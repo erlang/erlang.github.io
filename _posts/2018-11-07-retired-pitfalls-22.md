@@ -138,9 +138,9 @@ binary would give you what comes after `CP2` instead.
 Now, you might be wondering why we couldn't simply restore the position before
 converting `Bin0` back to a binary. It's an obvious thing to do but before OTP
 22 the context tracked not only the current position but also previous ones
-needed when backtracking. These were saved in "slots" which were mutable and
-heavily reused, and the match at `1` clobbered the slot needed to restore
-`Bin0`.
+needed when backtracking. These were saved in per-context "slots" which were
+mutable and heavily reused, and the match at `1` clobbered the slot needed to
+restore `Bin0`.
 
 This also meant that a context couldn't be used again after being passed to
 another function or entering a `try`/`catch`, which made it more or less
