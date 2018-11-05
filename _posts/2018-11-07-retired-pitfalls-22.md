@@ -122,7 +122,7 @@ bin_search_inv_1(<<CP1/utf8, BinRest/binary>>=Bin0, Cont, Sep) ->
                     %% 3
                     [Bin0|Cont]
             end;
-        ... snip ...
+        %% ... snip ...
 ```
 
 What we're looking at is a fast-path for ASCII characters; when both `CP1` and
