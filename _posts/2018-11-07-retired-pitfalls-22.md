@@ -62,8 +62,8 @@ need to care about is yielding in the outer loops.
 
 This also had the nice side-effect of reducing the worst-case complexity from
 `O(n²)` to `O(n log n)` and let us remove some warnings from the reference
-manual and [efficiency guide](http://erlang.org/documentation/doc-10.1/doc/efficiency_guide/commoncaveats.html#operator-----). Worth noting is
-that the new implementation always faster than the proposed workarounds, and
+manual and [efficiency guide](http://erlang.org/documentation/doc-10.1/doc/efficiency_guide/commoncaveats.html#operator-----). It's worth noting
+that the new implementation is always faster than the proposed workarounds, and
 that it falls back to the old algorithm when it's faster to do so.
 
 This change will be rolled out in OTP 21.2, big thanks to
