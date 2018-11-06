@@ -5,16 +5,24 @@ tags: erts compiler
 author: John Högberg
 ---
 
-Erlang/OTP 22 brings many performance improvements to the table, but most of
-them have a broad impact and don't affect the way you write efficient code. In
-this post I'd like to highlight a few things that used to be surprisingly slow
-but no longer need to be avoided.
+Erlang/OTP 22 will bring many performance improvements to the table, but most
+of them have a broad impact and don't affect the way you write efficient code.
+In this post I'd like to highlight a few things that used to be surprisingly
+slow but no longer need to be avoided.
 
 ### Named fun recursion
 
 Named funs have a neat little feature that might not be obvious at a first
 glance; their name is a variable like any other and you're free to pass it to
 another function or even return it.
+
+```erlang
+deepfoldl(F, Acc0, L) ->
+    (fun NamedFun([_|_]=Elem, Acc) -> lists:foldl(NamedFun, Acc, Elem);
+         NamedFun([], Acc) -> Acc;
+         NamedFun(Elem, Acc) -> F(Elem, Acc)
+     end)(L, Acc0).
+```
 
 This is cool but a bit of a headache for the compiler. To create a fun we pass
 its definition and free variables to a `make_fun2` instruction, but we can't
@@ -32,17 +40,19 @@ they're far less common.
 ### List subtraction with large operands (-- operator)
 
 While the Erlang VM appears to be pre-emptively scheduled to the programmer,
-it's co-operatively scheduled internally. When a native function runs it
-monopolizes the scheduler until it returns so a long-running one can severely
-harm the responsiveness of the system. We've therefore written nearly all such
-functions in a style that breaks the work into short units that complete
-quickly enough, but there's a steadily shrinking list of functions that
-misbehave, and list subtraction was one of these.
+it's [co-operatively scheduled](https://en.wikipedia.org/wiki/Computer_multitasking#Cooperative_multitasking)
+internally. When a native function runs it monopolizes the scheduler until it
+returns, so a long-running one can severely harm the responsiveness of the
+system. We've therefore written nearly all such functions in a style that
+breaks the work into short units that complete quickly enough, but there's
+a steadily shrinking list of functions that misbehave, and list subtraction
+was one of these.
 
 It's usually pretty straightforward to rewrite functions in this style, but
-the old algorithm processed the second list in a loop around the first list,
-which is problematic since both lists can be very long and resuming work in
-nested loops is almost always trickier than expected.
+the [old algorithm](https://github.com/erlang/otp/blob/d9682b02b81fa6e23e554b6e017650eb89ecebed/erts/emulator/beam/erl_bif_lists.c#L195)
+processed the second list in a loop around the first list, which is problematic
+since both lists can be very long and resuming work in nested loops is often
+trickier than expected.
 
 In this case it was easier to just get rid of the nested loop altogether. The
 new algorithm starts out by building a red-black tree from the right-hand side
@@ -50,10 +60,11 @@ before removing elements from the left-hand side. As all operations on the tree
 have `log n` complexity we know that they will finish really quickly, so all we
 need to care about is yielding in the outer loops.
 
-This also had the nice side-effect of reducing the run-time complexity from
-`n * m` to `n log n` and let us remove some warnings from the reference manual
-and [efficiency guide](http://erlang.org/documentation/doc-10.1/doc/efficiency_guide/commoncaveats.html#operator-----);
-the new implementation is always faster than the old workarounds.
+This also had the nice side-effect of reducing the worst-case complexity from
+`O(n²)` to `O(n log n)` and let us remove some warnings from the reference
+manual and [efficiency guide](http://erlang.org/documentation/doc-10.1/doc/efficiency_guide/commoncaveats.html#operator-----). Worth noting is
+that the new implementation always faster than the proposed workarounds, and
+that it falls back to the old algorithm when it's faster to do so.
 
 This change will be rolled out in OTP 21.2, big thanks to
 Dmytro Lytovchenko (@kvakvs on GitHub) for writing the better half of it!
@@ -67,8 +78,9 @@ The optimization pass for bit-syntax matching was completely rewritten in OTP
 same optimizations as before so already well-optimized code is unlikely to see
 any benefit, but it manages to apply them in far more cases.
 
-For those who aren't familiar, all bit-syntax matching operates on a "match
-context" internally, which is a mutable object that keeps track of the current
+For those who aren't familiar, all bit-syntax matching operates on a
+["match context"](http://erlang.org/doc/efficiency_guide/binaryhandling.html#matching-binaries)
+internally, which is a mutable object that keeps track of the current
 match position. This helps a lot when matching complicated patterns as it can
 zip back and forth as required, saving us from having to match components more
 than once.
@@ -81,7 +93,7 @@ trim_zero(<<0,Tail/binary>>) -> trim_zero(Tail);
 trim_zero(B) when is_binary(B) -> B.
 ```
 
-As the compiler can see that `Tail` is passed directly to `trim_zero` which
+As the compiler can see that `Tail` is passed directly to `trim_zero`, which
 promptly begins with a bit-match, it can skip extracting `Tail` as a sub-binary
 and pass the match context instead. This is a pretty well-known optimization
 called "match context reuse" which greatly improves performance when applied,
@@ -96,7 +108,7 @@ While the compiler did a pretty good job prior to OTP 22 it gave up a bit too
 easily in many cases, and the most trivial example is almost funny:
 
 ```erlang
-wrapper(<<"hello",Tail/binary>>) ->
+calls_wrapper(<<"hello",Tail/binary>>) ->
     count_ones(Tail).
 
 %% This simple wrapper prevents context reuse in the call above. :(
