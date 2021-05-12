@@ -13,7 +13,7 @@ Erlang/OTP 24 includes contributions from 60+ external contributors totalling
 1400+ commits, 300+ PRs and changing 0.5 million(!) lines of code. Though I'm not
 sure the line number should count as we vendored all of [AsmJit] and
 re-generated the wxWidgets support. If we ignore AsmJit and wx, there are still
-260k lines of code added and 320k lined removed, which is about 100k more than
+260k lines of code added and 320k lines removed, which is about 100k more than
 what our releases normally contain.
 
 You can download the readme describing the changes here: [Erlang/OTP 24 Readme].
