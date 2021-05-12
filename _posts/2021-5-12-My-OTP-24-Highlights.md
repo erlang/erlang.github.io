@@ -401,9 +401,9 @@ are very few applications outside Erlang/OTP that use `erl_docgen` to
 create documentation, so [EEP-48] style documentation was unavailable to
 those applications. Until now!
 
-Sponsored by the [Erlang Ecosystem Foundation], [Radek Szymczyszyn] has
-[added] support for [EEP-48] into [edoc] which means that from Erlang/OTP 24
-you can view both the documentation of `lists:foldl/3` and `recon:info/1`.
+[Radek Szymczyszyn] has [added] support for [EEP-48] into [edoc] which means
+that from Erlang/OTP 24 you can view both the documentation of `lists:foldl/3`
+and `recon:info/1`.
 
 ```
 $ rebar3 as docs shell
@@ -429,7 +429,6 @@ the [Doc chunks section in the Edoc User's Guide].
 [erl_docgen]: http://erlang.org/doc/man/erl_docgen_app.html
 [EEP-48]: https://www.erlang.org/erlang-enhancement-proposals/eep-0048.html
 [Erlang LS]: https://erlang-ls.github.io/
-[Erlang Ecosystem Foundation]: https://erlef.org/
 [Radek Szymczyszyn]: https://github.com/erszcz
 [edoc]: https://erlang.org/doc/man/edoc.html
 [added]: https://github.com/erlang/otp/pull/2803
