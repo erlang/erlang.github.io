@@ -21,10 +21,17 @@ for such scenarios is not yet perfect. However, the ETS table option
 Erlang/OTP 23 for the other table types) has made the scalability much
 better. A table with `decentralized_counters` activated uses
 decentralized counters instead of centralized counters to track the
-number of items in the table and the memory consumption. This blog
-post will give you a better understanding of when one should activate
-the `decentralized_counters` option and how the decentralized counters
-work.
+number of items in the table and the memory
+consumption. Unfortunately, tables with `decentralized_counters`
+activated will have slow operations to get the table size and
+memory usage ([`ets:info(Table,
+size)`](https://erlang.org/doc/man/ets.html#info-2) and
+[`ets:info(Table,
+memory)`](https://erlang.org/doc/man/ets.html#info-2)), so whether it
+is beneficial to turn `decentralized_counters` on or off depends on
+your use case. This blog post will give you a better understanding of
+when one should activate the `decentralized_counters` option and how
+the decentralized counters work.
 
 ## Scalability with Decentralized ETS Counters
 
@@ -43,9 +50,9 @@ a table of type `ordered_set`:
 
 ![alt text](/images/ets_scalable_counters/bench_ordset_50_ins_50_del_nospread.png "Throughput of inserts and deletes on a table of type ordered_set with and without the decentralized_counters activated")
 
-The interested reader can find more benchmark results, benchmark
-details, and the benchmark machine
-[here](http://winsh.me/ets_catree_benchmark/decent_ctrs_hash.html). The
+The interested reader can find more information about the benchmark at
+the [benchmark website for
+`decentralized_counters`](http://winsh.me/ets_catree_benchmark/decent_ctrs_hash.html). The
 benchmark results above show that both `set` and `ordered_set` tables
 get a significant scalability boost when the `decentralized_counter`
 option is activated. The `ordered_set` type receives a more
@@ -73,7 +80,7 @@ improvement, but this is not what this blog post is about.
 
 A centralized counter consists of a single memory word that is
 incremented and decremented with atomic instructions. The problem with
-a centralized counter is, of course, that modifications of the counter
+a centralized counter is that modifications of the counter
 by multiple cores are serialized. This problem is amplified because
 frequent modifications of a single memory word by multiple cores cause
 a lot of expensive traffic in the [cache
@@ -88,13 +95,16 @@ there may be applications out in the wild that frequently call
 [`ets:info(Table, size)`](https://erlang.org/doc/man/ets.html#info-2)
 and [`ets:info(Table,
 memory)`](https://erlang.org/doc/man/ets.html#info-2), we have chosen
-to make decentralized counters optional. Another thing that might be
-worth keeping in mind is that the hash-based tables use a different
-heuristic to decide when the number of buckets shall grow and shrink
-when decentralized counters are activated. The hash table heuristics
-for growing and shrinking used together with decentralized counters
-tend to lead to tables that use slightly more memory than the default
-heuristics.
+to make decentralized counters optional.
+
+Another thing that might be worth keeping in mind is that the
+hash-based tables that use decentralized counters tend to use slightly
+more hash table buckets than the corresponding tables without
+decentralized counters. The reason for this is that, with
+decentralized counters activated, the resizing decision is based on an
+estimate of the number of items in the table rather than an exact
+count, and the resizing heuristics trigger an increase of the number
+of buckets more eagerly than a decrease.
 
 ## Implementation
 
@@ -190,7 +200,7 @@ calculated. The following example illustrates this approach:
    ![alt text](/images/ets_scalable_counters/snap_ani_5.png "Step 6")
 
 Now, you should have got a basic understanding of how ETS'
-decentralized counters work. You are also very welcome to look at the
+decentralized counters work. You are also welcome to look at the
 source code in
 [erl_flxctr.c](https://github.com/erlang/otp/blob/ce7dbe8742e66f4632b5d39a9b4d7aa461e4f164/erts/emulator/beam/erl_flxctr.c)
 and
@@ -206,7 +216,7 @@ and the read operation does not block any scheduler and does not
 consume any CPU time during this time. On the other hand, the
 decentralized counter can be updated in a very efficient and scalable
 way, so using decentralized counters is most likely to prefer, if you
-seldom need to get the size and the memory consummation of your shared
+seldom need to get the size and the memory consumed by your shared
 ETS table.
 
 
