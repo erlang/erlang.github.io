@@ -7,7 +7,7 @@ author: Kjell Winblad
 
 A shared [Erlang Term Storage
 (ETS)](https://erlang.org/doc/man/ets.html) table is often an
-excellent place to store data that that is updated and read from
+excellent place to store data that is updated and read from
 multiple Erlang processes frequently. ETS provides key-value stores to
 Erlang processes. When the
 [write_concurrency](https://erlang.org/doc/man/ets.html#new-2) option
