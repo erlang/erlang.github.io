@@ -35,7 +35,7 @@ the decentralized counters work.
 
 ## Scalability with Decentralized ETS Counters
 
-The following figure shows the throughput (operations/second) archived
+The following figure shows the throughput (operations/second) archieved
 when processes are doing inserts (`ets:insert/2`) and deletes
 (`ets:delete/2`) to an ETS table of the `set` type on a machine with
 64 hardware threads both when `decentralized_counters` option is
