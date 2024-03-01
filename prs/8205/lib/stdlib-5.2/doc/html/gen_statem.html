@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-04ADC771.js"></script>
+    <script src="dist/sidebar_items-851CFB05.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -260,59 +260,59 @@ significantly delayed.</p></blockquote><h2 id="module-example" class="section-he
 <p>The following example shows a simple pushbutton model for a toggling pushbutton
 implemented with <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">state_functions</code>. You
 can push the button and it replies if it went on or off, and you can ask for a
-count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="2587485075-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="2587485075-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="2587485075-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="2587485075-2">)</span><span class="p">.</span><span class="w">
+count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="2258523568-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="2258523568-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="2258523568-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="2258523568-2">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2587485075-3">(</span><span class="p" data-group-id="2587485075-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2587485075-4">]</span><span class="p" data-group-id="2587485075-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2587485075-5">(</span><span class="p" data-group-id="2587485075-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2587485075-6">]</span><span class="p" data-group-id="2587485075-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2587485075-7">(</span><span class="p" data-group-id="2587485075-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="2587485075-8">]</span><span class="p" data-group-id="2587485075-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2258523568-3">(</span><span class="p" data-group-id="2258523568-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2258523568-4">]</span><span class="p" data-group-id="2258523568-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2258523568-5">(</span><span class="p" data-group-id="2258523568-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2258523568-6">]</span><span class="p" data-group-id="2258523568-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2258523568-7">(</span><span class="p" data-group-id="2258523568-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="2258523568-8">]</span><span class="p" data-group-id="2258523568-7">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">name</span><span class="p" data-group-id="2587485075-9">(</span><span class="p" data-group-id="2587485075-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
+</span><span class="nf">name</span><span class="p" data-group-id="2258523568-9">(</span><span class="p" data-group-id="2258523568-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
 
 </span><span class="c1">%% API.  This example uses a registered name name()</span><span class="w">
 </span><span class="c1">%% and does not link to the caller.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="2587485075-10">(</span><span class="p" data-group-id="2587485075-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="2587485075-11">(</span><span class="p" data-group-id="2587485075-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="2587485075-13">(</span><span class="p" data-group-id="2587485075-13">)</span><span class="p" data-group-id="2587485075-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2587485075-14">[</span><span class="p" data-group-id="2587485075-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2587485075-15">[</span><span class="p" data-group-id="2587485075-15">]</span><span class="p" data-group-id="2587485075-11">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">push</span><span class="p" data-group-id="2587485075-16">(</span><span class="p" data-group-id="2587485075-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2587485075-17">(</span><span class="nf">name</span><span class="p" data-group-id="2587485075-18">(</span><span class="p" data-group-id="2587485075-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="2587485075-17">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">get_count</span><span class="p" data-group-id="2587485075-19">(</span><span class="p" data-group-id="2587485075-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2587485075-20">(</span><span class="nf">name</span><span class="p" data-group-id="2587485075-21">(</span><span class="p" data-group-id="2587485075-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="2587485075-20">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="2587485075-22">(</span><span class="p" data-group-id="2587485075-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="2587485075-23">(</span><span class="nf">name</span><span class="p" data-group-id="2587485075-24">(</span><span class="p" data-group-id="2587485075-24">)</span><span class="p" data-group-id="2587485075-23">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="2258523568-10">(</span><span class="p" data-group-id="2258523568-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="2258523568-11">(</span><span class="p" data-group-id="2258523568-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="2258523568-13">(</span><span class="p" data-group-id="2258523568-13">)</span><span class="p" data-group-id="2258523568-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2258523568-14">[</span><span class="p" data-group-id="2258523568-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2258523568-15">[</span><span class="p" data-group-id="2258523568-15">]</span><span class="p" data-group-id="2258523568-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">push</span><span class="p" data-group-id="2258523568-16">(</span><span class="p" data-group-id="2258523568-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2258523568-17">(</span><span class="nf">name</span><span class="p" data-group-id="2258523568-18">(</span><span class="p" data-group-id="2258523568-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="2258523568-17">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">get_count</span><span class="p" data-group-id="2258523568-19">(</span><span class="p" data-group-id="2258523568-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2258523568-20">(</span><span class="nf">name</span><span class="p" data-group-id="2258523568-21">(</span><span class="p" data-group-id="2258523568-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="2258523568-20">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="2258523568-22">(</span><span class="p" data-group-id="2258523568-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="2258523568-23">(</span><span class="nf">name</span><span class="p" data-group-id="2258523568-24">(</span><span class="p" data-group-id="2258523568-24">)</span><span class="p" data-group-id="2258523568-23">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Mandatory callback functions</span><span class="w">
-</span><span class="nf">terminate</span><span class="p" data-group-id="2587485075-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="2587485075-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="2258523568-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="2258523568-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">void</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="2587485075-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="2587485075-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="2587485075-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2587485075-27">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="2587485075-28">(</span><span class="p" data-group-id="2587485075-29">[</span><span class="p" data-group-id="2587485075-29">]</span><span class="p" data-group-id="2587485075-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="2258523568-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="2258523568-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2258523568-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2258523568-27">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="2258523568-28">(</span><span class="p" data-group-id="2258523568-29">[</span><span class="p" data-group-id="2258523568-29">]</span><span class="p" data-group-id="2258523568-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Set the initial state + data.  Data is used only as a counter.</span><span class="w">
     </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="2587485075-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2587485075-30">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="2587485075-31">(</span><span class="p" data-group-id="2587485075-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2258523568-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2258523568-30">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="2258523568-31">(</span><span class="p" data-group-id="2258523568-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">off</span><span class="p" data-group-id="2587485075-32">(</span><span class="p" data-group-id="2587485075-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2587485075-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="2258523568-32">(</span><span class="p" data-group-id="2258523568-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2258523568-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="2587485075-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="2587485075-35">[</span><span class="p" data-group-id="2587485075-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="2587485075-36">}</span><span class="p" data-group-id="2587485075-35">]</span><span class="p" data-group-id="2587485075-34">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">off</span><span class="p" data-group-id="2587485075-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="2587485075-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-38">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2258523568-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="2258523568-35">[</span><span class="p" data-group-id="2258523568-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="2258523568-36">}</span><span class="p" data-group-id="2258523568-35">]</span><span class="p" data-group-id="2258523568-34">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="2258523568-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="2258523568-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-38">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">on</span><span class="p" data-group-id="2587485075-39">(</span><span class="p" data-group-id="2587485075-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2587485075-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="2258523568-39">(</span><span class="p" data-group-id="2258523568-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2258523568-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="2587485075-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2587485075-42">[</span><span class="p" data-group-id="2587485075-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="2587485075-43">}</span><span class="p" data-group-id="2587485075-42">]</span><span class="p" data-group-id="2587485075-41">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">on</span><span class="p" data-group-id="2587485075-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="2587485075-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-45">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2258523568-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2258523568-42">[</span><span class="p" data-group-id="2258523568-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="2258523568-43">}</span><span class="p" data-group-id="2258523568-42">]</span><span class="p" data-group-id="2258523568-41">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="2258523568-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="2258523568-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-45">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Handle events common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="2587485075-46">(</span><span class="p" data-group-id="2587485075-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2587485075-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2258523568-46">(</span><span class="p" data-group-id="2258523568-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2258523568-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="2587485075-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2587485075-49">[</span><span class="p" data-group-id="2587485075-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2587485075-50">}</span><span class="p" data-group-id="2587485075-49">]</span><span class="p" data-group-id="2587485075-48">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="2587485075-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2587485075-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2258523568-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2258523568-49">[</span><span class="p" data-group-id="2258523568-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2258523568-50">}</span><span class="p" data-group-id="2258523568-49">]</span><span class="p" data-group-id="2258523568-48">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2258523568-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2258523568-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="2587485075-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2587485075-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="text">1&gt; pushbutton:start().
+    </span><span class="p" data-group-id="2258523568-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2258523568-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="text">1&gt; pushbutton:start().
 {ok,&lt;0.36.0&gt;}
 2&gt; pushbutton:get_count().
 0
@@ -332,25 +332,25 @@ ok
      in call from gen_statem:call/3 (gen_statem.erl, line 386)</code></pre><p>To compare styles, here follows the same example using
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">handle_event_function</code>, or rather the
 code to replace after function <a href="#c:init/1"><code class="inline">init/1</code></a> of the <code class="inline">pushbutton.erl</code>
-example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="0569460059-1">(</span><span class="p" data-group-id="0569460059-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
+example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="0550526427-1">(</span><span class="p" data-group-id="0550526427-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0569460059-2">(</span><span class="p" data-group-id="0569460059-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0569460059-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0569460059-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0550526427-2">(</span><span class="p" data-group-id="0550526427-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0550526427-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0550526427-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="0569460059-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="0569460059-5">[</span><span class="p" data-group-id="0569460059-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="0569460059-6">}</span><span class="p" data-group-id="0569460059-5">]</span><span class="p" data-group-id="0569460059-4">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0569460059-7">(</span><span class="p" data-group-id="0569460059-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0569460059-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0569460059-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="0550526427-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="0550526427-5">[</span><span class="p" data-group-id="0550526427-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="0550526427-6">}</span><span class="p" data-group-id="0550526427-5">]</span><span class="p" data-group-id="0550526427-4">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0550526427-7">(</span><span class="p" data-group-id="0550526427-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0550526427-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0550526427-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="0569460059-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0569460059-10">[</span><span class="p" data-group-id="0569460059-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="0569460059-11">}</span><span class="p" data-group-id="0569460059-10">]</span><span class="p" data-group-id="0569460059-9">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="0550526427-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0550526427-10">[</span><span class="p" data-group-id="0550526427-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="0550526427-11">}</span><span class="p" data-group-id="0550526427-10">]</span><span class="p" data-group-id="0550526427-9">}</span><span class="p">;</span><span class="w">
 </span><span class="c1">%%</span><span class="w">
 </span><span class="c1">%% Event handling common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0569460059-12">(</span><span class="p" data-group-id="0569460059-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0569460059-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0569460059-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0550526427-12">(</span><span class="p" data-group-id="0550526427-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0550526427-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0550526427-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="0569460059-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0569460059-15">[</span><span class="p" data-group-id="0569460059-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0569460059-16">}</span><span class="p" data-group-id="0569460059-15">]</span><span class="p" data-group-id="0569460059-14">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0569460059-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0569460059-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="0550526427-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0550526427-15">[</span><span class="p" data-group-id="0550526427-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0550526427-16">}</span><span class="p" data-group-id="0550526427-15">]</span><span class="p" data-group-id="0550526427-14">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0550526427-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0550526427-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="0569460059-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0569460059-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
+    </span><span class="p" data-group-id="0550526427-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0550526427-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -933,6 +933,8 @@ that returns <code class="inline">{State,Data}</code>.</p></div>
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#c:format_status/2" translate="no">format_status/2</a>
+
+          <span class="deprecated" title="the callback gen_statem:format_status(_,_) is deprecated; use format_status/1 instead">deprecated</span>
 
       </div>
 
@@ -1596,7 +1598,7 @@ list.</p><ul><li><strong><code class="inline">hibernate</code></strong> - Sets t
     </a>
     <h1 class="signature" translate="no">enter_loop_opt()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1717" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1718" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1842,7 +1844,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">format_status()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1463" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1464" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2303,7 +2305,7 @@ relative time until the deadline over and over again.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">server_name()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1665" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1666" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2335,7 +2337,7 @@ relative time until the deadline over and over again.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">server_ref()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1689" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1690" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2376,7 +2378,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
     </a>
     <h1 class="signature" translate="no">start_mon_ret()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1731" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1732" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2406,7 +2408,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
     </a>
     <h1 class="signature" translate="no">start_opt()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1700" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1701" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2438,7 +2440,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
     </a>
     <h1 class="signature" translate="no">start_ret()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1725" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1726" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3217,7 +3219,7 @@ And again; the <em>current</em> callback module will get the
     </a>
     <h1 class="signature" translate="no">format_status(Status)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1520" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1521" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3252,15 +3254,15 @@ describes the current states of the <code class="inline">gen_statem</code>, and 
 <code class="inline">NewStatus</code> containing the same keys as the input map, but it may transform some
 values.</p><p>One use case for this function is to return compact alternative state
 representations to avoid having large state terms printed in log files. Another
-is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="1481808638-1">(</span><span class="n">Status</span><span class="p" data-group-id="1481808638-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="1481808638-2">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="p" data-group-id="1481808638-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="1481808638-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="1481808638-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="1481808638-4">)</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="1481808638-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="1481808638-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="1481808638-6">}</span><span class="p" data-group-id="1481808638-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="1481808638-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="1481808638-7">}</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="1481808638-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="1481808638-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="3654510074-1">(</span><span class="n">Status</span><span class="p" data-group-id="3654510074-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="3654510074-2">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="p" data-group-id="3654510074-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="3654510074-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="3654510074-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="3654510074-4">)</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="3654510074-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="3654510074-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="3654510074-6">}</span><span class="p" data-group-id="3654510074-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="3654510074-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="3654510074-7">}</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="3654510074-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="3654510074-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Value</span><span class="w">
-    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="1481808638-2">)</span><span class="p">.</span></code></pre>
+    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="3654510074-2">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="c:format_status/2">
@@ -3272,7 +3274,7 @@ is to hide sensitive data from being written to the error log.</p><p>Example:</p
     </a>
     <h1 class="signature" translate="no">format_status/2</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1434" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1435" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3283,6 +3285,10 @@ is to hide sensitive data from being written to the error log.</p><p>Example:</p
       <span class="note">(since OTP 19.0)</span>
 
   </div>
+
+    <div class="deprecated">
+      This callback is deprecated. the callback gen_statem:format_status(_,_) is deprecated; use format_status/1 instead.
+    </div>
 
   <section class="docstring">
 
@@ -3419,8 +3425,8 @@ in scope.</p>
 function is called by the new process to initialize the implementation state and
 server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><blockquote><h4 class="info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a> and
 <a href="#enter_loop/4"><code class="inline">enter_loop/4-6</code></a>, this callback will never be called. Since
-this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="6957735635-1">(</span><span class="p">_</span><span class="p" data-group-id="6957735635-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="6957735635-2">(</span><span class="p" data-group-id="6957735635-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="6957735635-3">(</span><span class="n">Args</span><span class="p" data-group-id="6957735635-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="6957735635-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6957735635-5">[</span><span class="n">Args</span><span class="p" data-group-id="6957735635-5">]</span><span class="p" data-group-id="6957735635-4">)</span><span class="p">.</span></code></pre></blockquote>
+this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="8313657963-1">(</span><span class="p">_</span><span class="p" data-group-id="8313657963-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="8313657963-2">(</span><span class="p" data-group-id="8313657963-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="8313657963-3">(</span><span class="n">Args</span><span class="p" data-group-id="8313657963-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="8313657963-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8313657963-5">[</span><span class="n">Args</span><span class="p" data-group-id="8313657963-5">]</span><span class="p" data-group-id="8313657963-4">)</span><span class="p">.</span></code></pre></blockquote>
   </section>
 </section>
 <section class="detail" id="c:StateName/3">
@@ -3528,7 +3534,7 @@ to linked processes and ports.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1987" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1988" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3558,7 +3564,7 @@ to linked processes and ports.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request, Timeout)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2029" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2030" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3608,7 +3614,7 @@ values for the <code class="inline">Reason</code> in the exit term.</p>
     </a>
     <h1 class="signature" translate="no">cast(ServerRef, Msg)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1963" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1964" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3642,7 +3648,7 @@ and event content <code class="inline">Msg</code>.</p>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqId)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2373" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2374" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3686,7 +3692,7 @@ request.</p>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqIdCollection, Delete)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2430" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2431" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3752,7 +3758,7 @@ associations of already handled or abandoned requests to
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2545" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2546" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3784,7 +3790,7 @@ must have been registered. This creates an anonymous server.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2563" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2564" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3822,7 +3828,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2604" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2605" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3871,7 +3877,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2238" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2239" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3907,7 +3913,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId, Timeout)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2275" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2276" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3958,7 +3964,7 @@ that a potential future response is ignored, while
     </a>
     <h1 class="signature" translate="no">receive_response(ReqIdCollection, Timeout, Delete)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2342" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2343" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4030,7 +4036,7 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
     </a>
     <h1 class="signature" translate="no">reply/1</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2507" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2508" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4060,7 +4066,7 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
     </a>
     <h1 class="signature" translate="no">reply(From, Reply)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2529" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2530" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4095,7 +4101,7 @@ canalso be sent using one or several <a href="#t:reply_action/0"><code class="in
     </a>
     <h1 class="signature" translate="no">reqids_add(ReqId, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2480" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2481" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4128,7 +4134,7 @@ identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_new()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2455" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2456" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4164,7 +4170,7 @@ request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_size(ReqIdCollection)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2463" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2464" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4194,7 +4200,7 @@ request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_to_list(ReqIdCollection)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2496" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2497" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4227,7 +4233,7 @@ collection.</p>
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2070" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2071" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4275,7 +4281,7 @@ the return value of <a href="#receive_response/2"><code class="inline">receive_r
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2098" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2099" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4317,7 +4323,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
     </a>
     <h1 class="signature" translate="no">start(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1745" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1746" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4347,7 +4353,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
     </a>
     <h1 class="signature" translate="no">start(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1764" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1765" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4381,7 +4387,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1776" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1777" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4411,7 +4417,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
     </a>
     <h1 class="signature" translate="no">start_link(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1876" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1877" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4493,7 +4499,7 @@ been consumed and the started <code class="inline">gen_statem</code> process had
     </a>
     <h1 class="signature" translate="no">start_monitor(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1888" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1889" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4523,7 +4529,7 @@ been consumed and the started <code class="inline">gen_statem</code> process had
     </a>
     <h1 class="signature" translate="no">start_monitor(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1913" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1914" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4566,7 +4572,7 @@ received and removed from the message queue.</p>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1923" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1924" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4596,7 +4602,7 @@ received and removed from the message queue.</p>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef, Reason, Timeout)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1950" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L1951" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4636,7 +4642,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2118" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2119" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4672,7 +4678,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId, WaitTime)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2153" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2154" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4721,7 +4727,7 @@ that a potential future response is ignored, while
     </a>
     <h1 class="signature" translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2219" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/compiler/fix-deprecated-docs/lib/stdlib/src/gen_statem.erl#L2220" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
