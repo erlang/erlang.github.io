@@ -1,0 +1,6 @@
+-module otp_8567.
+-compile export_all.
+-spec(a).
+-record r, {a}.
+-record s, {a :: integer()}.
+-type t() :: {#r{},#s{}}.

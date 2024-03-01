@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="project" content="Erlang System Documentation v27.0-rc1">
+
+
+    <title>List Handling — Erlang System Documentation v27.0-rc1</title>
+    <link rel="stylesheet" href="dist/html-erlang-YUARVD4J.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
+    <script src="dist/sidebar_items-1105547A.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-L4O5OK2K.js"></script>
+
+<style>.dark img { background-color: white; }</style>
+  </head>
+  <body data-type="extras" class="page-extra">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<div class="background-layer"></div>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="../index.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Erlang System Documentation" />
+        </a>
+
+      <div>
+        <a href="../index.html" class="sidebar-projectName" translate="no">
+Erlang System Documentation
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v27.0-rc1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+      <div class="top-search">
+        <div class="search-settings">
+          <form class="search-bar" action="search.html">
+            <label class="search-label">
+              <span class="sr-only">Search documentation of Erlang System Documentation</span>
+              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="search-button" aria-label="Submit Search">
+              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+            </button>
+            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+              <i class="ri-close-line ri-lg" title="Cancel search"></i>
+            </button>
+          </form>
+          <div class="autocomplete">
+          </div>
+          <button class="icon-settings display-settings">
+            <i class="ri-settings-3-line"></i>
+            <span class="sr-only">Settings</span>
+          </button>
+        </div>
+
+      </div>
+
+<h1>
+
+    <a href="https://github.com/MarkoMin/otp/blob/kernel/net_kernel/doc/system/doc/efficiency_guide/listhandling.md#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+
+  <span>List Handling</span>
+</h1>
+
+<h2 id="creating-a-list" class="section-heading">
+  <a href="#creating-a-list" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Creating a List</span>
+</h2>
+<p>Lists can only be built starting from the end and attaching list elements at the
+beginning. If you use the &quot;<code class="inline">++</code>&quot; operator as follows, a new list is created that
+is a copy of the elements in <code class="inline">List1</code>, followed by <code class="inline">List2</code>:</p><pre><code class="makeup erlang" translate="no"><span class="n">List1</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="n">List2</span></code></pre><p>Looking at how <a href="../../lib/stdlib-5.2/doc/html/lists.html#append/1"><code class="inline">lists:append/1</code></a> or <code class="inline">++</code> would be implemented in plain Erlang,
+clearly the first list is copied:</p><pre><code class="makeup erlang" translate="no"><span class="nf">append</span><span class="p" data-group-id="2841938582-1">(</span><span class="p" data-group-id="2841938582-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="2841938582-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="2841938582-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2841938582-3">[</span><span class="n">H</span><span class="p">|</span><span class="nf">append</span><span class="p" data-group-id="2841938582-4">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="2841938582-4">)</span><span class="p" data-group-id="2841938582-3">]</span><span class="p">;</span><span class="w">
+</span><span class="nf">append</span><span class="p" data-group-id="2841938582-5">(</span><span class="p" data-group-id="2841938582-6">[</span><span class="p" data-group-id="2841938582-6">]</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="2841938582-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Tail</span><span class="p">.</span></code></pre><p>When recursing and building a list, it is important to ensure that you attach
+the new elements to the beginning of the list. In this way, you will build <em>one</em>
+list, not hundreds or thousands of copies of the growing result list.</p><p>Let us first see how it is not to be done:</p><p><em>DO NOT</em></p><pre><code class="makeup erlang" translate="no"><span class="nf">bad_fib</span><span class="p" data-group-id="7985610626-1">(</span><span class="n">N</span><span class="p" data-group-id="7985610626-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">bad_fib</span><span class="p" data-group-id="7985610626-2">(</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7985610626-3">[</span><span class="p" data-group-id="7985610626-3">]</span><span class="p" data-group-id="7985610626-2">)</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">bad_fib</span><span class="p" data-group-id="7985610626-4">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Current</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Fibs</span><span class="p" data-group-id="7985610626-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Fibs</span><span class="p">;</span><span class="w">
+</span><span class="nf">bad_fib</span><span class="p" data-group-id="7985610626-5">(</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">Current</span><span class="p">,</span><span class="w"> </span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Fibs</span><span class="p" data-group-id="7985610626-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">bad_fib</span><span class="p" data-group-id="7985610626-6">(</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Current</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Fibs</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="p" data-group-id="7985610626-7">[</span><span class="n">Current</span><span class="p" data-group-id="7985610626-7">]</span><span class="p" data-group-id="7985610626-6">)</span><span class="p">.</span></code></pre><p>Here more than one list is built. In each iteration step a new list is created
+that is one element longer than the new previous list.</p><p>To avoid copying the result in each iteration, build the list in reverse order
+and reverse the list when you are done:</p><p><em>DO</em></p><pre><code class="makeup erlang" translate="no"><span class="nf">tail_recursive_fib</span><span class="p" data-group-id="7747694548-1">(</span><span class="n">N</span><span class="p" data-group-id="7747694548-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">tail_recursive_fib</span><span class="p" data-group-id="7747694548-2">(</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7747694548-3">[</span><span class="p" data-group-id="7747694548-3">]</span><span class="p" data-group-id="7747694548-2">)</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">tail_recursive_fib</span><span class="p" data-group-id="7747694548-4">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Current</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Fibs</span><span class="p" data-group-id="7747694548-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">lists</span><span class="p">:</span><span class="nf">reverse</span><span class="p" data-group-id="7747694548-5">(</span><span class="n">Fibs</span><span class="p" data-group-id="7747694548-5">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">tail_recursive_fib</span><span class="p" data-group-id="7747694548-6">(</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">Current</span><span class="p">,</span><span class="w"> </span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Fibs</span><span class="p" data-group-id="7747694548-6">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">tail_recursive_fib</span><span class="p" data-group-id="7747694548-7">(</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="n">Current</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Next</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7747694548-8">[</span><span class="n">Current</span><span class="p">|</span><span class="n">Fibs</span><span class="p" data-group-id="7747694548-8">]</span><span class="p" data-group-id="7747694548-7">)</span><span class="p">.</span></code></pre><h2 id="list-comprehensions" class="section-heading">
+  <a href="#list-comprehensions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">List Comprehensions</span>
+</h2>
+<p>Lists comprehensions still have a reputation for being slow. They used to be
+implemented using funs, which used to be slow.</p><p>A list comprehension:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="4829203476-1">[</span><span class="n">Expr</span><span class="p" data-group-id="4829203476-2">(</span><span class="n">E</span><span class="p" data-group-id="4829203476-2">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">List</span><span class="p" data-group-id="4829203476-1">]</span></code></pre><p>is basically translated to a local function:</p><pre><code class="makeup erlang" translate="no"><span class="nf">&#39;lc^0&#39;</span><span class="p" data-group-id="1698164358-1">(</span><span class="p" data-group-id="1698164358-2">[</span><span class="n">E</span><span class="p">|</span><span class="n">Tail</span><span class="p" data-group-id="1698164358-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="p" data-group-id="1698164358-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1698164358-3">[</span><span class="n">Expr</span><span class="p" data-group-id="1698164358-4">(</span><span class="n">E</span><span class="p" data-group-id="1698164358-4">)</span><span class="p">|</span><span class="nf">&#39;lc^0&#39;</span><span class="p" data-group-id="1698164358-5">(</span><span class="n">Tail</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="p" data-group-id="1698164358-5">)</span><span class="p" data-group-id="1698164358-3">]</span><span class="p">;</span><span class="w">
+</span><span class="nf">&#39;lc^0&#39;</span><span class="p" data-group-id="1698164358-6">(</span><span class="p" data-group-id="1698164358-7">[</span><span class="p" data-group-id="1698164358-7">]</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Expr</span><span class="p" data-group-id="1698164358-6">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="1698164358-8">[</span><span class="p" data-group-id="1698164358-8">]</span><span class="p">.</span></code></pre><p>If the result of the list comprehension will <em>obviously</em> not be used, a list
+will not be constructed. For example, in this code:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="4803765123-1">[</span><span class="nc">io</span><span class="p">:</span><span class="nf">put_chars</span><span class="p" data-group-id="4803765123-2">(</span><span class="n">E</span><span class="p" data-group-id="4803765123-2">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">List</span><span class="p" data-group-id="4803765123-1">]</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span><span class="p">.</span></code></pre><p>or in this code:</p><pre><code class="makeup erlang" translate="no"><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
+</span><span class="k">case</span><span class="w"> </span><span class="n">Var</span><span class="w"> </span><span class="k">of</span><span class="w">
+    </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="9216549215-1">[</span><span class="nc">io</span><span class="p">:</span><span class="nf">put_chars</span><span class="p" data-group-id="9216549215-2">(</span><span class="n">E</span><span class="p" data-group-id="9216549215-2">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">List</span><span class="p" data-group-id="9216549215-1">]</span><span class="p">;</span><span class="w">
+    </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="k">end</span><span class="p">,</span><span class="w">
+</span><span class="nf">some_function</span><span class="p" data-group-id="9216549215-3">(</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="9216549215-3">)</span><span class="p">,</span><span class="w">
+</span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>the value is not assigned to a variable, not passed to another function, and not
+returned. This means that there is no need to construct a list and the compiler
+will simplify the code for the list comprehension to:</p><pre><code class="makeup erlang" translate="no"><span class="nf">&#39;lc^0&#39;</span><span class="p" data-group-id="6963831987-1">(</span><span class="p" data-group-id="6963831987-2">[</span><span class="n">E</span><span class="p">|</span><span class="n">Tail</span><span class="p" data-group-id="6963831987-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="p" data-group-id="6963831987-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Expr</span><span class="p" data-group-id="6963831987-3">(</span><span class="n">E</span><span class="p" data-group-id="6963831987-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">&#39;lc^0&#39;</span><span class="p" data-group-id="6963831987-4">(</span><span class="n">Tail</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="p" data-group-id="6963831987-4">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">&#39;lc^0&#39;</span><span class="p" data-group-id="6963831987-5">(</span><span class="p" data-group-id="6963831987-6">[</span><span class="p" data-group-id="6963831987-6">]</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Expr</span><span class="p" data-group-id="6963831987-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6963831987-7">[</span><span class="p" data-group-id="6963831987-7">]</span><span class="p">.</span></code></pre><p>The compiler also understands that assigning to '_' means that the value will
+not used. Therefore, the code in the following example will also be optimized:</p><pre><code class="makeup erlang" translate="no"><span class="p">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3374530078-1">[</span><span class="nc">io</span><span class="p">:</span><span class="nf">put_chars</span><span class="p" data-group-id="3374530078-2">(</span><span class="n">E</span><span class="p" data-group-id="3374530078-2">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">List</span><span class="p" data-group-id="3374530078-1">]</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span><span class="p">.</span></code></pre><h2 id="deep-and-flat-lists" class="section-heading">
+  <a href="#deep-and-flat-lists" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Deep and Flat Lists</span>
+</h2>
+<p><a href="../../lib/stdlib-5.2/doc/html/lists.html#flatten/1"><code class="inline">lists:flatten/1</code></a> builds an entirely new list. It is therefore expensive, and
+even <em>more</em> expensive than the <code class="inline">++</code> operator (which copies its left argument,
+but not its right argument).</p><p>In the following situations, you can easily avoid calling <a href="../../lib/stdlib-5.2/doc/html/lists.html#flatten/1"><code class="inline">lists:flatten/1</code></a>:</p><ul><li>When sending data to a port. Ports understand deep lists so there is no reason
+to flatten the list before sending it to the port.</li><li>When calling BIFs that accept deep lists, such as
+<a href="../../erts-14.2.2/doc/html/erlang.html#list_to_binary/1">list_to_binary/1</a> or
+<a href="../../erts-14.2.2/doc/html/erlang.html#iolist_to_binary/1">iolist_to_binary/1</a>.</li><li>When you know that your list is only one level deep, you can use
+<a href="../../lib/stdlib-5.2/doc/html/lists.html#append/1"><code class="inline">lists:append/1</code></a>.</li></ul><h3 id="port-example" class="section-heading">
+  <a href="#port-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Port Example</span>
+</h3>
+<p><em>DO</em></p><pre><code class="text">      ...
+      port_command(Port, DeepList)
+      ...</code></pre><p><em>DO NOT</em></p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
+      </span><span class="nf">port_command</span><span class="p" data-group-id="9160752097-1">(</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">flatten</span><span class="p" data-group-id="9160752097-2">(</span><span class="n">DeepList</span><span class="p" data-group-id="9160752097-2">)</span><span class="p" data-group-id="9160752097-1">)</span><span class="w">
+      </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>A common way to send a zero-terminated string to a port is the following:</p><p><em>DO NOT</em></p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
+      </span><span class="n">TerminatedStr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="p" data-group-id="5558980801-1">[</span><span class="mi">0</span><span class="p" data-group-id="5558980801-1">]</span><span class="p">,</span><span class="w"> </span><span class="c1">% String=&quot;foo&quot; =&gt; [$f, $o, $o, 0]</span><span class="w">
+      </span><span class="nf">port_command</span><span class="p" data-group-id="5558980801-2">(</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">TerminatedStr</span><span class="p" data-group-id="5558980801-2">)</span><span class="w">
+      </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>Instead:</p><p><em>DO</em></p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
+      </span><span class="n">TerminatedStr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8218037009-1">[</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="8218037009-1">]</span><span class="p">,</span><span class="w"> </span><span class="c1">% String=&quot;foo&quot; =&gt; [[$f, $o, $o], 0]</span><span class="w">
+      </span><span class="nf">port_command</span><span class="p" data-group-id="8218037009-2">(</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">TerminatedStr</span><span class="p" data-group-id="8218037009-2">)</span><span class="w">
+      </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><h3 id="append-example" class="section-heading">
+  <a href="#append-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Append Example</span>
+</h3>
+<p><em>DO</em></p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="o">&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">append</span><span class="p" data-group-id="7826408454-1">(</span><span class="p" data-group-id="7826408454-2">[</span><span class="p" data-group-id="7826408454-3">[</span><span class="mi">1</span><span class="p" data-group-id="7826408454-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7826408454-4">[</span><span class="mi">2</span><span class="p" data-group-id="7826408454-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7826408454-5">[</span><span class="mi">3</span><span class="p" data-group-id="7826408454-5">]</span><span class="p" data-group-id="7826408454-2">]</span><span class="p" data-group-id="7826408454-1">)</span><span class="p">.</span><span class="w">
+      </span><span class="p" data-group-id="7826408454-6">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="7826408454-6">]</span><span class="w">
+      </span><span class="o">&gt;</span></code></pre><p><em>DO NOT</em></p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="o">&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">flatten</span><span class="p" data-group-id="4603936802-1">(</span><span class="p" data-group-id="4603936802-2">[</span><span class="p" data-group-id="4603936802-3">[</span><span class="mi">1</span><span class="p" data-group-id="4603936802-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4603936802-4">[</span><span class="mi">2</span><span class="p" data-group-id="4603936802-4">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4603936802-5">[</span><span class="mi">3</span><span class="p" data-group-id="4603936802-5">]</span><span class="p" data-group-id="4603936802-2">]</span><span class="p" data-group-id="4603936802-1">)</span><span class="p">.</span><span class="w">
+      </span><span class="p" data-group-id="4603936802-6">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="4603936802-6">]</span><span class="w">
+      </span><span class="o">&gt;</span></code></pre><h2 id="recursive-list-functions" class="section-heading">
+  <a href="#recursive-list-functions" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Recursive List Functions</span>
+</h2>
+<p>In section about myths, the following myth was exposed:
+<a href="myths.html#tail_recursive">Tail-Recursive Functions are Much Faster Than Recursive Functions</a>.</p><p>There is usually not much difference between a body-recursive list function and
+tail-recursive function that reverses the list at the end. Therefore,
+concentrate on writing beautiful code and forget about the performance of your
+list functions. In the time-critical parts of your code (and only there),
+<em>measure</em> before rewriting your code.</p><blockquote><h4 class="info">Note</h4><p>This section is about list functions that <em>construct</em> lists. A tail-recursive
+function that does not construct a list runs in constant space, while the
+corresponding body-recursive function uses stack space proportional to the
+length of the list.</p></blockquote><p>For example, a function that sums a list of integers, is <em>not</em> to be written as
+follows:</p><p><em>DO NOT</em></p><pre><code class="makeup erlang" translate="no"><span class="nf">recursive_sum</span><span class="p" data-group-id="4542404862-1">(</span><span class="p" data-group-id="4542404862-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="4542404862-2">]</span><span class="p" data-group-id="4542404862-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">H</span><span class="o">+</span><span class="nf">recursive_sum</span><span class="p" data-group-id="4542404862-3">(</span><span class="n">T</span><span class="p" data-group-id="4542404862-3">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">recursive_sum</span><span class="p" data-group-id="4542404862-4">(</span><span class="p" data-group-id="4542404862-5">[</span><span class="p" data-group-id="4542404862-5">]</span><span class="p" data-group-id="4542404862-4">)</span><span class="w">    </span><span class="p">-&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span></code></pre><p>Instead:</p><p><em>DO</em></p><pre><code class="makeup erlang" translate="no"><span class="nf">sum</span><span class="p" data-group-id="3785659779-1">(</span><span class="n">L</span><span class="p" data-group-id="3785659779-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="3785659779-2">(</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3785659779-2">)</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">sum</span><span class="p" data-group-id="3785659779-3">(</span><span class="p" data-group-id="3785659779-4">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="3785659779-4">]</span><span class="p">,</span><span class="w"> </span><span class="n">Sum</span><span class="p" data-group-id="3785659779-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">sum</span><span class="p" data-group-id="3785659779-5">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">H</span><span class="p" data-group-id="3785659779-5">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">sum</span><span class="p" data-group-id="3785659779-6">(</span><span class="p" data-group-id="3785659779-7">[</span><span class="p" data-group-id="3785659779-7">]</span><span class="p">,</span><span class="w"> </span><span class="n">Sum</span><span class="p" data-group-id="3785659779-6">)</span><span class="w">    </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Sum</span><span class="p">.</span></code></pre>
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="maps.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Maps
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="eff_guide_functions.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Functions
+        </span>
+      </a>
+
+  </div>
+</div>
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Erlang System Documentation.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+
+            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</main>
+</div>
+
+
+  </body>
+</html>

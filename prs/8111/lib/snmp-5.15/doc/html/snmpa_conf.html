@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="project" content="snmp v5.15">
+
+
+    <title>snmpa_conf — snmp v5.15</title>
+    <link rel="stylesheet" href="dist/html-erlang-YUARVD4J.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
+    <script src="dist/sidebar_items-1A482EB4.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-L4O5OK2K.js"></script>
+
+<style>.dark img { background-color: white; }</style>
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<div class="background-layer"></div>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="../../../../doc/index.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="snmp" />
+        </a>
+
+      <div>
+        <a href="../../../../doc/index.html" class="sidebar-projectName" translate="no">
+snmp
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v5.15
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+      <div class="top-search">
+        <div class="search-settings">
+          <form class="search-bar" action="search.html">
+            <label class="search-label">
+              <span class="sr-only">Search documentation of snmp</span>
+              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="search-button" aria-label="Submit Search">
+              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+            </button>
+            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+              <i class="ri-close-line ri-lg" title="Cancel search"></i>
+            </button>
+          </form>
+          <div class="autocomplete">
+          </div>
+          <button class="icon-settings display-settings">
+            <i class="ri-settings-3-line"></i>
+            <span class="sr-only">Settings</span>
+          </button>
+        </div>
+
+      </div>
+
+<h1>
+
+    <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L21" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">snmpa_conf</span> 
+  <small class="app-vsn" translate="no">(snmp v5.15)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>Utility functions for handling the agent config files.</p><p>The module <code class="inline">snmpa_conf</code> contains various utility functions to used for
+manipulating (write/append/read) the config files of the SNMP agent.</p><h2 id="module-data-types" class="section-heading">
+  <a href="#module-data-types" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">DATA TYPES</span>
+</h2>
+<pre><code class="makeup erlang" translate="no"><span class="nf">transportDomain</span><span class="p" data-group-id="3310003343-1">(</span><span class="p" data-group-id="3310003343-1">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">transportDomainUdpIpv4</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">transportDomainUdpIpv6</span><span class="w">
+
+</span><span class="nf">transportAddress</span><span class="p" data-group-id="3310003343-2">(</span><span class="p" data-group-id="3310003343-2">)</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nf">transportAddressIPv4</span><span class="p" data-group-id="3310003343-3">(</span><span class="p" data-group-id="3310003343-3">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">transportAddressIPv6</span><span class="p" data-group-id="3310003343-4">(</span><span class="p" data-group-id="3310003343-4">)</span><span class="w">
+
+</span><span class="nf">transportAddressWithPort</span><span class="p" data-group-id="3310003343-5">(</span><span class="p" data-group-id="3310003343-5">)</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nf">transportAddressIPv4WithPort</span><span class="p" data-group-id="3310003343-6">(</span><span class="p" data-group-id="3310003343-6">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">transportAddressIPv6WithPort</span><span class="p" data-group-id="3310003343-7">(</span><span class="p" data-group-id="3310003343-7">)</span><span class="w">
+
+</span><span class="nf">transportAddressWithoutPort</span><span class="p" data-group-id="3310003343-8">(</span><span class="p" data-group-id="3310003343-8">)</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nf">transportAddressIPv4WithoutPort</span><span class="p" data-group-id="3310003343-9">(</span><span class="p" data-group-id="3310003343-9">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">transportAddressIPv6WithoutPort</span><span class="p" data-group-id="3310003343-10">(</span><span class="p" data-group-id="3310003343-10">)</span><span class="w">
+
+</span><span class="nf">transportAddressIPv4</span><span class="p" data-group-id="3310003343-11">(</span><span class="p" data-group-id="3310003343-11">)</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nf">transportAddressIPv4WithPort</span><span class="p" data-group-id="3310003343-12">(</span><span class="p" data-group-id="3310003343-12">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">transportAddressIPv4WithoutPort</span><span class="p" data-group-id="3310003343-13">(</span><span class="p" data-group-id="3310003343-13">)</span><span class="w">
+</span><span class="ss">transportAddressIPv4WithPort</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-14">{</span><span class="nf">transportAddressIPv4WithoutPort</span><span class="p" data-group-id="3310003343-15">(</span><span class="p" data-group-id="3310003343-15">)</span><span class="p">,</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">port_number</span><span class="p" data-group-id="3310003343-16">(</span><span class="p" data-group-id="3310003343-16">)</span><span class="p" data-group-id="3310003343-14">}</span><span class="w"> </span><span class="p">|</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-17">[</span><span class="nf">byte</span><span class="p" data-group-id="3310003343-18">(</span><span class="p" data-group-id="3310003343-18">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nf">byte</span><span class="p" data-group-id="3310003343-19">(</span><span class="p" data-group-id="3310003343-19">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="3310003343-17">]</span><span class="w">
+</span><span class="ss">transportAddressIPv4WithoutPort</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nc">inet</span><span class="p">:</span><span class="nf">ip4_address</span><span class="p" data-group-id="3310003343-20">(</span><span class="p" data-group-id="3310003343-20">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="3310003343-21">[</span><span class="nf">byte</span><span class="p" data-group-id="3310003343-22">(</span><span class="p" data-group-id="3310003343-22">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">4</span><span class="p" data-group-id="3310003343-21">]</span><span class="w">
+
+</span><span class="nf">transportAddressIPv6</span><span class="p" data-group-id="3310003343-23">(</span><span class="p" data-group-id="3310003343-23">)</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nf">transportAddressIPv6WithPort</span><span class="p" data-group-id="3310003343-24">(</span><span class="p" data-group-id="3310003343-24">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">transportAddressIPv6WithoutPort</span><span class="p" data-group-id="3310003343-25">(</span><span class="p" data-group-id="3310003343-25">)</span><span class="w">
+</span><span class="ss">transportAddressIPv6WithPort</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-26">{</span><span class="nf">transportAddressIPv6WithoutPort</span><span class="p" data-group-id="3310003343-27">(</span><span class="p" data-group-id="3310003343-27">)</span><span class="p">,</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">port_number</span><span class="p" data-group-id="3310003343-28">(</span><span class="p" data-group-id="3310003343-28">)</span><span class="p" data-group-id="3310003343-26">}</span><span class="w"> </span><span class="p">|</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-29">[</span><span class="nf">word</span><span class="p" data-group-id="3310003343-30">(</span><span class="p" data-group-id="3310003343-30">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">port_number</span><span class="p" data-group-id="3310003343-31">(</span><span class="p" data-group-id="3310003343-31">)</span><span class="p" data-group-id="3310003343-29">]</span><span class="w"> </span><span class="p">|</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-32">[</span><span class="nf">word</span><span class="p" data-group-id="3310003343-33">(</span><span class="p" data-group-id="3310003343-33">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nf">byte</span><span class="p" data-group-id="3310003343-34">(</span><span class="p" data-group-id="3310003343-34">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="3310003343-32">]</span><span class="w"> </span><span class="p">|</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-35">{</span><span class="nf">byte</span><span class="p" data-group-id="3310003343-36">(</span><span class="p" data-group-id="3310003343-36">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="nf">byte</span><span class="p" data-group-id="3310003343-37">(</span><span class="p" data-group-id="3310003343-37">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w">
+</span><span class="ss">transportAddressIPv6WithoutPort</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="nc">inet</span><span class="p">:</span><span class="nf">ip6_address</span><span class="p" data-group-id="3310003343-38">(</span><span class="p" data-group-id="3310003343-38">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="3310003343-39">[</span><span class="nf">word</span><span class="p" data-group-id="3310003343-40">(</span><span class="p" data-group-id="3310003343-40">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">8</span><span class="p" data-group-id="3310003343-39">]</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="3310003343-41">[</span><span class="nf">byte</span><span class="p" data-group-id="3310003343-42">(</span><span class="p" data-group-id="3310003343-42">)</span><span class="w"> </span><span class="ss">x</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="3310003343-41">]</span><span class="w">
+
+</span><span class="nf">transportAddressMask</span><span class="p" data-group-id="3310003343-43">(</span><span class="p" data-group-id="3310003343-43">)</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="p" data-group-id="3310003343-44">[</span><span class="p" data-group-id="3310003343-44">]</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">transportAddressWithPort</span><span class="p" data-group-id="3310003343-45">(</span><span class="p" data-group-id="3310003343-45">)</span><span class="w">
+
+</span><span class="nf">byte</span><span class="p" data-group-id="3310003343-46">(</span><span class="p" data-group-id="3310003343-46">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="p">.</span><span class="mi">255</span><span class="w">
+</span><span class="nf">word</span><span class="p" data-group-id="3310003343-47">(</span><span class="p" data-group-id="3310003343-47">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="p">.</span><span class="mi">65535</span></code></pre><p>For <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:ip4_address/0"><code class="inline">inet:ip4_address()</code></a>,
+<a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:ip6_address/0"><code class="inline">inet:ip6_address()</code></a> and
+<a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:port_number/0"><code class="inline">inet:port_number()</code></a>, see also <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:ip_address/0"><code class="inline">inet:ip_address/0</code></a></p><p><a href="" id="agent_entry"></a></p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddress/0" translate="no">transportAddress()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressIPv4/0" translate="no">transportAddressIPv4()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressIPv4WithoutPort/0" translate="no">transportAddressIPv4WithoutPort()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressIPv4WithPort/0" translate="no">transportAddressIPv4WithPort()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressIPv6/0" translate="no">transportAddressIPv6()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressIPv6WithoutPort/0" translate="no">transportAddressIPv6WithoutPort()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressIPv6WithPort/0" translate="no">transportAddressIPv6WithPort()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressMask/0" translate="no">transportAddressMask()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressWithoutPort/0" translate="no">transportAddressWithoutPort()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportAddressWithPort/0" translate="no">transportAddressWithPort()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transportDomain/0" translate="no">transportDomain()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:usm_entry/0" translate="no">usm_entry()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:word/0" translate="no">word()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#agent_entry/2" translate="no">agent_entry(Tag, Val)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>agent_entry(Tag, Val) -&gt; agent_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_agent_config/2" translate="no">append_agent_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_agent_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_community_config/2" translate="no">append_community_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_community_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_context_config/2" translate="no">append_context_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_context_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_notify_config/2" translate="no">append_notify_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_notify_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_standard_config/2" translate="no">append_standard_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_standard_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_target_addr_config/2" translate="no">append_target_addr_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_target_addr_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_target_params_config/2" translate="no">append_target_params_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_target_params_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_usm_config/2" translate="no">append_usm_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_usm_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#append_vacm_config/2" translate="no">append_vacm_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>append_vacm_config(Dir, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#community_entry/1" translate="no">community_entry/1</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#community_entry/5"><code class="inline">community_entry/5</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#community_entry/5" translate="no">community_entry(CommIndex, CommName, SecName, CtxName, TransportTag)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>community_entry(CommunityIndex, CommunityName, SecName, ContextName,
+TransportTag) -&gt; community_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#context_entry/1" translate="no">context_entry(Ctx)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>context_entry(Context) -&gt; context_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#notify_entry/3" translate="no">notify_entry(Name, Tag, Type)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>notify_entry(Name, Tag, Type) -&gt; notify_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_agent_config/1" translate="no">read_agent_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_agent_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_community_config/1" translate="no">read_community_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_community_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_context_config/1" translate="no">read_context_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_context_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_notify_config/1" translate="no">read_notify_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_notify_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_standard_config/1" translate="no">read_standard_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_standard_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_target_addr_config/1" translate="no">read_target_addr_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_target_addr_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_target_params_config/1" translate="no">read_target_params_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_target_params_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_usm_config/1" translate="no">read_usm_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_usm_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_vacm_config/1" translate="no">read_vacm_config(Dir)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>read_vacm_config(Dir) -&gt; Conf</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#standard_entry/2" translate="no">standard_entry(Tag, Val)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>standard_entry(Tag, Val) -&gt; standard_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_addr_entry/6" translate="no">target_addr_entry/6</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#target_addr_entry/10"><code class="inline">target_addr_entry/10</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_addr_entry/7" translate="no">target_addr_entry(Name, Domain_or_Ip, Addr_or_Port, TagList, ParamsName, EngineId, TMask)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#target_addr_entry/10"><code class="inline">target_addr_entry/10</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_addr_entry/8" translate="no">target_addr_entry(Name, Domain_or_Ip, Addr_or_Port, TagList, ParamsName, EngineId, TMask, MaxMessageSize)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#target_addr_entry/10"><code class="inline">target_addr_entry/10</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_addr_entry/10" translate="no">target_addr_entry(Name, Domain_or_Ip, Addr_or_Port, Timeout, RetryCount, TagList, ParamsName, EngineId, TMask, MaxMessageSize)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>target_addr_entry(Name, Domain, Addr, Timeout, RetryCount, TagList, ParamsName,
+EngineId, TMask, MaxMessageSize) -&gt; target_addr_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_params_entry/2" translate="no">target_params_entry(Name, Vsn)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#target_params_entry/5"><code class="inline">target_params_entry/5</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_params_entry/4" translate="no">target_params_entry(Name, Vsn, SecName, SecLevel)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#target_params_entry/5"><code class="inline">target_params_entry/5</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#target_params_entry/5" translate="no">target_params_entry(Name, MPModel, SecModel, SecName, SecLevel)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>target_params_entry(Name, MPModel, SecModel, SecName, SecLevel) -&gt;
+target_params_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#usm_entry/1" translate="no">usm_entry(EngineID)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#usm_entry/13"><code class="inline">usm_entry/13</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#usm_entry/13" translate="no">usm_entry(EngineID, UserName, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC, PrivP, PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>usm_entry(EngineID, UserName, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC,
+PrivP, PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; usm_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#vacm_acc_entry/8" translate="no">vacm_acc_entry(GroupName, Prefix, SecModel, SecLevel, Match, RV, WV, NV)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry/4</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#vacm_s2g_entry/3" translate="no">vacm_s2g_entry(SecModel, SecName, GroupName)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry/4</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#vacm_vtf_entry/2" translate="no">vacm_vtf_entry(ViewIndex, ViewSubtree)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry/4</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#vacm_vtf_entry/4" translate="no">vacm_vtf_entry(ViewIndex, ViewSubtree, ViewStatus, ViewMask)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>vacm_vtf_entry(ViewIndex, ViewSubtree, ViewStatus, ViewMask) -&gt; vacm_vtf_entry()</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_agent_config/2" translate="no">write_agent_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_agent_config/3"><code class="inline">write_agent_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_agent_config/3" translate="no">write_agent_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_agent_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_community_config/2" translate="no">write_community_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_community_config/3"><code class="inline">write_community_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_community_config/3" translate="no">write_community_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_community_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_context_config/2" translate="no">write_context_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_context_config/3"><code class="inline">write_context_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_context_config/3" translate="no">write_context_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_context_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_notify_config/2" translate="no">write_notify_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_notify_config/3"><code class="inline">write_notify_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_notify_config/3" translate="no">write_notify_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_notify_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_standard_config/2" translate="no">write_standard_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_standard_config/3"><code class="inline">write_standard_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_standard_config/3" translate="no">write_standard_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_standard_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_target_addr_config/2" translate="no">write_target_addr_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_target_addr_config/3"><code class="inline">write_target_addr_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_target_addr_config/3" translate="no">write_target_addr_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_target_addr_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_target_params_config/2" translate="no">write_target_params_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_target_params_config/3"><code class="inline">write_target_params_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_target_params_config/3" translate="no">write_target_params_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_target_params_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_usm_config/2" translate="no">write_usm_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_usm_config/3"><code class="inline">write_usm_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_usm_config/3" translate="no">write_usm_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_usm_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_vacm_config/2" translate="no">write_vacm_config(Dir, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_vacm_config/3"><code class="inline">write_vacm_config/3</code></a></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_vacm_config/3" translate="no">write_vacm_config(Dir, Hdr, Conf)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>write_vacm_config(Dir, Hdr, Conf) -&gt; ok</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:transportAddress/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddress/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddress()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L148" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddress() :: <a href="#t:transportAddressIPv4/0">transportAddressIPv4</a>() | <a href="#t:transportAddressIPv6/0">transportAddressIPv6</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressIPv4/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressIPv4/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressIPv4()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L157" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressIPv4() :: <a href="#t:transportAddressIPv4WithPort/0">transportAddressIPv4WithPort</a>() | <a href="#t:transportAddressIPv4WithoutPort/0">transportAddressIPv4WithoutPort</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressIPv4WithoutPort/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressIPv4WithoutPort/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressIPv4WithoutPort()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L165" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressIPv4WithoutPort() ::
+    <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:ip4_address/0">inet:ip4_address</a>() | [IPA :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (IPB :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (IPC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (IPD :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>())))].</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressIPv4WithPort/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressIPv4WithPort/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressIPv4WithPort()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L160" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressIPv4WithPort() ::
+    {<a href="#t:transportAddressIPv4WithoutPort/0">transportAddressIPv4WithoutPort</a>(), <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:port_number/0">inet:port_number</a>()} |
+    [IPA ::
+         <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+         (IPB ::
+              <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (IPC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (IPD :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (PortA :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (PortB :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>())))))].</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressIPv6/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressIPv6/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressIPv6()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L168" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressIPv6() :: <a href="#t:transportAddressIPv6WithPort/0">transportAddressIPv6WithPort</a>() | <a href="#t:transportAddressIPv6WithoutPort/0">transportAddressIPv6WithoutPort</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressIPv6WithoutPort/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressIPv6WithoutPort/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressIPv6WithoutPort()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L184" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressIPv6WithoutPort() ::
+    <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:ip6_address/0">inet:ip6_address</a>() |
+    [IPA ::
+         <a href="#t:word/0">word</a>() |
+         (IPB ::
+              <a href="#t:word/0">word</a>() |
+              (IPC ::
+                   <a href="#t:word/0">word</a>() |
+                   (IPD ::
+                        <a href="#t:word/0">word</a>() |
+                        (IPE :: <a href="#t:word/0">word</a>() | (IPF :: <a href="#t:word/0">word</a>() | (IPG :: <a href="#t:word/0">word</a>() | (IPH :: <a href="#t:word/0">word</a>())))))))] |
+    [IPA ::
+         <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+         (IPB ::
+              <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+              (IPC ::
+                   <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                   (IPD ::
+                        <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                        (IPE ::
+                             <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                             (IPF ::
+                                  <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                  (IPG ::
+                                       <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                       (IPH ::
+                                            <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                            (IPI ::
+                                                 <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                 (IPJ ::
+                                                      <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                      (IPK ::
+                                                           <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                           (IPL ::
+                                                                <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                                (IPM ::
+                                                                     <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                                     (IPN ::
+                                                                          <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                                          (IPO ::
+                                                                               <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() |
+                                                                               (IPP :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>())))))))))))))))].</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressIPv6WithPort/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressIPv6WithPort/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressIPv6WithPort()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L171" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressIPv6WithPort() ::
+    {<a href="#t:transportAddressIPv6WithoutPort/0">transportAddressIPv6WithoutPort</a>(), <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:port_number/0">inet:port_number</a>()} |
+    [IPA ::
+         <a href="#t:word/0">word</a>() |
+         (IPB ::
+              <a href="#t:word/0">word</a>() |
+              (IPC ::
+                   <a href="#t:word/0">word</a>() |
+                   (IPD ::
+                        <a href="#t:word/0">word</a>() |
+                        (IPE ::
+                             <a href="#t:word/0">word</a>() |
+                             (IPF ::
+                                  <a href="#t:word/0">word</a>() | (IPG :: <a href="#t:word/0">word</a>() | (IPH :: <a href="#t:word/0">word</a>() | <a href="../../../../lib/kernel-9.2.1/doc/html/inet.html#t:port_number/0">inet:port_number</a>())))))))] |
+    [IPA ::
+         <a href="#t:word/0">word</a>() |
+         (IPB ::
+              <a href="#t:word/0">word</a>() |
+              (IPC ::
+                   <a href="#t:word/0">word</a>() |
+                   (IPD ::
+                        <a href="#t:word/0">word</a>() |
+                        (IPE ::
+                             <a href="#t:word/0">word</a>() |
+                             (IPF ::
+                                  <a href="#t:word/0">word</a>() |
+                                  (IPG ::
+                                       <a href="#t:word/0">word</a>() |
+                                       (IPH :: <a href="#t:word/0">word</a>() | (PortA :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>() | (PortB :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>())))))))))] |
+    {IPA :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPB :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPD :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPE :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPF :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPG :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPH :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPI :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPJ :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPK :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPL :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPM :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPN :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPO :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     IPP :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     PortA :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>(),
+     PortB :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:byte/0">byte</a>()}.</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressMask/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressMask/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressMask()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L193" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressMask() :: [] | <a href="#t:transportAddressWithPort/0">transportAddressWithPort</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressWithoutPort/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressWithoutPort/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressWithoutPort()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L154" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressWithoutPort() ::
+    <a href="#t:transportAddressIPv4WithoutPort/0">transportAddressIPv4WithoutPort</a>() | <a href="#t:transportAddressIPv6WithoutPort/0">transportAddressIPv6WithoutPort</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportAddressWithPort/0">
+
+  <div class="detail-header">
+    <a href="#t:transportAddressWithPort/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportAddressWithPort()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L151" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportAddressWithPort() :: <a href="#t:transportAddressIPv4WithPort/0">transportAddressIPv4WithPort</a>() | <a href="#t:transportAddressIPv6WithPort/0">transportAddressIPv6WithPort</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transportDomain/0">
+
+  <div class="detail-header">
+    <a href="#t:transportDomain/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">transportDomain()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L146" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> transportDomain() :: <a href="snmp.html#t:tdomain/0">snmp:tdomain</a>().</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:usm_entry/0">
+
+  <div class="detail-header">
+    <a href="#t:usm_entry/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">usm_entry()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L198" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> usm_entry() ::
+    {EngineID :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     UserName :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     SecName :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     Clone :: zeroDotZero | [<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()],
+     AuthP ::
+         usmNoAuthProtocol | usmHMACMD5AuthProtocol | usmHMACSHAAuthProtocol |
+         usmHMAC128SHA224AuthProtocol | usmHMAC192SHA256AuthProtocol |
+         usmHMAC256SHA384AuthProtocol | usmHMAC384SHA512AuthProtocol,
+     AuthKeyC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     OwnAuthKeyC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     PrivP :: usmNoPrivProtocol | usmDESPrivProtocol | usmAesCfb128Protocol,
+     PrivKeyC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     OwnPrivKeyC :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     Public :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+     AuthKey :: [<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()],
+     PrivKey :: [<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()]}.</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:word/0">
+
+  <div class="detail-header">
+    <a href="#t:word/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">word()</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L196" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> word() :: 0..65535.</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="agent_entry/2">
+
+  <div class="detail-header">
+    <a href="#agent_entry/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">agent_entry(Tag, Val)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L254" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>agent_entry(Tag, Val) -&gt; agent_entry()</p><p>Create an entry for the agent config file, <code class="inline">agent.conf</code>.</p><p>The type of <code class="inline">Val</code> depends on the value of <code class="inline">Tag</code>, see
+<a href="snmp_agent_config_files.html#agent_information">Agent Information</a> for more info.</p><p><a href="" id="write_agent_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_agent_config/2">
+
+  <div class="detail-header">
+    <a href="#append_agent_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_agent_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L311" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_agent_config(Dir, Conf) -&gt; ok</p><p>Append the config to the current agent config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#agent_information">Agent Information</a> for more
+info.</p><p><a href="" id="read_agent_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_community_config/2">
+
+  <div class="detail-header">
+    <a href="#append_community_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_community_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L565" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_community_config(Dir, Conf) -&gt; ok</p><p>Append the community config to the current agent community config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#community">Community</a> for more info.</p><p><a href="" id="read_community_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_context_config/2">
+
+  <div class="detail-header">
+    <a href="#append_context_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_context_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L432" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_context_config(Dir, Conf) -&gt; ok</p><p>Append the context config to the current agent context config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#context">Contexts</a> for more info.</p><p><a href="" id="read_context_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_notify_config/2">
+
+  <div class="detail-header">
+    <a href="#append_notify_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_notify_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1177" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_notify_config(Dir, Conf) -&gt; ok</p><p>Append the notify config to the current agent notify config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#notify">Notify Definitions</a> for more info.</p><p><a href="" id="read_notify_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_standard_config/2">
+
+  <div class="detail-header">
+    <a href="#append_standard_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_standard_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L683" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_standard_config(Dir, Conf) -&gt; ok</p><p>Append the standard config to the current agent standard config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#system_information">System Information</a> for more
+info.</p><p><a href="" id="read_standard_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_target_addr_config/2">
+
+  <div class="detail-header">
+    <a href="#append_target_addr_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_target_addr_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L880" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_target_addr_config(Dir, Conf) -&gt; ok</p><p>Append the target_addr config to the current agent target_addr config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#target_addr">Target Address Definitions</a> for
+more info.</p><p><a href="" id="read_target_addr_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_target_params_config/2">
+
+  <div class="detail-header">
+    <a href="#append_target_params_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_target_params_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1063" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_target_params_config(Dir, Conf) -&gt; ok</p><p>Append the target_params config to the current agent target_params config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#target_params">Target Parameters Definitions</a>
+for more info.</p><p><a href="" id="read_target_params_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_usm_config/2">
+
+  <div class="detail-header">
+    <a href="#append_usm_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_usm_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1317" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_usm_config(Dir, Conf) -&gt; ok</p><p>Append the usm config to the current agent vacm config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#usm">Security data for USM</a> for more info.</p><p><a href="" id="read_usm_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="append_vacm_config/2">
+
+  <div class="detail-header">
+    <a href="#append_vacm_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">append_vacm_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1472" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>append_vacm_config(Dir, Conf) -&gt; ok</p><p>Append the vacm config to the current agent vacm config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#vacm">MIB Views for VACM</a> for more info.</p><p><a href="" id="read_vacm_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="community_entry/1">
+
+  <div class="detail-header">
+    <a href="#community_entry/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">community_entry/1</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L480" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#community_entry/5"><code class="inline">community_entry/5</code></a></p>
+  </section>
+</section>
+<section class="detail" id="community_entry/5">
+
+  <div class="detail-header">
+    <a href="#community_entry/5" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">community_entry(CommIndex, CommName, SecName, CtxName, TransportTag)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L513" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>community_entry(CommunityIndex, CommunityName, SecName, ContextName,
+TransportTag) -&gt; community_entry()</p><p>Create an entry for the agent community config file, <code class="inline">community.conf</code>.</p><p><code class="inline">CommunityIndex</code> must be a <em>non-empty</em> string.</p><p><a href="#community_entry/1"><code class="inline">community_entry(&quot;public&quot;)</code></a> translates to the following
+call:
+<a href="#community_entry/5"><code class="inline">community_entry(CommunityIndex, CommunityIndex, &quot;initial&quot;, &quot;&quot;, &quot;&quot;)</code></a>.</p><p><a href="#community_entry/1"><code class="inline">community_entry(&quot;all-rights&quot;)</code></a> translates to the
+following call:
+<a href="#community_entry/5"><code class="inline">community_entry(CommunityIndex, CommunityIndex, CommunityIndex, &quot;&quot;, &quot;&quot;)</code></a>.</p><p>See <a href="snmp_agent_config_files.html#community">Community</a> for more info.</p><p><a href="" id="write_community_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="context_entry/1">
+
+  <div class="detail-header">
+    <a href="#context_entry/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">context_entry(Ctx)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L379" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>context_entry(Context) -&gt; context_entry()</p><p>Create an entry for the agent context config file, <code class="inline">context.conf</code>.</p><p>See <a href="snmp_agent_config_files.html#context">Contexts</a> for more info.</p><p><a href="" id="write_context_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="notify_entry/3">
+
+  <div class="detail-header">
+    <a href="#notify_entry/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">notify_entry(Name, Tag, Type)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1125" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>notify_entry(Name, Tag, Type) -&gt; notify_entry()</p><p>Create an entry for the agent notify config file, <code class="inline">notify.conf</code>.</p><p><code class="inline">Name</code> must be a <em>non-empty</em> string.</p><p>See <a href="snmp_agent_config_files.html#notify">Notify Definitions</a> for more info.</p><p><a href="" id="write_notify_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_agent_config/1">
+
+  <div class="detail-header">
+    <a href="#read_agent_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_agent_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L330" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_agent_config(Dir) -&gt; Conf</p><p>Read the current agent config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#agent_information">Agent Information</a> for more
+info.</p><p><a href="" id="standard_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_community_config/1">
+
+  <div class="detail-header">
+    <a href="#read_community_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_community_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L583" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_community_config(Dir) -&gt; Conf</p><p>Read the current agent community config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#community">Communities</a> for more info.</p><p><a href="" id="target_addr_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_context_config/1">
+
+  <div class="detail-header">
+    <a href="#read_context_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_context_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L450" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_context_config(Dir) -&gt; Conf</p><p>Read the current agent context config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#context">Contexts</a> for more info.</p><p><a href="" id="community_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_notify_config/1">
+
+  <div class="detail-header">
+    <a href="#read_notify_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_notify_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1195" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_notify_config(Dir) -&gt; Conf</p><p>Read the current agent notify config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#notify">Notify Definitions</a> for more info.</p><p><a href="" id="end"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_standard_config/1">
+
+  <div class="detail-header">
+    <a href="#read_standard_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_standard_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L702" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_standard_config(Dir) -&gt; Conf</p><p>Read the current agent standard config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#system_information">System Information</a> for more
+info.</p><p><a href="" id="context_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_target_addr_config/1">
+
+  <div class="detail-header">
+    <a href="#read_target_addr_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_target_addr_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L899" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_target_addr_config(Dir) -&gt; Conf</p><p>Read the current agent target_addr config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#target_addr">Target Address Definitions</a> for
+more info.</p><p><a href="" id="target_params_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_target_params_config/1">
+
+  <div class="detail-header">
+    <a href="#read_target_params_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_target_params_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1082" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_target_params_config(Dir) -&gt; Conf</p><p>Read the current agent target_params config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#target_params">Target Parameters Definitions</a>
+for more info.</p><p><a href="" id="vacm_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_usm_config/1">
+
+  <div class="detail-header">
+    <a href="#read_usm_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_usm_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1335" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_usm_config(Dir) -&gt; Conf</p><p>Read the current agent usm config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#usm">Security data for USM</a> for more info.</p><p><a href="" id="notify_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="read_vacm_config/1">
+
+  <div class="detail-header">
+    <a href="#read_vacm_config/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_vacm_config(Dir)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1490" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>read_vacm_config(Dir) -&gt; Conf</p><p>Read the current agent vacm config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p>See <a href="snmp_agent_config_files.html#vacm">MIB Views for VACM</a> for more info.</p><p><a href="" id="usm_entry"></a></p>
+  </section>
+</section>
+<section class="detail" id="standard_entry/2">
+
+  <div class="detail-header">
+    <a href="#standard_entry/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">standard_entry(Tag, Val)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L627" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>standard_entry(Tag, Val) -&gt; standard_entry()</p><p>Create an entry for the agent standard config file, <code class="inline">standard.conf</code>.</p><p>The type of <code class="inline">Val</code> depends on the value of <code class="inline">Tag</code>, see
+<a href="snmp_agent_config_files.html#system_information">System Information</a> for more
+info.</p><p><a href="" id="write_standard_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="target_addr_entry/6">
+
+  <div class="detail-header">
+    <a href="#target_addr_entry/6" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_addr_entry/6</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L751" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(since OTP 17.3)</span>
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#target_addr_entry/10"><code class="inline">target_addr_entry/10</code></a></p>
+  </section>
+</section>
+<section class="detail" id="target_addr_entry/7">
+
+  <div class="detail-header">
+    <a href="#target_addr_entry/7" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_addr_entry(Name, Domain_or_Ip, Addr_or_Port, TagList, ParamsName, EngineId, TMask)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L766" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(since OTP 17.3)</span>
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#target_addr_entry/10"><code class="inline">target_addr_entry/10</code></a></p>
+  </section>
+</section>
+<section class="detail" id="target_addr_entry/8">
+
+  <div class="detail-header">
+    <a href="#target_addr_entry/8" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_addr_entry(Name, Domain_or_Ip, Addr_or_Port, TagList, ParamsName, EngineId, TMask, MaxMessageSize)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L775" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(since OTP 17.3)</span>
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#target_addr_entry/10"><code class="inline">target_addr_entry/10</code></a></p>
+  </section>
+</section>
+<section class="detail" id="target_addr_entry/10">
+
+  <div class="detail-header">
+    <a href="#target_addr_entry/10" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_addr_entry(Name, Domain_or_Ip, Addr_or_Port, Timeout, RetryCount, TagList, ParamsName, EngineId, TMask, MaxMessageSize)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L805" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(since OTP 17.3)</span>
+
+  </div>
+
+  <section class="docstring">
+
+<p>target_addr_entry(Name, Domain, Addr, Timeout, RetryCount, TagList, ParamsName,
+EngineId, TMask, MaxMessageSize) -&gt; target_addr_entry()</p><p>Create an entry for the agent target_addr config file, <code class="inline">target_addr.conf</code>.</p><p><code class="inline">Name</code> must be a <em>non-empty</em> string.</p><p><a href="#target_addr_entry/6"><code class="inline">target_addr_entry/6</code></a> translates to the following call:
+<a href="#target_addr_entry/7"><code class="inline">target_addr_entry(Name, Domain, Addr, TagList, ParamsName, EngineId, [])</code></a>.</p><p><a href="#target_addr_entry/7"><code class="inline">target_addr_entry/7</code></a> translates to the following call:
+<a href="#target_addr_entry/8"><code class="inline">target_addr_entry(Name, Domain, Addr, TagList, ParamsName, EngineId, TMask, 2048)</code></a>.</p><p><a href="#target_addr_entry/8"><code class="inline">target_addr_entry/8</code></a> translates to the following call:
+<a href="#target_addr_entry/10"><code class="inline">target_addr_entry(Name, Domain, Addr, 1500, 3, TagList, ParamsName, EngineId, TMask, MaxMessageSize)</code></a>.</p><p>See <a href="snmp_agent_config_files.html#target_addr">Target Address Definitions</a> for
+more info.</p><p><a href="" id="write_target_addr_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="target_params_entry/2">
+
+  <div class="detail-header">
+    <a href="#target_params_entry/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_params_entry(Name, Vsn)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L964" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#target_params_entry/5"><code class="inline">target_params_entry/5</code></a></p>
+  </section>
+</section>
+<section class="detail" id="target_params_entry/4">
+
+  <div class="detail-header">
+    <a href="#target_params_entry/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_params_entry(Name, Vsn, SecName, SecLevel)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L970" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#target_params_entry/5"><code class="inline">target_params_entry/5</code></a></p>
+  </section>
+</section>
+<section class="detail" id="target_params_entry/5">
+
+  <div class="detail-header">
+    <a href="#target_params_entry/5" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">target_params_entry(Name, MPModel, SecModel, SecName, SecLevel)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1011" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>target_params_entry(Name, MPModel, SecModel, SecName, SecLevel) -&gt;
+target_params_entry()</p><p>Create an entry for the agent target_params config file, <code class="inline">target_params.conf</code>.</p><p><code class="inline">Name</code> must be a <em>non-empty</em> string.</p><p><code class="inline">Vsn</code> translates into <code class="inline">MPModel</code> and <code class="inline">SecModel</code> as follows:</p><pre><code class="text">\011  Vsn = v1 =&gt; MPModel = v1,  SecModel = v1
+\011  Vsn = v2 =&gt; MPModel = v2c, SecModel = v2c
+\011  Vsn = v3 =&gt; MPModel = v3,  SecModel = usm</code></pre><p><a href="#target_params_entry/2"><code class="inline">target_params_entry/2</code></a> translates to the following
+call:
+<a href="#target_params_entry/4"><code class="inline">target_params_entry(Name, Vsn, &quot;initial&quot;, noAuthNoPriv)</code></a>.</p><p><a href="#target_params_entry/4"><code class="inline">target_params_entry/4</code></a> translates to the following
+call:
+<a href="#target_params_entry/5"><code class="inline">target_params_entry(Name, MPModel, SecModel, SecName, SecLevel)</code></a>
+where <code class="inline">MPModel</code> and <code class="inline">SecModel</code> is mapped from <code class="inline">Vsn</code>, see above.</p><p>See <a href="snmp_agent_config_files.html#target_params">Target Parameters Definitions</a>
+for more info.</p><p><a href="" id="write_target_params_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="usm_entry/1">
+
+  <div class="detail-header">
+    <a href="#usm_entry/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">usm_entry(EngineID)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1226" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#usm_entry/13"><code class="inline">usm_entry/13</code></a></p>
+  </section>
+</section>
+<section class="detail" id="usm_entry/13">
+
+  <div class="detail-header">
+    <a href="#usm_entry/13" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">usm_entry(EngineID, UserName, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC, PrivP, PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1257" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>usm_entry(EngineID, UserName, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC,
+PrivP, PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; usm_entry()</p><p>Create an entry for the agent vacm config file, <code class="inline">vacm.conf</code>.</p><p><a href="#usm_entry/1"><code class="inline">usm_entry/1</code></a> translates to the following call:
+<code class="inline">usm_entry(&quot;initial&quot;, &quot;initial&quot;, zeroDotZero, usmNoAuthProtocol, &quot;&quot;, &quot;&quot;, usmNoPrivProtocol, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;)</code>.</p><p>See <a href="snmp_agent_config_files.html#usm">Security data for USM</a> for more info.</p><p><a href="" id="write_usm_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="vacm_acc_entry/8">
+
+  <div class="detail-header">
+    <a href="#vacm_acc_entry/8" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">vacm_acc_entry(GroupName, Prefix, SecModel, SecLevel, Match, RV, WV, NV)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1394" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry/4</code></a></p>
+  </section>
+</section>
+<section class="detail" id="vacm_s2g_entry/3">
+
+  <div class="detail-header">
+    <a href="#vacm_s2g_entry/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">vacm_s2g_entry(SecModel, SecName, GroupName)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1390" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry/4</code></a></p>
+  </section>
+</section>
+<section class="detail" id="vacm_vtf_entry/2">
+
+  <div class="detail-header">
+    <a href="#vacm_vtf_entry/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">vacm_vtf_entry(ViewIndex, ViewSubtree)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1398" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry/4</code></a></p>
+  </section>
+</section>
+<section class="detail" id="vacm_vtf_entry/4">
+
+  <div class="detail-header">
+    <a href="#vacm_vtf_entry/4" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">vacm_vtf_entry(ViewIndex, ViewSubtree, ViewStatus, ViewMask)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1412" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>vacm_vtf_entry(ViewIndex, ViewSubtree, ViewStatus, ViewMask) -&gt; vacm_vtf_entry()</p><p>Create an entry for the agent vacm config file, <code class="inline">vacm.conf</code>.</p><p><a href="#vacm_vtf_entry/2"><code class="inline">vacm_vtf_entry/2</code></a> translates to the following call:
+<a href="#vacm_vtf_entry/4"><code class="inline">vacm_vtf_entry(ViewIndex, ViewSubtree, included, null)</code></a>.</p><p>See <a href="snmp_agent_config_files.html#vacm">MIB Views for VACM</a> for more info.</p><p><a href="" id="write_vacm_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_agent_config/2">
+
+  <div class="detail-header">
+    <a href="#write_agent_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_agent_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L259" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_agent_config/3"><code class="inline">write_agent_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_agent_config/3">
+
+  <div class="detail-header">
+    <a href="#write_agent_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_agent_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L292" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_agent_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent config to the agent config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#agent_information">Agent Information</a> for more
+info.</p><p><a href="" id="append_agent_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_community_config/2">
+
+  <div class="detail-header">
+    <a href="#write_community_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_community_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L518" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_community_config/3"><code class="inline">write_community_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_community_config/3">
+
+  <div class="detail-header">
+    <a href="#write_community_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_community_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L547" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_community_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent community config to the agent community config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#community">Community</a> for more info.</p><p><a href="" id="append_community_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_context_config/2">
+
+  <div class="detail-header">
+    <a href="#write_context_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_context_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L384" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_context_config/3"><code class="inline">write_context_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_context_config/3">
+
+  <div class="detail-header">
+    <a href="#write_context_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_context_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L414" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_context_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent context config to the agent context config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#context">Contexts</a> for more info.</p><p><a href="" id="append_context_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_notify_config/2">
+
+  <div class="detail-header">
+    <a href="#write_notify_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_notify_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1130" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_notify_config/3"><code class="inline">write_notify_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_notify_config/3">
+
+  <div class="detail-header">
+    <a href="#write_notify_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_notify_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1159" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_notify_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent notify config to the agent notify config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#notify">Notify Definitions</a> for more info.</p><p><a href="" id="append_notify_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_standard_config/2">
+
+  <div class="detail-header">
+    <a href="#write_standard_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_standard_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L632" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_standard_config/3"><code class="inline">write_standard_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_standard_config/3">
+
+  <div class="detail-header">
+    <a href="#write_standard_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_standard_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L664" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_standard_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent standard config to the agent standard config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#system_information">System Information</a> for more
+info.</p><p><a href="" id="append_standard_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_target_addr_config/2">
+
+  <div class="detail-header">
+    <a href="#write_target_addr_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_target_addr_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L820" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_target_addr_config/3"><code class="inline">write_target_addr_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_target_addr_config/3">
+
+  <div class="detail-header">
+    <a href="#write_target_addr_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_target_addr_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L861" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_target_addr_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent target_addr config to the agent target_addr config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#target_addr">Target Address Definitions</a> for
+more info.</p><p><a href="" id="append_target_addr_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_target_params_config/2">
+
+  <div class="detail-header">
+    <a href="#write_target_params_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_target_params_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1016" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_target_params_config/3"><code class="inline">write_target_params_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_target_params_config/3">
+
+  <div class="detail-header">
+    <a href="#write_target_params_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_target_params_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1044" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_target_params_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent target_params config to the agent target_params config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#target_params">Target Parameters Definitions</a>
+for more info.</p><p><a href="" id="append_target_params_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_usm_config/2">
+
+  <div class="detail-header">
+    <a href="#write_usm_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_usm_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1268" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_usm_config/3"><code class="inline">write_usm_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_usm_config/3">
+
+  <div class="detail-header">
+    <a href="#write_usm_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_usm_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1299" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_usm_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent usm config to the agent usm config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#usm">Security data for USM</a> for more info.</p><p><a href="" id="append_usm_config"></a></p>
+  </section>
+</section>
+<section class="detail" id="write_vacm_config/2">
+
+  <div class="detail-header">
+    <a href="#write_vacm_config/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_vacm_config(Dir, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1417" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Equivalent to <a href="#write_vacm_config/3"><code class="inline">write_vacm_config/3</code></a></p>
+  </section>
+</section>
+<section class="detail" id="write_vacm_config/3">
+
+  <div class="detail-header">
+    <a href="#write_vacm_config/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_vacm_config(Dir, Hdr, Conf)</h1>
+
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/snmp/src/agent/snmpa_conf.erl#L1454" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>write_vacm_config(Dir, Hdr, Conf) -&gt; ok</p><p>Write the agent vacm config to the agent vacm config file.</p><p><code class="inline">Dir</code> is the path to the directory where to store the config file.</p><p><code class="inline">Hdr</code> is an optional file header (note that this text is written to the file as
+is).</p><p>See <a href="snmp_agent_config_files.html#vacm">MIB Views for VACM</a> for more info.</p><p><a href="" id="append_vacm_config"></a></p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="snmp.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+
+            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</main>
+</div>
+
+
+  </body>
+</html>

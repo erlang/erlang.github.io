@@ -1,0 +1,27 @@
+name: Compress git repository
+
+## Update the base image every day
+on:
+  workflow_dispatch:
+  schedule:
+  ## In UTC
+  - cron: '0 0 * * *'
+
+concurrency: erlang.github.io-deploy
+
+## Build base images to be used by other github workflows
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Reset base and compress
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          HASH=$(git log --grep "Reset to only include PRs" --oneline | awk '{print $1}')
+          git reset --soft ${HASH}
+          git commit --amend --no-edit
+          git push origin +master
