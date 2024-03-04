@@ -1,9 +1,0 @@
-{merge_tests,false}.
-{label,"multiple_specs2"}.
-{suites,n1,"../tests/to1",[x_SUITE]}.
-{groups,n1,"../tests/to1",y_SUITE,[g1,g2]}.
-{cases,n1,"../tests/to1",y_SUITE,[tc1,tc2]}.
-{skip_suites,n1,"../tests/to1",z_SUITE,"skipped"}.
-{suites,n2,"../tests/to2",[x_SUITE,y_SUITE]}.
-{skip_groups,n2,"../tests/to2",x_SUITE,[g1,g2],"skipped"}.
-{skip_cases,n2,"../tests/to2",y_SUITE,[tc1,tc2],"skipped"}.
