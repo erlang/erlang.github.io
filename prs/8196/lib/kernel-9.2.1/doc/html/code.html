@@ -193,11 +193,11 @@ structure for an application. If you, for example, create an archive of
 <code class="inline">mnesia-4.4.7</code>, the archive file must be named <code class="inline">mnesia-4.4.7.ez</code> and it must
 contain a top directory named <code class="inline">mnesia-4.4.7</code>. If the version part of the name is
 omitted, it must also be omitted in the archive. That is, a <code class="inline">mnesia.ez</code> archive
-must contain a <code class="inline">mnesia</code> top directory.</p><p>An archive file for an application can, for example, be created like this:</p><pre><code class="makeup erlang" translate="no"><span class="nc">zip</span><span class="p">:</span><span class="nf">create</span><span class="p" data-group-id="1995839797-1">(</span><span class="s">&quot;mnesia-4.4.7.ez&quot;</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="1995839797-2">[</span><span class="s">&quot;mnesia-4.4.7&quot;</span><span class="p" data-group-id="1995839797-2">]</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="1995839797-3">[</span><span class="p" data-group-id="1995839797-4">{</span><span class="ss">cwd</span><span class="p">,</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="1995839797-5">(</span><span class="p" data-group-id="1995839797-5">)</span><span class="p" data-group-id="1995839797-4">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="1995839797-6">{</span><span class="ss">compress</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="1995839797-6">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="1995839797-7">{</span><span class="ss">uncompress</span><span class="p">,</span><span class="p" data-group-id="1995839797-8">[</span><span class="s">&quot;.beam&quot;</span><span class="p">,</span><span class="s">&quot;.app&quot;</span><span class="p" data-group-id="1995839797-8">]</span><span class="p" data-group-id="1995839797-7">}</span><span class="p" data-group-id="1995839797-3">]</span><span class="p" data-group-id="1995839797-1">)</span><span class="p">.</span></code></pre><p>Any file in the archive can be compressed, but to speed up the access of
+must contain a <code class="inline">mnesia</code> top directory.</p><p>An archive file for an application can, for example, be created like this:</p><pre><code class="makeup erlang" translate="no"><span class="nc">zip</span><span class="p">:</span><span class="nf">create</span><span class="p" data-group-id="8323068156-1">(</span><span class="s">&quot;mnesia-4.4.7.ez&quot;</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="8323068156-2">[</span><span class="s">&quot;mnesia-4.4.7&quot;</span><span class="p" data-group-id="8323068156-2">]</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="8323068156-3">[</span><span class="p" data-group-id="8323068156-4">{</span><span class="ss">cwd</span><span class="p">,</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="8323068156-5">(</span><span class="p" data-group-id="8323068156-5">)</span><span class="p" data-group-id="8323068156-4">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="8323068156-6">{</span><span class="ss">compress</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="8323068156-6">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="8323068156-7">{</span><span class="ss">uncompress</span><span class="p">,</span><span class="p" data-group-id="8323068156-8">[</span><span class="s">&quot;.beam&quot;</span><span class="p">,</span><span class="s">&quot;.app&quot;</span><span class="p" data-group-id="8323068156-8">]</span><span class="p" data-group-id="8323068156-7">}</span><span class="p" data-group-id="8323068156-3">]</span><span class="p" data-group-id="8323068156-1">)</span><span class="p">.</span></code></pre><p>Any file in the archive can be compressed, but to speed up the access of
 frequently read files, it can be a good idea to store <code class="inline">beam</code> and <code class="inline">app</code> files
 uncompressed in the archive.</p><p>Normally the top directory of an application is located in library directory
 <code class="inline">$OTPROOT/lib</code> or in a directory referred to by environment variable <code class="inline">ERL_LIBS</code>.
@@ -1895,10 +1895,10 @@ the object code is not the expected module name.</p></li><li><p><strong><code cl
 the code already exists.</p></li><li><p><strong><code class="inline">sticky_directory</code></strong> - The object code resides in a sticky directory.</p></li><li><p><strong><code class="inline">pending_on_load</code></strong> - A previously loaded module contains an <code class="inline">-on_load</code>
 function that never finished.</p></li></ul><p>If it is important to minimize the time that an application is inactive while
 changing code, use <a href="#prepare_loading/1"><code class="inline">prepare_loading/1</code></a> and <a href="#finish_loading/1"><code class="inline">finish_loading/1</code></a> instead of
-<a href="#atomic_load/1"><code class="inline">atomic_load/1</code></a>. Here is an example:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="9015317776-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Prepared</span><span class="p" data-group-id="9015317776-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">prepare_loading</span><span class="p" data-group-id="9015317776-2">(</span><span class="n">Modules</span><span class="p" data-group-id="9015317776-2">)</span><span class="p">,</span><span class="w">
+<a href="#atomic_load/1"><code class="inline">atomic_load/1</code></a>. Here is an example:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="8158898925-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Prepared</span><span class="p" data-group-id="8158898925-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">prepare_loading</span><span class="p" data-group-id="8158898925-2">(</span><span class="n">Modules</span><span class="p" data-group-id="8158898925-2">)</span><span class="p">,</span><span class="w">
 </span><span class="c1">%% Put the application into an inactive state or do any</span><span class="w">
 </span><span class="c1">%% other preparation needed before changing the code.</span><span class="w">
-</span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">finish_loading</span><span class="p" data-group-id="9015317776-3">(</span><span class="n">Prepared</span><span class="p" data-group-id="9015317776-3">)</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">finish_loading</span><span class="p" data-group-id="8158898925-3">(</span><span class="n">Prepared</span><span class="p" data-group-id="8158898925-3">)</span><span class="p">,</span><span class="w">
 </span><span class="c1">%% Resume the application.</span></code></pre>
   </section>
 </section>
@@ -2002,7 +2002,7 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
     </a>
     <h1 class="signature" translate="no">coverage_support()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2147" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2150" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2237,7 +2237,7 @@ function that never finished.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">get_coverage(Level, Module)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2040" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2043" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2253,13 +2253,14 @@ function that never finished.</p></li></ul>
 
           <pre translate="no"><span class="attribute">-spec</span> get_coverage(Level, <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>()) -> Result
                 when
-                    Level :: function | line,
+                    Level :: function | line | cover_id_line,
                     Result :: [{Entity, CoverageInfo}],
-                    Entity :: {Function, Arity} | Line,
+                    Entity :: {Function, Arity} | Line | CoverId,
                     CoverageInfo :: Covered | Counter,
                     Function :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
                     Arity :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:arity/0">arity</a>(),
                     Line :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                    CoverId :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>(),
                     Covered :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean</a>(),
                     Counter :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
 
@@ -2275,7 +2276,7 @@ in this mode, counters for the number of times each function has been executed
 <strong>cannot</strong> be retrieved).</p></li></ul><p>If Level is <code class="inline">line</code>, returns line coverage for the given module according to its
 coverage mode:</p><ul><li><p><strong><code class="inline">line</code></strong> - For each executable line in the module, a boolean indicating
 whether that line has been executed at least once is returned.</p></li><li><p><strong><code class="inline">line_counters</code></strong> - For each executable line in the module, an integer
-giving the number of times that line was executed is returned.</p></li></ul><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Level</code> is not <code class="inline">function</code> or <code class="inline">line</code>.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> was not loaded in another coverage mode than
+giving the number of times that line was executed is returned.</p></li></ul><p>Level <code class="inline">cover_id_line</code> is used by the <a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a> tool.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Level</code> is not <code class="inline">function</code> or <code class="inline">line</code>.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> was not loaded in another coverage mode than
 <code class="inline">none</code>.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If Level is <code class="inline">line</code> and <code class="inline">Module</code> has not been loaded with either
 <code class="inline">line</code> or <code class="inline">line_counters</code> enabled.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul>
   </section>
@@ -2289,7 +2290,7 @@ giving the number of times that line was executed is returned.</p></li></ul><p>F
     </a>
     <h1 class="signature" translate="no">get_coverage_mode()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2054" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2057" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2320,7 +2321,7 @@ giving the number of times that line was executed is returned.</p></li></ul><p>F
     </a>
     <h1 class="signature" translate="no">get_coverage_mode(Module)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2072" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2075" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2450,8 +2451,8 @@ in embedded mode, the code must be loaded with <a href="#load_binary/3"><code cl
 binary data object, which contains the object code for the module. This can be
 useful if code is to be loaded on a remote node in a distributed system. For
 example, loading module <code class="inline">Module</code> on a node <code class="inline">Node</code> is done as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="6317289755-1">{</span><span class="p">_</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p" data-group-id="6317289755-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">get_object_code</span><span class="p" data-group-id="6317289755-2">(</span><span class="n">Module</span><span class="p" data-group-id="6317289755-2">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">rpc</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="6317289755-3">(</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="ss">code</span><span class="p">,</span><span class="w"> </span><span class="ss">load_binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6317289755-4">[</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p" data-group-id="6317289755-4">]</span><span class="p" data-group-id="6317289755-3">)</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="7766406205-1">{</span><span class="p">_</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p" data-group-id="7766406205-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">get_object_code</span><span class="p" data-group-id="7766406205-2">(</span><span class="n">Module</span><span class="p" data-group-id="7766406205-2">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">rpc</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="7766406205-3">(</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="ss">code</span><span class="p">,</span><span class="w"> </span><span class="ss">load_binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7766406205-4">[</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p" data-group-id="7766406205-4">]</span><span class="p" data-group-id="7766406205-3">)</span><span class="p">,</span><span class="w">
 </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre>
   </section>
 </section>
@@ -3060,7 +3061,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">reset_coverage(Module)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2140" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2143" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3120,7 +3121,7 @@ installed.</p><p><em>Example:</em></p><pre><code class="text">&gt; code:root_dir
     </a>
     <h1 class="signature" translate="no">set_coverage_mode(Mode)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2121" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/fix-erl_expand_records/GH-8190/lib/kernel/src/code.erl#L2124" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
