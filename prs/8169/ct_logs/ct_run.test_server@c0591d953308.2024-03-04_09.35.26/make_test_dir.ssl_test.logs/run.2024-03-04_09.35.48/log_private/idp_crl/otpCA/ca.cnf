@@ -1,0 +1,67 @@
+# Purpose: Configuration for CAs.
+
+ROOTDIR	       = /buildroot/otp/lib/ssl/make_test_dir/ct_logs/ct_run.test_server@c0591d953308.2024-03-04_09.35.26/make_test_dir.ssl_test.logs/run.2024-03-04_09.35.48/log_private/idp_crl
+default_ca	= ca
+
+[ca]
+dir		= $ROOTDIR/otpCA
+certs		= $dir/certs
+crl_dir	        = $dir/crl
+database	        = $dir/index.txt
+new_certs_dir	= $dir/newcerts
+certificate	= $dir/cert.pem
+serial		= $dir/serial
+crl		= $dir/crl.pem
+crlnumber		= $dir/crlnumber
+private_key	= $dir/private/key.pem
+RANDFILE	        = $dir/private/RAND
+
+x509_extensions   = user_cert
+crl_extensions = crl_ext
+unique_subject  = no
+default_days	= 3600
+default_md	= sha256
+preserve	        = no
+policy		= policy_match
+
+[policy_match]
+commonName		= supplied
+organizationalUnitName	= optional
+organizationName	        = match
+countryName		= match
+localityName		= match
+emailAddress		= supplied
+
+[crl_ext]
+authorityKeyIdentifier=keyid:always,issuer:always
+issuingDistributionPoint=critical, @idpsec
+[idpsec]
+fullname=URI:http://localhost:8000/otpCA/crl.pem
+[user_cert]
+basicConstraints	= CA:false
+keyUsage 		= nonRepudiation, digitalSignature, keyEncipherment
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+subjectAltName	= DNS.1:c0591d953308
+issuerAltName	= issuer:copy
+crlDistributionPoints=@crl_section
+[crl_section]
+URI.1=http://localhost/otpCA/crl.pem
+URI.2=http://localhost:33353/otpCA/crl.pem
+
+[user_cert_digital_signature_only]
+basicConstraints	= CA:false
+keyUsage 		= digitalSignature
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+subjectAltName	= DNS.1:c0591d953308
+issuerAltName	= issuer:copy
+
+[ca_cert]
+basicConstraints 	= critical,CA:true
+keyUsage 		= cRLSign, keyCertSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+subjectAltName	= DNS.1:c0591d953308
+issuerAltName	= issuer:copy
+crlDistributionPoints=@crl_section
