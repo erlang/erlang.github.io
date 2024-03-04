@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-E5880E98.js"></script>
+    <script src="dist/sidebar_items-06CDBE7F.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -133,7 +133,9 @@ Pages
 
 
   <section id="moduledoc">
-<p>Utility functions for Core Erlang case/receive clauses.</p><p>Syntax trees are defined in the module <a href="cerl.html"><code class="inline">cerl</code></a>.</p>
+<p>Utility functions for Core Erlang case/receive clauses.</p><blockquote><h4 class="info">Note</h4><p>The documentation of the public interface for the Erlang compiler can be
+found in module <a href="compile.html"><code class="inline">compile</code></a>.</p><p>This module is an internal part of the compiler. Its API is not guaranteed
+to remain compatible between releases.</p></blockquote><p>Syntax trees are defined in the module <a href="cerl.html"><code class="inline">cerl</code></a>.</p>
   </section>
 
 
@@ -189,67 +191,53 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#any_catchall/1" translate="no">any_catchall/1</a>
+        <a href="#any_catchall/1" translate="no">any_catchall(Clauses)</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if any of the abstract clauses in the list is a catch-all,
-otherwise <code class="inline">false</code>. See <a href="#is_catchall/1"><code class="inline">is_catchall/1</code></a> for details.</p></div>
+otherwise <code class="inline">false</code>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#eval_guard/1" translate="no">eval_guard(E)</a>
+        <a href="#eval_guard/1" translate="no">eval_guard(Expr)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Tries to reduce a guard expression to a single constant value, if possible. The
-returned value is <code class="inline">{value, Term}</code> if the guard expression <code class="inline">Expr</code> always yields
-the constant value <code class="inline">Term</code>, and is otherwise <code class="inline">none</code>.</p></div>
+        <div class="summary-synopsis"><p>Tries to reduce a guard expression to a single constant value, if possible.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#is_catchall/1" translate="no">is_catchall(C)</a>
+        <a href="#is_catchall/1" translate="no">is_catchall(Clause)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if an abstract clause is a catch-all, otherwise <code class="inline">false</code>. A clause
-is a catch-all if all its patterns are variables, and its guard expression
-always evaluates to <code class="inline">true</code>; cf. <a href="#eval_guard/1"><code class="inline">eval_guard/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if an abstract clause is a catch-all, otherwise <code class="inline">false</code>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#match/2" translate="no">match(P, E)</a>
+        <a href="#match/2" translate="no">match(Pattern, Expr)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Matches a pattern against an expression. The returned value is <code class="inline">none</code> if a match
-is impossible, <code class="inline">{true, Bindings}</code> if <code class="inline">Pattern</code> definitely matches <code class="inline">Expr</code>, and
-<code class="inline">{false, Bindings}</code> if a match is not definite, but cannot be excluded.
-<code class="inline">Bindings</code> is then a list of pairs <code class="inline">{Var, SubExpr}</code>, associating each variable
-in the pattern with either the corresponding subexpression of <code class="inline">Expr</code>, or with
-the atom <code class="inline">any</code> if no matching subexpression exists. (Recall that variables may
-not be repeated in a Core Erlang pattern.) The list of bindings is given in
-innermost-first order; this should only be of interest if <code class="inline">Pattern</code> contains one
-or more alias patterns. If the returned value is <code class="inline">{true, []}</code>, it implies that
-the pattern and the expression are syntactically identical.</p></div>
+        <div class="summary-synopsis"><p>Matches a pattern against an expression.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#match_list/2" translate="no">match_list/2</a>
+        <a href="#match_list/2" translate="no">match_list(Patterns, Exprs)</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Like <a href="#match/2"><code class="inline">match/2</code></a>, but matching a sequence of patterns against a
-sequence of expressions. Passing an empty list for <code class="inline">Exprs</code> is equivalent to
-passing a list of <code class="inline">any</code> atoms of the same length as <code class="inline">Patterns</code>.</p></div>
+sequence of expressions.</p></div>
 
     </div>
 
@@ -265,18 +253,12 @@ passing a list of <code class="inline">any</code> atoms of the same length as <c
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reduce/2" translate="no">reduce(Cs, Es)</a>
+        <a href="#reduce/2" translate="no">reduce(Clauses, Exprs)</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Selects a single clause, if possible, or otherwise reduces the list of
-selectable clauses. The input is a list <code class="inline">Clauses</code> of abstract clauses (i.e.,
-syntax trees of type <code class="inline">clause</code>), and a list of switch expressions <code class="inline">Exprs</code>. The
-function tries to uniquely select a single clause or discard unselectable
-clauses, with respect to the switch expressions. All abstract clauses in the
-list must have the same number of patterns. If <code class="inline">Exprs</code> is not the empty list, it
-must have the same length as the number of patterns in each clause; see
-<a href="#match_list/2"><code class="inline">match_list/2</code></a> for details.</p></div>
+selectable clauses.</p></div>
 
     </div>
 
@@ -302,7 +284,7 @@ must have the same length as the number of patterns in each clause; see
     </a>
     <h1 class="signature" translate="no">bindings()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L149" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -332,7 +314,7 @@ must have the same length as the number of patterns in each clause; see
     </a>
     <h1 class="signature" translate="no">cerl()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L36" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L44" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -362,7 +344,7 @@ must have the same length as the number of patterns in each clause; see
     </a>
     <h1 class="signature" translate="no">expr()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L235" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L158" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -392,7 +374,7 @@ must have the same length as the number of patterns in each clause; see
     </a>
     <h1 class="signature" translate="no">match_ret()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L379" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L239" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -432,9 +414,9 @@ must have the same length as the number of patterns in each clause; see
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">any_catchall/1</h1>
+    <h1 class="signature" translate="no">any_catchall(Clauses)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L109" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L97" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -446,12 +428,12 @@ must have the same length as the number of patterns in each clause; see
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> any_catchall([<a href="#t:cerl/0">cerl</a>()]) -> <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> any_catchall(Clauses :: [<a href="#t:cerl/0">cerl</a>()]) -> <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
 
       </div>
 
 <p>Returns <code class="inline">true</code> if any of the abstract clauses in the list is a catch-all,
-otherwise <code class="inline">false</code>. See <a href="#is_catchall/1"><code class="inline">is_catchall/1</code></a> for details.</p><p>Note: each node in <code class="inline">Clauses</code> must have type <code class="inline">clause</code>.</p><p><em>See also: </em><a href="#is_catchall/1"><code class="inline">is_catchall/1</code></a>.</p>
+otherwise <code class="inline">false</code>.</p><p>See <a href="#is_catchall/1"><code class="inline">is_catchall/1</code></a> for details.</p><p>Note: each node in <code class="inline">Clauses</code> must have type <code class="inline">clause</code>.</p><p><em>See also: </em><a href="#is_catchall/1"><code class="inline">is_catchall/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="eval_guard/1">
@@ -461,9 +443,9 @@ otherwise <code class="inline">false</code>. See <a href="#is_catchall/1"><code 
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">eval_guard(E)</h1>
+    <h1 class="signature" translate="no">eval_guard(Expr)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L152" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L123" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -475,13 +457,12 @@ otherwise <code class="inline">false</code>. See <a href="#is_catchall/1"><code 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> eval_guard(<a href="#t:cerl/0">cerl</a>()) -> none | {value, <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> eval_guard(Expr :: <a href="#t:cerl/0">cerl</a>()) -> none | {value, <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
-<p>Tries to reduce a guard expression to a single constant value, if possible. The
-returned value is <code class="inline">{value, Term}</code> if the guard expression <code class="inline">Expr</code> always yields
-the constant value <code class="inline">Term</code>, and is otherwise <code class="inline">none</code>.</p><p>Note that although guard expressions should only yield boolean values, this
+<p>Tries to reduce a guard expression to a single constant value, if possible.</p><p>The returned value is <code class="inline">{value, Term}</code> if the guard expression <code class="inline">Expr</code>
+always yields the constant value <code class="inline">Term</code>, and is otherwise <code class="inline">none</code>.</p><p>Note that although guard expressions should only yield boolean values, this
 function does not guarantee that <code class="inline">Term</code> is either <code class="inline">true</code> or <code class="inline">false</code>. Also note
 that only simple constructs like let-expressions are examined recursively;
 general constant folding is not performed.</p><p><em>See also: </em><a href="#is_catchall/1"><code class="inline">is_catchall/1</code></a>.</p>
@@ -494,9 +475,9 @@ general constant folding is not performed.</p><p><em>See also: </em><a href="#is
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">is_catchall(C)</h1>
+    <h1 class="signature" translate="no">is_catchall(Clause)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L64" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L61" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -508,13 +489,13 @@ general constant folding is not performed.</p><p><em>See also: </em><a href="#is
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> is_catchall(<a href="cerl.html#t:c_clause/0">cerl:c_clause</a>()) -> <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> is_catchall(Clause :: <a href="cerl.html#t:c_clause/0">cerl:c_clause</a>()) -> <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
 
       </div>
 
-<p>Returns <code class="inline">true</code> if an abstract clause is a catch-all, otherwise <code class="inline">false</code>. A clause
-is a catch-all if all its patterns are variables, and its guard expression
-always evaluates to <code class="inline">true</code>; cf. <a href="#eval_guard/1"><code class="inline">eval_guard/1</code></a>.</p><p>Note: <code class="inline">Clause</code> must have type <code class="inline">clause</code>.</p><p><em>See also: </em><a href="#any_catchall/1"><code class="inline">any_catchall/1</code></a>, <a href="#eval_guard/1"><code class="inline">eval_guard/1</code></a>.</p>
+<p>Returns <code class="inline">true</code> if an abstract clause is a catch-all, otherwise <code class="inline">false</code>.</p><p>A clause is a catch-all if all its patterns are variables, and its
+guard expression always evaluates to <code class="inline">true</code>;
+cf. <a href="#eval_guard/1"><code class="inline">eval_guard/1</code></a>.</p><p>Note: <code class="inline">Clause</code> must have type <code class="inline">clause</code>.</p><p><em>See also: </em><a href="#any_catchall/1"><code class="inline">any_catchall/1</code></a>, <a href="#eval_guard/1"><code class="inline">eval_guard/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="match/2">
@@ -524,9 +505,9 @@ always evaluates to <code class="inline">true</code>; cf. <a href="#eval_guard/1
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">match(P, E)</h1>
+    <h1 class="signature" translate="no">match(Pattern, Expr)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L422" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L285" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -538,20 +519,19 @@ always evaluates to <code class="inline">true</code>; cf. <a href="#eval_guard/1
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> match(<a href="#t:cerl/0">cerl</a>(), <a href="#t:expr/0">expr</a>()) -> <a href="#t:match_ret/0">match_ret</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> match(Pattern :: <a href="#t:cerl/0">cerl</a>(), Expr :: <a href="#t:expr/0">expr</a>()) -> <a href="#t:match_ret/0">match_ret</a>().</pre>
 
       </div>
 
-<p>Matches a pattern against an expression. The returned value is <code class="inline">none</code> if a match
-is impossible, <code class="inline">{true, Bindings}</code> if <code class="inline">Pattern</code> definitely matches <code class="inline">Expr</code>, and
-<code class="inline">{false, Bindings}</code> if a match is not definite, but cannot be excluded.
-<code class="inline">Bindings</code> is then a list of pairs <code class="inline">{Var, SubExpr}</code>, associating each variable
-in the pattern with either the corresponding subexpression of <code class="inline">Expr</code>, or with
-the atom <code class="inline">any</code> if no matching subexpression exists. (Recall that variables may
-not be repeated in a Core Erlang pattern.) The list of bindings is given in
-innermost-first order; this should only be of interest if <code class="inline">Pattern</code> contains one
-or more alias patterns. If the returned value is <code class="inline">{true, []}</code>, it implies that
-the pattern and the expression are syntactically identical.</p><p>Instead of a syntax tree, the atom <code class="inline">any</code> can be passed for <code class="inline">Expr</code> (or, more
+<p>Matches a pattern against an expression.</p><p>The returned value is <code class="inline">none</code> if a match is impossible, <code class="inline">{true, Bindings}</code> if <code class="inline">Pattern</code> definitely matches <code class="inline">Expr</code>, and <code class="inline">{false, Bindings}</code> if a match is not definite, but cannot be excluded.
+<code class="inline">Bindings</code> is then a list of pairs <code class="inline">{Var, SubExpr}</code>, associating each
+variable in the pattern with either the corresponding subexpression of
+<code class="inline">Expr</code>, or with the atom <code class="inline">any</code> if no matching subexpression
+exists. (Recall that variables may not be repeated in a Core Erlang
+pattern.) The list of bindings is given in innermost-first order; this
+should only be of interest if <code class="inline">Pattern</code> contains one or more alias
+patterns. If the returned value is <code class="inline">{true, []}</code>, it implies that the
+pattern and the expression are syntactically identical.</p><p>Instead of a syntax tree, the atom <code class="inline">any</code> can be passed for <code class="inline">Expr</code> (or, more
 generally, be used for any subtree of <code class="inline">Expr</code>, in as much the abstract syntax
 tree implementation allows it); this means that it cannot be decided whether the
 pattern will match or not, and the corresponding variable bindings will all map
@@ -576,9 +556,9 @@ with &quot;<code class="inline">{bar, baz}</code>&quot;.</li><li>Matching a patt
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">match_list/2</h1>
+    <h1 class="signature" translate="no">match_list(Patterns, Exprs)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L546" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L398" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -590,13 +570,13 @@ with &quot;<code class="inline">{bar, baz}</code>&quot;.</li><li>Matching a patt
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> match_list([<a href="#t:cerl/0">cerl</a>()], [<a href="#t:expr/0">expr</a>()]) -> <a href="#t:match_ret/0">match_ret</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> match_list(Patterns :: [<a href="#t:cerl/0">cerl</a>()], Exprs :: [<a href="#t:expr/0">expr</a>()]) -> <a href="#t:match_ret/0">match_ret</a>().</pre>
 
       </div>
 
 <p>Like <a href="#match/2"><code class="inline">match/2</code></a>, but matching a sequence of patterns against a
-sequence of expressions. Passing an empty list for <code class="inline">Exprs</code> is equivalent to
-passing a list of <code class="inline">any</code> atoms of the same length as <code class="inline">Patterns</code>.</p><p><em>See also: </em><a href="#match/2"><code class="inline">match/2</code></a>.</p>
+sequence of expressions.</p><p>Passing an empty list for <code class="inline">Exprs</code> is equivalent to passing a list of
+<code class="inline">any</code> atoms of the same length as <code class="inline">Patterns</code>.</p><p><em>See also: </em><a href="#match/2"><code class="inline">match/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="reduce/1">
@@ -608,7 +588,7 @@ passing a list of <code class="inline">any</code> atoms of the same length as <c
     </a>
     <h1 class="signature" translate="no">reduce(Cs)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L189" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L155" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -634,9 +614,9 @@ passing a list of <code class="inline">any</code> atoms of the same length as <c
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">reduce(Cs, Es)</h1>
+    <h1 class="signature" translate="no">reduce(Clauses, Exprs)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L269" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/compiler/src/cerl_clauses.erl#L194" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -648,13 +628,13 @@ passing a list of <code class="inline">any</code> atoms of the same length as <c
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> reduce([<a href="cerl.html#t:c_clause/0">cerl:c_clause</a>()], [<a href="#t:expr/0">expr</a>()]) ->
+          <pre translate="no"><span class="attribute">-spec</span> reduce(Clauses :: [<a href="cerl.html#t:c_clause/0">cerl:c_clause</a>()], Exprs :: [<a href="#t:expr/0">expr</a>()]) ->
           {true, {<a href="cerl.html#t:c_clause/0">cerl:c_clause</a>(), <a href="#t:bindings/0">bindings</a>()}} | {false, [<a href="cerl.html#t:c_clause/0">cerl:c_clause</a>()]}.</pre>
 
       </div>
 
 <p>Selects a single clause, if possible, or otherwise reduces the list of
-selectable clauses. The input is a list <code class="inline">Clauses</code> of abstract clauses (i.e.,
+selectable clauses.</p><p>The input is a list <code class="inline">Clauses</code> of abstract clauses (i.e.,
 syntax trees of type <code class="inline">clause</code>), and a list of switch expressions <code class="inline">Exprs</code>. The
 function tries to uniquely select a single clause or discard unselectable
 clauses, with respect to the switch expressions. All abstract clauses in the
@@ -685,6 +665,10 @@ order.</p><p><em>See also: </em><a href="#eval_guard/1"><code class="inline">eva
             <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
               Search HexDocs
             </button>
+
+              <a href="compiler.epub" title="ePub version">
+                Download ePub version
+              </a>
 
           </span>
         </p>

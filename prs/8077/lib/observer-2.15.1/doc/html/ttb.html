@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-AD7C1CDE.js"></script>
+    <script src="dist/sidebar_items-630A1DD9.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -670,11 +670,13 @@ parallel.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#write_trace_info/2" translate="no">write_trace_info(Key, What)</a>
+        <a href="#write_trace_info/2" translate="no">write_trace_info(Key, Info)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>write_trace_info(Key,Info) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>File <code class="inline">.ti</code> contains <code class="inline">{Key,ValueList}</code> tuples. This function adds <code class="inline">Data</code> to the
+<code class="inline">ValueList</code> associated with <code class="inline">Key</code>. All information written with this function is
+included in the call to the format handler.</p></div>
 
     </div>
 
@@ -965,7 +967,7 @@ parallel.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> nodes() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:node/0">node</a>() | [<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:node/0">node</a>()] | all | existing | new.</pre>
+          <pre translate="no"><span class="attribute">-type</span> nodes() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:node/0">node</a>() | [<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:node/0">node</a>()] | all.</pre>
 
       </div>
 
@@ -1934,13 +1936,13 @@ that if the item is called on a process with trace flag <code class="inline">cal
 is &quot;contaminated&quot; with token <code class="inline">seq_trace</code>.</p><p>If <code class="inline">Flags = all</code>, all possible flags are set.</p><p>The possible values for <code class="inline">SeqTraceFlag</code> are available in <a href="../../../../lib/kernel-9.2.1/doc/html/seq_trace.html"><code class="inline">seq_trace</code></a>.</p><p>For a description of the <code class="inline">match_spec()</code> syntax, see section
 <a href="../../../../erts-14.2.2/doc/html/match_spec.html"><code class="inline">Match Specifications in Erlang</code></a> in ERTS, which
 explains the general match specification &quot;language&quot;.</p><blockquote><h4 class="info">Note</h4><p>The <em>system tracer</em> for sequential tracing is automatically initiated by <code class="inline">ttb</code>
-when a trace port is started with <code class="inline">ttb:tracer/0,1,2</code>.</p></blockquote><p>An example of how to use function <code class="inline">seq_trigger_ms/0,1</code> follows:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">(tiger@durin)5&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tracer</span><span class="p" data-group-id="2252994670-1">(</span><span class="p" data-group-id="2252994670-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="2252994670-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="2252994670-3">[</span><span class="ss">tiger@durin</span><span class="p" data-group-id="2252994670-3">]</span><span class="p" data-group-id="2252994670-2">}</span><span class="gp unselectable">
-(tiger@durin)6&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="2252994670-4">(</span><span class="ss">all</span><span class="p">,</span><span class="ss">call</span><span class="p" data-group-id="2252994670-4">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="2252994670-5">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="2252994670-6">{</span><span class="p" data-group-id="2252994670-7">[</span><span class="ss">all</span><span class="p" data-group-id="2252994670-7">]</span><span class="p">,</span><span class="p" data-group-id="2252994670-8">[</span><span class="ss">call</span><span class="p" data-group-id="2252994670-8">]</span><span class="p" data-group-id="2252994670-6">}</span><span class="p" data-group-id="2252994670-5">}</span><span class="gp unselectable">
-(tiger@durin)7&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tp</span><span class="p" data-group-id="2252994670-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="ss">func</span><span class="p">,</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">seq_trigger_ms</span><span class="p" data-group-id="2252994670-10">(</span><span class="p" data-group-id="2252994670-10">)</span><span class="p" data-group-id="2252994670-9">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="2252994670-11">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="2252994670-12">[</span><span class="p" data-group-id="2252994670-13">{</span><span class="ss">matched</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="2252994670-13">}</span><span class="p">,</span><span class="p" data-group-id="2252994670-14">{</span><span class="ss">saved</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="2252994670-14">}</span><span class="p" data-group-id="2252994670-12">]</span><span class="p" data-group-id="2252994670-11">}</span><span class="w">
-</span><span class="p" data-group-id="2252994670-15">(</span><span class="ss">tiger@durin</span><span class="p" data-group-id="2252994670-15">)</span><span class="mi">8</span><span class="o">&gt;</span></code></pre><p>Whenever <code class="inline">mod:func(...)</code> is called after this, token <code class="inline">seq_trace</code> is set on the
+when a trace port is started with <code class="inline">ttb:tracer/0,1,2</code>.</p></blockquote><p>An example of how to use function <code class="inline">seq_trigger_ms/0,1</code> follows:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">(tiger@durin)5&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tracer</span><span class="p" data-group-id="5927132292-1">(</span><span class="p" data-group-id="5927132292-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5927132292-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="5927132292-3">[</span><span class="ss">tiger@durin</span><span class="p" data-group-id="5927132292-3">]</span><span class="p" data-group-id="5927132292-2">}</span><span class="gp unselectable">
+(tiger@durin)6&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="5927132292-4">(</span><span class="ss">all</span><span class="p">,</span><span class="ss">call</span><span class="p" data-group-id="5927132292-4">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5927132292-5">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="5927132292-6">{</span><span class="p" data-group-id="5927132292-7">[</span><span class="ss">all</span><span class="p" data-group-id="5927132292-7">]</span><span class="p">,</span><span class="p" data-group-id="5927132292-8">[</span><span class="ss">call</span><span class="p" data-group-id="5927132292-8">]</span><span class="p" data-group-id="5927132292-6">}</span><span class="p" data-group-id="5927132292-5">}</span><span class="gp unselectable">
+(tiger@durin)7&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tp</span><span class="p" data-group-id="5927132292-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="ss">func</span><span class="p">,</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">seq_trigger_ms</span><span class="p" data-group-id="5927132292-10">(</span><span class="p" data-group-id="5927132292-10">)</span><span class="p" data-group-id="5927132292-9">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5927132292-11">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="5927132292-12">[</span><span class="p" data-group-id="5927132292-13">{</span><span class="ss">matched</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="5927132292-13">}</span><span class="p">,</span><span class="p" data-group-id="5927132292-14">{</span><span class="ss">saved</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="5927132292-14">}</span><span class="p" data-group-id="5927132292-12">]</span><span class="p" data-group-id="5927132292-11">}</span><span class="w">
+</span><span class="p" data-group-id="5927132292-15">(</span><span class="ss">tiger@durin</span><span class="p" data-group-id="5927132292-15">)</span><span class="mi">8</span><span class="o">&gt;</span></code></pre><p>Whenever <code class="inline">mod:func(...)</code> is called after this, token <code class="inline">seq_trace</code> is set on the
 executing process.</p>
   </section>
 </section>
@@ -1979,14 +1981,14 @@ executing process.</p>
 
 <p>start_trace(Nodes, Patterns, FlagSpec, Opts) -&gt; Result</p><p>This function is a shortcut allowing to start a trace with one command. Each
 tuple in <code class="inline">Patterns</code> is converted to a list, which in turn is passed to
-<code class="inline">ttb:tpl/2,3,4</code>.</p><p>The call:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="9413698817-1">(</span><span class="p" data-group-id="9413698817-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="9413698817-2">]</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="9413698817-3">[</span><span class="p" data-group-id="9413698817-4">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9413698817-5">[</span><span class="p" data-group-id="9413698817-5">]</span><span class="p" data-group-id="9413698817-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9413698817-6">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="9413698817-6">}</span><span class="p" data-group-id="9413698817-3">]</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="9413698817-7">{</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="9413698817-7">}</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="9413698817-8">[</span><span class="p" data-group-id="9413698817-9">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="9413698817-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9413698817-10">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="9413698817-11">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="9413698817-11">}</span><span class="p" data-group-id="9413698817-10">}</span><span class="p" data-group-id="9413698817-8">]</span><span class="p" data-group-id="9413698817-1">)</span><span class="p">.</span></code></pre><p>is equivalent to:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="9822627293-1">(</span><span class="p" data-group-id="9822627293-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="9822627293-2">]</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="9822627293-3">[</span><span class="p" data-group-id="9822627293-4">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="9822627293-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9822627293-5">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="9822627293-6">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="9822627293-6">}</span><span class="p" data-group-id="9822627293-5">}</span><span class="p" data-group-id="9822627293-3">]</span><span class="p" data-group-id="9822627293-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="9822627293-7">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9822627293-8">[</span><span class="p" data-group-id="9822627293-8">]</span><span class="p" data-group-id="9822627293-7">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="9822627293-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9822627293-10">[</span><span class="p" data-group-id="9822627293-10">]</span><span class="p" data-group-id="9822627293-9">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="9822627293-11">(</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="9822627293-11">)</span><span class="p">.</span></code></pre>
+<code class="inline">ttb:tpl/2,3,4</code>.</p><p>The call:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="7580344319-1">(</span><span class="p" data-group-id="7580344319-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="7580344319-2">]</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="7580344319-3">[</span><span class="p" data-group-id="7580344319-4">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7580344319-5">[</span><span class="p" data-group-id="7580344319-5">]</span><span class="p" data-group-id="7580344319-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7580344319-6">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7580344319-6">}</span><span class="p" data-group-id="7580344319-3">]</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="7580344319-7">{</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="7580344319-7">}</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="7580344319-8">[</span><span class="p" data-group-id="7580344319-9">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="7580344319-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7580344319-10">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="7580344319-11">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="7580344319-11">}</span><span class="p" data-group-id="7580344319-10">}</span><span class="p" data-group-id="7580344319-8">]</span><span class="p" data-group-id="7580344319-1">)</span><span class="p">.</span></code></pre><p>is equivalent to:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="1089684276-1">(</span><span class="p" data-group-id="1089684276-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="1089684276-2">]</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="1089684276-3">[</span><span class="p" data-group-id="1089684276-4">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="1089684276-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1089684276-5">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="1089684276-6">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="1089684276-6">}</span><span class="p" data-group-id="1089684276-5">}</span><span class="p" data-group-id="1089684276-3">]</span><span class="p" data-group-id="1089684276-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="1089684276-7">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1089684276-8">[</span><span class="p" data-group-id="1089684276-8">]</span><span class="p" data-group-id="1089684276-7">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="1089684276-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1089684276-10">[</span><span class="p" data-group-id="1089684276-10">]</span><span class="p" data-group-id="1089684276-9">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="1089684276-11">(</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="1089684276-11">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="stop/0">
@@ -2520,9 +2522,9 @@ information is appended at the end of the file.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">write_trace_info(Key, What)</h1>
+    <h1 class="signature" translate="no">write_trace_info(Key, Info)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/observer/src/ttb.erl#L1132" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/observer/src/ttb.erl#L1129" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2532,7 +2534,14 @@ information is appended at the end of the file.</p>
 
   <section class="docstring">
 
-<p>write_trace_info(Key,Info) -&gt; ok</p><p>File <code class="inline">.ti</code> contains <code class="inline">{Key,ValueList}</code> tuples. This function adds <code class="inline">Data</code> to the
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> write_trace_info(Key :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), Info) -> ok
+                    when Info :: Data :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>() | fun(() -> Data :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()).</pre>
+
+      </div>
+
+<p>File <code class="inline">.ti</code> contains <code class="inline">{Key,ValueList}</code> tuples. This function adds <code class="inline">Data</code> to the
 <code class="inline">ValueList</code> associated with <code class="inline">Key</code>. All information written with this function is
 included in the call to the format handler.</p>
   </section>
@@ -2548,6 +2557,10 @@ included in the call to the format handler.</p>
             <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
               Search HexDocs
             </button>
+
+              <a href="observer.epub" title="ePub version">
+                Download ePub version
+              </a>
 
           </span>
         </p>
