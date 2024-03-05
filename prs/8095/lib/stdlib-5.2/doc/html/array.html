@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-CD6D49E0.js"></script>
+    <script src="dist/sidebar_items-052AD98B.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -121,7 +121,7 @@ Pages
 
 <h1>
 
-    <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L75" title="View Source" class="icon-action" rel="help">
+    <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L14" title="View Source" class="icon-action" rel="help">
       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
       <span class="sr-only">View Source</span>
     </a>
@@ -133,23 +133,22 @@ Pages
 
 
   <section id="moduledoc">
-<p>Functional, extendible arrays.</p><p>Functional, extendible arrays. Arrays can have fixed size, or can grow
-automatically as needed. A default value is used for entries that have not been
-explicitly set.</p><p>Arrays uses <em>zero</em>-based indexing. This is a deliberate design choice and
+<p>Functional, extendible arrays.</p><p>Arrays can have fixed size, or can grow automatically as needed. A default value
+is used for entries that have not been explicitly set.</p><p>Arrays uses <em>zero</em>-based indexing. This is a deliberate design choice and
 differs from other Erlang data structures, for example, tuples.</p><p>Unless specified by the user when the array is created, the default value is the
 atom <code class="inline">undefined</code>. There is no difference between an unset entry and an entry
 that has been explicitly set to the same value as the default one (compare
 <a href="#reset/2"><code class="inline">reset/2</code></a>). If you need to differentiate between unset and set entries, ensure
 that the default value cannot be confused with the values of set entries.</p><p>The array never shrinks automatically. If an index <code class="inline">I</code> has been used to set an
-entry successfully, all indices in the range [0,<code class="inline">I</code>] stay accessible unless the
-array size is explicitly changed by calling <a href="#resize/2"><code class="inline">resize/2</code></a>.</p><p><em>Examples:</em></p><p>Create a fixed-size array with entries 0-9 set to <code class="inline">undefined</code>:</p><pre><code class="makeup erlang" translate="no"><span class="n">A0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="2290583072-1">(</span><span class="mi">10</span><span class="p" data-group-id="2290583072-1">)</span><span class="p">.</span><span class="w">
-</span><span class="mi">10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="2290583072-2">(</span><span class="n">A0</span><span class="p" data-group-id="2290583072-2">)</span><span class="p">.</span></code></pre><p>Create an extendible array and set entry 17 to <code class="inline">true</code>, causing the array to grow
-automatically:</p><pre><code class="makeup erlang" translate="no"><span class="n">A1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="9886032073-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="9886032073-2">(</span><span class="p" data-group-id="9886032073-2">)</span><span class="p" data-group-id="9886032073-1">)</span><span class="p">.</span><span class="w">
-</span><span class="mi">18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="9886032073-3">(</span><span class="n">A1</span><span class="p" data-group-id="9886032073-3">)</span><span class="p">.</span></code></pre><p>Read back a stored value:</p><pre><code class="text">true = array:get(17, A1).</code></pre><p>Accessing an unset entry returns default value:</p><pre><code class="text">undefined = array:get(3, A1)</code></pre><p>Accessing an entry beyond the last set entry also returns the default value, if
-the array does not have fixed size:</p><pre><code class="text">undefined = array:get(18, A1).</code></pre><p>&quot;Sparse&quot; functions ignore default-valued entries:</p><pre><code class="makeup erlang" translate="no"><span class="n">A2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="5523204802-1">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="5523204802-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="5523204802-2">[</span><span class="p" data-group-id="5523204802-3">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="5523204802-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5523204802-4">{</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="5523204802-4">}</span><span class="p" data-group-id="5523204802-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">sparse_to_orddict</span><span class="p" data-group-id="5523204802-5">(</span><span class="n">A2</span><span class="p" data-group-id="5523204802-5">)</span><span class="p">.</span></code></pre><p>An extendible array can be made fixed-size later:</p><pre><code class="text">A3 = array:fix(A2).</code></pre><p>A fixed-size array does not grow automatically and does not allow accesses
-beyond the last set entry:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="7505539209-1">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="7505539209-2">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="7505539209-2">}</span><span class="p" data-group-id="7505539209-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7505539209-3">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="7505539209-4">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="7505539209-4">)</span><span class="p" data-group-id="7505539209-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="7505539209-5">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="7505539209-6">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="7505539209-6">}</span><span class="p" data-group-id="7505539209-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7505539209-7">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="7505539209-8">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="7505539209-8">)</span><span class="p" data-group-id="7505539209-7">)</span><span class="p">.</span></code></pre>
+entry successfully, all indices in the range <code class="inline">[0,I]</code> stay accessible unless the
+array size is explicitly changed by calling <a href="#resize/2"><code class="inline">resize/2</code></a>.</p><p><em>Examples:</em></p><p>Create a fixed-size array with entries 0-9 set to <code class="inline">undefined</code>:</p><pre><code class="makeup erlang" translate="no"><span class="n">A0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="2353986975-1">(</span><span class="mi">10</span><span class="p" data-group-id="2353986975-1">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="2353986975-2">(</span><span class="n">A0</span><span class="p" data-group-id="2353986975-2">)</span><span class="p">.</span></code></pre><p>Create an extendible array and set entry 17 to <code class="inline">true</code>, causing the array to grow
+automatically:</p><pre><code class="makeup erlang" translate="no"><span class="n">A1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="8982590120-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="8982590120-2">(</span><span class="p" data-group-id="8982590120-2">)</span><span class="p" data-group-id="8982590120-1">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="8982590120-3">(</span><span class="n">A1</span><span class="p" data-group-id="8982590120-3">)</span><span class="p">.</span></code></pre><p>Read back a stored value:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="4400287277-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="4400287277-1">)</span><span class="p">.</span></code></pre><p>Accessing an unset entry returns default value:</p><pre><code class="makeup erlang" translate="no"><span class="ss">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="4837617644-1">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="4837617644-1">)</span></code></pre><p>Accessing an entry beyond the last set entry also returns the default value, if
+the array does not have fixed size:</p><pre><code class="makeup erlang" translate="no"><span class="ss">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="5885642178-1">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="5885642178-1">)</span><span class="p">.</span></code></pre><p>&quot;Sparse&quot; functions ignore default-valued entries:</p><pre><code class="makeup erlang" translate="no"><span class="n">A2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="9558158454-1">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="9558158454-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9558158454-2">[</span><span class="p" data-group-id="9558158454-3">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="9558158454-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9558158454-4">{</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="9558158454-4">}</span><span class="p" data-group-id="9558158454-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">sparse_to_orddict</span><span class="p" data-group-id="9558158454-5">(</span><span class="n">A2</span><span class="p" data-group-id="9558158454-5">)</span><span class="p">.</span></code></pre><p>An extendible array can be made fixed-size later:</p><pre><code class="makeup erlang" translate="no"><span class="n">A3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">fix</span><span class="p" data-group-id="1872320419-1">(</span><span class="n">A2</span><span class="p" data-group-id="1872320419-1">)</span><span class="p">.</span></code></pre><p>A fixed-size array does not grow automatically and does not allow accesses
+beyond the last set entry:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="0245820257-1">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="0245820257-2">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="0245820257-2">}</span><span class="p" data-group-id="0245820257-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0245820257-3">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="0245820257-4">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="0245820257-4">)</span><span class="p" data-group-id="0245820257-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="0245820257-5">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="0245820257-6">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="0245820257-6">}</span><span class="p" data-group-id="0245820257-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0245820257-7">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="0245820257-8">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="0245820257-8">)</span><span class="p" data-group-id="0245820257-7">)</span><span class="p">.</span></code></pre>
   </section>
 
 
@@ -259,8 +258,7 @@ insertion.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Folds the array elements using the specified function and initial accumulator
-value. The elements are visited in order from the lowest index to the highest.
-If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p></div>
+value. The elements are visited in order from the lowest index to the highest.</p></div>
 
     </div>
 
@@ -272,8 +270,7 @@ If <code class="inline">Function</code> is not a function, the call fails with r
 
         <div class="summary-synopsis"><p>Folds the array elements right-to-left using the specified function and initial
 accumulator value. The elements are visited in order from the highest index to
-the lowest. If <code class="inline">Function</code> is not a function, the call fails with reason
-<code class="inline">badarg</code>.</p></div>
+the lowest.</p></div>
 
     </div>
 
@@ -294,8 +291,7 @@ the lowest. If <code class="inline">Function</code> is not a function, the call 
       </div>
 
         <div class="summary-synopsis"><p>Converts a list to an extendible array. <code class="inline">Default</code> is used as the value for
-uninitialized entries of the array. If <code class="inline">List</code> is not a proper list, the call
-fails with reason <code class="inline">badarg</code>.</p></div>
+uninitialized entries of the array.</p></div>
 
     </div>
 
@@ -316,9 +312,7 @@ fails with reason <code class="inline">badarg</code>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Converts an ordered list of pairs <code class="inline">{Index, Value}</code> to a corresponding extendible
-array. <code class="inline">Default</code> is used as the value for uninitialized entries of the array. If
-<code class="inline">Orddict</code> is not a proper, ordered list of pairs whose first elements are
-non-negative integers, the call fails with reason <code class="inline">badarg</code>.</p></div>
+array. <code class="inline">Default</code> is used as the value for uninitialized entries of the array.</p></div>
 
     </div>
 
@@ -328,9 +322,7 @@ non-negative integers, the call fails with reason <code class="inline">badarg</c
 
       </div>
 
-        <div class="summary-synopsis"><p>Gets the value of entry <code class="inline">I</code>. If <code class="inline">I</code> is not a non-negative integer, or if the
-array has fixed size and <code class="inline">I</code> is larger than the maximum index, the call fails
-with reason <code class="inline">badarg</code>.</p></div>
+        <div class="summary-synopsis"><p>Gets the value of entry <code class="inline">I</code>.</p></div>
 
     </div>
 
@@ -340,9 +332,7 @@ with reason <code class="inline">badarg</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if <code class="inline">X</code> is an array, otherwise <code class="inline">false</code>. Notice that the check is
-only shallow, as there is no guarantee that <code class="inline">X</code> is a well-formed array
-representation even if this function returns <code class="inline">true</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if <code class="inline">X</code> is an array, otherwise <code class="inline">false</code>.</p></div>
 
     </div>
 
@@ -364,8 +354,7 @@ otherwise <code class="inline">false</code>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Maps the specified function onto each array element. The elements are visited in
-order from the lowest index to the highest. If <code class="inline">Function</code> is not a function, the
-call fails with reason <code class="inline">badarg</code>.</p></div>
+order from the lowest index to the highest.</p></div>
 
     </div>
 
@@ -396,10 +385,7 @@ extendible and has initial size zero. Array indices start at <code class="inline
 
       </div>
 
-        <div class="summary-synopsis"><p>Creates a new array according to the specified size and options. If <code class="inline">Size</code> is
-not a non-negative integer, the call fails with reason <code class="inline">badarg</code>. By default, the
-array has fixed size. Notice that any size specifications in <code class="inline">Options</code> override
-parameter <code class="inline">Size</code>.</p></div>
+        <div class="summary-synopsis"><p>Creates a new array according to the specified size and options.</p></div>
 
     </div>
 
@@ -420,8 +406,7 @@ parameter <code class="inline">Size</code>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Resets entry <code class="inline">I</code> to the default value for the array. If the value of entry <code class="inline">I</code>
-is the default value, the array is returned unchanged. Reset never changes the
-array size. Shrinking can be done explicitly by calling <a href="#resize/2"><code class="inline">resize/2</code></a>.</p></div>
+is the default value, the array is returned unchanged.</p></div>
 
     </div>
 
@@ -442,9 +427,7 @@ array has fixed size, also the resulting array has fixed size.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Change the array size. If <code class="inline">Size</code> is not a non-negative integer, the call fails
-with reason <code class="inline">badarg</code>. If the specified array has fixed size, also the resulting
-array has fixed size.</p></div>
+        <div class="summary-synopsis"><p>Change the array size.</p></div>
 
     </div>
 
@@ -454,9 +437,7 @@ array has fixed size.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Sets entry <code class="inline">I</code> of the array to <code class="inline">Value</code>. If <code class="inline">I</code> is not a non-negative integer, or
-if the array has fixed size and <code class="inline">I</code> is larger than the maximum index, the call
-fails with reason <code class="inline">badarg</code>.</p></div>
+        <div class="summary-synopsis"><p>Sets entry <code class="inline">I</code> of the array to <code class="inline">Value</code>.</p></div>
 
     </div>
 
@@ -480,8 +461,7 @@ guaranteed to not have been previously set.</p></div>
 
         <div class="summary-synopsis"><p>Folds the array elements using the specified function and initial accumulator
 value, skipping default-valued entries. The elements are visited in order from
-the lowest index to the highest. If <code class="inline">Function</code> is not a function, the call fails
-with reason <code class="inline">badarg</code>.</p></div>
+the lowest index to the highest.</p></div>
 
     </div>
 
@@ -493,8 +473,7 @@ with reason <code class="inline">badarg</code>.</p></div>
 
         <div class="summary-synopsis"><p>Folds the array elements right-to-left using the specified function and initial
 accumulator value, skipping default-valued entries. The elements are visited in
-order from the highest index to the lowest. If <code class="inline">Function</code> is not a function, the
-call fails with reason <code class="inline">badarg</code>.</p></div>
+order from the highest index to the lowest.</p></div>
 
     </div>
 
@@ -505,8 +484,7 @@ call fails with reason <code class="inline">badarg</code>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Maps the specified function onto each array element, skipping default-valued
-entries. The elements are visited in order from the lowest index to the highest.
-If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p></div>
+entries. The elements are visited in order from the lowest index to the highest.</p></div>
 
     </div>
 
@@ -585,7 +563,7 @@ default-valued entries.</p></div>
     </a>
     <h1 class="signature" translate="no">array()</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L240" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L181" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -613,7 +591,7 @@ default-valued entries.</p></div>
     </a>
     <h1 class="signature" translate="no">array(Type)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L247" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L188" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -645,7 +623,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">array_indx()</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L254" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L195" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -675,7 +653,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">array_opt()</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L256" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L197" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -710,7 +688,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">array_opts()</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L260" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L201" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -740,7 +718,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">indx_pair(Type)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L262" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L203" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -770,7 +748,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">indx_pairs(Type)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L263" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L204" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -812,7 +790,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">default(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L503" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L372" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -840,7 +818,7 @@ for equality.</p>
     </a>
     <h1 class="signature" translate="no">fix(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L592" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L457" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -869,7 +847,7 @@ insertion.</p><p>See also <a href="#set/3"><code class="inline">set/3</code></a>
     </a>
     <h1 class="signature" translate="no">foldl(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1873" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1639" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -887,8 +865,7 @@ insertion.</p><p>See also <a href="#set/3"><code class="inline">set/3</code></a>
       </div>
 
 <p>Folds the array elements using the specified function and initial accumulator
-value. The elements are visited in order from the lowest index to the highest.
-If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#map/2"><code class="inline">map/2</code></a>, <a href="#sparse_foldl/3"><code class="inline">sparse_foldl/3</code></a>.</p>
+value. The elements are visited in order from the lowest index to the highest.</p><p>If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#map/2"><code class="inline">map/2</code></a>, <a href="#sparse_foldl/3"><code class="inline">sparse_foldl/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="foldr/3">
@@ -900,7 +877,7 @@ If <code class="inline">Function</code> is not a function, the call fails with r
     </a>
     <h1 class="signature" translate="no">foldr(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L2038" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1790" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -919,8 +896,7 @@ If <code class="inline">Function</code> is not a function, the call fails with r
 
 <p>Folds the array elements right-to-left using the specified function and initial
 accumulator value. The elements are visited in order from the highest index to
-the lowest. If <code class="inline">Function</code> is not a function, the call fails with reason
-<code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#map/2"><code class="inline">map/2</code></a>.</p>
+the lowest.</p><p>If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#map/2"><code class="inline">map/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="from_list/1">
@@ -932,7 +908,7 @@ the lowest. If <code class="inline">Function</code> is not a function, the call 
     </a>
     <h1 class="signature" translate="no">from_list(List)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1142" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L953" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -960,7 +936,7 @@ the lowest. If <code class="inline">Function</code> is not a function, the call 
     </a>
     <h1 class="signature" translate="no">from_list(List, Default)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1161" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L966" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -977,8 +953,7 @@ the lowest. If <code class="inline">Function</code> is not a function, the call 
       </div>
 
 <p>Converts a list to an extendible array. <code class="inline">Default</code> is used as the value for
-uninitialized entries of the array. If <code class="inline">List</code> is not a proper list, the call
-fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#to_list/1"><code class="inline">to_list/1</code></a>.</p>
+uninitialized entries of the array.</p><p>If <code class="inline">List</code> is not a proper list, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#to_list/1"><code class="inline">to_list/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="from_orddict/1">
@@ -990,7 +965,7 @@ fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#n
     </a>
     <h1 class="signature" translate="no">from_orddict(Orddict)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1445" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1240" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1018,7 +993,7 @@ fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#n
     </a>
     <h1 class="signature" translate="no">from_orddict(Orddict, Default)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1468" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1255" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1035,8 +1010,7 @@ fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#n
       </div>
 
 <p>Converts an ordered list of pairs <code class="inline">{Index, Value}</code> to a corresponding extendible
-array. <code class="inline">Default</code> is used as the value for uninitialized entries of the array. If
-<code class="inline">Orddict</code> is not a proper, ordered list of pairs whose first elements are
+array. <code class="inline">Default</code> is used as the value for uninitialized entries of the array.</p><p>If <code class="inline">Orddict</code> is not a proper, ordered list of pairs whose first elements are
 non-negative integers, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#to_orddict/1"><code class="inline">to_orddict/1</code></a>.</p>
   </section>
 </section>
@@ -1049,7 +1023,7 @@ non-negative integers, the call fails with reason <code class="inline">badarg</c
     </a>
     <h1 class="signature" translate="no">get(I, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L854" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L684" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1065,9 +1039,8 @@ non-negative integers, the call fails with reason <code class="inline">badarg</c
 
       </div>
 
-<p>Gets the value of entry <code class="inline">I</code>. If <code class="inline">I</code> is not a non-negative integer, or if the
-array has fixed size and <code class="inline">I</code> is larger than the maximum index, the call fails
-with reason <code class="inline">badarg</code>.</p><p>If the array does not have fixed size, the default value for any index <code class="inline">I</code>
+<p>Gets the value of entry <code class="inline">I</code>.</p><p>If <code class="inline">I</code> is not a non-negative integer, or if the array has fixed size and <code class="inline">I</code> is
+larger than the maximum index, the call fails with reason <code class="inline">badarg</code>.</p><p>If the array does not have fixed size, the default value for any index <code class="inline">I</code>
 greater than <code class="inline">size(Array)-1</code> is returned.</p><p>See also <a href="#set/3"><code class="inline">set/3</code></a>.</p>
   </section>
 </section>
@@ -1080,7 +1053,7 @@ greater than <code class="inline">size(Array)-1</code> is returned.</p><p>See al
     </a>
     <h1 class="signature" translate="no">is_array(X)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L466" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L345" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1096,9 +1069,8 @@ greater than <code class="inline">size(Array)-1</code> is returned.</p><p>See al
 
       </div>
 
-<p>Returns <code class="inline">true</code> if <code class="inline">X</code> is an array, otherwise <code class="inline">false</code>. Notice that the check is
-only shallow, as there is no guarantee that <code class="inline">X</code> is a well-formed array
-representation even if this function returns <code class="inline">true</code>.</p>
+<p>Returns <code class="inline">true</code> if <code class="inline">X</code> is an array, otherwise <code class="inline">false</code>.</p><p>Notice that the check is only shallow, as there is no guarantee that <code class="inline">X</code> is a
+well-formed array representation even if this function returns <code class="inline">true</code>.</p>
   </section>
 </section>
 <section class="detail" id="is_fix/1">
@@ -1110,7 +1082,7 @@ representation even if this function returns <code class="inline">true</code>.</
     </a>
     <h1 class="signature" translate="no">is_fix(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L608" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L469" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1139,7 +1111,7 @@ otherwise <code class="inline">false</code>.</p><p>See also <a href="#fix/1"><co
     </a>
     <h1 class="signature" translate="no">map(Function, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1671" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1452" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1157,8 +1129,7 @@ otherwise <code class="inline">false</code>.</p><p>See also <a href="#fix/1"><co
       </div>
 
 <p>Maps the specified function onto each array element. The elements are visited in
-order from the lowest index to the highest. If <code class="inline">Function</code> is not a function, the
-call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#sparse_map/2"><code class="inline">sparse_map/2</code></a>.</p>
+order from the lowest index to the highest.</p><p>If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#sparse_map/2"><code class="inline">sparse_map/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="new/0">
@@ -1170,7 +1141,7 @@ call fails with reason <code class="inline">badarg</code>.</p><p>See also <a hre
     </a>
     <h1 class="signature" translate="no">new()</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L280" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L215" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1198,7 +1169,7 @@ call fails with reason <code class="inline">badarg</code>.</p><p>See also <a hre
     </a>
     <h1 class="signature" translate="no">new(Options)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L367" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L264" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1219,7 +1190,7 @@ extendible and has initial size zero. Array indices start at <code class="inline
 array size; this also implies <code class="inline">{fixed, true}</code>. If <code class="inline">N</code> is not a non-negative
 integer, the call fails with reason <code class="inline">badarg</code>.</p></li><li><p><strong><code class="inline">fixed</code> or <code class="inline">{fixed, true}</code></strong> - Creates a fixed-size array. See also <a href="#fix/1"><code class="inline">fix/1</code></a>.</p></li><li><p><strong><code class="inline">{fixed, false}</code></strong> - Creates an extendible (non-fixed-size) array.</p></li><li><p><strong><code class="inline">{default, Value}</code></strong> - Sets the default value for the array to <code class="inline">Value</code>.</p></li></ul><p>Options are processed in the order they occur in the list, that is, later
 options have higher precedence.</p><p>The default value is used as the value of uninitialized entries, and cannot be
-changed once the array has been created.</p><p><em>Examples:</em></p><pre><code class="text">array:new(100)</code></pre><p>creates a fixed-size array of size 100.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="4866193525-1">(</span><span class="p" data-group-id="4866193525-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="4866193525-2">}</span><span class="p" data-group-id="4866193525-1">)</span></code></pre><p>creates an empty, extendible array whose default value is <code class="inline">0</code>.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="8599679538-1">(</span><span class="p" data-group-id="8599679538-2">[</span><span class="p" data-group-id="8599679538-3">{</span><span class="nb">size</span><span class="p">,</span><span class="mi">10</span><span class="p" data-group-id="8599679538-3">}</span><span class="p">,</span><span class="p" data-group-id="8599679538-4">{</span><span class="ss">fixed</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="8599679538-4">}</span><span class="p">,</span><span class="p" data-group-id="8599679538-5">{</span><span class="ss">default</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="8599679538-5">}</span><span class="p" data-group-id="8599679538-2">]</span><span class="p" data-group-id="8599679538-1">)</span></code></pre><p>creates an extendible array with initial size 10 whose default value is <code class="inline">-1</code>.</p><p>See also <a href="#fix/1"><code class="inline">fix/1</code></a>, <a href="#from_list/2"><code class="inline">from_list/2</code></a>, <a href="#get/2"><code class="inline">get/2</code></a>, <a href="#new/0"><code class="inline">new/0</code></a>, <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#set/3"><code class="inline">set/3</code></a>.</p>
+changed once the array has been created.</p><p><em>Examples:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="6945448777-1">(</span><span class="mi">100</span><span class="p" data-group-id="6945448777-1">)</span></code></pre><p>creates a fixed-size array of size 100.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="1671919721-1">(</span><span class="p" data-group-id="1671919721-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1671919721-2">}</span><span class="p" data-group-id="1671919721-1">)</span></code></pre><p>creates an empty, extendible array whose default value is <code class="inline">0</code>.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="8421344457-1">(</span><span class="p" data-group-id="8421344457-2">[</span><span class="p" data-group-id="8421344457-3">{</span><span class="nb">size</span><span class="p">,</span><span class="mi">10</span><span class="p" data-group-id="8421344457-3">}</span><span class="p">,</span><span class="p" data-group-id="8421344457-4">{</span><span class="ss">fixed</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="8421344457-4">}</span><span class="p">,</span><span class="p" data-group-id="8421344457-5">{</span><span class="ss">default</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="8421344457-5">}</span><span class="p" data-group-id="8421344457-2">]</span><span class="p" data-group-id="8421344457-1">)</span></code></pre><p>creates an extendible array with initial size 10 whose default value is <code class="inline">-1</code>.</p><p>See also <a href="#fix/1"><code class="inline">fix/1</code></a>, <a href="#from_list/2"><code class="inline">from_list/2</code></a>, <a href="#get/2"><code class="inline">get/2</code></a>, <a href="#new/0"><code class="inline">new/0</code></a>, <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#set/3"><code class="inline">set/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="new/2">
@@ -1231,7 +1202,7 @@ changed once the array has been created.</p><p><em>Examples:</em></p><pre><code 
     </a>
     <h1 class="signature" translate="no">new(Size, Options)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L408" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L291" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1247,13 +1218,12 @@ changed once the array has been created.</p><p><em>Examples:</em></p><pre><code 
 
       </div>
 
-<p>Creates a new array according to the specified size and options. If <code class="inline">Size</code> is
-not a non-negative integer, the call fails with reason <code class="inline">badarg</code>. By default, the
-array has fixed size. Notice that any size specifications in <code class="inline">Options</code> override
-parameter <code class="inline">Size</code>.</p><p>If <code class="inline">Options</code> is a list, this is equivalent to
+<p>Creates a new array according to the specified size and options.</p><p>If <code class="inline">Size</code> is not a non-negative integer, the call fails with reason <code class="inline">badarg</code>.
+By default, the array has fixed size. Notice that any size specifications in
+<code class="inline">Options</code> override parameter <code class="inline">Size</code>.</p><p>If <code class="inline">Options</code> is a list, this is equivalent to
 <a href="#new/1"><code class="inline">new([{size, Size} | Options])</code></a>, otherwise it is equivalent to
 <a href="#new/1"><code class="inline">new([{size, Size} | [Options]])</code></a>. However, using this function
-directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="1032160050-1">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1032160050-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1032160050-2">}</span><span class="p" data-group-id="1032160050-1">)</span></code></pre><p>creates a fixed-size array of size 100, whose default value is <code class="inline">0</code>.</p><p>See also <a href="#new/1"><code class="inline">new/1</code></a>.</p>
+directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="0001112527-1">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0001112527-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="0001112527-2">}</span><span class="p" data-group-id="0001112527-1">)</span></code></pre><p>creates a fixed-size array of size 100, whose default value is <code class="inline">0</code>.</p><p>See also <a href="#new/1"><code class="inline">new/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="relax/1">
@@ -1265,7 +1235,7 @@ directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup 
     </a>
     <h1 class="signature" translate="no">relax(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L651" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L508" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1293,7 +1263,7 @@ directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup 
     </a>
     <h1 class="signature" translate="no">reset(I, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L905" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L725" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1310,8 +1280,8 @@ directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup 
       </div>
 
 <p>Resets entry <code class="inline">I</code> to the default value for the array. If the value of entry <code class="inline">I</code>
-is the default value, the array is returned unchanged. Reset never changes the
-array size. Shrinking can be done explicitly by calling <a href="#resize/2"><code class="inline">resize/2</code></a>.</p><p>If <code class="inline">I</code> is not a non-negative integer, or if the array has fixed size and <code class="inline">I</code> is
+is the default value, the array is returned unchanged.</p><p>Reset never changes the array size. Shrinking can be done explicitly by calling
+<a href="#resize/2"><code class="inline">resize/2</code></a>.</p><p>If <code class="inline">I</code> is not a non-negative integer, or if the array has fixed size and <code class="inline">I</code> is
 larger than the maximum index, the call fails with reason <code class="inline">badarg</code>; compare
 <a href="#set/3"><code class="inline">set/3</code></a></p><p>See also <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#set/3"><code class="inline">set/3</code></a>.</p>
   </section>
@@ -1325,7 +1295,7 @@ larger than the maximum index, the call fails with reason <code class="inline">b
     </a>
     <h1 class="signature" translate="no">resize(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L721" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L568" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1354,7 +1324,7 @@ array has fixed size, also the resulting array has fixed size.</p><p>See also <a
     </a>
     <h1 class="signature" translate="no">resize(Size, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L682" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L536" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1370,9 +1340,8 @@ array has fixed size, also the resulting array has fixed size.</p><p>See also <a
 
       </div>
 
-<p>Change the array size. If <code class="inline">Size</code> is not a non-negative integer, the call fails
-with reason <code class="inline">badarg</code>. If the specified array has fixed size, also the resulting
-array has fixed size.</p>
+<p>Change the array size.</p><p>If <code class="inline">Size</code> is not a non-negative integer, the call fails with reason <code class="inline">badarg</code>. If
+the specified array has fixed size, also the resulting array has fixed size.</p>
   </section>
 </section>
 <section class="detail" id="set/3">
@@ -1384,7 +1353,7 @@ array has fixed size.</p>
     </a>
     <h1 class="signature" translate="no">set(I, Value, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L781" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L619" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1400,9 +1369,8 @@ array has fixed size.</p>
 
       </div>
 
-<p>Sets entry <code class="inline">I</code> of the array to <code class="inline">Value</code>. If <code class="inline">I</code> is not a non-negative integer, or
-if the array has fixed size and <code class="inline">I</code> is larger than the maximum index, the call
-fails with reason <code class="inline">badarg</code>.</p><p>If the array does not have fixed size, and <code class="inline">I</code> is greater than <code class="inline">size(Array)-1</code>,
+<p>Sets entry <code class="inline">I</code> of the array to <code class="inline">Value</code>.</p><p>If <code class="inline">I</code> is not a non-negative integer, or if the array has fixed size and <code class="inline">I</code> is
+larger than the maximum index, the call fails with reason <code class="inline">badarg</code>.</p><p>If the array does not have fixed size, and <code class="inline">I</code> is greater than <code class="inline">size(Array)-1</code>,
 the array grows to size <code class="inline">I+1</code>.</p><p>See also <a href="#get/2"><code class="inline">get/2</code></a>, <a href="#reset/2"><code class="inline">reset/2</code></a>.</p>
   </section>
 </section>
@@ -1415,7 +1383,7 @@ the array grows to size <code class="inline">I+1</code>.</p><p>See also <a href=
     </a>
     <h1 class="signature" translate="no">size(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L488" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L361" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1445,7 +1413,7 @@ guaranteed to not have been previously set.</p><p>See also <a href="#set/3"><cod
     </a>
     <h1 class="signature" translate="no">sparse_foldl(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1953" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1712" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1464,8 +1432,7 @@ guaranteed to not have been previously set.</p><p>See also <a href="#set/3"><cod
 
 <p>Folds the array elements using the specified function and initial accumulator
 value, skipping default-valued entries. The elements are visited in order from
-the lowest index to the highest. If <code class="inline">Function</code> is not a function, the call fails
-with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#sparse_foldr/3"><code class="inline">sparse_foldr/3</code></a>.</p>
+the lowest index to the highest.</p><p>If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#sparse_foldr/3"><code class="inline">sparse_foldr/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="sparse_foldr/3">
@@ -1477,7 +1444,7 @@ with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3
     </a>
     <h1 class="signature" translate="no">sparse_foldr(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L2124" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1868" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1496,8 +1463,7 @@ with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldl/3
 
 <p>Folds the array elements right-to-left using the specified function and initial
 accumulator value, skipping default-valued entries. The elements are visited in
-order from the highest index to the lowest. If <code class="inline">Function</code> is not a function, the
-call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#sparse_foldl/3"><code class="inline">sparse_foldl/3</code></a>.</p>
+order from the highest index to the lowest.</p><p>If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#sparse_foldl/3"><code class="inline">sparse_foldl/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="sparse_map/2">
@@ -1509,7 +1475,7 @@ call fails with reason <code class="inline">badarg</code>.</p><p>See also <a hre
     </a>
     <h1 class="signature" translate="no">sparse_map(Function, Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1770" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1544" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1527,8 +1493,7 @@ call fails with reason <code class="inline">badarg</code>.</p><p>See also <a hre
       </div>
 
 <p>Maps the specified function onto each array element, skipping default-valued
-entries. The elements are visited in order from the lowest index to the highest.
-If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#map/2"><code class="inline">map/2</code></a>.</p>
+entries. The elements are visited in order from the lowest index to the highest.</p><p>If <code class="inline">Function</code> is not a function, the call fails with reason <code class="inline">badarg</code>.</p><p>See also <a href="#map/2"><code class="inline">map/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="sparse_size/1">
@@ -1540,7 +1505,7 @@ If <code class="inline">Function</code> is not a function, the call fails with r
     </a>
     <h1 class="signature" translate="no">sparse_size(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L2181" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1918" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1570,7 +1535,7 @@ array, or zero if no such entry exists.</p><p>See also <a href="#resize/1"><code
     </a>
     <h1 class="signature" translate="no">sparse_to_list(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1074" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L885" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1598,7 +1563,7 @@ array, or zero if no such entry exists.</p><p>See also <a href="#resize/1"><code
     </a>
     <h1 class="signature" translate="no">sparse_to_orddict(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1363" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1158" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1627,7 +1592,7 @@ default-valued entries.</p><p>See also <a href="#to_orddict/1"><code class="inli
     </a>
     <h1 class="signature" translate="no">to_list(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L996" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L811" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1655,7 +1620,7 @@ default-valued entries.</p><p>See also <a href="#to_orddict/1"><code class="inli
     </a>
     <h1 class="signature" translate="no">to_orddict(Array)</h1>
 
-      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1265" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/rickard-green/otp/blob/rickard/year2038/OTP-18965/lib/stdlib/src/array.erl#L1065" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1685,6 +1650,10 @@ default-valued entries.</p><p>See also <a href="#to_orddict/1"><code class="inli
             <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
               Search HexDocs
             </button>
+
+              <a href="stdlib.epub" title="ePub version">
+                Download ePub version
+              </a>
 
           </span>
         </p>
