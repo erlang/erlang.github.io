@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="project" content="Erlang System Documentation v27.0-rc1">
+
+
+    <title>Advanced — Erlang System Documentation v27.0-rc1</title>
+    <link rel="stylesheet" href="dist/html-erlang-YUARVD4J.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
+    <script src="dist/sidebar_items-1105547A.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-L4O5OK2K.js"></script>
+
+<style>.dark img { background-color: white; }</style>
+  </head>
+  <body data-type="extras" class="page-extra">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<div class="background-layer"></div>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="../index.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="Erlang System Documentation" />
+        </a>
+
+      <div>
+        <a href="../index.html" class="sidebar-projectName" translate="no">
+Erlang System Documentation
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v27.0-rc1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+      <div class="top-search">
+        <div class="search-settings">
+          <form class="search-bar" action="search.html">
+            <label class="search-label">
+              <span class="sr-only">Search documentation of Erlang System Documentation</span>
+              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="search-button" aria-label="Submit Search">
+              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+            </button>
+            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+              <i class="ri-close-line ri-lg" title="Cancel search"></i>
+            </button>
+          </form>
+          <div class="autocomplete">
+          </div>
+          <button class="icon-settings display-settings">
+            <i class="ri-settings-3-line"></i>
+            <span class="sr-only">Settings</span>
+          </button>
+        </div>
+
+      </div>
+
+<h1>
+
+    <a href="https://github.com/bjorng/otp/blob/bjorn/compiler/fix-option-order/GH-6979/OTP-18968/system/doc/efficiency_guide/advanced.md#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+
+  <span>Advanced</span>
+</h1>
+
+<h2 id="memory" class="section-heading">
+  <a href="#memory" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Memory</span>
+</h2>
+<p>A good start when programming efficiently is to know how much memory different
+data types and operations require. It is implementation-dependent how much
+memory the Erlang data types and other items consume, but the following table
+shows some figures for the <code class="inline">erts-8.0</code> system in OTP 19.0.</p><p>The unit of measurement is memory words. There exists both a 32-bit and a 64-bit
+implementation. A word is therefore 4 bytes or 8 bytes, respectively. The value
+for a running system can be determined by calling
+<a href="../../erts-14.2.2/doc/html/erlang.html#system_info_wordsize"><code class="inline">erlang:system_info(wordsize)</code></a>.</p><table><thead><tr><th style="text-align: left;"><em>Data Type</em></th><th style="text-align: left;"><em>Memory Size</em></th></tr></thead><tbody><tr><td style="text-align: left;">Small integer</td><td style="text-align: left;">1 word. On 32-bit architectures: -134217729 &lt; i &lt; 134217728 (28 bits). On 64-bit architectures: -576460752303423489 &lt; i &lt; 576460752303423488 (60 bits).</td></tr><tr><td style="text-align: left;">Large integer</td><td style="text-align: left;">3..N words.</td></tr><tr><td style="text-align: left;">Atom</td><td style="text-align: left;">1 word. An atom refers into an atom table, which also consumes memory. The atom text is stored once for each unique atom in this table. The atom table is <em>not</em> garbage-collected.</td></tr><tr><td style="text-align: left;">Float</td><td style="text-align: left;">On 32-bit architectures: 4 words. On 64-bit architectures: 3 words.</td></tr><tr><td style="text-align: left;">Binary</td><td style="text-align: left;">3..6 words + data (can be shared).</td></tr><tr><td style="text-align: left;">List</td><td style="text-align: left;">1 word + 1 word per element + the size of each element.</td></tr><tr><td style="text-align: left;">String (is the same as a list of integers)</td><td style="text-align: left;">1 word + 2 words per character.</td></tr><tr><td style="text-align: left;">Tuple</td><td style="text-align: left;">2 words + the size of each element.</td></tr><tr><td style="text-align: left;">Small Map</td><td style="text-align: left;">5 words + the size of all keys and values.</td></tr><tr><td style="text-align: left;">Large Map (&gt; 32 keys)</td><td style="text-align: left;"><code class="inline">N</code> x <code class="inline">F</code> words + the size of all keys and values. <code class="inline">N</code> is the number of keys in the Map. <code class="inline">F</code> is a sparsity factor that can vary between 1.6 and 1.8 due to the probabilistic nature of the internal HAMT data structure.</td></tr><tr><td style="text-align: left;">Pid</td><td style="text-align: left;">1 word for a process identifier from the current local node. On 32-bit: 6 words for a process identifier from another node. On 64-bit: 5 words for a process identifier from another node. A process identifier refers into a process table and a node table, which also consumes memory.</td></tr><tr><td style="text-align: left;">Port</td><td style="text-align: left;">1 word for a port identifier from the current local node. 5 words for a port identifier from another node. A port identifier refers into a port table and a node table, which also consumes memory.</td></tr><tr><td style="text-align: left;">Reference</td><td style="text-align: left;">On 32-bit architectures: 4-7 words for a reference from the current local node, and 7-9 words for a reference from another node. On 64-bit architectures: 4-6 words for a reference from the current local node, and 6-7 words for a reference from another node. A reference also refers into more or less emulator internal data structures which also consumes memory. At a minimum it refers into the node tables.</td></tr><tr><td style="text-align: left;">Fun</td><td style="text-align: left;">9..13 words + the size of environment. A fun refers into a fun table, which also consumes memory.</td></tr><tr><td style="text-align: left;">Ets table</td><td style="text-align: left;">Initially 768 words + the size of each element (6 words + the size of Erlang data). The table grows when necessary.</td></tr><tr><td style="text-align: left;">Erlang process</td><td style="text-align: left;">338 words when spawned, including a heap of 233 words.</td></tr></tbody></table><p><em>Table: Memory Size of Different Data Types</em></p><h2 id="system-limits" class="section-heading">
+  <a href="#system-limits" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">System Limits</span>
+</h2>
+<p>The Erlang language specification puts no limits on the number of processes,
+length of atoms, and so on. However, for performance and memory saving reasons,
+there will always be limits in a practical implementation of the Erlang language
+and execution environment.</p><table><thead><tr><th style="text-align: left;">What</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;">Processes</td><td style="text-align: left;">The maximum number of simultaneously alive Erlang processes is by default 1,048,576. This limit can be configured at startup. For more information, see the <a href="../../erts-14.2.2/doc/html/erl_cmd.html#max_processes"><code class="inline">+P</code></a> command-line flag in the <a href="../../erts-14.2.2/doc/html/erl_cmd.html"><code class="inline">erl(1)</code></a> manual page in ERTS.</td></tr><tr><td style="text-align: left;"><a href="" id="unique_pids"></a> Unique Local Process Identifiers on a Runtime System Instance</td><td style="text-align: left;">On a 64 bit system at most <code class="inline">2⁶⁰ - 1</code> unique process identifiers can be created and on a 32 bit system at most <code class="inline">2²⁸ - 1</code>.</td></tr><tr><td style="text-align: left;">Known nodes</td><td style="text-align: left;">A remote node Y must be known to node X if there exists any pids, ports, references, or funs (Erlang data types) from Y on X, or if X and Y are connected. The maximum number of remote nodes simultaneously/ever known to a node is limited by the <a href="advanced.html#atoms">maximum number of atoms</a> available for node names. All data concerning remote nodes, except for the node name atom, are garbage-collected.</td></tr><tr><td style="text-align: left;">Connected nodes</td><td style="text-align: left;">The maximum number of simultaneously connected nodes is limited by either the maximum number of simultaneously known remote nodes, <a href="advanced.html#ports">the maximum number of (Erlang) ports</a> available, or <a href="advanced.html#files_sockets">the maximum number of sockets</a> available.</td></tr><tr><td style="text-align: left;">Characters in an atom</td><td style="text-align: left;">255.</td></tr><tr><td style="text-align: left;"><a href="" id="atoms"></a> Atoms</td><td style="text-align: left;">By default, the maximum number of atoms is 1,048,576. This limit can be raised or lowered using the <code class="inline">+t</code> option.</td></tr><tr><td style="text-align: left;">Elements in a tuple</td><td style="text-align: left;">The maximum number of elements in a tuple is 16,777,215 (24-bit unsigned integer).</td></tr><tr><td style="text-align: left;">Size of binary</td><td style="text-align: left;">In the 32-bitimplementation of Erlang, 536,870,911 bytes is the largest binary that can be constructed or matched using the bit syntax. In the 64-bit implementation, the maximum size is 2,305,843,009,213,693,951 bytes. If the limit is exceeded, bit syntax construction fails with a <code class="inline">system_limit</code> exception, while any attempt to match a binary that is too large fails. This limit is enforced starting in R11B-4. In earlier Erlang/OTP releases, operations on too large binaries in general either fail or give incorrect results. In future releases, other operations that create binaries (such as <a href="../../erts-14.2.2/doc/html/erlang.html#list_to_binary/1"><code class="inline">list_to_binary/1</code></a>) will probably also enforce the same limit.</td></tr><tr><td style="text-align: left;">Total amount of data allocated by an Erlang node</td><td style="text-align: left;">The Erlang runtime system can use the complete 32-bit (or 64-bit) address space, but the operating system often limits a single process to use less than that.</td></tr><tr><td style="text-align: left;">Length of a node name</td><td style="text-align: left;">An Erlang node name has the form host@shortname or host@longname. The node name is used as an atom within the system, so the maximum size of 255 holds also for the node name.</td></tr><tr><td style="text-align: left;"><a href="" id="ports"></a> Open ports</td><td style="text-align: left;">The maximum number of simultaneously open Erlang ports is often by default 16,384. This limit can be configured at startup. For more information, see the <a href="../../erts-14.2.2/doc/html/erl_cmd.html#max_ports"><code class="inline">+Q</code></a> command-line flag in the <a href="../../erts-14.2.2/doc/html/erl_cmd.html"><code class="inline">erl(1)</code></a> manual page in ERTS.</td></tr><tr><td style="text-align: left;"><a href="" id="unique_ports"></a> Unique Local Port Identifiers on a Runtime System Instance</td><td style="text-align: left;">On a 64 bit system at most <code class="inline">2⁶⁰ - 1</code> unique port identifiers can be created and on a 32 bit system at most <code class="inline">2²⁸ - 1</code>.</td></tr><tr><td style="text-align: left;"><a href="" id="files_sockets"></a> Open files and sockets</td><td style="text-align: left;">The maximum number of simultaneously open files and sockets depends on <a href="advanced.html#ports">the maximum number of Erlang ports</a> available, as well as on operating system-specific settings and limits.</td></tr><tr><td style="text-align: left;">Number of arguments to a function or fun</td><td style="text-align: left;">255</td></tr><tr><td style="text-align: left;"><a href="" id="unique_references"></a> Unique References on a Runtime System Instance</td><td style="text-align: left;">Each scheduler thread has its own set of references, and all other threads have a shared set of references. Each set of references consist of <code class="inline">2⁶⁴ - 1</code> unique references. That is, the total amount of unique references that can be produced on a runtime system instance is <code class="inline">(NoSchedulers + 1) × (2⁶⁴ - 1)</code>. If a scheduler thread create a new reference each nano second, references will at earliest be reused after more than 584 years. That is, for the foreseeable future they are unique enough.</td></tr><tr><td style="text-align: left;"><a href="" id="unique_integers"></a> Unique Integers on a Runtime System Instance</td><td style="text-align: left;">There are two types of unique integers both created using the <a href="../../erts-14.2.2/doc/html/erlang.html#unique_integer/1">erlang:unique_integer()</a> BIF: <em>1.</em> Unique integers created <em>with</em> the <code class="inline">monotonic</code> modifier consist of a set of <code class="inline">2⁶⁴ - 1</code> unique integers. <em>2.</em> Unique integers created <em>without</em> the <code class="inline">monotonic</code> modifier consist of a set of <code class="inline">2⁶⁴ - 1</code> unique integers per scheduler thread and a set of <code class="inline">2⁶⁴ - 1</code> unique integers shared by other threads. That is, the total amount of unique integers without the <code class="inline">monotonic</code> modifier is <code class="inline">(NoSchedulers + 1) × (2⁶⁴ - 1)</code>. If a unique integer is created each nano second, unique integers will at earliest be reused after more than 584 years. That is, for the foreseeable future they are unique enough.</td></tr></tbody></table><p><em>Table: System Limits</em></p>
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="drivers.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Drivers
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="profiling.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+Profiling
+        </span>
+      </a>
+
+  </div>
+</div>
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="Erlang System Documentation.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+
+            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</main>
+</div>
+
+
+  </body>
+</html>
