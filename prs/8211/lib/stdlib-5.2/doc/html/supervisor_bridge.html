@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-74C80D9B.js"></script>
+    <script src="dist/sidebar_items-4B14E1E0.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -199,7 +199,7 @@ and do any necessary cleaning up. The return value is ignored.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start_link/3"><code class="inline">start_link/3</code></a></p></div>
+        <div class="summary-synopsis"><p>Creates a nameless supervisor bridge process as part of a supervision tree.</p></div>
 
     </div>
 
@@ -210,9 +210,7 @@ and do any necessary cleaning up. The return value is ignored.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Creates a supervisor bridge process, linked to the calling process, which calls
-<a href="#c:init/1"><code class="inline">Module:init/1</code></a> to start the subsystem. To ensure a synchronized
-startup procedure, this function does not return until
-<a href="#c:init/1"><code class="inline">Module:init/1</code></a> has returned.</p></div>
+<a href="#c:init/1"><code class="inline">Module:init/1</code></a> to start the subsystem.</p></div>
 
     </div>
 
@@ -238,7 +236,7 @@ startup procedure, this function does not return until
     </a>
     <h1 class="signature" translate="no">init(Args)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L77" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L75" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -273,7 +271,7 @@ stopped by its supervisor with reason <code class="inline">Reason</code>, it cal
     </a>
     <h1 class="signature" translate="no">terminate(Reason, State)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L92" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L89" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -318,7 +316,7 @@ becomes <code class="inline">Term</code>.</p><p><code class="inline">State</code
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L120" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L122" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -340,7 +338,8 @@ becomes <code class="inline">Term</code>.</p><p><code class="inline">State</code
 
       </div>
 
-<p>Equivalent to <a href="#start_link/3"><code class="inline">start_link/3</code></a></p>
+<p>Creates a nameless supervisor bridge process as part of a supervision tree.</p><p>Equivalent to <a href="#start_link/3"><code class="inline">start_link/3</code></a> except that the supervisor process is not
+<a href="../../../../erts-14.2.2/doc/html/erlang.html#register/2"><code class="inline">registered</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start_link/3">
@@ -352,7 +351,7 @@ becomes <code class="inline">Term</code>.</p><p><code class="inline">State</code
     </a>
     <h1 class="signature" translate="no">start_link(SupBridgeName, Module, Args)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/supervisor_bridge.erl#L172" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -379,15 +378,14 @@ becomes <code class="inline">Term</code>.</p><p><code class="inline">State</code
       </div>
 
 <p>Creates a supervisor bridge process, linked to the calling process, which calls
-<a href="#c:init/1"><code class="inline">Module:init/1</code></a> to start the subsystem. To ensure a synchronized
-startup procedure, this function does not return until
+<a href="#c:init/1"><code class="inline">Module:init/1</code></a> to start the subsystem.</p><p>To ensure a synchronized startup procedure, this function does not return until
 <a href="#c:init/1"><code class="inline">Module:init/1</code></a> has returned.</p><ul><li>If <code class="inline">SupBridgeName={local,Name}</code>, the supervisor bridge is registered locally
 as <code class="inline">Name</code> using <a href="../../../../erts-14.2.2/doc/html/erlang.html#register/2"><code class="inline">register/2</code></a>.</li><li>If <code class="inline">SupBridgeName={global,GlobalName}</code>, the supervisor bridge is registered
 globally as <code class="inline">GlobalName</code> using <a href="../../../../lib/kernel-9.2.1/doc/html/global.html#register_name/2"><code class="inline">global:register_name/2</code></a>.</li><li>If <code class="inline">SupBridgeName={via,Module,ViaName}</code>, the supervisor bridge is registered
 as <code class="inline">ViaName</code> using a registry represented by Module. The <code class="inline">Module</code> callback is
 to export functions <code class="inline">register_name/2</code>, <code class="inline">unregister_name/1</code>, and <code class="inline">send/2</code>,
 which are to behave like the corresponding functions in <a href="../../../../lib/kernel-9.2.1/doc/html/global.html"><code class="inline">global</code></a>. Thus,
-<code class="inline">{via,global,GlobalName}</code> is a valid reference.</li></ul><p>If no name is provided, the supervisor bridge is not registered.</p><p><code class="inline">Module</code> is the name of the callback module.</p><p><code class="inline">Args</code> is an arbitrary term that is passed as the argument to
+<code class="inline">{via,global,GlobalName}</code> is a valid reference.</li></ul><p><code class="inline">Module</code> is the name of the callback module.</p><p><code class="inline">Args</code> is an arbitrary term that is passed as the argument to
 <a href="#c:init/1"><code class="inline">Module:init/1</code></a>.</p><ul><li>If the supervisor bridge and the subsystem are successfully started, the
 function returns <code class="inline">{ok,Pid}</code>, where <code class="inline">Pid</code> is is the pid of the supervisor
 bridge.</li><li>If there already exists a process with the specified <code class="inline">SupBridgeName</code>, the

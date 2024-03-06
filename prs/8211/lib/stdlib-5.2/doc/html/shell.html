@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-74C80D9B.js"></script>
+    <script src="dist/sidebar_items-4B14E1E0.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -133,7 +133,7 @@ Pages
 
 
   <section id="moduledoc">
-<p>The Erlang shell.</p><p>This module provides an Erlang shell.</p><p>The shell is a user interface program for entering expression sequences. The
+<p>The Erlang shell.</p><p>The shell is a user interface program for entering expression sequences. The
 expressions are evaluated and a value is returned. The shell provides an Emacs
 like set of shortcuts for editing the text of the current line. See
 <a href="../../../../erts-14.2.2/doc/html/tty.html">tty - A Command-Line Interface</a> in the ERTS User's Guide for a
@@ -171,7 +171,7 @@ records are described below. Notice that each job has its own set of record
 definitions. To facilitate matters, record definitions in modules
 <code class="inline">shell_default</code> and <code class="inline">user_default</code> (if loaded) are read each time a new job is
 started. For example, adding the following line to <code class="inline">user_default</code> makes the
-definition of <code class="inline">file_info</code> readily available in the shell:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="8510679348-1">(</span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="8510679348-1">)</span><span class="p">.</span></code></pre><p>The shell runs in two modes:</p><ul><li><code class="inline">Normal (possibly restricted)</code> mode, in which commands can be edited and
+definition of <code class="inline">file_info</code> readily available in the shell:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="7660056767-1">(</span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="7660056767-1">)</span><span class="p">.</span></code></pre><p>The shell runs in two modes:</p><ul><li><code class="inline">Normal (possibly restricted)</code> mode, in which commands can be edited and
 expressions evaluated</li><li>Job Control Mode, <code class="inline">JCL</code>, in which jobs can be started, killed, detached, and
 connected</li></ul><p>Only the currently connected job can 'talk' to the shell.</p><h2 id="module-shell-commands" class="section-heading">
   <a href="#module-shell-commands" class="hover-link">
@@ -238,105 +238,108 @@ file and the name of the module with <code class="inline">.erl</code> suffix.</p
   <span class="text">Example</span>
 </h2>
 <p>The following example is a long dialog with the shell. Commands starting with
-<code class="inline">&gt;</code> are inputs to the shell. All other lines are output from the shell.</p><pre><code class="text">strider 1&gt; erl
-Erlang (BEAM) emulator version 5.3 [hipe] [threads:0]
+<code class="inline">&gt;</code> are inputs to the shell. All other lines are output from the shell.</p><pre><code class="makeup erlang" translate="no"><span class="ss">strider</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="ss">erl</span><span class="w">
+</span><span class="n">Erlang</span><span class="w"> </span><span class="p" data-group-id="1542750278-1">(</span><span class="n">BEAM</span><span class="p" data-group-id="1542750278-1">)</span><span class="w"> </span><span class="ss">emulator</span><span class="w"> </span><span class="ss">version</span><span class="w"> </span><span class="mf">5.3</span><span class="w"> </span><span class="p" data-group-id="1542750278-2">[</span><span class="ss">hipe</span><span class="p" data-group-id="1542750278-2">]</span><span class="w"> </span><span class="p" data-group-id="1542750278-3">[</span><span class="nc">threads</span><span class="p">:</span><span class="mi">0</span><span class="p" data-group-id="1542750278-3">]</span><span class="w">
 
-Eshell V5.3  (abort with ^G)
-1&gt; Str = &quot;abcd&quot;.
-&quot;abcd&quot;</code></pre><p>Command 1 sets variable <code class="inline">Str</code> to string <code class="inline">&quot;abcd&quot;</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">length</span><span class="p" data-group-id="4162879216-1">(</span><span class="n">Str</span><span class="p" data-group-id="4162879216-1">)</span><span class="p">.</span><span class="w">
-</span><span class="mi">4</span></code></pre><p>Command 2 sets <code class="inline">L</code> to the length of string <code class="inline">Str</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">3&gt; </span><span class="n">Descriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5382084263-1">{</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="nf">list_to_atom</span><span class="p" data-group-id="5382084263-2">(</span><span class="n">Str</span><span class="p" data-group-id="5382084263-2">)</span><span class="p" data-group-id="5382084263-1">}</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="5382084263-3">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="5382084263-3">}</span></code></pre><p>Command 3 builds the tuple <code class="inline">Descriptor</code>, evaluating the BIF
-<a href="../../../../erts-14.2.2/doc/html/erlang.html#list_to_atom/1"><code class="inline">list_to_atom/1</code> </a>.</p><pre><code class="text">4&gt; L.
-4</code></pre><p>Command 4 prints the value of variable <code class="inline">L</code>.</p><pre><code class="text">5&gt; b().
-Descriptor = {4,abcd}
-L = 4
-Str = &quot;abcd&quot;
-ok</code></pre><p>Command 5 evaluates the internal shell command <code class="inline">b()</code>, which is an abbreviation
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V5</span><span class="p">.</span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="1542750278-4">(</span><span class="ss">abort</span><span class="w"> </span><span class="ss">with</span><span class="w"> </span><span class="err">^</span><span class="n">G</span><span class="p" data-group-id="1542750278-4">)</span><span class="gp unselectable">
+1&gt; </span><span class="n">Str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="p">.</span><span class="w">
+</span><span class="s">&quot;abcd&quot;</span></code></pre><p>Command 1 sets variable <code class="inline">Str</code> to string <code class="inline">&quot;abcd&quot;</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">length</span><span class="p" data-group-id="7897363841-1">(</span><span class="n">Str</span><span class="p" data-group-id="7897363841-1">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">4</span></code></pre><p>Command 2 sets <code class="inline">L</code> to the length of string <code class="inline">Str</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">3&gt; </span><span class="n">Descriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5458542553-1">{</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="nf">list_to_atom</span><span class="p" data-group-id="5458542553-2">(</span><span class="n">Str</span><span class="p" data-group-id="5458542553-2">)</span><span class="p" data-group-id="5458542553-1">}</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5458542553-3">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="5458542553-3">}</span></code></pre><p>Command 3 builds the tuple <code class="inline">Descriptor</code>, evaluating the BIF
+<a href="../../../../erts-14.2.2/doc/html/erlang.html#list_to_atom/1"><code class="inline">list_to_atom/1</code> </a>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">4&gt; </span><span class="n">L</span><span class="p">.</span><span class="w">
+</span><span class="mi">4</span></code></pre><p>Command 4 prints the value of variable <code class="inline">L</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">5&gt; </span><span class="nf">b</span><span class="p" data-group-id="5830163861-1">(</span><span class="p" data-group-id="5830163861-1">)</span><span class="p">.</span><span class="w">
+</span><span class="n">Descriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5830163861-2">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="5830163861-2">}</span><span class="w">
+</span><span class="n">L</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w">
+</span><span class="n">Str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 5 evaluates the internal shell command <code class="inline">b()</code>, which is an abbreviation
 of &quot;bindings&quot;. This prints the current shell variables and their bindings. <code class="inline">ok</code>
-at the end is the return value of function <code class="inline">b()</code>.</p><pre><code class="text">6&gt; f(L).
-ok</code></pre><p>Command 6 evaluates the internal shell command <code class="inline">f(L)</code> (abbreviation of
-&quot;forget&quot;). The value of variable <code class="inline">L</code> is removed.</p><pre><code class="text">7&gt; b().
-Descriptor = {4,abcd}
-Str = &quot;abcd&quot;
-ok</code></pre><p>Command 7 prints the new bindings.</p><pre><code class="text">8&gt; f(L).
-ok</code></pre><p>Command 8 has no effect, as <code class="inline">L</code> has no value.</p><pre><code class="text">9&gt; {L, _} = Descriptor.
-{4,abcd}</code></pre><p>Command 9 performs a pattern matching operation on <code class="inline">Descriptor</code>, binding a new
-value to <code class="inline">L</code>.</p><pre><code class="text">10&gt; L.
-4</code></pre><p>Command 10 prints the current value of <code class="inline">L</code>.</p><pre><code class="text">11&gt; {P, Q, R} = Descriptor.
-** exception error: no match of right hand side value {4,abcd}</code></pre><p>Command 11 tries to match <code class="inline">{P, Q, R}</code> against <code class="inline">Descriptor</code>, which is <code class="inline">{4, abc}</code>.
+at the end is the return value of function <code class="inline">b()</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">6&gt; </span><span class="nf">f</span><span class="p" data-group-id="2404822083-1">(</span><span class="n">L</span><span class="p" data-group-id="2404822083-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 6 evaluates the internal shell command <code class="inline">f(L)</code> (abbreviation of
+&quot;forget&quot;). The value of variable <code class="inline">L</code> is removed.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">7&gt; </span><span class="nf">b</span><span class="p" data-group-id="0857911800-1">(</span><span class="p" data-group-id="0857911800-1">)</span><span class="p">.</span><span class="w">
+</span><span class="n">Descriptor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0857911800-2">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="0857911800-2">}</span><span class="w">
+</span><span class="n">Str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;abcd&quot;</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 7 prints the new bindings.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">8&gt; </span><span class="nf">f</span><span class="p" data-group-id="7067200031-1">(</span><span class="n">L</span><span class="p" data-group-id="7067200031-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 8 has no effect, as <code class="inline">L</code> has no value.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">9&gt; </span><span class="p" data-group-id="7948001227-1">{</span><span class="n">L</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="7948001227-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Descriptor</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7948001227-2">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="7948001227-2">}</span></code></pre><p>Command 9 performs a pattern matching operation on <code class="inline">Descriptor</code>, binding a new
+value to <code class="inline">L</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">10&gt; </span><span class="n">L</span><span class="p">.</span><span class="w">
+</span><span class="mi">4</span></code></pre><p>Command 10 prints the current value of <code class="inline">L</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">11&gt; </span><span class="p" data-group-id="8272830818-1">{</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">R</span><span class="p" data-group-id="8272830818-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Descriptor</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="ss">exception</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="ss">no</span><span class="w"> </span><span class="ss">match</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="ss">right</span><span class="w"> </span><span class="ss">hand</span><span class="w"> </span><span class="ss">side</span><span class="w"> </span><span class="ss">value</span><span class="w"> </span><span class="p" data-group-id="8272830818-2">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="8272830818-2">}</span></code></pre><p>Command 11 tries to match <code class="inline">{P, Q, R}</code> against <code class="inline">Descriptor</code>, which is <code class="inline">{4, abc}</code>.
 The match fails and none of the new variables become bound. The printout
 starting with &quot;<code class="inline">** exception error:</code>&quot; is not the value of the expression (the
 expression had no value because its evaluation failed), but a warning printed by
 the system to inform the user that an error has occurred. The values of the
-other variables (<code class="inline">L</code>, <code class="inline">Str</code>, and so on) are unchanged.</p><pre><code class="text">12&gt; P.
-* 1:1: variable 'P' is unbound
-13&gt; Descriptor.
-{4,abcd}</code></pre><p>Commands 12 and 13 show that <code class="inline">P</code> is unbound because the previous command failed,
-and that <code class="inline">Descriptor</code> has not changed.</p><pre><code class="text">14&gt;{P, Q} = Descriptor.
-{4,abcd}
-15&gt; P.
-4</code></pre><p>Commands 14 and 15 show a correct match where <code class="inline">P</code> and <code class="inline">Q</code> are bound.</p><pre><code class="text">16&gt; f().
-ok</code></pre><p>Command 16 clears all bindings.</p><p>The next few commands assume that <code class="inline">test1:demo(X)</code> is defined as follows:</p><p><code class="inline">demo(X) -&gt;</code><br/>    <code class="inline">put(aa, worked),</code><br/>    <code class="inline">X = 1,</code><br/>    <code class="inline">X + 10.</code></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">17&gt; </span><span class="nf">put</span><span class="p" data-group-id="6934523283-1">(</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="ss">hello</span><span class="p" data-group-id="6934523283-1">)</span><span class="p">.</span><span class="w">
+other variables (<code class="inline">L</code>, <code class="inline">Str</code>, and so on) are unchanged.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">12&gt; </span><span class="n">P</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="ss">variable</span><span class="w"> </span><span class="ss">&#39;P&#39;</span><span class="w"> </span><span class="ss">is</span><span class="w"> </span><span class="ss">unbound</span><span class="gp unselectable">
+13&gt; </span><span class="n">Descriptor</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="8030026441-1">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="8030026441-1">}</span></code></pre><p>Commands 12 and 13 show that <code class="inline">P</code> is unbound because the previous command failed,
+and that <code class="inline">Descriptor</code> has not changed.</p><pre><code class="makeup erlang" translate="no"><span class="mi">14</span><span class="o">&gt;</span><span class="p" data-group-id="7892169626-1">{</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p" data-group-id="7892169626-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Descriptor</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7892169626-2">{</span><span class="mi">4</span><span class="p">,</span><span class="ss">abcd</span><span class="p" data-group-id="7892169626-2">}</span><span class="gp unselectable">
+15&gt; </span><span class="n">P</span><span class="p">.</span><span class="w">
+</span><span class="mi">4</span></code></pre><p>Commands 14 and 15 show a correct match where <code class="inline">P</code> and <code class="inline">Q</code> are bound.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">16&gt; </span><span class="nf">f</span><span class="p" data-group-id="4035990943-1">(</span><span class="p" data-group-id="4035990943-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 16 clears all bindings.</p><p>The next few commands assume that <code class="inline">test1:demo(X)</code> is defined as follows:</p><pre><code class="makeup erlang" translate="no"><span class="nf">demo</span><span class="p" data-group-id="2102598018-1">(</span><span class="n">X</span><span class="p" data-group-id="2102598018-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="err"> </span><span class="err"> </span><span class="err"> </span><span class="err"> </span><span class="nf">put</span><span class="p" data-group-id="2102598018-2">(</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="ss">worked</span><span class="p" data-group-id="2102598018-2">)</span><span class="p">,</span><span class="w">
+</span><span class="err"> </span><span class="err"> </span><span class="err"> </span><span class="err"> </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span><span class="err"> </span><span class="err"> </span><span class="err"> </span><span class="err"> </span><span class="n">X</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="p">.</span></code></pre><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">17&gt; </span><span class="nf">put</span><span class="p" data-group-id="7622777830-1">(</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="ss">hello</span><span class="p" data-group-id="7622777830-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">undefined</span><span class="gp unselectable">
-18&gt; </span><span class="nf">get</span><span class="p" data-group-id="6934523283-2">(</span><span class="ss">aa</span><span class="p" data-group-id="6934523283-2">)</span><span class="p">.</span><span class="w">
+18&gt; </span><span class="nf">get</span><span class="p" data-group-id="7622777830-2">(</span><span class="ss">aa</span><span class="p" data-group-id="7622777830-2">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">hello</span></code></pre><p>Commands 17 and 18 set and inspect the value of item <code class="inline">aa</code> in the process
-dictionary.</p><pre><code class="text">19&gt; Y = test1:demo(1).
-11</code></pre><p>Command 19 evaluates <code class="inline">test1:demo(1)</code>. The evaluation succeeds and the changes
+dictionary.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">19&gt; </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">test1</span><span class="p">:</span><span class="nf">demo</span><span class="p" data-group-id="1314918183-1">(</span><span class="mi">1</span><span class="p" data-group-id="1314918183-1">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">11</span></code></pre><p>Command 19 evaluates <code class="inline">test1:demo(1)</code>. The evaluation succeeds and the changes
 made in the process dictionary become visible to the shell. The new value of
-dictionary item <code class="inline">aa</code> can be seen in command 20.</p><pre><code class="text">20&gt; get().
-[{aa,worked}]
-21&gt; put(aa, hello).
-worked
-22&gt; Z = test1:demo(2).
-** exception error: no match of right hand side value 1
-     in function  test1:demo/1</code></pre><p>Commands 21 and 22 change the value of dictionary item <code class="inline">aa</code> to <code class="inline">hello</code> and call
+dictionary item <code class="inline">aa</code> can be seen in command 20.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">20&gt; </span><span class="nf">get</span><span class="p" data-group-id="4332319675-1">(</span><span class="p" data-group-id="4332319675-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="4332319675-2">[</span><span class="p" data-group-id="4332319675-3">{</span><span class="ss">aa</span><span class="p">,</span><span class="ss">worked</span><span class="p" data-group-id="4332319675-3">}</span><span class="p" data-group-id="4332319675-2">]</span><span class="gp unselectable">
+21&gt; </span><span class="nf">put</span><span class="p" data-group-id="4332319675-4">(</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="ss">hello</span><span class="p" data-group-id="4332319675-4">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">worked</span><span class="gp unselectable">
+22&gt; </span><span class="n">Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">test1</span><span class="p">:</span><span class="nf">demo</span><span class="p" data-group-id="4332319675-5">(</span><span class="mi">2</span><span class="p" data-group-id="4332319675-5">)</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="ss">exception</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="ss">no</span><span class="w"> </span><span class="ss">match</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="ss">right</span><span class="w"> </span><span class="ss">hand</span><span class="w"> </span><span class="ss">side</span><span class="w"> </span><span class="ss">value</span><span class="w"> </span><span class="mi">1</span><span class="w">
+     </span><span class="ss">in</span><span class="w"> </span><span class="ss">function</span><span class="w">  </span><span class="nc">test1</span><span class="p">:</span><span class="ss">demo</span><span class="p">/</span><span class="mi">1</span></code></pre><p>Commands 21 and 22 change the value of dictionary item <code class="inline">aa</code> to <code class="inline">hello</code> and call
 <code class="inline">test1:demo(2)</code>. Evaluation fails and the changes made to the dictionary in
-<code class="inline">test1:demo(2)</code>, before the error occurred, are discarded.</p><pre><code class="text">23&gt; Z.
-* 1:1: variable 'Z' is unbound
-24&gt; get(aa).
-hello</code></pre><p>Commands 23 and 24 show that <code class="inline">Z</code> was not bound and that dictionary item <code class="inline">aa</code> has
-retained its original value.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">25&gt; </span><span class="nf">erase</span><span class="p" data-group-id="4720119133-1">(</span><span class="p" data-group-id="4720119133-1">)</span><span class="p">,</span><span class="w"> </span><span class="nf">put</span><span class="p" data-group-id="4720119133-2">(</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="ss">hello</span><span class="p" data-group-id="4720119133-2">)</span><span class="p">.</span><span class="w">
+<code class="inline">test1:demo(2)</code>, before the error occurred, are discarded.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">23&gt; </span><span class="n">Z</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="ss">variable</span><span class="w"> </span><span class="ss">&#39;Z&#39;</span><span class="w"> </span><span class="ss">is</span><span class="w"> </span><span class="ss">unbound</span><span class="gp unselectable">
+24&gt; </span><span class="nf">get</span><span class="p" data-group-id="7410042148-1">(</span><span class="ss">aa</span><span class="p" data-group-id="7410042148-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">hello</span></code></pre><p>Commands 23 and 24 show that <code class="inline">Z</code> was not bound and that dictionary item <code class="inline">aa</code> has
+retained its original value.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">25&gt; </span><span class="nf">erase</span><span class="p" data-group-id="9207992543-1">(</span><span class="p" data-group-id="9207992543-1">)</span><span class="p">,</span><span class="w"> </span><span class="nf">put</span><span class="p" data-group-id="9207992543-2">(</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="ss">hello</span><span class="p" data-group-id="9207992543-2">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">undefined</span><span class="gp unselectable">
-26&gt; </span><span class="nf">spawn</span><span class="p" data-group-id="4720119133-3">(</span><span class="ss">test1</span><span class="p">,</span><span class="w"> </span><span class="ss">demo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4720119133-4">[</span><span class="mi">1</span><span class="p" data-group-id="4720119133-4">]</span><span class="p" data-group-id="4720119133-3">)</span><span class="p">.</span><span class="w">
+26&gt; </span><span class="nf">spawn</span><span class="p" data-group-id="9207992543-3">(</span><span class="ss">test1</span><span class="p">,</span><span class="w"> </span><span class="ss">demo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9207992543-4">[</span><span class="mi">1</span><span class="p" data-group-id="9207992543-4">]</span><span class="p" data-group-id="9207992543-3">)</span><span class="p">.</span><span class="w">
 </span><span class="o">&lt;</span><span class="mf">0.57</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="gp unselectable">
-27&gt; </span><span class="nf">get</span><span class="p" data-group-id="4720119133-5">(</span><span class="ss">aa</span><span class="p" data-group-id="4720119133-5">)</span><span class="p">.</span><span class="w">
+27&gt; </span><span class="nf">get</span><span class="p" data-group-id="9207992543-5">(</span><span class="ss">aa</span><span class="p" data-group-id="9207992543-5">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">hello</span></code></pre><p>Commands 25, 26, and 27 show the effect of evaluating <code class="inline">test1:demo(1)</code> in the
 background. In this case, the expression is evaluated in a newly spawned
 process. Any changes made in the process dictionary are local to the newly
-spawned process and therefore not visible to the shell.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">28&gt; </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="1397766259-1">(</span><span class="s">&quot;hello hello\n&quot;</span><span class="p" data-group-id="1397766259-1">)</span><span class="p">.</span><span class="w">
+spawned process and therefore not visible to the shell.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">28&gt; </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5299415634-1">(</span><span class="s">&quot;hello hello\n&quot;</span><span class="p" data-group-id="5299415634-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">hello</span><span class="w"> </span><span class="ss">hello</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-29&gt; </span><span class="nf">e</span><span class="p" data-group-id="1397766259-2">(</span><span class="mi">28</span><span class="p" data-group-id="1397766259-2">)</span><span class="p">.</span><span class="w">
+29&gt; </span><span class="nf">e</span><span class="p" data-group-id="5299415634-2">(</span><span class="mi">28</span><span class="p" data-group-id="5299415634-2">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">hello</span><span class="w"> </span><span class="ss">hello</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-30&gt; </span><span class="nf">v</span><span class="p" data-group-id="1397766259-3">(</span><span class="mi">28</span><span class="p" data-group-id="1397766259-3">)</span><span class="p">.</span><span class="w">
+30&gt; </span><span class="nf">v</span><span class="p" data-group-id="5299415634-3">(</span><span class="mi">28</span><span class="p" data-group-id="5299415634-3">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span></code></pre><p>Commands 28, 29 and 30 use the history facilities of the shell. Command 29
 re-evaluates command 28. Command 30 uses the value (result) of command 28. In
 the cases of a pure function (a function with no side effects), the result is
 the same. For a function with side effects, the result can be different.</p><p>The next few commands show some record manipulation. It is assumed that <code class="inline">ex.erl</code>
-defines a record as follows:</p><p><code class="inline">-record(rec, {a, b = val()}).</code></p><p><code class="inline">val() -&gt;</code><br/>    <code class="inline">3.</code></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">31&gt; </span><span class="nf">c</span><span class="p" data-group-id="8167701147-1">(</span><span class="ss">ex</span><span class="p" data-group-id="8167701147-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8167701147-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="ss">ex</span><span class="p" data-group-id="8167701147-2">}</span><span class="gp unselectable">
-32&gt; </span><span class="nf">rr</span><span class="p" data-group-id="8167701147-3">(</span><span class="ss">ex</span><span class="p" data-group-id="8167701147-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8167701147-4">[</span><span class="ss">rec</span><span class="p" data-group-id="8167701147-4">]</span></code></pre><p>Commands 31 and 32 compile file <code class="inline">ex.erl</code> and read the record definitions in
+defines a record as follows:</p><p><code class="inline">-record(rec, {a, b = val()}).</code></p><p><code class="inline">val() -&gt;</code><br/>    <code class="inline">3.</code></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">31&gt; </span><span class="nf">c</span><span class="p" data-group-id="8076266670-1">(</span><span class="ss">ex</span><span class="p" data-group-id="8076266670-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="8076266670-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="ss">ex</span><span class="p" data-group-id="8076266670-2">}</span><span class="gp unselectable">
+32&gt; </span><span class="nf">rr</span><span class="p" data-group-id="8076266670-3">(</span><span class="ss">ex</span><span class="p" data-group-id="8076266670-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="8076266670-4">[</span><span class="ss">rec</span><span class="p" data-group-id="8076266670-4">]</span></code></pre><p>Commands 31 and 32 compile file <code class="inline">ex.erl</code> and read the record definitions in
 <code class="inline">ex.beam</code>. If the compiler did not output any record definitions on the BEAM
-file, <code class="inline">rr(ex)</code> tries to read record definitions from the source file instead.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">33&gt; </span><span class="nf">rl</span><span class="p" data-group-id="9498061715-1">(</span><span class="ss">rec</span><span class="p" data-group-id="9498061715-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">record</span><span class="p" data-group-id="9498061715-2">(</span><span class="ss">rec</span><span class="p">,</span><span class="p" data-group-id="9498061715-3">{</span><span class="ss">a</span><span class="p">,</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">val</span><span class="p" data-group-id="9498061715-4">(</span><span class="p" data-group-id="9498061715-4">)</span><span class="p" data-group-id="9498061715-3">}</span><span class="p" data-group-id="9498061715-2">)</span><span class="p">.</span><span class="w">
-</span><span class="ss">ok</span></code></pre><p>Command 33 prints the definition of the record named <code class="inline">rec</code>.</p><pre><code class="text">34&gt; #rec{}.
-** exception error: undefined shell command val/0</code></pre><p>Command 34 tries to create a <code class="inline">rec</code> record, but fails as function <code class="inline">val/0</code> is
-undefined.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">35&gt; </span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="8815956562-1">{</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8815956562-1">}</span><span class="p">.</span><span class="w">
-</span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="8815956562-2">{</span><span class="ss">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">undefined</span><span class="p">,</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8815956562-2">}</span></code></pre><p>Command 35 shows the workaround: explicitly assign values to record fields that
-cannot otherwise be initialized.</p><pre><code class="text">36&gt; rp(v(-1)).
-#rec{a = undefined,b = 3}
-ok</code></pre><p>Command 36 prints the newly created record using record definitions maintained
-by the shell.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">37&gt; </span><span class="nf">rd</span><span class="p" data-group-id="9374059338-1">(</span><span class="ss">rec</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9374059338-2">{</span><span class="ss">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">orddict</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="9374059338-3">(</span><span class="p" data-group-id="9374059338-3">)</span><span class="p" data-group-id="9374059338-2">}</span><span class="p" data-group-id="9374059338-1">)</span><span class="p">.</span><span class="w">
+file, <code class="inline">rr(ex)</code> tries to read record definitions from the source file instead.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">33&gt; </span><span class="nf">rl</span><span class="p" data-group-id="2727283643-1">(</span><span class="ss">rec</span><span class="p" data-group-id="2727283643-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">record</span><span class="p" data-group-id="2727283643-2">(</span><span class="ss">rec</span><span class="p">,</span><span class="p" data-group-id="2727283643-3">{</span><span class="ss">a</span><span class="p">,</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">val</span><span class="p" data-group-id="2727283643-4">(</span><span class="p" data-group-id="2727283643-4">)</span><span class="p" data-group-id="2727283643-3">}</span><span class="p" data-group-id="2727283643-2">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 33 prints the definition of the record named <code class="inline">rec</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">34&gt; </span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="4558093023-1">{</span><span class="p" data-group-id="4558093023-1">}</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="ss">exception</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="ss">undefined</span><span class="w"> </span><span class="ss">shell</span><span class="w"> </span><span class="ss">command</span><span class="w"> </span><span class="ss">val</span><span class="p">/</span><span class="mi">0</span></code></pre><p>Command 34 tries to create a <code class="inline">rec</code> record, but fails as function <code class="inline">val/0</code> is
+undefined.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">35&gt; </span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="4273910793-1">{</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4273910793-1">}</span><span class="p">.</span><span class="w">
+</span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="4273910793-2">{</span><span class="ss">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">undefined</span><span class="p">,</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4273910793-2">}</span></code></pre><p>Command 35 shows the workaround: explicitly assign values to record fields that
+cannot otherwise be initialized.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">36&gt; </span><span class="nf">rp</span><span class="p" data-group-id="8285755440-1">(</span><span class="nf">v</span><span class="p" data-group-id="8285755440-2">(</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="8285755440-2">)</span><span class="p" data-group-id="8285755440-1">)</span><span class="p">.</span><span class="w">
+</span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="8285755440-3">{</span><span class="ss">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">undefined</span><span class="p">,</span><span class="ss">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="8285755440-3">}</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 36 prints the newly created record using record definitions maintained
+by the shell.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">37&gt; </span><span class="nf">rd</span><span class="p" data-group-id="7102224885-1">(</span><span class="ss">rec</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7102224885-2">{</span><span class="ss">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">orddict</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="7102224885-3">(</span><span class="p" data-group-id="7102224885-3">)</span><span class="p" data-group-id="7102224885-2">}</span><span class="p" data-group-id="7102224885-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">rec</span></code></pre><p>Command 37 defines a record directly in the shell. The definition replaces the
-one read from file <code class="inline">ex.beam</code>.</p><pre><code class="text">38&gt; #rec{}.
-#rec{f = []}
-ok</code></pre><p>Command 38 creates a record using the new definition, and prints the result.</p><pre><code class="text">39&gt; rd(rec, {c}), A.
-* 1:15: variable 'A' is unbound
-40&gt; #rec{}.
-#rec{c = undefined}
-ok</code></pre><p>Command 39 and 40 show that record definitions are updated as side effects. The
+one read from file <code class="inline">ex.beam</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">38&gt; </span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="7039355182-1">{</span><span class="p" data-group-id="7039355182-1">}</span><span class="p">.</span><span class="w">
+</span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="7039355182-2">{</span><span class="ss">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7039355182-3">[</span><span class="p" data-group-id="7039355182-3">]</span><span class="p" data-group-id="7039355182-2">}</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 38 creates a record using the new definition, and prints the result.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">39&gt; </span><span class="nf">rd</span><span class="p" data-group-id="3677446119-1">(</span><span class="ss">rec</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3677446119-2">{</span><span class="ss">c</span><span class="p" data-group-id="3677446119-2">}</span><span class="p" data-group-id="3677446119-1">)</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="w"> </span><span class="ss">variable</span><span class="w"> </span><span class="ss">&#39;A&#39;</span><span class="w"> </span><span class="ss">is</span><span class="w"> </span><span class="ss">unbound</span><span class="gp unselectable">
+40&gt; </span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="3677446119-3">{</span><span class="p" data-group-id="3677446119-3">}</span><span class="p">.</span><span class="w">
+</span><span class="o">#</span><span class="ss">rec</span><span class="p" data-group-id="3677446119-4">{</span><span class="ss">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">undefined</span><span class="p" data-group-id="3677446119-4">}</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>Command 39 and 40 show that record definitions are updated as side effects. The
 evaluation of the command fails, but the definition of <code class="inline">rec</code> has been carried
 out.</p><p>For the next command, it is assumed that <code class="inline">test1:loop(N)</code> is defined as follows:</p><p><code class="inline">loop(N) -&gt;</code><br/>    <code class="inline">io:format(&quot;Hello Number: ~w~n&quot;, [N]),</code><br/>    <code class="inline">loop(N+1).</code></p><pre><code class="text">41&gt; test1:loop(0).
 Hello Number: 0
@@ -361,32 +364,32 @@ the current process, which is stuck in a loop, and activates <code class="inline
 <code class="inline">JCL</code> mode the user can start and stop jobs.</p><p>In this particular case, command <code class="inline">i</code> (&quot;interrupt&quot;) terminates the looping
 program, and command <code class="inline">c</code> connects to the shell again. As the process was running
 in the background before we killed it, more printouts occur before message
-&quot;<code class="inline">** exception exit: killed</code>&quot; is shown.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">42&gt; </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="0699362027-1">(</span><span class="ss">t</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0699362027-2">[</span><span class="p" data-group-id="0699362027-2">]</span><span class="p" data-group-id="0699362027-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">#</span><span class="n">Ref</span><span class="o">&lt;</span><span class="mf">0.1662103692</span><span class="p">.</span><span class="mf">2407923716.214192</span><span class="o">&gt;</span></code></pre><p>Command 42 creates an ETS table.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">43&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="6756654270-1">(</span><span class="p" data-group-id="6756654270-2">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="6756654270-2">}</span><span class="p" data-group-id="6756654270-1">)</span><span class="p">.</span><span class="w">
+&quot;<code class="inline">** exception exit: killed</code>&quot; is shown.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">42&gt; </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="6236970427-1">(</span><span class="ss">t</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6236970427-2">[</span><span class="p" data-group-id="6236970427-2">]</span><span class="p" data-group-id="6236970427-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">#</span><span class="n">Ref</span><span class="o">&lt;</span><span class="mf">0.1662103692</span><span class="p">.</span><span class="mf">2407923716.214192</span><span class="o">&gt;</span></code></pre><p>Command 42 creates an ETS table.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">43&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="6007795216-1">(</span><span class="p" data-group-id="6007795216-2">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="6007795216-2">}</span><span class="p" data-group-id="6007795216-1">)</span><span class="p">.</span><span class="w">
 </span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="ss">exception</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="ss">undefined</span><span class="w"> </span><span class="ss">function</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="ss">insert</span><span class="p">/</span><span class="mi">1</span></code></pre><p>Command 43 tries to insert a tuple into the ETS table, but the first argument
-(the table) is missing. The exception kills the evaluator process.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">44&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="6735194796-1">(</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6735194796-2">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="6735194796-2">}</span><span class="p" data-group-id="6735194796-1">)</span><span class="p">.</span><span class="w">
+(the table) is missing. The exception kills the evaluator process.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">44&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="9702732183-1">(</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9702732183-2">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="9702732183-2">}</span><span class="p" data-group-id="9702732183-1">)</span><span class="p">.</span><span class="w">
 </span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="ss">exception</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="ss">argument</span><span class="w"> </span><span class="ss">is</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="ss">wrong</span><span class="w"> </span><span class="ss">type</span><span class="w">
      </span><span class="ss">in</span><span class="w"> </span><span class="ss">function</span><span class="w">  </span><span class="nc">ets</span><span class="p">:</span><span class="ss">insert</span><span class="p">/</span><span class="mi">2</span><span class="w">
-        </span><span class="ss">called</span><span class="w"> </span><span class="ss">as</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="6735194796-3">(</span><span class="mi">16</span><span class="p">,</span><span class="p" data-group-id="6735194796-4">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="6735194796-4">}</span><span class="p" data-group-id="6735194796-3">)</span></code></pre><p>Command 44 corrects the mistake, but the ETS table has been destroyed as it was
-owned by the killed evaluator process.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">45&gt; </span><span class="nf">f</span><span class="p" data-group-id="5918383085-1">(</span><span class="n">E</span><span class="p" data-group-id="5918383085-1">)</span><span class="p">.</span><span class="w">
+        </span><span class="ss">called</span><span class="w"> </span><span class="ss">as</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="9702732183-3">(</span><span class="mi">16</span><span class="p">,</span><span class="p" data-group-id="9702732183-4">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="9702732183-4">}</span><span class="p" data-group-id="9702732183-3">)</span></code></pre><p>Command 44 corrects the mistake, but the ETS table has been destroyed as it was
+owned by the killed evaluator process.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">45&gt; </span><span class="nf">f</span><span class="p" data-group-id="5839216178-1">(</span><span class="n">E</span><span class="p" data-group-id="5839216178-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-46&gt; </span><span class="nf">catch_exception</span><span class="p" data-group-id="5918383085-2">(</span><span class="ss">true</span><span class="p" data-group-id="5918383085-2">)</span><span class="p">.</span><span class="w">
+46&gt; </span><span class="nf">catch_exception</span><span class="p" data-group-id="5839216178-2">(</span><span class="ss">true</span><span class="p" data-group-id="5839216178-2">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">false</span></code></pre><p>Command 46 sets the exception handling of the evaluator process to <code class="inline">true</code>. The
 exception handling can also be set when starting Erlang by
-<code class="inline">erl -stdlib shell_catch_exception true</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">47&gt; </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="9036598143-1">(</span><span class="ss">t</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9036598143-2">[</span><span class="p" data-group-id="9036598143-2">]</span><span class="p" data-group-id="9036598143-1">)</span><span class="p">.</span><span class="w">
+<code class="inline">erl -stdlib shell_catch_exception true</code>.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">47&gt; </span><span class="n">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="7918555543-1">(</span><span class="ss">t</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7918555543-2">[</span><span class="p" data-group-id="7918555543-2">]</span><span class="p" data-group-id="7918555543-1">)</span><span class="p">.</span><span class="w">
 </span><span class="p">#</span><span class="n">Ref</span><span class="o">&lt;</span><span class="mf">0.1662103692</span><span class="p">.</span><span class="mf">2407923716.214197</span><span class="o">&gt;</span><span class="gp unselectable">
-48&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="9036598143-3">(</span><span class="p" data-group-id="9036598143-4">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="9036598143-4">}</span><span class="p" data-group-id="9036598143-3">)</span><span class="p">.</span><span class="w">
+48&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="7918555543-3">(</span><span class="p" data-group-id="7918555543-4">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="7918555543-4">}</span><span class="p" data-group-id="7918555543-3">)</span><span class="p">.</span><span class="w">
 </span><span class="o">*</span><span class="w"> </span><span class="ss">exception</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="ss">undefined</span><span class="w"> </span><span class="ss">function</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="ss">insert</span><span class="p">/</span><span class="mi">1</span></code></pre><p>Command 48 makes the same mistake as in command 43, but this time the evaluator
 process lives on. The single star at the beginning of the printout signals that
-the exception has been caught.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">49&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="4138088877-1">(</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4138088877-2">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="4138088877-2">}</span><span class="p" data-group-id="4138088877-1">)</span><span class="p">.</span><span class="w">
-</span><span class="ss">true</span></code></pre><p>Command 49 successfully inserts the tuple into the ETS table.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">50&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="3488573013-1">(</span><span class="p">#</span><span class="n">Ref</span><span class="o">&lt;</span><span class="mf">0.1662103692</span><span class="p">.</span><span class="mf">2407923716.214197</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3488573013-2">{</span><span class="ss">e</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p" data-group-id="3488573013-2">}</span><span class="p" data-group-id="3488573013-1">)</span><span class="p">.</span><span class="w">
+the exception has been caught.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">49&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="8261433255-1">(</span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8261433255-2">{</span><span class="ss">d</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="8261433255-2">}</span><span class="p" data-group-id="8261433255-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">true</span></code></pre><p>Command 49 successfully inserts the tuple into the ETS table.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">50&gt; </span><span class="nc">ets</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="6216870638-1">(</span><span class="p">#</span><span class="n">Ref</span><span class="o">&lt;</span><span class="mf">0.1662103692</span><span class="p">.</span><span class="mf">2407923716.214197</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6216870638-2">{</span><span class="ss">e</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p" data-group-id="6216870638-2">}</span><span class="p" data-group-id="6216870638-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">true</span></code></pre><p>Command 50 inserts another tuple into the ETS table. This time the first
 argument is the table identifier itself. The shell can parse commands with pids
 (<code class="inline">&lt;0.60.0&gt;</code>), ports (<code class="inline">#Port&lt;0.536&gt;</code>), references
 (<code class="inline">#Ref&lt;0.1662103692.2407792644.214210&gt;</code>), and external functions
 (<code class="inline">#Fun&lt;a.b.1&gt;</code>), but the command fails unless the corresponding pid, port,
-reference, or function can be created in the running system.</p><pre><code class="text">51&gt; halt().
-strider 2&gt;</code></pre><p>Command 51 exits the Erlang runtime system.</p><h2 id="module-jcl-mode" class="section-heading">
+reference, or function can be created in the running system.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">51&gt; </span><span class="nf">halt</span><span class="p" data-group-id="5870706366-1">(</span><span class="p" data-group-id="5870706366-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">strider</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span></code></pre><p>Command 51 exits the Erlang runtime system.</p><h2 id="module-jcl-mode" class="section-heading">
   <a href="#module-jcl-mode" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -546,13 +549,7 @@ expressions submitted to the shell prettier.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Can be used to set the formatting of the Erlang shell output. This has an effect
-on commands that have been submitted, and how it is saved in history. Or if the
-formatting hotkey is pressed while editing an expression (Alt-r by default). You
-can specify a <code class="inline">Mod:Func/1</code> that expects the whole expression as a string and
-returns a formatted expressions as a string. See
-<a href="stdlib_app.html#format_shell_func"><code class="inline">stdlib app config</code></a> for how to set it before
-shell started.</p></div>
+        <div class="summary-synopsis"><p>Can be used to set the formatting of the Erlang shell output.</p></div>
 
     </div>
 
@@ -729,7 +726,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">catch_exception(Bool)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2716" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L1953" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -762,7 +759,7 @@ processes linked to the evaluator process survive the exception.</p>
     </a>
     <h1 class="signature" translate="no">default_multiline_prompt(Pbs)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2883" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2121" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -794,7 +791,7 @@ function but it may also be set explicitly as
     </a>
     <h1 class="signature" translate="no">erl_pp_format_func(String)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2783" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2021" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -825,7 +822,7 @@ expressions submitted to the shell prettier.</p><blockquote><h4 class="info">Not
     </a>
     <h1 class="signature" translate="no">format_shell_func(ShellFormatFunc)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2768" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2006" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -846,15 +843,14 @@ expressions submitted to the shell prettier.</p><blockquote><h4 class="info">Not
 
       </div>
 
-<p>Can be used to set the formatting of the Erlang shell output. This has an effect
-on commands that have been submitted, and how it is saved in history. Or if the
-formatting hotkey is pressed while editing an expression (Alt-r by default). You
+<p>Can be used to set the formatting of the Erlang shell output.</p><p>This has an effect on commands that have been submitted, and how it is saved in history.
+Or if the formatting hotkey is pressed while editing an expression (Alt-r by default). You
 can specify a <code class="inline">Mod:Func/1</code> that expects the whole expression as a string and
 returns a formatted expressions as a string. See
 <a href="stdlib_app.html#format_shell_func"><code class="inline">stdlib app config</code></a> for how to set it before
 shell started.</p><p>If instead a string is provided, it will be used as a shell command. Your
 command must include <code class="inline">${file}</code> somewhere in the string, for the shell to know
-where the file goes in the command.</p><pre><code class="text">shell:format_shell_func(&quot;\&quot;emacs -batch \${file} -l ~/erlang-format/emacs-format-file -f emacs-format-function\&quot;&quot;).</code></pre><pre><code class="text">shell:format_shell_func({shell, erl_pp_format_func}).</code></pre>
+where the file goes in the command.</p><pre><code class="makeup erlang" translate="no"><span class="nc">shell</span><span class="p">:</span><span class="nf">format_shell_func</span><span class="p" data-group-id="0170397568-1">(</span><span class="s">&quot;\&quot;emacs -batch \${file} -l ~/erlang-format/emacs-format-file -f emacs-format-function\&quot;&quot;</span><span class="p" data-group-id="0170397568-1">)</span><span class="p">.</span></code></pre><pre><code class="makeup erlang" translate="no"><span class="nc">shell</span><span class="p">:</span><span class="nf">format_shell_func</span><span class="p" data-group-id="6365183394-1">(</span><span class="p" data-group-id="6365183394-2">{</span><span class="ss">shell</span><span class="p">,</span><span class="w"> </span><span class="ss">erl_pp_format_func</span><span class="p" data-group-id="6365183394-2">}</span><span class="p" data-group-id="6365183394-1">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="history/1">
@@ -866,7 +862,7 @@ where the file goes in the command.</p><pre><code class="text">shell:format_shel
     </a>
     <h1 class="signature" translate="no">history(N)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2690" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L1927" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -895,7 +891,7 @@ previous number is returned. Defaults to 20.</p>
     </a>
     <h1 class="signature" translate="no">inverted_space_prompt(Pbs)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2895" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2133" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -927,7 +923,7 @@ previous number is returned. Defaults to 20.</p>
     </a>
     <h1 class="signature" translate="no">multiline_prompt_func(PromptFunc)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2740" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L1977" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -961,7 +957,7 @@ function is returned.</p>
     </a>
     <h1 class="signature" translate="no">prompt_func(PromptFunc)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2728" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L1965" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -995,7 +991,7 @@ returned.</p>
     </a>
     <h1 class="signature" translate="no">prompt_width(String)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2828" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2066" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1026,7 +1022,7 @@ returned.</p>
     </a>
     <h1 class="signature" translate="no">prompt_width(String, Encoding)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2859" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2097" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1045,19 +1041,19 @@ returned.</p>
       </div>
 
 <p>It receives a prompt and computes its width, considering its Unicode characters
-and ANSI escapes.</p><p>Useful for creating custom multiline prompts.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="3631405927-1">(</span><span class="s">&quot;olá&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unicode</span><span class="p" data-group-id="3631405927-1">)</span><span class="p">.</span><span class="w">
+and ANSI escapes.</p><p>Useful for creating custom multiline prompts.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="1935169654-1">(</span><span class="s">&quot;olá&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unicode</span><span class="p" data-group-id="1935169654-1">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">5</span><span class="w">
 </span><span class="c1">%% &quot;olá&gt; &quot; is printed as &quot;ol\341&gt; &quot; on a latin1 systems</span><span class="gp unselectable">
-2&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="3631405927-2">(</span><span class="s">&quot;olá&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">latin1</span><span class="p" data-group-id="3631405927-2">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="1935169654-2">(</span><span class="s">&quot;olá&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">latin1</span><span class="p" data-group-id="1935169654-2">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">8</span><span class="w">
 </span><span class="c1">%% Ansi escapes are ignored</span><span class="gp unselectable">
-3&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="3631405927-3">(</span><span class="s">&quot;\e[32molá\e[0m&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unicode</span><span class="p" data-group-id="3631405927-3">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="1935169654-3">(</span><span class="s">&quot;\e[32molá\e[0m&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unicode</span><span class="p" data-group-id="1935169654-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">5</span><span class="w">
 </span><span class="c1">%% Double width characters count as 2</span><span class="gp unselectable">
-4&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="3631405927-4">(</span><span class="s">&quot;😀&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unicode</span><span class="p" data-group-id="3631405927-4">)</span><span class="p">.</span><span class="w">
+4&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="1935169654-4">(</span><span class="s">&quot;😀&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">unicode</span><span class="p" data-group-id="1935169654-4">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">4</span><span class="w">
 </span><span class="c1">%% &quot;😀&gt; &quot; is printed as &quot;\x{1F600}&gt; &quot; on latin1 systems</span><span class="gp unselectable">
-5&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="3631405927-5">(</span><span class="s">&quot;😀&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">latin1</span><span class="p" data-group-id="3631405927-5">)</span><span class="p">.</span><span class="w">
+5&gt; </span><span class="nc">shell</span><span class="p">:</span><span class="nf">prompt_width</span><span class="p" data-group-id="1935169654-5">(</span><span class="s">&quot;😀&gt; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">latin1</span><span class="p" data-group-id="1935169654-5">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">11</span></code></pre>
   </section>
 </section>
@@ -1070,7 +1066,7 @@ and ANSI escapes.</p><p>Useful for creating custom multiline prompts.</p><p>Exam
     </a>
     <h1 class="signature" translate="no">results(N)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2700" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L1937" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1099,7 +1095,7 @@ and ANSI escapes.</p><p>Useful for creating custom multiline prompts.</p><p>Exam
     </a>
     <h1 class="signature" translate="no">start_interactive()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L834" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L71" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1131,7 +1127,7 @@ the -noinput or -noshell flags.</p>
     </a>
     <h1 class="signature" translate="no">start_interactive/1</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L885" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L122" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1187,7 +1183,7 @@ description of the error reasons.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">start_restricted(Module)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L939" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L176" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1220,7 +1216,7 @@ to load the code of the callback module.</p>
     </a>
     <h1 class="signature" translate="no">stop_restricted()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L959" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1249,7 +1245,7 @@ called from the shell.</p>
     </a>
     <h1 class="signature" translate="no">strings(Strings)</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2819" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L2057" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1283,7 +1279,7 @@ using the string syntax.</p>
     </a>
     <h1 class="signature" translate="no">whereis()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L897" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/erts/eliminate-halfword-vestiges/lib/stdlib/src/shell.erl#L134" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
