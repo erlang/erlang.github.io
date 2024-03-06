@@ -4,21 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="generator" content="ExDoc v0.31.2">
     <meta name="project" content="stdlib v5.2">
 
 
     <title>gen_statem — stdlib v5.2</title>
-    <link rel="stylesheet" href="dist/html-erlang-YUARVD4J.css" />
+    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-91529CD1.js"></script>
+    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
+    <script src="dist/sidebar_items-BBCE5103.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/html-L4O5OK2K.js"></script>
+    <script async src="dist/html-JRPQ5PR6.js"></script>
 
 <style>.dark img { background-color: white; }</style>
   </head>
@@ -100,7 +100,7 @@ Pages
           <form class="search-bar" action="search.html">
             <label class="search-label">
               <span class="sr-only">Search documentation of stdlib</span>
-              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
             </label>
             <button type="submit" class="search-button" aria-label="Submit Search">
               <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
@@ -151,7 +151,7 @@ explicit time-out <a href="#t:timeout_cancel_action/0"><code class="inline">canc
 <a href="#t:action/0"><code class="inline">change_callback_module</code></a>,
 <a href="#t:action/0"><code class="inline">push_callback_module</code></a> and
 <a href="#t:action/0"><code class="inline">pop_callback_module</code></a>, was added.</li></ul></blockquote><p><code class="inline">gen_statem</code> has got the same features that <a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> had and adds some really
-useful:</p><ul><li>Co-located state code</li><li>Arbitrary term state</li><li>Event postponing</li><li>Self-generated events</li><li>State time-out</li><li>Multiple generic named time-outs</li><li>Absolute time-out time</li><li>Automatic state enter calls</li><li>Reply from other state than the request, <code class="inline">sys</code> traceable</li><li>Multiple <code class="inline">sys</code> traceable replies</li><li>Changing the callback module</li></ul><p>Two <a href="#t:callback_mode/0"><em>callback modes</em></a> are supported:</p><ul><li>One for finite-state machines (<a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> like), which requires the state to
+useful:</p><ul><li>Co-located state code</li><li>Arbitrary term state</li><li>Event postponing</li><li>Self-generated events</li><li>State time-out</li><li>Multiple generic named time-outs</li><li>Absolute time-out time</li><li>Automatic state enter calls</li><li>Reply from other state than the request, <a href="sys.html"><code class="inline">sys</code></a> traceable</li><li>Multiple <a href="sys.html"><code class="inline">sys</code></a> traceable replies</li><li>Changing the callback module</li></ul><p>Two <a href="#t:callback_mode/0"><em>callback modes</em></a> are supported:</p><ul><li>One for finite-state machines (<a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> like), which requires the state to
 be an atom and uses that state as the name of the current callback function.</li><li>One that allows the state to be any term and that uses one callback function
 for all states.</li></ul><p>The callback model(s) for <code class="inline">gen_statem</code> differs from the one for <a href="gen_fsm.html"><code class="inline">gen_fsm</code></a>, but
 it is still fairly easy to
@@ -229,7 +229,7 @@ something you will have to remember at every <em>state transition</em> to the st
 that need it.</p><blockquote><h4 class="info">Note</h4><p>If you in <code class="inline">gen_statem</code>, for example, postpone an event in one state and then
 call another <em>state callback</em> of yours, you have not done a <em>state change</em> and
 hence the postponed event is not retried, which is logical but can be
-confusing.</p></blockquote><p>For the details of a <em>state transition</em>, see type <a href="#t:transition_option/0"><code class="inline">transition_option/0</code></a>.</p><p>A <code class="inline">gen_statem</code> handles system messages as described in <a href="sys.html"><code class="inline">sys</code></a>. The <code class="inline">sys</code> module
+confusing.</p></blockquote><p>For the details of a <em>state transition</em>, see type <a href="#t:transition_option/0"><code class="inline">transition_option/0</code></a>.</p><p>A <code class="inline">gen_statem</code> handles system messages as described in <a href="sys.html"><code class="inline">sys</code></a>. The <a href="sys.html"><code class="inline">sys</code></a> module
 can be used for debugging a <code class="inline">gen_statem</code>.</p><p>Notice that a <code class="inline">gen_statem</code> does not trap exit signals automatically, this must
 be explicitly initiated in the callback module (by calling
 <a href="../../../../erts-14.2.2/doc/html/erlang.html#process_flag/2"><code class="inline">process_flag(trap_exit, true)</code></a>.</p><p>Unless otherwise stated, all functions in this module fail if the specified
@@ -260,97 +260,97 @@ significantly delayed.</p></blockquote><h2 id="module-example" class="section-he
 <p>The following example shows a simple pushbutton model for a toggling pushbutton
 implemented with <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">state_functions</code>. You
 can push the button and it replies if it went on or off, and you can ask for a
-count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="2223186667-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="2223186667-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="2223186667-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="2223186667-2">)</span><span class="p">.</span><span class="w">
+count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="3529821367-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="3529821367-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="3529821367-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="3529821367-2">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2223186667-3">(</span><span class="p" data-group-id="2223186667-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2223186667-4">]</span><span class="p" data-group-id="2223186667-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2223186667-5">(</span><span class="p" data-group-id="2223186667-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2223186667-6">]</span><span class="p" data-group-id="2223186667-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2223186667-7">(</span><span class="p" data-group-id="2223186667-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="2223186667-8">]</span><span class="p" data-group-id="2223186667-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="3529821367-3">(</span><span class="p" data-group-id="3529821367-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="3529821367-4">]</span><span class="p" data-group-id="3529821367-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="3529821367-5">(</span><span class="p" data-group-id="3529821367-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="3529821367-6">]</span><span class="p" data-group-id="3529821367-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="3529821367-7">(</span><span class="p" data-group-id="3529821367-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="3529821367-8">]</span><span class="p" data-group-id="3529821367-7">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">name</span><span class="p" data-group-id="2223186667-9">(</span><span class="p" data-group-id="2223186667-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
+</span><span class="nf">name</span><span class="p" data-group-id="3529821367-9">(</span><span class="p" data-group-id="3529821367-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
 
 </span><span class="c1">%% API.  This example uses a registered name name()</span><span class="w">
 </span><span class="c1">%% and does not link to the caller.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="2223186667-10">(</span><span class="p" data-group-id="2223186667-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="2223186667-11">(</span><span class="p" data-group-id="2223186667-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="2223186667-13">(</span><span class="p" data-group-id="2223186667-13">)</span><span class="p" data-group-id="2223186667-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2223186667-14">[</span><span class="p" data-group-id="2223186667-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2223186667-15">[</span><span class="p" data-group-id="2223186667-15">]</span><span class="p" data-group-id="2223186667-11">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">push</span><span class="p" data-group-id="2223186667-16">(</span><span class="p" data-group-id="2223186667-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2223186667-17">(</span><span class="nf">name</span><span class="p" data-group-id="2223186667-18">(</span><span class="p" data-group-id="2223186667-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="2223186667-17">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">get_count</span><span class="p" data-group-id="2223186667-19">(</span><span class="p" data-group-id="2223186667-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2223186667-20">(</span><span class="nf">name</span><span class="p" data-group-id="2223186667-21">(</span><span class="p" data-group-id="2223186667-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="2223186667-20">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="2223186667-22">(</span><span class="p" data-group-id="2223186667-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="2223186667-23">(</span><span class="nf">name</span><span class="p" data-group-id="2223186667-24">(</span><span class="p" data-group-id="2223186667-24">)</span><span class="p" data-group-id="2223186667-23">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="3529821367-10">(</span><span class="p" data-group-id="3529821367-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="3529821367-11">(</span><span class="p" data-group-id="3529821367-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="3529821367-13">(</span><span class="p" data-group-id="3529821367-13">)</span><span class="p" data-group-id="3529821367-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3529821367-14">[</span><span class="p" data-group-id="3529821367-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3529821367-15">[</span><span class="p" data-group-id="3529821367-15">]</span><span class="p" data-group-id="3529821367-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">push</span><span class="p" data-group-id="3529821367-16">(</span><span class="p" data-group-id="3529821367-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="3529821367-17">(</span><span class="nf">name</span><span class="p" data-group-id="3529821367-18">(</span><span class="p" data-group-id="3529821367-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="3529821367-17">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">get_count</span><span class="p" data-group-id="3529821367-19">(</span><span class="p" data-group-id="3529821367-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="3529821367-20">(</span><span class="nf">name</span><span class="p" data-group-id="3529821367-21">(</span><span class="p" data-group-id="3529821367-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="3529821367-20">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="3529821367-22">(</span><span class="p" data-group-id="3529821367-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="3529821367-23">(</span><span class="nf">name</span><span class="p" data-group-id="3529821367-24">(</span><span class="p" data-group-id="3529821367-24">)</span><span class="p" data-group-id="3529821367-23">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Mandatory callback functions</span><span class="w">
-</span><span class="nf">terminate</span><span class="p" data-group-id="2223186667-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="2223186667-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="3529821367-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="3529821367-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">void</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="2223186667-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="2223186667-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="2223186667-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2223186667-27">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="2223186667-28">(</span><span class="p" data-group-id="2223186667-29">[</span><span class="p" data-group-id="2223186667-29">]</span><span class="p" data-group-id="2223186667-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="3529821367-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="3529821367-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="3529821367-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="3529821367-27">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="3529821367-28">(</span><span class="p" data-group-id="3529821367-29">[</span><span class="p" data-group-id="3529821367-29">]</span><span class="p" data-group-id="3529821367-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Set the initial state + data.  Data is used only as a counter.</span><span class="w">
     </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="2223186667-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2223186667-30">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="2223186667-31">(</span><span class="p" data-group-id="2223186667-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="3529821367-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="3529821367-30">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="3529821367-31">(</span><span class="p" data-group-id="3529821367-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">off</span><span class="p" data-group-id="2223186667-32">(</span><span class="p" data-group-id="2223186667-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2223186667-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="3529821367-32">(</span><span class="p" data-group-id="3529821367-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="3529821367-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="2223186667-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="2223186667-35">[</span><span class="p" data-group-id="2223186667-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="2223186667-36">}</span><span class="p" data-group-id="2223186667-35">]</span><span class="p" data-group-id="2223186667-34">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">off</span><span class="p" data-group-id="2223186667-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="2223186667-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-38">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="3529821367-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="3529821367-35">[</span><span class="p" data-group-id="3529821367-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="3529821367-36">}</span><span class="p" data-group-id="3529821367-35">]</span><span class="p" data-group-id="3529821367-34">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="3529821367-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="3529821367-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-38">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">on</span><span class="p" data-group-id="2223186667-39">(</span><span class="p" data-group-id="2223186667-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2223186667-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="3529821367-39">(</span><span class="p" data-group-id="3529821367-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="3529821367-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="2223186667-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2223186667-42">[</span><span class="p" data-group-id="2223186667-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="2223186667-43">}</span><span class="p" data-group-id="2223186667-42">]</span><span class="p" data-group-id="2223186667-41">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">on</span><span class="p" data-group-id="2223186667-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="2223186667-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-45">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="3529821367-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="3529821367-42">[</span><span class="p" data-group-id="3529821367-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="3529821367-43">}</span><span class="p" data-group-id="3529821367-42">]</span><span class="p" data-group-id="3529821367-41">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="3529821367-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="3529821367-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-45">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Handle events common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="2223186667-46">(</span><span class="p" data-group-id="2223186667-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2223186667-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="3529821367-46">(</span><span class="p" data-group-id="3529821367-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="3529821367-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="2223186667-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2223186667-49">[</span><span class="p" data-group-id="2223186667-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2223186667-50">}</span><span class="p" data-group-id="2223186667-49">]</span><span class="p" data-group-id="2223186667-48">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="2223186667-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2223186667-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="3529821367-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="3529821367-49">[</span><span class="p" data-group-id="3529821367-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="3529821367-50">}</span><span class="p" data-group-id="3529821367-49">]</span><span class="p" data-group-id="3529821367-48">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="3529821367-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3529821367-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="2223186667-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2223186667-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="text">1&gt; pushbutton:start().
-{ok,&lt;0.36.0&gt;}
-2&gt; pushbutton:get_count().
-0
-3&gt; pushbutton:push().
-on
-4&gt; pushbutton:get_count().
-1
-5&gt; pushbutton:push().
-off
-6&gt; pushbutton:get_count().
-1
-7&gt; pushbutton:stop().
-ok
-8&gt; pushbutton:push().
-** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}}
+    </span><span class="p" data-group-id="3529821367-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="3529821367-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="8757518803-1">(</span><span class="p" data-group-id="8757518803-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="8757518803-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="8757518803-2">}</span><span class="gp unselectable">
+2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="8757518803-3">(</span><span class="p" data-group-id="8757518803-3">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">0</span><span class="gp unselectable">
+3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="8757518803-4">(</span><span class="p" data-group-id="8757518803-4">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">on</span><span class="gp unselectable">
+4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="8757518803-5">(</span><span class="p" data-group-id="8757518803-5">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">1</span><span class="gp unselectable">
+5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="8757518803-6">(</span><span class="p" data-group-id="8757518803-6">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">off</span><span class="gp unselectable">
+6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="8757518803-7">(</span><span class="p" data-group-id="8757518803-7">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">1</span><span class="gp unselectable">
+7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="8757518803-8">(</span><span class="p" data-group-id="8757518803-8">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="8757518803-9">(</span><span class="p" data-group-id="8757518803-9">)</span><span class="p">.</span><span class="w">
+</span><span class="gt">** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}}
      in function  gen:do_for_proc/2 (gen.erl, line 261)
-     in call from gen_statem:call/3 (gen_statem.erl, line 386)</code></pre><p>To compare styles, here follows the same example using
+     in call from gen_statem:call/3 (gen_statem.erl, line 386)</span></code></pre><p>To compare styles, here follows the same example using
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">handle_event_function</code>, or rather the
 code to replace after function <a href="#c:init/1"><code class="inline">init/1</code></a> of the <code class="inline">pushbutton.erl</code>
-example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="0039222780-1">(</span><span class="p" data-group-id="0039222780-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
+example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="1663303800-1">(</span><span class="p" data-group-id="1663303800-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0039222780-2">(</span><span class="p" data-group-id="0039222780-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0039222780-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0039222780-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="1663303800-2">(</span><span class="p" data-group-id="1663303800-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1663303800-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1663303800-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="0039222780-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="0039222780-5">[</span><span class="p" data-group-id="0039222780-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="0039222780-6">}</span><span class="p" data-group-id="0039222780-5">]</span><span class="p" data-group-id="0039222780-4">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0039222780-7">(</span><span class="p" data-group-id="0039222780-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0039222780-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0039222780-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1663303800-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="1663303800-5">[</span><span class="p" data-group-id="1663303800-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="1663303800-6">}</span><span class="p" data-group-id="1663303800-5">]</span><span class="p" data-group-id="1663303800-4">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="1663303800-7">(</span><span class="p" data-group-id="1663303800-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1663303800-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1663303800-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="0039222780-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0039222780-10">[</span><span class="p" data-group-id="0039222780-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="0039222780-11">}</span><span class="p" data-group-id="0039222780-10">]</span><span class="p" data-group-id="0039222780-9">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="1663303800-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="1663303800-10">[</span><span class="p" data-group-id="1663303800-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="1663303800-11">}</span><span class="p" data-group-id="1663303800-10">]</span><span class="p" data-group-id="1663303800-9">}</span><span class="p">;</span><span class="w">
 </span><span class="c1">%%</span><span class="w">
 </span><span class="c1">%% Event handling common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0039222780-12">(</span><span class="p" data-group-id="0039222780-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0039222780-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0039222780-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="1663303800-12">(</span><span class="p" data-group-id="1663303800-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1663303800-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1663303800-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="0039222780-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0039222780-15">[</span><span class="p" data-group-id="0039222780-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0039222780-16">}</span><span class="p" data-group-id="0039222780-15">]</span><span class="p" data-group-id="0039222780-14">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0039222780-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0039222780-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1663303800-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="1663303800-15">[</span><span class="p" data-group-id="1663303800-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1663303800-16">}</span><span class="p" data-group-id="1663303800-15">]</span><span class="p" data-group-id="1663303800-14">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="1663303800-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1663303800-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="0039222780-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0039222780-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
+    </span><span class="p" data-group-id="1663303800-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1663303800-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -522,7 +522,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 
       </div>
 
-        <div class="summary-synopsis"><p>A map that describes the <code class="inline">gen_statem</code> status. The keys are</p></div>
+        <div class="summary-synopsis"><p>A map that describes the <code class="inline">gen_statem</code> status.</p></div>
 
     </div>
 
@@ -675,8 +675,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 
       </div>
 
-        <div class="summary-synopsis"><p>Server specification to use when addressing a <code class="inline">gen_statem</code> server. See <a href="#call/2"><code class="inline">call/2</code></a>
-and <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> above.</p></div>
+        <div class="summary-synopsis"><p>Server specification to use when addressing a <code class="inline">gen_statem</code> server.</p></div>
 
     </div>
 
@@ -896,12 +895,7 @@ returns. Here are the sequence of steps for a <em>state transition</em></p></div
       </div>
 
         <div class="summary-synopsis"><p>This function is called by a <code class="inline">gen_statem</code> when it needs to find out the
-<a href="#t:callback_mode/0"><em>callback mode</em></a> of the callback module. The value is
-cached by <code class="inline">gen_statem</code> for efficiency reasons, so this function is only called
-once after server start, after code change, and after changing the callback
-module, but before the first <a href="gen_statem.html#state-callback"><em>state callback</em></a>
-in the current callback module's code version is called. More occasions may be
-added in future versions of <code class="inline">gen_statem</code>.</p></div>
+<a href="#t:callback_mode/0"><em>callback mode</em></a> of the callback module.</p></div>
 
     </div>
 
@@ -911,10 +905,11 @@ added in future versions of <code class="inline">gen_statem</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>This callback is optional, so callback modules need not export it. If a
-release upgrade/downgrade with <code class="inline">Change = {advanced,Extra}</code> specified in the
-<code class="inline">.appup</code> file is made when <a href="#c:code_change/4"><code class="inline">code_change/4</code></a> is not
-implemented the process will crash with exit reason <code class="inline">undef</code>.</p></div>
+        <div class="summary-synopsis"><p>This function is called by a <code class="inline">gen_statem</code> when it is to update its internal
+state during a release upgrade/downgrade, that is, when the instruction
+<code class="inline">{update,Module,Change,...}</code>, where <code class="inline">Change = {advanced,Extra}</code>, is specified in
+the <a href="../../../../lib/sasl-4.2.1/doc/html/appup.html"><code class="inline">appup</code></a> file. For more information, see
+<a href="../../../../doc/system/release_handling.html#instr">OTP Design Principles</a>.</p></div>
 
     </div>
 
@@ -924,9 +919,8 @@ implemented the process will crash with exit reason <code class="inline">undef</
 
       </div>
 
-        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
-The <code class="inline">gen_statem</code> module provides a default implementation of this function
-that returns <code class="inline">{State,Data}</code>.</p></div>
+        <div class="summary-synopsis"><p>This function is called by a <code class="inline">gen_statem</code> process in in order to format/limit the
+server state for debugging and logging purposes.</p></div>
 
     </div>
 
@@ -934,10 +928,12 @@ that returns <code class="inline">{State,Data}</code>.</p></div>
       <div class="summary-signature">
         <a href="#c:format_status/2" translate="no">format_status/2</a>
 
+          <span class="deprecated" title="the callback gen_statem:format_status(_,_) is deprecated; use format_status/1 instead">deprecated</span>
+
       </div>
 
-        <div class="summary-synopsis"><blockquote><h4 class="warning">Warning</h4><p>This callback is deprecated, in new code use <a href="#c:format_status/1"><code class="inline">format_status/1</code></a>. If a
-<a href="#c:format_status/1"><code class="inline">format_status/1</code></a> callback exists, then this function will never be called.</p></div>
+        <div class="summary-synopsis"><p>This function is called by a <code class="inline">gen_statem</code> process in in order to format/limit the
+server state for debugging and logging purposes.</p></div>
 
     </div>
 
@@ -961,7 +957,10 @@ normal process message, one of these functions is called. If
 
       </div>
 
-        <div class="summary-synopsis"><p><a href=""></a></p></div>
+        <div class="summary-synopsis"><p>Whenever a <code class="inline">gen_statem</code> is started using <a href="#start_link/3"><code class="inline">start_link/3,4</code></a>,
+<a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>, or <a href="#start/3"><code class="inline">start/3,4</code></a>, this
+function is called by the new process to initialize the implementation state and
+server data.</p></div>
 
     </div>
 
@@ -971,6 +970,8 @@ normal process message, one of these functions is called. If
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#c:handle_event/4"><code class="inline">handle_event/4</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -979,8 +980,10 @@ normal process message, one of these functions is called. If
 
       </div>
 
-        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>This callback is optional, so callback modules need not export it. The
-<code class="inline">gen_statem</code> module provides a default implementation without cleanup.</p></div>
+        <div class="summary-synopsis"><p>This function is called by a <code class="inline">gen_statem</code> when it is about to terminate. It is
+to be the opposite of <a href="#c:init/1"><code class="inline">Module:init/1</code></a> and do any necessary
+cleaning up. When it returns, the <code class="inline">gen_statem</code> terminates with <code class="inline">Reason</code>. The
+return value is ignored.</p></div>
 
     </div>
 
@@ -996,7 +999,7 @@ normal process message, one of these functions is called. If
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#call/3"><code class="inline">call/3</code></a></p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#call/3"><code class="inline">call(ServerRef, Request, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -1007,9 +1010,7 @@ normal process message, one of these functions is called. If
       </div>
 
         <div class="summary-synopsis"><p>Makes a synchronous call to the <code class="inline">gen_statem</code> <a href="#t:server_ref/0"><code class="inline">ServerRef</code></a> by
-sending a request and waiting until its reply arrives. The <code class="inline">gen_statem</code> calls
-the <a href="gen_statem.html#state-callback"><em>state callback</em></a> with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a>
-<code class="inline">{call,From}</code> and event content <code class="inline">Request</code>.</p></div>
+sending a request and waiting until its reply arrives.</p></div>
 
     </div>
 
@@ -1021,9 +1022,7 @@ the <a href="gen_statem.html#state-callback"><em>state callback</em></a> with <a
 
         <div class="summary-synopsis"><p>Sends an asynchronous event to the <code class="inline">gen_statem</code> <a href="#t:server_ref/0"><code class="inline">ServerRef</code></a>
 and returns <code class="inline">ok</code> immediately, ignoring if the destination node or <code class="inline">gen_statem</code>
-does not exist. The <code class="inline">gen_statem</code> calls the
-<a href="gen_statem.html#state-callback"><em>state callback</em></a> with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a> <code class="inline">cast</code>
-and event content <code class="inline">Msg</code>.</p></div>
+does not exist.</p></div>
 
     </div>
 
@@ -1033,11 +1032,7 @@ and event content <code class="inline">Msg</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Check if <code class="inline">Msg</code> is a response corresponding to the request identifier <code class="inline">ReqId</code>.
-The request must have been made by <a href="#send_request/2"><code class="inline">send_request/2</code></a>. If <code class="inline">Msg</code> is a reply to the
-handle <code class="inline">ReqId</code> the result of the request is returned in <code class="inline">Reply</code>. Otherwise
-returns <code class="inline">no_reply</code> and no cleanup is done, and thus the function shall be
-invoked repeatedly until a reply is returned.</p></div>
+        <div class="summary-synopsis"><p>Check if <code class="inline">Msg</code> is a response corresponding to the request identifier <code class="inline">ReqId</code>.</p></div>
 
     </div>
 
@@ -1083,11 +1078,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
 
       </div>
 
-        <div class="summary-synopsis"><p>Makes the calling process become a <code class="inline">gen_statem</code>. Does not return, instead the
-calling process enters the <code class="inline">gen_statem</code> receive loop and becomes a <code class="inline">gen_statem</code>
-server. The process <em>must</em> have been started using one of the start functions in
-<a href="proc_lib.html"><code class="inline">proc_lib</code></a>. The user is responsible for any initialization of the process,
-including registering a name for it.</p></div>
+        <div class="summary-synopsis"><p>Makes the calling process become a <code class="inline">gen_statem</code>.</p></div>
 
     </div>
 
@@ -1097,8 +1088,7 @@ including registering a name for it.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The same as calling
-<a href="#receive_response/2"><code class="inline">gen_statem:receive_response(ReqId, infinity)</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#receive_response/2"><code class="inline">receive_response(ReqId, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -1130,11 +1120,12 @@ all requests must have been made by the process calling this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reply/1" translate="no">reply/1</a>
+        <a href="#reply/1" translate="no">reply(Replies)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#reply/2"><code class="inline">reply/2</code></a></p></div>
+        <div class="summary-synopsis"><p>Send a reply or multiple replies using one or several <a href="#t:reply_action/0"><code class="inline">reply_action/0</code></a>s from a
+<a href="gen_statem.html#state-callback"><em>state callback</em></a>.</p></div>
 
     </div>
 
@@ -1144,9 +1135,7 @@ all requests must have been made by the process calling this function.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This function can be used by a <code class="inline">gen_statem</code> to explicitly send a reply to a
-process that waits in <a href="#call/2"><code class="inline">call/2</code></a> when the reply cannot be defined in the return
-value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.</p></div>
+        <div class="summary-synopsis"><p>Send a <code class="inline">Reply</code> to <code class="inline">From</code>.</p></div>
 
     </div>
 
@@ -1202,16 +1191,7 @@ collection.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Sends an asynchronous <code class="inline">call</code> request <code class="inline">Request</code> to the <code class="inline">gen_statem</code> process
-identified by <code class="inline">ServerRef</code> and returns a request identifier <code class="inline">ReqId</code>. The return
-value <code class="inline">ReqId</code> shall later be used with <a href="#receive_response/2"><code class="inline">receive_response/2</code></a>, <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>,
-or <a href="#check_response/2"><code class="inline">check_response/2</code></a> to fetch the actual result of the request. Besides passing
-the request identifier directly to these functions, it can also be saved in a
-request identifier collection using <a href="#reqids_add/3"><code class="inline">reqids_add/3</code></a>. Such a collection of request
-identifiers can later be used in order to get one response corresponding to a
-request in the collection by passing the collection as argument to
-<a href="#receive_response/3"><code class="inline">receive_response/3</code></a>, <a href="#wait_response/3"><code class="inline">wait_response/3</code></a>, or <a href="#check_response/3"><code class="inline">check_response/3</code></a>. If you are about
-to save the request identifier in a request identifier collection, you may want
-to consider using <a href="#send_request/4"><code class="inline">send_request/4</code></a> instead.</p></div>
+identified by <code class="inline">ServerRef</code> and returns a request identifier <code class="inline">ReqId</code>.</p></div>
 
     </div>
 
@@ -1237,7 +1217,8 @@ collection as argument to <a href="#receive_response/3"><code class="inline">rec
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start/4"><code class="inline">start/4</code></a></p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#start/4"><code class="inline">start/4</code></a> except that the <code class="inline">gen_statem</code> process is not
+registered with any <a href="#t:server_name/0">name service</a>.</p></div>
 
     </div>
 
@@ -1259,7 +1240,8 @@ process, this start function cannot be used by a supervisor to start a child.</p
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start_link/4"><code class="inline">start_link/4</code></a></p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#start_link/4"><code class="inline">start_link/4</code></a> except that the <code class="inline">gen_statem</code> process is not
+registered with any <a href="#t:server_name/0">name service</a>.</p></div>
 
     </div>
 
@@ -1282,7 +1264,8 @@ linked to its supervisor.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start_monitor/4"><code class="inline">start_monitor/4</code></a></p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#start_monitor/4"><code class="inline">start_monitor/4</code></a> except that the <code class="inline">gen_statem</code> process is not
+registered with any <a href="#t:server_name/0">name service</a>.</p></div>
 
     </div>
 
@@ -1305,7 +1288,7 @@ function cannot be used by a supervisor to start a child.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The same as <a href="#stop/3"><code class="inline">stop(ServerRef, normal, infinity)</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#stop/3"><code class="inline">stop(ServerRef, normal, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -1327,8 +1310,7 @@ specified <code class="inline">Reason</code> and waits for it to terminate. The 
 
       </div>
 
-        <div class="summary-synopsis"><p>The same as calling
-<a href="#receive_response/2"><code class="inline">gen_statem:receive_response(ReqId, infinity)</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#receive_response/2"><code class="inline">receive_response(ReqId, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -1380,7 +1362,7 @@ all requests must have been made by the process calling this function.</p></div>
     </a>
     <h1 class="signature" translate="no">action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L786" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L787" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1449,7 +1431,7 @@ the stack is empty the server fails. Otherwise like
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L540" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L541" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1490,7 +1472,7 @@ The result is cached for subsequent calls to
     </a>
     <h1 class="signature" translate="no">callback_mode_result()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L520" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L521" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1522,7 +1504,7 @@ selects <a href="#t:callback_mode/0"><em>callback mode</em></a> and whether to d
     </a>
     <h1 class="signature" translate="no">data()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L480" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L481" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1558,7 +1540,7 @@ item is to be made a part of the state.</p>
     </a>
     <h1 class="signature" translate="no">enter_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L830" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L831" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1596,7 +1578,7 @@ list.</p><ul><li><strong><code class="inline">hibernate</code></strong> - Sets t
     </a>
     <h1 class="signature" translate="no">enter_loop_opt()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1717" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1708" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1632,7 +1614,7 @@ is called.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">event_content()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L513" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L514" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1665,7 +1647,7 @@ event types, which is also where the event content comes from.</p>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L974" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L972" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1695,7 +1677,7 @@ event types, which is also where the event content comes from.</p>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L986" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L984" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1733,7 +1715,7 @@ change</em>.</li></ul>
     </a>
     <h1 class="signature" translate="no">event_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L677" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L678" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1774,7 +1756,7 @@ cancelled automatically by any other event.</p>
     </a>
     <h1 class="signature" translate="no">event_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L489" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L490" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1806,7 +1788,7 @@ cancelled automatically by any other event.</p>
     </a>
     <h1 class="signature" translate="no">external_event_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L498" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L499" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1842,7 +1824,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">format_status()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1463" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1451" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1867,7 +1849,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 
       </div>
 
-<p>A map that describes the <code class="inline">gen_statem</code> status. The keys are:</p><ul><li><p><strong><code class="inline">state</code></strong> - The current state of the <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">data</code></strong> - The state data of the the <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">reason</code></strong> - The reason that caused the state machine to terminate.</p></li><li><p><strong><code class="inline">queue</code></strong> - The event queue of the <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">postponed</code></strong> - The <a href="#t:postpone/0">postponed</a> events queue of the
+<p>A map that describes the <code class="inline">gen_statem</code> status.</p><p>The keys are:</p><ul><li><p><strong><code class="inline">state</code></strong> - The current state of the <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">data</code></strong> - The state data of the the <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">reason</code></strong> - The reason that caused the state machine to terminate.</p></li><li><p><strong><code class="inline">queue</code></strong> - The event queue of the <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">postponed</code></strong> - The <a href="#t:postpone/0">postponed</a> events queue of the
 <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">timeouts</code></strong> - The active <a href="#t:timeout_action/0">time-outs</a> of the
 <code class="inline">gen_statem</code> process.</p></li><li><p><strong><code class="inline">log</code></strong> - The <a href="sys.html#log/2">sys log</a> of the server.</p></li></ul><p>New associations may be added to the status map without prior notice.</p>
   </section>
@@ -1881,7 +1863,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">from()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L450" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L451" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1913,7 +1895,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">generic_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L698" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L699" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1983,7 +1965,7 @@ by setting it to <code class="inline">infinity</code>.</p>
     </a>
     <h1 class="signature" translate="no">hibernate()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L654" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L655" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2090,7 +2072,7 @@ should be used; see <a href="#start_link/3"><code class="inline">start_link/3,4<
     </a>
     <h1 class="signature" translate="no">postpone()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L638" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L639" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2123,7 +2105,7 @@ should be used; see <a href="#start_link/3"><code class="inline">start_link/3,4<
     </a>
     <h1 class="signature" translate="no">reply_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L921" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L922" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2162,13 +2144,11 @@ since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">reply_tag()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L453" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L454" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(opaque)</span>
 
       <span class="note">(since OTP 19.0)</span>
 
@@ -2194,13 +2174,11 @@ since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">request_id()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1063" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1060" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(opaque)</span>
 
       <span class="note">(since OTP 19.0)</span>
 
@@ -2226,13 +2204,11 @@ since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">request_id_collection()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1070" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1067" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(opaque)</span>
 
       <span class="note">(since OTP 19.0)</span>
 
@@ -2260,7 +2236,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
     </a>
     <h1 class="signature" translate="no">response_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1092" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1089" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2303,7 +2279,7 @@ relative time until the deadline over and over again.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">server_name()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1665" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1655" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2335,7 +2311,7 @@ relative time until the deadline over and over again.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">server_ref()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1689" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1680" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2358,8 +2334,7 @@ relative time until the deadline over and over again.</p></li></ul>
 
       </div>
 
-<p>Server specification to use when addressing a <code class="inline">gen_statem</code> server. See <a href="#call/2"><code class="inline">call/2</code></a>
-and <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> above.</p><p>It can be:</p><ul><li><p><strong><code class="inline">pid() | LocalName</code></strong> - The <code class="inline">gen_statem</code> is locally registered.</p></li><li><p><strong><code class="inline">{Name,Node}</code></strong> - The <code class="inline">gen_statem</code> is locally registered on another node.</p></li><li><p><strong><code class="inline">{global,GlobalName}</code></strong> - The <code class="inline">gen_statem</code> is globally registered in
+<p>Server specification to use when addressing a <code class="inline">gen_statem</code> server.</p><p>See <a href="#call/2"><code class="inline">call/2</code></a> and <a href="#t:server_name/0"><code class="inline">server_name/0</code></a>.</p><p>It can be:</p><ul><li><p><strong><code class="inline">pid() | LocalName</code></strong> - The <code class="inline">gen_statem</code> is locally registered.</p></li><li><p><strong><code class="inline">{Name,Node}</code></strong> - The <code class="inline">gen_statem</code> is locally registered on another node.</p></li><li><p><strong><code class="inline">{global,GlobalName}</code></strong> - The <code class="inline">gen_statem</code> is globally registered in
 <a href="../../../../lib/kernel-9.2.1/doc/html/global.html"><code class="inline">global</code></a>.</p></li><li><p><strong><code class="inline">{via,RegMod,ViaName}</code></strong> - The <code class="inline">gen_statem</code> is registered in an alternative
 process registry. The registry callback module <code class="inline">RegMod</code> is to export functions
 <code class="inline">register_name/2</code>, <code class="inline">unregister_name/1</code>, <code class="inline">whereis_name/1</code>, and <code class="inline">send/2</code>, which
@@ -2376,7 +2351,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
     </a>
     <h1 class="signature" translate="no">start_mon_ret()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1731" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1722" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2406,7 +2381,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
     </a>
     <h1 class="signature" translate="no">start_opt()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1700" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1691" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2438,7 +2413,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
     </a>
     <h1 class="signature" translate="no">start_ret()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1725" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1716" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2469,7 +2444,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
     </a>
     <h1 class="signature" translate="no">state()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L460" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L461" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2503,7 +2478,7 @@ postponed events are retried.</p>
     </a>
     <h1 class="signature" translate="no">state_callback_result(ActionType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L996" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L993" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2535,7 +2510,7 @@ postponed events are retried.</p>
     </a>
     <h1 class="signature" translate="no">state_callback_result(ActionType, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1028" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1025" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2596,7 +2571,7 @@ version of <code class="inline">gen_statem</code>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L572" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L573" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2648,7 +2623,7 @@ will happen when repeating the <em>state enter call</em>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L956" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L955" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2678,7 +2653,7 @@ will happen when repeating the <em>state enter call</em>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L964" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L963" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2743,7 +2718,7 @@ has to be the current state, sets <code class="inline">NewData</code>, and execu
     </a>
     <h1 class="signature" translate="no">state_name()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L471" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L472" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2779,7 +2754,7 @@ it would collide with the optional callback function
     </a>
     <h1 class="signature" translate="no">state_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L718" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L719" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2819,7 +2794,7 @@ value. Therefore it is possible to cancel this time-out by setting it to
     </a>
     <h1 class="signature" translate="no">timeout_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L860" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L861" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2881,7 +2856,7 @@ to <code class="inline">Time</code> for <code class="inline">Name</code> with <c
     </a>
     <h1 class="signature" translate="no">timeout_cancel_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L889" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L890" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2916,7 +2891,7 @@ time-out.</p>
     </a>
     <h1 class="signature" translate="no">timeout_event_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L504" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L505" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2949,7 +2924,7 @@ itself with the corresponding <a href="#t:timeout_action/0"><code class="inline"
     </a>
     <h1 class="signature" translate="no">timeout_option()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L727" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L728" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2983,7 +2958,7 @@ relative, which is the default. See
     </a>
     <h1 class="signature" translate="no">timeout_update_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L900" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L901" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3020,7 +2995,7 @@ like when starting a time-out with relative <code class="inline">Time = 0</code>
     </a>
     <h1 class="signature" translate="no">transition_option()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L631" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L632" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3100,7 +3075,7 @@ corresponding event, and we start again from the top of this sequence.</li></ol>
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1152" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3119,8 +3094,7 @@ corresponding event, and we start again from the top of this sequence.</li></ol>
       </div>
 
 <p>This function is called by a <code class="inline">gen_statem</code> when it needs to find out the
-<a href="#t:callback_mode/0"><em>callback mode</em></a> of the callback module. The value is
-cached by <code class="inline">gen_statem</code> for efficiency reasons, so this function is only called
+<a href="#t:callback_mode/0"><em>callback mode</em></a> of the callback module.</p><p>The value is cached by <code class="inline">gen_statem</code> for efficiency reasons, so this function is only called
 once after server start, after code change, and after changing the callback
 module, but before the first <a href="gen_statem.html#state-callback"><em>state callback</em></a>
 in the current callback module's code version is called. More occasions may be
@@ -3143,7 +3117,7 @@ module is doing something strange.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">code_change(OldVsn, OldState, OldData, Extra)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1368" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1356" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3167,10 +3141,7 @@ module is doing something strange.</p></blockquote>
 
       </div>
 
-<blockquote><h4 class="info">Note</h4><p>This callback is optional, so callback modules need not export it. If a
-release upgrade/downgrade with <code class="inline">Change = {advanced,Extra}</code> specified in the
-<code class="inline">.appup</code> file is made when <a href="#c:code_change/4"><code class="inline">code_change/4</code></a> is not
-implemented the process will crash with exit reason <code class="inline">undef</code>.</p></blockquote><p>This function is called by a <code class="inline">gen_statem</code> when it is to update its internal
+<p>This function is called by a <code class="inline">gen_statem</code> when it is to update its internal
 state during a release upgrade/downgrade, that is, when the instruction
 <code class="inline">{update,Module,Change,...}</code>, where <code class="inline">Change = {advanced,Extra}</code>, is specified in
 the <a href="../../../../lib/sasl-4.2.1/doc/html/appup.html"><code class="inline">appup</code></a> file. For more information, see
@@ -3205,7 +3176,9 @@ recommended, what is important is to upgrade <em>that</em> module whenever a
 an upgrade that upgrades <em>that</em> module needs to suspend, code change, and resume
 any server whose child specification declares that it is using <em>that</em> module.
 And again; the <em>current</em> callback module will get the
-<a href="#c:code_change/4"><code class="inline">Module:code_change/4</code></a> call.</p>
+<a href="#c:code_change/4"><code class="inline">Module:code_change/4</code></a> call.</p><blockquote><h4 class="info">Note</h4><p>If a release upgrade/downgrade with <code class="inline">Change = {advanced,Extra}</code> specified in the
+<code class="inline">.appup</code> file is made when <a href="#c:code_change/4"><code class="inline">code_change/4</code></a> is not
+implemented the process will crash with exit reason <code class="inline">undef</code>.</p></blockquote>
   </section>
 </section>
 <section class="detail" id="c:format_status/1">
@@ -3217,7 +3190,7 @@ And again; the <em>current</em> callback module will get the
     </a>
     <h1 class="signature" translate="no">format_status(Status)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1520" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1510" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3237,12 +3210,8 @@ And again; the <em>current</em> callback module will get the
 
       </div>
 
-<blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
-The <code class="inline">gen_statem</code> module provides a default implementation of this function
-that returns <code class="inline">{State,Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data, the
-default function will instead return <code class="inline">{State,Info}</code>, where <code class="inline">Info</code> says nothing
-but the fact that <a href="#c:format_status/2"><code class="inline">format_status/2</code></a> has crashed.</p></blockquote><p>This function is called by a <code class="inline">gen_statem</code> process when any of the following
-apply:</p><ul><li><a href="sys.html#get_status/1"><code class="inline">sys:get_status/1,2</code></a> is invoked to get the <code class="inline">gen_statem</code>
+<p>This function is called by a <code class="inline">gen_statem</code> process in in order to format/limit the
+server state for debugging and logging purposes.</p><p>It is called in the following situations:</p><ul><li><a href="sys.html#get_status/1"><code class="inline">sys:get_status/1,2</code></a> is invoked to get the <code class="inline">gen_statem</code>
 status.</li><li>The <code class="inline">gen_statem</code> process terminates abnormally and logs an error.</li></ul><p>This function is useful for changing the form and appearance of the <code class="inline">gen_statem</code>
 status for these cases. A callback module wishing to change the
 <a href="sys.html#get_status/1"><code class="inline">sys:get_status/1,2</code></a> return value and how its status
@@ -3252,15 +3221,19 @@ describes the current states of the <code class="inline">gen_statem</code>, and 
 <code class="inline">NewStatus</code> containing the same keys as the input map, but it may transform some
 values.</p><p>One use case for this function is to return compact alternative state
 representations to avoid having large state terms printed in log files. Another
-is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="4229210975-1">(</span><span class="n">Status</span><span class="p" data-group-id="4229210975-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="4229210975-2">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="p" data-group-id="4229210975-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="4229210975-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="4229210975-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="4229210975-4">)</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="4229210975-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="4229210975-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="4229210975-6">}</span><span class="p" data-group-id="4229210975-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="4229210975-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="4229210975-7">}</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="4229210975-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="4229210975-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="0763766487-1">(</span><span class="n">Status</span><span class="p" data-group-id="0763766487-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="0763766487-2">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="p" data-group-id="0763766487-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="0763766487-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="0763766487-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="0763766487-4">)</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="0763766487-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="0763766487-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="0763766487-6">}</span><span class="p" data-group-id="0763766487-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="0763766487-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="0763766487-7">}</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="0763766487-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="0763766487-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Value</span><span class="w">
-    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="4229210975-2">)</span><span class="p">.</span></code></pre>
+    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="0763766487-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
+The <code class="inline">gen_statem</code> module provides a default implementation of this function
+that returns <code class="inline">{State,Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data, the
+default function will instead return <code class="inline">{State,Info}</code>, where <code class="inline">Info</code> says nothing
+but the fact that <a href="#c:format_status/2"><code class="inline">format_status/2</code></a> has crashed.</p></blockquote>
   </section>
 </section>
 <section class="detail" id="c:format_status/2">
@@ -3272,7 +3245,7 @@ is to hide sensitive data from being written to the error log.</p><p>Example:</p
     </a>
     <h1 class="signature" translate="no">format_status/2</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1434" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1420" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3284,6 +3257,10 @@ is to hide sensitive data from being written to the error log.</p><p>Example:</p
 
   </div>
 
+    <div class="deprecated">
+      This callback is deprecated. the callback gen_statem:format_status(_,_) is deprecated; use format_status/1 instead.
+    </div>
+
   <section class="docstring">
 
       <div class="specs">
@@ -3294,13 +3271,8 @@ is to hide sensitive data from being written to the error log.</p><p>Example:</p
 
       </div>
 
-<blockquote><h4 class="warning">Warning</h4><p>This callback is deprecated, in new code use <a href="#c:format_status/1"><code class="inline">format_status/1</code></a>. If a
-<a href="#c:format_status/1"><code class="inline">format_status/1</code></a> callback exists, then this function will never be called.</p></blockquote><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
-The <code class="inline">gen_statem</code> module provides a default implementation of this function
-that returns <code class="inline">{State,Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data, the
-default function will instead return <code class="inline">{State,Info}</code>, where <code class="inline">Info</code> says nothing
-but the fact that <a href="#c:format_status/2"><code class="inline">format_status/2</code></a> has crashed.</p></blockquote><p>This function is called by a <code class="inline">gen_statem</code> process when any of the following
-apply:</p><ul><li>One of <a href="sys.html#get_status/1"><code class="inline">sys:get_status/1,2</code></a> is invoked to get the
+<p>This function is called by a <code class="inline">gen_statem</code> process in in order to format/limit the
+server state for debugging and logging purposes.</p><p>It is called in the following situations:</p><ul><li>One of <a href="sys.html#get_status/1"><code class="inline">sys:get_status/1,2</code></a> is invoked to get the
 <code class="inline">gen_statem</code> status. <code class="inline">Opt</code> is set to the atom <code class="inline">normal</code> for this case.</li><li>The <code class="inline">gen_statem</code> terminates abnormally and logs an error. <code class="inline">Opt</code> is set to the
 atom <code class="inline">terminate</code> for this case.</li></ul><p>This function is useful for changing the form and appearance of the <code class="inline">gen_statem</code>
 status for these cases. A callback module wishing to change the
@@ -3317,7 +3289,11 @@ recommendation is not required, but it makes the callback module status
 consistent with the rest of the <a href="sys.html#get_status/1"><code class="inline">sys:get_status/1,2</code></a>
 return value.</p><p>One use for this function is to return compact alternative state representations
 to avoid having large state terms printed in log files. Another use is to hide
-sensitive data from being written to the error log.</p>
+sensitive data from being written to the error log.</p><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
+The <code class="inline">gen_statem</code> module provides a default implementation of this function
+that returns <code class="inline">{State,Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data, the
+default function will instead return <code class="inline">{State,Info}</code>, where <code class="inline">Info</code> says nothing
+but the fact that <a href="#c:format_status/2"><code class="inline">format_status/2</code></a> has crashed.</p></blockquote>
   </section>
 </section>
 <section class="detail" id="c:handle_event/4">
@@ -3329,7 +3305,7 @@ sensitive data from being written to the error log.</p>
     </a>
     <h1 class="signature" translate="no">handle_event/4</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1226" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1220" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3396,7 +3372,7 @@ in scope.</p>
     </a>
     <h1 class="signature" translate="no">init(Args)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1121" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1116" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3414,13 +3390,13 @@ in scope.</p>
 
       </div>
 
-<p><a href="" id="Module%3Ainit-1"></a></p><p>Whenever a <code class="inline">gen_statem</code> is started using <a href="#start_link/3"><code class="inline">start_link/3,4</code></a>,
+<p>Whenever a <code class="inline">gen_statem</code> is started using <a href="#start_link/3"><code class="inline">start_link/3,4</code></a>,
 <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>, or <a href="#start/3"><code class="inline">start/3,4</code></a>, this
 function is called by the new process to initialize the implementation state and
 server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><blockquote><h4 class="info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a> and
 <a href="#enter_loop/4"><code class="inline">enter_loop/4-6</code></a>, this callback will never be called. Since
-this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="5528913400-1">(</span><span class="p">_</span><span class="p" data-group-id="5528913400-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="5528913400-2">(</span><span class="p" data-group-id="5528913400-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="5528913400-3">(</span><span class="n">Args</span><span class="p" data-group-id="5528913400-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="5528913400-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5528913400-5">[</span><span class="n">Args</span><span class="p" data-group-id="5528913400-5">]</span><span class="p" data-group-id="5528913400-4">)</span><span class="p">.</span></code></pre></blockquote>
+this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="3365096075-1">(</span><span class="p">_</span><span class="p" data-group-id="3365096075-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="3365096075-2">(</span><span class="p" data-group-id="3365096075-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="3365096075-3">(</span><span class="n">Args</span><span class="p" data-group-id="3365096075-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="3365096075-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3365096075-5">[</span><span class="n">Args</span><span class="p" data-group-id="3365096075-5">]</span><span class="p" data-group-id="3365096075-4">)</span><span class="p">.</span></code></pre></blockquote>
   </section>
 </section>
 <section class="detail" id="c:StateName/3">
@@ -3432,7 +3408,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
     </a>
     <h1 class="signature" translate="no">'StateName'/3</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1165" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1159" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3453,7 +3429,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
 
       </div>
 
-
+<p>Equivalent to <a href="#c:handle_event/4"><code class="inline">handle_event/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="c:terminate/3">
@@ -3465,7 +3441,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
     </a>
     <h1 class="signature" translate="no">terminate/3</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1296" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1285" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3488,8 +3464,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
 
       </div>
 
-<blockquote><h4 class="info">Note</h4><p>This callback is optional, so callback modules need not export it. The
-<code class="inline">gen_statem</code> module provides a default implementation without cleanup.</p></blockquote><p>This function is called by a <code class="inline">gen_statem</code> when it is about to terminate. It is
+<p>This function is called by a <code class="inline">gen_statem</code> when it is about to terminate. It is
 to be the opposite of <a href="#c:init/1"><code class="inline">Module:init/1</code></a> and do any necessary
 cleaning up. When it returns, the <code class="inline">gen_statem</code> terminates with <code class="inline">Reason</code>. The
 return value is ignored.</p><p><code class="inline">Reason</code> is a term denoting the stop reason and <a href="#t:state/0"><code class="inline">State</code></a> is the
@@ -3528,7 +3503,7 @@ to linked processes and ports.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1987" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1989" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3546,7 +3521,7 @@ to linked processes and ports.</p>
 
       </div>
 
-<p>Equivalent to <a href="#call/3"><code class="inline">call/3</code></a></p>
+<p>Equivalent to <a href="#call/3"><code class="inline">call(ServerRef, Request, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="call/3">
@@ -3558,7 +3533,7 @@ to linked processes and ports.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request, Timeout)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2029" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2032" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3580,9 +3555,8 @@ to linked processes and ports.</p>
       </div>
 
 <p>Makes a synchronous call to the <code class="inline">gen_statem</code> <a href="#t:server_ref/0"><code class="inline">ServerRef</code></a> by
-sending a request and waiting until its reply arrives. The <code class="inline">gen_statem</code> calls
-the <a href="gen_statem.html#state-callback"><em>state callback</em></a> with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a>
-<code class="inline">{call,From}</code> and event content <code class="inline">Request</code>.</p><p>A <code class="inline">Reply</code> is generated when a <a href="gen_statem.html#state-callback"><em>state callback</em></a>
+sending a request and waiting until its reply arrives.</p><p>The <code class="inline">gen_statem</code> calls the <a href="gen_statem.html#state-callback"><em>state callback</em></a>
+with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a> <code class="inline">{call,From}</code> and event content <code class="inline">Request</code>.</p><p>A <code class="inline">Reply</code> is generated when a <a href="gen_statem.html#state-callback"><em>state callback</em></a>
 returns with <code class="inline">{reply,From,Reply}</code> as one <a href="#t:action/0"><code class="inline">action/0</code></a>, and that <code class="inline">Reply</code> becomes
 the return value of this function.</p><p><code class="inline">Timeout</code> is an integer &gt; 0, which specifies how many milliseconds to wait for a
 reply, or the atom <code class="inline">infinity</code> to wait indefinitely, which is the default. If no
@@ -3608,7 +3582,7 @@ values for the <code class="inline">Reason</code> in the exit term.</p>
     </a>
     <h1 class="signature" translate="no">cast(ServerRef, Msg)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1963" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1965" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3628,7 +3602,7 @@ values for the <code class="inline">Reason</code> in the exit term.</p>
 
 <p>Sends an asynchronous event to the <code class="inline">gen_statem</code> <a href="#t:server_ref/0"><code class="inline">ServerRef</code></a>
 and returns <code class="inline">ok</code> immediately, ignoring if the destination node or <code class="inline">gen_statem</code>
-does not exist. The <code class="inline">gen_statem</code> calls the
+does not exist.</p><p>The <code class="inline">gen_statem</code> calls the
 <a href="gen_statem.html#state-callback"><em>state callback</em></a> with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a> <code class="inline">cast</code>
 and event content <code class="inline">Msg</code>.</p>
   </section>
@@ -3642,7 +3616,7 @@ and event content <code class="inline">Msg</code>.</p>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqId)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2373" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2372" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3666,8 +3640,7 @@ and event content <code class="inline">Msg</code>.</p>
 
       </div>
 
-<p>Check if <code class="inline">Msg</code> is a response corresponding to the request identifier <code class="inline">ReqId</code>.
-The request must have been made by <a href="#send_request/2"><code class="inline">send_request/2</code></a>. If <code class="inline">Msg</code> is a reply to the
+<p>Check if <code class="inline">Msg</code> is a response corresponding to the request identifier <code class="inline">ReqId</code>.</p><p>The request must have been made by <a href="#send_request/2"><code class="inline">send_request/2</code></a>. If <code class="inline">Msg</code> is a reply to the
 handle <code class="inline">ReqId</code> the result of the request is returned in <code class="inline">Reply</code>. Otherwise
 returns <code class="inline">no_reply</code> and no cleanup is done, and thus the function shall be
 invoked repeatedly until a reply is returned.</p><p>The return value <code class="inline">Reply</code> is generated when a
@@ -3686,7 +3659,7 @@ request.</p>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqIdCollection, Delete)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2430" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2429" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3752,7 +3725,7 @@ associations of already handled or abandoned requests to
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2545" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2555" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3784,7 +3757,7 @@ must have been registered. This creates an anonymous server.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2563" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2573" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3822,7 +3795,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2604" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2616" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3846,7 +3819,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
 
       </div>
 
-<p>Makes the calling process become a <code class="inline">gen_statem</code>. Does not return, instead the
+<p>Makes the calling process become a <code class="inline">gen_statem</code>.</p><p>Does not return, instead the
 calling process enters the <code class="inline">gen_statem</code> receive loop and becomes a <code class="inline">gen_statem</code>
 server. The process <em>must</em> have been started using one of the start functions in
 <a href="proc_lib.html"><code class="inline">proc_lib</code></a>. The user is responsible for any initialization of the process,
@@ -3871,7 +3844,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2238" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2236" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3894,8 +3867,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
 
       </div>
 
-<p>The same as calling
-<a href="#receive_response/2"><code class="inline">gen_statem:receive_response(ReqId, infinity)</code></a>.</p>
+<p>Equivalent to <a href="#receive_response/2"><code class="inline">receive_response(ReqId, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="receive_response/2">
@@ -3907,7 +3879,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId, Timeout)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2275" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2273" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3958,7 +3930,7 @@ that a potential future response is ignored, while
     </a>
     <h1 class="signature" translate="no">receive_response(ReqIdCollection, Timeout, Delete)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2342" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2340" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4028,9 +4000,9 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">reply/1</h1>
+    <h1 class="signature" translate="no">reply(Replies)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2507" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2517" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4044,11 +4016,14 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> reply([<a href="#t:reply_action/0">reply_action</a>()] | <a href="#t:reply_action/0">reply_action</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> reply(Replies :: [<a href="#t:reply_action/0">reply_action</a>()] | <a href="#t:reply_action/0">reply_action</a>()) -> ok.</pre>
 
       </div>
 
-<p>Equivalent to <a href="#reply/2"><code class="inline">reply/2</code></a></p>
+<p>Send a reply or multiple replies using one or several <a href="#t:reply_action/0"><code class="inline">reply_action/0</code></a>s from a
+<a href="gen_statem.html#state-callback"><em>state callback</em></a>.</p><p>This function can be used by a <code class="inline">gen_statem</code> to explicitly send a reply to a
+process that waits in <a href="#call/2"><code class="inline">call/2</code></a> when the reply cannot be defined in the return
+value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.</p><blockquote><h4 class="info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></blockquote>
   </section>
 </section>
 <section class="detail" id="reply/2">
@@ -4060,7 +4035,7 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
     </a>
     <h1 class="signature" translate="no">reply(From, Reply)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2529" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2539" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4078,12 +4053,10 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
 
       </div>
 
-<p>This function can be used by a <code class="inline">gen_statem</code> to explicitly send a reply to a
+<p>Send a <code class="inline">Reply</code> to <code class="inline">From</code>.</p><p>This function can be used by a <code class="inline">gen_statem</code> to explicitly send a reply to a
 process that waits in <a href="#call/2"><code class="inline">call/2</code></a> when the reply cannot be defined in the return
 value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.</p><p><code class="inline">From</code> must be the term from argument <a href="#t:event_type/0"><code class="inline">{call,From}</code></a> to the
-<a href="gen_statem.html#state-callback"><em>state callback</em></a>. A reply or multiple replies
-canalso be sent using one or several <a href="#t:reply_action/0"><code class="inline">reply_action/0</code></a>s from a
-<a href="gen_statem.html#state-callback"><em>state callback</em></a>.</p><blockquote><h4 class="info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></blockquote>
+<a href="gen_statem.html#state-callback"><em>state callback</em></a>. </p><blockquote><h4 class="info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></blockquote>
   </section>
 </section>
 <section class="detail" id="reqids_add/3">
@@ -4095,7 +4068,7 @@ canalso be sent using one or several <a href="#t:reply_action/0"><code class="in
     </a>
     <h1 class="signature" translate="no">reqids_add(ReqId, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2480" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2479" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4128,7 +4101,7 @@ identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_new()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2455" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2454" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4164,7 +4137,7 @@ request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_size(ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2463" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2462" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4194,7 +4167,7 @@ request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_to_list(ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2496" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2495" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4227,7 +4200,7 @@ collection.</p>
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2070" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2074" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4246,8 +4219,7 @@ collection.</p>
       </div>
 
 <p>Sends an asynchronous <code class="inline">call</code> request <code class="inline">Request</code> to the <code class="inline">gen_statem</code> process
-identified by <code class="inline">ServerRef</code> and returns a request identifier <code class="inline">ReqId</code>. The return
-value <code class="inline">ReqId</code> shall later be used with <a href="#receive_response/2"><code class="inline">receive_response/2</code></a>, <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>,
+identified by <code class="inline">ServerRef</code> and returns a request identifier <code class="inline">ReqId</code>.</p><p>The return value <code class="inline">ReqId</code> shall later be used with <a href="#receive_response/2"><code class="inline">receive_response/2</code></a>, <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>,
 or <a href="#check_response/2"><code class="inline">check_response/2</code></a> to fetch the actual result of the request. Besides passing
 the request identifier directly to these functions, it can also be saved in a
 request identifier collection using <a href="#reqids_add/3"><code class="inline">reqids_add/3</code></a>. Such a collection of request
@@ -4275,7 +4247,7 @@ the return value of <a href="#receive_response/2"><code class="inline">receive_r
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2098" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2102" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4317,7 +4289,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
     </a>
     <h1 class="signature" translate="no">start(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1745" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1739" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4335,7 +4307,8 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
 
       </div>
 
-<p>Equivalent to <a href="#start/4"><code class="inline">start/4</code></a></p>
+<p>Equivalent to <a href="#start/4"><code class="inline">start/4</code></a> except that the <code class="inline">gen_statem</code> process is not
+registered with any <a href="#t:server_name/0">name service</a>.</p>
   </section>
 </section>
 <section class="detail" id="start/4">
@@ -4347,7 +4320,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
     </a>
     <h1 class="signature" translate="no">start(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1764" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1758" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4369,7 +4342,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
 <p>Creates a standalone <code class="inline">gen_statem</code> process according to OTP design principles
 (using <a href="proc_lib.html"><code class="inline">proc_lib</code></a> primitives). As it does not get linked to the calling
 process, this start function cannot be used by a supervisor to start a child.</p><p>For a description of arguments and return values, see
-<a href="#start_link/3"><code class="inline">start_link/3,4</code></a>.</p>
+<a href="#start_link/4"><code class="inline">start_link/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start_link/3">
@@ -4381,7 +4354,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1776" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1773" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4399,7 +4372,8 @@ process, this start function cannot be used by a supervisor to start a child.</p
 
       </div>
 
-<p>Equivalent to <a href="#start_link/4"><code class="inline">start_link/4</code></a></p>
+<p>Equivalent to <a href="#start_link/4"><code class="inline">start_link/4</code></a> except that the <code class="inline">gen_statem</code> process is not
+registered with any <a href="#t:server_name/0">name service</a>.</p>
   </section>
 </section>
 <section class="detail" id="start_link/4">
@@ -4411,7 +4385,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
     </a>
     <h1 class="signature" translate="no">start_link(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1876" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L1873" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4511,7 +4485,8 @@ been consumed and the started <code class="inline">gen_statem</code> process had
 
       </div>
 
-<p>Equivalent to <a href="#start_monitor/4"><code class="inline">start_monitor/4</code></a></p>
+<p>Equivalent to <a href="#start_monitor/4"><code class="inline">start_monitor/4</code></a> except that the <code class="inline">gen_statem</code> process is not
+registered with any <a href="#t:server_name/0">name service</a>.</p>
   </section>
 </section>
 <section class="detail" id="start_monitor/4">
@@ -4584,7 +4559,7 @@ received and removed from the message queue.</p>
 
       </div>
 
-<p>The same as <a href="#stop/3"><code class="inline">stop(ServerRef, normal, infinity)</code></a>.</p>
+<p>Equivalent to <a href="#stop/3"><code class="inline">stop(ServerRef, normal, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="stop/3">
@@ -4636,7 +4611,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2118" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2119" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4659,8 +4634,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
 
       </div>
 
-<p>The same as calling
-<a href="#receive_response/2"><code class="inline">gen_statem:receive_response(ReqId, infinity)</code></a>.</p>
+<p>Equivalent to <a href="#receive_response/2"><code class="inline">receive_response(ReqId, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="wait_response/2">
@@ -4672,7 +4646,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId, WaitTime)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2153" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2154" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4721,7 +4695,7 @@ that a potential future response is ignored, while
     </a>
     <h1 class="signature" translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2219" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/brainpool-TLS-1.3/OTP-18884/lib/stdlib/src/gen_statem.erl#L2220" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4797,16 +4771,21 @@ determined by <code class="inline">WaitTime</code> is triggered and then return 
               Search HexDocs
             </button>
 
+              <a href="stdlib.epub" title="ePub version">
+                Download ePub version
+              </a>
+
           </span>
         </p>
 
         <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
 
             <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
         </p>
+<p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
       </footer>
     </div>
   </div>

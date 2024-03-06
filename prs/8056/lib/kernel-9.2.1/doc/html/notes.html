@@ -4,21 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.1">
+    <meta name="generator" content="ExDoc v0.31.2">
     <meta name="project" content="kernel v9.2.1">
 
 
     <title>Kernel Release Notes — kernel v9.2.1</title>
-    <link rel="stylesheet" href="dist/html-erlang-YUARVD4J.css" />
+    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-281438B7.js"></script>
+    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
+    <script src="dist/sidebar_items-D2FEDBD7.js"></script>
 
       <script src="docs_config.js"></script>
 
-    <script async src="dist/html-L4O5OK2K.js"></script>
+    <script async src="dist/html-JRPQ5PR6.js"></script>
 
 <style>.dark img { background-color: white; }</style>
   </head>
@@ -100,7 +100,7 @@ Pages
           <form class="search-bar" action="search.html">
             <label class="search-label">
               <span class="sr-only">Search documentation of kernel</span>
-              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
             </label>
             <button type="submit" class="search-button" aria-label="Submit Search">
               <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
@@ -3817,12 +3817,12 @@ had unlinked or a monitor that you had demonitored.</p><p>The new behavior of <a
 viewed as two operations performed atomically. Asynchronously send an unlink
 signal or a demonitor signal, and ignore any future results of the link or
 monitor.</p><p><em>NOTE</em>: This change can cause some obscure code to fail which previously did
-not. For example, the following code might hang:</p><pre><code class="makeup erlang" translate="no"><span class="w">            </span><span class="n">Mon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">monitor</span><span class="p" data-group-id="7902061943-1">(</span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="7902061943-1">)</span><span class="p">,</span><span class="w">
+not. For example, the following code might hang:</p><pre><code class="makeup erlang" translate="no"><span class="w">            </span><span class="n">Mon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">monitor</span><span class="p" data-group-id="9495280261-1">(</span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="9495280261-1">)</span><span class="p">,</span><span class="w">
             </span><span class="c1">%% ...</span><span class="w">
-            </span><span class="nf">exit</span><span class="p" data-group-id="7902061943-2">(</span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="ss">bang</span><span class="p" data-group-id="7902061943-2">)</span><span class="p">,</span><span class="w">
-            </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">demonitor</span><span class="p" data-group-id="7902061943-3">(</span><span class="n">Mon</span><span class="p" data-group-id="7902061943-3">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">exit</span><span class="p" data-group-id="9495280261-2">(</span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="ss">bang</span><span class="p" data-group-id="9495280261-2">)</span><span class="p">,</span><span class="w">
+            </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">demonitor</span><span class="p" data-group-id="9495280261-3">(</span><span class="n">Mon</span><span class="p" data-group-id="9495280261-3">)</span><span class="p">,</span><span class="w">
             </span><span class="k">receive</span><span class="w">
-                </span><span class="p" data-group-id="7902061943-4">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">Mon</span><span class="p">,</span><span class="w"> </span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="7902061943-4">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="w">
+                </span><span class="p" data-group-id="9495280261-4">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">Mon</span><span class="p">,</span><span class="w"> </span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="9495280261-4">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="w">
             </span><span class="c1">%% We were previously guaranteed to get a down message</span><span class="w">
             </span><span class="c1">%% (since we exited the process ourself), so we could</span><span class="w">
             </span><span class="c1">%% in this case leave out:</span><span class="w">
@@ -4202,12 +4202,12 @@ from the run-time system several releases ago.</p><p>Own Id: OTP-5222</p></li></
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
-      <a href="api-reference.html" class="bottom-actions-button" rel="prev">
+      <a href="kernel_app.html" class="bottom-actions-button" rel="prev">
         <span class="subheader">
           ← Previous Page
         </span>
         <span class="title">
-API Reference
+Kernel Application
         </span>
       </a>
 
@@ -4233,16 +4233,21 @@ Introduction
               Search HexDocs
             </button>
 
+              <a href="kernel.epub" title="ePub version">
+                Download ePub version
+              </a>
+
           </span>
         </p>
 
         <p class="built-using">
           Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
 
             <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
         </p>
+<p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
       </footer>
     </div>
   </div>
