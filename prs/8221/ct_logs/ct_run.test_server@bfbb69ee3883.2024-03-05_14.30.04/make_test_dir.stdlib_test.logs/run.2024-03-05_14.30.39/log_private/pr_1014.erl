@@ -1,3 +1,0 @@
--module pr_1014.
--compile export_all.
--type m() :: #{..., a := integer()}.
