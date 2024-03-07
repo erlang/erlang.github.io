@@ -131,7 +131,7 @@ Pages
 </h1>
 
 <blockquote><h4 class="info">Note</h4><p>The SASL error logging concept described in this section is deprecated since
-Erlang/OTP 21.0, when the new <a href="../../../../lib/kernel-9.2.1/doc/html/logger_chapter.html">logging API</a> was
+Erlang/OTP 21.0, when the new <a href="../../../../lib/kernel-9.2.2/doc/html/logger_chapter.html">logging API</a> was
 introduced.</p><p>The new default behaviour is that the SASL application no longer affects which
 log events that are logged.
 <a href="error_logging.html#supervisor_report">Supervisor reports</a> and
@@ -140,14 +140,14 @@ logger handler which is setup by Kernel.
 <a href="error_logging.html#progress_report">Progress reports</a> are by default not
 logged, but can be enabled by setting the primary log level to <code class="inline">info</code>, for
 example by using the Kernel configuration parameter
-<a href="../../../../lib/kernel-9.2.1/doc/html/kernel_app.html#logger_level"><code class="inline">logger_level</code></a>.</p><p>The old SASL error logging behaviour can be re-enabled by setting the Kernel
+<a href="../../../../lib/kernel-9.2.2/doc/html/kernel_app.html#logger_level"><code class="inline">logger_level</code></a>.</p><p>The old SASL error logging behaviour can be re-enabled by setting the Kernel
 configuration parameter
-<a href="../../../../lib/kernel-9.2.1/doc/html/kernel_app.html#logger_sasl_compatible"><code class="inline">logger_sasl_compatible</code></a> to
+<a href="../../../../lib/kernel-9.2.2/doc/html/kernel_app.html#logger_sasl_compatible"><code class="inline">logger_sasl_compatible</code></a> to
 <code class="inline">true</code>.</p><p>The mechanism for
 <a href="error_logging.html#multi_file_logging">multi-file error report logging</a> as
 described in this section is also kept for backwards compatibility. However,
-the new logging API also introduces <a href="../../../../lib/kernel-9.2.1/doc/html/logger_disk_log_h.html"><code class="inline">logger_disk_log_h</code></a>, which is a logger
-handler that can print to multiple files using <a href="../../../../lib/kernel-9.2.1/doc/html/disk_log.html"><code class="inline">disk_log</code></a>.</p></blockquote><h2 id="sasl-reports" class="section-heading">
+the new logging API also introduces <a href="../../../../lib/kernel-9.2.2/doc/html/logger_disk_log_h.html"><code class="inline">logger_disk_log_h</code></a>, which is a logger
+handler that can print to multiple files using <a href="../../../../lib/kernel-9.2.2/doc/html/disk_log.html"><code class="inline">disk_log</code></a>.</p></blockquote><h2 id="sasl-reports" class="section-heading">
   <a href="#sasl-reports" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -177,11 +177,11 @@ progress report contains the following items:</p><ul><li><p><strong><code class=
   </a>
   <span class="text">Crash Report</span>
 </h3>
-<p>Processes started with functions <a href="../../../../lib/stdlib-5.2/doc/html/proc_lib.html#spawn/1"><code class="inline">proc_lib:spawn</code></a> or
-<a href="../../../../lib/stdlib-5.2/doc/html/proc_lib.html#spawn_link/1"><code class="inline">proc_lib:spawn_link</code></a> are wrapped within a <code class="inline">catch</code>. A
+<p>Processes started with functions <a href="../../../../lib/stdlib-5.2.1/doc/html/proc_lib.html#spawn/1"><code class="inline">proc_lib:spawn</code></a> or
+<a href="../../../../lib/stdlib-5.2.1/doc/html/proc_lib.html#spawn_link/1"><code class="inline">proc_lib:spawn_link</code></a> are wrapped within a <code class="inline">catch</code>. A
 crash report is issued when such a process terminates with an unexpected reason,
 which is any reason other than <code class="inline">normal</code>, <code class="inline">shutdown</code>, or <code class="inline">{shutdown,Term}</code>.
-Processes using behaviors <a href="../../../../lib/stdlib-5.2/doc/html/gen_server.html"><code class="inline">gen_server</code></a>, <a href="../../../../lib/stdlib-5.2/doc/html/gen_fsm.html"><code class="inline">gen_fsm</code></a> or <a href="../../../../lib/stdlib-5.2/doc/html/gen_statem.html"><code class="inline">gen_statem</code></a> are
+Processes using behaviors <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html"><code class="inline">gen_server</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_fsm.html"><code class="inline">gen_fsm</code></a> or <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_statem.html"><code class="inline">gen_statem</code></a> are
 examples of such processes. A crash report contains the following items:</p><ul><li><p><strong><code class="inline">Crasher</code></strong> - Information about the crashing process, such as initial
 function call, exit reason, and message queue.</p></li><li><p><strong><code class="inline">Neighbours</code></strong> - Information about processes that are linked to the crashing
 process and do not trap exits. These processes are the neighbours that
@@ -196,7 +196,7 @@ as the information for Crasher, described in the previous item.</p></li></ul><h3
 example process is a <code class="inline">permanent</code> process supervised by the <code class="inline">test_sup</code>
 supervisor. A division by zero is executed and the error is first reported by
 the faulty process. A crash report is generated, as the process was started
-using function <a href="../../../../lib/stdlib-5.2/doc/html/proc_lib.html#spawn/3"><code class="inline">proc_lib:spawn/3</code></a>. The supervisor generates a supervisor report
+using function <a href="../../../../lib/stdlib-5.2.1/doc/html/proc_lib.html#spawn/3"><code class="inline">proc_lib:spawn/3</code></a>. The supervisor generates a supervisor report
 showing the crashed process. A progress report is generated when the process is
 finally restarted.</p><pre><code class="text">        =ERROR REPORT==== 27-May-1996::13:38:56 ===
         &lt;0.63.0&gt;: Divide by zero !
@@ -255,7 +255,7 @@ Reference Manual.</p><h2 id="report-browser" class="section-heading">
   <span class="text">Report Browser</span>
 </h2>
 <p>The report browser is used to browse and format error reports written by the
-error logger handler <a href="../../../../lib/stdlib-5.2/doc/html/log_mf_h.html"><code class="inline">log_mf_h</code></a> defined in STDLIB.</p><p>The <code class="inline">log_mf_h</code> handler writes all reports to a report logging directory, which
+error logger handler <a href="../../../../lib/stdlib-5.2.1/doc/html/log_mf_h.html"><code class="inline">log_mf_h</code></a> defined in STDLIB.</p><p>The <code class="inline">log_mf_h</code> handler writes all reports to a report logging directory, which
 is specified when configuring the SASL application.</p><p>If the report browser is used offline, the reports can be copied to another
 directory specified when starting the browser. If no such directory is
 specified, the browser reads reports from the SASL <code class="inline">error_logger_mf_dir</code>.</p><h3 id="starting-report-browser" class="section-heading">
@@ -313,42 +313,42 @@ help system.</p><h3 id="list-reports-in-server" class="section-heading">
   <span class="text">Show Reports</span>
 </h3>
 <p>Use function <a href="rb.html#show/1"><code class="inline">rb:show(Number)</code></a> to show details of a specific
-report:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">7&gt; </span><span class="nc">rb</span><span class="p">:</span><span class="nf">show</span><span class="p" data-group-id="7229091247-1">(</span><span class="mi">4</span><span class="p" data-group-id="7229091247-1">)</span><span class="p">.</span><span class="w">
+report:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">7&gt; </span><span class="nc">rb</span><span class="p">:</span><span class="nf">show</span><span class="p" data-group-id="3594077533-1">(</span><span class="mi">4</span><span class="p" data-group-id="3594077533-1">)</span><span class="p">.</span><span class="w">
 
 </span><span class="n">PROGRESS</span><span class="w"> </span><span class="n">REPORT</span><span class="w">  </span><span class="o">&lt;</span><span class="mf">0.20</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">                                   </span><span class="mi">1996</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span><span class="w"> </span><span class="mi">16</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">36</span><span class="w">
 </span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">=</span><span class="w">
-</span><span class="ss">supervisor</span><span class="w">                                                     </span><span class="p" data-group-id="7229091247-2">{</span><span class="ss">local</span><span class="p">,</span><span class="ss">sasl_sup</span><span class="p" data-group-id="7229091247-2">}</span><span class="w">
+</span><span class="ss">supervisor</span><span class="w">                                                     </span><span class="p" data-group-id="3594077533-2">{</span><span class="ss">local</span><span class="p">,</span><span class="ss">sasl_sup</span><span class="p" data-group-id="3594077533-2">}</span><span class="w">
 </span><span class="ss">started</span><span class="w">
-</span><span class="p" data-group-id="7229091247-3">[</span><span class="p" data-group-id="7229091247-4">{</span><span class="ss">pid</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.24</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7229091247-4">}</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-5">{</span><span class="ss">name</span><span class="p">,</span><span class="ss">release_handler</span><span class="p" data-group-id="7229091247-5">}</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-6">{</span><span class="ss">mfa</span><span class="p">,</span><span class="p" data-group-id="7229091247-7">{</span><span class="ss">release_handler</span><span class="p">,</span><span class="ss">start_link</span><span class="p">,</span><span class="p" data-group-id="7229091247-8">[</span><span class="p" data-group-id="7229091247-8">]</span><span class="p" data-group-id="7229091247-7">}</span><span class="p" data-group-id="7229091247-6">}</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-9">{</span><span class="ss">restart_type</span><span class="p">,</span><span class="ss">permanent</span><span class="p" data-group-id="7229091247-9">}</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-10">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="mi">2000</span><span class="p" data-group-id="7229091247-10">}</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-11">{</span><span class="ss">child_type</span><span class="p">,</span><span class="ss">worker</span><span class="p" data-group-id="7229091247-11">}</span><span class="p" data-group-id="7229091247-3">]</span><span class="w">
+</span><span class="p" data-group-id="3594077533-3">[</span><span class="p" data-group-id="3594077533-4">{</span><span class="ss">pid</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.24</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="3594077533-4">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-5">{</span><span class="ss">name</span><span class="p">,</span><span class="ss">release_handler</span><span class="p" data-group-id="3594077533-5">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-6">{</span><span class="ss">mfa</span><span class="p">,</span><span class="p" data-group-id="3594077533-7">{</span><span class="ss">release_handler</span><span class="p">,</span><span class="ss">start_link</span><span class="p">,</span><span class="p" data-group-id="3594077533-8">[</span><span class="p" data-group-id="3594077533-8">]</span><span class="p" data-group-id="3594077533-7">}</span><span class="p" data-group-id="3594077533-6">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-9">{</span><span class="ss">restart_type</span><span class="p">,</span><span class="ss">permanent</span><span class="p" data-group-id="3594077533-9">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-10">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="mi">2000</span><span class="p" data-group-id="3594077533-10">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-11">{</span><span class="ss">child_type</span><span class="p">,</span><span class="ss">worker</span><span class="p" data-group-id="3594077533-11">}</span><span class="p" data-group-id="3594077533-3">]</span><span class="w">
 
 </span><span class="ss">ok</span><span class="gp unselectable">
-8&gt; </span><span class="nc">rb</span><span class="p">:</span><span class="nf">show</span><span class="p" data-group-id="7229091247-12">(</span><span class="mi">9</span><span class="p" data-group-id="7229091247-12">)</span><span class="p">.</span><span class="w">
+8&gt; </span><span class="nc">rb</span><span class="p">:</span><span class="nf">show</span><span class="p" data-group-id="3594077533-12">(</span><span class="mi">9</span><span class="p" data-group-id="3594077533-12">)</span><span class="p">.</span><span class="w">
 
 </span><span class="n">CRASH</span><span class="w"> </span><span class="n">REPORT</span><span class="w">  </span><span class="o">&lt;</span><span class="mf">0.24</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">                                      </span><span class="mi">1996</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">16</span><span class="w"> </span><span class="mi">16</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">21</span><span class="w">
 </span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">==</span><span class="o">=</span><span class="w">
 </span><span class="n">Crashing</span><span class="w"> </span><span class="ss">process</span><span class="w">
 </span><span class="ss">pid</span><span class="w">                                                                 </span><span class="o">&lt;</span><span class="mf">0.24</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">
 </span><span class="ss">registered_name</span><span class="w">                                              </span><span class="ss">release_handler</span><span class="w">
-</span><span class="ss">error_info</span><span class="w">                             </span><span class="p" data-group-id="7229091247-13">{</span><span class="ss">undef</span><span class="p">,</span><span class="p" data-group-id="7229091247-14">{</span><span class="ss">release_handler</span><span class="p">,</span><span class="ss">mbj_func</span><span class="p">,</span><span class="p" data-group-id="7229091247-15">[</span><span class="p" data-group-id="7229091247-15">]</span><span class="p" data-group-id="7229091247-14">}</span><span class="p" data-group-id="7229091247-13">}</span><span class="w">
+</span><span class="ss">error_info</span><span class="w">                             </span><span class="p" data-group-id="3594077533-13">{</span><span class="ss">undef</span><span class="p">,</span><span class="p" data-group-id="3594077533-14">{</span><span class="ss">release_handler</span><span class="p">,</span><span class="ss">mbj_func</span><span class="p">,</span><span class="p" data-group-id="3594077533-15">[</span><span class="p" data-group-id="3594077533-15">]</span><span class="p" data-group-id="3594077533-14">}</span><span class="p" data-group-id="3594077533-13">}</span><span class="w">
 </span><span class="ss">initial_call</span><span class="w">
-</span><span class="p" data-group-id="7229091247-16">{</span><span class="ss">gen</span><span class="p">,</span><span class="ss">init_it</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-17">[</span><span class="ss">gen_server</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-16">{</span><span class="ss">gen</span><span class="p">,</span><span class="ss">init_it</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-17">[</span><span class="ss">gen_server</span><span class="p">,</span><span class="w">
 </span><span class="o">&lt;</span><span class="mf">0.20</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
 </span><span class="o">&lt;</span><span class="mf">0.20</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-18">{</span><span class="ss">erlang</span><span class="p">,</span><span class="nb">register</span><span class="p" data-group-id="7229091247-18">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-18">{</span><span class="ss">erlang</span><span class="p">,</span><span class="nb">register</span><span class="p" data-group-id="3594077533-18">}</span><span class="p">,</span><span class="w">
 </span><span class="ss">release_handler</span><span class="p">,</span><span class="w">
 </span><span class="ss">release_handler</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-19">[</span><span class="p" data-group-id="7229091247-19">]</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="7229091247-20">[</span><span class="p" data-group-id="7229091247-20">]</span><span class="p" data-group-id="7229091247-17">]</span><span class="p" data-group-id="7229091247-16">}</span><span class="w">
-</span><span class="ss">ancestors</span><span class="w">                                                </span><span class="p" data-group-id="7229091247-21">[</span><span class="ss">sasl_sup</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.18</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7229091247-21">]</span><span class="w">
-</span><span class="ss">messages</span><span class="w">                                                                  </span><span class="p" data-group-id="7229091247-22">[</span><span class="p" data-group-id="7229091247-22">]</span><span class="w">
-</span><span class="ss">links</span><span class="w">                                                    </span><span class="p" data-group-id="7229091247-23">[</span><span class="o">&lt;</span><span class="mf">0.23</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.20</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7229091247-23">]</span><span class="w">
-</span><span class="ss">dictionary</span><span class="w">                                                                </span><span class="p" data-group-id="7229091247-24">[</span><span class="p" data-group-id="7229091247-24">]</span><span class="w">
+</span><span class="p" data-group-id="3594077533-19">[</span><span class="p" data-group-id="3594077533-19">]</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="3594077533-20">[</span><span class="p" data-group-id="3594077533-20">]</span><span class="p" data-group-id="3594077533-17">]</span><span class="p" data-group-id="3594077533-16">}</span><span class="w">
+</span><span class="ss">ancestors</span><span class="w">                                                </span><span class="p" data-group-id="3594077533-21">[</span><span class="ss">sasl_sup</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.18</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="3594077533-21">]</span><span class="w">
+</span><span class="ss">messages</span><span class="w">                                                                  </span><span class="p" data-group-id="3594077533-22">[</span><span class="p" data-group-id="3594077533-22">]</span><span class="w">
+</span><span class="ss">links</span><span class="w">                                                    </span><span class="p" data-group-id="3594077533-23">[</span><span class="o">&lt;</span><span class="mf">0.23</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.20</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="3594077533-23">]</span><span class="w">
+</span><span class="ss">dictionary</span><span class="w">                                                                </span><span class="p" data-group-id="3594077533-24">[</span><span class="p" data-group-id="3594077533-24">]</span><span class="w">
 </span><span class="ss">trap_exit</span><span class="w">                                                              </span><span class="ss">false</span><span class="w">
 </span><span class="ss">status</span><span class="w">                                                               </span><span class="ss">running</span><span class="w">
 </span><span class="ss">heap_size</span><span class="w">                                                                </span><span class="mi">610</span><span class="w">
