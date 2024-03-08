@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-DBDEACAD.js"></script>
+    <script src="dist/sidebar_items-1B63DE45.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -149,7 +149,19 @@ list.</p><p>The list is appended to any options given to <a href="#file/2"><code
 <a href="#noenv_file/2"><code class="inline">noenv_file/2</code></a>, <a href="#noenv_forms/2"><code class="inline">noenv_forms/2</code></a>, or
 <a href="#noenv_output_generated/1">noenv_output_generated/2</a> if you do not want the
 environment variable to be consulted, for example, if you are calling the
-compiler recursively from inside a parse transform.</p><p>The list can be retrieved with <a href="#env_compiler_options/0"><code class="inline">env_compiler_options/0</code></a>.</p><h2 id="module-inlining" class="section-heading">
+compiler recursively from inside a parse transform.</p><p>The list can be retrieved with <a href="#env_compiler_options/0"><code class="inline">env_compiler_options/0</code></a>.</p><h2 id="module-order-of-compiler-options" class="section-heading">
+  <a href="#module-order-of-compiler-options" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Order of Compiler Options</span>
+</h2>
+<p>Options given in the <code class="inline">compile()</code> attribute in the source code take
+precedence over options given to the compiler, which in turn take
+precedence over options given in the environment.</p><p>A later compiler option takes precedence over an earlier one in the
+option list. Example:</p><pre><code class="makeup erlang" translate="no"><span class="nc">compile</span><span class="p">:</span><span class="nf">file</span><span class="p" data-group-id="8285739385-1">(</span><span class="ss">something</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8285739385-2">[</span><span class="ss">nowarn_missing_spec</span><span class="p">,</span><span class="ss">warn_missing_spec</span><span class="p" data-group-id="8285739385-2">]</span><span class="p" data-group-id="8285739385-1">)</span><span class="p">.</span></code></pre><p>Warnings will be emitted for functions without specifications, unless
+the source code for module <code class="inline">something</code> contains a <code class="inline">compile(nowarn_missing_spec)</code>
+attribute.</p><blockquote><h4 class="info">Change</h4><p>In Erlang/OTP 26 and earlier, the option order was the opposite of what
+is described here.</p></blockquote><h2 id="module-inlining" class="section-heading">
   <a href="#module-inlining" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -170,14 +182,14 @@ or a <code class="inline">-compile()</code> attribute in the source module.</p><
 which functions to inline, or <code class="inline">{inline,[{Name,Arity},...]}</code> to have the compiler
 inline all calls to the given functions. If the option is given inside a
 <code class="inline">compile</code> directive in an Erlang module, <code class="inline">{Name,Arity}</code> can be written as
-<code class="inline">Name/Arity</code>.</p><p>Example of explicit inlining:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="0932916728-1">(</span><span class="p" data-group-id="0932916728-2">{</span><span class="ss">inline</span><span class="p">,</span><span class="p" data-group-id="0932916728-3">[</span><span class="ss">pi</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="0932916728-3">]</span><span class="p" data-group-id="0932916728-2">}</span><span class="p" data-group-id="0932916728-1">)</span><span class="p">.</span><span class="w">
+<code class="inline">Name/Arity</code>.</p><p>Example of explicit inlining:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="6011497624-1">(</span><span class="p" data-group-id="6011497624-2">{</span><span class="ss">inline</span><span class="p">,</span><span class="p" data-group-id="6011497624-3">[</span><span class="ss">pi</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="6011497624-3">]</span><span class="p" data-group-id="6011497624-2">}</span><span class="p" data-group-id="6011497624-1">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">pi</span><span class="p" data-group-id="0932916728-4">(</span><span class="p" data-group-id="0932916728-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="mf">3.1416</span><span class="p">.</span></code></pre><p>Example of implicit inlining:</p><pre><code class="text">-compile(inline).</code></pre><p>The option <code class="inline">{inline_size,Size}</code> controls how large functions that are allowed to
+</span><span class="nf">pi</span><span class="p" data-group-id="6011497624-4">(</span><span class="p" data-group-id="6011497624-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="mf">3.1416</span><span class="p">.</span></code></pre><p>Example of implicit inlining:</p><pre><code class="text">-compile(inline).</code></pre><p>The option <code class="inline">{inline_size,Size}</code> controls how large functions that are allowed to
 be inlined. Default is <code class="inline">24</code>, which keeps the size of the inlined code roughly
 the same as the un-inlined version (only relatively small functions are
 inlined).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="c1">%% Aggressive inlining - will increase code size.</span><span class="w">
-</span><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="3409393596-1">(</span><span class="ss">inline</span><span class="p" data-group-id="3409393596-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="3409393596-2">(</span><span class="p" data-group-id="3409393596-3">{</span><span class="ss">inline_size</span><span class="p">,</span><span class="mi">100</span><span class="p" data-group-id="3409393596-3">}</span><span class="p" data-group-id="3409393596-2">)</span><span class="p">.</span></code></pre><h2 id="module-inlining-of-list-functions" class="section-heading">
+</span><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="0736909735-1">(</span><span class="ss">inline</span><span class="p" data-group-id="0736909735-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="0736909735-2">(</span><span class="p" data-group-id="0736909735-3">{</span><span class="ss">inline_size</span><span class="p">,</span><span class="mi">100</span><span class="p" data-group-id="0736909735-3">}</span><span class="p" data-group-id="0736909735-2">)</span><span class="p">.</span></code></pre><h2 id="module-inlining-of-list-functions" class="section-heading">
   <a href="#module-inlining-of-list-functions" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -447,7 +459,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">abstract_code()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L165" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L188" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -477,7 +489,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">bin_ret()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L186" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L209" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -507,7 +519,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">comp_ret()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L189" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L212" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -535,7 +547,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">err_ret()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L188" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L211" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -565,7 +577,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">error_description()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L176" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L199" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -595,7 +607,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">error_info()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L177" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L200" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -625,7 +637,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">errors()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L201" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -655,7 +667,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">forms()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L194" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -684,7 +696,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">mod_ret()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L180" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L203" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -718,7 +730,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">option()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L174" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L197" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -746,7 +758,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">warnings()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L179" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L202" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -788,7 +800,7 @@ is not consulted.</p></div>
     </a>
     <h1 class="signature" translate="no">env_compiler_options()</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L895" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L918" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -820,7 +832,7 @@ not a list, it is put into a list.</p>
     </a>
     <h1 class="signature" translate="no">file(File)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L212" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L235" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -849,7 +861,7 @@ not a list, it is put into a list.</p>
     </a>
     <h1 class="signature" translate="no">file(File, Options)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L798" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L821" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -924,10 +936,10 @@ directive can only be present in a prefix of the file, before exports and
 function definitions. This is the preferred method of enabling and disabling
 features, since it is a local property of a module.</p></blockquote></li><li><p><strong><code class="inline">makedep</code></strong> - Produces a Makefile rule to track headers dependencies. No
 object file is produced.</p><p>By default, this rule is written to <code class="inline">&lt;File&gt;.Pbeam</code>. However, if option
-<code class="inline">binary</code> is set, nothing is written and the rule is returned in <code class="inline">Binary</code>.</p><p>The output will be encoded in UTF-8.</p><p>For example, if you have the following module:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="7246238457-1">(</span><span class="ss">module</span><span class="p" data-group-id="7246238457-1">)</span><span class="p">.</span><span class="w">
+<code class="inline">binary</code> is set, nothing is written and the rule is returned in <code class="inline">Binary</code>.</p><p>The output will be encoded in UTF-8.</p><p>For example, if you have the following module:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="0594721176-1">(</span><span class="ss">module</span><span class="p" data-group-id="0594721176-1">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="7246238457-2">(</span><span class="s">&quot;eunit/include/eunit.hrl&quot;</span><span class="p" data-group-id="7246238457-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">include</span><span class="p" data-group-id="7246238457-3">(</span><span class="s">&quot;header.hrl&quot;</span><span class="p" data-group-id="7246238457-3">)</span><span class="p">.</span></code></pre><p>The Makefile rule generated by this option looks as follows:</p><pre><code class="text">module.beam: module.erl \
+</span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="0594721176-2">(</span><span class="s">&quot;eunit/include/eunit.hrl&quot;</span><span class="p" data-group-id="0594721176-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">include</span><span class="p" data-group-id="0594721176-3">(</span><span class="s">&quot;header.hrl&quot;</span><span class="p" data-group-id="0594721176-3">)</span><span class="p">.</span></code></pre><p>The Makefile rule generated by this option looks as follows:</p><pre><code class="text">module.beam: module.erl \
   /usr/local/lib/erlang/lib/eunit/include/eunit.hrl \
   header.hrl</code></pre></li><li><p><strong><code class="inline">makedep_side_effect</code></strong> - The dependencies are created as a side effect to
 the normal compilation process. This means that the object file will also be
@@ -993,7 +1005,7 @@ option must be used to resolve name clashes with auto-imported BIFs that existed
 before Erlang/OTP R14A  when calling a local function with the same name
 as an auto-imported BIF without module prefix.</p><p>If the BIF is to be called, use the <code class="inline">erlang</code> module prefix
 in the call, not <code class="inline">{no_auto_import,[{F,A}, ...]}</code>.</p><p>If this option is written in the source code, as a <code class="inline">-compile</code> directive, the
-syntax <code class="inline">F/A</code> can be used instead of <code class="inline">{F,A}</code>. For example:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="4011657941-1">(</span><span class="p" data-group-id="4011657941-2">{</span><span class="ss">no_auto_import</span><span class="p">,</span><span class="p" data-group-id="4011657941-3">[</span><span class="ss">error</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="4011657941-3">]</span><span class="p" data-group-id="4011657941-2">}</span><span class="p" data-group-id="4011657941-1">)</span><span class="p">.</span></code></pre></li><li><p><strong><code class="inline">no_auto_import</code></strong> - Do not auto-import any functions from <code class="inline">erlang</code> module.</p></li><li><p><strong><code class="inline">no_line_info</code></strong> - Omits line number information to produce a slightly
+syntax <code class="inline">F/A</code> can be used instead of <code class="inline">{F,A}</code>. For example:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">compile</span><span class="p" data-group-id="3661561723-1">(</span><span class="p" data-group-id="3661561723-2">{</span><span class="ss">no_auto_import</span><span class="p">,</span><span class="p" data-group-id="3661561723-3">[</span><span class="ss">error</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="3661561723-3">]</span><span class="p" data-group-id="3661561723-2">}</span><span class="p" data-group-id="3661561723-1">)</span><span class="p">.</span></code></pre></li><li><p><strong><code class="inline">no_auto_import</code></strong> - Do not auto-import any functions from <code class="inline">erlang</code> module.</p></li><li><p><strong><code class="inline">no_line_info</code></strong> - Omits line number information to produce a slightly
 smaller output file.</p></li><li><p><strong><code class="inline">no_lint</code></strong> - Skips the pass that checks for errors and warnings. Only
 applicable together with the <code class="inline">from_abstr</code> option. This is mainly for
 implementations of other languages on top of Erlang, which have already done
@@ -1136,7 +1148,7 @@ the atom <code class="inline">none</code>.</p><p>A string describing the error i
     </a>
     <h1 class="signature" translate="no">format_error(ErrorDescription)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L1046" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L1069" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1166,7 +1178,7 @@ structure is processed.</p>
     </a>
     <h1 class="signature" translate="no">forms(Forms)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L809" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L832" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1195,7 +1207,7 @@ structure is processed.</p>
     </a>
     <h1 class="signature" translate="no">forms(Forms, Options)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L822" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L845" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1227,7 +1239,7 @@ usually not a binary) is returned instead of a binary.</p>
     </a>
     <h1 class="signature" translate="no">noenv_file(File, Options)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L855" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L878" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1256,7 +1268,7 @@ is not consulted.</p>
     </a>
     <h1 class="signature" translate="no">noenv_forms(Forms, Options)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L866" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L889" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1285,7 +1297,7 @@ is not consulted.</p>
     </a>
     <h1 class="signature" translate="no">noenv_output_generated(Options)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L877" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L900" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1314,7 +1326,7 @@ is not consulted.</p>
     </a>
     <h1 class="signature" translate="no">output_generated(Options)</h1>
 
-      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L840" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/michalmuskala/otp/blob/json/lib/compiler/src/compile.erl#L863" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
