@@ -140,13 +140,13 @@ is an ASN.1 OBJECT IDENTIFIER.</p><p>This index is used to separate the implemen
 actual implementation of the table. The SNMP ordering, that is implementation of
 GET NEXT, is implemented in this module.</p><p>For example, suppose there is an SNMP table, which is best implemented in Erlang
 as one process per SNMP table row. Suppose further that the INDEX in the SNMP
-table is an OCTET STRING. The index structure would be created as follows:</p><pre><code class="text">snmp_index:new(string)</code></pre><p>For each new process we create, we insert an item in an <code class="inline">snmp_index</code> structure:</p><pre><code class="makeup erlang" translate="no"><span class="nf">new_process</span><span class="p" data-group-id="3887823828-1">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">SnmpIndex</span><span class="p" data-group-id="3887823828-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="n">Pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">start_process</span><span class="p" data-group-id="3887823828-2">(</span><span class="p" data-group-id="3887823828-2">)</span><span class="p">,</span><span class="w">
+table is an OCTET STRING. The index structure would be created as follows:</p><pre><code class="text">snmp_index:new(string)</code></pre><p>For each new process we create, we insert an item in an <code class="inline">snmp_index</code> structure:</p><pre><code class="makeup erlang" translate="no"><span class="nf">new_process</span><span class="p" data-group-id="6151990860-1">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">SnmpIndex</span><span class="p" data-group-id="6151990860-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="n">Pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">start_process</span><span class="p" data-group-id="6151990860-2">(</span><span class="p" data-group-id="6151990860-2">)</span><span class="p">,</span><span class="w">
   </span><span class="n">NewSnmpIndex</span><span class="w"> </span><span class="o">=</span><span class="w">
-    </span><span class="nc">snmp_index</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="3887823828-3">(</span><span class="n">SnmpIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="3887823828-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">snmp_index</span><span class="p">:</span><span class="nf">insert</span><span class="p" data-group-id="6151990860-3">(</span><span class="n">SnmpIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="6151990860-3">)</span><span class="p">,</span><span class="w">
   </span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span></code></pre><p>With this structure, we can now map an OBJECT IDENTIFIER in e.g. a GET NEXT
-request, to the correct process:</p><pre><code class="makeup erlang" translate="no"><span class="nf">get_next_pid</span><span class="p" data-group-id="3891841673-1">(</span><span class="n">Oid</span><span class="p">,</span><span class="w"> </span><span class="n">SnmpIndex</span><span class="p" data-group-id="3891841673-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="p" data-group-id="3891841673-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3891841673-3">{</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="3891841673-3">}</span><span class="p" data-group-id="3891841673-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">snmp_index</span><span class="p">:</span><span class="nf">get_next</span><span class="p" data-group-id="3891841673-4">(</span><span class="n">SnmpIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Oid</span><span class="p" data-group-id="3891841673-4">)</span><span class="p">,</span><span class="w">
+request, to the correct process:</p><pre><code class="makeup erlang" translate="no"><span class="nf">get_next_pid</span><span class="p" data-group-id="4802745429-1">(</span><span class="n">Oid</span><span class="p">,</span><span class="w"> </span><span class="n">SnmpIndex</span><span class="p" data-group-id="4802745429-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="p" data-group-id="4802745429-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4802745429-3">{</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="4802745429-3">}</span><span class="p" data-group-id="4802745429-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">snmp_index</span><span class="p">:</span><span class="nf">get_next</span><span class="p" data-group-id="4802745429-4">(</span><span class="n">SnmpIndex</span><span class="p">,</span><span class="w"> </span><span class="n">Oid</span><span class="p" data-group-id="4802745429-4">)</span><span class="p">,</span><span class="w">
   </span><span class="n">Pid</span><span class="p">.</span></code></pre><h2 id="module-warnings" class="section-heading">
   <a href="#module-warnings" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -395,7 +395,7 @@ key already exists, the new <code class="inline">Value</code> overwrites the old
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> key() :: <a href="#t:key_spec/0">key_spec</a>() | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:tuple/0">tuple</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> key() :: <a href="#t:key_spec/0">key_spec</a>() | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:tuple/0">tuple</a>().</pre>
 
       </div>
 
@@ -404,7 +404,7 @@ single atom, the corresponding <a href="#t:key/0"><code class="inline">key/0</co
 <a href="#t:key_types/0"><code class="inline">key_types/0</code></a> is a tuple, <a href="#t:key/0"><code class="inline">key/0</code></a> must be a tuple of the same size.</p><p>In the example above, valid <code class="inline">keys</code> could be <code class="inline">{&quot;hi&quot;, &quot;mom&quot;}</code> and
 <code class="inline">{&quot;no&quot;, &quot;thanks&quot;}</code>, whereas <code class="inline">&quot;hi&quot;</code>, <code class="inline">{&quot;hi&quot;, 42}</code> and <code class="inline">{&quot;hello&quot;, &quot;there&quot;}</code> would
 be invalid.</p><p>There is no way to propely describe this type in the erlang type language, which
-is why <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:tuple/0"><code class="inline">tuple/0</code></a> was used above. The proper definition looks like:</p><p><code class="inline">key() = key_spec() | {key_spec(), key_spec(), ...}</code></p>
+is why <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:tuple/0"><code class="inline">tuple/0</code></a> was used above. The proper definition looks like:</p><p><code class="inline">key() = key_spec() | {key_spec(), key_spec(), ...}</code></p>
   </section>
 </section>
 <section class="detail" id="t:key_spec/0">
@@ -428,7 +428,7 @@ is why <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:tuple/0"><code cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> key_spec() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> key_spec() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -456,7 +456,7 @@ is why <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:tuple/0"><code cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> key_types() :: <a href="#t:type_spec/0">type_spec</a>() | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:tuple/0">tuple</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> key_types() :: <a href="#t:type_spec/0">type_spec</a>() | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:tuple/0">tuple</a>().</pre>
 
       </div>
 
@@ -466,7 +466,7 @@ corresponding type should be <code class="inline">integer</code>. If it is a var
 OBJECT IDENTIFIER, OCTET STRING), the corresponding type should be <code class="inline">string</code>.
 Finally, if the type is of variable length, but with a fixed size restriction
 (e.g. IpAddress), the corresponding type should be <code class="inline">fix_string</code>.</p><p>There is no way to propely describe this type in the erlang type language, which
-is why <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:tuple/0"><code class="inline">tuple/0</code></a> was used above. The proper definition looks like:</p><p><code class="inline">key_types = type_spec() | {type_spec(), type_spec(), ...}</code></p>
+is why <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:tuple/0"><code class="inline">tuple/0</code></a> was used above. The proper definition looks like:</p><p><code class="inline">key_types = type_spec() | {type_spec(), type_spec(), ...}</code></p>
   </section>
 </section>
 <section class="detail" id="t:type_spec/0">
@@ -589,7 +589,7 @@ index can no longer be referenced after this call. See the
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> get(Index, KeyOid) -> {ok, {KeyOid, Value}} | undefined
-       when Index :: <a href="#t:index/0">index</a>(), KeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+       when Index :: <a href="#t:index/0">index</a>(), KeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -619,7 +619,7 @@ instrumentation function.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> get_last(Index) -> {ok, {KeyOid, Value}} | undefined
-            when Index :: <a href="#t:index/0">index</a>(), KeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+            when Index :: <a href="#t:index/0">index</a>(), KeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -648,7 +648,7 @@ instrumentation function.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> get_next(Index, KeyOid) -> {ok, {NextKeyOid, Value}} | undefined
-            when Index :: <a href="#t:index/0">index</a>(), KeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), NextKeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+            when Index :: <a href="#t:index/0">index</a>(), KeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), NextKeyOid :: <a href="snmp.html#t:oid/0">snmp:oid</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -679,7 +679,7 @@ index.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> insert(Index, Key, Value) -> NewIndex
-          when Index :: <a href="#t:index/0">index</a>(), Key :: <a href="#t:key/0">key</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), NewIndex :: <a href="#t:index/0">index</a>().</pre>
+          when Index :: <a href="#t:index/0">index</a>(), Key :: <a href="#t:key/0">key</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), NewIndex :: <a href="#t:index/0">index</a>().</pre>
 
       </div>
 
@@ -764,7 +764,7 @@ key already exists, the new <code class="inline">Value</code> overwrites the old
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> new(KeyTypes, Name) -> Index when KeyTypes :: <a href="#t:key_types/0">key_types</a>(), Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(), Index :: <a href="#t:index/0">index</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> new(KeyTypes, Name) -> Index when KeyTypes :: <a href="#t:key_types/0">key_types</a>(), Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), Index :: <a href="#t:index/0">index</a>().</pre>
 
       </div>
 

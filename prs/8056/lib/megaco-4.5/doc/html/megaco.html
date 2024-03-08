@@ -1056,7 +1056,7 @@ by the <code class="inline">versions1</code> and <code class="inline">versions2<
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> action_reqs() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>() | [<a href="#t:action_request/0">action_request</a>()].</pre>
+          <pre translate="no"><span class="attribute">-type</span> action_reqs() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>() | [<a href="#t:action_request/0">action_request</a>()].</pre>
 
       </div>
 
@@ -1155,7 +1155,7 @@ by the <code class="inline">versions1</code> and <code class="inline">versions2<
 
 <p>This type is a basic (atom) lookup key (for info on an active connection). The
 corresponding value can be of any type.<a href="" id="ci_control_pid"></a></p><ul><li><p><strong><code class="inline">control_pid</code></strong> - The process identifier of the controlling process for a
-connection.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid()</a></p><p><a href="" id="ci_send_handle"></a></p></li><li><p><strong><code class="inline">send_handle</code></strong> - Opaque send handle whose contents is internal for the send
+connection.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid()</a></p><p><a href="" id="ci_send_handle"></a></p></li><li><p><strong><code class="inline">send_handle</code></strong> - Opaque send handle whose contents is internal for the send
 module.</p><p>Value type: <a href="#t:send_handle/0"><code class="inline">send_handle/0</code></a></p><p><a href="" id="ci_local_mid"></a></p></li><li><p><strong><code class="inline">local_mid</code></strong> - The local mid (of the connection, i.e. the own mid).</p><p>Value type: <a href="#t:mid/0"><code class="inline">mid/0</code></a></p><p><a href="" id="ci_remote_mid"></a></p></li><li><p><strong><code class="inline">remote_mid</code></strong> - The remote mid (of the connection).</p><p>Value type: <a href="#t:mid/0"><code class="inline">mid/0</code></a></p><p><a href="" id="ci_receive_handle"></a></p></li><li><p><strong><code class="inline">receive_handle</code></strong> - Construct a megaco_receive_handle record.</p><p>Value type: <a href="#t:receive_handle/0"><code class="inline">receive_handle/0</code></a></p><p><a href="" id="ci_trans_id"></a></p></li><li><p><strong><code class="inline">trans_id</code></strong> - Next transaction id.</p><p>Note that transaction id's are (currently) maintained on a per user basis so
 there is no way to be sure that the value returned will actually be used for a
 transaction sent on this connection (in case a user has several connections,
@@ -1177,14 +1177,14 @@ as this timer is running, replies will be delivered via the
 their &quot;arrival number&quot; (see <code class="inline">UserReply</code> of the
 <a href="megaco_user.html#trans_reply">handle_trans_reply/4,5</a> callback function).</p><p>Replies arriving after the timer has expired, will be delivered using the
 <a href="megaco_user.html#unexpected_trans">handle_unexpected_trans/3,4</a> callback
-function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ci_long_request_resend"></a></p></li><li><p><strong><code class="inline">long_request_resend</code></strong> - This option indicates weather the request should
+function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ci_long_request_resend"></a></p></li><li><p><strong><code class="inline">long_request_resend</code></strong> - This option indicates weather the request should
 be resent until the reply is received, <em>even</em> though a pending message has
 been received.</p><p>Normally, after a pending message has been received, the request is not resent
 (since a pending message is an indication that the request has been received).
 But since the reply (to the request) can be lost, this behaviour has its
 values.</p><p>It is of course pointless to set this value to <em>true</em> unless the
 <code class="inline">long_request_timer</code> (see above) is also set to an incremental timer
-(<code class="inline">#megaco_incr_timer{}</code>).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_reply_timer"></a></p></li><li><p><strong><code class="inline">reply_timer</code></strong> - Wait for an ack.</p><p>When a request is received, some info related to the reply is store internally
+(<code class="inline">#megaco_incr_timer{}</code>).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_reply_timer"></a></p></li><li><p><strong><code class="inline">reply_timer</code></strong> - Wait for an ack.</p><p>When a request is received, some info related to the reply is store internally
 (e.g. the binary of the reply). This info will live until either an ack is
 received or this timer expires. For instance, if the same request is received
 again (e.g. a request with the same transaction id), the (stored) reply will
@@ -1196,28 +1196,28 @@ delivered to the user, the proxy process continue to exist for as long as this
 option specifies. Any received messages, is passed on to the user via the
 <a href="megaco_user.html#handle_unexpected_trans">handle_unexpected_trans</a> callback
 function.</p><p>The timeout time is in milliseconds. A value of 0 (zero) means that the proxy
-process will exit directly after the reply has been delivered.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">5000</code> (= 5 seconds).</p></li><li><p><strong><code class="inline">auto_ack</code></strong> - Automatic send transaction ack when the transaction reply has
-been received (see <code class="inline">trans_ack</code> below).</p><p>This is used for <em>three-way-handshake</em>.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_ack"></a></p></li><li><p><strong><code class="inline">trans_ack</code></strong> - Shall ack's be accumulated or not.</p><p>This property is only valid if <code class="inline">auto_ack</code> is true.</p><p>If <code class="inline">auto_ack</code> is true, then if <code class="inline">trans_ack</code> is <code class="inline">false</code>, ack's will be sent
+process will exit directly after the reply has been delivered.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">5000</code> (= 5 seconds).</p></li><li><p><strong><code class="inline">auto_ack</code></strong> - Automatic send transaction ack when the transaction reply has
+been received (see <code class="inline">trans_ack</code> below).</p><p>This is used for <em>three-way-handshake</em>.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_ack"></a></p></li><li><p><strong><code class="inline">trans_ack</code></strong> - Shall ack's be accumulated or not.</p><p>This property is only valid if <code class="inline">auto_ack</code> is true.</p><p>If <code class="inline">auto_ack</code> is true, then if <code class="inline">trans_ack</code> is <code class="inline">false</code>, ack's will be sent
 immediately. If <code class="inline">trans_ack</code> is <code class="inline">true</code>, then ack's will instead be sent to the
 transaction sender process for accumulation and later sending (see
 <code class="inline">trans_ack_maxcount</code>, <code class="inline">trans_req_maxcount</code>, <code class="inline">trans_req_maxsize</code>,
-<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_ack_maxcount"></a></p></li><li><p><strong><code class="inline">trans_ack_maxcount</code></strong> - Maximum number of accumulated ack's. At most this
+<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_ack_maxcount"></a></p></li><li><p><strong><code class="inline">trans_ack_maxcount</code></strong> - Maximum number of accumulated ack's. At most this
 many ack's will be accumulated by the transaction sender (if started and
-configured to accumulate ack's).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ci_trans_req"></a></p></li><li><p><strong><code class="inline">trans_req</code></strong> - Shall requests be accumulated or not.</p><p>If <code class="inline">trans_req</code> is <code class="inline">false</code>, then request(s) will be sent immediately (in its
+configured to accumulate ack's).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ci_trans_req"></a></p></li><li><p><strong><code class="inline">trans_req</code></strong> - Shall requests be accumulated or not.</p><p>If <code class="inline">trans_req</code> is <code class="inline">false</code>, then request(s) will be sent immediately (in its
 own message).</p><p>If <code class="inline">trans_req</code> is true, then request(s) will instead be sent to the
 transaction sender process for accumulation and later sending (see
 <code class="inline">trans_ack_maxcount</code>, <code class="inline">trans_req_maxcount</code>, <code class="inline">trans_req_maxsize</code>,
-<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_req_maxcount"></a></p></li><li><p><strong><code class="inline">trans_req_maxcount</code></strong> - Maximum number of accumulated requests. At most
+<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_req_maxcount"></a></p></li><li><p><strong><code class="inline">trans_req_maxcount</code></strong> - Maximum number of accumulated requests. At most
 this many requests will be accumulated by the transaction sender (if started
-and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ci_trans_req_maxsize"></a></p></li><li><p><strong><code class="inline">trans_req_maxsize</code></strong> - Maximum size of the accumulated requests. At most
+and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ci_trans_req_maxsize"></a></p></li><li><p><strong><code class="inline">trans_req_maxsize</code></strong> - Maximum size of the accumulated requests. At most
 this much requests will be accumulated by the transaction sender (if started
-and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">2048</code>.</p><p><a href="" id="ci_trans_timer"></a></p></li><li><p><strong><code class="inline">trans_timer</code></strong> - Transaction sender timeout time. Has two functions. First,
+and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">2048</code>.</p><p><a href="" id="ci_trans_timer"></a></p></li><li><p><strong><code class="inline">trans_timer</code></strong> - Transaction sender timeout time. Has two functions. First,
 if the value is 0, then transactions will not be accumulated (e.g. the
 transaction sender process will not be started). Second, if the value is
 greater then 0 and <code class="inline">auto_ack</code> and <code class="inline">trans_ack</code> is true or if <code class="inline">trans_req</code> is
 true, then transaction sender will be started and transactions (which is
 depending on the values of <code class="inline">auto_ack</code>, <code class="inline">trans_ack</code> and <code class="inline">trans_req</code>) will be
-accumulated, for later sending.</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">0</code>.</p><p><a href="" id="ci_pending_timer"></a></p></li><li><p><strong><code class="inline">pending_timer</code></strong> - Automatic send transaction pending if the timer expires
+accumulated, for later sending.</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">0</code>.</p><p><a href="" id="ci_pending_timer"></a></p></li><li><p><strong><code class="inline">pending_timer</code></strong> - Automatic send transaction pending if the timer expires
 before a transaction reply has been sent. This timer is also called
 provisional response timer.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">30000</code> (= 30 seconds).</p><p><a href="" id="ci_sent_pending_limit"></a></p></li><li><p><strong><code class="inline">sent_pending_limit</code></strong> - Sent pending limit (see the
 MGOriginatedPendingLimit and the MGCOriginatedPendingLimit of the megaco root
@@ -1228,45 +1228,45 @@ transaction is aborted (see
 message is sent to the other side.</p><p>Note that this has no effect on the actual sending of pending transactions.
 This is either implicit (e.g. when receiving a re-sent transaction request for
 a request which is being processed) or controlled by the pending_timer, see
-above.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ci_recv_pending_limit"></a></p></li><li><p><strong><code class="inline">recv_pending_limit</code></strong> - Receive pending limit (see the
+above.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ci_recv_pending_limit"></a></p></li><li><p><strong><code class="inline">recv_pending_limit</code></strong> - Receive pending limit (see the
 MGOriginatedPendingLimit and the MGCOriginatedPendingLimit of the megaco root
 package). This parameter specifies how many pending messages that can be
 received (for a sent transaction request). When the limit is exceeded, the
 transaction is considered lost, and an error returned to the user (through the
-call-back function <em>handle_trans_reply</em>).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ci_send_mod"></a></p></li><li><p><strong><code class="inline">send_mod</code></strong> - Send callback module which exports send_message/2. The
+call-back function <em>handle_trans_reply</em>).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ci_send_mod"></a></p></li><li><p><strong><code class="inline">send_mod</code></strong> - Send callback module which exports send_message/2. The
 function SendMod:send_message(SendHandle, Binary) is invoked when the bytes
-needs to be transmitted to the remote user.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module()</a>.</p><p>Defaults to <code class="inline">megaco_tcp</code>.</p><p><a href="" id="ci_encoding_mod"></a></p></li><li><p><strong><code class="inline">encoding_mod</code></strong> - Encoding callback module which exports encode_message/2
+needs to be transmitted to the remote user.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module()</a>.</p><p>Defaults to <code class="inline">megaco_tcp</code>.</p><p><a href="" id="ci_encoding_mod"></a></p></li><li><p><strong><code class="inline">encoding_mod</code></strong> - Encoding callback module which exports encode_message/2
 and decode_message/2. The function EncodingMod:encode_message(EncodingConfig,
 MegacoMessage) is invoked whenever a 'MegacoMessage' record needs to be
 translated into an Erlang binary. The function
 EncodingMod:decode_message(EncodingConfig, Binary) is invoked whenever an
-Erlang binary needs to be translated into a 'MegacoMessage' record.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module()</a>.</p><p>Defaults to <code class="inline">megaco_pretty_text_encoder</code>.</p><p><a href="" id="ci_encoding_config"></a></p></li><li><p><strong><code class="inline">encoding_config</code></strong> - Encoding module config.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">loist()</a>.</p><p>Defaults to <code class="inline">[]</code>.</p><p><a href="" id="ci_protocol_version"></a></p></li><li><p><strong><code class="inline">protocol_version</code></strong> - Actual protocol version.</p><p>Value type: <a href="#t:protocol_version/0"><code class="inline">protocol_version/0</code></a></p><p>Defaults to <code class="inline">1</code>.</p><p><a href="" id="ci_strict_version"></a></p></li><li><p><strong><code class="inline">strict_version</code></strong> - Strict version control, i.e. when a message is
-received, verify that the version is that which was negotiated.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">true</code>.</p><p><a href="" id="ci_reply_data"></a></p></li><li><p><strong><code class="inline">reply_data</code></strong> - Default reply data.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term()</a></p><p>Defaults to <code class="inline">undefined</code>.</p><p><a href="" id="ci_threaded"></a></p></li><li><p><strong><code class="inline">threaded</code></strong> - If a received message contains several transaction requests,
+Erlang binary needs to be translated into a 'MegacoMessage' record.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module()</a>.</p><p>Defaults to <code class="inline">megaco_pretty_text_encoder</code>.</p><p><a href="" id="ci_encoding_config"></a></p></li><li><p><strong><code class="inline">encoding_config</code></strong> - Encoding module config.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">loist()</a>.</p><p>Defaults to <code class="inline">[]</code>.</p><p><a href="" id="ci_protocol_version"></a></p></li><li><p><strong><code class="inline">protocol_version</code></strong> - Actual protocol version.</p><p>Value type: <a href="#t:protocol_version/0"><code class="inline">protocol_version/0</code></a></p><p>Defaults to <code class="inline">1</code>.</p><p><a href="" id="ci_strict_version"></a></p></li><li><p><strong><code class="inline">strict_version</code></strong> - Strict version control, i.e. when a message is
+received, verify that the version is that which was negotiated.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">true</code>.</p><p><a href="" id="ci_reply_data"></a></p></li><li><p><strong><code class="inline">reply_data</code></strong> - Default reply data.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term()</a></p><p>Defaults to <code class="inline">undefined</code>.</p><p><a href="" id="ci_threaded"></a></p></li><li><p><strong><code class="inline">threaded</code></strong> - If a received message contains several transaction requests,
 this option indicates whether the requests should be handled sequentially in
 the same process (<code class="inline">false</code>), or if each request should be handled by its own
-process (<code class="inline">true</code> i.e. a separate process is spawned for each request).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_resend_indication"></a></p></li><li><p><strong><code class="inline">resend_indication</code></strong> - This option indicates weather the transport module
+process (<code class="inline">true</code> i.e. a separate process is spawned for each request).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_resend_indication"></a></p></li><li><p><strong><code class="inline">resend_indication</code></strong> - This option indicates weather the transport module
 should be told if a message send is a resend or not.</p><p>If <em>false</em>, megaco messages are sent using the
 <a href="megaco_transport.html#c:send_message/2">send_message/2</a> function.</p><p>If <em>true</em>, megaco message <em>re-sends</em> are made using the
 <a href="megaco_transport.html#c:resend_message/2">resend_message</a> function. The initial
 message send is still done using the
 <a href="megaco_transport.html#c:send_message/2">send_message</a> function.</p><p>The special value <em>flag</em> instead indicates that the function
-<a href="megaco_transport.html#c:send_message/3">send_message/3</a> shall be used.</p><p>Value type: <code class="inline">flag</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_segment_reply_ind"></a></p></li><li><p><strong><code class="inline">segment_reply_ind</code></strong> - This option specifies if the user shall be notified
+<a href="megaco_transport.html#c:send_message/3">send_message/3</a> shall be used.</p><p>Value type: <code class="inline">flag</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_segment_reply_ind"></a></p></li><li><p><strong><code class="inline">segment_reply_ind</code></strong> - This option specifies if the user shall be notified
 of received segment replies or not.</p><p>See <a href="megaco_user.html#segment_reply">handle_segment_reply</a> callback function
-for more information.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_segment_recv_timer"></a></p></li><li><p><strong><code class="inline">segment_recv_timer</code></strong> - This timer is started when the segment indicated by
+for more information.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_segment_recv_timer"></a></p></li><li><p><strong><code class="inline">segment_recv_timer</code></strong> - This timer is started when the segment indicated by
 the <code class="inline">segmentation complete token</code> (e.g. the last of the segment which makes up
 the reply) is received, but all segments has not yet been received.</p><p>When the timer finally expires, a &quot;megaco segments not received&quot; (459) error
 message is sent to the other side and the user is notified with a
 <code class="inline">segment timeout</code> <code class="inline">UserReply</code> in either the
 <a href="megaco_user.html#trans_reply">handle_trans_reply</a> callback function or the
-return value of the <a href="megaco.html#call">call</a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code> (= 10 seconds).</p><p><a href="" id="ci_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
+return value of the <a href="megaco.html#call">call</a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code> (= 10 seconds).</p><p><a href="" id="ci_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
 either it is known that messages are never to large or that the transport
-protocol can handle such things on its own (e.g. TCP or SCTP).</p></li><li><p><strong><a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0"><code class="inline">pos_integer/0</code></a></strong> - Outgoing reply messages will be segmented as needed
+protocol can handle such things on its own (e.g. TCP or SCTP).</p></li><li><p><strong><a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0"><code class="inline">pos_integer/0</code></a></strong> - Outgoing reply messages will be segmented as needed
 (see <code class="inline">max_pdu_size</code> below). This value, K, indicate the outstanding window,
 i.e. how many segments can be outstanding (not acknowledged) at any given
 time.</p></li><li><p><strong><code class="inline">infinity</code></strong> - Outgoing reply messages will be segmented as needed (see
 <code class="inline">max_pdu_size</code> below). Segment messages are sent all at once (i.e. no
 acknowledgement awaited before sending the next segment).</p></li></ul><p>Defaults to <code class="inline">none</code>.</p><p><a href="" id="ci_max_pdu_size"></a></p></li><li><p><strong><code class="inline">max_pdu_size</code></strong> - Max message size. If the encoded message (PDU) exceeds
-this size, the message should be segmented, and then encoded.</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p></li></ul>
+this size, the message should be segmented, and then encoded.</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p></li></ul>
   </section>
 </section>
 <section class="detail" id="t:counter/0">
@@ -1322,7 +1322,7 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> counter_value() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> counter_value() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
 
       </div>
 
@@ -1903,7 +1903,7 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> send_handle() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> send_handle() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -1940,15 +1940,15 @@ term.</p>
 
       </div>
 
-<p><a href="" id="si_text_config"></a></p><ul><li><p><strong><code class="inline">text_config</code></strong> - The text encoding config.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term()</a></p><p><a href="" id="si_connections"></a></p></li><li><p><strong><code class="inline">connections</code></strong> - Lists all active connections. Returns a list of
+<p><a href="" id="si_text_config"></a></p><ul><li><p><strong><code class="inline">text_config</code></strong> - The text encoding config.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term()</a></p><p><a href="" id="si_connections"></a></p></li><li><p><strong><code class="inline">connections</code></strong> - Lists all active connections. Returns a list of
 megaco_conn_handle records.</p><p>Value type: [<a href="#t:conn_handle/0"><code class="inline">conn_handle/0</code></a>]</p><p><a href="" id="si_users"></a></p></li><li><p><strong><code class="inline">users</code></strong> - Lists all active users.</p><p>Value type: [<a href="#t:mid/0"><code class="inline">mid/0</code></a>]</p><p><a href="" id="si_active_requests"></a></p></li><li><p><strong><code class="inline">n_active_requests</code></strong> - Returns number of requests that has originated from
 this Erlang node and still are active (and therefore consumes system
-resources).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_active_replies"></a></p></li><li><p><strong><code class="inline">n_active_replies</code></strong> - Returns the number of replies that has originated
+resources).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_active_replies"></a></p></li><li><p><strong><code class="inline">n_active_replies</code></strong> - Returns the number of replies that has originated
 from this Erlang node and still are active (and therefore consumes system
-resources).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_active_connections"></a></p></li><li><p><strong><code class="inline">n_active_connections</code></strong> - Returns the number of active connections.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_reply_counters"></a></p></li><li><p><strong><code class="inline">reply_counters</code></strong> - Returns a list of the reply counters.</p><p>Value type: [{<a href="#t:conn_handle/0"><code class="inline">conn_handle/0</code></a>, <a href="#t:transaction_id/0"><code class="inline">transaction_id/0</code></a>,
-<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]</p><p><a href="" id="si_pending_counters"></a></p></li><li><p><strong><code class="inline">pending_counters</code></strong> - Returns a list of the receive and sent pending
+resources).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_active_connections"></a></p></li><li><p><strong><code class="inline">n_active_connections</code></strong> - Returns the number of active connections.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_reply_counters"></a></p></li><li><p><strong><code class="inline">reply_counters</code></strong> - Returns a list of the reply counters.</p><p>Value type: [{<a href="#t:conn_handle/0"><code class="inline">conn_handle/0</code></a>, <a href="#t:transaction_id/0"><code class="inline">transaction_id/0</code></a>,
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]</p><p><a href="" id="si_pending_counters"></a></p></li><li><p><strong><code class="inline">pending_counters</code></strong> - Returns a list of the receive and sent pending
 counters.</p><p>Value type: [{recv | sent, [{<a href="#t:transaction_id/0"><code class="inline">transaction_id/0</code></a>,
-<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]}]</p></li></ul><p><a href="" id="start"></a></p>
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]}]</p></li></ul><p><a href="" id="start"></a></p>
   </section>
 </section>
 <section class="detail" id="t:trace_data/0">
@@ -1974,7 +1974,7 @@ counters.</p><p>Value type: [{recv | sent, [{<a href="#t:transaction_id/0"><code
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> trace_data() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> trace_data() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2006,7 +2006,7 @@ handler fun can use to print the event to a file.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> trace_event() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> trace_event() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2096,7 +2096,7 @@ produced, which is the default.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> transaction_id() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> transaction_id() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>().</pre>
 
       </div>
 
@@ -2183,7 +2183,7 @@ been received.</p><p>Normally, after a pending message has been received, the re
 But since the reply (to the request) can be lost, this behaviour has its
 values.</p><p>It is of course pointless to set this value to <em>true</em> unless the
 <code class="inline">long_request_timer</code> (see above) is also set to an incremental timer
-(<code class="inline">#megaco_incr_timer{}</code>).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_reply_timer"></a></p></li><li><p><strong><code class="inline">reply_timer</code></strong> - Wait for an ack.</p><p>When a request is received, some info related to the reply is store internally
+(<code class="inline">#megaco_incr_timer{}</code>).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_reply_timer"></a></p></li><li><p><strong><code class="inline">reply_timer</code></strong> - Wait for an ack.</p><p>When a request is received, some info related to the reply is store internally
 (e.g. the binary of the reply). This info will live until either an ack is
 received or this timer expires. For instance, if the same request is received
 again (e.g. a request with the same transaction id), the (stored) reply will
@@ -2197,34 +2197,34 @@ as this timer is running, replies will be delivered via the
 their &quot;arrival number&quot; (see <code class="inline">UserReply</code> of the
 <a href="megaco_user.html#trans_reply">handle_trans_reply/4,5</a> callback function).</p><p>Replies arriving after the timer has expired, will be delivered using the
 <a href="megaco_user.html#unexpected_trans">handle_unexpected_trans/3,4</a> callback
-function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ui_call_proxy_gc_timeout"></a></p></li><li><p><strong><code class="inline">call_proxy_gc_timeout</code></strong> - Timeout time for the call proxy.</p><p>When a request is sent using the <a href="megaco.html#call">call/3</a> function, a proxy
+function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ui_call_proxy_gc_timeout"></a></p></li><li><p><strong><code class="inline">call_proxy_gc_timeout</code></strong> - Timeout time for the call proxy.</p><p>When a request is sent using the <a href="megaco.html#call">call/3</a> function, a proxy
 process is started to handle all replies. When the reply has been received and
 delivered to the user, the proxy process continue to exist for as long as this
 option specifies. Any received messages, is passed on to the user via the
 <a href="megaco_user.html#handle_unexpected_trans">handle_unexpected_trans</a> callback
 function.</p><p>The timeout time is in milliseconds. A value of 0 (zero) means that the proxy
-process will exit directly after the reply has been delivered.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">5000</code> (= 5 seconds).</p><p><a href="" id="ui_auto_ack"></a></p></li><li><p><strong><code class="inline">auto_ack</code></strong> - Automatic send transaction ack when the transaction reply has
-been received (see <code class="inline">trans_ack</code> below).</p><p>This is used for <em>three-way-handshake</em>.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_ack"></a></p></li><li><p><strong><code class="inline">trans_ack</code></strong> - Shall ack's be accumulated or not.</p><p>This property is only valid if <code class="inline">auto_ack</code> is true.</p><p>If <code class="inline">auto_ack</code> is true, then if <code class="inline">trans_ack</code> is <code class="inline">false</code>, ack's will be sent
+process will exit directly after the reply has been delivered.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">5000</code> (= 5 seconds).</p><p><a href="" id="ui_auto_ack"></a></p></li><li><p><strong><code class="inline">auto_ack</code></strong> - Automatic send transaction ack when the transaction reply has
+been received (see <code class="inline">trans_ack</code> below).</p><p>This is used for <em>three-way-handshake</em>.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_ack"></a></p></li><li><p><strong><code class="inline">trans_ack</code></strong> - Shall ack's be accumulated or not.</p><p>This property is only valid if <code class="inline">auto_ack</code> is true.</p><p>If <code class="inline">auto_ack</code> is true, then if <code class="inline">trans_ack</code> is <code class="inline">false</code>, ack's will be sent
 immediately. If <code class="inline">trans_ack</code> is <code class="inline">true</code>, then ack's will instead be sent to the
 transaction sender process for accumulation and later sending (see
 <code class="inline">trans_ack_maxcount</code>, <code class="inline">trans_req_maxcount</code>, <code class="inline">trans_req_maxsize</code>,
-<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_ack_maxcount"></a></p></li><li><p><strong><code class="inline">trans_ack_maxcount</code></strong> - Maximum number of accumulated ack's. At most this
+<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_ack_maxcount"></a></p></li><li><p><strong><code class="inline">trans_ack_maxcount</code></strong> - Maximum number of accumulated ack's. At most this
 many ack's will be accumulated by the transaction sender (if started and
-configured to accumulate ack's).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ui_trans_req"></a></p></li><li><p><strong><code class="inline">trans_req</code></strong> - Shall requests be accumulated or not.</p><p>If <code class="inline">trans_req</code> is <code class="inline">false</code>, then request(s) will be sent immediately (in its
+configured to accumulate ack's).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ui_trans_req"></a></p></li><li><p><strong><code class="inline">trans_req</code></strong> - Shall requests be accumulated or not.</p><p>If <code class="inline">trans_req</code> is <code class="inline">false</code>, then request(s) will be sent immediately (in its
 own message).</p><p>If <code class="inline">trans_req</code> is true, then request(s) will instead be sent to the
 transaction sender process for accumulation and later sending (see
 <code class="inline">trans_ack_maxcount</code>, <code class="inline">trans_req_maxcount</code>, <code class="inline">trans_req_maxsize</code>,
-<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_req_maxcount"></a></p></li><li><p><strong><code class="inline">trans_req_maxcount</code></strong> - Maximum number of accumulated requests. At most
+<code class="inline">trans_ack_maxcount</code> and <code class="inline">trans_timer</code>).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_req_maxcount"></a></p></li><li><p><strong><code class="inline">trans_req_maxcount</code></strong> - Maximum number of accumulated requests. At most
 this many requests will be accumulated by the transaction sender (if started
-and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ui_trans_req_maxsize"></a></p></li><li><p><strong><code class="inline">trans_req_maxsize</code></strong> - Maximum size of the accumulated requests. At most
+and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">10</code>.</p><p><a href="" id="ui_trans_req_maxsize"></a></p></li><li><p><strong><code class="inline">trans_req_maxsize</code></strong> - Maximum size of the accumulated requests. At most
 this much requests will be accumulated by the transaction sender (if started
-and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">2048</code>.</p><p><a href="" id="ui_trans_timer"></a></p></li><li><p><strong><code class="inline">trans_timer</code></strong> - Transaction sender timeout time. Has two functions. First,
+and configured to accumulate requests).</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">2048</code>.</p><p><a href="" id="ui_trans_timer"></a></p></li><li><p><strong><code class="inline">trans_timer</code></strong> - Transaction sender timeout time. Has two functions. First,
 if the value is 0, then transactions will not be accumulated (e.g. the
 transaction sender process will not be started). Second, if the value is
 greater then 0 and <code class="inline">auto_ack</code> and <code class="inline">trans_ack</code> are both true or if <code class="inline">trans_req</code>
 is true, then transaction sender will be started and transactions (which is
 depending on the values of <code class="inline">auto_ack</code>, <code class="inline">trans_ack</code> and <code class="inline">trans_req</code>) will be
-accumulated, for later sending.</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">0</code>.</p><p><a href="" id="ui_pending_timer"></a></p></li><li><p><strong><code class="inline">pending_timer</code></strong> - Automatically send pending if the timer expires before a
+accumulated, for later sending.</p><p>See also <a href="megaco_run.html#transaction_sender">transaction sender</a> for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer()</a></p><p>Defaults to <code class="inline">0</code>.</p><p><a href="" id="ui_pending_timer"></a></p></li><li><p><strong><code class="inline">pending_timer</code></strong> - Automatically send pending if the timer expires before a
 transaction reply has been sent. This timer is also called provisional
 response timer.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">30000</code>.</p><p><a href="" id="ui_sent_pending_limit"></a></p></li><li><p><strong><code class="inline">sent_pending_limit</code></strong> - Sent pending limit (see the
 MGOriginatedPendingLimit and the MGCOriginatedPendingLimit of the megaco root
@@ -2235,47 +2235,47 @@ transaction is aborted (see
 message is sent to the other side.</p><p>Note that this has no effect on the actual sending of pending transactions.
 This is either implicit (e.g. when receiving a re-sent transaction request for
 a request which is being processed) or controlled by the pending_timer, see
-above.</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ui_recv_pending_limit"></a></p></li><li><p><strong><code class="inline">recv_pending_limit</code></strong> - Receive pending limit (see the
+above.</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ui_recv_pending_limit"></a></p></li><li><p><strong><code class="inline">recv_pending_limit</code></strong> - Receive pending limit (see the
 MGOriginatedPendingLimit and the MGCOriginatedPendingLimit of the megaco root
 package). This parameter specifies how many pending messages that can be
 received (for a sent transaction request). When the limit is exceeded, the
 transaction is considered lost, and an error returned to the user (through the
-call-back function <em>handle_trans_reply</em>).</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ui_send_mod"></a></p></li><li><p><strong><code class="inline">send_mod</code></strong> - Send callback module which exports send_message/2. The
+call-back function <em>handle_trans_reply</em>).</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p><p><a href="" id="ui_send_mod"></a></p></li><li><p><strong><code class="inline">send_mod</code></strong> - Send callback module which exports send_message/2. The
 function SendMod:send_message(SendHandle, Binary) is invoked when the bytes
-needs to be transmitted to the remote user.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module()</a></p><p>Defaults to <code class="inline">megaco_tcp</code>.</p><p><a href="" id="ui_encoding_mod"></a></p></li><li><p><strong><code class="inline">encoding_mod</code></strong> - Encoding callback module which exports encode_message/2
+needs to be transmitted to the remote user.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module()</a></p><p>Defaults to <code class="inline">megaco_tcp</code>.</p><p><a href="" id="ui_encoding_mod"></a></p></li><li><p><strong><code class="inline">encoding_mod</code></strong> - Encoding callback module which exports encode_message/2
 and decode_message/2. The function EncodingMod:encode_message(EncodingConfig,
 MegacoMessage) is invoked whenever a 'MegacoMessage' record needs to be
 translated into an Erlang binary. The function
 EncodingMod:decode_message(EncodingConfig, Binary) is invoked whenever an
-Erlang binary needs to be translated into a 'MegacoMessage' record.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module()</a></p><p>Defaults to <code class="inline">megaco_pretty_text_encoder</code>.</p><p><a href="" id="ui_encoding_config"></a></p></li><li><p><strong><code class="inline">encoding_config</code></strong> - Encoding module config.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">list()</a></p><p>Defaults to <code class="inline">[]</code>.</p><p><a href="" id="ui_protocol_version"></a></p></li><li><p><strong><code class="inline">protocol_version</code></strong> - Actual protocol version.</p><p>Value type: <a href="#t:protocol_version/0"><code class="inline">protocol_version/0</code></a></p><p>Defaults to <code class="inline">1</code>.</p><p><a href="" id="ui_strict_version"></a></p></li><li><p><strong><code class="inline">strict_version</code></strong> - Strict version control, i.e. when a message is
-received, verify that the version is that which was negotiated.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">true</code>.</p><p><a href="" id="ui_reply_data"></a></p></li><li><p><strong><code class="inline">reply_data</code></strong> - Default reply data.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term()</a></p><p>Defaults to <code class="inline">undefined</code>.</p><p><a href="" id="ui_user_mod"></a></p></li><li><p><strong><code class="inline">user_mod</code></strong> - Name of the user callback module. See the the reference
-manual for megaco_user for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module()</a></p><p>Has no default value since its an mandatory config option.</p><p><a href="" id="ui_user_args"></a></p></li><li><p><strong><code class="inline">user_args</code></strong> - List of extra arguments to the user callback functions. See
-the the reference manual for megaco_user for more info.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">list()</a></p><p><a href="" id="ui_threaded"></a></p></li><li><p><strong><code class="inline">threaded</code></strong> - If a received message contains several transaction requests,
+Erlang binary needs to be translated into a 'MegacoMessage' record.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module()</a></p><p>Defaults to <code class="inline">megaco_pretty_text_encoder</code>.</p><p><a href="" id="ui_encoding_config"></a></p></li><li><p><strong><code class="inline">encoding_config</code></strong> - Encoding module config.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">list()</a></p><p>Defaults to <code class="inline">[]</code>.</p><p><a href="" id="ui_protocol_version"></a></p></li><li><p><strong><code class="inline">protocol_version</code></strong> - Actual protocol version.</p><p>Value type: <a href="#t:protocol_version/0"><code class="inline">protocol_version/0</code></a></p><p>Defaults to <code class="inline">1</code>.</p><p><a href="" id="ui_strict_version"></a></p></li><li><p><strong><code class="inline">strict_version</code></strong> - Strict version control, i.e. when a message is
+received, verify that the version is that which was negotiated.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">true</code>.</p><p><a href="" id="ui_reply_data"></a></p></li><li><p><strong><code class="inline">reply_data</code></strong> - Default reply data.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term()</a></p><p>Defaults to <code class="inline">undefined</code>.</p><p><a href="" id="ui_user_mod"></a></p></li><li><p><strong><code class="inline">user_mod</code></strong> - Name of the user callback module. See the the reference
+manual for megaco_user for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module()</a></p><p>Has no default value since its an mandatory config option.</p><p><a href="" id="ui_user_args"></a></p></li><li><p><strong><code class="inline">user_args</code></strong> - List of extra arguments to the user callback functions. See
+the the reference manual for megaco_user for more info.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">list()</a></p><p><a href="" id="ui_threaded"></a></p></li><li><p><strong><code class="inline">threaded</code></strong> - If a received message contains several transaction requests,
 this option indicates whether the requests should be handled sequentially in
 the same process (<code class="inline">false</code>), or if each request should be handled by its own
-process (<code class="inline">true</code> i.e. a separate process is spawned for each request).</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_resend_indication"></a></p></li><li><p><strong><code class="inline">resend_indication</code></strong> - This option indicates weather the transport module
+process (<code class="inline">true</code> i.e. a separate process is spawned for each request).</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_resend_indication"></a></p></li><li><p><strong><code class="inline">resend_indication</code></strong> - This option indicates weather the transport module
 should be told if a message send is a resend or not.</p><p>If <em>false</em>, megaco messages are sent using the
 <a href="megaco_transport.html#c:send_message/2">send_message</a> function.</p><p>If <em>true</em>, megaco message <em>re-sends</em> are made using the
 <a href="megaco_transport.html#c:resend_message/2">resend_message</a> function. The initial
 message send is still done using the
 <a href="megaco_transport.html#c:send_message/2">send_message</a> function.</p><p>The special value <em>flag</em> instead indicates that the function
-<a href="megaco_transport.html#c:send_message/3">send_message/3</a> shall be used.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_segment_reply_ind"></a></p></li><li><p><strong><code class="inline">segment_reply_ind</code></strong> - This option specifies if the user shall be notified
+<a href="megaco_transport.html#c:send_message/3">send_message/3</a> shall be used.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_segment_reply_ind"></a></p></li><li><p><strong><code class="inline">segment_reply_ind</code></strong> - This option specifies if the user shall be notified
 of received segment replies or not.</p><p>See <a href="megaco_user.html#segment_reply">handle_segment_reply</a> callback function
-for more information.</p><p>Value type: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_segment_recv_timer"></a></p></li><li><p><strong><code class="inline">segment_recv_timer</code></strong> - This timer is started when the segment indicated by
+for more information.</p><p>Value type: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_segment_recv_timer"></a></p></li><li><p><strong><code class="inline">segment_recv_timer</code></strong> - This timer is started when the segment indicated by
 the <code class="inline">segmentation complete token</code> is received, but all segments has not yet
 been received.</p><p>When the timer finally expires, a &quot;megaco segments not received&quot; (459) error
 message is sent to the other side and the user is notified with a
 <code class="inline">segment timeout</code> <code class="inline">UserReply</code> in either the
 <a href="megaco_user.html#trans_reply">handle_trans_reply</a> callback function or the
-return value of the <a href="megaco.html#call">call</a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code>.</p><p><a href="" id="ui_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
+return value of the <a href="megaco.html#call">call</a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code>.</p><p><a href="" id="ui_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
 either it is known that messages are never to large or that the transport
-protocol can handle such things on its own (e.g. TCP or SCTP).</p></li><li><p><strong><a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0"><code class="inline">pos_integer/0</code></a></strong> - Outgoing reply messages will be segmented as needed
+protocol can handle such things on its own (e.g. TCP or SCTP).</p></li><li><p><strong><a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0"><code class="inline">pos_integer/0</code></a></strong> - Outgoing reply messages will be segmented as needed
 (see <code class="inline">max_pdu_size</code> below). This value, K, indicate the outstanding window,
 i.e. how many segments can be outstanding (not acknowledged) at any given
 time.</p></li><li><p><strong><code class="inline">infinity</code></strong> - Outgoing reply messages will be segmented as needed (see
 <code class="inline">max_pdu_size</code> below). Segment messages are sent all at once (i.e. no
 acknowledgement awaited before sending the next segment).</p></li></ul><p>Defaults to <code class="inline">none</code>.</p><p><a href="" id="ui_max_pdu_size"></a></p></li><li><p><strong><code class="inline">max_pdu_size</code></strong> - Max message size. If the encoded message (PDU) exceeds
-this size, the message should be segmented, and then encoded.</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p></li></ul>
+this size, the message should be segmented, and then encoded.</p><p>Value type: <code class="inline">infinity</code> | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">infinity</code>.</p></li></ul>
   </section>
 </section>
 <section class="detail" id="t:void/0">
@@ -2299,7 +2299,7 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> void() :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> void() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2349,7 +2349,7 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
                 {long_request_timer, <a href="#t:megaco_timer/0">megaco_timer</a>()} |
                 {send_handle, <a href="#t:send_handle/0">send_handle</a>()} |
                 {protocol_version, <a href="#t:protocol_version/0">protocol_version</a>()} |
-                {call_proxy_gc_timeout, <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()},
+                {call_proxy_gc_timeout, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()},
             ProtocolVersion :: <a href="#t:protocol_version/0">protocol_version</a>(),
             UserReply :: Success | Failure,
             Success :: {ok, Result} | {ok, Result, SuccessExtra},
@@ -2366,14 +2366,14 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
             SegmentsErr :: {<a href="#t:segment_no/0">segment_no</a>(), <a href="#t:error_desc/0">error_desc</a>()},
             MissingSegments :: [<a href="#t:segment_no/0">segment_no</a>()],
             UserCancelReason :: {user_cancel, ReasonForUserCancel},
-            ReasonForUserCancel :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+            ReasonForUserCancel :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
             SendReason :: SendCancelledReason | SendFailedReason,
-            SendCancelledReason :: {send_message_cancelled, <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()},
-            SendFailedReason :: {send_message_failed, <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()},
+            SendCancelledReason :: {send_message_cancelled, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()},
+            SendFailedReason :: {send_message_failed, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()},
             OtherReason ::
-                {wrong_mid, WrongMid :: <a href="#t:mid/0">mid</a>(), RightMid :: <a href="#t:mid/0">mid</a>(), <a href="#t:transaction_reply/0">transaction_reply</a>()} | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-            SuccessExtra :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-            ErrorExtra :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                {wrong_mid, WrongMid :: <a href="#t:mid/0">mid</a>(), RightMid :: <a href="#t:mid/0">mid</a>(), <a href="#t:transaction_reply/0">transaction_reply</a>()} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+            SuccessExtra :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+            ErrorExtra :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2382,7 +2382,7 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
 transactions in a message, <code class="inline">ActionRequests</code> should be <code class="inline">[action_reqs()]</code> (the
 reply will then be <code class="inline">[UserReply]</code>). Each element of the list is part of one
 transaction.</p><p>For some of <em>our</em> codecs (not binary), it is also possible to pre-encode the
-actions, in which case <code class="inline">ActionRequests</code> will be either a <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> or
+actions, in which case <code class="inline">ActionRequests</code> will be either a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> or
 <code class="inline">[binary()]</code>.</p><p>The function returns when the reply arrives, when the request timer eventually
 times out or when the outstanding requests are explicitly cancelled.</p><p>The default values of the send options are obtained by
 <code class="inline">megaco:conn_info(ConnHandle, Item)</code>. But the send options above, may explicitly
@@ -2423,7 +2423,7 @@ callback module documentation.</p><p><a href="" id="cast"></a></p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> cancel(ConnHandle, CancelReason) -> ok | {error, Reason}
-          when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), CancelReason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), CancelReason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2465,10 +2465,10 @@ applies. See the megaco_user module for more info about the callback arguments.<
                 {send_handle, <a href="#t:send_handle/0">send_handle</a>()} |
                 {reply_data, ReplyData} |
                 {protocol_version, ProtocolVersion},
-            RequestKeepAliveTimer :: plain | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-            ReplyData :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+            RequestKeepAliveTimer :: plain | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+            ReplyData :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
             ProtocolVersion :: <a href="#t:protocol_version/0">protocol_version</a>(),
-            Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+            Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2476,7 +2476,7 @@ applies. See the megaco_user module for more info about the callback arguments.<
 <a href="#t:action_reqs/0"><code class="inline">action_reqs/0</code></a>. When sending several transactions in a message,
 <code class="inline">ActionRequests</code> should be <code class="inline">[action_reqs()]</code>. Each element of the list is part
 of one transaction.</p><p>For some of <em>our</em> codecs (not binary), it is also possible to pre-encode the
-actions, in which case <code class="inline">Actions</code> will be either a <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> or <code class="inline">[binary()]</code>.</p><p>The default values of the send options are obtained by
+actions, in which case <code class="inline">Actions</code> will be either a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> or <code class="inline">[binary()]</code>.</p><p>The default values of the send options are obtained by
 megaco:conn_info(ConnHandle, Item). But the send options above, may explicitly
 be overridden.</p><p>The ProtocolVersion version is the version actually encoded in the reply
 message.</p><p>The callback function UserMod:handle_trans_reply/4 is invoked when the reply
@@ -2510,7 +2510,7 @@ about the callback arguments.</p><p>Given as <code class="inline">ReplyData</cod
              when
                  ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                  Item :: requests | replies | <a href="#t:conn_info_item/0">conn_info_item</a>(),
-                 Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                 Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2539,7 +2539,7 @@ about the callback arguments.</p><p>Given as <code class="inline">ReplyData</cod
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> conn_info(ConnHandle, all) -> [{Item, Value}]
-             when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), Item :: <a href="#t:conn_info_item/0">conn_info_item</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>();
+             when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), Item :: <a href="#t:conn_info_item/0">conn_info_item</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>();
          (ConnHandle, requests) -> [TransId]
              when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), TransId :: <a href="#t:transaction_id/0">transaction_id</a>();
          (ConnHandle, replies) -> [{TransId, ReplyState, Handler}]
@@ -2547,9 +2547,9 @@ about the callback arguments.</p><p>Given as <code class="inline">ReplyData</cod
                  ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                  TransId :: <a href="#t:transaction_id/0">transaction_id</a>(),
                  ReplyState :: prepare | eval_request | waiting_for_ack | aborted,
-                 Handler :: undefined | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>();
+                 Handler :: undefined | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>();
          (ConnHandle, Item) -> Value
-             when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), Item :: <a href="#t:conn_info_item/0">conn_info_item</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+             when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), Item :: <a href="#t:conn_info_item/0">conn_info_item</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2586,15 +2586,15 @@ longer exists.</p><p><a href="" id="update_conn_info"></a></p>
                ReceiveHandle :: <a href="#t:receive_handle/0">receive_handle</a>(),
                RemoteMid :: preliminary_mid | <a href="#t:mid/0">mid</a>(),
                SendHandle :: <a href="#t:send_handle/0">send_handle</a>(),
-               ControlPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+               ControlPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
-               Reason :: ConnectReason | HandleConnectReason | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+               Reason :: ConnectReason | HandleConnectReason | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                ConnectReason ::
-                   {no_such_user, LocalMid} | {already_connected, ConnHandle} | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                   {no_such_user, LocalMid} | {already_connected, ConnHandle} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                LocalMid :: <a href="#t:mid/0">mid</a>(),
-               HandleConnectReason :: {connection_refused, ConnData, ErrorInfo} | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-               ConnData :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-               ErrorInfo :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+               HandleConnectReason :: {connection_refused, ConnData, ErrorInfo} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+               ConnData :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+               ErrorInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2628,16 +2628,16 @@ longer exists.</p><p><a href="" id="update_conn_info"></a></p>
                ReceiveHandle :: <a href="#t:receive_handle/0">receive_handle</a>(),
                RemoteMid :: preliminary_mid | <a href="#t:mid/0">mid</a>(),
                SendHandle :: <a href="#t:send_handle/0">send_handle</a>(),
-               ControlPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
-               Extra :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+               ControlPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
+               Extra :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
-               Reason :: ConnectReason | HandleConnectReason | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+               Reason :: ConnectReason | HandleConnectReason | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                ConnectReason ::
-                   {no_such_user, LocalMid} | {already_connected, ConnHandle} | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                   {no_such_user, LocalMid} | {already_connected, ConnHandle} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                LocalMid :: <a href="#t:mid/0">mid</a>(),
-               HandleConnectReason :: {connection_refused, ConnData, ErrorInfo} | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-               ConnData :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-               ErrorInfo :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+               HandleConnectReason :: {connection_refused, ConnData, ErrorInfo} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+               ConnData :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+               ErrorInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2683,7 +2683,7 @@ The first step could result in an error with <code class="inline">Reason = Conne
 second an error with <code class="inline">Reason = HandleConnectReason</code>:</p><ul><li><p><strong><code class="inline">ConnectReason</code></strong> - An error with this reason is generated by the megaco
 application itself.</p></li><li><p><strong><code class="inline">HandleConnectReason</code></strong> - An error with this reason is caused by the user
 <a href="megaco_user.html#connect">handle_connect</a> callback function either returning
-an error or an invalid value.</p></li></ul><p><code class="inline">Extra</code> can be any <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0"><code class="inline">term/0</code></a> except the atom <code class="inline">ignore_extra</code>. It is passed
+an error or an invalid value.</p></li></ul><p><code class="inline">Extra</code> can be any <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0"><code class="inline">term/0</code></a> except the atom <code class="inline">ignore_extra</code>. It is passed
 (back) to the user via the callback function
 <a href="megaco_user.html#connect">handle_connect/3</a>.</p><p><a href="" id="disconnect"></a></p>
   </section>
@@ -2716,8 +2716,8 @@ an error or an invalid value.</p></li></ul><p><code class="inline">Extra</code> 
                   DecodeSdpPropertyGroup :: [DecodeSDP],
                   DecodeSdpPropertyGroups :: [DecodeSdpPropertyGroup],
                   DecodeSDP :: <a href="#t:sdp/0">sdp</a>() | {<a href="#t:property_parm/0">property_parm</a>(), DecodeError},
-                  DecodeError :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                  Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                  DecodeError :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                  Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2779,7 +2779,7 @@ sdp-records, but also this two-tuple construct.</p><p>This function performs the
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> disconnect(ConnHandle, DiscoReason) -> ok | {error, ErrReason}
-              when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), DiscoReason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), ErrReason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+              when ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(), DiscoReason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), ErrReason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2812,8 +2812,8 @@ the megaco_user module for more info about the callback arguments.</p><p><a href
                 when
                     Level :: <a href="#t:trace_level/0">trace_level</a>(),
                     Destination :: File | Port | HandlerSpec | io,
-                    File :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
-                    Port :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                    File :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
+                    Port :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>(),
                     HandlerSpec :: {HandlerFun, InitialData},
                     HandlerFun :: <a href="#t:trace_handler/0">trace_handler</a>(),
                     InitialData :: <a href="#t:trace_data/0">trace_data</a>().</pre>
@@ -2823,8 +2823,8 @@ the megaco_user module for more info about the callback arguments.</p><p><a href
 <p>This function is used to start megaco tracing at a given <code class="inline">Level</code> and direct
 result to the given <code class="inline">Destination</code>.</p><p>It starts a tracer server and then sets the proper match spec (according to
 <code class="inline">Level</code>).</p><p>In the case when <code class="inline">Destination</code> is <code class="inline">File</code>, the printable megaco trace events will
-be printed to the file <code class="inline">File</code> using plain <a href="../../../../lib/stdlib-5.2/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>In the case when <code class="inline">Destination</code> is <code class="inline">io</code>, the printable megaco trace events will
-be printed on stdout using plain <a href="../../../../lib/stdlib-5.2/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>See <code class="inline">dbg</code> for further information.</p><p><a href="" id="disable_trace"></a></p>
+be printed to the file <code class="inline">File</code> using plain <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>In the case when <code class="inline">Destination</code> is <code class="inline">io</code>, the printable megaco trace events will
+be printed on stdout using plain <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>See <code class="inline">dbg</code> for further information.</p><p><a href="" id="disable_trace"></a></p>
   </section>
 </section>
 <section class="detail" id="encode_actions/3">
@@ -2858,8 +2858,8 @@ be printed on stdout using plain <a href="../../../../lib/stdlib-5.2/doc/html/io
                           {long_request_timer, <a href="#t:megaco_timer/0">megaco_timer</a>()} |
                           {send_handle, <a href="#t:send_handle/0">send_handle</a>()} |
                           {protocol_version, <a href="#t:protocol_version/0">protocol_version</a>()},
-                      Result :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>() | [<a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>()],
-                      Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                      Result :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>() | [<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>()],
+                      Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2898,7 +2898,7 @@ transaction.</p><p><a href="" id="token_tag2string"></a></p>
                       <a href="#t:sdp_property_groups/0">sdp_property_groups</a>() |
                       asn1_NOVALUE,
                   PP :: <a href="#t:property_parm/0">property_parm</a>() | <a href="#t:property_group/0">property_group</a>() | <a href="#t:property_groups/0">property_groups</a>() | asn1_NOVALUE,
-                  Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                  Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2930,12 +2930,12 @@ unchanged.</p><p>This function performs the following transformation:</p><ul><li
           <pre translate="no"><span class="attribute">-spec</span> eval_digit_map(DigitMap) -> {ok, MatchResult} | {error, Reason}
                   when
                       DigitMap :: <a href="#t:digit_map_value/0">digit_map_value</a>() | ParsedDigitMap,
-                      ParsedDigitMap :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                      ParsedDigitMap :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                       MatchResult :: {Kind, Letters} | {Kind, Letters, Extra},
                       Kind :: <a href="#t:digit_map_kind/0">digit_map_kind</a>(),
                       Letters :: [<a href="#t:digit_map_letter/0">digit_map_letter</a>()],
                       Extra :: <a href="#t:digit_map_letter/0">digit_map_letter</a>(),
-                      Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                      Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -2966,7 +2966,7 @@ unchanged.</p><p>This function performs the following transformation:</p><ul><li
           <pre translate="no"><span class="attribute">-spec</span> eval_digit_map(DigitMap, Timers) -> {ok, MatchResult} | {error, Reason}
                   when
                       DigitMap :: <a href="#t:digit_map_value/0">digit_map_value</a>() | ParsedDigitMap,
-                      ParsedDigitMap :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                      ParsedDigitMap :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                       Timers :: Ignore | Reject,
                       Ignore :: ignore | {ignore, <a href="#t:digit_map_value/0">digit_map_value</a>()},
                       Reject :: reject | {reject, <a href="#t:digit_map_value/0">digit_map_value</a>()} | <a href="#t:digit_map_value/0">digit_map_value</a>(),
@@ -2974,7 +2974,7 @@ unchanged.</p><p>This function performs the following transformation:</p><ul><li
                       Kind :: <a href="#t:digit_map_kind/0">digit_map_kind</a>(),
                       Letters :: [<a href="#t:digit_map_letter/0">digit_map_letter</a>()],
                       Extra :: <a href="#t:digit_map_letter/0">digit_map_letter</a>(),
-                      Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                      Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3012,7 +3012,7 @@ the evaluation is aborted and an error is returned.</p><p><a href="" id="report_
              when
                  TotalStats :: {<a href="#t:conn_handle/0">conn_handle</a>(), [Stats]} | {<a href="#t:global_counter/0">global_counter</a>(), <a href="#t:counter_value/0">counter_value</a>()},
                  Stats :: {<a href="#t:counter/0">counter</a>(), <a href="#t:counter_value/0">counter_value</a>()},
-                 Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                 Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3043,12 +3043,12 @@ properly setup).</p><p><a href="" id="get_stats_1_1"></a></p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> get_stats(GCounter) -> {ok, Value} | {error, Reason}
-             when GCounter :: <a href="#t:global_counter/0">global_counter</a>(), Value :: <a href="#t:counter_value/0">counter_value</a>(), Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>();
+             when GCounter :: <a href="#t:global_counter/0">global_counter</a>(), Value :: <a href="#t:counter_value/0">counter_value</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>();
          (ConnHandle) -> {ok, [Stats]} | {error, Reason}
              when
                  ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                  Stats :: {<a href="#t:counter/0">counter</a>(), <a href="#t:counter_value/0">counter_value</a>()},
-                 Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                 Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3085,7 +3085,7 @@ a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
                  ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                  Counter :: <a href="#t:counter/0">counter</a>(),
                  Value :: <a href="#t:counter_value/0">counter_value</a>(),
-                 Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                 Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3113,7 +3113,7 @@ a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> info() -> Info when Info :: [{Key, Value}], Key :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> info() -> Info when Info :: [{Key, Value}], Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3146,7 +3146,7 @@ this is a simple way to get it all at once.</p><p><a href="" id="connect"></a></
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> parse_digit_map(DigitMapBody) -> {ok, ParsedDigitMap} | {error, Reason}
-                   when DigitMapBody :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(), ParsedDigitMap :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                   when DigitMapBody :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(), ParsedDigitMap :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3203,13 +3203,13 @@ state transitions suited to be evaluated by megaco:eval_digit_map/1,2.</p><p><a 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> print_version_info(Versions) -> <a href="#t:void/0">void</a>() when Versions :: [VersionInfo], VersionInfo :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> print_version_info(Versions) -> <a href="#t:void/0">void</a>() when Versions :: [VersionInfo], VersionInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
 <p>Utility function to produce a formated printout of the versions info generated
 by the <code class="inline">versions1</code> and <code class="inline">versions2</code> functions.</p><p>The function print_version_info/0 uses the result of function version1/0 as
-<code class="inline">VersionInfo</code>.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="w">           </span><span class="p" data-group-id="9446090587-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="p" data-group-id="9446090587-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">versions1</span><span class="p" data-group-id="9446090587-2">(</span><span class="p" data-group-id="9446090587-2">)</span><span class="p">,</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">format_versions</span><span class="p" data-group-id="9446090587-3">(</span><span class="n">V</span><span class="p" data-group-id="9446090587-3">)</span><span class="p">.</span></code></pre><p><a href="" id="enable_trace"></a></p>
+<code class="inline">VersionInfo</code>.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="w">           </span><span class="p" data-group-id="8180072297-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="p" data-group-id="8180072297-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">versions1</span><span class="p" data-group-id="8180072297-2">(</span><span class="p" data-group-id="8180072297-2">)</span><span class="p">,</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">format_versions</span><span class="p" data-group-id="8180072297-3">(</span><span class="n">V</span><span class="p" data-group-id="8180072297-3">)</span><span class="p">.</span></code></pre><p><a href="" id="enable_trace"></a></p>
   </section>
 </section>
 <section class="detail" id="process_received_message/4">
@@ -3236,9 +3236,9 @@ by the <code class="inline">versions1</code> and <code class="inline">versions2<
           <pre translate="no"><span class="attribute">-spec</span> process_received_message(ReceiveHandle, ControlPid, SendHandle, BinMsg) -> ok
                             when
                                 ReceiveHandle :: <a href="#t:receive_handle/0">receive_handle</a>(),
-                                ControlPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+                                ControlPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                                 SendHandle :: <a href="#t:send_handle/0">send_handle</a>(),
-                                BinMsg :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>().</pre>
+                                BinMsg :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>().</pre>
 
       </div>
 
@@ -3269,10 +3269,10 @@ by the <code class="inline">versions1</code> and <code class="inline">versions2<
           <pre translate="no"><span class="attribute">-spec</span> process_received_message(ReceiveHandle, ControlPid, SendHandle, BinMsg, Extra) -> ok
                             when
                                 ReceiveHandle :: <a href="#t:receive_handle/0">receive_handle</a>(),
-                                ControlPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+                                ControlPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                                 SendHandle :: <a href="#t:send_handle/0">send_handle</a>(),
-                                BinMsg :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>(),
-                                Extra :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                                BinMsg :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>(),
+                                Extra :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3328,9 +3328,9 @@ important the following callback function will be invoked:</p><ul><li>UserMod:ha
           <pre translate="no"><span class="attribute">-spec</span> receive_message(ReceiveHandle, ControlPid, SendHandle, BinMsg) -> ok
                    when
                        ReceiveHandle :: <a href="#t:receive_handle/0">receive_handle</a>(),
-                       ControlPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+                       ControlPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                        SendHandle :: <a href="#t:send_handle/0">send_handle</a>(),
-                       BinMsg :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>().</pre>
+                       BinMsg :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>().</pre>
 
       </div>
 
@@ -3361,10 +3361,10 @@ important the following callback function will be invoked:</p><ul><li>UserMod:ha
           <pre translate="no"><span class="attribute">-spec</span> receive_message(ReceiveHandle, ControlPid, SendHandle, BinMsg, Extra) -> ok
                    when
                        ReceiveHandle :: <a href="#t:receive_handle/0">receive_handle</a>(),
-                       ControlPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+                       ControlPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                        SendHandle :: <a href="#t:send_handle/0">send_handle</a>(),
-                       BinMsg :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>(),
-                       Extra :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                       BinMsg :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>(),
+                       Extra :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3398,9 +3398,9 @@ via a <code class="inline">spawn</code> to perform the actual processing.</p><p>
 
           <pre translate="no"><span class="attribute">-spec</span> report_digit_event(DigitMapEvalPid, Events) -> ok | {error, Reason}
                       when
-                          DigitMapEvalPid :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+                          DigitMapEvalPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                           Events :: <a href="#t:digit_map_event/0">digit_map_event</a>() | [<a href="#t:digit_map_event/0">digit_map_event</a>()],
-                          Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                          Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3515,7 +3515,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> start() -> ok | {error, Reason} when Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> start() -> ok | {error, Reason} when Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3551,8 +3551,8 @@ details.</p><p><a href="" id="stop"></a></p>
                   UserMid :: <a href="#t:mid/0">mid</a>(),
                   Config :: [{Item, Value}],
                   Item :: <a href="#t:user_info_item/0">user_info_item</a>(),
-                  Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                  Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                  Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                  Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3582,7 +3582,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> stop() -> ok | {error, Reason} when Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> stop() -> ok | {error, Reason} when Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3610,7 +3610,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> stop_user(UserMid) -> ok | {error, Reason} when UserMid :: <a href="#t:mid/0">mid</a>(), Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> stop_user(UserMid) -> ok | {error, Reason} when UserMid :: <a href="#t:mid/0">mid</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3638,7 +3638,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> system_info() -> [{Item, Value}] when Item :: <a href="#t:system_info_item/0">system_info_item</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> system_info() -> [{Item, Value}] when Item :: <a href="#t:system_info_item/0">system_info_item</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3666,7 +3666,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> system_info(Item) -> Value when Item :: <a href="#t:system_info_item/0">system_info_item</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> system_info(Item) -> Value when Item :: <a href="#t:system_info_item/0">system_info_item</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3697,11 +3697,11 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
           <pre translate="no"><span class="attribute">-spec</span> test_digit_event(DigitMap, Events) -> {ok, Kind, Letters} | {error, Reason}
                     when
                         DigitMap :: <a href="#t:digit_map_value/0">digit_map_value</a>() | ParsedDigitMap,
-                        ParsedDigitMap :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                        ParsedDigitMap :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                         Events :: <a href="#t:digit_map_event/0">digit_map_event</a>() | [<a href="#t:digit_map_event/0">digit_map_event</a>()],
                         Kind :: <a href="#t:digit_map_kind/0">digit_map_kind</a>(),
                         Letters :: [<a href="#t:digit_map_letter/0">digit_map_letter</a>()],
-                        Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                        Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3735,13 +3735,13 @@ to simplify testing of digit maps.</p><p><a href="" id="encode_sdp"></a></p>
               when
                   ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                   Version :: <a href="#t:protocol_version/0">protocol_version</a>(),
-                  EncodingMod :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(),
-                  EncodingConfig :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">list</a>(),
+                  EncodingMod :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(),
+                  EncodingConfig :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">list</a>(),
                   Reply :: <a href="#t:error_desc/0">error_desc</a>() | [<a href="#t:action_reply/0">action_reply</a>()],
                   MegaMsg :: <a href="#t:megaco_message/0">megaco_message</a>(),
                   EncodeRes :: {ok, Bin} | {error, Reason},
-                  Bin :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>(),
-                  Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                  Bin :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>(),
+                  Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3780,13 +3780,13 @@ tuple of the composed megaco message and the encode result.</p>
                 when
                     ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                     Version :: <a href="#t:protocol_version/0">protocol_version</a>(),
-                    EncodingMod :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(),
-                    EncodingConfig :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">list</a>(),
+                    EncodingMod :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(),
+                    EncodingConfig :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">list</a>(),
                     ActionRequests :: <a href="#t:action_reqs/0">action_reqs</a>() | [<a href="#t:action_reqs/0">action_reqs</a>()],
                     MegaMsg :: <a href="#t:megaco_message/0">megaco_message</a>(),
                     EncodeRes :: {ok, Bin} | {error, Reason},
-                    Bin :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:binary/0">binary</a>(),
-                    Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                    Bin :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0">binary</a>(),
+                    Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3820,7 +3820,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> token_tag2string(Tag) -> Result
-                    when Tag :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(), Result :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>() | {error, Reason}, Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                    when Tag :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), Result :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>() | {error, Reason}, Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3850,10 +3850,10 @@ result.</p><p><a href="" id="test_reply"></a></p>
 
           <pre translate="no"><span class="attribute">-spec</span> token_tag2string(Tag, EncodingMod) -> Result
                     when
-                        Tag :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
-                        EncodingMod :: pretty | compact | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(),
-                        Result :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>() | {error, Reason},
-                        Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                        Tag :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
+                        EncodingMod :: pretty | compact | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(),
+                        Result :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>() | {error, Reason},
+                        Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3883,11 +3883,11 @@ result.</p><p><a href="" id="test_reply"></a></p>
 
           <pre translate="no"><span class="attribute">-spec</span> token_tag2string(Tag, EncodingMod, Version) -> Result
                     when
-                        Tag :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
-                        EncodingMod :: pretty | compact | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(),
+                        Tag :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
+                        EncodingMod :: pretty | compact | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(),
                         Version :: <a href="#t:protocol_version/0">protocol_version</a>() | v1 | v2 | v3,
-                        Result :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>() | {error, Reason},
-                        Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                        Result :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>() | {error, Reason},
+                        Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3919,8 +3919,8 @@ result.</p><p><a href="" id="test_reply"></a></p>
                     when
                         ConnHandle :: <a href="#t:conn_handle/0">conn_handle</a>(),
                         Item :: <a href="#t:conn_info_item/0">conn_info_item</a>(),
-                        Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                        Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                        Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                        Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3953,8 +3953,8 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
                     when
                         UserMid :: <a href="#t:mid/0">mid</a>(),
                         Item :: <a href="#t:user_info_item/0">user_info_item</a>(),
-                        Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                        Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                        Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                        Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3983,7 +3983,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> user_info(UserMid) -> [{Item, Value}]
-             when UserMid :: <a href="#t:mid/0">mid</a>(), Item :: requests | replies | <a href="#t:user_info_item/0">user_info_item</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+             when UserMid :: <a href="#t:mid/0">mid</a>(), Item :: requests | replies | <a href="#t:user_info_item/0">user_info_item</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -4019,8 +4019,8 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
                  Conn :: <a href="#t:conn_handle/0">conn_handle</a>(),
                  TransId :: <a href="#t:transaction_id/0">transaction_id</a>(),
                  ReplyState :: prepare | eval_request | waiting_for_ack | aborted,
-                 Handler :: undefined | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:pid/0">pid</a>();
-         (UserMid, Item) -> Value when UserMid :: <a href="#t:mid/0">mid</a>(), Item :: <a href="#t:user_info_item/0">user_info_item</a>(), Value :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                 Handler :: undefined | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>();
+         (UserMid, Item) -> Value when UserMid :: <a href="#t:mid/0">mid</a>(), Item :: <a href="#t:user_info_item/0">user_info_item</a>(), Value :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -4048,7 +4048,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> versions1() -> {ok, VersionInfo} | {error, Reason} when VersionInfo :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">list</a>(), Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> versions1() -> {ok, VersionInfo} | {error, Reason} when VersionInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">list</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -4076,7 +4076,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> versions2() -> {ok, VersionInfo} | {error, Reason} when VersionInfo :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:list/0">list</a>(), Reason :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> versions2() -> {ok, VersionInfo} | {error, Reason} when VersionInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:list/0">list</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
