@@ -1,577 +1,486 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html xmlns:erl="http://erlang.org" xmlns:fn="http://www.w3.org/2005/02/xpath-functions">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="utf-8">
-<link rel="stylesheet" href="../../../../doc/otp_doc.css" type="text/css">
-<title>Erlang -- Logging Cookbook</title>
-</head>
-<body>
-<div id="container">
-<script id="js" type="text/javascript" language="JavaScript" src="../../../../doc/js/flipmenu/flipmenu.js"></script><script id="js2" type="text/javascript" src="../../../../doc/js/erlresolvelinks.js"></script><script id="js3" type="text/javascript" src="../../../../doc/js/topbar.js"></script><script language="JavaScript" type="text/javascript">
-            <!--
-              function setscrollpos() {
-                var objf = document.getElementById('loadscrollpos');
-                if (objf) {
-                  document.getElementById("leftnav").firstChild.scrollTop = objf.offsetTop - 10;
-                }
-              }
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.31.2">
+    <meta name="project" content="kernel v9.2.2">
 
-              function addEvent(obj, evType, fn){
-                if (obj.addEventListener){
-                obj.addEventListener(evType, fn, true);
-                return true;
-              } else if (obj.attachEvent){
-                var r = obj.attachEvent("on"+evType, fn);
-                return r;
-              } else {
-                return false;
-              }
-             }
 
-             addEvent(window, 'load', setscrollpos);
+    <title>Logging Cookbook — kernel v9.2.2</title>
+    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
 
-             //-->
-</script><div class="topbar">
-<div class="topbar-expand "><button onclick="toggleDisplay();"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" viewBox="0 0 54 54" width="24" height="24"><g><path style="fill:#000000;" d="M27,54c-0.552,0-1-0.448-1-1V8c0-0.552,0.448-1,1-1s1,0.448,1,1v45C28,53.552,27.552,54,27,54z"></path><path style="fill:#000000;" d="M11,25c-0.256,0-0.512-0.098-0.707-0.293c-0.391-0.391-0.391-1.023,0-1.414l16-16                                      c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414l-16,16C11.512,24.902,11.256,25,11,25z"></path><path style="fill:#000000;" d="M43,25c-0.256,0-0.512-0.098-0.707-0.293l-16-16c-0.391-0.391-0.391-1.023,0-1.414                                      s1.023-0.391,1.414,0l16,16c0.391,0.391,0.391,1.023,0,1.414C43.512,24.902,43.256,25,43,25z"></path><path style="fill:#000000;" d="M43,2H11c-0.552,0-1-0.448-1-1s0.448-1,1-1h32c0.552,0,1,0.448,1,1S43.552,2,43,2z"></path></g></svg></button></div>
-<div class="topbar-title"><h1 id="Logging Cookbook">4 
-                Logging Cookbook</h1></div>
-<div class="search-expand "></div>
-</div>
-<aside class="hide-mobile" id="leftnav"><nav class="leftnav-tube"><div class="erlang-logo-wrapper"><a href="../../../../doc/index.html"><img alt="Erlang Logo" src="../../../../doc/erlang-logo.png" class="erlang-logo"></a></div>
-<p class="section-title">Kernel</p>
-<p class="section-subtitle">User's Guide</p>
-<p class="section-version">Version 9.2.2</p>
-<ul class="panel-sections">
-<li><a href="users_guide.html">User's Guide</a></li>
-<li><a href="index.html">Reference Manual</a></li>
-<li><a href="notes.html">Release Notes</a></li>
-<li><a href="../pdf/kernel-9.2.2.pdf">PDF</a></li>
-<li><a href="../../../../doc/index.html">Top</a></li>
-</ul>
-<ul class="expand-collapse-items">
-<li><a href="javascript:openAllFlips()">Expand All</a></li>
-<li><a href="javascript:closeAllFlips()">Contract All</a></li>
-</ul>
-<h3 id="chapters">Chapters</h3>
-<ul class="flipMenu" imagepath="../../../../doc/js/flipmenu">
-<li id="no" title="Introduction" expanded="false">Introduction<ul>
-<li><a href="introduction.html">
-              Top of chapter
-            </a></li>
-<li title="Scope"><a href="introduction.html#scope">Scope</a></li>
-<li title="Prerequisites"><a href="introduction.html#prerequisites">Prerequisites</a></li>
-</ul>
-</li>
-<li id="no" title="Socket Usage" expanded="false">Socket Usage<ul>
-<li><a href="socket_usage.html">
-              Top of chapter
-            </a></li>
-<li title="Introduction"><a href="socket_usage.html#introduction">Introduction</a></li>
-<li title="Socket Registry"><a href="socket_usage.html#socket-registry">Socket Registry</a></li>
-<li title="Socket Options"><a href="socket_usage.html#socket-options">Socket Options</a></li>
-</ul>
-</li>
-<li id="no" title="Logging" expanded="false">Logging<ul>
-<li><a href="logger_chapter.html">
-              Top of chapter
-            </a></li>
-<li title="Overview"><a href="logger_chapter.html#overview">Overview</a></li>
-<li title="Logger API"><a href="logger_chapter.html#logger-api">Logger API</a></li>
-<li title="Filters"><a href="logger_chapter.html#filters">Filters</a></li>
-<li title="Handlers"><a href="logger_chapter.html#handlers">Handlers</a></li>
-<li title="Formatters"><a href="logger_chapter.html#formatters">Formatters</a></li>
-<li title="Configuration"><a href="logger_chapter.html#configuration">Configuration</a></li>
-<li title="Backwards Compatibility with error_logger"><a href="logger_chapter.html#backwards-compatibility-with-error_logger">Backwards Compatibility with error_logger</a></li>
-<li title="Error Handling"><a href="logger_chapter.html#error-handling">Error Handling</a></li>
-<li title="Example: Add a handler to log info events to file"><a href="logger_chapter.html#example--add-a-handler-to-log-info-events-to-file">Example: Add a handler to log info events to file</a></li>
-<li title="Example: Implement a handler"><a href="logger_chapter.html#example--implement-a-handler">Example: Implement a handler</a></li>
-<li title="Protecting the Handler from Overload"><a href="logger_chapter.html#protecting-the-handler-from-overload">Protecting the Handler from Overload</a></li>
-<li title="Logger Proxy"><a href="logger_chapter.html#logger-proxy">Logger Proxy</a></li>
-<li title="See Also"><a href="logger_chapter.html#see-also">See Also</a></li>
-</ul>
-</li>
-<li id="loadscrollpos" title="Logging Cookbook" expanded="true">Logging Cookbook<ul>
-<li><a href="logger_cookbook.html">
-              Top of chapter
-            </a></li>
-<li title="Get Logger information"><a href="logger_cookbook.html#get-logger-information">Get Logger information</a></li>
-<li title="Configure the Logger"><a href="logger_cookbook.html#configure-the-logger">Configure the Logger</a></li>
-<li title="Configure Logger formatter"><a href="logger_cookbook.html#configure-logger-formatter">Configure Logger formatter</a></li>
-<li title="Configuring handlers"><a href="logger_cookbook.html#configuring-handlers">Configuring handlers</a></li>
-<li title="Logging"><a href="logger_cookbook.html#logging">Logging</a></li>
-<li title="Filters"><a href="logger_cookbook.html#filters">Filters</a></li>
-</ul>
-</li>
-<li id="no" title="EEP-48: Documentation storage and format" expanded="false">EEP-48: Documentation storage and format<ul>
-<li><a href="eep48_chapter.html">
-              Top of chapter
-            </a></li>
-<li title='the "Docs" storage'><a href="eep48_chapter.html#the--docs--storage">the "Docs" storage</a></li>
-<li title='the "Docs" format'><a href="eep48_chapter.html#the--docs--format">the "Docs" format</a></li>
-<li title="See Also"><a href="eep48_chapter.html#see-also">See Also</a></li>
-</ul>
-</li>
-</ul></nav></aside><div id="content">
-<div class="innertube">
-<h1 id="Logging Cookbook">4 Logging Cookbook</h1>
-  
 
-  <p>Using and especially configuring Logger can be difficult at times
-  as there are many different options that can be changed and often more
-  than one way to achieve the same result. This User's Guide tries to help
-  by giving many different examples of how you can use logger.</p>
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
+    <script src="dist/sidebar_items-B0FDD196.js"></script>
 
-  <p>For more examples of practical use-cases of using Logger, Fred Hebert's blog post
-  <span class="bold_code bc-20"><a href="https://ferd.ca/erlang-otp-21-s-new-logger.html">Erlang/OTP 21's new logger</a></span>
-  is a great starting point.</p>
+      <script src="docs_config.js"></script>
 
-  <div class="note">
-<div class="label">Note</div>
-<div class="content"><p><p>If you find that some common Logger usage is missing from this guide, please
-    open a pull request on github with the suggested addition</p></p></div>
-</div>
+    <script async src="dist/html-JRPQ5PR6.js"></script>
 
-  <h3 id="get-logger-information" class="title-link" onMouseOver="document.getElementById('ghlink-get-logger-information-idm1958').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-get-logger-information-idm1958').style.visibility = 'hidden';">
-<div class="title-name">4.1 
-        Get Logger information</div>
-<div class="title-anchors"><span id="ghlink-get-logger-information-idm1958" class="ghlink-after"><a href="#get-logger-information" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L45" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+<style>.dark img { background-color: white; }</style>
+  </head>
+  <body data-type="extras" class="page-extra">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<div class="background-layer"></div>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="../../../../doc/index.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="kernel" />
+        </a>
+
+      <div>
+        <a href="../../../../doc/index.html" class="sidebar-projectName" translate="no">
+kernel
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v9.2.2
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+      <div class="top-search">
+        <div class="search-settings">
+          <form class="search-bar" action="search.html">
+            <label class="search-label">
+              <span class="sr-only">Search documentation of kernel</span>
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </label>
+            <button type="submit" class="search-button" aria-label="Submit Search">
+              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+            </button>
+            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+              <i class="ri-close-line ri-lg" title="Cancel search"></i>
+            </button>
+          </form>
+          <div class="autocomplete">
+          </div>
+          <button class="icon-settings display-settings">
+            <i class="ri-settings-3-line"></i>
+            <span class="sr-only">Settings</span>
+          </button>
+        </div>
+
+      </div>
+
+<h1>
+
+    <a href="https://github.com/Whaileee/otp/blob/whaileee/inets/remove-http-uri/OTP-19022/lib/kernel/doc/guides/logger_cookbook.md#L1" title="View Source" class="icon-action" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+
+  <span>Logging Cookbook</span>
+</h1>
+
+<p>Using and especially configuring Logger can be difficult at times as there are
+many different options that can be changed and often more than one way to
+achieve the same result. This User's Guide tries to help by giving many
+different examples of how you can use logger.</p><p>For more examples of practical use-cases of using Logger, Fred Hebert's blog
+post
+<a href="https://ferd.ca/erlang-otp-21-s-new-logger.html">Erlang/OTP 21's new logger</a> is
+a great starting point.</p><blockquote><h4 class="info">Note</h4><p>If you find that some common Logger usage is missing from this guide, please
+open a pull request on github with the suggested addition</p></blockquote><h2 id="get-logger-information" class="section-heading">
+  <a href="#get-logger-information" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Get Logger information</span>
+</h2>
+<h3 id="print-the-primary-logger-configurations" class="section-heading">
+  <a href="#print-the-primary-logger-configurations" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Print the primary Logger configurations.</span>
 </h3>
-    
-    <h4 id="print-the-primary-logger-configurations." class="title-link" onMouseOver="document.getElementById('ghlink-print-the-primary-logger-configurations.-idm1960').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-print-the-primary-logger-configurations.-idm1960').style.visibility = 'hidden';">
-<div class="title-name">Print the primary Logger configurations.</div>
-<div class="title-anchors"><span id="ghlink-print-the-primary-logger-configurations.-idm1960" class="ghlink-after"><a href="#print-the-primary-logger-configurations." title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L47" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <div class="example example-erl-repl"><pre>1&gt; logger:i(primary).
-Primary configuration:
-    Level: notice
-    Filter Default: log
-    Filters:
-        (none)</pre></div>
-      <p>It is also possible to fetch the configuration using
-        <span class="bold_code bc-15"><a href="logger.html#get_primary_config-0"><span class="code">logger:get_primary_config()</span></a></span>.
-      </p>
-      <h5>See also</h5>
-        
-        <ul>
-          <li><span class="bold_code bc-15"><a href="logger.html#i-0">logger:i()</a></span></li>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#configuration">Configuration</a></span> in the Logging User's Guide</li>
-        </ul>
-      
-    
-    <h4 id="print-the-configuration-of-all-handlers." class="title-link" onMouseOver="document.getElementById('ghlink-print-the-configuration-of-all-handlers.-idm1973').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-print-the-configuration-of-all-handlers.-idm1973').style.visibility = 'hidden';">
-<div class="title-name">Print the configuration of all handlers.</div>
-<div class="title-anchors"><span id="ghlink-print-the-configuration-of-all-handlers.-idm1973" class="ghlink-after"><a href="#print-the-configuration-of-all-handlers." title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L66" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <div class="example example-erl-repl"><pre>2&gt; logger:i(handlers).
-Handler configuration:
-    Id: default
-        Module: logger_std_h
-        Level:  all
-        Formatter:
-            Module: logger_formatter
-            Config:
-                legacy_header: true
-                single_line: false
-        Filter Default: stop
-        Filters:
-            Id: remote_gl
-                Fun: fun logger_filters:remote_gl/2
-                Arg: stop
-            Id: domain
-                Fun: fun logger_filters:domain/2
-                Arg: {log,super,[otp,sasl]}
-            Id: no_domain
-                Fun: fun logger_filters:domain/2
-                Arg: {log,undefined,[]}
-        Handler Config:
-            burst_limit_enable: true
-            burst_limit_max_count: 500
-            burst_limit_window_time: 1000
-            drop_mode_qlen: 200
-            filesync_repeat_interval: no_repeat
-            flush_qlen: 1000
-            overload_kill_enable: false
-            overload_kill_mem_size: 3000000
-            overload_kill_qlen: 20000
-            overload_kill_restart_after: 5000
-            sync_mode_qlen: 10
-            type: standard_io</pre></div>
-      <p>You can also print the configuration of a specific handler using
-        <span class="bold_code bc-15"><a href="logger.html#i-1"><span class="code">logger:i(HandlerName)</span></a></span>,
-        or fetch the configuration using
-        <span class="bold_code bc-15"><a href="logger.html#get_handler_config-0"><span class="code">logger:get_handler_config()</span></a></span>,
-        or <span class="bold_code bc-15"><a href="logger.html#get_handler_config-1"><span class="code">logger:get_handler_config(HandlerName)</span></a></span>
-        for a specific handler.</p>
-      <h5>See also</h5>
-        
-        <ul>
-          <li><span class="bold_code bc-15"><a href="logger.html#i-0"><span class="code">logger:i()</span></a></span></li>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#configuration">Configuration</a></span> in the Logging User's Guide</li>
-        </ul>
-      
-    
-  
-
-  <h3 id="configure-the-logger" class="title-link" onMouseOver="document.getElementById('ghlink-configure-the-logger-idm1991').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-configure-the-logger-idm1991').style.visibility = 'hidden';">
-<div class="title-name">4.2 
-        Configure the Logger</div>
-<div class="title-anchors"><span id="ghlink-configure-the-logger-idm1991" class="ghlink-after"><a href="#configure-the-logger" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L119" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+<pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">i</span><span class="p" data-group-id="7696249904-1">(</span><span class="ss">primary</span><span class="p" data-group-id="7696249904-1">)</span><span class="p">.</span><span class="w">
+</span><span class="n">Primary</span><span class="w"> </span><span class="nc">configuration</span><span class="p">:</span><span class="w">
+    </span><span class="n">Level</span><span class="p">:</span><span class="w"> </span><span class="ss">notice</span><span class="w">
+    </span><span class="n">Filter</span><span class="w"> </span><span class="n">Default</span><span class="p">:</span><span class="w"> </span><span class="ss">log</span><span class="w">
+    </span><span class="n">Filters</span><span class="p">:</span><span class="w">
+        </span><span class="p" data-group-id="7696249904-2">(</span><span class="ss">none</span><span class="p" data-group-id="7696249904-2">)</span></code></pre><p>It is also possible to fetch the configuration using
+<a href="logger.html#get_primary_config/0"><code class="inline">logger:get_primary_config()</code></a>.</p><h4>See also</h4><ul><li><a href="logger.html#i/0">logger:i()</a></li><li><a href="logger_chapter.html#configuration">Configuration</a> in the Logging User's Guide</li></ul><h3 id="print-the-configuration-of-all-handlers" class="section-heading">
+  <a href="#print-the-configuration-of-all-handlers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Print the configuration of all handlers.</span>
 </h3>
-    
-
-    <h4 id="where-did-my-progress-reports-go-" class="title-link" onMouseOver="document.getElementById('ghlink-where-did-my-progress-reports-go--idm1993').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-where-did-my-progress-reports-go--idm1993').style.visibility = 'hidden';">
-<div class="title-name">Where did my progress reports go?</div>
-<div class="title-anchors"><span id="ghlink-where-did-my-progress-reports-go--idm1993" class="ghlink-after"><a href="#where-did-my-progress-reports-go-" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L122" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>In OTP-21 the default primary log level is <span class="code">notice</span>. The means
-        that many log messages are by default not printed. This includes
-        the progress reports of supervisors. In order to get progress reports
-        you need to raise the primary log level to <span class="code">info</span></p>
-      <div class="example example-erl-repl"><pre>$ erl -kernel logger_level info
-=PROGRESS REPORT==== 4-Nov-2019::16:33:11.742069 ===
-    application: kernel
-    started_at: nonode@nohost
-=PROGRESS REPORT==== 4-Nov-2019::16:33:11.746546 ===
-    application: stdlib
-    started_at: nonode@nohost
-Eshell V10.5.3  (abort with ^G)
-1&gt;</pre></div>
-
-    
-  
-
-  <h3 id="configure-logger-formatter" class="title-link" onMouseOver="document.getElementById('ghlink-configure-logger-formatter-idm1999').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-configure-logger-formatter-idm1999').style.visibility = 'hidden';">
-<div class="title-name">4.3 
-        Configure Logger formatter</div>
-<div class="title-anchors"><span id="ghlink-configure-logger-formatter-idm1999" class="ghlink-after"><a href="#configure-logger-formatter" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L141" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+<pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">i</span><span class="p" data-group-id="5686977936-1">(</span><span class="ss">handlers</span><span class="p" data-group-id="5686977936-1">)</span><span class="p">.</span><span class="w">
+</span><span class="n">Handler</span><span class="w"> </span><span class="nc">configuration</span><span class="p">:</span><span class="w">
+    </span><span class="n">Id</span><span class="p">:</span><span class="w"> </span><span class="ss">default</span><span class="w">
+        </span><span class="n">Module</span><span class="p">:</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="w">
+        </span><span class="n">Level</span><span class="p">:</span><span class="w">  </span><span class="ss">all</span><span class="w">
+        </span><span class="n">Formatter</span><span class="p">:</span><span class="w">
+            </span><span class="n">Module</span><span class="p">:</span><span class="w"> </span><span class="ss">logger_formatter</span><span class="w">
+            </span><span class="n">Config</span><span class="p">:</span><span class="w">
+                </span><span class="nc">legacy_header</span><span class="p">:</span><span class="w"> </span><span class="ss">true</span><span class="w">
+                </span><span class="nc">single_line</span><span class="p">:</span><span class="w"> </span><span class="ss">false</span><span class="w">
+        </span><span class="n">Filter</span><span class="w"> </span><span class="n">Default</span><span class="p">:</span><span class="w"> </span><span class="ss">stop</span><span class="w">
+        </span><span class="n">Filters</span><span class="p">:</span><span class="w">
+            </span><span class="n">Id</span><span class="p">:</span><span class="w"> </span><span class="ss">remote_gl</span><span class="w">
+                </span><span class="n">Fun</span><span class="p">:</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">remote_gl</span><span class="p">/</span><span class="mi">2</span><span class="w">
+                </span><span class="n">Arg</span><span class="p">:</span><span class="w"> </span><span class="ss">stop</span><span class="w">
+            </span><span class="n">Id</span><span class="p">:</span><span class="w"> </span><span class="ss">domain</span><span class="w">
+                </span><span class="n">Fun</span><span class="p">:</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">domain</span><span class="p">/</span><span class="mi">2</span><span class="w">
+                </span><span class="n">Arg</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5686977936-2">{</span><span class="ss">log</span><span class="p">,</span><span class="ss">super</span><span class="p">,</span><span class="p" data-group-id="5686977936-3">[</span><span class="ss">otp</span><span class="p">,</span><span class="ss">sasl</span><span class="p" data-group-id="5686977936-3">]</span><span class="p" data-group-id="5686977936-2">}</span><span class="w">
+            </span><span class="n">Id</span><span class="p">:</span><span class="w"> </span><span class="ss">no_domain</span><span class="w">
+                </span><span class="n">Fun</span><span class="p">:</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">domain</span><span class="p">/</span><span class="mi">2</span><span class="w">
+                </span><span class="n">Arg</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5686977936-4">{</span><span class="ss">log</span><span class="p">,</span><span class="ss">undefined</span><span class="p">,</span><span class="p" data-group-id="5686977936-5">[</span><span class="p" data-group-id="5686977936-5">]</span><span class="p" data-group-id="5686977936-4">}</span><span class="w">
+        </span><span class="n">Handler</span><span class="w"> </span><span class="n">Config</span><span class="p">:</span><span class="w">
+            </span><span class="nc">burst_limit_enable</span><span class="p">:</span><span class="w"> </span><span class="ss">true</span><span class="w">
+            </span><span class="nc">burst_limit_max_count</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="w">
+            </span><span class="nc">burst_limit_window_time</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w">
+            </span><span class="nc">drop_mode_qlen</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+            </span><span class="nc">filesync_repeat_interval</span><span class="p">:</span><span class="w"> </span><span class="ss">no_repeat</span><span class="w">
+            </span><span class="nc">flush_qlen</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w">
+            </span><span class="nc">overload_kill_enable</span><span class="p">:</span><span class="w"> </span><span class="ss">false</span><span class="w">
+            </span><span class="nc">overload_kill_mem_size</span><span class="p">:</span><span class="w"> </span><span class="mi">3000000</span><span class="w">
+            </span><span class="nc">overload_kill_qlen</span><span class="p">:</span><span class="w"> </span><span class="mi">20000</span><span class="w">
+            </span><span class="nc">overload_kill_restart_after</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="w">
+            </span><span class="nc">sync_mode_qlen</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+            </span><span class="nc">type</span><span class="p">:</span><span class="w"> </span><span class="ss">standard_io</span></code></pre><p>You can also print the configuration of a specific handler using
+<a href="logger.html#i/1"><code class="inline">logger:i(HandlerName)</code></a>, or fetch the configuration using
+<a href="logger.html#get_handler_config/0"><code class="inline">logger:get_handler_config()</code></a>, or
+<a href="logger.html#get_handler_config/1"><code class="inline">logger:get_handler_config(HandlerName)</code></a> for a
+specific handler.</p><h4>See also</h4><ul><li><a href="logger.html#i/0"><code class="inline">logger:i()</code></a></li><li><a href="logger_chapter.html#configuration">Configuration</a> in the Logging User's Guide</li></ul><h2 id="configure-the-logger" class="section-heading">
+  <a href="#configure-the-logger" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Configure the Logger</span>
+</h2>
+<h3 id="where-did-my-progress-reports-go" class="section-heading">
+  <a href="#where-did-my-progress-reports-go" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Where did my progress reports go?</span>
 </h3>
-    
-    <p>In order to fit better into your existing logging infrastructure Logger can
-      format its logging messages any way you want to. Either you can use the built-in
-      formatter, or you can build your own.</p>
-    <h4 id="single-line-configuration" class="title-link" onMouseOver="document.getElementById('ghlink-single-line-configuration-idm2002').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-single-line-configuration-idm2002').style.visibility = 'hidden';">
-<div class="title-name">Single line configuration</div>
-<div class="title-anchors"><span id="ghlink-single-line-configuration-idm2002" class="ghlink-after"><a href="#single-line-configuration" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L146" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>Since single line logging is the default of the built-in formatter you only have to
-        provide the empty map as the configuration. The example below uses the <span class="code">sys.config</span>
-        to change the formatter configuration.</p>
-      <div class="example example-erl-repl"><pre>$ cat sys.config
-[{kernel,
-  [{logger,
-    [{handler, default, logger_std_h,
-      #{ formatter =&gt; {logger_formatter, #{ }}}}]}]}].
-$ erl -config sys
-Eshell V10.5.1  (abort with ^G)
-1&gt; logger:error("Oh noes, an error").
-1962-10-03T11:07:47.466763-04:00 error: Oh noes, an error</pre></div>
-      <p>However, if you just want to change it for the current session you can
-        also do that.</p>
-      <div class="example example-erl-repl"><pre>1&gt; logger:set_handler_config(default, formatter, {logger_formatter, #{}}).
-ok
-2&gt; logger:error("Oh noes, another error").
-1962-10-04T15:34:02.648713-04:00 error: Oh noes, another error</pre></div>
-      <h5>See also</h5>
-        
-        <ul>
-          <li><span class="bold_code bc-15"><a href="logger_formatter.html#type-config">logger_formatter's Configuration</a></span></li>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#formatters">Formatters</a></span> in the Logging User's Guide</li>
-          <li><span class="bold_code bc-15"><a href="logger.html#set_handler_config-3"><span class="code">logger:set_handler_config/3</span></a></span></li>
-        </ul>
-      
-    
-    <h4 id="add-file-and-line-number-to-log-entries" class="title-link" onMouseOver="document.getElementById('ghlink-add-file-and-line-number-to-log-entries-idm2019').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-add-file-and-line-number-to-log-entries-idm2019').style.visibility = 'hidden';">
-<div class="title-name">Add file and line number to log entries</div>
-<div class="title-anchors"><span id="ghlink-add-file-and-line-number-to-log-entries-idm2019" class="ghlink-after"><a href="#add-file-and-line-number-to-log-entries" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L176" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>You can change what is printed to the log by using the formatter template:</p>
-      <div class="example example-erl-repl"><pre>$ cat sys.config
-[{kernel,
-  [{logger,
-    [{handler, default, logger_std_h,
-      #{ formatter =&gt; {logger_formatter,
-        #{ template =&gt; [time," ", file,":",line," ",level,": ",msg,"\n"] }}}}]}]}].
-$ erl -config sys
-Eshell V10.5.1  (abort with ^G)
-1&gt; logger:error("Oh noes, more errors",#{ file =&gt; "shell.erl", line =&gt; 1 }).
-1962-10-05T07:37:44.104241+02:00 shell.erl:1 error: Oh noes, more errors</pre></div>
-      <p>Note that file and line have to be added in the metadata by the caller of
-        <span class="bold_code bc-15"><a href="logger.html#log-3"><span class="code">logger:log/3</span></a></span> as otherwise
-        Logger will not know from where it was called. The file and line number
-        are automatically added if you use the <span class="code">?LOG_ERROR</span> macros in
-        <span class="code">kernel/include/logger.hrl</span>.</p>
-      <h5>See also</h5>
-        
-        <ul>
-          <li><span class="bold_code bc-15"><a href="logger_formatter.html#type-config">logger_formatter's Configuration</a></span></li>
-          <li><span class="bold_code bc-15"><a href="logger_formatter.html#type-template">logger_formatter's Template</a></span></li>
-          <li><span class="bold_code bc-15"><a href="logger.html#macros">Logger Macros</a></span></li>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#metadata">Metadata</a></span> in the Logging User's Guide</li>
-        </ul>
-      
-    
-  
-
-  <h3 id="configuring-handlers" class="title-link" onMouseOver="document.getElementById('ghlink-configuring-handlers-idm2039').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-configuring-handlers-idm2039').style.visibility = 'hidden';">
-<div class="title-name">4.4 
-        Configuring handlers</div>
-<div class="title-anchors"><span id="ghlink-configuring-handlers-idm2039" class="ghlink-after"><a href="#configuring-handlers" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L206" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+<p>In OTP-21 the default primary log level is <code class="inline">notice</code>. The means that many log
+messages are by default not printed. This includes the progress reports of
+supervisors. In order to get progress reports you need to raise the primary log
+level to <code class="inline">info</code></p><pre><code class="makeup erlang" translate="no"><span class="sc">$ </span><span class="ss">erl</span><span class="w"> </span><span class="o">-</span><span class="ss">kernel</span><span class="w"> </span><span class="ss">logger_level</span><span class="w"> </span><span class="ss">info</span><span class="w">
+</span><span class="o">=</span><span class="n">PROGRESS</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="o">-</span><span class="n">Nov</span><span class="o">-</span><span class="mi">2019</span><span class="p">:</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mf">11.742069</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
+    </span><span class="nc">application</span><span class="p">:</span><span class="w"> </span><span class="ss">kernel</span><span class="w">
+    </span><span class="nc">started_at</span><span class="p">:</span><span class="w"> </span><span class="ss">nonode@nohost</span><span class="w">
+</span><span class="o">=</span><span class="n">PROGRESS</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="o">-</span><span class="n">Nov</span><span class="o">-</span><span class="mi">2019</span><span class="p">:</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mf">11.746546</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
+    </span><span class="nc">application</span><span class="p">:</span><span class="w"> </span><span class="ss">stdlib</span><span class="w">
+    </span><span class="nc">started_at</span><span class="p">:</span><span class="w"> </span><span class="ss">nonode@nohost</span><span class="w">
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V10</span><span class="p">.</span><span class="mf">5.3</span><span class="w">  </span><span class="p" data-group-id="8169915838-1">(</span><span class="ss">abort</span><span class="w"> </span><span class="ss">with</span><span class="w"> </span><span class="err">^</span><span class="n">G</span><span class="p" data-group-id="8169915838-1">)</span><span class="w">
+</span><span class="mi">1</span><span class="o">&gt;</span></code></pre><h2 id="configure-logger-formatter" class="section-heading">
+  <a href="#configure-logger-formatter" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Configure Logger formatter</span>
+</h2>
+<p>In order to fit better into your existing logging infrastructure Logger can
+format its logging messages any way you want to. Either you can use the built-in
+formatter, or you can build your own.</p><h3 id="single-line-configuration" class="section-heading">
+  <a href="#single-line-configuration" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Single line configuration</span>
 </h3>
-    
-    <h4 id="print-logs-to-a-file" class="title-link" onMouseOver="document.getElementById('ghlink-print-logs-to-a-file-idm2041').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-print-logs-to-a-file-idm2041').style.visibility = 'hidden';">
-<div class="title-name">Print logs to a file</div>
-<div class="title-anchors"><span id="ghlink-print-logs-to-a-file-idm2041" class="ghlink-after"><a href="#print-logs-to-a-file" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L208" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>Instead of printing the logs to stdout we print them to a rotating file log.</p>
-      <div class="example example-erl-repl"><pre>$ cat sys.config
-[{kernel,
-  [{logger,
-    [{handler, default, logger_std_h,
-      #{ config =&gt; #{ file =&gt; "log/erlang.log",
-                      max_no_bytes =&gt; 4096,
-                      max_no_files =&gt; 5},
-         formatter =&gt; {logger_formatter, #{}}}}]}]}].
-$ erl -config sys
-Eshell V10.5.1  (abort with ^G)
-1&gt; logger:error("Oh noes, even more errors").
-ok
-2&gt; erlang:halt().
-$ cat log/erlang.log
-2019-10-07T11:47:16.837958+02:00 error: Oh noes, even more errors</pre></div>
-      <h5>See also</h5>
-        
-        <ul>
-          <li><span class="bold_code bc-15"><a href="logger_std_h.html#description">logger_std_h's Description</a></span></li>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#handlers">Handlers</a></span> in the Logging User's Guide</li>
-        </ul>
-      
-    
-    <h4 id="debug-only-handler" class="title-link" onMouseOver="document.getElementById('ghlink-debug-only-handler-idm2052').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-debug-only-handler-idm2052').style.visibility = 'hidden';">
-<div class="title-name">Debug only handler</div>
-<div class="title-anchors"><span id="ghlink-debug-only-handler-idm2052" class="ghlink-after"><a href="#debug-only-handler" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L234" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>Add a handler that prints <span class="code">debug</span> log events to a file,
-        while the default handler prints only up to <span class="code">notice</span> level
-        events to standard out.</p>
-      <div class="example example-erl-repl"><pre>$ cat sys.config
-[{kernel,
-  [{logger_level, all},
-   {logger,
-    [{handler, default, logger_std_h,
-      #{ level =&gt; notice }},
-     {handler, debug, logger_std_h,
-      #{ filters =&gt; [{debug,{fun logger_filters:level/2, {stop, neq, debug}}}],
-         config =&gt; #{ file =&gt; "log/debug.log" } }}
-    ]}]}].
-$ erl -config sys
-Eshell V10.5.1  (abort with ^G)
-1&gt; logger:error("Oh noes, even more errors").
-=ERROR REPORT==== 9-Oct-2019::14:40:54.784162 ===
-Oh noes, even more errors
-ok
-2&gt; logger:debug("A debug event").
-ok
-3&gt; erlang:halt().
-$ cat log/debug.log
-2019-10-09T14:41:03.680541+02:00 debug: A debug event</pre></div>
-    <p>In the configuration above we first raise the primary log level to max in
-      order for the debug log events to get to the handlers. Then we configure
-      the default handler to only log notice and below events, the default log level
-      for a handler is <span class="code">all</span>. Then the debug handler is configured with a filter
-      to stop any log message that is not a debug level message.</p>
-    <p>It is also possible to do the same changes in an already running system
-      using the <span class="code">logger</span> module. Then you do like this:</p>
-    <div class="example example-erl-repl"><pre>$ erl
-1&gt; logger:set_handler_config(default, level, notice).
-ok
-2&gt; logger:add_handler(debug, logger_std_h, #{
-  filters =&gt; [{debug,{fun logger_filters:level/2, {stop, neq, debug}}}],
-  config =&gt; #{ file =&gt; "log/debug.log" } }).
-ok
-3&gt; logger:set_primary_config(level, all).
-ok</pre></div>
-    <p>It is important that you do not raise the primary log level before adjusting
-      the default handler's level as otherwise your standard out may be flooded by debug
-      log messages.</p>
-    <h5>See also</h5>
-      
-        <ul>
-          <li><span class="bold_code bc-15"><a href="logger_std_h.html#description">logger_std_h's Description</a></span></li>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#filters">Filters</a></span> in the Logging User's Guide</li>
-        </ul>
-      
-    
-  
-
-  
-
-  <h3 id="logging" class="title-link" onMouseOver="document.getElementById('ghlink-logging-idm2071').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-logging-idm2071').style.visibility = 'hidden';">
-<div class="title-name">4.5 
-        Logging</div>
-<div class="title-anchors"><span id="ghlink-logging-idm2071" class="ghlink-after"><a href="#logging" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L299" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+<p>Since single line logging is the default of the built-in formatter you only have
+to provide the empty map as the configuration. The example below uses the
+<code class="inline">sys.config</code> to change the formatter configuration.</p><pre><code class="makeup erlang" translate="no"><span class="sc">$ </span><span class="ss">cat</span><span class="w"> </span><span class="ss">sys</span><span class="p">.</span><span class="ss">config</span><span class="w">
+</span><span class="p" data-group-id="6136825516-1">[</span><span class="p" data-group-id="6136825516-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="6136825516-3">[</span><span class="p" data-group-id="6136825516-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="6136825516-5">[</span><span class="p" data-group-id="6136825516-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="6136825516-7">#{</span><span class="w"> </span><span class="ss">formatter</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="6136825516-8">{</span><span class="ss">logger_formatter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6136825516-9">#{</span><span class="w"> </span><span class="p" data-group-id="6136825516-9">}</span><span class="p" data-group-id="6136825516-8">}</span><span class="p" data-group-id="6136825516-7">}</span><span class="p" data-group-id="6136825516-6">}</span><span class="p" data-group-id="6136825516-5">]</span><span class="p" data-group-id="6136825516-4">}</span><span class="p" data-group-id="6136825516-3">]</span><span class="p" data-group-id="6136825516-2">}</span><span class="p" data-group-id="6136825516-1">]</span><span class="p">.</span><span class="w">
+</span><span class="sc">$ </span><span class="ss">erl</span><span class="w"> </span><span class="o">-</span><span class="ss">config</span><span class="w"> </span><span class="ss">sys</span><span class="w">
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V10</span><span class="p">.</span><span class="mf">5.1</span><span class="w">  </span><span class="p" data-group-id="6136825516-10">(</span><span class="ss">abort</span><span class="w"> </span><span class="ss">with</span><span class="w"> </span><span class="err">^</span><span class="n">G</span><span class="p" data-group-id="6136825516-10">)</span><span class="gp unselectable">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="6136825516-11">(</span><span class="s">&quot;Oh noes, an error&quot;</span><span class="p" data-group-id="6136825516-11">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">1962</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">03</span><span class="n">T11</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mf">47.466763</span><span class="o">-</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="n">Oh</span><span class="w"> </span><span class="ss">noes</span><span class="p">,</span><span class="w"> </span><span class="ss">an</span><span class="w"> </span><span class="ss">error</span></code></pre><p>However, if you just want to change it for the current session you can also do
+that.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_handler_config</span><span class="p" data-group-id="1713748513-1">(</span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">formatter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1713748513-2">{</span><span class="ss">logger_formatter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1713748513-3">#{</span><span class="p" data-group-id="1713748513-3">}</span><span class="p" data-group-id="1713748513-2">}</span><span class="p" data-group-id="1713748513-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="1713748513-4">(</span><span class="s">&quot;Oh noes, another error&quot;</span><span class="p" data-group-id="1713748513-4">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">1962</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">04</span><span class="n">T15</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mf">02.648713</span><span class="o">-</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="n">Oh</span><span class="w"> </span><span class="ss">noes</span><span class="p">,</span><span class="w"> </span><span class="ss">another</span><span class="w"> </span><span class="ss">error</span></code></pre><h4>See also</h4><ul><li><a href="logger_formatter.html#t:config/0">logger_formatter's Configuration</a></li><li><a href="logger_chapter.html#formatters">Formatters</a> in the Logging User's Guide</li><li><a href="logger.html#set_handler_config/3"><code class="inline">logger:set_handler_config/3</code></a></li></ul><h3 id="add-file-and-line-number-to-log-entries" class="section-heading">
+  <a href="#add-file-and-line-number-to-log-entries" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Add file and line number to log entries</span>
 </h3>
-    
-    <h4 id="what-to-log-and-how" class="title-link" onMouseOver="document.getElementById('ghlink-what-to-log-and-how-idm2073').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-what-to-log-and-how-idm2073').style.visibility = 'hidden';">
-<div class="title-name">What to log and how</div>
-<div class="title-anchors"><span id="ghlink-what-to-log-and-how-idm2073" class="ghlink-after"><a href="#what-to-log-and-how" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L301" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>The simplest way to log something is by using the Logger macros and
-      give a report to the macro. For example if you want to log an error:</p>
-      <div class="example example-erl"><pre>?LOG_ERROR(#{ what =&gt; http_error, status =&gt; 418, src =&gt; ClientIP, dst =&gt; ServerIP }).</pre></div>
-      <p>This will print the following in the default log:</p>
-      <div class="example example-none"><pre>=ERROR REPORT==== 10-Oct-2019::12:13:10.089073 ===
+<p>You can change what is printed to the log by using the formatter template:</p><pre><code class="makeup erlang" translate="no"><span class="sc">$ </span><span class="ss">cat</span><span class="w"> </span><span class="ss">sys</span><span class="p">.</span><span class="ss">config</span><span class="w">
+</span><span class="p" data-group-id="1442660949-1">[</span><span class="p" data-group-id="1442660949-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="1442660949-3">[</span><span class="p" data-group-id="1442660949-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="1442660949-5">[</span><span class="p" data-group-id="1442660949-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="1442660949-7">#{</span><span class="w"> </span><span class="ss">formatter</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="1442660949-8">{</span><span class="ss">logger_formatter</span><span class="p">,</span><span class="w">
+        </span><span class="p" data-group-id="1442660949-9">#{</span><span class="w"> </span><span class="ss">template</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="1442660949-10">[</span><span class="ss">time</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">file</span><span class="p">,</span><span class="s">&quot;:&quot;</span><span class="p">,</span><span class="ss">line</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="ss">level</span><span class="p">,</span><span class="s">&quot;: &quot;</span><span class="p">,</span><span class="ss">msg</span><span class="p">,</span><span class="s">&quot;\n&quot;</span><span class="p" data-group-id="1442660949-10">]</span><span class="w"> </span><span class="p" data-group-id="1442660949-9">}</span><span class="p" data-group-id="1442660949-8">}</span><span class="p" data-group-id="1442660949-7">}</span><span class="p" data-group-id="1442660949-6">}</span><span class="p" data-group-id="1442660949-5">]</span><span class="p" data-group-id="1442660949-4">}</span><span class="p" data-group-id="1442660949-3">]</span><span class="p" data-group-id="1442660949-2">}</span><span class="p" data-group-id="1442660949-1">]</span><span class="p">.</span><span class="w">
+</span><span class="sc">$ </span><span class="ss">erl</span><span class="w"> </span><span class="o">-</span><span class="ss">config</span><span class="w"> </span><span class="ss">sys</span><span class="w">
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V10</span><span class="p">.</span><span class="mf">5.1</span><span class="w">  </span><span class="p" data-group-id="1442660949-11">(</span><span class="ss">abort</span><span class="w"> </span><span class="ss">with</span><span class="w"> </span><span class="err">^</span><span class="n">G</span><span class="p" data-group-id="1442660949-11">)</span><span class="gp unselectable">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="1442660949-12">(</span><span class="s">&quot;Oh noes, more errors&quot;</span><span class="p">,</span><span class="p" data-group-id="1442660949-13">#{</span><span class="w"> </span><span class="ss">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;shell.erl&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">line</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p" data-group-id="1442660949-13">}</span><span class="p" data-group-id="1442660949-12">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">1962</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">05</span><span class="n">T07</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mf">44.104241</span><span class="o">+</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span><span class="w"> </span><span class="ss">shell</span><span class="p">.</span><span class="nc">erl</span><span class="p">:</span><span class="mi">1</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="n">Oh</span><span class="w"> </span><span class="ss">noes</span><span class="p">,</span><span class="w"> </span><span class="ss">more</span><span class="w"> </span><span class="ss">errors</span></code></pre><p>Note that file and line have to be added in the metadata by the caller of
+<a href="logger.html#log/3"><code class="inline">logger:log/3</code></a> as otherwise Logger will not know from where it was called. The
+file and line number are automatically added if you use the <code class="inline">?LOG_ERROR</code> macros
+in <code class="inline">kernel/include/logger.hrl</code>.</p><h4>See also</h4><ul><li><a href="logger_formatter.html#t:config/0">logger_formatter's Configuration</a></li><li><a href="logger_formatter.html#t:template/0">logger_formatter's Template</a></li><li><a href="logger.html#module-macros">Logger Macros</a></li><li><a href="logger_chapter.html#metadata">Metadata</a> in the Logging User's Guide</li></ul><h2 id="configuring-handlers" class="section-heading">
+  <a href="#configuring-handlers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Configuring handlers</span>
+</h2>
+<h3 id="print-logs-to-a-file" class="section-heading">
+  <a href="#print-logs-to-a-file" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Print logs to a file</span>
+</h3>
+<p>Instead of printing the logs to stdout we print them to a rotating file log.</p><pre><code class="makeup erlang" translate="no"><span class="sc">$ </span><span class="ss">cat</span><span class="w"> </span><span class="ss">sys</span><span class="p">.</span><span class="ss">config</span><span class="w">
+</span><span class="p" data-group-id="7997338105-1">[</span><span class="p" data-group-id="7997338105-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7997338105-3">[</span><span class="p" data-group-id="7997338105-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="7997338105-5">[</span><span class="p" data-group-id="7997338105-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="7997338105-7">#{</span><span class="w"> </span><span class="ss">config</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="7997338105-8">#{</span><span class="w"> </span><span class="ss">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;log/erlang.log&quot;</span><span class="p">,</span><span class="w">
+                      </span><span class="ss">max_no_bytes</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w">
+                      </span><span class="ss">max_no_files</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="7997338105-8">}</span><span class="p">,</span><span class="w">
+         </span><span class="ss">formatter</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="7997338105-9">{</span><span class="ss">logger_formatter</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7997338105-10">#{</span><span class="p" data-group-id="7997338105-10">}</span><span class="p" data-group-id="7997338105-9">}</span><span class="p" data-group-id="7997338105-7">}</span><span class="p" data-group-id="7997338105-6">}</span><span class="p" data-group-id="7997338105-5">]</span><span class="p" data-group-id="7997338105-4">}</span><span class="p" data-group-id="7997338105-3">]</span><span class="p" data-group-id="7997338105-2">}</span><span class="p" data-group-id="7997338105-1">]</span><span class="p">.</span><span class="w">
+</span><span class="sc">$ </span><span class="ss">erl</span><span class="w"> </span><span class="o">-</span><span class="ss">config</span><span class="w"> </span><span class="ss">sys</span><span class="w">
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V10</span><span class="p">.</span><span class="mf">5.1</span><span class="w">  </span><span class="p" data-group-id="7997338105-11">(</span><span class="ss">abort</span><span class="w"> </span><span class="ss">with</span><span class="w"> </span><span class="err">^</span><span class="n">G</span><span class="p" data-group-id="7997338105-11">)</span><span class="gp unselectable">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="7997338105-12">(</span><span class="s">&quot;Oh noes, even more errors&quot;</span><span class="p" data-group-id="7997338105-12">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+2&gt; </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">halt</span><span class="p" data-group-id="7997338105-13">(</span><span class="p" data-group-id="7997338105-13">)</span><span class="p">.</span><span class="w">
+</span><span class="sc">$ </span><span class="ss">cat</span><span class="w"> </span><span class="ss">log</span><span class="o">/</span><span class="ss">erlang</span><span class="p">.</span><span class="ss">log</span><span class="w">
+</span><span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">07</span><span class="n">T11</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mf">16.837958</span><span class="o">+</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span><span class="w"> </span><span class="nc">error</span><span class="p">:</span><span class="w"> </span><span class="n">Oh</span><span class="w"> </span><span class="ss">noes</span><span class="p">,</span><span class="w"> </span><span class="ss">even</span><span class="w"> </span><span class="ss">more</span><span class="w"> </span><span class="ss">errors</span></code></pre><h4>See also</h4><ul><li><a href="logger_std_h.html"><code class="inline">logger_std_h</code></a></li><li><a href="logger_chapter.html#handlers">Handlers</a> in the Logging User's Guide</li></ul><h3 id="debug-only-handler" class="section-heading">
+  <a href="#debug-only-handler" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Debug only handler</span>
+</h3>
+<p>Add a handler that prints <code class="inline">debug</code> log events to a file, while the default
+handler prints only up to <code class="inline">notice</code> level events to standard out.</p><pre><code class="makeup erlang" translate="no"><span class="sc">$ </span><span class="ss">cat</span><span class="w"> </span><span class="ss">sys</span><span class="p">.</span><span class="ss">config</span><span class="w">
+</span><span class="p" data-group-id="8731903536-1">[</span><span class="p" data-group-id="8731903536-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8731903536-3">[</span><span class="p" data-group-id="8731903536-4">{</span><span class="ss">logger_level</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="8731903536-4">}</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="8731903536-5">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8731903536-6">[</span><span class="p" data-group-id="8731903536-7">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="8731903536-8">#{</span><span class="w"> </span><span class="ss">level</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">notice</span><span class="w"> </span><span class="p" data-group-id="8731903536-8">}</span><span class="p" data-group-id="8731903536-7">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="8731903536-9">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">debug</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="8731903536-10">#{</span><span class="w"> </span><span class="ss">filters</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8731903536-11">[</span><span class="p" data-group-id="8731903536-12">{</span><span class="ss">debug</span><span class="p">,</span><span class="p" data-group-id="8731903536-13">{</span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">level</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8731903536-14">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="ss">neq</span><span class="p">,</span><span class="w"> </span><span class="ss">debug</span><span class="p" data-group-id="8731903536-14">}</span><span class="p" data-group-id="8731903536-13">}</span><span class="p" data-group-id="8731903536-12">}</span><span class="p" data-group-id="8731903536-11">]</span><span class="p">,</span><span class="w">
+         </span><span class="ss">config</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8731903536-15">#{</span><span class="w"> </span><span class="ss">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;log/debug.log&quot;</span><span class="w"> </span><span class="p" data-group-id="8731903536-15">}</span><span class="w"> </span><span class="p" data-group-id="8731903536-10">}</span><span class="p" data-group-id="8731903536-9">}</span><span class="w">
+    </span><span class="p" data-group-id="8731903536-6">]</span><span class="p" data-group-id="8731903536-5">}</span><span class="p" data-group-id="8731903536-3">]</span><span class="p" data-group-id="8731903536-2">}</span><span class="p" data-group-id="8731903536-1">]</span><span class="p">.</span><span class="w">
+</span><span class="sc">$ </span><span class="ss">erl</span><span class="w"> </span><span class="o">-</span><span class="ss">config</span><span class="w"> </span><span class="ss">sys</span><span class="w">
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V10</span><span class="p">.</span><span class="mf">5.1</span><span class="w">  </span><span class="p" data-group-id="8731903536-16">(</span><span class="ss">abort</span><span class="w"> </span><span class="ss">with</span><span class="w"> </span><span class="err">^</span><span class="n">G</span><span class="p" data-group-id="8731903536-16">)</span><span class="gp unselectable">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="8731903536-17">(</span><span class="s">&quot;Oh noes, even more errors&quot;</span><span class="p" data-group-id="8731903536-17">)</span><span class="p">.</span><span class="w">
+</span><span class="o">=</span><span class="n">ERROR</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">9</span><span class="o">-</span><span class="n">Oct</span><span class="o">-</span><span class="mi">2019</span><span class="p">:</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mf">54.784162</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
+</span><span class="n">Oh</span><span class="w"> </span><span class="ss">noes</span><span class="p">,</span><span class="w"> </span><span class="ss">even</span><span class="w"> </span><span class="ss">more</span><span class="w"> </span><span class="ss">errors</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="8731903536-18">(</span><span class="s">&quot;A debug event&quot;</span><span class="p" data-group-id="8731903536-18">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+3&gt; </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">halt</span><span class="p" data-group-id="8731903536-19">(</span><span class="p" data-group-id="8731903536-19">)</span><span class="p">.</span><span class="w">
+</span><span class="sc">$ </span><span class="ss">cat</span><span class="w"> </span><span class="ss">log</span><span class="o">/</span><span class="ss">debug</span><span class="p">.</span><span class="ss">log</span><span class="w">
+</span><span class="mi">2019</span><span class="o">-</span><span class="mi">10</span><span class="o">-</span><span class="mi">09</span><span class="n">T14</span><span class="p">:</span><span class="mi">41</span><span class="p">:</span><span class="mf">03.680541</span><span class="o">+</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span><span class="w"> </span><span class="nc">debug</span><span class="p">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="ss">debug</span><span class="w"> </span><span class="ss">event</span></code></pre><p>In the configuration above we first raise the primary log level to max in order
+for the debug log events to get to the handlers. Then we configure the default
+handler to only log notice and below events, the default log level for a handler
+is <code class="inline">all</code>. Then the debug handler is configured with a filter to stop any log
+message that is not a debug level message.</p><p>It is also possible to do the same changes in an already running system using
+the <code class="inline">logger</code> module. Then you do like this:</p><pre><code class="makeup erlang" translate="no"><span class="sc">$ </span><span class="ss">erl</span><span class="gp unselectable">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_handler_config</span><span class="p" data-group-id="8584033642-1">(</span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">level</span><span class="p">,</span><span class="w"> </span><span class="ss">notice</span><span class="p" data-group-id="8584033642-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">add_handler</span><span class="p" data-group-id="8584033642-2">(</span><span class="ss">debug</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8584033642-3">#{</span><span class="w">
+  </span><span class="ss">filters</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8584033642-4">[</span><span class="p" data-group-id="8584033642-5">{</span><span class="ss">debug</span><span class="p">,</span><span class="p" data-group-id="8584033642-6">{</span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">level</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8584033642-7">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="ss">neq</span><span class="p">,</span><span class="w"> </span><span class="ss">debug</span><span class="p" data-group-id="8584033642-7">}</span><span class="p" data-group-id="8584033642-6">}</span><span class="p" data-group-id="8584033642-5">}</span><span class="p" data-group-id="8584033642-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">config</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8584033642-8">#{</span><span class="w"> </span><span class="ss">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;log/debug.log&quot;</span><span class="w"> </span><span class="p" data-group-id="8584033642-8">}</span><span class="w"> </span><span class="p" data-group-id="8584033642-3">}</span><span class="p" data-group-id="8584033642-2">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+3&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_primary_config</span><span class="p" data-group-id="8584033642-9">(</span><span class="ss">level</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="8584033642-9">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>It is important that you do not raise the primary log level before adjusting the
+default handler's level as otherwise your standard out may be flooded by debug
+log messages.</p><h4>See also</h4><ul><li><a href="logger_std_h.html"><code class="inline">logger_std_h</code></a></li><li><a href="logger_chapter.html#filters">Filters</a> in the Logging User's Guide</li></ul><h2 id="logging" class="section-heading">
+  <a href="#logging" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Logging</span>
+</h2>
+<h3 id="what-to-log-and-how" class="section-heading">
+  <a href="#what-to-log-and-how" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">What to log and how</span>
+</h3>
+<p>The simplest way to log something is by using the Logger macros and give a
+report to the macro. For example if you want to log an error:</p><pre><code class="makeup erlang" translate="no"><span class="o">?</span><span class="n">LOG_ERROR</span><span class="p" data-group-id="3408175546-1">(</span><span class="p" data-group-id="3408175546-2">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">http_error</span><span class="p">,</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">418</span><span class="p">,</span><span class="w"> </span><span class="ss">src</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">ClientIP</span><span class="p">,</span><span class="w"> </span><span class="ss">dst</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">ServerIP</span><span class="w"> </span><span class="p" data-group-id="3408175546-2">}</span><span class="p" data-group-id="3408175546-1">)</span><span class="p">.</span></code></pre><p>This will print the following in the default log:</p><pre><code class="text">=ERROR REPORT==== 10-Oct-2019::12:13:10.089073 ===
     dst: {8,8,4,4}
     src: {8,8,8,8}
     status: 418
-    what: http_error</pre></div>
-      <p>or the below if you use a single line formatter:</p>
-      <div class="example example-none"><pre>2019-10-10T12:14:11.921843+02:00 error: dst: {8,8,4,4}, src: {8,8,8,8}, status: 418, what: http_error</pre></div>
-      <h5>See also</h5>
-        
-        <ul>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#log_message">Log Message</a></span> in the Logging User's Guide</li>
-        </ul>
-      
-    
-    <h4 id="report-call-backs-and-printing-of-events" class="title-link" onMouseOver="document.getElementById('ghlink-report-call-backs-and-printing-of-events-idm2086').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-report-call-backs-and-printing-of-events-idm2086').style.visibility = 'hidden';">
-<div class="title-name">Report call-backs and printing of events</div>
-<div class="title-anchors"><span id="ghlink-report-call-backs-and-printing-of-events-idm2086" class="ghlink-after"><a href="#report-call-backs-and-printing-of-events" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L321" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>If you want to do structured logging, but still want to have some control
-      of how the final log message is formatted you can give a <span class="code">report_cb</span>
-      as part of the metadata with your log event.</p>
-      <div class="example example-erl"><pre>ReportCB = fun(#{ what := What, status := Status, src := Src, dst := Dst }) -&gt;
-                   {ok, #hostent{ h_name = SrcName }} = inet:gethostbyaddr(Src),
-                   {ok, #hostent{ h_name = DstName }} = inet:gethostbyaddr(Dst),
-                   {"What: ~p~nStatus: ~p~nSrc: ~s (~s)~nDst: ~s (~s)~n",
-                    [What, Status, inet:ntoa(Src), SrcName, inet:ntoa(Dst), DstName]}
-           end,
-?LOG_ERROR(#{ what =&gt; http_error, status =&gt; 418, src =&gt; ClientIP, dst =&gt; ServerIP },
-           #{ report_cb =&gt; ReportCB }).</pre></div>
-      <p>This will print the following:</p>
-      <div class="example example-none"><pre>=ERROR REPORT==== 10-Oct-2019::13:29:02.230863 ===
+    what: http_error</code></pre><p>or the below if you use a single line formatter:</p><pre><code class="text">2019-10-10T12:14:11.921843+02:00 error: dst: {8,8,4,4}, src: {8,8,8,8}, status: 418, what: http_error</code></pre><h4>See also</h4><ul><li><a href="logger_chapter.html#log_message">Log Message</a> in the Logging User's Guide</li></ul><h3 id="report-call-backs-and-printing-of-events" class="section-heading">
+  <a href="#report-call-backs-and-printing-of-events" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Report call-backs and printing of events</span>
+</h3>
+<p>If you want to do structured logging, but still want to have some control of how
+the final log message is formatted you can give a <code class="inline">report_cb</code> as part of the
+metadata with your log event.</p><pre><code class="makeup erlang" translate="no"><span class="n">ReportCB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="5306036336-1">(</span><span class="p" data-group-id="5306036336-2">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">What</span><span class="p">,</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Status</span><span class="p">,</span><span class="w"> </span><span class="ss">src</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Src</span><span class="p">,</span><span class="w"> </span><span class="ss">dst</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Dst</span><span class="w"> </span><span class="p" data-group-id="5306036336-2">}</span><span class="p" data-group-id="5306036336-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                   </span><span class="p" data-group-id="5306036336-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="ss">hostent</span><span class="p" data-group-id="5306036336-4">{</span><span class="w"> </span><span class="ss">h_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SrcName</span><span class="w"> </span><span class="p" data-group-id="5306036336-4">}</span><span class="p" data-group-id="5306036336-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">gethostbyaddr</span><span class="p" data-group-id="5306036336-5">(</span><span class="n">Src</span><span class="p" data-group-id="5306036336-5">)</span><span class="p">,</span><span class="w">
+                   </span><span class="p" data-group-id="5306036336-6">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="ss">hostent</span><span class="p" data-group-id="5306036336-7">{</span><span class="w"> </span><span class="ss">h_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DstName</span><span class="w"> </span><span class="p" data-group-id="5306036336-7">}</span><span class="p" data-group-id="5306036336-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">gethostbyaddr</span><span class="p" data-group-id="5306036336-8">(</span><span class="n">Dst</span><span class="p" data-group-id="5306036336-8">)</span><span class="p">,</span><span class="w">
+                   </span><span class="p" data-group-id="5306036336-9">{</span><span class="s">&quot;What: </span><span class="si">~p</span><span class="si">~n</span><span class="s">Status: </span><span class="si">~p</span><span class="si">~n</span><span class="s">Src: </span><span class="si">~s</span><span class="s"> (</span><span class="si">~s</span><span class="s">)</span><span class="si">~n</span><span class="s">Dst: </span><span class="si">~s</span><span class="s"> (</span><span class="si">~s</span><span class="s">)</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
+                    </span><span class="p" data-group-id="5306036336-10">[</span><span class="n">What</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p">,</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">ntoa</span><span class="p" data-group-id="5306036336-11">(</span><span class="n">Src</span><span class="p" data-group-id="5306036336-11">)</span><span class="p">,</span><span class="w"> </span><span class="n">SrcName</span><span class="p">,</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">ntoa</span><span class="p" data-group-id="5306036336-12">(</span><span class="n">Dst</span><span class="p" data-group-id="5306036336-12">)</span><span class="p">,</span><span class="w"> </span><span class="n">DstName</span><span class="p" data-group-id="5306036336-10">]</span><span class="p" data-group-id="5306036336-9">}</span><span class="w">
+           </span><span class="k">end</span><span class="p">,</span><span class="w">
+</span><span class="o">?</span><span class="n">LOG_ERROR</span><span class="p" data-group-id="5306036336-13">(</span><span class="p" data-group-id="5306036336-14">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">http_error</span><span class="p">,</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">418</span><span class="p">,</span><span class="w"> </span><span class="ss">src</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">ClientIP</span><span class="p">,</span><span class="w"> </span><span class="ss">dst</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">ServerIP</span><span class="w"> </span><span class="p" data-group-id="5306036336-14">}</span><span class="p">,</span><span class="w">
+           </span><span class="p" data-group-id="5306036336-15">#{</span><span class="w"> </span><span class="ss">report_cb</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">ReportCB</span><span class="w"> </span><span class="p" data-group-id="5306036336-15">}</span><span class="p" data-group-id="5306036336-13">)</span><span class="p">.</span></code></pre><p>This will print the following:</p><pre><code class="text">=ERROR REPORT==== 10-Oct-2019::13:29:02.230863 ===
 What: http_error
 Status: 418
 Src: 8.8.8.8 (dns.google)
-Dst: 192.121.151.106 (erlang.org)</pre></div>
-      <p>Note that the order that things are printed have changed, and also I added
-        a reverse-dns lookup of the IP address. This will not print as nicely when using
-        a single line formatter, however you can also use a report_cb fun with 2 arguments
-        where the second argument is the formatting options.</p>
-      <h5>See also</h5>
-        
-        <ul>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#log_message">Log Message</a></span> in the Logging User's Guide</li>
-          <li><span class="bold_code bc-15"><a href="logger.html#type-report_cb">Logger Report Callbacks</a></span></li>
-        </ul>
-      
-    
-  
-
-  <h3 id="filters" class="title-link" onMouseOver="document.getElementById('ghlink-filters-idm2101').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-filters-idm2101').style.visibility = 'hidden';">
-<div class="title-name">4.6 
-        Filters</div>
-<div class="title-anchors"><span id="ghlink-filters-idm2101" class="ghlink-after"><a href="#filters" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L356" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+Dst: 192.121.151.106 (erlang.org)</code></pre><p>Note that the order that things are printed have changed, and also I added a
+reverse-dns lookup of the IP address. This will not print as nicely when using a
+single line formatter, however you can also use a report_cb fun with 2 arguments
+where the second argument is the formatting options.</p><h4>See also</h4><ul><li><a href="logger_chapter.html#log_message">Log Message</a> in the Logging User's Guide</li><li><a href="logger.html#t:report_cb/0">Logger Report Callbacks</a></li></ul><h2 id="filters" class="section-heading">
+  <a href="#filters" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Filters</span>
+</h2>
+<p>Filters are used to remove or change log events before they reach the handlers.</p><h3 id="process-filters" class="section-heading">
+  <a href="#process-filters" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Process filters</span>
 </h3>
-    
-    <p>Filters are used to remove or change log events before they reach the handlers.</p>
-    <h4 id="process-filters" class="title-link" onMouseOver="document.getElementById('ghlink-process-filters-idm2104').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-process-filters-idm2104').style.visibility = 'hidden';">
-<div class="title-name">Process filters</div>
-<div class="title-anchors"><span id="ghlink-process-filters-idm2104" class="ghlink-after"><a href="#process-filters" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L359" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>If we only want debug messages from a specific process it is possible to do
-      this with a filter like this:</p>
-      <div class="example example-erl"><pre>%% Initial setup to use a filter for the level filter instead of the primary level
-PrimaryLevel = maps:get(level, logger:get_primary_config()),
-ok = logger:add_primary_filter(primary_level,
-    {fun logger_filters:level/2, {log, gteq, PrimaryLevel}}),
-logger:set_primary_config(filter_default, stop),
-logger:set_primary_config(level, all),
+<p>If we only want debug messages from a specific process it is possible to do this
+with a filter like this:</p><pre><code class="makeup erlang" translate="no"><span class="c1">%% Initial setup to use a filter for the level filter instead of the primary level</span><span class="w">
+</span><span class="n">PrimaryLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">maps</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="5636958154-1">(</span><span class="ss">level</span><span class="p">,</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_primary_config</span><span class="p" data-group-id="5636958154-2">(</span><span class="p" data-group-id="5636958154-2">)</span><span class="p" data-group-id="5636958154-1">)</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">add_primary_filter</span><span class="p" data-group-id="5636958154-3">(</span><span class="ss">primary_level</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="5636958154-4">{</span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">level</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5636958154-5">{</span><span class="ss">log</span><span class="p">,</span><span class="w"> </span><span class="ss">gteq</span><span class="p">,</span><span class="w"> </span><span class="n">PrimaryLevel</span><span class="p" data-group-id="5636958154-5">}</span><span class="p" data-group-id="5636958154-4">}</span><span class="p" data-group-id="5636958154-3">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_primary_config</span><span class="p" data-group-id="5636958154-6">(</span><span class="ss">filter_default</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="5636958154-6">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_primary_config</span><span class="p" data-group-id="5636958154-7">(</span><span class="ss">level</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="5636958154-7">)</span><span class="p">,</span><span class="w">
 
-%% Test that things work as they should
-logger:notice("Notice should be logged"),
-logger:debug("Should not be logged"),
+</span><span class="c1">%% Test that things work as they should</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">notice</span><span class="p" data-group-id="5636958154-8">(</span><span class="s">&quot;Notice should be logged&quot;</span><span class="p" data-group-id="5636958154-8">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="5636958154-9">(</span><span class="s">&quot;Should not be logged&quot;</span><span class="p" data-group-id="5636958154-9">)</span><span class="p">,</span><span class="w">
 
-%% Add the filter to allow PidToLog to send debug events
-PidToLog = self(),
-PidFilter = fun(LogEvent, _) when PidToLog =:= self() -&gt; LogEvent;
-               (_LogEvent, _) -&gt; ignore end,
-ok = logger:add_primary_filter(pid, {PidFilter,[]}),
-logger:debug("Debug should be logged").</pre></div>
-      <p>There is a bit of setup needed to allow filters to decide whether a specific process
-      should be allowed to log. This is because the default primary log level is notice and
-      it is enforced before the primary filters. So in order for the pid filter to be useful
-      we have to raise the primary log level to <span class="code">all</span> and then add a level filter that
-      only lets certain messages at or greater than notice through. When the setup is done,
-      it is simple to add a filter that allows a certain pid through.
-      </p>
-      <p>Note that doing the primary log level filtering through a filter and not through
-      the level is quite a lot more expensive, so make sure to test that your system can
-      handle the extra load before you enable it on a production node.</p>
-      <h5>See also</h5>
-        
-        <ul>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#filters">Filters</a></span> in the Logging User's Guide</li>
-          <li><span class="bold_code bc-15"><a href="logger_filters.html#level-2"><span class="code">logger_filters:level/2</span></a></span></li>
-          <li><span class="bold_code bc-15"><a href="logger.html#set_primary_config-2"><span class="code">logger:set_primary_config/2</span></a></span></li>
-        </ul>
-      
-    
-    <h4 id="domains" class="title-link" onMouseOver="document.getElementById('ghlink-domains-idm2122').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-domains-idm2122').style.visibility = 'hidden';">
-<div class="title-name">Domains</div>
-<div class="title-anchors"><span id="ghlink-domains-idm2122" class="ghlink-after"><a href="#domains" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/logger_cookbook.xml#L400" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
-</h4>
-      
-      <p>Domains are used to specify which subsystem a certain log event originates from.
-      The default handler will by default only log events with the domain <span class="code">[otp]</span> or
-      without a domain. If you would like to include SSL log events into the
-      default handler log you could do this:</p>
-      <div class="example example-erl-repl"><pre>1&gt; logger:add_handler_filter(default,ssl_domain,
-  {fun logger_filters:domain/2,{log,sub,[otp,ssl]}}).
-2&gt; application:ensure_all_started(ssl).
-{ok,[crypto,asn1,public_key,ssl]}
-3&gt; ssl:connect("www.erlang.org",443,[{log_level,debug}]).
-%% lots of text</pre></div>
-      <h5>See also</h5>
-        
-        <ul>
-          <li>
-<span class="bold_code bc-15"><a href="logger_chapter.html#filters">Filters</a></span> in the Logging User's Guide</li>
-          <li><span class="bold_code bc-15"><a href="logger_filters.html#domain-2"><span class="code">logger_filters:domain/2</span></a></span></li>
-          <li><span class="bold_code bc-15"><a href="logger.html#set_primary_config-2"><span class="code">logger:set_primary_config/2</span></a></span></li>
-        </ul>
-      
-    
-  
+</span><span class="c1">%% Add the filter to allow PidToLog to send debug events</span><span class="w">
+</span><span class="n">PidToLog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="5636958154-10">(</span><span class="p" data-group-id="5636958154-10">)</span><span class="p">,</span><span class="w">
+</span><span class="n">PidFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="5636958154-11">(</span><span class="n">LogEvent</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="5636958154-11">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="n">PidToLog</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="5636958154-12">(</span><span class="p" data-group-id="5636958154-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">LogEvent</span><span class="p">;</span><span class="w">
+               </span><span class="p" data-group-id="5636958154-13">(</span><span class="p">_</span><span class="n">LogEvent</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="5636958154-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ignore</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">add_primary_filter</span><span class="p" data-group-id="5636958154-14">(</span><span class="ss">pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5636958154-15">{</span><span class="n">PidFilter</span><span class="p">,</span><span class="p" data-group-id="5636958154-16">[</span><span class="p" data-group-id="5636958154-16">]</span><span class="p" data-group-id="5636958154-15">}</span><span class="p" data-group-id="5636958154-14">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="5636958154-17">(</span><span class="s">&quot;Debug should be logged&quot;</span><span class="p" data-group-id="5636958154-17">)</span><span class="p">.</span></code></pre><p>There is a bit of setup needed to allow filters to decide whether a specific
+process should be allowed to log. This is because the default primary log level
+is notice and it is enforced before the primary filters. So in order for the pid
+filter to be useful we have to raise the primary log level to <code class="inline">all</code> and then add
+a level filter that only lets certain messages at or greater than notice
+through. When the setup is done, it is simple to add a filter that allows a
+certain pid through.</p><p>Note that doing the primary log level filtering through a filter and not through
+the level is quite a lot more expensive, so make sure to test that your system
+can handle the extra load before you enable it on a production node.</p><h4>See also</h4><ul><li><a href="logger_chapter.html#filters">Filters</a> in the Logging User's Guide</li><li><a href="logger_filters.html#level/2"><code class="inline">logger_filters:level/2</code></a></li><li><a href="logger.html#set_primary_config/2"><code class="inline">logger:set_primary_config/2</code></a></li></ul><h3 id="domains" class="section-heading">
+  <a href="#domains" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Domains</span>
+</h3>
+<p>Domains are used to specify which subsystem a certain log event originates from.
+The default handler will by default only log events with the domain <code class="inline">[otp]</code> or
+without a domain. If you would like to include SSL log events into the default
+handler log you could do this:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">add_handler_filter</span><span class="p" data-group-id="9707848755-1">(</span><span class="ss">default</span><span class="p">,</span><span class="ss">ssl_domain</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="9707848755-2">{</span><span class="k">fun</span><span class="w"> </span><span class="nc">logger_filters</span><span class="p">:</span><span class="ss">domain</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="p" data-group-id="9707848755-3">{</span><span class="ss">log</span><span class="p">,</span><span class="ss">sub</span><span class="p">,</span><span class="p" data-group-id="9707848755-4">[</span><span class="ss">otp</span><span class="p">,</span><span class="ss">ssl</span><span class="p" data-group-id="9707848755-4">]</span><span class="p" data-group-id="9707848755-3">}</span><span class="p" data-group-id="9707848755-2">}</span><span class="p" data-group-id="9707848755-1">)</span><span class="p">.</span><span class="gp unselectable">
+2&gt; </span><span class="nc">application</span><span class="p">:</span><span class="nf">ensure_all_started</span><span class="p" data-group-id="9707848755-5">(</span><span class="ss">ssl</span><span class="p" data-group-id="9707848755-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9707848755-6">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="9707848755-7">[</span><span class="ss">crypto</span><span class="p">,</span><span class="ss">asn1</span><span class="p">,</span><span class="ss">public_key</span><span class="p">,</span><span class="ss">ssl</span><span class="p" data-group-id="9707848755-7">]</span><span class="p" data-group-id="9707848755-6">}</span><span class="gp unselectable">
+3&gt; </span><span class="nc">ssl</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="9707848755-8">(</span><span class="s">&quot;www.erlang.org&quot;</span><span class="p">,</span><span class="mi">443</span><span class="p">,</span><span class="p" data-group-id="9707848755-9">[</span><span class="p" data-group-id="9707848755-10">{</span><span class="ss">log_level</span><span class="p">,</span><span class="ss">debug</span><span class="p" data-group-id="9707848755-10">}</span><span class="p" data-group-id="9707848755-9">]</span><span class="p" data-group-id="9707848755-8">)</span><span class="p">.</span><span class="w">
+</span><span class="c1">%% lots of text</span></code></pre><h4>See also</h4><ul><li><a href="logger_chapter.html#filters">Filters</a> in the Logging User's Guide</li><li><a href="logger_filters.html#domain/2"><code class="inline">logger_filters:domain/2</code></a></li><li><a href="logger.html#set_primary_config/2"><code class="inline">logger:set_primary_config/2</code></a></li></ul>
+<div class="bottom-actions">
+  <div class="bottom-actions-item">
 
+      <a href="logger_chapter.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Logging
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="eep48_chapter.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+EEP-48: Documentation storage and format
+        </span>
+      </a>
+
+  </div>
 </div>
-<div class="footer">
-<hr>
-<p>Copyright © 1997-2024 Ericsson AB. All Rights Reserved.</p>
+      <footer class="footer">
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="kernel.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
+
+            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+        </p>
+<p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
+      </footer>
+    </div>
+  </div>
+</main>
 </div>
-</div>
-</div>
-<script type="text/javascript">window.__otpTopDocDir = '../../../../doc/js/';</script><script type="text/javascript" src="../../../../doc/js/highlight.js"></script>
-</body>
+
+
+  </body>
 </html>
