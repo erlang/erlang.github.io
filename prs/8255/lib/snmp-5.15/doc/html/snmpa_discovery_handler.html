@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-65BBABE8.js"></script>
+    <script src="dist/sidebar_items-80317743.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -134,7 +134,7 @@ Pages
 
   <section id="moduledoc">
 <p>Behaviour module for the SNMP agent discovery handler.</p><p>This module defines the behaviour of the agent discovery handler. A
-<code class="inline">snmpa_discovery_handler</code> compliant module must export the following functions:</p><ul><li><a href="snmpa_discovery_handler.html#stage1_finish">stage1_finish/2</a></li></ul><p>The semantics of them and their exact signatures are explained below.</p><p><a href="" id="stage1_finish"></a></p>
+<code class="inline">snmpa_discovery_handler</code> compliant module must export the following functions:</p><ul><li><a href="#c:stage1_finish/3"><code class="inline">stage1_finish/3</code></a></li></ul><p>The semantics of them and their exact signatures are explained below.</p>
   </section>
 
 
@@ -159,7 +159,7 @@ Pages
         <div class="summary-synopsis"><p>This function is called at the end of stage 1 of the discovery process. It
 should return either the atom <code class="inline">ignore</code> or <code class="inline">{ok, usm_entry() | [usm_entry()]}</code>.
 See <a href="snmp_agent_config_files.html#usm">usm_entry()</a> and
-<a href="snmpa_conf.html#usm_entry">usm_entry/13</a> for more info.</p></div>
+<a href="snmpa_conf.html#usm_entry/1">usm_entry/1,3</a> for more info.</p></div>
 
     </div>
 
@@ -185,7 +185,7 @@ See <a href="snmp_agent_config_files.html#usm">usm_entry()</a> and
     </a>
     <h1 class="signature" translate="no">stage1_finish(TargetName, ManagerEngineID, ExtraInfo)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmpa_discovery_handler.erl#L75" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmpa_discovery_handler.erl#L73" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -198,13 +198,12 @@ See <a href="snmp_agent_config_files.html#usm">usm_entry()</a> and
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-callback</span> stage1_finish(TargetName, ManagerEngineID, ExtraInfo) ->
-                 ignore |
-                 {ok, <a href="snmpa_conf.html#t:usm_entry/0">snmpa_conf:usm_entry</a>() | [<a href="snmpa_conf.html#t:usm_entry/0">snmpa_conf:usm_entry</a>()]} |
-                 {ok, <a href="snmpa_conf.html#t:usm_entry/0">snmpa_conf:usm_entry</a>() | [<a href="snmpa_conf.html#t:usm_entry/0">snmpa_conf:usm_entry</a>()], NewExtraInfo}
+                 ignore | {ok, UsmEntry | [UsmEntry]} | {ok, UsmEntry | [UsmEntry], NewExtraInfo}
                  when
-                     TargetName :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
-                     ManagerEngineID :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
+                     TargetName :: <a href="snmp_target_mib.html#t:name/0">snmp_target_mib:name</a>(),
+                     ManagerEngineID :: <a href="snmp_framework_mib.html#t:engine_id/0">snmp_framework_mib:engine_id</a>(),
                      ExtraInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                     UsmEntry :: <a href="snmp_user_based_sm_mib.html#t:usm_entry/0">snmp_user_based_sm_mib:usm_entry</a>(),
                      NewExtraInfo :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
@@ -212,9 +211,9 @@ See <a href="snmp_agent_config_files.html#usm">usm_entry()</a> and
 <p>This function is called at the end of stage 1 of the discovery process. It
 should return either the atom <code class="inline">ignore</code> or <code class="inline">{ok, usm_entry() | [usm_entry()]}</code>.
 See <a href="snmp_agent_config_files.html#usm">usm_entry()</a> and
-<a href="snmpa_conf.html#usm_entry">usm_entry/13</a> for more info.</p><p>If the function returns <code class="inline">ignore</code>, then it is assumed that either:</p><ul><li>The caller (of the discovery function) will make the needed updates later.</li><li>The callback function itself did the updates.</li></ul><p>In either case, the agent will do nothing, but return the retrieved
-ManagerEngineID (see <a href="snmpa.html#discovery">discovery</a> for more info) and
-possible continue with stage 2 of the discovery process.</p><p>The <code class="inline">ExtraInfo</code> argument is passed on from the <a href="snmpa.html#discovery">discovery</a>
+<a href="snmpa_conf.html#usm_entry/1">usm_entry/1,3</a> for more info.</p><p>If the function returns <code class="inline">ignore</code>, then it is assumed that either:</p><ul><li>The caller (of the discovery function) will make the needed updates later.</li><li>The callback function itself did the updates.</li></ul><p>In either case, the agent will do nothing, but return the retrieved
+ManagerEngineID (see <a href="snmpa.html#discovery/6"><code class="inline">snmpa:discovery/6</code></a> for more info) and
+possible continue with stage 2 of the discovery process.</p><p>The <code class="inline">ExtraInfo</code> argument is passed on from the <a href="snmpa.html#discovery/6"><code class="inline">snmpa:discovery/6</code></a>
 function.</p><p>This function may return an updated <code class="inline">NewExtraInfo</code> that will be used in
 subsequent calls to the callback functions. Intended for future use.</p><p>The purpose of this function is to generate the usm- related security data
 needed for usm processing in the agent. Specifically, updating the usmUserTable.</p><p>When an <code class="inline">usm_entry()</code> tuple (or a list of such tuples) is returned, this data is

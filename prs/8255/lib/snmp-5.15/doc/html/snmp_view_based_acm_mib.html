@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-65BBABE8.js"></script>
+    <script src="dist/sidebar_items-80317743.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -134,7 +134,7 @@ Pages
 
   <section id="moduledoc">
 <p>Instrumentation Functions for SNMP-VIEW-BASED-ACM-MIB</p><p>The module <code class="inline">snmp_view_based_acm_mib</code> implements the instrumentation functions
-for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p><p>The configuration files are described in the SNMP User's Manual.</p><p><a href="" id="configure"></a></p>
+for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p><p>The configuration files are described in the SNMP User's Manual.</p>
   </section>
 
 
@@ -149,6 +149,71 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
   <h2>
     <a href="#types">Types</a>
   </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:access_notify_view_name/0" translate="no">access_notify_view_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;The value of an instance of this object identifies the MIB view of the SNMP
+context to which this conceptual row authorizes access for notifications.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:access_read_view_name/0" translate="no">access_read_view_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;The value of an instance of this object identifies the MIB view of the SNMP
+context to which this conceptual row authorizes read access.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:access_write_view_name/0" translate="no">access_write_view_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;The value of an instance of this object identifies the MIB view of the SNMP
+context to which this conceptual row authorizes write access.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:context_match/0" translate="no">context_match()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><pre><code class="text">	  exact  - exact match of prefix and contextName
+          prefix - Only match to the prefix</code></pre><p><code class="inline">INTEGER { exact (1), prefix (2) }</code></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:context_prefix/0" translate="no">context_prefix()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p><code class="inline">SnmpAdminString (SIZE(0..32))</code></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:group_name/0" translate="no">group_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;The name of the group to which this entry (e.g., the combination of
+securityModel and securityName) belongs.&quot;</p></div>
+
+    </div>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -184,17 +249,44 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:octet/0" translate="no">octet()</a>
+        <a href="#t:security_name/0" translate="no">security_name()</a>
 
       </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;The securityName for the principal, represented in a Security Model
+independent format.&quot;</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:octet_string/0" translate="no">octet_string()</a>
+        <a href="#t:view_mask/0" translate="no">view_mask()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>The bit mask which, in combination with the corresponding instance of
+vacmViewTreeFamilySubtree, defines a family of view subtrees.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:view_name/0" translate="no">view_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;The human readable name for a family of view subtrees.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:view_type/0" translate="no">view_type()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Does the corresponding instances of subtree and mask define a family of view
+subtrees which are included in or excluded from the MIB view.</p></div>
 
     </div>
 
@@ -210,7 +302,8 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>add_access(GroupName, Prefix, SecModel, SecLevel, Match, RV, WV, NV) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Adds a access definition to the agent config. Equivalent to one vacmAccess-line
+in the <code class="inline">vacm.conf</code> file.</p></div>
 
     </div>
 
@@ -220,27 +313,29 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>add_sec2group(SecModel, SecName, GroupName) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Adds a security to group definition to the agent config. Equivalent to one
+vacmSecurityToGroup-line in the <code class="inline">vacm.conf</code> file.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#add_view_tree_fam/4" translate="no">add_view_tree_fam(ViewIndex, SubTree, Status, Mask)</a>
+        <a href="#add_view_tree_fam/4" translate="no">add_view_tree_fam(ViewName, SubTree, Status, Mask)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>add_view_tree_fam(ViewIndex, SubTree, Status, Mask) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Adds a view tree family definition to the agent config. Equivalent to one
+vacmViewTreeFamily-line in the <code class="inline">vacm.conf</code> file.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#configure/1" translate="no">configure(Dir)</a>
+        <a href="#configure/1" translate="no">configure(ConfDir)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>configure(ConfDir) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>This function is called from the supervisor at system start-up.</p></div>
 
     </div>
 
@@ -250,7 +345,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>delete_access(Key) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Delete a access definition from the agent config.</p></div>
 
     </div>
 
@@ -260,7 +355,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>delete_sec2group(Key) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Delete a security to group definition from the agent config.</p></div>
 
     </div>
 
@@ -270,17 +365,19 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>delete_view_tree_fam(Key) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Delete a view tree family definition from the agent config.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reconfigure/1" translate="no">reconfigure(Dir)</a>
+        <a href="#reconfigure/1" translate="no">reconfigure(ConfDir)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>reconfigure(ConfDir) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>Inserts all data in the configuration files into the database and destroys all
+old data, including the rows with StorageType <code class="inline">nonVolatile</code>. The rows created
+from the configuration file will have StorageType <code class="inline">nonVolatile</code>.</p></div>
 
     </div>
 
@@ -297,6 +394,179 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
       <span class="text">Types</span>
     </h1>
     <div class="types-list">
+<section class="detail" id="t:access_notify_view_name/0">
+
+  <div class="detail-header">
+    <a href="#t:access_notify_view_name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">access_notify_view_name()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L158" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> access_notify_view_name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;The value of an instance of this object identifies the MIB view of the SNMP
+context to which this conceptual row authorizes access for notifications.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(0..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:access_read_view_name/0">
+
+  <div class="detail-header">
+    <a href="#t:access_read_view_name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">access_read_view_name()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L136" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> access_read_view_name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;The value of an instance of this object identifies the MIB view of the SNMP
+context to which this conceptual row authorizes read access.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(0..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:access_write_view_name/0">
+
+  <div class="detail-header">
+    <a href="#t:access_write_view_name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">access_write_view_name()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L147" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> access_write_view_name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;The value of an instance of this object identifies the MIB view of the SNMP
+context to which this conceptual row authorizes write access.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(0..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:context_match/0">
+
+  <div class="detail-header">
+    <a href="#t:context_match/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">context_match()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L125" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> context_match() :: exact | prefix.</pre>
+
+      </div>
+
+<pre><code class="text">	  exact  - exact match of prefix and contextName
+          prefix - Only match to the prefix</code></pre><p><code class="inline">INTEGER { exact (1), prefix (2) }</code></p>
+  </section>
+</section>
+<section class="detail" id="t:context_prefix/0">
+
+  <div class="detail-header">
+    <a href="#t:context_prefix/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">context_prefix()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L114" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> context_prefix() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<p><code class="inline">SnmpAdminString (SIZE(0..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:group_name/0">
+
+  <div class="detail-header">
+    <a href="#t:group_name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">group_name()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L110" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> group_name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;The name of the group to which this entry (e.g., the combination of
+securityModel and securityName) belongs.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(1..32))</code></p>
+  </section>
+</section>
 <section class="detail" id="t:internal_view_mask/0">
 
   <div class="detail-header">
@@ -306,7 +576,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
     </a>
     <h1 class="signature" translate="no">internal_view_mask()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L72" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L208" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -334,7 +604,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
     </a>
     <h1 class="signature" translate="no">internal_view_mask_element()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L73" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L209" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -362,7 +632,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
     </a>
     <h1 class="signature" translate="no">internal_view_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L75" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L211" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -390,7 +660,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
     </a>
     <h1 class="signature" translate="no">mibview()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L77" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L213" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -409,22 +679,20 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
   </section>
 </section>
-<section class="detail" id="t:octet/0">
+<section class="detail" id="t:security_name/0">
 
   <div class="detail-header">
-    <a href="#t:octet/0" class="detail-link" title="Link to this type">
+    <a href="#t:security_name/0" class="detail-link" title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
-    <h1 class="signature" translate="no">octet()</h1>
+    <h1 class="signature" translate="no">security_name()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L83" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L169" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(not exported)</span>
 
   </div>
 
@@ -432,29 +700,28 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> octet() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:byte/0">byte</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> security_name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
 
       </div>
 
-
+<blockquote><h4 class="info">Note</h4><p>&quot;The securityName for the principal, represented in a Security Model
+independent format.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(1..32))</code></p>
   </section>
 </section>
-<section class="detail" id="t:octet_string/0">
+<section class="detail" id="t:view_mask/0">
 
   <div class="detail-header">
-    <a href="#t:octet_string/0" class="detail-link" title="Link to this type">
+    <a href="#t:view_mask/0" class="detail-link" title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
-    <h1 class="signature" translate="no">octet_string()</h1>
+    <h1 class="signature" translate="no">view_mask()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L82" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L206" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(not exported)</span>
 
   </div>
 
@@ -462,11 +729,72 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> octet_string() :: [<a href="#t:octet/0">octet</a>()].</pre>
+          <pre translate="no"><span class="attribute">-type</span> view_mask() :: [0 | 1].</pre>
 
       </div>
 
+<p>The bit mask which, in combination with the corresponding instance of
+vacmViewTreeFamilySubtree, defines a family of view subtrees.</p><p>A '1' indicates that an exact match must occur, a '0' indicates 'wild card' (any
+sub-identifier value matches).</p><blockquote><h4 class="info">Note</h4><p>Note that in the &quot;external&quot; format, each bit of each octet is represented by a
+&quot;bit&quot; in this list. That is, each octet &quot;contains&quot; 8 bits; so at most 8*16 =
+128 bits in total.</p></blockquote><p><code class="inline">OCTET STRING (SIZE (0..16))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:view_name/0">
 
+  <div class="detail-header">
+    <a href="#t:view_name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">view_name()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L179" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> view_name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;The human readable name for a family of view subtrees.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(1..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:view_type/0">
+
+  <div class="detail-header">
+    <a href="#t:view_type/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">view_type()</h1>
+
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L188" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> view_type() :: included | excluded.</pre>
+
+      </div>
+
+<p>Does the corresponding instances of subtree and mask define a family of view
+subtrees which are included in or excluded from the MIB view.</p><p><code class="inline">INTEGER { included(1), excluded(2) }</code></p>
   </section>
 </section>
 
@@ -490,7 +818,7 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
     </a>
     <h1 class="signature" translate="no">add_access(GroupName, Prefix, SecModel, SecLevel, Match, RV, WV, NV)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L371" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L516" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -500,8 +828,26 @@ for the SNMP-VIEW-BASED-ACM-MIB, and functions for configuring the database.</p>
 
   <section class="docstring">
 
-<p>add_access(GroupName, Prefix, SecModel, SecLevel, Match, RV, WV, NV) -&gt; Ret</p><p>Adds a access definition to the agent config. Equivalent to one vacmAccess-line
-in the <code class="inline">vacm.conf</code> file.</p><p><a href="" id="delete_access"></a></p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> add_access(GroupName, Prefix, SecModel, SecLevel, Match, RV, WV, NV) ->
+              {ok, Key} | {error, Reason}
+              when
+                  GroupName :: <a href="#t:group_name/0">group_name</a>(),
+                  Prefix :: <a href="#t:context_prefix/0">context_prefix</a>(),
+                  SecModel :: <a href="snmp_framework_mib.html#t:security_model/0">snmp_framework_mib:security_model</a>(),
+                  SecLevel :: <a href="snmp_framework_mib.html#t:security_level/0">snmp_framework_mib:security_level</a>(),
+                  Match :: <a href="#t:context_match/0">context_match</a>(),
+                  RV :: <a href="#t:access_read_view_name/0">access_read_view_name</a>(),
+                  WV :: <a href="#t:access_write_view_name/0">access_write_view_name</a>(),
+                  NV :: <a href="#t:access_notify_view_name/0">access_notify_view_name</a>(),
+                  Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                  Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Adds a access definition to the agent config. Equivalent to one vacmAccess-line
+in the <code class="inline">vacm.conf</code> file.</p>
   </section>
 </section>
 <section class="detail" id="add_sec2group/3">
@@ -513,7 +859,7 @@ in the <code class="inline">vacm.conf</code> file.</p><p><a href="" id="delete_a
     </a>
     <h1 class="signature" translate="no">add_sec2group(SecModel, SecName, GroupName)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L323" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L457" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -523,8 +869,20 @@ in the <code class="inline">vacm.conf</code> file.</p><p><a href="" id="delete_a
 
   <section class="docstring">
 
-<p>add_sec2group(SecModel, SecName, GroupName) -&gt; Ret</p><p>Adds a security to group definition to the agent config. Equivalent to one
-vacmSecurityToGroup-line in the <code class="inline">vacm.conf</code> file.</p><p><a href="" id="delete_sec2group"></a></p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> add_sec2group(SecModel, SecName, GroupName) -> {ok, Key} | {error, Reason}
+                 when
+                     SecModel :: <a href="snmp_framework_mib.html#t:security_model/0">snmp_framework_mib:security_model</a>(),
+                     SecName :: <a href="#t:security_name/0">security_name</a>(),
+                     GroupName :: <a href="#t:group_name/0">group_name</a>(),
+                     Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                     Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Adds a security to group definition to the agent config. Equivalent to one
+vacmSecurityToGroup-line in the <code class="inline">vacm.conf</code> file.</p>
   </section>
 </section>
 <section class="detail" id="add_view_tree_fam/4">
@@ -534,9 +892,9 @@ vacmSecurityToGroup-line in the <code class="inline">vacm.conf</code> file.</p><
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">add_view_tree_fam(ViewIndex, SubTree, Status, Mask)</h1>
+    <h1 class="signature" translate="no">add_view_tree_fam(ViewName, SubTree, Status, Mask)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L406" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L557" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -546,8 +904,21 @@ vacmSecurityToGroup-line in the <code class="inline">vacm.conf</code> file.</p><
 
   <section class="docstring">
 
-<p>add_view_tree_fam(ViewIndex, SubTree, Status, Mask) -&gt; Ret</p><p>Adds a view tree family definition to the agent config. Equivalent to one
-vacmViewTreeFamily-line in the <code class="inline">vacm.conf</code> file.</p><p><a href="" id="delete_view_tree_fam"></a></p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> add_view_tree_fam(ViewName, SubTree, Status, Mask) -> {ok, Key} | {error, Reason}
+                     when
+                         ViewName :: <a href="#t:view_name/0">view_name</a>(),
+                         SubTree :: <a href="snmp.html#t:oid/0">snmp:oid</a>(),
+                         Status :: <a href="#t:view_type/0">view_type</a>(),
+                         Mask :: null | <a href="#t:view_mask/0">view_mask</a>(),
+                         Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                         Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Adds a view tree family definition to the agent config. Equivalent to one
+vacmViewTreeFamily-line in the <code class="inline">vacm.conf</code> file.</p>
   </section>
 </section>
 <section class="detail" id="configure/1">
@@ -557,9 +928,9 @@ vacmViewTreeFamily-line in the <code class="inline">vacm.conf</code> file.</p><p
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">configure(Dir)</h1>
+    <h1 class="signature" translate="no">configure(ConfDir)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L119" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L253" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -569,12 +940,18 @@ vacmViewTreeFamily-line in the <code class="inline">vacm.conf</code> file.</p><p
 
   <section class="docstring">
 
-<p>configure(ConfDir) -&gt; void()</p><p>This function is called from the supervisor at system start-up.</p><p>Inserts all data in the configuration files into the database and destroys all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> configure(ConfDir) -> <a href="snmp.html#t:void/0">snmp:void</a>() when ConfDir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>This function is called from the supervisor at system start-up.</p><p>Inserts all data in the configuration files into the database and destroys all
 old rows with StorageType <code class="inline">volatile</code>. The rows created from the configuration
 file will have StorageType <code class="inline">nonVolatile</code>.</p><p>All <code class="inline">snmp</code> counters are set to zero.</p><p>If an error is found in the configuration file, it is reported using the
 function <code class="inline">config_err/2</code> of the error report module, and the function fails with
 the reason <code class="inline">configuration_error</code>.</p><p><code class="inline">ConfDir</code> is a string which points to the directory where the configuration
-files are found.</p><p>The configuration file read is: <code class="inline">vacm.conf</code>.</p><p><a href="" id="reconfigure"></a></p>
+files are found.</p><p>The configuration file read is: <code class="inline">vacm.conf</code>.</p>
   </section>
 </section>
 <section class="detail" id="delete_access/1">
@@ -586,7 +963,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
     </a>
     <h1 class="signature" translate="no">delete_access(Key)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L539" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -596,7 +973,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
 
   <section class="docstring">
 
-<p>delete_access(Key) -&gt; Ret</p><p>Delete a access definition from the agent config.</p><p><a href="" id="add_view_tree_fam"></a></p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> delete_access(Key) -> ok | {error, Reason} when Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Delete a access definition from the agent config.</p>
   </section>
 </section>
 <section class="detail" id="delete_sec2group/1">
@@ -608,7 +991,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
     </a>
     <h1 class="signature" translate="no">delete_sec2group(Key)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L350" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L485" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -618,7 +1001,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
 
   <section class="docstring">
 
-<p>delete_sec2group(Key) -&gt; Ret</p><p>Delete a security to group definition from the agent config.</p><p><a href="" id="add_access"></a></p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> delete_sec2group(Key) -> ok | {error, Reason} when Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Delete a security to group definition from the agent config.</p>
   </section>
 </section>
 <section class="detail" id="delete_view_tree_fam/1">
@@ -630,7 +1019,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
     </a>
     <h1 class="signature" translate="no">delete_view_tree_fam(Key)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L431" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L583" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -640,7 +1029,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
 
   <section class="docstring">
 
-<p>delete_view_tree_fam(Key) -&gt; Ret</p><p>Delete a view tree family definition from the agent config.</p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> delete_view_tree_fam(Key) -> ok | {error, Reason} when Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Delete a view tree family definition from the agent config.</p>
   </section>
 </section>
 <section class="detail" id="reconfigure/1">
@@ -650,9 +1045,9 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">reconfigure(Dir)</h1>
+    <h1 class="signature" translate="no">reconfigure(ConfDir)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L173" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/cert-policies/OTP-19027/lib/snmp/src/agent/snmp_view_based_acm_mib.erl#L308" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -662,13 +1057,19 @@ files are found.</p><p>The configuration file read is: <code class="inline">vacm
 
   <section class="docstring">
 
-<p>reconfigure(ConfDir) -&gt; void()</p><p>Inserts all data in the configuration files into the database and destroys all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> reconfigure(ConfDir) -> <a href="snmp.html#t:void/0">snmp:void</a>() when ConfDir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>Inserts all data in the configuration files into the database and destroys all
 old data, including the rows with StorageType <code class="inline">nonVolatile</code>. The rows created
 from the configuration file will have StorageType <code class="inline">nonVolatile</code>.</p><p>Thus, the data in the SNMP-VIEW-BASED-ACM-MIB, after this function has been
 called, is the data from the configuration files.</p><p>All <code class="inline">snmp</code> counters are set to zero.</p><p>If an error is found in the configuration file, it is reported using the
 function <a href="snmpa_error.html#config_err">config_err/2</a> of the error report module,
 and the function fails with the reason <code class="inline">configuration_error</code>.</p><p><code class="inline">ConfDir</code> is a string which points to the directory where the configuration
-files are found.</p><p>The configuration file read is: <code class="inline">vacm.conf</code>.</p><p><a href="" id="add_sec2group"></a></p>
+files are found.</p><p>The configuration file read is: <code class="inline">vacm.conf</code>.</p>
   </section>
 </section>
 
