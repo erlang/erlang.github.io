@@ -260,97 +260,97 @@ significantly delayed.</p></blockquote><h2 id="module-example" class="section-he
 <p>The following example shows a simple pushbutton model for a toggling pushbutton
 implemented with <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">state_functions</code>. You
 can push the button and it replies if it went on or off, and you can ask for a
-count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="7454242960-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="7454242960-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="7454242960-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="7454242960-2">)</span><span class="p">.</span><span class="w">
+count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="4712900770-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="4712900770-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="4712900770-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="4712900770-2">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="7454242960-3">(</span><span class="p" data-group-id="7454242960-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="7454242960-4">]</span><span class="p" data-group-id="7454242960-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="7454242960-5">(</span><span class="p" data-group-id="7454242960-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="7454242960-6">]</span><span class="p" data-group-id="7454242960-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="7454242960-7">(</span><span class="p" data-group-id="7454242960-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="7454242960-8">]</span><span class="p" data-group-id="7454242960-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4712900770-3">(</span><span class="p" data-group-id="4712900770-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="4712900770-4">]</span><span class="p" data-group-id="4712900770-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4712900770-5">(</span><span class="p" data-group-id="4712900770-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="4712900770-6">]</span><span class="p" data-group-id="4712900770-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4712900770-7">(</span><span class="p" data-group-id="4712900770-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="4712900770-8">]</span><span class="p" data-group-id="4712900770-7">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">name</span><span class="p" data-group-id="7454242960-9">(</span><span class="p" data-group-id="7454242960-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
+</span><span class="nf">name</span><span class="p" data-group-id="4712900770-9">(</span><span class="p" data-group-id="4712900770-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
 
 </span><span class="c1">%% API.  This example uses a registered name name()</span><span class="w">
 </span><span class="c1">%% and does not link to the caller.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="7454242960-10">(</span><span class="p" data-group-id="7454242960-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="7454242960-11">(</span><span class="p" data-group-id="7454242960-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="7454242960-13">(</span><span class="p" data-group-id="7454242960-13">)</span><span class="p" data-group-id="7454242960-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7454242960-14">[</span><span class="p" data-group-id="7454242960-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7454242960-15">[</span><span class="p" data-group-id="7454242960-15">]</span><span class="p" data-group-id="7454242960-11">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">push</span><span class="p" data-group-id="7454242960-16">(</span><span class="p" data-group-id="7454242960-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="7454242960-17">(</span><span class="nf">name</span><span class="p" data-group-id="7454242960-18">(</span><span class="p" data-group-id="7454242960-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="7454242960-17">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">get_count</span><span class="p" data-group-id="7454242960-19">(</span><span class="p" data-group-id="7454242960-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="7454242960-20">(</span><span class="nf">name</span><span class="p" data-group-id="7454242960-21">(</span><span class="p" data-group-id="7454242960-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="7454242960-20">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="7454242960-22">(</span><span class="p" data-group-id="7454242960-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="7454242960-23">(</span><span class="nf">name</span><span class="p" data-group-id="7454242960-24">(</span><span class="p" data-group-id="7454242960-24">)</span><span class="p" data-group-id="7454242960-23">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="4712900770-10">(</span><span class="p" data-group-id="4712900770-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="4712900770-11">(</span><span class="p" data-group-id="4712900770-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="4712900770-13">(</span><span class="p" data-group-id="4712900770-13">)</span><span class="p" data-group-id="4712900770-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4712900770-14">[</span><span class="p" data-group-id="4712900770-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4712900770-15">[</span><span class="p" data-group-id="4712900770-15">]</span><span class="p" data-group-id="4712900770-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">push</span><span class="p" data-group-id="4712900770-16">(</span><span class="p" data-group-id="4712900770-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="4712900770-17">(</span><span class="nf">name</span><span class="p" data-group-id="4712900770-18">(</span><span class="p" data-group-id="4712900770-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="4712900770-17">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">get_count</span><span class="p" data-group-id="4712900770-19">(</span><span class="p" data-group-id="4712900770-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="4712900770-20">(</span><span class="nf">name</span><span class="p" data-group-id="4712900770-21">(</span><span class="p" data-group-id="4712900770-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="4712900770-20">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="4712900770-22">(</span><span class="p" data-group-id="4712900770-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="4712900770-23">(</span><span class="nf">name</span><span class="p" data-group-id="4712900770-24">(</span><span class="p" data-group-id="4712900770-24">)</span><span class="p" data-group-id="4712900770-23">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Mandatory callback functions</span><span class="w">
-</span><span class="nf">terminate</span><span class="p" data-group-id="7454242960-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="7454242960-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="4712900770-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="4712900770-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">void</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="7454242960-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="7454242960-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="7454242960-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7454242960-27">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="7454242960-28">(</span><span class="p" data-group-id="7454242960-29">[</span><span class="p" data-group-id="7454242960-29">]</span><span class="p" data-group-id="7454242960-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="4712900770-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="4712900770-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="4712900770-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4712900770-27">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="4712900770-28">(</span><span class="p" data-group-id="4712900770-29">[</span><span class="p" data-group-id="4712900770-29">]</span><span class="p" data-group-id="4712900770-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Set the initial state + data.  Data is used only as a counter.</span><span class="w">
     </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="7454242960-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7454242960-30">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="7454242960-31">(</span><span class="p" data-group-id="7454242960-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="4712900770-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4712900770-30">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="4712900770-31">(</span><span class="p" data-group-id="4712900770-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">off</span><span class="p" data-group-id="7454242960-32">(</span><span class="p" data-group-id="7454242960-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7454242960-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="4712900770-32">(</span><span class="p" data-group-id="4712900770-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="4712900770-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="7454242960-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="7454242960-35">[</span><span class="p" data-group-id="7454242960-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="7454242960-36">}</span><span class="p" data-group-id="7454242960-35">]</span><span class="p" data-group-id="7454242960-34">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">off</span><span class="p" data-group-id="7454242960-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="7454242960-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-38">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="4712900770-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="4712900770-35">[</span><span class="p" data-group-id="4712900770-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="4712900770-36">}</span><span class="p" data-group-id="4712900770-35">]</span><span class="p" data-group-id="4712900770-34">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="4712900770-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="4712900770-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-38">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">on</span><span class="p" data-group-id="7454242960-39">(</span><span class="p" data-group-id="7454242960-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7454242960-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="4712900770-39">(</span><span class="p" data-group-id="4712900770-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="4712900770-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="7454242960-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="7454242960-42">[</span><span class="p" data-group-id="7454242960-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="7454242960-43">}</span><span class="p" data-group-id="7454242960-42">]</span><span class="p" data-group-id="7454242960-41">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">on</span><span class="p" data-group-id="7454242960-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="7454242960-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-45">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="4712900770-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="4712900770-42">[</span><span class="p" data-group-id="4712900770-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="4712900770-43">}</span><span class="p" data-group-id="4712900770-42">]</span><span class="p" data-group-id="4712900770-41">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="4712900770-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="4712900770-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-45">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Handle events common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="7454242960-46">(</span><span class="p" data-group-id="7454242960-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7454242960-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="4712900770-46">(</span><span class="p" data-group-id="4712900770-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="4712900770-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="7454242960-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="7454242960-49">[</span><span class="p" data-group-id="7454242960-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7454242960-50">}</span><span class="p" data-group-id="7454242960-49">]</span><span class="p" data-group-id="7454242960-48">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="7454242960-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7454242960-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="4712900770-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="4712900770-49">[</span><span class="p" data-group-id="4712900770-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4712900770-50">}</span><span class="p" data-group-id="4712900770-49">]</span><span class="p" data-group-id="4712900770-48">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="4712900770-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4712900770-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="7454242960-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7454242960-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="8733059657-1">(</span><span class="p" data-group-id="8733059657-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8733059657-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="8733059657-2">}</span><span class="gp unselectable">
-2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="8733059657-3">(</span><span class="p" data-group-id="8733059657-3">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="4712900770-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4712900770-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="7871519040-1">(</span><span class="p" data-group-id="7871519040-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7871519040-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7871519040-2">}</span><span class="gp unselectable">
+2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7871519040-3">(</span><span class="p" data-group-id="7871519040-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">0</span><span class="gp unselectable">
-3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="8733059657-4">(</span><span class="p" data-group-id="8733059657-4">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7871519040-4">(</span><span class="p" data-group-id="7871519040-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">on</span><span class="gp unselectable">
-4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="8733059657-5">(</span><span class="p" data-group-id="8733059657-5">)</span><span class="p">.</span><span class="w">
+4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7871519040-5">(</span><span class="p" data-group-id="7871519040-5">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="8733059657-6">(</span><span class="p" data-group-id="8733059657-6">)</span><span class="p">.</span><span class="w">
+5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7871519040-6">(</span><span class="p" data-group-id="7871519040-6">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">off</span><span class="gp unselectable">
-6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="8733059657-7">(</span><span class="p" data-group-id="8733059657-7">)</span><span class="p">.</span><span class="w">
+6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7871519040-7">(</span><span class="p" data-group-id="7871519040-7">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="8733059657-8">(</span><span class="p" data-group-id="8733059657-8">)</span><span class="p">.</span><span class="w">
+7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="7871519040-8">(</span><span class="p" data-group-id="7871519040-8">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="8733059657-9">(</span><span class="p" data-group-id="8733059657-9">)</span><span class="p">.</span><span class="w">
+8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7871519040-9">(</span><span class="p" data-group-id="7871519040-9">)</span><span class="p">.</span><span class="w">
 </span><span class="gt">** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}}
      in function  gen:do_for_proc/2 (gen.erl, line 261)
      in call from gen_statem:call/3 (gen_statem.erl, line 386)</span></code></pre><p>To compare styles, here follows the same example using
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">handle_event_function</code>, or rather the
 code to replace after function <a href="#c:init/1"><code class="inline">init/1</code></a> of the <code class="inline">pushbutton.erl</code>
-example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="7958680796-1">(</span><span class="p" data-group-id="7958680796-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
+example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="6128267976-1">(</span><span class="p" data-group-id="6128267976-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="7958680796-2">(</span><span class="p" data-group-id="7958680796-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7958680796-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7958680796-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="6128267976-2">(</span><span class="p" data-group-id="6128267976-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="6128267976-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6128267976-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="7958680796-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="7958680796-5">[</span><span class="p" data-group-id="7958680796-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="7958680796-6">}</span><span class="p" data-group-id="7958680796-5">]</span><span class="p" data-group-id="7958680796-4">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="7958680796-7">(</span><span class="p" data-group-id="7958680796-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7958680796-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7958680796-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="6128267976-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="6128267976-5">[</span><span class="p" data-group-id="6128267976-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="6128267976-6">}</span><span class="p" data-group-id="6128267976-5">]</span><span class="p" data-group-id="6128267976-4">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="6128267976-7">(</span><span class="p" data-group-id="6128267976-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="6128267976-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6128267976-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="7958680796-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="7958680796-10">[</span><span class="p" data-group-id="7958680796-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="7958680796-11">}</span><span class="p" data-group-id="7958680796-10">]</span><span class="p" data-group-id="7958680796-9">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="6128267976-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="6128267976-10">[</span><span class="p" data-group-id="6128267976-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="6128267976-11">}</span><span class="p" data-group-id="6128267976-10">]</span><span class="p" data-group-id="6128267976-9">}</span><span class="p">;</span><span class="w">
 </span><span class="c1">%%</span><span class="w">
 </span><span class="c1">%% Event handling common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="7958680796-12">(</span><span class="p" data-group-id="7958680796-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7958680796-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7958680796-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="6128267976-12">(</span><span class="p" data-group-id="6128267976-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="6128267976-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6128267976-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="7958680796-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="7958680796-15">[</span><span class="p" data-group-id="7958680796-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7958680796-16">}</span><span class="p" data-group-id="7958680796-15">]</span><span class="p" data-group-id="7958680796-14">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="7958680796-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7958680796-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="6128267976-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="6128267976-15">[</span><span class="p" data-group-id="6128267976-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="6128267976-16">}</span><span class="p" data-group-id="6128267976-15">]</span><span class="p" data-group-id="6128267976-14">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="6128267976-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6128267976-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="7958680796-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7958680796-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
+    </span><span class="p" data-group-id="6128267976-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="6128267976-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -1362,7 +1362,7 @@ all requests must have been made by the process calling this function.</p></div>
     </a>
     <h1 class="signature" translate="no">action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L787" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L785" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1431,7 +1431,7 @@ the stack is empty the server fails. Otherwise like
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L541" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L539" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1472,7 +1472,7 @@ The result is cached for subsequent calls to
     </a>
     <h1 class="signature" translate="no">callback_mode_result()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L521" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L519" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1504,7 +1504,7 @@ selects <a href="#t:callback_mode/0"><em>callback mode</em></a> and whether to d
     </a>
     <h1 class="signature" translate="no">data()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L481" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L479" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1540,7 +1540,7 @@ item is to be made a part of the state.</p>
     </a>
     <h1 class="signature" translate="no">enter_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L831" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L829" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1578,7 +1578,7 @@ list.</p><ul><li><strong><code class="inline">hibernate</code></strong> - Sets t
     </a>
     <h1 class="signature" translate="no">enter_loop_opt()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1708" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1706" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1614,7 +1614,7 @@ is called.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">event_content()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L514" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L512" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1647,7 +1647,7 @@ event types, which is also where the event content comes from.</p>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L972" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L970" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1677,7 +1677,7 @@ event types, which is also where the event content comes from.</p>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L984" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L982" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1715,7 +1715,7 @@ change</em>.</li></ul>
     </a>
     <h1 class="signature" translate="no">event_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L678" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L676" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1756,7 +1756,7 @@ cancelled automatically by any other event.</p>
     </a>
     <h1 class="signature" translate="no">event_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L490" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L488" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1788,7 +1788,7 @@ cancelled automatically by any other event.</p>
     </a>
     <h1 class="signature" translate="no">external_event_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L499" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L497" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1824,7 +1824,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">format_status()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1451" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1449" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1863,7 +1863,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">from()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L451" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L449" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1895,7 +1895,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
     </a>
     <h1 class="signature" translate="no">generic_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L699" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L697" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1935,7 +1935,7 @@ by setting it to <code class="inline">infinity</code>.</p>
     </a>
     <h1 class="signature" translate="no">handle_event_result()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L952" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L950" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1965,7 +1965,7 @@ by setting it to <code class="inline">infinity</code>.</p>
     </a>
     <h1 class="signature" translate="no">hibernate()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L655" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L653" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2002,7 +2002,7 @@ event.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">init_result(StateType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L926" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L924" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2032,7 +2032,7 @@ event.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">init_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L941" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L939" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2072,7 +2072,7 @@ should be used; see <a href="#start_link/3"><code class="inline">start_link/3,4<
     </a>
     <h1 class="signature" translate="no">postpone()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L639" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L637" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2105,7 +2105,7 @@ should be used; see <a href="#start_link/3"><code class="inline">start_link/3,4<
     </a>
     <h1 class="signature" translate="no">reply_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L922" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L920" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2144,7 +2144,7 @@ since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">reply_tag()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L454" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L452" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2174,7 +2174,7 @@ since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">request_id()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1060" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1058" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2204,7 +2204,7 @@ since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">request_id_collection()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1067" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1065" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2236,7 +2236,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
     </a>
     <h1 class="signature" translate="no">response_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1089" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1087" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2279,7 +2279,7 @@ relative time until the deadline over and over again.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">server_name()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1655" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1653" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2311,7 +2311,7 @@ relative time until the deadline over and over again.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">server_ref()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1680" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1678" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2351,7 +2351,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
     </a>
     <h1 class="signature" translate="no">start_mon_ret()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1722" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1720" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2381,7 +2381,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
     </a>
     <h1 class="signature" translate="no">start_opt()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1691" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1689" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2413,7 +2413,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
     </a>
     <h1 class="signature" translate="no">start_ret()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1716" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1714" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2444,7 +2444,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
     </a>
     <h1 class="signature" translate="no">state()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L461" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L459" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2478,7 +2478,7 @@ postponed events are retried.</p>
     </a>
     <h1 class="signature" translate="no">state_callback_result(ActionType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L993" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L991" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2510,7 +2510,7 @@ postponed events are retried.</p>
     </a>
     <h1 class="signature" translate="no">state_callback_result(ActionType, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1025" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1023" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2571,7 +2571,7 @@ version of <code class="inline">gen_statem</code>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L573" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L571" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2623,7 +2623,7 @@ will happen when repeating the <em>state enter call</em>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L955" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L953" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2653,7 +2653,7 @@ will happen when repeating the <em>state enter call</em>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State, DataType)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L963" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L961" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2688,7 +2688,7 @@ has to be the current state, sets <code class="inline">NewData</code>, and execu
     </a>
     <h1 class="signature" translate="no">state_function_result()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L950" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L948" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2718,7 +2718,7 @@ has to be the current state, sets <code class="inline">NewData</code>, and execu
     </a>
     <h1 class="signature" translate="no">state_name()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L472" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L470" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2754,7 +2754,7 @@ it would collide with the optional callback function
     </a>
     <h1 class="signature" translate="no">state_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L719" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L717" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2794,7 +2794,7 @@ value. Therefore it is possible to cancel this time-out by setting it to
     </a>
     <h1 class="signature" translate="no">timeout_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L861" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L859" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2856,7 +2856,7 @@ to <code class="inline">Time</code> for <code class="inline">Name</code> with <c
     </a>
     <h1 class="signature" translate="no">timeout_cancel_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L890" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L888" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2891,7 +2891,7 @@ time-out.</p>
     </a>
     <h1 class="signature" translate="no">timeout_event_type()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L505" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L503" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2924,7 +2924,7 @@ itself with the corresponding <a href="#t:timeout_action/0"><code class="inline"
     </a>
     <h1 class="signature" translate="no">timeout_option()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L728" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L726" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2958,7 +2958,7 @@ relative, which is the default. See
     </a>
     <h1 class="signature" translate="no">timeout_update_action()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L901" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L899" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2995,7 +2995,7 @@ like when starting a time-out with relative <code class="inline">Time = 0</code>
     </a>
     <h1 class="signature" translate="no">transition_option()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L632" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L630" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3075,7 +3075,7 @@ corresponding event, and we start again from the top of this sequence.</li></ol>
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1148" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1146" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3117,7 +3117,7 @@ module is doing something strange.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">code_change(OldVsn, OldState, OldData, Extra)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1356" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1354" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3190,7 +3190,7 @@ implemented the process will crash with exit reason <code class="inline">undef</
     </a>
     <h1 class="signature" translate="no">format_status(Status)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1510" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1508" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3221,15 +3221,15 @@ describes the current states of the <code class="inline">gen_statem</code>, and 
 <code class="inline">NewStatus</code> containing the same keys as the input map, but it may transform some
 values.</p><p>One use case for this function is to return compact alternative state
 representations to avoid having large state terms printed in log files. Another
-is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="8814882978-1">(</span><span class="n">Status</span><span class="p" data-group-id="8814882978-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="8814882978-2">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="p" data-group-id="8814882978-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="8814882978-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="8814882978-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="8814882978-4">)</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="8814882978-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="8814882978-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="8814882978-6">}</span><span class="p" data-group-id="8814882978-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="8814882978-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="8814882978-7">}</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="8814882978-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="8814882978-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="3503230580-1">(</span><span class="n">Status</span><span class="p" data-group-id="3503230580-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="3503230580-2">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="p" data-group-id="3503230580-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="3503230580-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="3503230580-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="3503230580-4">)</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="3503230580-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="3503230580-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="3503230580-6">}</span><span class="p" data-group-id="3503230580-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="3503230580-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="3503230580-7">}</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="3503230580-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="3503230580-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Value</span><span class="w">
-    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="8814882978-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
+    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="3503230580-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
 The <code class="inline">gen_statem</code> module provides a default implementation of this function
 that returns <code class="inline">{State,Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data, the
 default function will instead return <code class="inline">{State,Info}</code>, where <code class="inline">Info</code> says nothing
@@ -3245,7 +3245,7 @@ but the fact that <a href="#c:format_status/2"><code class="inline">format_statu
     </a>
     <h1 class="signature" translate="no">format_status/2</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1420" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1418" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3305,7 +3305,7 @@ but the fact that <a href="#c:format_status/2"><code class="inline">format_statu
     </a>
     <h1 class="signature" translate="no">handle_event/4</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1220" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1218" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3372,7 +3372,7 @@ in scope.</p>
     </a>
     <h1 class="signature" translate="no">init(Args)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1116" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1114" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3395,8 +3395,8 @@ in scope.</p>
 function is called by the new process to initialize the implementation state and
 server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><blockquote><h4 class="info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a> and
 <a href="#enter_loop/4"><code class="inline">enter_loop/4-6</code></a>, this callback will never be called. Since
-this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="2171848241-1">(</span><span class="p">_</span><span class="p" data-group-id="2171848241-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="2171848241-2">(</span><span class="p" data-group-id="2171848241-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="2171848241-3">(</span><span class="n">Args</span><span class="p" data-group-id="2171848241-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="2171848241-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2171848241-5">[</span><span class="n">Args</span><span class="p" data-group-id="2171848241-5">]</span><span class="p" data-group-id="2171848241-4">)</span><span class="p">.</span></code></pre></blockquote>
+this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="8091528237-1">(</span><span class="p">_</span><span class="p" data-group-id="8091528237-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="8091528237-2">(</span><span class="p" data-group-id="8091528237-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="8091528237-3">(</span><span class="n">Args</span><span class="p" data-group-id="8091528237-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="8091528237-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8091528237-5">[</span><span class="n">Args</span><span class="p" data-group-id="8091528237-5">]</span><span class="p" data-group-id="8091528237-4">)</span><span class="p">.</span></code></pre></blockquote>
   </section>
 </section>
 <section class="detail" id="c:StateName/3">
@@ -3408,7 +3408,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
     </a>
     <h1 class="signature" translate="no">'StateName'/3</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1157" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3441,7 +3441,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
     </a>
     <h1 class="signature" translate="no">terminate/3</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1285" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1283" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3503,7 +3503,7 @@ to linked processes and ports.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1989" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1987" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3533,7 +3533,7 @@ to linked processes and ports.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request, Timeout)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2032" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2030" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3582,7 +3582,7 @@ values for the <code class="inline">Reason</code> in the exit term.</p>
     </a>
     <h1 class="signature" translate="no">cast(ServerRef, Msg)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1965" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1963" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3616,7 +3616,7 @@ and event content <code class="inline">Msg</code>.</p>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqId)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2372" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2370" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3659,7 +3659,7 @@ request.</p>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqIdCollection, Delete)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2429" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2427" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3725,7 +3725,7 @@ associations of already handled or abandoned requests to
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2555" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2553" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3757,7 +3757,7 @@ must have been registered. This creates an anonymous server.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2573" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2571" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3795,7 +3795,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2616" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2614" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3844,7 +3844,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2236" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2234" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3879,7 +3879,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId, Timeout)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2273" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2271" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3930,7 +3930,7 @@ that a potential future response is ignored, while
     </a>
     <h1 class="signature" translate="no">receive_response(ReqIdCollection, Timeout, Delete)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2340" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2338" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4002,7 +4002,7 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
     </a>
     <h1 class="signature" translate="no">reply(Replies)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2517" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2515" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4035,7 +4035,7 @@ value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.
     </a>
     <h1 class="signature" translate="no">reply(From, Reply)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2539" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2537" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4068,7 +4068,7 @@ value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.
     </a>
     <h1 class="signature" translate="no">reqids_add(ReqId, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2479" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2477" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4101,7 +4101,7 @@ identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_new()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2454" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2452" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4137,7 +4137,7 @@ request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_size(ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2462" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2460" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4167,7 +4167,7 @@ request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_to_list(ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2495" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2493" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4200,7 +4200,7 @@ collection.</p>
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2074" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2072" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4247,7 +4247,7 @@ the return value of <a href="#receive_response/2"><code class="inline">receive_r
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2102" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2100" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4289,7 +4289,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
     </a>
     <h1 class="signature" translate="no">start(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1739" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1737" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4320,7 +4320,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
     </a>
     <h1 class="signature" translate="no">start(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1758" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1756" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4354,7 +4354,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1773" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1771" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4385,7 +4385,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
     </a>
     <h1 class="signature" translate="no">start_link(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1873" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1871" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4467,7 +4467,7 @@ been consumed and the started <code class="inline">gen_statem</code> process had
     </a>
     <h1 class="signature" translate="no">start_monitor(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1888" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1886" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4498,7 +4498,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
     </a>
     <h1 class="signature" translate="no">start_monitor(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1913" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1911" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4541,7 +4541,7 @@ received and removed from the message queue.</p>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1923" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1921" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4571,7 +4571,7 @@ received and removed from the message queue.</p>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef, Reason, Timeout)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1950" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L1948" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4611,7 +4611,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2119" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2117" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4646,7 +4646,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId, WaitTime)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2154" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2152" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4695,7 +4695,7 @@ that a potential future response is ignored, while
     </a>
     <h1 class="signature" translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2220" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/ssl/no-cbc-in-default/OTP-19025/lib/stdlib/src/gen_statem.erl#L2218" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
