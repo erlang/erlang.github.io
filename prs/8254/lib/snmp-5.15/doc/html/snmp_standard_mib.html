@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-65BBABE8.js"></script>
+    <script src="dist/sidebar_items-80317743.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -152,11 +152,11 @@ STANDARD-MIB and SNMPv2-MIB, and functions for configuring the database.</p><p>T
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#configure/1" translate="no">configure(Dir)</a>
+        <a href="#configure/1" translate="no">configure(ConfDir)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>configure(ConfDir) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>This function is called from the supervisor at system start-up.</p></div>
 
     </div>
 
@@ -176,17 +176,19 @@ STANDARD-MIB and SNMPv2-MIB, and functions for configuring the database.</p><p>T
 
       </div>
 
-        <div class="summary-synopsis"><p>inc(Name, N) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>Increments a variable in the MIB with <code class="inline">N</code>, or one if <code class="inline">N</code> is not specified.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reconfigure/1" translate="no">reconfigure(Dir)</a>
+        <a href="#reconfigure/1" translate="no">reconfigure(ConfDir)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>reconfigure(ConfDir) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>Inserts all data in the configuration files into the database and destroys all
+old data, including the rows with StorageType <code class="inline">nonVolatile</code>. The rows created
+from the configuration file will have StorageType <code class="inline">nonVolatile</code>.</p></div>
 
     </div>
 
@@ -196,7 +198,7 @@ STANDARD-MIB and SNMPv2-MIB, and functions for configuring the database.</p><p>T
 
       </div>
 
-        <div class="summary-synopsis"><p>reset() -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>Resets all <code class="inline">snmp</code> counters to 0.</p></div>
 
     </div>
 
@@ -206,7 +208,7 @@ STANDARD-MIB and SNMPv2-MIB, and functions for configuring the database.</p><p>T
 
       </div>
 
-        <div class="summary-synopsis"><p>sys_up_time() -&gt; Time</p></div>
+        <div class="summary-synopsis"><p>Gets the system up time in hundredth of a second.</p></div>
 
     </div>
 
@@ -230,9 +232,9 @@ STANDARD-MIB and SNMPv2-MIB, and functions for configuring the database.</p><p>T
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">configure(Dir)</h1>
+    <h1 class="signature" translate="no">configure(ConfDir)</h1>
 
-      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L110" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L112" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -242,7 +244,13 @@ STANDARD-MIB and SNMPv2-MIB, and functions for configuring the database.</p><p>T
 
   <section class="docstring">
 
-<p>configure(ConfDir) -&gt; void()</p><p>This function is called from the supervisor at system start-up.</p><p>Inserts all data in the configuration files into the database and destroys all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> configure(ConfDir) -> <a href="snmp.html#t:void/0">snmp:void</a>() when ConfDir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>This function is called from the supervisor at system start-up.</p><p>Inserts all data in the configuration files into the database and destroys all
 old rows with StorageType <code class="inline">volatile</code>. The rows created from the configuration
 file will have StorageType <code class="inline">nonVolatile</code>.</p><p>All <code class="inline">snmp</code> counters are set to zero.</p><p>If an error is found in the configuration file, it is reported using the
 function <code class="inline">config_err/2</code> of the error report module, and the function fails with
@@ -259,7 +267,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
     </a>
     <h1 class="signature" translate="no">inc(Name)</h1>
 
-      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L302" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L309" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -268,6 +276,12 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
   </div>
 
   <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> inc(Name) -> <a href="snmp.html#t:void/0">snmp:void</a>() when Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>().</pre>
+
+      </div>
 
 <p>Equivalent to <a href="#inc/2"><code class="inline">inc/2</code></a>.</p>
   </section>
@@ -281,7 +295,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
     </a>
     <h1 class="signature" translate="no">inc(Name, N)</h1>
 
-      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L308" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L316" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -291,7 +305,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
 
   <section class="docstring">
 
-<p>inc(Name, N) -&gt; void()</p><p>Increments a variable in the MIB with <code class="inline">N</code>, or one if <code class="inline">N</code> is not specified.</p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> inc(Name, N) -> <a href="snmp.html#t:void/0">snmp:void</a>() when Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), N :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+
+      </div>
+
+<p>Increments a variable in the MIB with <code class="inline">N</code>, or one if <code class="inline">N</code> is not specified.</p>
   </section>
 </section>
 <section class="detail" id="reconfigure/1">
@@ -301,9 +321,9 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">reconfigure(Dir)</h1>
+    <h1 class="signature" translate="no">reconfigure(ConfDir)</h1>
 
-      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L170" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L174" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -313,7 +333,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
 
   <section class="docstring">
 
-<p>reconfigure(ConfDir) -&gt; void()</p><p>Inserts all data in the configuration files into the database and destroys all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> reconfigure(ConfDir) -> <a href="snmp.html#t:void/0">snmp:void</a>() when ConfDir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>Inserts all data in the configuration files into the database and destroys all
 old data, including the rows with StorageType <code class="inline">nonVolatile</code>. The rows created
 from the configuration file will have StorageType <code class="inline">nonVolatile</code>.</p><p>Thus, the data in the SNMP-STANDARD-MIB and SNMPv2-MIB, after this function has
 been called, is from the configuration files.</p><p>All <code class="inline">snmp</code> counters are set to zero.</p><p>If an error is found in the configuration file, it is reported using the
@@ -331,7 +357,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
     </a>
     <h1 class="signature" translate="no">reset()</h1>
 
-      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L275" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L278" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -341,7 +367,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
 
   <section class="docstring">
 
-<p>reset() -&gt; void()</p><p>Resets all <code class="inline">snmp</code> counters to 0.</p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> reset() -> <a href="snmp.html#t:void/0">snmp:void</a>().</pre>
+
+      </div>
+
+<p>Resets all <code class="inline">snmp</code> counters to 0.</p>
   </section>
 </section>
 <section class="detail" id="sys_up_time/0">
@@ -353,7 +385,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
     </a>
     <h1 class="signature" translate="no">sys_up_time()</h1>
 
-      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L574" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jhogberg/otp/blob/john/erts/improve-iolist_to_iovec/lib/snmp/src/agent/snmp_standard_mib.erl#L576" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -363,7 +395,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">stan
 
   <section class="docstring">
 
-<p>sys_up_time() -&gt; Time</p><p>Gets the system up time in hundredth of a second.</p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> sys_up_time() -> Time when Time :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+
+      </div>
+
+<p>Gets the system up time in hundredth of a second.</p>
   </section>
 </section>
 
