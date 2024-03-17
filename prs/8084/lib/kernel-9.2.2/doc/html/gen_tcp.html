@@ -135,27 +135,27 @@ Pages
   <section id="moduledoc">
 <p>Interface to TCP/IP sockets.</p><p>This module provides functions for communicating with sockets using the TCP/IP
 protocol.</p><p>The following code fragment is a simple example of a client connecting to a
-server at port 5678, transferring a binary, and closing the connection:</p><pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="2304311823-1">(</span><span class="p" data-group-id="2304311823-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+server at port 5678, transferring a binary, and closing the connection:</p><pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="1209907275-1">(</span><span class="p" data-group-id="1209907275-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="n">SomeHostInNet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">% to make it runnable on one machine</span><span class="w">
-    </span><span class="p" data-group-id="2304311823-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="2304311823-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="2304311823-3">(</span><span class="n">SomeHostInNet</span><span class="p">,</span><span class="w"> </span><span class="mi">5678</span><span class="p">,</span><span class="w">
-                                 </span><span class="p" data-group-id="2304311823-4">[</span><span class="ss">binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2304311823-5">{</span><span class="ss">packet</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2304311823-5">}</span><span class="p" data-group-id="2304311823-4">]</span><span class="p" data-group-id="2304311823-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="2304311823-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Some Data&quot;</span><span class="p" data-group-id="2304311823-6">)</span><span class="p">,</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2304311823-7">(</span><span class="n">Sock</span><span class="p" data-group-id="2304311823-7">)</span><span class="p">.</span></code></pre><p>At the other end, a server is listening on port 5678, accepts the connection,
-and receives the binary:</p><pre><code class="makeup erlang" translate="no"><span class="nf">server</span><span class="p" data-group-id="5809369806-1">(</span><span class="p" data-group-id="5809369806-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5809369806-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="5809369806-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="5809369806-3">(</span><span class="mi">5678</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809369806-4">[</span><span class="ss">binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809369806-5">{</span><span class="ss">packet</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="5809369806-5">}</span><span class="p">,</span><span class="w">
-                                        </span><span class="p" data-group-id="5809369806-6">{</span><span class="ss">active</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="5809369806-6">}</span><span class="p" data-group-id="5809369806-4">]</span><span class="p" data-group-id="5809369806-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="5809369806-7">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="5809369806-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="5809369806-8">(</span><span class="n">LSock</span><span class="p" data-group-id="5809369806-8">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="5809369806-9">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Bin</span><span class="p" data-group-id="5809369806-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">do_recv</span><span class="p" data-group-id="5809369806-10">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809369806-11">[</span><span class="p" data-group-id="5809369806-11">]</span><span class="p" data-group-id="5809369806-10">)</span><span class="p">,</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="5809369806-12">(</span><span class="n">Sock</span><span class="p" data-group-id="5809369806-12">)</span><span class="p">,</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="5809369806-13">(</span><span class="n">LSock</span><span class="p" data-group-id="5809369806-13">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="1209907275-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="1209907275-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="1209907275-3">(</span><span class="n">SomeHostInNet</span><span class="p">,</span><span class="w"> </span><span class="mi">5678</span><span class="p">,</span><span class="w">
+                                 </span><span class="p" data-group-id="1209907275-4">[</span><span class="ss">binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1209907275-5">{</span><span class="ss">packet</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="1209907275-5">}</span><span class="p" data-group-id="1209907275-4">]</span><span class="p" data-group-id="1209907275-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="1209907275-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Some Data&quot;</span><span class="p" data-group-id="1209907275-6">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="1209907275-7">(</span><span class="n">Sock</span><span class="p" data-group-id="1209907275-7">)</span><span class="p">.</span></code></pre><p>At the other end, a server is listening on port 5678, accepts the connection,
+and receives the binary:</p><pre><code class="makeup erlang" translate="no"><span class="nf">server</span><span class="p" data-group-id="3150705192-1">(</span><span class="p" data-group-id="3150705192-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="3150705192-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="3150705192-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="3150705192-3">(</span><span class="mi">5678</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3150705192-4">[</span><span class="ss">binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3150705192-5">{</span><span class="ss">packet</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3150705192-5">}</span><span class="p">,</span><span class="w">
+                                        </span><span class="p" data-group-id="3150705192-6">{</span><span class="ss">active</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="3150705192-6">}</span><span class="p" data-group-id="3150705192-4">]</span><span class="p" data-group-id="3150705192-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3150705192-7">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="3150705192-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3150705192-8">(</span><span class="n">LSock</span><span class="p" data-group-id="3150705192-8">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3150705192-9">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Bin</span><span class="p" data-group-id="3150705192-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">do_recv</span><span class="p" data-group-id="3150705192-10">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3150705192-11">[</span><span class="p" data-group-id="3150705192-11">]</span><span class="p" data-group-id="3150705192-10">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3150705192-12">(</span><span class="n">Sock</span><span class="p" data-group-id="3150705192-12">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3150705192-13">(</span><span class="n">LSock</span><span class="p" data-group-id="3150705192-13">)</span><span class="p">,</span><span class="w">
     </span><span class="n">Bin</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">do_recv</span><span class="p" data-group-id="5809369806-14">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Bs</span><span class="p" data-group-id="5809369806-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="5809369806-15">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="5809369806-15">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="5809369806-16">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p" data-group-id="5809369806-16">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nf">do_recv</span><span class="p" data-group-id="5809369806-17">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5809369806-18">[</span><span class="n">Bs</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p" data-group-id="5809369806-18">]</span><span class="p" data-group-id="5809369806-17">)</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="5809369806-19">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">closed</span><span class="p" data-group-id="5809369806-19">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="5809369806-20">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="nf">list_to_binary</span><span class="p" data-group-id="5809369806-21">(</span><span class="n">Bs</span><span class="p" data-group-id="5809369806-21">)</span><span class="p" data-group-id="5809369806-20">}</span><span class="w">
+</span><span class="nf">do_recv</span><span class="p" data-group-id="3150705192-14">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Bs</span><span class="p" data-group-id="3150705192-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="3150705192-15">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3150705192-15">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="3150705192-16">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p" data-group-id="3150705192-16">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nf">do_recv</span><span class="p" data-group-id="3150705192-17">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3150705192-18">[</span><span class="n">Bs</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p" data-group-id="3150705192-18">]</span><span class="p" data-group-id="3150705192-17">)</span><span class="p">;</span><span class="w">
+        </span><span class="p" data-group-id="3150705192-19">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">closed</span><span class="p" data-group-id="3150705192-19">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="3150705192-20">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="nf">list_to_binary</span><span class="p" data-group-id="3150705192-21">(</span><span class="n">Bs</span><span class="p" data-group-id="3150705192-21">)</span><span class="p" data-group-id="3150705192-20">}</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span></code></pre><p>For more examples, see section <a href="gen_tcp.html#module-examples">Examples</a>.</p><blockquote><h4 class="info">Note</h4><p>Functions that create sockets can take an optional option;
 <code class="inline">{inet_backend, Backend}</code> that, if specified, has to be the first option. This
 selects the implementation backend towards the platform's socket API.</p><p>This is a <em>temporary</em> option that will be ignored in a future release.</p><p>The default is <code class="inline">Backend = inet</code> that selects the traditional <code class="inline">inet_drv.c</code>
@@ -168,22 +168,13 @@ tries to send more data than there is room for in the OS buffers, the &quot;rest
 data&quot; is buffered by the inet driver (and later sent in the background). The
 effect for the user is that the call is non-blocking.</p><p>This is <em>not</em> the effect when <code class="inline">inet_backend = socket</code>, since there is no
 buffering. Instead the user hangs either until all data has been sent or the
-<code class="inline">send_timeout</code> timeout has been reached.</p></li><li><p>Remote close detected by background send.</p><p>An background send will detect a 'remote close' and (the inet driver will)
-mark the socket as 'closed'. No other action is taken. If the socket has
-<code class="inline">active</code> set to <code class="inline">false</code> (passive) at this point and no one is reading, this
-will not be noticed. But as soon as the socket is &quot;activated&quot; (<code class="inline">active</code> set
-to not <code class="inline">false</code>, <a href="#send/2"><code class="inline">send/2</code></a> is called or <a href="#recv/2">recv/2,3</a> is called), an
-error message will be sent to the caller or (socket) owner:
-<code class="inline">{tcp_error, Socket, econnreset}</code>. Any data in the OS receive buffers will
-be lost!</p><p>This behaviour is <em>not</em> replicated by the socket implementation. A send
-operation will detect a remote close and immediately return this to the
-caller, but do nothing else. A reader will therefore be able to extract any
-data from the OS buffers. If the socket is set to <code class="inline">active</code> not <code class="inline">false</code>, the
-data will be received as expected (<code class="inline">{tcp, ...}</code> and then a closed message
-(<code class="inline">{tcp_closed, ...}</code> will be received (not an error).</p></li><li><p>The option <a href="inet.html#option-show_econnreset">show_econnreset</a> basically do
-<em>not</em> work as described when used with <code class="inline">inet_backend = socket</code>. The &quot;issue&quot;
-is that a remote close (as described above) <em>do</em> allow a reader to extract
-what is in the read buffers before a close is &quot;delivered&quot;.</p></li><li><p>The option <a href="inet.html#option-nodelay">nodelay</a> is a TCP specific option that
+<code class="inline">send_timeout</code> timeout has been reached.</p></li><li><p><a href="#shutdown/2"><code class="inline">shutdown/2</code></a> may hide errors</p><p>The call does not involve the receive process state, and is done
+right on the underlying socket.  On for example Linux, it is a known
+misbehaviour that it skips some checks so doing shutdown on a
+listen socket returns <code class="inline">ok</code> while the logical result should have been
+<code class="inline">{error, enotconn}</code>.  The <code class="inline">inet_drv.c</code> driver did an extra check
+and simulated the correct error, but with <code class="inline">Backend = socket</code>
+it would introduce overhead to involve the receive process.</p></li><li><p>The option <a href="inet.html#option-nodelay">nodelay</a> is a TCP specific option that
 is <em>not</em> compatible with <code class="inline">domain = local</code>.</p><p>When using <code class="inline">inet_backend = socket</code>, trying to create a socket (via listen or
 connect) with <code class="inline">domain = local</code> (for example with option {ifaddr,
 {local,&quot;/tmp/test&quot;}}) <em>will fail</em> with <code class="inline">{error, enotsup}</code>.</p><p>This does not actually work for <code class="inline">inet_backend = inet</code> either, but in that
@@ -203,48 +194,48 @@ accepts by implementing a server as a number of worker processes doing accept on
 a single listening socket. Function <code class="inline">start/2</code> takes the number of worker
 processes and the port number on which to listen for incoming connections. If
 <code class="inline">LPort</code> is specified as <code class="inline">0</code>, an ephemeral port number is used, which is why the
-start function returns the actual port number allocated:</p><pre><code class="makeup erlang" translate="no"><span class="nf">start</span><span class="p" data-group-id="2049448361-1">(</span><span class="n">Num</span><span class="p">,</span><span class="n">LPort</span><span class="p" data-group-id="2049448361-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="2049448361-2">(</span><span class="n">LPort</span><span class="p">,</span><span class="p" data-group-id="2049448361-3">[</span><span class="p" data-group-id="2049448361-4">{</span><span class="ss">active</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="2049448361-4">}</span><span class="p">,</span><span class="p" data-group-id="2049448361-5">{</span><span class="ss">packet</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="2049448361-5">}</span><span class="p" data-group-id="2049448361-3">]</span><span class="p" data-group-id="2049448361-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="2049448361-6">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">ListenSock</span><span class="p" data-group-id="2049448361-6">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nf">start_servers</span><span class="p" data-group-id="2049448361-7">(</span><span class="n">Num</span><span class="p">,</span><span class="n">ListenSock</span><span class="p" data-group-id="2049448361-7">)</span><span class="p">,</span><span class="w">
-            </span><span class="p" data-group-id="2049448361-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="2049448361-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">port</span><span class="p" data-group-id="2049448361-9">(</span><span class="n">ListenSock</span><span class="p" data-group-id="2049448361-9">)</span><span class="p">,</span><span class="w">
+start function returns the actual port number allocated:</p><pre><code class="makeup erlang" translate="no"><span class="nf">start</span><span class="p" data-group-id="0332491549-1">(</span><span class="n">Num</span><span class="p">,</span><span class="n">LPort</span><span class="p" data-group-id="0332491549-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="0332491549-2">(</span><span class="n">LPort</span><span class="p">,</span><span class="p" data-group-id="0332491549-3">[</span><span class="p" data-group-id="0332491549-4">{</span><span class="ss">active</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="0332491549-4">}</span><span class="p">,</span><span class="p" data-group-id="0332491549-5">{</span><span class="ss">packet</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="0332491549-5">}</span><span class="p" data-group-id="0332491549-3">]</span><span class="p" data-group-id="0332491549-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="0332491549-6">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">ListenSock</span><span class="p" data-group-id="0332491549-6">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nf">start_servers</span><span class="p" data-group-id="0332491549-7">(</span><span class="n">Num</span><span class="p">,</span><span class="n">ListenSock</span><span class="p" data-group-id="0332491549-7">)</span><span class="p">,</span><span class="w">
+            </span><span class="p" data-group-id="0332491549-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="0332491549-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">inet</span><span class="p">:</span><span class="nf">port</span><span class="p" data-group-id="0332491549-9">(</span><span class="n">ListenSock</span><span class="p" data-group-id="0332491549-9">)</span><span class="p">,</span><span class="w">
             </span><span class="n">Port</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="2049448361-10">{</span><span class="ss">error</span><span class="p">,</span><span class="n">Reason</span><span class="p" data-group-id="2049448361-10">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="2049448361-11">{</span><span class="ss">error</span><span class="p">,</span><span class="n">Reason</span><span class="p" data-group-id="2049448361-11">}</span><span class="w">
+        </span><span class="p" data-group-id="0332491549-10">{</span><span class="ss">error</span><span class="p">,</span><span class="n">Reason</span><span class="p" data-group-id="0332491549-10">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="0332491549-11">{</span><span class="ss">error</span><span class="p">,</span><span class="n">Reason</span><span class="p" data-group-id="0332491549-11">}</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">start_servers</span><span class="p" data-group-id="2049448361-12">(</span><span class="mi">0</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="2049448361-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">start_servers</span><span class="p" data-group-id="0332491549-12">(</span><span class="mi">0</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="0332491549-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-</span><span class="nf">start_servers</span><span class="p" data-group-id="2049448361-13">(</span><span class="n">Num</span><span class="p">,</span><span class="n">LS</span><span class="p" data-group-id="2049448361-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="2049448361-14">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="ss">server</span><span class="p">,</span><span class="p" data-group-id="2049448361-15">[</span><span class="n">LS</span><span class="p" data-group-id="2049448361-15">]</span><span class="p" data-group-id="2049448361-14">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">start_servers</span><span class="p" data-group-id="2049448361-16">(</span><span class="n">Num</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">LS</span><span class="p" data-group-id="2049448361-16">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start_servers</span><span class="p" data-group-id="0332491549-13">(</span><span class="n">Num</span><span class="p">,</span><span class="n">LS</span><span class="p" data-group-id="0332491549-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="0332491549-14">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="ss">server</span><span class="p">,</span><span class="p" data-group-id="0332491549-15">[</span><span class="n">LS</span><span class="p" data-group-id="0332491549-15">]</span><span class="p" data-group-id="0332491549-14">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">start_servers</span><span class="p" data-group-id="0332491549-16">(</span><span class="n">Num</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">LS</span><span class="p" data-group-id="0332491549-16">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="2049448361-17">(</span><span class="n">LS</span><span class="p" data-group-id="2049448361-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="2049448361-18">(</span><span class="n">LS</span><span class="p" data-group-id="2049448361-18">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="2049448361-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">S</span><span class="p" data-group-id="2049448361-19">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nf">loop</span><span class="p" data-group-id="2049448361-20">(</span><span class="n">S</span><span class="p" data-group-id="2049448361-20">)</span><span class="p">,</span><span class="w">
-            </span><span class="nf">server</span><span class="p" data-group-id="2049448361-21">(</span><span class="n">LS</span><span class="p" data-group-id="2049448361-21">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="0332491549-17">(</span><span class="n">LS</span><span class="p" data-group-id="0332491549-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="0332491549-18">(</span><span class="n">LS</span><span class="p" data-group-id="0332491549-18">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="0332491549-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">S</span><span class="p" data-group-id="0332491549-19">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nf">loop</span><span class="p" data-group-id="0332491549-20">(</span><span class="n">S</span><span class="p" data-group-id="0332491549-20">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">server</span><span class="p" data-group-id="0332491549-21">(</span><span class="n">LS</span><span class="p" data-group-id="0332491549-21">)</span><span class="p">;</span><span class="w">
         </span><span class="n">Other</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2049448361-22">(</span><span class="s">&quot;accept returned </span><span class="si">~w</span><span class="s"> - goodbye!</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="p" data-group-id="2049448361-23">[</span><span class="n">Other</span><span class="p" data-group-id="2049448361-23">]</span><span class="p" data-group-id="2049448361-22">)</span><span class="p">,</span><span class="w">
+            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0332491549-22">(</span><span class="s">&quot;accept returned </span><span class="si">~w</span><span class="s"> - goodbye!</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="p" data-group-id="0332491549-23">[</span><span class="n">Other</span><span class="p" data-group-id="0332491549-23">]</span><span class="p" data-group-id="0332491549-22">)</span><span class="p">,</span><span class="w">
             </span><span class="ss">ok</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">loop</span><span class="p" data-group-id="2049448361-24">(</span><span class="n">S</span><span class="p" data-group-id="2049448361-24">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">inet</span><span class="p">:</span><span class="nf">setopts</span><span class="p" data-group-id="2049448361-25">(</span><span class="n">S</span><span class="p">,</span><span class="p" data-group-id="2049448361-26">[</span><span class="p" data-group-id="2049448361-27">{</span><span class="ss">active</span><span class="p">,</span><span class="ss">once</span><span class="p" data-group-id="2049448361-27">}</span><span class="p" data-group-id="2049448361-26">]</span><span class="p" data-group-id="2049448361-25">)</span><span class="p">,</span><span class="w">
+</span><span class="nf">loop</span><span class="p" data-group-id="0332491549-24">(</span><span class="n">S</span><span class="p" data-group-id="0332491549-24">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">inet</span><span class="p">:</span><span class="nf">setopts</span><span class="p" data-group-id="0332491549-25">(</span><span class="n">S</span><span class="p">,</span><span class="p" data-group-id="0332491549-26">[</span><span class="p" data-group-id="0332491549-27">{</span><span class="ss">active</span><span class="p">,</span><span class="ss">once</span><span class="p" data-group-id="0332491549-27">}</span><span class="p" data-group-id="0332491549-26">]</span><span class="p" data-group-id="0332491549-25">)</span><span class="p">,</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-        </span><span class="p" data-group-id="2049448361-28">{</span><span class="ss">tcp</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2049448361-28">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="n">Answer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">process</span><span class="p" data-group-id="2049448361-29">(</span><span class="n">Data</span><span class="p" data-group-id="2049448361-29">)</span><span class="p">,</span><span class="w"> </span><span class="c1">% Not implemented in this example</span><span class="w">
-            </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="2049448361-30">(</span><span class="n">S</span><span class="p">,</span><span class="n">Answer</span><span class="p" data-group-id="2049448361-30">)</span><span class="p">,</span><span class="w">
-            </span><span class="nf">loop</span><span class="p" data-group-id="2049448361-31">(</span><span class="n">S</span><span class="p" data-group-id="2049448361-31">)</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="2049448361-32">{</span><span class="ss">tcp_closed</span><span class="p">,</span><span class="n">S</span><span class="p" data-group-id="2049448361-32">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2049448361-33">(</span><span class="s">&quot;Socket </span><span class="si">~w</span><span class="s"> closed [</span><span class="si">~w</span><span class="s">]</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="p" data-group-id="2049448361-34">[</span><span class="n">S</span><span class="p">,</span><span class="nf">self</span><span class="p" data-group-id="2049448361-35">(</span><span class="p" data-group-id="2049448361-35">)</span><span class="p" data-group-id="2049448361-34">]</span><span class="p" data-group-id="2049448361-33">)</span><span class="p">,</span><span class="w">
+        </span><span class="p" data-group-id="0332491549-28">{</span><span class="ss">tcp</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0332491549-28">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="n">Answer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">process</span><span class="p" data-group-id="0332491549-29">(</span><span class="n">Data</span><span class="p" data-group-id="0332491549-29">)</span><span class="p">,</span><span class="w"> </span><span class="c1">% Not implemented in this example</span><span class="w">
+            </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="0332491549-30">(</span><span class="n">S</span><span class="p">,</span><span class="n">Answer</span><span class="p" data-group-id="0332491549-30">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">loop</span><span class="p" data-group-id="0332491549-31">(</span><span class="n">S</span><span class="p" data-group-id="0332491549-31">)</span><span class="p">;</span><span class="w">
+        </span><span class="p" data-group-id="0332491549-32">{</span><span class="ss">tcp_closed</span><span class="p">,</span><span class="n">S</span><span class="p" data-group-id="0332491549-32">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0332491549-33">(</span><span class="s">&quot;Socket </span><span class="si">~w</span><span class="s"> closed [</span><span class="si">~w</span><span class="s">]</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="p" data-group-id="0332491549-34">[</span><span class="n">S</span><span class="p">,</span><span class="nf">self</span><span class="p" data-group-id="0332491549-35">(</span><span class="p" data-group-id="0332491549-35">)</span><span class="p" data-group-id="0332491549-34">]</span><span class="p" data-group-id="0332491549-33">)</span><span class="p">,</span><span class="w">
             </span><span class="ss">ok</span><span class="w">
-    </span><span class="k">end</span><span class="p">.</span></code></pre><p>Example of a simple client:</p><pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="1565107947-1">(</span><span class="n">PortNo</span><span class="p">,</span><span class="n">Message</span><span class="p" data-group-id="1565107947-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="1565107947-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Sock</span><span class="p" data-group-id="1565107947-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="1565107947-3">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="n">PortNo</span><span class="p">,</span><span class="p" data-group-id="1565107947-4">[</span><span class="p" data-group-id="1565107947-5">{</span><span class="ss">active</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="1565107947-5">}</span><span class="p">,</span><span class="w">
-                                                    </span><span class="p" data-group-id="1565107947-6">{</span><span class="ss">packet</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="1565107947-6">}</span><span class="p" data-group-id="1565107947-4">]</span><span class="p" data-group-id="1565107947-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="1565107947-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="n">Message</span><span class="p" data-group-id="1565107947-7">)</span><span class="p">,</span><span class="w">
-    </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="1565107947-8">(</span><span class="n">Sock</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1565107947-8">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="1565107947-9">(</span><span class="n">Sock</span><span class="p" data-group-id="1565107947-9">)</span><span class="p">,</span><span class="w">
+    </span><span class="k">end</span><span class="p">.</span></code></pre><p>Example of a simple client:</p><pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="9689900894-1">(</span><span class="n">PortNo</span><span class="p">,</span><span class="n">Message</span><span class="p" data-group-id="9689900894-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="9689900894-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Sock</span><span class="p" data-group-id="9689900894-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="9689900894-3">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="n">PortNo</span><span class="p">,</span><span class="p" data-group-id="9689900894-4">[</span><span class="p" data-group-id="9689900894-5">{</span><span class="ss">active</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="9689900894-5">}</span><span class="p">,</span><span class="w">
+                                                    </span><span class="p" data-group-id="9689900894-6">{</span><span class="ss">packet</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="9689900894-6">}</span><span class="p" data-group-id="9689900894-4">]</span><span class="p" data-group-id="9689900894-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="9689900894-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="n">Message</span><span class="p" data-group-id="9689900894-7">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="9689900894-8">(</span><span class="n">Sock</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9689900894-8">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9689900894-9">(</span><span class="n">Sock</span><span class="p" data-group-id="9689900894-9">)</span><span class="p">,</span><span class="w">
     </span><span class="n">A</span><span class="p">.</span></code></pre><p>The <code class="inline">send</code> call does not accept a time-out option because time-outs on send is
 handled through socket option <code class="inline">send_timeout</code>. The behavior of a send operation
 with no receiver is mainly defined by the underlying TCP stack and the network
@@ -254,32 +245,32 @@ server on the network. The process is connected to the server through TCP/IP and
 does not get any acknowledge for each message it sends, but has to rely on the
 send time-out option to detect that the other end is unresponsive. Option
 <code class="inline">send_timeout</code> can be used when connecting:</p><pre><code class="makeup erlang" translate="no"><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="5882802523-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Sock</span><span class="p" data-group-id="5882802523-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="5882802523-2">(</span><span class="n">HostAddress</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                            </span><span class="p" data-group-id="5882802523-3">[</span><span class="p" data-group-id="5882802523-4">{</span><span class="ss">active</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="5882802523-4">}</span><span class="p">,</span><span class="w">
-                             </span><span class="p" data-group-id="5882802523-5">{</span><span class="ss">send_timeout</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p" data-group-id="5882802523-5">}</span><span class="p">,</span><span class="w">
-                             </span><span class="p" data-group-id="5882802523-6">{</span><span class="ss">packet</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="5882802523-6">}</span><span class="p" data-group-id="5882802523-3">]</span><span class="p" data-group-id="5882802523-2">)</span><span class="p">,</span><span class="w">
-                </span><span class="nf">loop</span><span class="p" data-group-id="5882802523-7">(</span><span class="n">Sock</span><span class="p" data-group-id="5882802523-7">)</span><span class="p">,</span><span class="w"> </span><span class="c1">% See below</span><span class="w">
-</span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>In the loop where requests are handled, send time-outs can now be detected:</p><pre><code class="makeup erlang" translate="no"><span class="nf">loop</span><span class="p" data-group-id="6751809516-1">(</span><span class="n">Sock</span><span class="p" data-group-id="6751809516-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="p" data-group-id="7224554606-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Sock</span><span class="p" data-group-id="7224554606-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="7224554606-2">(</span><span class="n">HostAddress</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
+                            </span><span class="p" data-group-id="7224554606-3">[</span><span class="p" data-group-id="7224554606-4">{</span><span class="ss">active</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="7224554606-4">}</span><span class="p">,</span><span class="w">
+                             </span><span class="p" data-group-id="7224554606-5">{</span><span class="ss">send_timeout</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p" data-group-id="7224554606-5">}</span><span class="p">,</span><span class="w">
+                             </span><span class="p" data-group-id="7224554606-6">{</span><span class="ss">packet</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="7224554606-6">}</span><span class="p" data-group-id="7224554606-3">]</span><span class="p" data-group-id="7224554606-2">)</span><span class="p">,</span><span class="w">
+                </span><span class="nf">loop</span><span class="p" data-group-id="7224554606-7">(</span><span class="n">Sock</span><span class="p" data-group-id="7224554606-7">)</span><span class="p">,</span><span class="w"> </span><span class="c1">% See below</span><span class="w">
+</span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>In the loop where requests are handled, send time-outs can now be detected:</p><pre><code class="makeup erlang" translate="no"><span class="nf">loop</span><span class="p" data-group-id="7618685325-1">(</span><span class="n">Sock</span><span class="p" data-group-id="7618685325-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-        </span><span class="p" data-group-id="6751809516-2">{</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="ss">send_data</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p" data-group-id="6751809516-2">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="6751809516-3">(</span><span class="n">Sock</span><span class="p">,</span><span class="p" data-group-id="6751809516-4">[</span><span class="n">Binary</span><span class="p" data-group-id="6751809516-4">]</span><span class="p" data-group-id="6751809516-3">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-                </span><span class="p" data-group-id="6751809516-5">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="6751809516-5">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="6751809516-6">(</span><span class="s">&quot;Send timeout, closing!</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
-                              </span><span class="p" data-group-id="6751809516-7">[</span><span class="p" data-group-id="6751809516-7">]</span><span class="p" data-group-id="6751809516-6">)</span><span class="p">,</span><span class="w">
-                    </span><span class="nf">handle_send_timeout</span><span class="p" data-group-id="6751809516-8">(</span><span class="p" data-group-id="6751809516-8">)</span><span class="p">,</span><span class="w"> </span><span class="c1">% Not implemented here</span><span class="w">
-                    </span><span class="n">Client</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="6751809516-9">{</span><span class="nf">self</span><span class="p" data-group-id="6751809516-10">(</span><span class="p" data-group-id="6751809516-10">)</span><span class="p">,</span><span class="p" data-group-id="6751809516-11">{</span><span class="ss">error_sending</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="6751809516-11">}</span><span class="p" data-group-id="6751809516-9">}</span><span class="p">,</span><span class="w">
+        </span><span class="p" data-group-id="7618685325-2">{</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="ss">send_data</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p" data-group-id="7618685325-2">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="k">case</span><span class="w"> </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="7618685325-3">(</span><span class="n">Sock</span><span class="p">,</span><span class="p" data-group-id="7618685325-4">[</span><span class="n">Binary</span><span class="p" data-group-id="7618685325-4">]</span><span class="p" data-group-id="7618685325-3">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+                </span><span class="p" data-group-id="7618685325-5">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="7618685325-5">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7618685325-6">(</span><span class="s">&quot;Send timeout, closing!</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
+                              </span><span class="p" data-group-id="7618685325-7">[</span><span class="p" data-group-id="7618685325-7">]</span><span class="p" data-group-id="7618685325-6">)</span><span class="p">,</span><span class="w">
+                    </span><span class="nf">handle_send_timeout</span><span class="p" data-group-id="7618685325-8">(</span><span class="p" data-group-id="7618685325-8">)</span><span class="p">,</span><span class="w"> </span><span class="c1">% Not implemented here</span><span class="w">
+                    </span><span class="n">Client</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="7618685325-9">{</span><span class="nf">self</span><span class="p" data-group-id="7618685325-10">(</span><span class="p" data-group-id="7618685325-10">)</span><span class="p">,</span><span class="p" data-group-id="7618685325-11">{</span><span class="ss">error_sending</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="7618685325-11">}</span><span class="p" data-group-id="7618685325-9">}</span><span class="p">,</span><span class="w">
                     </span><span class="c1">%% Usually, it&#39;s a good idea to give up in case of a</span><span class="w">
                     </span><span class="c1">%% send timeout, as you never know how much actually</span><span class="w">
                     </span><span class="c1">%% reached the server, maybe only a packet header?!</span><span class="w">
-                    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="6751809516-12">(</span><span class="n">Sock</span><span class="p" data-group-id="6751809516-12">)</span><span class="p">;</span><span class="w">
-                </span><span class="p" data-group-id="6751809516-13">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="n">OtherSendError</span><span class="p" data-group-id="6751809516-13">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="6751809516-14">(</span><span class="s">&quot;Some other error on socket (</span><span class="si">~p</span><span class="s">), closing&quot;</span><span class="p">,</span><span class="w">
-                              </span><span class="p" data-group-id="6751809516-15">[</span><span class="n">OtherSendError</span><span class="p" data-group-id="6751809516-15">]</span><span class="p" data-group-id="6751809516-14">)</span><span class="p">,</span><span class="w">
-                    </span><span class="n">Client</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="6751809516-16">{</span><span class="nf">self</span><span class="p" data-group-id="6751809516-17">(</span><span class="p" data-group-id="6751809516-17">)</span><span class="p">,</span><span class="p" data-group-id="6751809516-18">{</span><span class="ss">error_sending</span><span class="p">,</span><span class="w"> </span><span class="n">OtherSendError</span><span class="p" data-group-id="6751809516-18">}</span><span class="p" data-group-id="6751809516-16">}</span><span class="p">,</span><span class="w">
-                    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="6751809516-19">(</span><span class="n">Sock</span><span class="p" data-group-id="6751809516-19">)</span><span class="p">;</span><span class="w">
+                    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="7618685325-12">(</span><span class="n">Sock</span><span class="p" data-group-id="7618685325-12">)</span><span class="p">;</span><span class="w">
+                </span><span class="p" data-group-id="7618685325-13">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="n">OtherSendError</span><span class="p" data-group-id="7618685325-13">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7618685325-14">(</span><span class="s">&quot;Some other error on socket (</span><span class="si">~p</span><span class="s">), closing&quot;</span><span class="p">,</span><span class="w">
+                              </span><span class="p" data-group-id="7618685325-15">[</span><span class="n">OtherSendError</span><span class="p" data-group-id="7618685325-15">]</span><span class="p" data-group-id="7618685325-14">)</span><span class="p">,</span><span class="w">
+                    </span><span class="n">Client</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="7618685325-16">{</span><span class="nf">self</span><span class="p" data-group-id="7618685325-17">(</span><span class="p" data-group-id="7618685325-17">)</span><span class="p">,</span><span class="p" data-group-id="7618685325-18">{</span><span class="ss">error_sending</span><span class="p">,</span><span class="w"> </span><span class="n">OtherSendError</span><span class="p" data-group-id="7618685325-18">}</span><span class="p" data-group-id="7618685325-16">}</span><span class="p">,</span><span class="w">
+                    </span><span class="nc">gen_tcp</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="7618685325-19">(</span><span class="n">Sock</span><span class="p" data-group-id="7618685325-19">)</span><span class="p">;</span><span class="w">
                 </span><span class="ss">ok</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                    </span><span class="n">Client</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="6751809516-20">{</span><span class="nf">self</span><span class="p" data-group-id="6751809516-21">(</span><span class="p" data-group-id="6751809516-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">data_sent</span><span class="p" data-group-id="6751809516-20">}</span><span class="p">,</span><span class="w">
-                    </span><span class="nf">loop</span><span class="p" data-group-id="6751809516-22">(</span><span class="n">Sock</span><span class="p" data-group-id="6751809516-22">)</span><span class="w">
+                    </span><span class="n">Client</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="7618685325-20">{</span><span class="nf">self</span><span class="p" data-group-id="7618685325-21">(</span><span class="p" data-group-id="7618685325-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">data_sent</span><span class="p" data-group-id="7618685325-20">}</span><span class="p">,</span><span class="w">
+                    </span><span class="nf">loop</span><span class="p" data-group-id="7618685325-22">(</span><span class="n">Sock</span><span class="p" data-group-id="7618685325-22">)</span><span class="w">
             </span><span class="k">end</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span></code></pre><p>Usually it suffices to detect time-outs on receive, as most protocols include
 some sort of acknowledgment from the server, but if the protocol is strictly one
@@ -511,7 +502,7 @@ return value is <code class="inline">{error, einval}</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">connect_option()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L375" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L363" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -548,7 +539,7 @@ return value is <code class="inline">{error, einval}</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">listen_option()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L386" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L374" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -586,7 +577,7 @@ return value is <code class="inline">{error, einval}</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">option()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L274" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L262" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -653,7 +644,7 @@ return value is <code class="inline">{error, einval}</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">option_name()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L333" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L321" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -691,7 +682,7 @@ return value is <code class="inline">{error, einval}</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">pktoptions_value()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L331" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L319" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -727,7 +718,7 @@ FreeBSD 10.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">socket()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L403" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L391" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -767,7 +758,7 @@ FreeBSD 10.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">accept(ListenSocket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L726" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L714" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -799,7 +790,7 @@ FreeBSD 10.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">accept(ListenSocket, Timeout)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L773" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L761" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -842,7 +833,7 @@ acceptor processes handling incoming connections.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">close(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L856" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L844" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -876,7 +867,7 @@ it has received all the data.</li></ol>
     </a>
     <h1 class="signature" translate="no">connect(SockAddr, Opts)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L424" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L412" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -911,7 +902,7 @@ it has received all the data.</li></ol>
     </a>
     <h1 class="signature" translate="no">connect/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L465" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L453" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -962,7 +953,7 @@ see <a href="inet.html"><code class="inline">inet</code></a>.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">connect(Address, Port, Opts, Timeout)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L590" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L578" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1021,7 +1012,7 @@ see <a href="inet.html"><code class="inline">inet</code></a>.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">controlling_process(Socket, Pid)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L1008" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L996" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1062,7 +1053,7 @@ changing the sockets active mode before the transfer is complete may cause this.
     </a>
     <h1 class="signature" translate="no">listen(Port, Options)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L696" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L684" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1110,7 +1101,7 @@ Kernel configuration parameter <code class="inline">inet_default_listen_options<
     </a>
     <h1 class="signature" translate="no">recv(Socket, Length)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L926" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L914" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1144,7 +1135,7 @@ Kernel configuration parameter <code class="inline">inet_default_listen_options<
     </a>
     <h1 class="signature" translate="no">recv(Socket, Length, Timeout)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L964" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L952" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1190,7 +1181,7 @@ could return errors such as <code class="inline">{error, ealready}</code>.</p>
     </a>
     <h1 class="signature" translate="no">send(Socket, Packet)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L904" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L892" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1237,7 +1228,7 @@ and then set package to the wanted package type again.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">shutdown(Socket, How)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L825" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/gen_tcp.erl#L813" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

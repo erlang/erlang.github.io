@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-1105547A.js"></script>
+    <script src="dist/sidebar_items-C6865BFD.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -120,11 +120,11 @@ Pages
   <span>Profiling</span>
 </h1>
 
-<h2 id="do-not-guess-about-performance-profile" class="section-heading">
-  <a href="#do-not-guess-about-performance-profile" class="hover-link">
+<h2 id="never-guess-about-performance-bottlenecks" class="section-heading">
+  <a href="#never-guess-about-performance-bottlenecks" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  <span class="text">Do Not Guess About Performance - Profile</span>
+  <span class="text">Never Guess About Performance Bottlenecks</span>
 </h2>
 <p>Even experienced software developers often guess wrong about where the
 performance bottlenecks are in their programs. Therefore, profile your program
@@ -134,7 +134,7 @@ is spent, but it significantly slows down the program it profiles.</li><li><a hr
 <code class="inline">cpu_timestamp</code> options it can be used to time how long function calls in a
 live system take.</li><li><a href="../../lib/tools-3.6/doc/html/lcnt.html"><code class="inline">lcnt</code></a> is used to find contention points in the Erlang Run-Time System's
 internal locking mechanisms. It is useful when looking for bottlenecks in
-interaction between process, port, ets tables and other entities that can be
+interaction between process, port, ETS tables, and other entities that can be
 run in parallel.</li></ul><p>The tools are further described in <a href="profiling.html#profiling_tools">Tools</a>.</p><p>There are also several open source tools outside of Erlang/OTP that can be used
 to help profiling. Some of them are:</p><ul><li><p><a href="https://github.com/isacssouza/erlgrind">erlgrind</a> can be used to visualize
 fprof data in kcachegrind.</p></li><li><p><a href="https://github.com/proger/eflame">eflame</a> is an alternative to fprof that
@@ -155,22 +155,25 @@ internal documentation.</p></li></ul><h2 id="memory-profiling" class="section-he
 <pre><code class="text">eheap_alloc: Cannot allocate 1234567890 bytes of memory (of type &quot;heap&quot;).</code></pre><p>The above slogan is one of the more common reasons for Erlang to terminate. For
 unknown reasons the Erlang Run-Time System failed to allocate memory to use.
 When this happens a crash dump is generated that contains information about the
-state of the system as it ran out of memory. Use the
+state of the system as it ran out of memory. Use
 <a href="../../lib/observer-2.15.1/doc/html/cdv_cmd.html"><code class="inline">crashdump_viewer</code></a> to get a view of the memory being
-used. Look for processes with large heaps or many messages, large ets tables,
-etc.</p><p>When looking at memory usage in a running system the most basic function to get
+used. Look for processes with large heaps or many messages, large ETS tables,
+and so on.</p><p>When looking at memory usage in a running system the most basic function to get
 information from is <a href="../../erts-14.2.3/doc/html/erlang.html#memory/0"><code class="inline">erlang:memory()</code></a>. It returns the
 current memory usage of the system. <a href="../../lib/runtime_tools-2.0.1/doc/html/instrument.html"><code class="inline">instrument</code></a> can be used to get a more
-detailed breakdown of where memory is used.</p><p>Processes, ports and ets tables can then be inspected using their respective
-info functions, i.e. <a href="../../erts-14.2.3/doc/html/erlang.html#process_info_memory"><code class="inline">erlang:process_info/2</code></a>,
-<a href="../../erts-14.2.3/doc/html/erlang.html#port_info_memory"><code class="inline">erlang:port_info/2</code></a>and <a href="../../lib/stdlib-5.2.1/doc/html/ets.html#info/1"><code class="inline">ets:info/1</code></a>.</p><p>Sometimes the system can enter a state where the reported memory from
-<code class="inline">erlang:memory(total)</code> is very different from the memory reported by the OS.
-This can be because of internal fragmentation within the Erlang Run-Time System.
-Data about how memory is allocated can be retrieved using
-<a href="../../erts-14.2.3/doc/html/erlang.html#system_info_allocator"><code class="inline">erlang:system_info(allocator)</code></a>. The data
-you get from that function is very raw and not very pleasant to read.
-<a href="http://ferd.github.io/recon/recon_alloc.html">recon_alloc</a> can be used to
-extract useful information from system_info statistics counters.</p><h2 id="large-systems" class="section-heading">
+detailed breakdown of where memory is used.</p><p>Processes, ports, and ETS tables can then be inspected using their respective
+information functions, that is,
+<a href="../../erts-14.2.3/doc/html/erlang.html#process_info_memory"><code class="inline">process_info/2</code></a>,
+<a href="../../erts-14.2.3/doc/html/erlang.html#port_info_memory"><code class="inline">erlang:port_info/2</code></a>, and <a href="../../lib/stdlib-5.2.1/doc/html/ets.html#info/1"><code class="inline">ets:info/1</code></a>.</p><p>Sometimes the system can enter a state where the reported memory from
+<code class="inline">erlang:memory(total)</code> is very different from the memory reported by
+the operating system. One reason for that is internal fragmentation
+within the Erlang run-time system.  Data about how memory is allocated
+can be retrieved using
+<a href="../../erts-14.2.3/doc/html/erlang.html#system_info_allocator"><code class="inline">erlang:system_info(allocator)</code></a>. The
+data you get from that function is raw and hard to read.
+<a href="http://ferd.github.io/recon/recon_alloc.html">recon_alloc</a> can
+be used to extract useful information from system_info statistics
+counters.</p><h2 id="large-systems" class="section-heading">
   <a href="#large-systems" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -202,7 +205,7 @@ Also ask yourself what you can do to reduce this time. The following are
 appropriate types of questions to ask yourself:</p><ul><li>Is it possible to reduce the number of times the function is called?</li><li>Can any test be run less often if the order of tests is changed?</li><li>Can any redundant tests be removed?</li><li>Does any calculated expression give the same result each time?</li><li>Are there other ways to do this that are equivalent and more efficient?</li><li>Can another internal data representation be used to make things more
 efficient?</li></ul><p>These questions are not always trivial to answer. Some benchmarks might be
 needed to back up your theory and to avoid making things slower if your theory
-is wrong. For details, see <a href="profiling.html#benchmark">Benchmarking</a>.</p><h2 id="tools" class="section-heading">
+is wrong. For details, see <a href="benchmarking.html">Benchmarking</a>.</p><h2 id="tools" class="section-heading">
   <a href="#tools" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -266,55 +269,28 @@ For example if you have a process that all other processes in the system needs
 to interact with (maybe it has some global configuration), then <code class="inline">lcnt</code> can be
 used to figure out if the interaction with that process is a problem.</p><p>In the Erlang Run-time System entities are only run in parallel when there are
 multiple schedulers. Therefore <code class="inline">lcnt</code> will show more contention points (and thus
-be more useful) on systems using many schedulers on many cores.</p><p>For more information, see the <a href="../../lib/tools-3.6/doc/html/lcnt.html"><code class="inline">lcnt</code></a> manual page in Tools.</p><p><a href="" id="benchmark"></a></p><h2 id="benchmarking" class="section-heading">
-  <a href="#benchmarking" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Benchmarking</span>
-</h2>
-<p>The main purpose of benchmarking is to find out which implementation of a given
-algorithm or function is the fastest. Benchmarking is far from an exact science.
-Today's operating systems generally run background tasks that are difficult to
-turn off. Caches and multiple CPU cores do not facilitate benchmarking. It would
-be best to run UNIX computers in single-user mode when benchmarking, but that is
-inconvenient to say the least for casual testing.</p><p>Benchmarks can measure wall-clock time or CPU time.</p><ul><li><a href="../../lib/stdlib-5.2.1/doc/html/timer.html#tc/3"><code class="inline">timer:tc/3</code></a> measures wall-clock time. The advantage with wall-clock time is
-that I/O, swapping, and other activities in the operating system kernel are
-included in the measurements. The disadvantage is that the measurements vary a
-lot. Usually it is best to run the benchmark several times and note the
-shortest time, which is to be the minimum time that is possible to achieve
-under the best of circumstances.</li><li><a href="../../erts-14.2.3/doc/html/erlang.html#statistics/1">statistics/1</a> with argument <code class="inline">runtime</code> measures CPU
-time spent in the Erlang virtual machine. The advantage with CPU time is that
-the results are more consistent from run to run. The disadvantage is that the
-time spent in the operating system kernel (such as swapping and I/O) is not
-included. Therefore, measuring CPU time is misleading if any I/O (file or
-socket) is involved.</li></ul><p>It is probably a good idea to do both wall-clock measurements and CPU time
-measurements.</p><p>Some final advice:</p><ul><li>The granularity of both measurement types can be high. Therefore, ensure that
-each individual measurement lasts for at least several seconds.</li><li>To make the test fair, each new test run is to run in its own, newly created
-Erlang process. Otherwise, if all tests run in the same process, the later
-tests start out with larger heap sizes and therefore probably do fewer garbage
-collections. Also consider restarting the Erlang emulator between each test.</li><li>Do not assume that the fastest implementation of a given algorithm on computer
-architecture X is also the fastest on computer architecture Y.</li></ul>
+be more useful) on systems using many schedulers on many cores.</p><p>For more information, see the <a href="../../lib/tools-3.6/doc/html/lcnt.html"><code class="inline">lcnt</code></a> manual page in Tools.</p>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
-      <a href="advanced.html" class="bottom-actions-button" rel="prev">
+      <a href="system_limits.html" class="bottom-actions-button" rel="prev">
         <span class="subheader">
           ← Previous Page
         </span>
         <span class="title">
-Advanced
+System Limits
         </span>
       </a>
 
   </div>
   <div class="bottom-actions-item">
 
-      <a href="retired_myths.html" class="bottom-actions-button" rel="next">
+      <a href="benchmarking.html" class="bottom-actions-button" rel="next">
         <span class="subheader">
           Next Page →
         </span>
         <span class="title">
-Retired Myths
+Benchmarking
         </span>
       </a>
 
