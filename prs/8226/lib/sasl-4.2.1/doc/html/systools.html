@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-5B6F0A59.js"></script>
+    <script src="dist/sidebar_items-A03077A2.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -140,8 +140,8 @@ release upgrade file (<code class="inline">relup</code>), and release packages.<
   </a>
   <span class="text">See Also</span>
 </h2>
-<p><a href="../../../../lib/kernel-9.2.1/doc/html/app.html"><code class="inline">app(4)</code></a>, <a href="appup.html"><code class="inline">appup(4)</code></a>,
-<a href="../../../../erts-14.2.2/doc/html/erl_cmd.html"><code class="inline">erl(1)</code></a>, <a href="rel.html"><code class="inline">rel(4)</code></a>, <a href="release_handler.html"><code class="inline">release_handler</code></a>,
+<p><a href="../../../../lib/kernel-9.2.2/doc/html/app.html"><code class="inline">app(4)</code></a>, <a href="appup.html"><code class="inline">appup(4)</code></a>,
+<a href="../../../../erts-14.2.3/doc/html/erl_cmd.html"><code class="inline">erl(1)</code></a>, <a href="rel.html"><code class="inline">rel(4)</code></a>, <a href="release_handler.html"><code class="inline">release_handler</code></a>,
 <a href="relup.html"><code class="inline">relup(4)</code></a>, <a href="script.html"><code class="inline">script(4)</code></a></p>
   </section>
 
@@ -164,17 +164,18 @@ release upgrade file (<code class="inline">relup</code>), and release packages.<
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#make_relup/4"><code class="inline">make_relup/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#make_relup/4"><code class="inline">make_relup(Name, UpFrom, DownTo, [])</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#make_relup/4" translate="no">make_relup(ReleaseName, UpNameList, DownNameList, Opts)</a>
+        <a href="#make_relup/4" translate="no">make_relup(Name, UpFrom, DownTo, [Opt])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>make_relup(Name, UpFrom, DownTo, [Opt]) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Generates a release upgrade file <code class="inline">relup</code> containing instructions for upgrading
+from or downgrading to one or more previous releases.</p></div>
 
     </div>
 
@@ -190,11 +191,13 @@ release upgrade file (<code class="inline">relup</code>), and release packages.<
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#make_script/2" translate="no">make_script(RelName, Opt)</a>
+        <a href="#make_script/2" translate="no">make_script(Name, [Opt])</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>make_script(Name, [Opt]) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Generates a boot script <code class="inline">Name.script</code> and its binary version, the boot file
+<code class="inline">Name.boot</code>, unless the <code class="inline">{script_name, ScriptName}</code> option is given, in which
+case the names are <code class="inline">ScriptName.script</code> and <code class="inline">ScriptName.boot</code>.</p></div>
 
     </div>
 
@@ -204,7 +207,7 @@ release upgrade file (<code class="inline">relup</code>), and release packages.<
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#make_tar/2"><code class="inline">make_tar/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#make_tar/2"><code class="inline">make_tar(Name, [])</code></a>.</p></div>
 
     </div>
 
@@ -214,9 +217,7 @@ release upgrade file (<code class="inline">relup</code>), and release packages.<
 
       </div>
 
-        <div class="summary-synopsis"><p>Creates a release package file <code class="inline">Name.tar.gz</code>. This file must be uncompressed and
-unpacked on the target system using <a href="release_handler.html"><code class="inline">release_handler</code></a> before the new release
-can be installed.</p></div>
+        <div class="summary-synopsis"><p>Creates a release package file <code class="inline">Name.tar.gz</code>.</p></div>
 
     </div>
 
@@ -226,7 +227,8 @@ can be installed.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>script2boot(File) -&gt; ok | error</p></div>
+        <div class="summary-synopsis"><p>This function transforms the <code class="inline">File.script</code> boot script to a binary
+term, which is stored in the <code class="inline">File.boot</code> file.</p></div>
 
     </div>
 
@@ -252,7 +254,7 @@ can be installed.</p></div>
     </a>
     <h1 class="signature" translate="no">make_relup(Name, UpFrom, DownTo)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L347" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L352" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -266,21 +268,21 @@ can be installed.</p></div>
 
           <pre translate="no"><span class="attribute">-spec</span> make_relup(Name, UpFrom, DownTo) -> Result
               when
-                  Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                  Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                   UpFrom :: [Name | {Name, Descr}],
                   DownTo :: [Name | {Name, Descr}],
-                  Descr :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                  Descr :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                   Result ::
                       ok | error |
-                      {ok, Relup :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), Module, Warnings} |
+                      {ok, Relup :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Module, Warnings} |
                       {error, Module, Error},
-                  Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
-                  Warnings :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                  Error :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                  Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
+                  Warnings :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                  Error :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
-<p>Equivalent to <a href="#make_relup/4"><code class="inline">make_relup/4</code></a>.</p>
+<p>Equivalent to <a href="#make_relup/4"><code class="inline">make_relup(Name, UpFrom, DownTo, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="make_relup/4">
@@ -290,9 +292,9 @@ can be installed.</p></div>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">make_relup(ReleaseName, UpNameList, DownNameList, Opts)</h1>
+    <h1 class="signature" translate="no">make_relup(Name, UpFrom, DownTo, [Opt])</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L428" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L435" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -306,30 +308,30 @@ can be installed.</p></div>
 
           <pre translate="no"><span class="attribute">-spec</span> make_relup(Name, UpFrom, DownTo, [Opt]) -> Result
               when
-                  Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                  Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                   UpFrom :: [Name | {Name, Descr}],
                   DownTo :: [Name | {Name, Descr}],
-                  Descr :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
+                  Descr :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
                   Opt ::
                       {path, [Dir]} |
                       restart_emulator | silent | noexec |
                       {outdir, Dir} |
                       warnings_as_errors,
-                  Dir :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                  Dir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                   Result ::
                       ok | error |
-                      {ok, Relup :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(), Module, Warnings} |
+                      {ok, Relup :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Module, Warnings} |
                       {error, Module, Error},
-                  Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
-                  Warnings :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                  Error :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                  Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
+                  Warnings :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                  Error :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
-<p>make_relup(Name, UpFrom, DownTo, [Opt]) -&gt; Result</p><p>Generates a release upgrade file <code class="inline">relup</code> containing instructions for upgrading
-from or downgrading to one or more previous releases. The instructions are used
-by <a href="release_handler.html"><code class="inline">release_handler</code></a> when installing a new version of a release in runtime.</p><p>By default, <code class="inline">relup</code> file is located in the current working directory. If option
-<code class="inline">{outdir,Dir}</code> is specified, the <code class="inline">relup</code> file is located in <code class="inline">Dir</code> instead.</p><p>The release resource file <code class="inline">Name.rel</code> is compared with all release resource files
+<p>Generates a release upgrade file <code class="inline">relup</code> containing instructions for upgrading
+from or downgrading to one or more previous releases.</p><p>The instructions are used by <a href="release_handler.html"><code class="inline">release_handler</code></a> when installing a new
+version of a release in runtime.</p><p>By default, the <code class="inline">relup</code> file is located in the current working directory. If option
+<code class="inline">{outdir,Dir}</code> is specified, the <code class="inline">relup</code> file is located in directory <code class="inline">Dir</code> instead.</p><p>The release resource file <code class="inline">Name.rel</code> is compared with all release resource files
 <code class="inline">Name2.rel</code>, specified in <code class="inline">UpFrom</code> and <code class="inline">DownTo</code>. For each such pair, the
 following is deducted:</p><ul><li>Which applications to be deleted, that is, applications listed in <code class="inline">Name.rel</code>
 but not in <code class="inline">Name2.rel</code></li><li>Which applications to be added, that is, applications listed in <code class="inline">Name2.rel</code>
@@ -339,7 +341,7 @@ if the ERTS version differs between <code class="inline">Name.rel</code> and <co
 Instructions for upgrading or downgrading between application versions are
 fetched from the relevant application upgrade files <code class="inline">App.appup</code>, sorted in the
 same order as when generating a boot script, see
-<a href="#make_script/1"><code class="inline">make_script/1,2</code></a>. High-level instructions are translated
+<a href="#make_script/2"><code class="inline">make_script/1,2</code></a>. High-level instructions are translated
 into low-level instructions and the result is printed to the <code class="inline">relup</code> file.</p><p>The optional <code class="inline">Descr</code> parameter is included &quot;as is&quot; in the <code class="inline">relup</code> file, see
 <a href="relup.html"><code class="inline">relup(4)</code></a>. Defaults to the empty list.</p><p>All the files are searched for in the code path. It is assumed that the <code class="inline">.app</code>
 and <code class="inline">.appup</code> files for an application are located in the same directory.</p><p>If option <code class="inline">{path,[Dir]}</code> is specified, this path is appended to the current
@@ -380,11 +382,11 @@ calling <code class="inline">Module:format_warning(Warnings)</code> or <code cla
 
           <pre translate="no"><span class="attribute">-spec</span> make_script(Name) -> Result
                when
-                   Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                   Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                    Result :: ok | error | {ok, Module, Warnings} | {error, Module, Error},
-                   Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
-                   Warnings :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                   Error :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                   Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
+                   Warnings :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                   Error :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -398,9 +400,9 @@ calling <code class="inline">Module:format_warning(Warnings)</code> or <code cla
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">make_script(RelName, Opt)</h1>
+    <h1 class="signature" translate="no">make_script(Name, [Opt])</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L176" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L178" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -414,7 +416,7 @@ calling <code class="inline">Module:format_warning(Warnings)</code> or <code cla
 
           <pre translate="no"><span class="attribute">-spec</span> make_script(Name, [Opt]) -> Result
                when
-                   Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                   Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                    Opt ::
                        src_tests |
                        {path, [Dir]} |
@@ -426,27 +428,27 @@ calling <code class="inline">Module:format_warning(Warnings)</code> or <code cla
                        {outdir, Dir} |
                        no_dot_erlang | no_warn_sasl | warnings_as_errors |
                        {script_name, Name},
-                   Dir :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                   Dir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                    Var :: {VarName, Prefix},
-                   VarName :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
-                   Prefix :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
-                   App :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
+                   VarName :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
+                   Prefix :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
+                   App :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
                    Result :: ok | error | {ok, Module, Warnings} | {error, Module, Error},
-                   Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
-                   Warnings :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>(),
-                   Error :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                   Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
+                   Warnings :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                   Error :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
-<p>make_script(Name, [Opt]) -&gt; Result</p><p>Generates a boot script <code class="inline">Name.script</code> and its binary version, the boot file
+<p>Generates a boot script <code class="inline">Name.script</code> and its binary version, the boot file
 <code class="inline">Name.boot</code>, unless the <code class="inline">{script_name, ScriptName}</code> option is given, in which
-case the names are <code class="inline">ScriptName.script</code> and <code class="inline">ScriptName.boot</code> The boot file
-specifies which code to be loaded and which applications to be started when the
-Erlang runtime system is started. See <a href="script.html"><code class="inline">script(4)</code></a>.</p><p>The release resource file <code class="inline">Name.rel</code> is read to determine which applications are
+case the names are <code class="inline">ScriptName.script</code> and <code class="inline">ScriptName.boot</code>.</p><p>The boot file§ specifies which code to be loaded and which
+applications to be started when the Erlang runtime system is
+started. See <a href="script.html"><code class="inline">script(4)</code></a>.</p><p>The release resource file <code class="inline">Name.rel</code> is read to determine which applications are
 included in the release. Then the relevant application resource files <code class="inline">App.app</code>
 are read to determine which modules to be loaded, and if and how the
 applications are to be started. (Keys <code class="inline">modules</code> and <code class="inline">mod</code>, see
-<a href="../../../../lib/kernel-9.2.1/doc/html/app.html"><code class="inline">app(4)</code></a>.</p><p>By default, the boot script and boot file are located in the same directory as
+<a href="../../../../lib/kernel-9.2.2/doc/html/app.html"><code class="inline">app(4)</code></a>.</p><p>By default, the boot script and boot file are located in the same directory as
 <code class="inline">Name.rel</code>. That is, in the current working directory unless <code class="inline">Name</code> contains a
 path. If option <code class="inline">{outdir,Dir}</code> is specified, they are located in <code class="inline">Dir</code> instead.</p><p>The correctness of each application is checked as follows:</p><ul><li>The version of an application specified in the <code class="inline">.rel</code> file is to be the same
 as the version specified in the <code class="inline">.app</code> file.</li><li>There are to be no undefined applications, that is, dependencies to
@@ -499,7 +501,7 @@ file during boot is <em>not</em> included.</p>
     </a>
     <h1 class="signature" translate="no">make_tar(Name)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L192" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L194" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -513,15 +515,15 @@ file during boot is <em>not</em> included.</p>
 
           <pre translate="no"><span class="attribute">-spec</span> make_tar(Name) -> Result
             when
-                Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                 Result ::
                     ok | error |
-                    {ok, Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(), Warnings :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()} |
-                    {error, Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(), Error :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                    {ok, Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(), Warnings :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()} |
+                    {error, Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(), Error :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
-<p>Equivalent to <a href="#make_tar/2"><code class="inline">make_tar/2</code></a>.</p>
+<p>Equivalent to <a href="#make_tar/2"><code class="inline">make_tar(Name, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="make_tar/2">
@@ -533,7 +535,7 @@ file during boot is <em>not</em> included.</p>
     </a>
     <h1 class="signature" translate="no">make_tar(Name, Opts)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L295" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L298" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -547,7 +549,7 @@ file during boot is <em>not</em> included.</p>
 
           <pre translate="no"><span class="attribute">-spec</span> make_tar(Name, Opts) -> Result
             when
-                Name :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                Name :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                 Opts :: [Opt],
                 Opt ::
                     {dirs, [IncDir]} |
@@ -561,28 +563,27 @@ file during boot is <em>not</em> included.</p>
                     {outdir, Dir} |
                     no_warn_sasl | warnings_as_errors |
                     {extra_files, ExtraFiles},
-                Dir :: <a href="../../../../lib/kernel-9.2.1/doc/html/file.html#t:filename_all/0">file:filename_all</a>(),
-                IncDir :: src | include | <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
+                Dir :: <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#t:filename_all/0">file:filename_all</a>(),
+                IncDir :: src | include | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
                 Var :: {VarName, PreFix},
-                VarName :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
-                PreFix :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>(),
+                VarName :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
+                PreFix :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
                 VarTar :: include | ownfile | omit,
-                App :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:atom/0">atom</a>(),
+                App :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(),
                 Result ::
                     ok | error |
-                    {ok, Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(), Warnings :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()} |
-                    {error, Module :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:module/0">module</a>(), Error :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:term/0">term</a>()},
-                ExtraFiles :: [{NameInArchive, <a href="../../../../lib/kernel-9.2.1/doc/html/file.html#t:filename_all/0">file:filename_all</a>()}],
-                NameInArchive :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>().</pre>
+                    {ok, Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(), Warnings :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()} |
+                    {error, Module :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:module/0">module</a>(), Error :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()},
+                ExtraFiles :: [{NameInArchive, <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#t:filename_all/0">file:filename_all</a>()}],
+                NameInArchive :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
 
       </div>
 
-<p>Creates a release package file <code class="inline">Name.tar.gz</code>. This file must be uncompressed and
-unpacked on the target system using <a href="release_handler.html"><code class="inline">release_handler</code></a> before the new release
-can be installed.</p><p>The release resource file <code class="inline">Name.rel</code> is read to determine which applications are
+<p>Creates a release package file <code class="inline">Name.tar.gz</code>.</p><p>This file must be uncompressed and unpacked on the target system using
+<a href="release_handler.html"><code class="inline">release_handler</code></a> before the new release can be installed.</p><p>The release resource file <code class="inline">Name.rel</code> is read to determine which applications are
 included in the release. Then the relevant application resource files <code class="inline">App.app</code>
 are read to determine the version and modules of each application (keys <code class="inline">vsn</code>
-and <code class="inline">modules</code>, see <a href="../../../../lib/kernel-9.2.1/doc/html/app.html"><code class="inline">app(4)</code></a>).</p><p>By default, the release package file is located in the same directory as
+and <code class="inline">modules</code>, see <a href="../../../../lib/kernel-9.2.2/doc/html/app.html"><code class="inline">app(4)</code></a>).</p><p>By default, the release package file is located in the same directory as
 <code class="inline">Name.rel</code>. That is, in the current working directory unless <code class="inline">Name</code> contains a
 path. If option <code class="inline">{outdir,Dir}</code> is specified, it is located in <code class="inline">Dir</code> instead.</p><p>If SASL is not included as an application in the <code class="inline">.rel</code> file, a warning is
 issued because such a release cannot be used in an upgrade. To turn off this
@@ -593,7 +594,7 @@ is specified, this path is appended to the current path. Wildcard <code class="i
 expanded to all matching directories. Example: <code class="inline">&quot;lib/*/ebin&quot;</code>.</p><p>If the <code class="inline">{extra_files, ExtraFiles}</code> option is given then the <code class="inline">ExtraFiles</code> are
 added to the tarball after everything else to be included has been added. The
 <code class="inline">ExtraFiles</code> list is a list of files or directories in the same format as the
-<code class="inline">add_type()</code> tuple for <a href="../../../../lib/stdlib-5.2/doc/html/erl_tar.html#add/3">erl_tar:add/3,4</a></p><p>Option <code class="inline">variables</code> can be used to specify an installation directory other than
+<code class="inline">add_type()</code> tuple for <a href="../../../../lib/stdlib-5.2.1/doc/html/erl_tar.html#add/3">erl_tar:add/3,4</a></p><p>Option <code class="inline">variables</code> can be used to specify an installation directory other than
 <code class="inline">lib</code> for some of the applications. If variable <code class="inline">{VarName,Prefix}</code> is specified
 and an application is found in directory <code class="inline">Prefix/Rest/App[-Vsn]/ebin</code>, this
 application is packed into a separate <code class="inline">VarName.tar.gz</code> file as
@@ -629,7 +630,7 @@ described for <a href="#make_script/1"><code class="inline">make_script</code></
     </a>
     <h1 class="signature" translate="no">script2boot(File)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L312" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/sasl/src/systools.erl#L317" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -641,13 +642,13 @@ described for <a href="#make_script/1"><code class="inline">make_script</code></
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> script2boot(File) -> ok | error when File :: <a href="../../../../erts-14.2.2/doc/html/erlang.html#t:string/0">string</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> script2boot(File) -> ok | error when File :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
 
       </div>
 
-<p>script2boot(File) -&gt; ok | error</p><p>The Erlang runtime system requires that the contents of the script used to boot
-the system is a binary Erlang term. This function transforms the <code class="inline">File.script</code>
-boot script to a binary term, which is stored in the <code class="inline">File.boot</code> file.</p><p>A boot script generated using <a href="#make_script/1"><code class="inline">make_script</code></a> is already
+<p>This function transforms the <code class="inline">File.script</code> boot script to a binary
+term, which is stored in the <code class="inline">File.boot</code> file.</p><p>The Erlang runtime system requires that the contents of the script
+used to boot the system is a binary Erlang term.</p><p>A boot script generated using <a href="#make_script/1"><code class="inline">make_script</code></a> is already
 transformed to the binary form.</p>
   </section>
 </section>

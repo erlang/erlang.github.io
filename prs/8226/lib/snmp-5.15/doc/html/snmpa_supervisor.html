@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-65BBABE8.js"></script>
+    <script src="dist/sidebar_items-80317743.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -157,8 +157,9 @@ sub-agent).</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>start_master_sup(Opts) -&gt; {ok, pid()} | {error, {already_started, pid()}} |
-{error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Starts a supervisor for the SNMP agent system. The supervisor starts all
+involved SNMP processes, including the master agent. Sub-agents should be
+started by calling <code class="inline">start_subagent/3</code>.</p></div>
 
     </div>
 
@@ -168,7 +169,8 @@ sub-agent).</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>start_sub_agent(ParentAgent,Subtree,Mibs) -&gt; {ok, pid()} | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Starts a sub-agent on the node where the function is called. The
+<code class="inline">snmpa_supervisor</code> must be running.</p></div>
 
     </div>
 
@@ -178,8 +180,10 @@ sub-agent).</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>start_sub_sup(Opts) -&gt; {ok, pid()} | {error, {already_started, pid()}} | {error,
-Reason}</p></div>
+        <div class="summary-synopsis"><p>Starts a supervisor for the SNMP agent system without a master agent. The
+supervisor starts all involved SNMP agent processes, but no agent processes.
+Sub-agents should be started by calling
+<a href="#start_sub_agent/3"><code class="inline">start_sub_agent/3</code></a>.</p></div>
 
     </div>
 
@@ -189,7 +193,8 @@ Reason}</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>stop_sub_agent(SubAgent) -&gt; ok | no_such_child</p></div>
+        <div class="summary-synopsis"><p>Stops the sub-agent on the node where the function is called. The
+<code class="inline">snmpa_supervisor</code> must be running.</p></div>
 
     </div>
 
@@ -215,7 +220,7 @@ Reason}</p></div>
     </a>
     <h1 class="signature" translate="no">start_master_sup(Opts)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L217" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L225" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -225,8 +230,20 @@ Reason}</p></div>
 
   <section class="docstring">
 
-<p>start_master_sup(Opts) -&gt; {ok, pid()} | {error, {already_started, pid()}} |
-{error, Reason}</p><p>Starts a supervisor for the SNMP agent system. The supervisor starts all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> start_master_sup(Opts) -> {ok, Pid} | {error, Reason}
+                    when
+                        Opts :: [Opt],
+                        Opt :: {db_dir, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>()} | {config, ConfOpts} | {<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()},
+                        ConfOpts :: [ConfOpt],
+                        ConfOpt :: {dir, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>()} | {<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()},
+                        Pid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
+                        Reason :: {already_started, Pid} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Starts a supervisor for the SNMP agent system. The supervisor starts all
 involved SNMP processes, including the master agent. Sub-agents should be
 started by calling <code class="inline">start_subagent/3</code>.</p><p><code class="inline">db_dir</code> is mandatory.</p><p><code class="inline">dir</code> in config is mandatory.</p><p>See <a href="snmp_config.html">snmp config</a> for a description of the options.</p>
   </section>
@@ -240,7 +257,7 @@ started by calling <code class="inline">start_subagent/3</code>.</p><p><code cla
     </a>
     <h1 class="signature" translate="no">start_sub_agent(ParentAgent, Subtree, Mibs)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L261" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L276" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -250,7 +267,20 @@ started by calling <code class="inline">start_subagent/3</code>.</p><p><code cla
 
   <section class="docstring">
 
-<p>start_sub_agent(ParentAgent,Subtree,Mibs) -&gt; {ok, pid()} | {error, Reason}</p><p>Starts a sub-agent on the node where the function is called. The
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> start_sub_agent(ParentAgent, Subtree, Mibs) -> {ok, Pid} | {error, Reason}
+                   when
+                       ParentAgent :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
+                       Subtree :: <a href="snmp.html#t:oid/0">snmp:oid</a>(),
+                       Mibs :: [MibName],
+                       MibName :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>(),
+                       Pid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
+                       Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Starts a sub-agent on the node where the function is called. The
 <code class="inline">snmpa_supervisor</code> must be running.</p><p>If the supervisor is not running, the function fails with the reason <code class="inline">badarg</code>.</p>
   </section>
 </section>
@@ -263,7 +293,7 @@ started by calling <code class="inline">start_subagent/3</code>.</p><p><code cla
     </a>
     <h1 class="signature" translate="no">start_sub_sup(Opts)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L193" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -273,9 +303,19 @@ started by calling <code class="inline">start_subagent/3</code>.</p><p><code cla
 
   <section class="docstring">
 
-<p>start_sub_sup(Opts) -&gt; {ok, pid()} | {error, {already_started, pid()}} | {error,
-Reason}</p><p>Starts a supervisor for the SNMP agent system without a master agent. The
-supervisor starts all involved SNMP processes, but no agent processes.
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> start_sub_sup(Opts) -> {ok, Pid} | {error, Reason}
+                 when
+                     Opts :: [Opt],
+                     Opt :: {db_dir, <a href="snmp.html#t:dir/0">snmp:dir</a>()} | {<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:atom/0">atom</a>(), <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>()},
+                     Pid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>(),
+                     Reason :: {already_started, Pid} | <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Starts a supervisor for the SNMP agent system without a master agent. The
+supervisor starts all involved SNMP agent processes, but no agent processes.
 Sub-agents should be started by calling
 <a href="#start_sub_agent/3"><code class="inline">start_sub_agent/3</code></a>.</p><p><code class="inline">db_dir</code> is mandatory.</p><p>See <a href="snmp_config.html#configuration_params">configuration parameters</a> for a
 description of the options.</p>
@@ -290,7 +330,7 @@ description of the options.</p>
     </a>
     <h1 class="signature" translate="no">stop_sub_agent(SubAgentPid)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L277" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmpa_supervisor.erl#L293" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -300,7 +340,13 @@ description of the options.</p>
 
   <section class="docstring">
 
-<p>stop_sub_agent(SubAgent) -&gt; ok | no_such_child</p><p>Stops the sub-agent on the node where the function is called. The
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> stop_sub_agent(SubAgentPid) -> ok | no_such_child when SubAgentPid :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>().</pre>
+
+      </div>
+
+<p>Stops the sub-agent on the node where the function is called. The
 <code class="inline">snmpa_supervisor</code> must be running.</p><p>If the supervisor is not running, the function fails with the reason <code class="inline">badarg</code>.</p>
   </section>
 </section>

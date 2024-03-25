@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-65BBABE8.js"></script>
+    <script src="dist/sidebar_items-80317743.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -146,6 +146,107 @@ the SNMP-USER-BASED-SM-MIB, and functions for configuring the database.</p><p>No
       </a>
       <span class="text">Summary</span>
     </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:auth_key/0" translate="no">auth_key()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The size/length of the list depends on auth protocol</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:auth_protocol/0" translate="no">auth_protocol()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;An indication of whether messages sent on behalf of this user to/from the
+SNMP engine identified by usmUserEngineID, can be authenticated, and if so,
+the type of authentication protocol which is used.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:clone_from/0" translate="no">clone_from()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;A pointer to another conceptual row in this usmUserTable. The user in this
+other conceptual row is called the clone-from user.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:key_change/0" translate="no">key_change()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;Every definition of an object with this syntax must identify a protocol P, a
+secret key K, and a hash algorithm H that produces output of L octets.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:name/0" translate="no">name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;A human readable string representing the name of the user. This is the
+(User-based Security) Model dependent security ID.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:priv_key/0" translate="no">priv_key()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The size/length of the list depends on priv protocol</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:priv_protocol/0" translate="no">priv_protocol()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><blockquote><h4 class="info">Note</h4><p>&quot;An indication of whether messages sent on behalf of this user to/from the
+SNMP engine identified by usmUserEngineID, can be protected from disclosure,
+and if so, the type of privacy protocol which is used.&quot;</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:public/0" translate="no">public()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p><code class="inline">OCTET STRING (SIZE(0..32))</code></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:usm_entry/0" translate="no">usm_entry()</a>
+
+      </div>
+
+    </div>
+
+</div>
 <div class="summary-functions summary">
   <h2>
     <a href="#functions">Functions</a>
@@ -157,18 +258,18 @@ the SNMP-USER-BASED-SM-MIB, and functions for configuring the database.</p><p>No
 
       </div>
 
-        <div class="summary-synopsis"><p>add_user(EngineID, Name, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC, PrivP,
-PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Adds a USM security data (user) to the agent config. Equivalent to one line in
+the <code class="inline">usm.conf</code> file.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#configure/1" translate="no">configure(Dir)</a>
+        <a href="#configure/1" translate="no">configure(ConfDir)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>configure(ConfDir) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>This function is called from the supervisor at system start-up.</p></div>
 
     </div>
 
@@ -178,17 +279,19 @@ PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; Ret</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>delete_user(Key) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p>Delete a USM security data (user) from the agent config.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reconfigure/1" translate="no">reconfigure(Dir)</a>
+        <a href="#reconfigure/1" translate="no">reconfigure(ConfDir)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>reconfigure(ConfDir) -&gt; void()</p></div>
+        <div class="summary-synopsis"><p>Inserts all data in the configuration files into the database and destroys all
+old data, including the rows with StorageType <code class="inline">nonVolatile</code>. The rows created
+from the configuration file will have StorageType <code class="inline">nonVolatile</code>.</p></div>
 
     </div>
 
@@ -196,6 +299,303 @@ PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; Ret</p></div>
 
   </section>
 
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:auth_key/0">
+
+  <div class="detail-header">
+    <a href="#t:auth_key/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">auth_key()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L179" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> auth_key() :: <a href="snmp.html#t:octet_string/0">snmp:octet_string</a>().</pre>
+
+      </div>
+
+<p>The size/length of the list depends on auth protocol:</p><pre><code class="text">               Size any for usmNoAuthProtocol
+               Size 16  for usmHMACMD5AuthProtocol
+               Size 20  for usmHMACSHAAuthProtocol
+               Size 28  for usmHMAC128SHA224AuthProtocol
+               Size 32  for usmHMAC192SHA256AuthProtocol
+               Size 48  for usmHMAC256SHA384AuthProtocol
+	       Size 64  for usmHMAC384SHA512AuthProtocol</code></pre>
+  </section>
+</section>
+<section class="detail" id="t:auth_protocol/0">
+
+  <div class="detail-header">
+    <a href="#t:auth_protocol/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">auth_protocol()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L123" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> auth_protocol() ::
+    usmNoAuthProtocol | usmHMACMD5AuthProtocol | usmHMACSHAAuthProtocol |
+    usmHMAC128SHA224AuthProtocol | usmHMAC192SH256AuthProtocol | usmHMAC256SHA384AuthProtocol |
+    usmHMAC384SHA512AuthProtocol.</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;An indication of whether messages sent on behalf of this user to/from the
+SNMP engine identified by usmUserEngineID, can be authenticated, and if so,
+the type of authentication protocol which is used.&quot;</p></blockquote><blockquote><h4 class="info">Note</h4><p>Some of the entries of this tyype are actually defined by the
+SNMP-USM-HMAC-SHA2-MIB mib.</p></blockquote><p><code class="inline">AutonomousType</code></p>
+  </section>
+</section>
+<section class="detail" id="t:clone_from/0">
+
+  <div class="detail-header">
+    <a href="#t:clone_from/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">clone_from()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L106" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> clone_from() :: zeroDotZero | <a href="snmp.html#t:row_pointer/0">snmp:row_pointer</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;A pointer to another conceptual row in this usmUserTable. The user in this
+other conceptual row is called the clone-from user.&quot;</p></blockquote><p><code class="inline">RowPointer</code></p>
+  </section>
+</section>
+<section class="detail" id="t:key_change/0">
+
+  <div class="detail-header">
+    <a href="#t:key_change/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">key_change()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L140" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> key_change() :: <a href="snmp.html#t:octet_string/0">snmp:octet_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;Every definition of an object with this syntax must identify a protocol P, a
+secret key K, and a hash algorithm H that produces output of L octets.&quot;</p></blockquote><p><code class="inline">OCTET STRING</code></p>
+  </section>
+</section>
+<section class="detail" id="t:name/0">
+
+  <div class="detail-header">
+    <a href="#t:name/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">name()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L95" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> name() :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>().</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;A human readable string representing the name of the user. This is the
+(User-based Security) Model dependent security ID.&quot;</p></blockquote><p><code class="inline">SnmpAdminString (SIZE(1..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:priv_key/0">
+
+  <div class="detail-header">
+    <a href="#t:priv_key/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">priv_key()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L191" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> priv_key() :: <a href="snmp.html#t:octet_string/0">snmp:octet_string</a>().</pre>
+
+      </div>
+
+<p>The size/length of the list depends on priv protocol:</p><pre><code class="text">	       Size any for usmNoPrivProtocol
+               Size 16  for usmDESPrivProtocol
+               Size 16  for usmAesCfb128Protocol</code></pre>
+  </section>
+</section>
+<section class="detail" id="t:priv_protocol/0">
+
+  <div class="detail-header">
+    <a href="#t:priv_protocol/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">priv_protocol()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L157" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> priv_protocol() :: usmNoPrivProtocol | usmDESPrivProtocol | usmAesCfb128Protocol.</pre>
+
+      </div>
+
+<blockquote><h4 class="info">Note</h4><p>&quot;An indication of whether messages sent on behalf of this user to/from the
+SNMP engine identified by usmUserEngineID, can be protected from disclosure,
+and if so, the type of privacy protocol which is used.&quot;</p></blockquote><blockquote><h4 class="info">Note</h4><p>Some of the entries of this tyype are actually defined by the SNMP-USM-AES-MIB
+mib.</p></blockquote><p><code class="inline">AutonomousType</code></p>
+  </section>
+</section>
+<section class="detail" id="t:public/0">
+
+  <div class="detail-header">
+    <a href="#t:public/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">public()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L163" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> public() :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p><code class="inline">OCTET STRING (SIZE(0..32))</code></p>
+  </section>
+</section>
+<section class="detail" id="t:usm_entry/0">
+
+  <div class="detail-header">
+    <a href="#t:usm_entry/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">usm_entry()</h1>
+
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L193" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> usm_entry() ::
+    {EngineID :: <a href="snmp_framework_mib.html#t:engine_id/0">snmp_framework_mib:engine_id</a>(),
+     UserName :: <a href="#t:name/0">name</a>(),
+     SecName :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>(),
+     Clone :: <a href="#t:clone_from/0">clone_from</a>(),
+     AuthP :: <a href="#t:auth_protocol/0">auth_protocol</a>(),
+     AuthKeyC :: <a href="#t:key_change/0">key_change</a>(),
+     OwnAuthKeyC :: <a href="#t:key_change/0">key_change</a>(),
+     PrivP :: <a href="#t:priv_protocol/0">priv_protocol</a>(),
+     PrivKeyC :: <a href="#t:key_change/0">key_change</a>(),
+     OwnPrivKeyC :: <a href="#t:key_change/0">key_change</a>(),
+     Public :: <a href="#t:public/0">public</a>(),
+     AuthKey :: <a href="#t:auth_key/0">auth_key</a>(),
+     PrivKey :: <a href="#t:priv_key/0">priv_key</a>()}.</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
 
   <section id="functions" class="details-list">
     <h1 class="section-heading">
@@ -214,7 +614,7 @@ PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; Ret</p></div>
     </a>
     <h1 class="signature" translate="no">add_user(EngineID, Name, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC, PrivP, PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L361" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L515" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -224,9 +624,32 @@ PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; Ret</p></div>
 
   <section class="docstring">
 
-<p>add_user(EngineID, Name, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC, PrivP,
-PrivKeyC, OwnPrivKeyC, Public, AuthKey, PrivKey) -&gt; Ret</p><p>Adds a USM security data (user) to the agent config. Equivalent to one line in
-the <code class="inline">usm.conf</code> file.</p><p><a href="" id="delete_user"></a></p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> add_user(EngineID, Name, SecName, Clone, AuthP, AuthKeyC, OwnAuthKeyC, PrivP, PrivKeyC,
+         OwnPrivKeyC, Public, AuthKey, PrivKey) ->
+            {ok, Key} | {error, Reason}
+            when
+                EngineID :: <a href="snmp_framework_mib.html#t:engine_id/0">snmp_framework_mib:engine_id</a>(),
+                Name :: <a href="#t:name/0">name</a>(),
+                SecName :: <a href="snmp_framework_mib.html#t:admin_string/0">snmp_framework_mib:admin_string</a>(),
+                Clone :: <a href="#t:clone_from/0">clone_from</a>(),
+                AuthP :: <a href="#t:auth_protocol/0">auth_protocol</a>(),
+                AuthKeyC :: <a href="#t:key_change/0">key_change</a>(),
+                OwnAuthKeyC :: <a href="#t:key_change/0">key_change</a>(),
+                PrivP :: <a href="#t:priv_protocol/0">priv_protocol</a>(),
+                PrivKeyC :: <a href="#t:key_change/0">key_change</a>(),
+                OwnPrivKeyC :: <a href="#t:key_change/0">key_change</a>(),
+                Public :: <a href="#t:public/0">public</a>(),
+                AuthKey :: <a href="#t:auth_key/0">auth_key</a>(),
+                PrivKey :: <a href="#t:priv_key/0">priv_key</a>(),
+                Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(),
+                Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Adds a USM security data (user) to the agent config. Equivalent to one line in
+the <code class="inline">usm.conf</code> file.</p>
   </section>
 </section>
 <section class="detail" id="configure/1">
@@ -236,9 +659,9 @@ the <code class="inline">usm.conf</code> file.</p><p><a href="" id="delete_user"
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">configure(Dir)</h1>
+    <h1 class="signature" translate="no">configure(ConfDir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L114" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L252" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -248,7 +671,13 @@ the <code class="inline">usm.conf</code> file.</p><p><a href="" id="delete_user"
 
   <section class="docstring">
 
-<p>configure(ConfDir) -&gt; void()</p><p>This function is called from the supervisor at system start-up.</p><p>Inserts all data in the configuration files into the database and destroys all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> configure(ConfDir) -> <a href="snmp.html#t:void/0">snmp:void</a>() when ConfDir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>This function is called from the supervisor at system start-up.</p><p>Inserts all data in the configuration files into the database and destroys all
 old rows with StorageType <code class="inline">volatile</code>. The rows created from the configuration
 file will have StorageType <code class="inline">nonVolatile</code>.</p><p>All <code class="inline">snmp</code> counters are set to zero.</p><p>If an error is found in the configuration file, it is reported using the
 function <code class="inline">config_err/2</code> of the error report module, and the function fails with
@@ -265,7 +694,7 @@ files are found.</p><p>The configuration file read is: <code class="inline">usm.
     </a>
     <h1 class="signature" translate="no">delete_user(Key)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L394" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L554" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -275,7 +704,13 @@ files are found.</p><p>The configuration file read is: <code class="inline">usm.
 
   <section class="docstring">
 
-<p>delete_user(Key) -&gt; Ret</p><p>Delete a USM security data (user) from the agent config.</p>
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> delete_user(Key) -> ok | {error, Reason} when Key :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>(), Reason :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Delete a USM security data (user) from the agent config.</p>
   </section>
 </section>
 <section class="detail" id="reconfigure/1">
@@ -285,9 +720,9 @@ files are found.</p><p>The configuration file read is: <code class="inline">usm.
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">reconfigure(Dir)</h1>
+    <h1 class="signature" translate="no">reconfigure(ConfDir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/snmp/src/agent/snmp_user_based_sm_mib.erl#L306" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -297,13 +732,19 @@ files are found.</p><p>The configuration file read is: <code class="inline">usm.
 
   <section class="docstring">
 
-<p>reconfigure(ConfDir) -&gt; void()</p><p>Inserts all data in the configuration files into the database and destroys all
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> reconfigure(ConfDir) -> <a href="snmp.html#t:void/0">snmp:void</a>() when ConfDir :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>Inserts all data in the configuration files into the database and destroys all
 old data, including the rows with StorageType <code class="inline">nonVolatile</code>. The rows created
 from the configuration file will have StorageType <code class="inline">nonVolatile</code>.</p><p>Thus, the data in the SNMP-USER-BASED-SM-MIB, after this function has been
 called, is the data from the configuration files.</p><p>All <code class="inline">snmp</code> counters are set to zero.</p><p>If an error is found in the configuration file, it is reported using the
 function <code class="inline">config_err/2</code> of the error report module, and the function fails with
 the reason <code class="inline">configuration_error</code>.</p><p><code class="inline">ConfDir</code> is a string which points to the directory where the configuration
-files are found.</p><p>The configuration file read is: <code class="inline">usm.conf</code>.<a href="" id="add_user"></a></p>
+files are found.</p><p>The configuration file read is: <code class="inline">usm.conf</code>.</p>
   </section>
 </section>
 
