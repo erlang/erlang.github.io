@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-B0FDD196.js"></script>
+    <script src="dist/sidebar_items-3642742D.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -141,7 +141,7 @@ interface. The only significant addition is that some of the functions, e.g.
 the <code class="inline">Timeout</code> argument to <code class="inline">nowait</code> or to a (<a href="#t:select_handle/0">select</a> or
 <a href="#t:completion_handle/0">completion</a>) <em>handle</em>.</p><p>For instance, if calling the <a href="socket.html#recv-nowait"><code class="inline">recv/3</code></a> function with
 Timeout set to <code class="inline">nowait</code> (<a href="#recv/3"><code class="inline">recv(Sock, 0, nowait)</code></a>) when there is
-actually nothing to read, it will return with either one of:</p><ul><li>____ - <code class="inline">{completion,</code><a href="#t:completion_info/0"><code class="inline">CompletionInfo</code></a><code class="inline">}</code></li><li>____ - <code class="inline">{select,</code><a href="#t:select_info/0"><code class="inline">SelectInfo</code></a><code class="inline">}</code></li></ul><p><code class="inline">CompletionInfo</code> contains the <a href="#t:completion_handle/0">CompletionHandle</a> and
+actually nothing to read, it will return with either one of:</p><ul><li><code class="inline">{completion,</code><a href="#t:completion_info/0"><code class="inline">CompletionInfo</code></a><code class="inline">}</code></li><li><code class="inline">{select,</code><a href="#t:select_info/0"><code class="inline">SelectInfo</code></a><code class="inline">}</code></li></ul><p><code class="inline">CompletionInfo</code> contains the <a href="#t:completion_handle/0">CompletionHandle</a> and
 <code class="inline">SelectInfo</code> contains the <a href="#t:select_handle/0">SelectHandle</a>.</p><p>We have two different implementations. One on <em>Unix</em> (<code class="inline">select</code>, based directly
 on the synchronous standard socket interface) and one on <em>Windows</em>
 (<code class="inline">completion</code>, based on the asynchronous I/O Completion Ports).</p><p>These two implementations have a slightly different behaviour and message
@@ -150,8 +150,7 @@ timeout argument set to 'nowait' (see above).</p><p>When an completion message i
 that means that the operation (connect, send, recv, ...) has been <em>completed</em>
 (successfully or otherwise). When a select message is received, that only
 means that the operation <em>can now be completed</em>, via a call to, for instance,
-<a href="#connect/1"><code class="inline">connect/1</code></a>.</p><p>The completion message has the format:</p><ul><li>____ -
-<code class="inline">{'$socket', socket(), completion, {CompletionHandle, CompletionStatus}}</code></li></ul><p>The select message has the format:</p><ul><li>____ - <code class="inline">{'$socket', socket(), select, SelectHandle}</code></li></ul><p>Note that, on select &quot;system&quot;, all other users are <em>locked out</em> until the
+<a href="#connect/1"><code class="inline">connect/1</code></a>.</p><p>The completion message has the format:</p><ul><li><code class="inline">{'$socket', socket(), completion, {CompletionHandle, CompletionStatus}}</code></li></ul><p>The select message has the format:</p><ul><li><code class="inline">{'$socket', socket(), select, SelectHandle}</code></li></ul><p>Note that, on select &quot;system&quot;, all other users are <em>locked out</em> until the
 'current user' has called the function (<code class="inline">recv</code> for instance) and its return
 value shows that the operation has completed. Such an operation can also be
 cancelled with <a href="#cancel/2"><code class="inline">cancel/2</code></a>.</p><p>Instead of <code class="inline">Timeout = nowait</code> it is equivalent to create a
@@ -162,36 +161,36 @@ the <code class="inline">Handle</code> in the 'completion' or 'select' message, 
 optimization for receiving a message containing a newly created
 <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> (ignore the part of the message queue that had arrived before
 the the <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> was created).</p><p>Another message the user must be prepared for (when making asynchronous calls)
-is the <code class="inline">abort</code> message:</p><ul><li>____ - <code class="inline">{'$socket', socket(), abort, Info}</code></li></ul><p>This message indicates that the (asynchronous) operation has been aborted. If,
+is the <code class="inline">abort</code> message:</p><ul><li><code class="inline">{'$socket', socket(), abort, Info}</code></li></ul><p>This message indicates that the (asynchronous) operation has been aborted. If,
 for instance, the socket has been closed (by another process), <code class="inline">Info</code> will be
-<code class="inline">{SelectHandle, closed}</code>.</p></blockquote><blockquote><h4 class="info">Note</h4><p>The Windows support has currently <em>pre-release</em> status.</p><p>Support for IPv6 has been implemented but not <em>fully</em> tested.</p><p>SCTP has only been partly implemented (and not tested).</p></blockquote><h2 id="module-examples" class="section-heading">
+<code class="inline">{SelectHandle, closed}</code>.</p></blockquote><blockquote><h4 class="info">Note</h4><p>Support for IPv6 has been implemented but not <em>fully</em> tested.</p><p>SCTP has only been partly implemented (and not tested).</p></blockquote><h2 id="module-examples" class="section-heading">
   <a href="#module-examples" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Examples</span>
 </h2>
-<p><a href="" id="examples"></a></p><pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="5594272739-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="5594272739-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="5594272739-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="5594272739-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="5594272739-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="5594272739-3">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="5594272739-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5594272739-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+<p><a href="" id="examples"></a></p><pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="4974457360-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="4974457360-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="4974457360-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="4974457360-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="4974457360-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="4974457360-3">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="4974457360-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4974457360-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                                </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SAddr</span><span class="p">,</span><span class="w">
-                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="5594272739-5">}</span><span class="p" data-group-id="5594272739-4">)</span><span class="p">,</span><span class="w">
+                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="4974457360-5">}</span><span class="p" data-group-id="4974457360-4">)</span><span class="p">,</span><span class="w">
    </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="5594272739-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5594272739-6">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="5594272739-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="5594272739-7">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="5594272739-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5594272739-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="5594272739-9">(</span><span class="n">Sock</span><span class="p" data-group-id="5594272739-9">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="5594272739-10">(</span><span class="n">Sock</span><span class="p" data-group-id="5594272739-10">)</span><span class="p">.</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="4974457360-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4974457360-6">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="4974457360-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="4974457360-7">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4974457360-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4974457360-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="4974457360-9">(</span><span class="n">Sock</span><span class="p" data-group-id="4974457360-9">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4974457360-10">(</span><span class="n">Sock</span><span class="p" data-group-id="4974457360-10">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="5594272739-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="5594272739-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="5594272739-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="5594272739-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="5594272739-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="5594272739-13">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="5594272739-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5594272739-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="4974457360-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="4974457360-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="4974457360-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="4974457360-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="4974457360-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="4974457360-13">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="4974457360-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4974457360-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                              </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="5594272739-15">}</span><span class="p" data-group-id="5594272739-14">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="5594272739-16">(</span><span class="n">LSock</span><span class="p" data-group-id="5594272739-16">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="5594272739-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="5594272739-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="5594272739-18">(</span><span class="n">LSock</span><span class="p" data-group-id="5594272739-18">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="5594272739-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5594272739-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="5594272739-20">(</span><span class="n">Sock</span><span class="p" data-group-id="5594272739-20">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="5594272739-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5594272739-21">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="5594272739-22">(</span><span class="n">Sock</span><span class="p" data-group-id="5594272739-22">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="5594272739-23">(</span><span class="n">LSock</span><span class="p" data-group-id="5594272739-23">)</span><span class="p">.</span></code></pre>
+                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="4974457360-15">}</span><span class="p" data-group-id="4974457360-14">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="4974457360-16">(</span><span class="n">LSock</span><span class="p" data-group-id="4974457360-16">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4974457360-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="4974457360-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4974457360-18">(</span><span class="n">LSock</span><span class="p" data-group-id="4974457360-18">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4974457360-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4974457360-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="4974457360-20">(</span><span class="n">Sock</span><span class="p" data-group-id="4974457360-20">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="4974457360-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4974457360-21">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4974457360-22">(</span><span class="n">Sock</span><span class="p" data-group-id="4974457360-22">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4974457360-23">(</span><span class="n">LSock</span><span class="p" data-group-id="4974457360-23">)</span><span class="p">.</span></code></pre>
   </section>
 
 
@@ -1363,8 +1362,8 @@ then be specified in <code class="inline">Opts</code>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Depending on the <code class="inline">Timeout</code> argument; the same as
-<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, 0, 0, infinity)</code></a>, <a href="socket.html#sendfile-timeout"><code class="inline">sendfile(Socket, FileHandle, 0, 0, Timeout)</code></a>, or
-<a href="socket.html#sendfile-nowait"><code class="inline">sendfile(Socket, FileHandle, 0, 0, SelectHandle)</code></a>, that
+<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, 0, 0, infinity)</code></a>, <a href="socket.html#sendfile-timeout"><code class="inline">sendfile(Socket, FileHandle, 0, 0, Timeout)</code></a>, or
+<a href="socket.html#sendfile-nowait"><code class="inline">sendfile(Socket, FileHandle, 0, 0, SelectHandle)</code></a>, that
 is: send all data in the file to the socket, with the given <code class="inline">Timeout</code>.</p></div>
 
     </div>
@@ -1376,7 +1375,7 @@ is: send all data in the file to the socket, with the given <code class="inline"
       </div>
 
         <div class="summary-synopsis"><p>The same as
-<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, Offset, Count, infinity)</code></a>, that
+<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, Offset, Count, infinity)</code></a>, that
 is: send the file data at <code class="inline">Offset</code> and <code class="inline">Count</code> to the socket, without time-out
 other than from the platform's network stack.</p></div>
 
@@ -1589,7 +1588,7 @@ possible to override this explicitly when creating an individual sockets, see
     </a>
     <h1 class="signature" translate="no">cmsg()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1319" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1316" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1619,7 +1618,7 @@ possible to override this explicitly when creating an individual sockets, see
     </a>
     <h1 class="signature" translate="no">cmsg_recv()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1329" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1326" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1666,7 +1665,7 @@ successfully decoded the data.</p>
     </a>
     <h1 class="signature" translate="no">cmsg_send()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1368" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1365" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1706,7 +1705,7 @@ compatible what is defined in the platform's header files.</p>
     </a>
     <h1 class="signature" translate="no">completion_handle()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1505" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1502" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1737,7 +1736,7 @@ in the returned <a href="#t:completion_info/0"><code class="inline">completion_i
     </a>
     <h1 class="signature" translate="no">completion_info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1522" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1519" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1771,7 +1770,7 @@ the <code class="inline">CompletionStatus</code>.</p>
     </a>
     <h1 class="signature" translate="no">completion_tag()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1494" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1491" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1802,7 +1801,7 @@ contained in the returned <a href="#t:completion_info/0"><code class="inline">co
     </a>
     <h1 class="signature" translate="no">domain()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L356" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L353" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1837,7 +1836,7 @@ address family is supported by the platform's header files.</p>
     </a>
     <h1 class="signature" translate="no">ee_origin()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1382" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1379" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1867,7 +1866,7 @@ address family is supported by the platform's header files.</p>
     </a>
     <h1 class="signature" translate="no">eei()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L291" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L288" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1900,7 +1899,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">extended_err()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1389" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1386" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1965,7 +1964,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">hatype()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L532" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L529" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2001,7 +2000,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">icmp_dest_unreach()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1383" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1380" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2032,7 +2031,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">icmpv6_dest_unreach()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1386" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1383" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2064,7 +2063,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">in6_addr()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L389" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L386" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2094,7 +2093,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">in6_flow_info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L386" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L383" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2126,7 +2125,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">in6_scope_id()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L387" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L384" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2158,7 +2157,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">in_addr()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L384" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L381" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2188,7 +2187,7 @@ nif has been configured to produce it.</p>
     </a>
     <h1 class="signature" translate="no">info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L299" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L296" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2225,7 +2224,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">info_keys()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1433" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1430" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2257,7 +2256,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">invalid()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L284" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L281" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2287,7 +2286,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">ioctl_device_flag()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1443" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1440" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2321,7 +2320,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">ioctl_device_map()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1459" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1456" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2357,7 +2356,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">ip_mreq()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L416" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L413" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2387,7 +2386,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">ip_mreq_source()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L421" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L418" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2417,7 +2416,7 @@ platform documentation to be sure.</p>
     </a>
     <h1 class="signature" translate="no">ip_msfilter()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L430" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L427" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2452,7 +2451,7 @@ filtering (RFC 3376).</p>
     </a>
     <h1 class="signature" translate="no">ip_pktinfo()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L453" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L450" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2482,7 +2481,7 @@ filtering (RFC 3376).</p>
     </a>
     <h1 class="signature" translate="no">ip_pmtudisc()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L440" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L437" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2513,7 +2512,7 @@ filtering (RFC 3376).</p>
     </a>
     <h1 class="signature" translate="no">ip_tos()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L448" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L445" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2544,7 +2543,7 @@ Some constant(s) may be unsupported by the platform.</p>
     </a>
     <h1 class="signature" translate="no">ipv6_hops()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L479" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L476" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2575,7 +2574,7 @@ Some constant(s) may be unsupported by the platform.</p>
     </a>
     <h1 class="signature" translate="no">ipv6_mreq()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L464" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L461" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2606,7 +2605,7 @@ RFC 2553.</p>
     </a>
     <h1 class="signature" translate="no">ipv6_pktinfo()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L482" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L479" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2636,7 +2635,7 @@ RFC 2553.</p>
     </a>
     <h1 class="signature" translate="no">ipv6_pmtudisc()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L472" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L469" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2667,7 +2666,7 @@ RFC 2553.</p>
     </a>
     <h1 class="signature" translate="no">level()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L631" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L628" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2705,7 +2704,7 @@ header files.</p>
     </a>
     <h1 class="signature" translate="no">linger()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L403" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L400" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2736,7 +2735,7 @@ header files.</p>
     </a>
     <h1 class="signature" translate="no">msg()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1226" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1223" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2766,7 +2765,7 @@ header files.</p>
     </a>
     <h1 class="signature" translate="no">msg_flag()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1214" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1211" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2802,7 +2801,7 @@ all platforms. See the platform's documentation,
     </a>
     <h1 class="signature" translate="no">msg_recv()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1288" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1285" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2843,7 +2842,7 @@ last in the containing list.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">msg_send()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1247" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1244" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2882,7 +2881,7 @@ they are set to <code class="inline">NULL</code>, <code class="inline">0</code>.
     </a>
     <h1 class="signature" translate="no">native_value()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1357" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1354" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2914,7 +2913,7 @@ they are set to <code class="inline">NULL</code>, <code class="inline">0</code>.
     </a>
     <h1 class="signature" translate="no">otp_socket_option()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L702" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L699" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2938,16 +2937,16 @@ they are set to <code class="inline">NULL</code>, <code class="inline">0</code>.
 options, above all OS protocol levels. They affect Erlang/OTP's socket
 implementation.</p><ul><li><p><strong><code class="inline">debug</code></strong> - <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a> - Activate debug printout.</p></li><li><p><strong><code class="inline">iow</code></strong> - <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a> - Inform On Wrap of statistics counters.</p></li><li><p><strong><code class="inline">controlling_process</code></strong> - <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0"><code class="inline">pid/0</code></a> - The socket &quot;owner&quot;. Only the current
 controlling process can set this option.</p></li><li><p><strong><code class="inline">rcvbuf</code></strong> -
-<code class="inline">BufSize :: (default | integer()&gt;0) | {N :: integer()&gt;0, BufSize :: (default | integer()&gt;0)}</code>-
+<code class="inline">BufSize :: (default | integer()&gt;0) | {N :: integer()&gt;0, BufSize :: (default | integer()&gt;0)}</code>-
 Receive buffer size.</p><p>The value <code class="inline">default</code> is only valid to <em>set</em>.</p><p><code class="inline">N</code> specifies the number of read attempts to do in a tight loop before
 assuming no more data is pending.</p><p>This is the allocation size for the receive buffer used when calling the OS
 protocol stack's receive API, when no specific size (size 0) is requested.
 When the receive function returns the receive buffer is reallocated to the
 actually received size. If the data is copied or shrinked in place is up to
 the allocator, and can to some extent be configured in the Erlang VM.</p><p>The similar socket option; <code class="inline">{socket,rcvbuf}</code> is a related option for the OS'
-protocol stack that on Unix corresponds to <code class="inline">SOL_SOCKET,SO_RCVBUF</code>.</p></li><li><p><strong><code class="inline">rcvctrlbuf</code></strong> - <code class="inline">BufSize :: (default | integer()&gt;0)</code>- Allocation size for
+protocol stack that on Unix corresponds to <code class="inline">SOL_SOCKET,SO_RCVBUF</code>.</p></li><li><p><strong><code class="inline">rcvctrlbuf</code></strong> - <code class="inline">BufSize :: (default | integer()&gt;0)</code>- Allocation size for
 the ancillary data buffer used when calling the OS protocol stack's receive
-API.</p><p>The value <code class="inline">default</code> is only valid to <em>set</em>.</p></li><li><p><strong><code class="inline">sndctrlbuf</code></strong> - <code class="inline">BufSize :: (default | integer()&gt;0)</code>- Allocation size for
+API.</p><p>The value <code class="inline">default</code> is only valid to <em>set</em>.</p></li><li><p><strong><code class="inline">sndctrlbuf</code></strong> - <code class="inline">BufSize :: (default | integer()&gt;0)</code>- Allocation size for
 the ancillary data buffer used when calling the OS protocol stack's
 <a href="#sendmsg/2">sendmsg</a> API.</p><p>The value <code class="inline">default</code> is only valid to <em>set</em>.</p><p>It is the user's responsibility to set a buffer size that has room for the
 encoded ancillary data in the message to send.</p><p>See <a href="#sendmsg/2">sendmsg</a> and also the <code class="inline">ctrl</code> field of the <a href="#t:msg_send/0"><code class="inline">msg_send/0</code></a>
@@ -2967,7 +2966,7 @@ internal use only.</p>
     </a>
     <h1 class="signature" translate="no">packet_type()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L528" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L525" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3001,7 +3000,7 @@ internal use only.</p>
     </a>
     <h1 class="signature" translate="no">port_number()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L382" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L379" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3031,7 +3030,7 @@ internal use only.</p>
     </a>
     <h1 class="signature" translate="no">posix()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1427" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1424" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3063,7 +3062,7 @@ internal use only.</p>
     </a>
     <h1 class="signature" translate="no">protocol()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L380" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L377" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3097,7 +3096,7 @@ supported, and <a href="#is_supported/2"><code class="inline">is_supported(proto
     </a>
     <h1 class="signature" translate="no">sctp_assocparams()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L488" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L485" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3133,7 +3132,7 @@ supported, and <a href="#is_supported/2"><code class="inline">is_supported(proto
     </a>
     <h1 class="signature" translate="no">sctp_event_subscribe()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L503" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L500" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3174,7 +3173,7 @@ have been stripped from the C struct field names, for convenience.</p>
     </a>
     <h1 class="signature" translate="no">sctp_initmsg()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L515" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L512" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3208,7 +3207,7 @@ have been stripped from the C struct field names, for convenience.</p>
     </a>
     <h1 class="signature" translate="no">sctp_rtoinfo()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L522" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L519" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3239,7 +3238,7 @@ have been stripped from the C struct field names, for convenience.</p>
     </a>
     <h1 class="signature" translate="no">select_handle()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1500" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1497" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3270,7 +3269,7 @@ the returned <a href="#t:select_info/0"><code class="inline">select_info/0</code
     </a>
     <h1 class="signature" translate="no">select_info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1512" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1509" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3302,7 +3301,7 @@ the returned <a href="#t:select_info/0"><code class="inline">select_info/0</code
     </a>
     <h1 class="signature" translate="no">select_tag()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1488" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1485" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3336,7 +3335,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L586" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L583" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3373,7 +3372,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_dl()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L574" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L571" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3410,7 +3409,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_in6()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L561" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L558" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3445,7 +3444,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_in()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L556" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L553" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3476,7 +3475,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_ll()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L567" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L564" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3512,7 +3511,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_native()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L584" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L581" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3542,7 +3541,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_recv()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L595" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L592" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3572,7 +3571,7 @@ returned <a href="#t:select_info/0"><code class="inline">select_info/0</code></a
     </a>
     <h1 class="signature" translate="no">sockaddr_un()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L553" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L550" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3609,7 +3608,7 @@ address is zero.</p>
     </a>
     <h1 class="signature" translate="no">sockaddr_unspec()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L582" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L579" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3639,7 +3638,7 @@ address is zero.</p>
     </a>
     <h1 class="signature" translate="no">socket()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1197" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1194" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3669,7 +3668,7 @@ address is zero.</p>
     </a>
     <h1 class="signature" translate="no">socket_counters()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L305" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L302" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3723,7 +3722,7 @@ address is zero.</p>
     </a>
     <h1 class="signature" translate="no">socket_handle()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1199" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3753,7 +3752,7 @@ address is zero.</p>
     </a>
     <h1 class="signature" translate="no">socket_info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L330" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L327" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3796,7 +3795,7 @@ address is zero.</p>
     </a>
     <h1 class="signature" translate="no">socket_option()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1025" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1022" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3872,9 +3871,9 @@ recommend setting this option.</p><p>Instead, use the <code class="inline">Timeo
 socket's error queue, which should be read using the message flag
 <a href="#t:msg_flag/0"><code class="inline">errqueue</code></a>, and using <a href="#recvmsg/1"><code class="inline">recvmsg/1,2,3,4,5</code></a> to
 get all error information in the <a href="#t:msg_recv/0">message's</a> <code class="inline">ctrl</code> field as a
-<a href="#t:cmsg_recv/0">control message</a> <code class="inline">#{level := ip, type := recverr}</code>.</p><p>A working strategy should be to first poll the error queue using
-<a href="socket.html#recvmsg-timeout"><code class="inline">recvmsg/2,3,4</code> </a>with <code class="inline">Timeout =:= 0</code> and <code class="inline">Flags</code>
-containing <code class="inline">errqueue</code> (ignore the return value <code class="inline">{error, timeout}</code>) before
+<a href="#t:cmsg_recv/0">control message</a> <code class="inline">#{level := ip, type := recverr}</code>.</p><p>A working strategy should be to first poll the error queue using
+<a href="socket.html#recvmsg-timeout"><code class="inline">recvmsg/2,3,4</code> </a>with <code class="inline">Timeout =:= 0</code> and <code class="inline">Flags</code>
+containing <code class="inline">errqueue</code> (ignore the return value <code class="inline">{error, timeout}</code>) before
 reading the actual data to ensure that the error queue gets cleared. And read
 the data using one of the <code class="inline">nowait |</code>
 <a href="#t:select_handle/0"><code class="inline">select_handle()</code> </a>recv functions:
@@ -3896,7 +3895,7 @@ queue. The same warning applies for this option.</p></li><li><p><strong><code cl
     </a>
     <h1 class="signature" translate="no">timeval()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L411" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L408" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3927,7 +3926,7 @@ microseconds.</p>
     </a>
     <h1 class="signature" translate="no">type()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L364" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L361" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3970,7 +3969,7 @@ microseconds.</p>
     </a>
     <h1 class="signature" translate="no">accept(ListenSocket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2913" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2910" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4002,7 +4001,7 @@ microseconds.</p>
     </a>
     <h1 class="signature" translate="no">accept/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3057" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3054" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4074,8 +4073,8 @@ microseconds.</p>
 <code class="inline">seqpacket</code>). It returns the first pending incoming connection for a listen
 socket, or waits for one to arrive, and returns the (newly) connected socket.</p><p><a href="" id="accept-timeout"></a></p><p>The same as <a href="#accept/1"><code class="inline">accept/1</code></a> but returns <code class="inline">{error, timeout}</code> if no connection has been
 accepted after <code class="inline">Timeout</code> milliseconds.</p><blockquote><h4 class="info">Note</h4><p>On unix, note that if multiple calls are made <em>only</em> the <em>last</em> call is
-&quot;valid&quot;:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p" data-group-id="3017971699-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3017971699-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Handle</span><span class="p" data-group-id="3017971699-2">}</span><span class="p" data-group-id="3017971699-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3017971699-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="3017971699-3">)</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="3017971699-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="3017971699-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3017971699-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="3017971699-5">)</span><span class="p">,</span><span class="w">
+&quot;valid&quot;:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p" data-group-id="7003137238-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7003137238-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Handle</span><span class="p" data-group-id="7003137238-2">}</span><span class="p" data-group-id="7003137238-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="7003137238-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="7003137238-3">)</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="7003137238-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="7003137238-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="7003137238-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="7003137238-5">)</span><span class="p">,</span><span class="w">
       </span><span class="p">.</span><span class="w">
             </span><span class="p">.</span><span class="w">
       </span><span class="p">.</span></code></pre><p>In the example above, <code class="inline">Handle</code> is <em>not</em> valid once the second (accept-) call
@@ -4097,11 +4096,11 @@ completion message. The <code class="inline">Handle</code> is presumed to be uni
 <a href="#t:select_handle/0"><code class="inline">select_handle/0</code></a> generated by the call.</p></li><li><p><strong>On <em>Windows</em></strong> - And a <code class="inline">CompletionInfo</code> is returned, it will contain a
 <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> generated by the call.</p></li></ul><p>If the caller doesn't want to wait for a connection, it must immediately call
 <a href="#cancel/2"><code class="inline">cancel/2</code></a> to cancel the operation.</p><blockquote><h4 class="info">Note</h4><p>On unix, note that if multiple calls are made <em>only</em> the <em>last</em> call is
-&quot;valid&quot;:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p" data-group-id="6679000272-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6679000272-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Handle1</span><span class="p" data-group-id="6679000272-2">}</span><span class="p" data-group-id="6679000272-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="6679000272-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="6679000272-3">)</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="6679000272-4">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6679000272-5">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Handle2</span><span class="p" data-group-id="6679000272-5">}</span><span class="p" data-group-id="6679000272-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="6679000272-6">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="6679000272-6">)</span><span class="p">,</span><span class="w">
+&quot;valid&quot;:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="p" data-group-id="4635685280-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4635685280-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Handle1</span><span class="p" data-group-id="4635685280-2">}</span><span class="p" data-group-id="4635685280-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4635685280-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="4635685280-3">)</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="4635685280-4">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4635685280-5">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Handle2</span><span class="p" data-group-id="4635685280-5">}</span><span class="p" data-group-id="4635685280-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4635685280-6">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="4635685280-6">)</span><span class="p">,</span><span class="w">
       </span><span class="k">receive</span><span class="w">
-          </span><span class="p" data-group-id="6679000272-7">{</span><span class="ss">&#39;$socket&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="n">Handle2</span><span class="p" data-group-id="6679000272-7">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-               </span><span class="p" data-group-id="6679000272-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">ASock</span><span class="p" data-group-id="6679000272-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="6679000272-9">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="6679000272-9">)</span><span class="p">,</span><span class="w">
+          </span><span class="p" data-group-id="4635685280-7">{</span><span class="ss">&#39;$socket&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="n">Handle2</span><span class="p" data-group-id="4635685280-7">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+               </span><span class="p" data-group-id="4635685280-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">ASock</span><span class="p" data-group-id="4635685280-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4635685280-9">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="4635685280-9">)</span><span class="p">,</span><span class="w">
                </span><span class="p">.</span><span class="w">
                      </span><span class="p">.</span><span class="w">
                </span><span class="p">.</span><span class="w">
@@ -4119,7 +4118,7 @@ messaage sent, when the second call is made).</p></blockquote>
     </a>
     <h1 class="signature" translate="no">bind(Socket, Addr)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2594" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2591" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4157,7 +4156,7 @@ was chosen, you can find out using something like: <code class="inline">{ok, #{p
     </a>
     <h1 class="signature" translate="no">cancel/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L7004" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L7001" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4187,13 +4186,13 @@ finished in good order, or until it has been cancelled by this function.</p><p>A
 / recv) will be enqueued and notified with the regular <code class="inline">select</code> mechanism for
 asynchronous operations when the current operation and all enqueued before it
 has been completed.</p><p>If <code class="inline">SelectInfo</code> does not match an operation in progress for the calling process,
-this function returns <code class="inline">{error, {invalid, SelectInfo}}</code>.</p><p>Cancel an asynchronous (completion) request.</p><p>Call this function in order to cancel a previous asynchronous call to, e.g.
+this function returns <code class="inline">{error, {invalid, SelectInfo}}</code>.</p><p>Cancel an asynchronous (completion) request.</p><p>Call this function in order to cancel a previous asynchronous call to, e.g.
 <a href="#recv/3"><code class="inline">recv/3</code></a>.</p><p>An ongoing asynchronous operation blocks the socket until the operation has been
 finished in good order, or until it has been cancelled by this function.</p><p>Any other process that tries an operation of the same basic type (accept / send
 / recv) will be enqueued and notified with the regular <code class="inline">select</code> mechanism for
 asynchronous operations when the current operation and all enqueued before it
 has been completed.</p><p>If <code class="inline">CompletionInfo</code> does not match an operation in progress for the calling
-process, this function returns <code class="inline">{error, {invalid, CompletionInfo}}</code>.</p>
+process, this function returns <code class="inline">{error, {invalid, CompletionInfo}}</code>.</p>
   </section>
 </section>
 <section class="detail" id="cancel_monitor/1">
@@ -4205,7 +4204,7 @@ process, this function returns <code class="inline">{error, {invalid, Completi
     </a>
     <h1 class="signature" translate="no">cancel_monitor(MRef)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2195" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2192" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4242,7 +4241,7 @@ process.</p>
     </a>
     <h1 class="signature" translate="no">close(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6199" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4277,7 +4276,7 @@ and then wait for the read side of the socket to be closed.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">connect(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2860" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2857" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4314,7 +4313,7 @@ connect address and time-out are processed in vain.</p><blockquote><h4 class="in
     </a>
     <h1 class="signature" translate="no">connect(Socket, SockAddr)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2662" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2659" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4348,7 +4347,7 @@ connect address and time-out are processed in vain.</p><blockquote><h4 class="in
     </a>
     <h1 class="signature" translate="no">connect/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2778" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2775" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4444,7 +4443,7 @@ immediately call <a href="#cancel/2"><code class="inline">cancel/2</code></a> to
     </a>
     <h1 class="signature" translate="no">getopt/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6399" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6396" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4485,7 +4484,7 @@ even if &quot;we&quot; support an option; it does not mean that the underlying O
     </a>
     <h1 class="signature" translate="no">getopt/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6415" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6412" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4516,7 +4515,7 @@ even if &quot;we&quot; support an option; it does not mean that the underlying O
     </a>
     <h1 class="signature" translate="no">getopt_native/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6486" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6483" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4581,7 +4580,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">i()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1817" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1814" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4611,7 +4610,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">i/1</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1843" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1840" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4648,7 +4647,7 @@ shell.</p>
     </a>
     <h1 class="signature" translate="no">i/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1879" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1876" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4683,7 +4682,7 @@ shell. What information is included is defined by <code class="inline">InfoKeys<
     </a>
     <h1 class="signature" translate="no">info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2079" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2076" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4714,7 +4713,7 @@ call this function often.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">info(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2108" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2105" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4746,7 +4745,7 @@ call this function often.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">ioctl/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6605" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6602" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4777,7 +4776,7 @@ call this function often.</p></blockquote>
 argument.</p><ul><li><p><strong><code class="inline">gifconf</code></strong> - Return a list of interface (transport layer) addresses.</p><p>Result, a list of interfaces, map with name and address.</p></li><li><p><strong><code class="inline">nread</code></strong> - Get the number of bytes that are immediately available for
 reading.</p><p>Result, number of bytes, is a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a>.</p></li><li><p><strong><code class="inline">nwrite</code></strong> - The number of bytes in the send queue.</p><p>Result, number of bytes, is a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a>.</p></li><li><p><strong><code class="inline">nspace</code></strong> - Get the free space in the send queue.</p><p>Result, number of bytes, is a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a>.</p></li><li><p><strong><code class="inline">atmark</code></strong> - Test if there is oob (out-of-bound) data waiting to be read.</p><p>Result is a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a>.</p></li><li><p><strong><code class="inline">tcp_info</code></strong> - Return miscellaneous TCP related information for a
 <em>connected</em> socket.</p><p>Result is a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a>.</p></li></ul><blockquote><h4 class="info">Note</h4><p>To see if a ioctl request is supported on the current platform:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="n">Request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">nread</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="1705477151-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="1705477151-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="1705477151-2">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="1705477151-2">)</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="6055814763-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="6055814763-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="6055814763-2">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="6055814763-2">)</span><span class="p">,</span><span class="w">
       </span><span class="p">.</span><span class="w">
       </span><span class="p">.</span><span class="w">
       </span><span class="p">.</span></code></pre></blockquote>
@@ -4792,7 +4791,7 @@ reading.</p><p>Result, number of bytes, is a <a href="../../../../erts-14.2.3/do
     </a>
     <h1 class="signature" translate="no">ioctl/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6827" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6824" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4873,7 +4872,7 @@ allowed). And bind to port zero</p><p>Must have a sufficiently large buffer.</p>
     </a>
     <h1 class="signature" translate="no">ioctl(Socket, SetRequest, Name, Value)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6925" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6922" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4923,7 +4922,7 @@ interface with the specified name.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">is_supported(Key1)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2299" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2296" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4953,7 +4952,7 @@ interface with the specified name.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">is_supported(Key1, Key2)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2315" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2312" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4986,7 +4985,7 @@ or on a different platform there might be more supported items.</p><p>This funct
     </a>
     <h1 class="signature" translate="no">listen(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2878" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2875" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5017,7 +5016,7 @@ or on a different platform there might be more supported items.</p><p>This funct
     </a>
     <h1 class="signature" translate="no">listen(Socket, Backlog)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2894" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2891" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5048,7 +5047,7 @@ or on a different platform there might be more supported items.</p><p>This funct
     </a>
     <h1 class="signature" translate="no">monitor(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2150" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2147" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5082,7 +5081,7 @@ error; it results in as many independent monitoring instances.</p>
     </a>
     <h1 class="signature" translate="no">number_of()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1569" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1566" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5112,7 +5111,7 @@ error; it results in as many independent monitoring instances.</p>
     </a>
     <h1 class="signature" translate="no">open(FD)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2390" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5143,7 +5142,7 @@ error; it results in as many independent monitoring instances.</p>
     </a>
     <h1 class="signature" translate="no">open/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2463" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2460" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5201,7 +5200,7 @@ since they cannot be retrieved from the platform.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2501" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2498" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5232,8 +5231,8 @@ since they cannot be retrieved from the platform.</p></blockquote>
 
       </div>
 
-<p>Creates an endpoint (socket) for communication.</p><p>The same as <a href="#open/3"><code class="inline">open(Domain, Type, default)</code></a> and
-<a href="#open/4"><code class="inline">open(Domain, Type, default, Opts)</code></a> respectively.</p>
+<p>Creates an endpoint (socket) for communication.</p><p>The same as <a href="#open/3"><code class="inline">open(Domain, Type, default)</code></a> and
+<a href="#open/4"><code class="inline">open(Domain, Type, default, Opts)</code></a> respectively.</p>
   </section>
 </section>
 <section class="detail" id="open/4">
@@ -5245,7 +5244,7 @@ since they cannot be retrieved from the platform.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open(Domain, Type, Protocol, Opts)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2555" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2552" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5273,11 +5272,11 @@ since they cannot be retrieved from the platform.</p></blockquote>
 <p>Creates an endpoint (socket) for communication.</p><p><code class="inline">Domain</code> and <code class="inline">Type</code> may be <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a>s, as defined in the platform's header
 files. The same goes for <code class="inline">Protocol</code> as defined in the platform's <code class="inline">services(5)</code>
 database. See also the OS man page for the library call <code class="inline">socket(2)</code>.</p><blockquote><h4 class="info">Note</h4><p>For some combinations of <code class="inline">Domain</code> and <code class="inline">Type</code> the platform has got a default
-protocol that can be selected with <code class="inline">Protocol = default</code>, and the platform may
+protocol that can be selected with <code class="inline">Protocol = default</code>, and the platform may
 allow or require selecting the default protocol, a specific protocol, or
-either.</p><p>Examples:</p><ul><li><strong><code class="inline">socket:open(inet, stream, tcp)</code></strong> - It is common that for protocol domain
+either.</p><p>Examples:</p><ul><li><strong><code class="inline">socket:open(inet, stream, tcp)</code></strong> - It is common that for protocol domain
 and type <code class="inline">inet,stream</code> it is allowed to select the <code class="inline">tcp</code> protocol although
-that mostly is the default.</li><li><strong><code class="inline">socket:open(local, dgram)</code></strong> - It is common that for the protocol domain
+that mostly is the default.</li><li><strong><code class="inline">socket:open(local, dgram)</code></strong> - It is common that for the protocol domain
 <code class="inline">local</code> it is mandatory to not select a protocol, that is; to select the
 default protocol.</li></ul></blockquote><p>The <code class="inline">Opts</code> argument is intended for &quot;other&quot; options. The supported option(s) are
 described below:</p><ul><li><p><strong><code class="inline">netns: string()</code></strong> - Used to set the network namespace during the open
@@ -5294,7 +5293,7 @@ for this socket. This overrides the global value.<br/>Defaults to the global val
     </a>
     <h1 class="signature" translate="no">peername(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6523" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6520" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5325,7 +5324,7 @@ for this socket. This overrides the global value.<br/>Defaults to the global val
     </a>
     <h1 class="signature" translate="no">recv(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4907" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4904" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5356,7 +5355,7 @@ for this socket. This overrides the global value.<br/>Defaults to the global val
     </a>
     <h1 class="signature" translate="no">recv/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4930" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4927" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5397,7 +5396,7 @@ for this socket. This overrides the global value.<br/>Defaults to the global val
     </a>
     <h1 class="signature" translate="no">recv/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5044" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5041" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5516,7 +5515,7 @@ for this socket. This overrides the global value.<br/>Defaults to the global val
     </a>
     <h1 class="signature" translate="no">recv/4</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5169" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5166" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5584,16 +5583,16 @@ for this socket. This overrides the global value.<br/>Defaults to the global val
 requested data can be delivered, or if &quot;all available&quot; data was requested when
 the first data chunk arrives.</p><p>The message <code class="inline">Flags</code> may be symbolic <a href="#t:msg_flag/0"><code class="inline">msg_flag/0</code></a>s and/or <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a>s, as in
 the platform's appropriate header files. The values of all symbolic flags and
-integers are or:ed together.</p><p>When there is a socket error this function returns <code class="inline">{error, Reason}</code>, or if some
-data arrived before the error; <code class="inline">{error, {Reason, Data}}</code>.</p><p><a href="" id="recv-timeout"></a></p><p>Receives data from a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it to
+integers are or:ed together.</p><p>When there is a socket error this function returns <code class="inline">{error, Reason}</code>, or if some
+data arrived before the error; <code class="inline">{error, {Reason, Data}}</code>.</p><p><a href="" id="recv-timeout"></a></p><p>Receives data from a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it to
 arrive.</p><p>The same as <a href="socket.html#recv-infinity">infinite time-out <code class="inline">recv/1,2,3,4</code> </a>but
-returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, Data}}</code> after <code class="inline">Timeout</code>
+returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, Data}}</code> after <code class="inline">Timeout</code>
 milliseconds, if the requested data has not been delivered.</p><p><a href="" id="recv-nowait"></a></p><p>Receives data from a socket, but returns a <code class="inline">select</code> or <code class="inline">completion</code> continuation
 if the data could not be returned immediately.</p><p>The same as <a href="socket.html#recv-infinity">infinite time-out <code class="inline">recv/1,2,3,4</code> </a>but if
 the data can be delivered immediately, the function returns (on <em>Unix</em>)
-<a href="#t:select_info/0"><code class="inline">{select,  SelectInfo}</code></a> or (on <em>Windows</em>)
-<a href="#t:completion_info/0"><code class="inline">{completion,  CompletionInfo}</code></a>, and the caller will
-then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> (with the
+<a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on <em>Windows</em>)
+<a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the caller will
+then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> (with the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a>) when data has arrived.</p><p>A subsequent call to <code class="inline">recv/1,2,3,4</code> will then return the data.</p></li><li><p><strong><code class="inline">completion</code> message</strong> -
 <code class="inline">{'$socket', Socket, completion, {CompletionHandle, CompletionStatus}}</code> (with
@@ -5603,7 +5602,7 @@ be contained in a returned <code class="inline">SelectInfo</code> or <code class
 corresponding (select or completion) message. The <code class="inline">Handle</code> is presumed to be
 unique to this call.</p><p>If the time-out argument is <code class="inline">nowait</code>, and a <code class="inline">SelectInfo</code> or <code class="inline">CompletionInfo</code> is
 returned, it will contain a <a href="#t:select_handle/0"><code class="inline">select_handle/0</code></a> or <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a>
-generated by the call.</p><p>Note that for a socket of type <code class="inline">stream</code> (on <em>Unix</em>), if <code class="inline">Length &gt; 0</code> and only
+generated by the call.</p><p>Note that for a socket of type <code class="inline">stream</code> (on <em>Unix</em>), if <code class="inline">Length &gt; 0</code> and only
 part of that amount of data is available, the function will return
 <a href="#t:select_info/0"><code class="inline">{ok, {Data, SelectInfo}}</code> </a>with partial data. If the caller
 doesn't want to wait for more data, it must immediately call <a href="#cancel/2"><code class="inline">cancel/2</code></a> to
@@ -5619,7 +5618,7 @@ cancel the operation.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5436" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5433" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5654,7 +5653,7 @@ cancel the operation.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5459" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5456" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5697,7 +5696,7 @@ cancel the operation.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5570" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5567" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5814,7 +5813,7 @@ cancel the operation.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/4</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5694" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5691" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5887,14 +5886,14 @@ the platform's appropriate header files. The values of all symbolic flags and
 integers are or:ed together.</p><p><a href="" id="recvfrom-timeout"></a></p><p>Receives a message from a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it
 to arrive.</p><p>The same as
 <a href="socket.html#recvfrom-infinity">infinite time-out <code class="inline">recvfrom/1,2,3,4</code> </a>but returns
-<code class="inline">{error, timeout}</code> after <code class="inline">Timeout</code> milliseconds, if no message has been
+<code class="inline">{error, timeout}</code> after <code class="inline">Timeout</code> milliseconds, if no message has been
 delivered.</p><p><a href="" id="recvfrom-nowait"></a></p><p>Receives a message from a socket, but returns a select continuation or a
 completion term if no message could be returned immediately.</p><p>The same as
 <a href="socket.html#recvfrom-infinity">infinite time-out <code class="inline">recvfrom/1,2,3,4</code> </a>but if no
 message can be delivered immediately, the function returns (on <em>/Unix</em>)
-<a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on <em>Windows</em>)
-<a href="#t:completion_info/0"><code class="inline">{completion,  CompletionInfo}</code></a>, and the caller will
-then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> (with the
+<a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on <em>Windows</em>)
+<a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the caller will
+then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> (with the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a>) when data has arrived.</p><p>A subsequent call to <code class="inline">recvfrom/1,2,3,4</code> will then return the message.</p></li><li><p><strong><code class="inline">completion</code> message</strong> -
 <code class="inline">{'$socket', Socket, completion, {CompletionHandle, CompletionStatus}}</code> (with
@@ -5917,7 +5916,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5787" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5784" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5948,7 +5947,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">recvmsg/2</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5842" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5839" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6006,7 +6005,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">recvmsg/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5957" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5954" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6072,7 +6071,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket, BufSz, CtrlSz, Timeout)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5898" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L5895" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6135,7 +6134,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">recvmsg/5</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6083" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6080" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6203,14 +6202,14 @@ the message is <em>not</em> &quot;consumed&quot; from the underlying buffers, so
 the platform's appropriate header files. The values of all symbolic flags and
 integers are or:ed together.</p><p><a href="" id="recvmsg-timeout"></a></p><p>Receives a message from a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it
 to arrive.</p><p>The same as <a href="socket.html#recvmsg-infinity">recvmsg/1,2,3,4,5</a> but returns
-<code class="inline">{error, timeout}</code> after <code class="inline">Timeout</code> milliseconds, if no message has been
+<code class="inline">{error, timeout}</code> after <code class="inline">Timeout</code> milliseconds, if no message has been
 delivered.</p><p><a href="" id="recvmsg-nowait"></a></p><p>Receives a message from a socket, but returns a select continuation or a
 completion term if no message could be returned immediately.</p><p>The same as
 <a href="socket.html#recvmsg-infinity">infinite time-out <code class="inline">recvmsg/1,2,3,4</code> </a>but if no
 message can delivered immediately, the function returns (on <em>Unix</em>)
-<a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on <em>Windows</em>)
-<a href="#t:completion_info/0"><code class="inline">{completion,  CompletionInfo}</code></a>, and the caller will
-then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> (with the
+<a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on <em>Windows</em>)
+<a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the caller will
+then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> (with the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a>) when data has arrived.</p><p>A subsequent call to <code class="inline">recvmsg/1,2,3,4,5</code> will then return the data.</p></li><li><p><strong><code class="inline">completion</code> message</strong> -
 <code class="inline">{'$socket', Socket, completion, {CompletionHandle, CompletionStatus}}</code> (with
@@ -6233,7 +6232,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">send(Socket, Data)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3151" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6268,7 +6267,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">send/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3243" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3240" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6353,7 +6352,7 @@ generated by the call.</p><p>If the caller doesn't want to wait for the data, it
     </a>
     <h1 class="signature" translate="no">send/4</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3475" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3472" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6463,27 +6462,27 @@ network layer, or it reports an error.</p><p>The message <code class="inline">Fl
 matching the platform's appropriate header files. The values of all symbolic
 flags and integers are or:ed together.</p><p>The <code class="inline">Data</code>, if it is not a <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a>, is copied into one before calling the
 platform network API, because a single buffer is required. A returned <code class="inline">RestData</code>
-is a sub binary of this data binary.</p><p>The return value indicates the result from the platform's network layer:</p><ul><li><p><strong><code class="inline">ok</code></strong> - All data has been accepted.</p></li><li><p><strong><code class="inline">{ok, RestData}</code></strong> - Not all data has been accepted, but no error has been
+is a sub binary of this data binary.</p><p>The return value indicates the result from the platform's network layer:</p><ul><li><p><strong><code class="inline">ok</code></strong> - All data has been accepted.</p></li><li><p><strong><code class="inline">{ok, RestData}</code></strong> - Not all data has been accepted, but no error has been
 reported. <code class="inline">RestData</code> is the tail of <code class="inline">Data</code> that has not been accepted.</p><p>This cannot happen for a socket of <a href="#t:type/0">type <code class="inline">stream</code></a> where a
 partially successful send is retried until the data is either accepted or
 there is an error.</p><p>For a socket of <a href="#t:type/0">type <code class="inline">dgram</code></a> this should probably also not
 happen since a message that cannot be passed atomically should render an
-error.</p><p>It is nevertheless possible for the platform's network layer to return this.</p></li><li><p><strong><code class="inline">{error, Reason}</code></strong> - An error has been reported and no data has been
+error.</p><p>It is nevertheless possible for the platform's network layer to return this.</p></li><li><p><strong><code class="inline">{error, Reason}</code></strong> - An error has been reported and no data has been
 accepted. The <a href="#t:posix/0"><code class="inline">posix/0</code></a> <code class="inline">Reasons</code> are from the platform's network layer.
 <code class="inline">closed</code> means that this socket library knows that the socket is closed, and
-<a href="#t:invalid/0"><code class="inline">invalid/0</code></a> means that something about an argument is invalid.</p></li><li><p><strong><code class="inline">{error, {Reason, RestData}}</code></strong> - An error has been reported but before that
+<a href="#t:invalid/0"><code class="inline">invalid/0</code></a> means that something about an argument is invalid.</p></li><li><p><strong><code class="inline">{error, {Reason, RestData}}</code></strong> - An error has been reported but before that
 some data was accepted. <code class="inline">RestData</code> is the tail of <code class="inline">Data</code> that has not been
-accepted. See <code class="inline">{error, Reason}</code> above.</p><p>This can only happen for a socket of <a href="#t:type/0">type <code class="inline">stream</code></a> when a
+accepted. See <code class="inline">{error, Reason}</code> above.</p><p>This can only happen for a socket of <a href="#t:type/0">type <code class="inline">stream</code></a> when a
 partially successful send is retried until there is an error.</p></li></ul><p><a href="" id="send-timeout"></a></p><p>Sends data on a connected socket, waiting at most <code class="inline">Timeout</code> milliseconds for it
 to be sent.</p><p>The same as <a href="socket.html#send-infinity">infinite time-out <code class="inline">send/2,3,4</code> </a>but
-returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, RestData}}</code> after <code class="inline">Timeout</code>
+returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, RestData}}</code> after <code class="inline">Timeout</code>
 milliseconds, if no <code class="inline">Data</code> or only some of it was accepted by the platform's
 network layer.</p><p><a href="" id="send-nowait"></a></p><p>Sends data on a connected socket, but returns completion <em>or</em> a select
 continuation if the data could not be sent immediately.</p><p>The same as <a href="socket.html#send-infinity">infinite time-out <code class="inline">send/2,3</code> </a>but if the
 data is not immediately accepted by the platform network layer, the function
-returns (on <em>Unix</em>) <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on
-<em>Windows</em>) <a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the
-caller will then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> ( with the
+returns (on <em>Unix</em>) <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on
+<em>Windows</em>) <a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the
+caller will then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> ( with the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code> </a>) when there is room for more data.</p><p>A subsequent call to <code class="inline">send/2-4</code> will then send the data.</p></li><li><p><strong><code class="inline">completion</code> message</strong> -
 <code class="inline">{'$socket', Socket, completion, {CompletionHandle, CompletionStatus}}</code> (with
@@ -6494,7 +6493,7 @@ corresponding select or completion message. The <code class="inline">Handle</cod
 unique to this call.</p><p>If <code class="inline">Handle</code> is <code class="inline">nowait</code>, and a <code class="inline">SelectInfo</code> or <code class="inline">CompletionInfo</code> is returned, it
 will contain a <a href="#t:select_handle/0"><code class="inline">select_handle/0</code></a> or <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> generated by the
 call.</p><p>If some of the data was sent, the function will return
-<a href="#t:select_info/0"><code class="inline">{select, {RestData, SelectInfo},</code></a>which can only happen
+<a href="#t:select_info/0"><code class="inline">{select, {RestData, SelectInfo},</code></a>which can only happen
 (on <em>Unix</em>) for a socket of <a href="#t:type/0">type <code class="inline">stream</code></a>. If the caller does not
 want to wait to send the rest of the data, it should immediately cancel the
 operation with <a href="#cancel/2"><code class="inline">cancel/2</code></a>.</p><p><a href="" id="send-cont"></a></p><p>Continues sending data on a connected socket, where the send operation was
@@ -6516,7 +6515,7 @@ continuation. Otherwise like
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4491" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4488" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6536,7 +6535,7 @@ continuation. Otherwise like
       </div>
 
 <p>sendfile(Socket, FileHandle) -&gt; Result</p><p>The same as
-<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, 0, 0, infinity)</code></a>, that
+<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, 0, 0, infinity)</code></a>, that
 is: send all data in the file to the socket, without time-out other than from
 the platform's network stack.</p>
   </section>
@@ -6550,7 +6549,7 @@ the platform's network stack.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle, Timeout)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4511" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4508" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6579,8 +6578,8 @@ the platform's network stack.</p>
       </div>
 
 <p>Depending on the <code class="inline">Timeout</code> argument; the same as
-<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, 0, 0, infinity)</code></a>, <a href="socket.html#sendfile-timeout"><code class="inline">sendfile(Socket, FileHandle, 0, 0, Timeout)</code></a>, or
-<a href="socket.html#sendfile-nowait"><code class="inline">sendfile(Socket, FileHandle, 0, 0, SelectHandle)</code></a>, that
+<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, 0, 0, infinity)</code></a>, <a href="socket.html#sendfile-timeout"><code class="inline">sendfile(Socket, FileHandle, 0, 0, Timeout)</code></a>, or
+<a href="socket.html#sendfile-nowait"><code class="inline">sendfile(Socket, FileHandle, 0, 0, SelectHandle)</code></a>, that
 is: send all data in the file to the socket, with the given <code class="inline">Timeout</code>.</p>
   </section>
 </section>
@@ -6593,7 +6592,7 @@ is: send all data in the file to the socket, with the given <code class="inline"
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont, Offset, Count)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4529" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4526" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6618,7 +6617,7 @@ is: send all data in the file to the socket, with the given <code class="inline"
       </div>
 
 <p>The same as
-<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, Offset, Count, infinity)</code></a>, that
+<a href="socket.html#sendfile-infinity"><code class="inline">sendfile(Socket, FileHandle, Offset, Count, infinity)</code></a>, that
 is: send the file data at <code class="inline">Offset</code> and <code class="inline">Count</code> to the socket, without time-out
 other than from the platform's network stack.</p>
   </section>
@@ -6632,7 +6631,7 @@ other than from the platform's network stack.</p>
     </a>
     <h1 class="signature" translate="no">sendfile/5</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4729" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4726" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6741,21 +6740,21 @@ other than from the platform's network stack.</p>
 sent (<em>&quot;infinite&quot; time-out</em>).</p><p>The <code class="inline">FileHandle</code> must refer to an open raw file as described in <a href="file.html#open/2"><code class="inline">file:open/2</code></a>.</p><p>This call will not return until the data has been accepted by the platform's
 network layer, or it reports an error.</p><p>The <code class="inline">Offset</code> argument is the file offset to start reading from. The default
 value is <code class="inline">0</code>.</p><p>The <code class="inline">Count</code> argument is the number of bytes to transfer from <code class="inline">FileHandle</code> to
-<code class="inline">Socket</code>. If <code class="inline">Count =:= 0</code> (the default) the transfer stops at the end of file.</p><p>The return value indicates the result from the platform's network layer:</p><ul><li><p><strong><code class="inline">{ok, BytesSent}</code></strong> - The transfer completed successfully after <code class="inline">BytesSent</code>
-bytes of data.</p></li><li><p><strong><code class="inline">{error, Reason}</code></strong> - An error has been reported and no data has been
+<code class="inline">Socket</code>. If <code class="inline">Count =:= 0</code> (the default) the transfer stops at the end of file.</p><p>The return value indicates the result from the platform's network layer:</p><ul><li><p><strong><code class="inline">{ok, BytesSent}</code></strong> - The transfer completed successfully after <code class="inline">BytesSent</code>
+bytes of data.</p></li><li><p><strong><code class="inline">{error, Reason}</code></strong> - An error has been reported and no data has been
 transferred. The <a href="#t:posix/0"><code class="inline">posix/0</code></a> <code class="inline">Reasons</code> are from the platform's network layer.
 <code class="inline">closed</code> means that this socket library knows that the socket is closed, and
-<a href="#t:invalid/0"><code class="inline">invalid/0</code></a> means that something about an argument is invalid.</p></li><li><p><strong><code class="inline">{error, {Reason, BytesSent}}</code></strong> - An error has been reported but before
-that some data was transferred. See <code class="inline">{error, Reason}</code> and <code class="inline">{ok, BytesSent}</code>
+<a href="#t:invalid/0"><code class="inline">invalid/0</code></a> means that something about an argument is invalid.</p></li><li><p><strong><code class="inline">{error, {Reason, BytesSent}}</code></strong> - An error has been reported but before
+that some data was transferred. See <code class="inline">{error, Reason}</code> and <code class="inline">{ok, BytesSent}</code>
 above.</p></li></ul><p><a href="" id="sendfile-timeout"></a></p><p>Sends file data on a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it to be
 sent (<em>limited time-out</em>).</p><p>The same as <a href="socket.html#sendfile-infinity">&quot;infinite&quot; time-out <code class="inline">sendfile/5</code> </a>but
-returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, BytesSent}}</code> after <code class="inline">Timeout</code>
+returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, BytesSent}}</code> after <code class="inline">Timeout</code>
 milliseconds, if not all file data was transferred by the platform's network
 layer.</p><p><a href="" id="sendfile-nowait"></a></p><p>Sends file data on a socket, but returns a select continuation if the data could
 not be sent immediately (<em>nowait</em>).</p><p>The same as <a href="socket.html#sendfile-infinity">&quot;infinite&quot; time-out <code class="inline">sendfile/5</code> </a>but
 if the data is not immediately accepted by the platform network layer, the
-function returns <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a>, and the caller
-will then receive a select message, <code class="inline">{'$socket', Socket, select, SelectHandle}</code>
+function returns <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a>, and the caller
+will then receive a select message, <code class="inline">{'$socket', Socket, select, SelectHandle}</code>
 ( with the <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code> </a>) when there is room for more data. Then a
 call to <a href="socket.html#sendfile-cont"><code class="inline">sendfile/3</code></a> with <code class="inline">SelectInfo</code> as the second
@@ -6763,7 +6762,7 @@ argument will continue the data transfer.</p><p>If <code class="inline">SelectHa
 returned <code class="inline">SelectInfo</code> and the corresponding select message. The <code class="inline">SelectHandle</code>
 is presumed to be unique to this call.</p><p>If <code class="inline">SelectHandle</code> is <code class="inline">nowait</code>, and a <code class="inline">SelectInfo</code> is returned, it will contain a
 <a href="#t:select_handle/0"><code class="inline">select_handle()</code> </a>generated by the call.</p><p>If some file data was sent, the function will return
-<a href="#t:select_info/0"><code class="inline">{ok, {BytesSent, SelectInfo}.</code></a>If the caller does not want
+<a href="#t:select_info/0"><code class="inline">{ok, {BytesSent, SelectInfo}.</code></a>If the caller does not want
 to wait to send the rest of the data, it should immediately cancel the operation
 with <a href="#cancel/2"><code class="inline">cancel/2</code></a>.</p><p><a href="" id="sendfile-cont"></a></p><p>Continues sending file data on a socket, where the send operation was initiated
 by <a href="socket.html#sendfile-nowait"><code class="inline">sendfile/3,5</code></a> that returned a <code class="inline">SelectInfo</code>
@@ -6784,7 +6783,7 @@ call.</p><p>The return value indicates the result from the platform's network la
     </a>
     <h1 class="signature" translate="no">sendmsg(Socket, Msg)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4075" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4072" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6819,7 +6818,7 @@ call.</p><p>The return value indicates the result from the platform's network la
     </a>
     <h1 class="signature" translate="no">sendmsg/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4163" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6906,7 +6905,7 @@ call.</p><p>The return value indicates the result from the platform's network la
     </a>
     <h1 class="signature" translate="no">sendmsg/4</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4395" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L4392" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7033,14 +7032,14 @@ matching the platform's appropriate header files. The values of all symbolic
 flags and integers are or:ed together.</p><p>The return value indicates the result from the platform's network layer. See
 <a href="socket.html#send-infinity"><code class="inline">send/2,3,4</code></a>.</p><blockquote><h4 class="info">Note</h4><p>On Windows, this function can only be used with datagram and raw sockets.</p></blockquote><p><a href="" id="sendmsg-timeout"></a></p><p>Sends a message on a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it to be
 sent.</p><p>The same as <a href="socket.html#sendmsg-infinity">infinite time-out <code class="inline">sendmsg/2,3,4</code> </a>but
-returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, RestData}}</code> after <code class="inline">Timeout</code>
+returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, RestData}}</code> after <code class="inline">Timeout</code>
 milliseconds, if no data or only some of it was accepted by the platform's
 network layer.</p><blockquote><h4 class="info">Note</h4><p>On Windows, this function can only be used with datagram and raw sockets.</p></blockquote><p><a href="" id="sendmsg-nowait"></a></p><p>Sends a message on a socket, but returns completion <em>or</em> a select continuation
 if the data could not be sent immediately.</p><p>The same as <a href="socket.html#sendmsg-infinity">infinity time-out <code class="inline">sendmsg/2,3</code> </a>but
 if the data is not immediately accepted by the platform network layer, the
-function returns (on <em>Unix</em>) <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on
-<em>Windows</em>) <a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the
-caller will then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> ( with the
+function returns (on <em>Unix</em>) <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on
+<em>Windows</em>) <a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the
+caller will then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> ( with the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code> </a>) when there is room for more data. A
 subsequent call to <code class="inline">sendmsg/2-4</code> will then send the data.</p></li><li><p><strong><code class="inline">completion</code> message</strong> -
@@ -7052,7 +7051,7 @@ corresponding select or completion message. The <code class="inline">Handle</cod
 unique to this call.</p><p>If <code class="inline">Timeout</code> is <code class="inline">nowait</code>, and a <code class="inline">SelectInfo</code> or <code class="inline">CompletionInfo</code> is returned, it
 will contain a <a href="#t:select_handle/0"><code class="inline">select_handle/0</code></a> or <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> generated by the
 call.</p><p>If some of the data was sent, the function will return
-<a href="#t:select_info/0"><code class="inline">{select, {RestData, SelectInfo},</code></a>which can only happen
+<a href="#t:select_info/0"><code class="inline">{select, {RestData, SelectInfo},</code></a>which can only happen
 for a socket of <a href="#t:type/0">type <code class="inline">stream</code></a>. If the caller does not want to wait
 to send the rest of the data, it should immediately cancel the operation with
 <a href="#cancel/2"><code class="inline">cancel/2</code></a>.</p><blockquote><h4 class="info">Note</h4><p>On Windows, this function can only be used with datagram and raw sockets.</p></blockquote><p><a href="" id="sendmsg-cont"></a></p><p>Continues sending a message data on a socket, where the send operation was
@@ -7074,7 +7073,7 @@ initiated by <a href="socket.html#sendmsg-nowait"><code class="inline">sendmsg/3
     </a>
     <h1 class="signature" translate="no">sendto(Socket, Data, Dest_Cont)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3674" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3671" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7117,7 +7116,7 @@ initiated by <a href="socket.html#sendmsg-nowait"><code class="inline">sendmsg/3
     </a>
     <h1 class="signature" translate="no">sendto/4</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3823" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3820" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7250,7 +7249,7 @@ continuation. Otherwise like
     </a>
     <h1 class="signature" translate="no">sendto/5</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3983" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L3980" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7324,14 +7323,14 @@ matching the platform's appropriate header files. The values of all symbolic
 flags and integers are or:ed together.</p><p>The return value indicates the result from the platform's network layer. See
 <a href="socket.html#send-infinity"><code class="inline">send/2,3,4</code></a>.</p><p><a href="" id="sendto-timeout"></a></p><p>Sends data on a socket, waiting at most <code class="inline">Timeout</code> milliseconds for it to be
 sent.</p><p>The same as <a href="socket.html#sendto-infinity">infinite time-out <code class="inline">sendto/3,4,5</code> </a>but
-returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, RestData}}</code> after <code class="inline">Timeout</code>
+returns <code class="inline">{error, timeout}</code> or <code class="inline">{error, {timeout, RestData}}</code> after <code class="inline">Timeout</code>
 milliseconds, if no <code class="inline">Data</code> or only some of it was accepted by the platform's
 network layer.</p><p><a href="" id="sendto-nowait"></a></p><p>Sends data on a socket, but returns completion <em>or</em> a select continuation if the
 data could not be sent immediately.</p><p>The same as <a href="socket.html#sendto-infinity">infinity time-out <code class="inline">sendto/3,4</code> </a>but if
 the data is not immediately accepted by the platform network layer, the function
-returns (on <em>Unix</em>) <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on
-<em>Windows</em>) <a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the
-caller will then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> ( with the
+returns (on <em>Unix</em>) <a href="#t:select_info/0"><code class="inline">{select, SelectInfo}</code></a> or (on
+<em>Windows</em>) <a href="#t:completion_info/0"><code class="inline">{completion, CompletionInfo}</code></a>, and the
+caller will then receive one of these messages:</p><ul><li><p><strong><code class="inline">select</code> message</strong> - <code class="inline">{'$socket', Socket, select, SelectHandle}</code> ( with the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a> that was contained in the
 <a href="#t:select_info/0"><code class="inline">SelectInfo</code> </a>) when there is room for more data.</p><p>A subsequent call to <code class="inline">send/2-4</code> will then send the data.</p></li><li><p><strong><code class="inline">completion</code> message</strong> -
 <code class="inline">{'$socket', Socket, completion, {CompletionHandle, CompletionStatus}}</code> (with
@@ -7342,7 +7341,7 @@ corresponding select or completion message. The <code class="inline">Handle</cod
 unique to this call.</p><p>If <code class="inline">Handle</code> is <code class="inline">nowait</code>, and a <code class="inline">SelectInfo</code> or <code class="inline">CompletionInfo</code> is returned, it
 will contain a <a href="#t:select_handle/0"><code class="inline">select_handle/0</code></a> or <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> generated by the
 call.</p><p>If some of the data was sent, the function will return
-<a href="#t:select_info/0"><code class="inline">{select, {RestData, SelectInfo},</code></a>which can only happen
+<a href="#t:select_info/0"><code class="inline">{select, {RestData, SelectInfo},</code></a>which can only happen
 (on <em>Unix</em>) for a socket of <a href="#t:type/0">type <code class="inline">stream</code></a>. If the caller does not
 want to wait to send the rest of the data, it should immediately cancel the
 operation with <a href="#cancel/2"><code class="inline">cancel/2</code></a>.</p>
@@ -7357,7 +7356,7 @@ operation with <a href="#cancel/2"><code class="inline">cancel/2</code></a>.</p>
     </a>
     <h1 class="signature" translate="no">setopt/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6288" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6285" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7397,7 +7396,7 @@ even if &quot;we&quot; support an option; it does not mean that the underlying O
     </a>
     <h1 class="signature" translate="no">setopt/4</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6306" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6303" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7427,7 +7426,7 @@ even if &quot;we&quot; support an option; it does not mean that the underlying O
     </a>
     <h1 class="signature" translate="no">setopt_native/3</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6343" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6340" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7471,7 +7470,7 @@ integer <code class="inline">NativeLevel</code> and <code class="inline">NativeO
     </a>
     <h1 class="signature" translate="no">shutdown(Socket, How)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6231" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6228" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7502,7 +7501,7 @@ integer <code class="inline">NativeLevel</code> and <code class="inline">NativeO
     </a>
     <h1 class="signature" translate="no">sockname(Socket)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6503" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L6500" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7533,7 +7532,7 @@ integer <code class="inline">NativeLevel</code> and <code class="inline">NativeO
     </a>
     <h1 class="signature" translate="no">supports()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2227" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2224" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7565,7 +7564,7 @@ integer <code class="inline">NativeLevel</code> and <code class="inline">NativeO
     </a>
     <h1 class="signature" translate="no">supports(Key1)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2240" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2237" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7595,7 +7594,7 @@ integer <code class="inline">NativeLevel</code> and <code class="inline">NativeO
     </a>
     <h1 class="signature" translate="no">supports(Key1, Key2)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2291" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L2288" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7643,7 +7642,7 @@ See <a href="#setopt/3"><code class="inline">setopt/3</code></a> and <a href="#g
     </a>
     <h1 class="signature" translate="no">use_registry(D)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1775" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1772" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7675,7 +7674,7 @@ possible to override this explicitly when creating an individual sockets, see
     </a>
     <h1 class="signature" translate="no">which_sockets()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1583" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1580" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7705,7 +7704,7 @@ possible to override this explicitly when creating an individual sockets, see
     </a>
     <h1 class="signature" translate="no">which_sockets(FilterRule)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1616" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/socket.erl#L1613" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
