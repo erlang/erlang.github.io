@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-65FA3A86.js"></script>
+    <script src="dist/sidebar_items-782D93CF.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -175,7 +175,7 @@ process</p></li><li><p><strong><code class="inline">sigquit</code></strong> - Qu
 </h2>
 <p>The following configuration parameters are defined for the Kernel application.
 For more information about configuration parameters, see file
-<a href="app.html"><code class="inline">app(4)</code></a>.</p><ul><li><p><strong><code class="inline" id="connect_all">connect_all = true | false</code></strong> - If enabled (<code class="inline">true</code>), which
+<a href="app.html"><code class="inline">app</code></a>.</p><ul><li><p><strong><code class="inline" id="connect_all">connect_all = true | false</code></strong> - If enabled (<code class="inline">true</code>), which
 also is the default, <a href="global.html"><code class="inline">global</code></a> will actively connect to all nodes that
 becomes known to it. Note that you also want to enable
 <a href="kernel_app.html#prevent_overlapping_partitions"><code class="inline">prevent_overlapping_partitions</code></a>
@@ -340,10 +340,11 @@ will allow to ignore commands that shut the node down. Defaults to <code class="
 many bytes the shell should remember. By default, the value is set to 512kb,
 and the minimal value is 50kb.</p></li><li><p><strong><code class="inline" id="shell_history_path">shell_history_path = string()</code></strong> - Specifies where
 the shell history files will be stored. defaults to the user's cache directory
-as returned by <code class="inline">filename:basedir(user_cache, &quot;erlang-history&quot;)</code>.</p></li><li><p><strong><code class="inline" id="shutdown_func">shutdown_func = {Mod, Func}</code></strong> - Where:</p><ul><li><code class="inline">Mod = atom()</code></li><li><code class="inline">Func = atom()</code></li></ul><p>Sets a function that <code class="inline">application_controller</code> calls when it starts to
+as returned by <code class="inline">filename:basedir(user_cache, &quot;erlang-history&quot;)</code>.</p></li><li><p><strong><code class="inline" id="shutdown_func">shutdown_func = {Mod :: atom(), Func :: atom()}</code></strong> -
+Sets a function that <code class="inline">application_controller</code> calls when it starts to
 terminate. The function is called as <code class="inline">Mod:Func(Reason)</code>, where <code class="inline">Reason</code> is the
 terminate reason for <code class="inline">application_controller</code>, and it must return as soon as
-possible for <code class="inline">application_controller</code> to terminate properly.</p></li><li><p><strong><code class="inline" id="source_search_rules">source_search_rules = [DirRule] | [SuffixRule]</code></strong> -  Where:</p><ul><li><code class="inline">DirRule = {ObjDirSuffix,SrcDirSuffix}</code></li><li><code class="inline">SuffixRule = {ObjSuffix,SrcSuffix,[DirRule]}</code></li><li><code class="inline">ObjDirSuffix = string()</code></li><li><code class="inline">SrcDirSuffix = string()</code></li><li><code class="inline">ObjSuffix = string()</code></li><li><code class="inline">SrcSuffix = string()</code></li></ul><p>Specifies a list of rules for use by <a href="../../../../lib/stdlib-5.2.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>
+possible for <code class="inline">application_controller</code> to terminate properly.</p></li><li><p><strong><code class="inline" id="source_search_rules">source_search_rules = [DirRule] | [SuffixRule]</code></strong></p><p>Where:</p><ul><li><code class="inline">DirRule = {ObjDirSuffix,SrcDirSuffix}</code></li><li><code class="inline">SuffixRule = {ObjSuffix,SrcSuffix,[DirRule]}</code></li><li><code class="inline">ObjDirSuffix = string()</code></li><li><code class="inline">SrcDirSuffix = string()</code></li><li><code class="inline">ObjSuffix = string()</code></li><li><code class="inline">SrcSuffix = string()</code></li></ul><p>Specifies a list of rules for use by <a href="../../../../lib/stdlib-5.2.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>
 <a href="../../../../lib/stdlib-5.2.1/doc/html/filelib.html#find_source/2"><code class="inline">filelib:find_source/2</code></a> If this is set to some other value than the empty
 list, it replaces the default rules. Rules can be simple pairs of directory
 suffixes, such as <code class="inline">{&quot;ebin&quot;, &quot;src&quot;}</code>, which are used by <a href="../../../../lib/stdlib-5.2.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>,
@@ -376,19 +377,10 @@ are only used if the corresponding configuration parameters for Logger are not
 set.</p><ul><li><p><strong><code class="inline">error_logger</code></strong> - Replaced by setting the <a href="logger_std_h.html#type"><code class="inline">type</code></a>,
 and possibly <a href="logger_std_h.html#file"><code class="inline">file</code></a> and
 <a href="logger_std_h.html#modes"><code class="inline">modes</code></a> parameters of the default <code class="inline">logger_std_h</code>
-handler. Example:</p><pre><code class="text">erl -kernel logger '[{handler,default,logger_std_h,#{config=&gt;#{file=&gt;&quot;/tmp/erlang.log&quot;}}}]'</code></pre></li><li><p><strong><code class="inline">error_logger_format_depth</code></strong> - Replaced by setting the
+handler. Example:</p><pre><code class="text">erl -kernel logger '[{handler,default,logger_std_h,#{config=&gt;#{file=&gt;&quot;/tmp/erlang.log&quot;}}}]'</code></pre></li><li><p><strong id="error_logger_format_depth"><code class="inline">error_logger_format_depth</code></strong> - Replaced by setting the
 <a href="logger_formatter.html#depth"><code class="inline">depth</code></a> parameter of the default handlers
-formatter. Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">erl</span><span class="w"> </span><span class="o">-</span><span class="ss">kernel</span><span class="w"> </span><span class="ss">logger</span><span class="w"> </span><span class="ss">&#39;[{handler,default,logger_std_h,#{formatter=&gt;{logger_formatter,#{legacy_header=&gt;true,template=&gt;[{logger_formatter,header},&quot;\n&quot;,msg,&quot;\n&quot;],depth=&gt;10}}}]&#39;</span></code></pre></li></ul><p>See <a href="logger_chapter.html#compatibility">Backwards compatibility with error_logger</a>
-for more information.</p><h2 id="see-also" class="section-heading">
-  <a href="#see-also" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">See Also</span>
-</h2>
-<p><a href="app.html"><code class="inline">app(4)</code></a>, <a href="application.html"><code class="inline">application</code></a>, <a href="code.html"><code class="inline">code</code></a>, <a href="disk_log.html"><code class="inline">disk_log</code></a>,
-<a href="erl_boot_server.html"><code class="inline">erl_boot_server</code></a>, <a href="erl_ddll.html"><code class="inline">erl_ddll</code></a>, <a href="file.html"><code class="inline">file</code></a>, <a href="global.html"><code class="inline">global</code></a>, <a href="global_group.html"><code class="inline">global_group</code></a>,
-<a href="heart.html"><code class="inline">heart</code></a>, <a href="inet.html"><code class="inline">inet</code></a>, <a href="logger.html"><code class="inline">logger</code></a>, <a href="net_kernel.html"><code class="inline">net_kernel</code></a>, <a href="os.html"><code class="inline">os</code></a>, <a href="pg.html"><code class="inline">pg</code></a>, <a href="rpc.html"><code class="inline">rpc</code></a>,
-<a href="seq_trace.html"><code class="inline">seq_trace</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/timer.html"><code class="inline">timer</code></a></p>
+formatter. Example:</p><pre><code class="text">erl -kernel logger '[{handler,default,logger_std_h,#{formatter=&gt;{logger_formatter,#{legacy_header=&gt;true,template=&gt;[{logger_formatter,header},&quot;\n&quot;,msg,&quot;\n&quot;],depth=&gt;10}}}]'</code></pre></li></ul><p>See <a href="logger_chapter.html#compatibility">Backwards compatibility with error_logger</a>
+for more information.</p>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
