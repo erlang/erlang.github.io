@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-B0FDD196.js"></script>
+    <script src="dist/sidebar_items-13BCF134.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -134,31 +134,25 @@ Pages
 
   <section id="moduledoc">
 <p>A service to read internally formatted wrap disk logs.</p><p>This module makes it possible to read internally formatted wrap disk logs, see
-<a href="disk_log.html"><code class="inline">disk_log</code></a>. <code class="inline">wrap_log_reader</code> does not interfere with <code class="inline">disk_log</code> activities;
-there is however a bug in this version of the <code class="inline">wrap_log_reader</code>, see section
-<a href="wrap_log_reader.html#bugs">Known Limitations</a>.</p><p>A wrap disk log file consists of many files, called index files. A log file can
+<a href="disk_log.html"><code class="inline">disk_log</code></a>. <a href="wrap_log_reader.html#content"><code class="inline">wrap_log_reader</code></a> does not interfere with <a href="disk_log.html"><code class="inline">disk_log</code></a> activities;
+there is however a bug in this version of the <a href="wrap_log_reader.html#content"><code class="inline">wrap_log_reader</code></a>, see section
+<a href="wrap_log_reader.html#module-known-limitations">Known Limitations</a>.</p><p>A wrap disk log file consists of many files, called index files. A log file can
 be opened and closed. Also, a single index file can be opened separately. If a
 non-existent or non-internally formatted file is opened, an error message is
 returned. If the file is corrupt, no attempt is made to repair it, but an error
 message is returned.</p><p>If a log is configured to be distributed, it is possible that all items are not
-logged on all nodes. <code class="inline">wrap_log_reader</code> only reads the log on the called node; it
+logged on all nodes. <a href="wrap_log_reader.html#content"><code class="inline">wrap_log_reader</code></a> only reads the log on the called node; it
 is up to the user to be sure that all items are read.</p><h2 id="module-known-limitations" class="section-heading">
   <a href="#module-known-limitations" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Known Limitations</span>
 </h2>
-<p><a href="" id="bugs"></a></p><p>This version of <code class="inline">wrap_log_reader</code> does not detect if <code class="inline">disk_log</code> wraps to a new
+<p>This version of <a href="wrap_log_reader.html#content"><code class="inline">wrap_log_reader</code></a> does not detect if <a href="disk_log.html"><code class="inline">disk_log</code></a> wraps to a new
 index file between a call to <a href="#open/1"><code class="inline">wrap_log_reader:open/1</code></a> and the first call to
 <a href="#chunk/1"><code class="inline">wrap_log_reader:chunk/1</code></a>. If this occurs, the call to <a href="#chunk/1"><code class="inline">chunk/1</code></a> reads the last
 logged items in the log file, as the opened index file was truncated by
-<code class="inline">disk_log</code>.</p><h2 id="module-see-also" class="section-heading">
-  <a href="#module-see-also" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">See Also</span>
-</h2>
-<p><a href="disk_log.html"><code class="inline">disk_log</code></a></p>
+<a href="disk_log.html"><code class="inline">disk_log</code></a>.</p>
   </section>
 
 
@@ -212,7 +206,7 @@ logged items in the log file, as the opened index file was truncated by
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/2"><code class="inline">chunk/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/2"><code class="inline">chunk(Continuation, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -243,7 +237,8 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#open/2"><code class="inline">open/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#open/2"><code class="inline">open(Filename, ...)</code></a> except that the whole
+wrap log file is read.</p></div>
 
     </div>
 
@@ -279,7 +274,7 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
     </a>
     <h1 class="signature" translate="no">chunk_ret()</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L160" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -313,7 +308,7 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
     </a>
     <h1 class="signature" translate="no">continuation()</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L80" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L74" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -341,7 +336,7 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
     </a>
     <h1 class="signature" translate="no">open_ret()</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L91" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L85" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -383,7 +378,7 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
     </a>
     <h1 class="signature" translate="no">chunk(Continuation)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L177" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L171" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -399,7 +394,7 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#chunk/2"><code class="inline">chunk/2</code></a>.</p>
+<p>Equivalent to <a href="#chunk/2"><code class="inline">chunk(Continuation, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="chunk/2">
@@ -411,7 +406,7 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
     </a>
     <h1 class="signature" translate="no">chunk(Continuation, N)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L213" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L207" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -429,9 +424,9 @@ I/O by reading 64 kilobyte chunks from the file.</p></div>
       </div>
 
 <p>Enables to efficiently read the terms that are appended to a log. Minimises disk
-I/O by reading 64 kilobyte chunks from the file.</p><p>The first time <code class="inline">chunk()</code> is called, an initial continuation returned from
-<a href="#open/1"><code class="inline">open/1</code></a> or <a href="#open/2"><code class="inline">open/2</code></a> must be provided.</p><p>When <code class="inline">chunk/3</code> is called, <code class="inline">N</code> controls the maximum number of terms that are read
-from the log in each chunk. Defaults to <code class="inline">infinity</code>, which means that all the
+I/O by reading 64 kilobyte chunks from the file.</p><p>The first time <a href="#chunk/2"><code class="inline">chunk/2</code></a> is called, an initial continuation returned from
+<a href="#open/1"><code class="inline">open/1</code></a> or <a href="#open/2"><code class="inline">open/2</code></a> must be provided.</p><p>When <a href="#chunk/2"><code class="inline">chunk/2</code></a> is called, <code class="inline">N</code> controls the maximum number of terms that are read
+from the log in each chunk. <code class="inline">infinity</code> means that all the
 terms contained in the 8K chunk are read. If less than <code class="inline">N</code> terms are returned,
 this does not necessarily mean that end of file is reached.</p><p>Returns a tuple <code class="inline">{Continuation2, Terms}</code>, where <code class="inline">Terms</code> is a list of terms found
 in the log. <code class="inline">Continuation2</code> is yet another continuation that must be passed on
@@ -454,7 +449,7 @@ during the search.</p>
     </a>
     <h1 class="signature" translate="no">close(Continuation)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L163" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L157" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -483,7 +478,7 @@ during the search.</p>
     </a>
     <h1 class="signature" translate="no">open(Filename)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L98" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L93" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -499,7 +494,8 @@ during the search.</p>
 
       </div>
 
-<p>Equivalent to <a href="#open/2"><code class="inline">open/2</code></a>.</p>
+<p>Equivalent to <a href="#open/2"><code class="inline">open(Filename, ...)</code></a> except that the whole
+wrap log file is read.</p>
   </section>
 </section>
 <section class="detail" id="open/2">
@@ -511,7 +507,7 @@ during the search.</p>
     </a>
     <h1 class="signature" translate="no">open(Filename, N)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L137" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_inet_res_rd/lib/kernel/src/wrap_log_reader.erl#L131" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -527,9 +523,8 @@ during the search.</p>
 
       </div>
 
-<p><code class="inline">Filename</code> specifies the name of the file to be read.</p><p><code class="inline">N</code> specifies the index of the file to be read. If <code class="inline">N</code> is omitted, the whole
-wrap log file is read; if it is specified, only the specified index file is
-read.</p><p>Returns <code class="inline">{ok, Continuation}</code> if the log/index file is opened successfully.
+<p><code class="inline">Filename</code> specifies the name of the file to be read.</p><p><code class="inline">N</code> specifies the index of the file to be read. Use <a href="#open/1"><code class="inline">open/1</code></a> to read the entire
+wrap log.</p><p>Returns <code class="inline">{ok, Continuation}</code> if the log/index file is opened successfully.
 <code class="inline">Continuation</code> is to be used when chunking or closing the file.</p><p>Returns <code class="inline">{error, Reason}</code> for all errors.</p>
   </section>
 </section>
