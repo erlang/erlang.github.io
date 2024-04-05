@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-85B2FEEA.js"></script>
+    <script src="dist/sidebar_items-AAC3A8F2.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -134,73 +134,76 @@ Pages
 
   <section id="moduledoc">
 <p>A Cross Reference Tool for analyzing dependencies between functions, modules,
-applications and releases.</p><p>Xref is a cross reference tool that can be used for finding dependencies between
-functions, modules, applications and releases.</p><p>Calls between functions are either <em id="local_call">local calls</em> like <code class="inline">f()</code>,
-or <em id="external_call">external calls</em> like <code class="inline">\m:f()</code>. <em id="module_data">Module data</em>, which are extracted from BEAM files, include local functions,
-exported functions, local calls and external calls. By default, calls to
-built-in functions (BIF) are ignored, but if the option <code class="inline">builtins</code>, accepted by
-some of this module's functions, is set to <code class="inline">true</code>, calls to BIFs are included as
-well. It is the analyzing OTP version that decides what functions are BIFs.
-Functional objects are assumed to be called where they are created (and nowhere
-else). <em id="unresolved_call">Unresolved calls</em> are calls to <code class="inline">apply</code> or <code class="inline">spawn</code>
-with variable module, variable function, or variable arguments. Examples are
-<code class="inline">M:F(a)</code>, <a href="../../../../erts-14.2.3/doc/html/erlang.html#apply/3"><code class="inline">apply(M, f, [a])</code></a>, and
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#spawn/3"><code class="inline">spawn(m, f(), Args)</code></a>. Unresolved calls are represented by calls
-where variable modules have been replaced with the atom <code class="inline">'$M_EXPR'</code>, variable
-functions have been replaced with the atom <code class="inline">'$F_EXPR'</code>, and variable number of
-arguments have been replaced with the number <code class="inline">-1</code>. The above mentioned examples
-are represented by calls to <code class="inline">'$M_EXPR':'$F_EXPR'/1</code>, <code class="inline">'$M_EXPR':f/1</code>, and
-<code class="inline">m:'$F_EXPR'/-1</code>. The unresolved calls are a subset of the external calls.</p><blockquote><h4 class="warning">Warning</h4><p>Unresolved calls make module data incomplete, which implies that the results
-of analyses may be invalid.</p></blockquote><p><em>Applications</em> are collections of modules. The modules' BEAM files are located
-in the <code class="inline">ebin</code> subdirectory of the application directory. The name of the
-application directory determines the name and version of the application.
-<em>Releases</em> are collections of applications located in the <code class="inline">lib</code> subdirectory of
+applications, and releases.</p><p>Calls between functions are either <em id="local_call">local calls</em> such as <code class="inline">f()</code>,
+or <em id="external_call">external calls</em> such as <code class="inline">mod:f()</code>.</p><p><em id="module_data">Module data</em>, which are extracted from BEAM files,
+include local functions, exported functions, local calls, and external
+calls. By default, calls to built-in functions (BIF) are ignored, but
+if the option <code class="inline">builtins</code>, accepted by some of this module's functions,
+is set to <code class="inline">true</code>, calls to BIFs are included as well. It is the
+analyzing OTP version that decides what functions are BIFs.
+Functional objects are assumed to be called where they are created
+(and nowhere else).</p><p><em id="unresolved_call">Unresolved calls</em> are calls to <code class="inline">apply</code> or
+<code class="inline">spawn</code> with variable module, variable function, or variable
+arguments. Examples are <code class="inline">M:F(a)</code>, <a href="../../../../erts-14.2.3/doc/html/erlang.html#apply/3"><code class="inline">apply(M, f, [a])</code></a>, and
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#spawn/3"><code class="inline">spawn(m, f(), Args)</code></a>. Unresolved calls are represented
+by calls where variable modules have been replaced with the atom
+<code class="inline">'$M_EXPR'</code>, variable functions have been replaced with the atom
+<code class="inline">'$F_EXPR'</code>, and variable number of arguments have been replaced with
+the number <code class="inline">-1</code>. The above mentioned examples are represented by calls
+to <code class="inline">'$M_EXPR':'$F_EXPR'/1</code>, <code class="inline">'$M_EXPR':f/1</code>, and <code class="inline">m:'$F_EXPR'/-1</code>. The
+unresolved calls are a subset of the external calls.</p><blockquote><h4 class="warning">Warning</h4><p>Unresolved calls make module data incomplete, which implies that the results
+of analyses may be invalid.</p></blockquote><p><em>Applications</em> are collections of modules. The BEAM files for the
+modules are located in the <code class="inline">ebin</code> subdirectory of the application
+directory. The name of the application directory determines the name
+and version of the application.</p><p><em>Releases</em> are collections of applications located in the <code class="inline">lib</code> subdirectory of
 the release directory. There is more to read about applications and releases in
-the Design Principles book.</p><p><em id="xref_server">Xref servers</em> are identified by names, supplied when creating
-new servers. Each Xref server holds a set of releases, a set of applications,
-and a set of modules with module data. Xref servers are independent of each
-other, and all analyses are evaluated in the context of one single Xref server
-(exceptions are the functions <a href="#m/1"><code class="inline">m/1</code></a> and <a href="#d/1"><code class="inline">d/1</code></a> which do not use
-servers at all). The <em id="mode">mode</em> of an Xref server determines what module
-data are extracted from BEAM files as modules are added to the server. Starting
-with R7, BEAM files compiled with the option <code class="inline">debug_info</code> contain so called
-<a href="" id="debug_info"></a> debug information, which is an abstract representation of
-the code. In <code class="inline">functions</code> mode, which is the default mode, function calls and
-line numbers are extracted from debug information. In <code class="inline">modules</code> mode, debug
-information is ignored if present, but dependencies between modules are
-extracted from other parts of the BEAM files. The <code class="inline">modules</code> mode is
-significantly less time and space consuming than the <code class="inline">functions</code> mode, but the
-analyses that can be done are limited.</p><p>An <em id="analyzed_module">analyzed module</em> is a module that has been added to an
+the Design Principles book.</p><p><em id="xref_server">Xref servers</em> are identified by names, supplied when
+creating new servers. Each Xref server holds a set of releases, a set
+of applications, and a set of modules with module data. Xref servers
+are independent of each other, and all analyses are evaluated in the
+context of one single Xref server (exceptions are the functions
+<a href="#m/1"><code class="inline">m/1</code></a> and <a href="#d/1"><code class="inline">d/1</code></a> which do not use servers at
+all).</p><p>The <em id="mode">mode</em> of an Xref server determines what module data are
+extracted from BEAM files as modules are added to the server. BEAM
+files compiled with the option <code class="inline">debug_info</code> contain <a href="" id="debug_info"></a> &quot;debug information&quot;, which is an abstract representation of the
+code.</p><ul><li><p>In <code class="inline">functions</code> mode, which is the default mode, function calls
+and line numbers are extracted from debug information.</p></li><li><p>In <code class="inline">modules</code> mode, debug information is ignored if present, but
+dependencies between modules are extracted from other parts of the
+BEAM files. The <code class="inline">modules</code> mode is significantly less time and space
+consuming than the <code class="inline">functions</code> mode, but the analyses that can be
+done are limited.</p></li></ul><p>An <em id="analyzed_module">analyzed module</em> is a module that has been added to an
 Xref server together with its module data. A <em id="library_module">library module</em> is a module located in some directory mentioned in the <em id="library_path">library path</em>. A library module is said to be used if some of its exported
 functions are used by some analyzed module. An <em id="unknown_module">unknown module</em> is a module that is neither an analyzed module nor a library
-module, but whose exported functions are used by some analyzed module. An
-<em id="unknown_function">unknown function</em> is a used function that is neither
-local or exported by any analyzed module nor exported by any library module. An
-<em id="undefined_function">undefined function</em> is an externally used function that
-is not exported by any analyzed module or library module. With this notion, a
-local function can be an undefined function, namely if it is externally used
-from some module. All unknown functions are also undefined functions; there is a
-<a href="xref_chapter.html#venn2">figure</a> in the User's Guide that illustrates this
-relationship.</p><p>Starting with R9C, the module attribute tag <code class="inline">deprecated</code> can be used to inform
+module, but whose exported functions are used by some analyzed module.</p><p>An <em id="unknown_function">unknown function</em> is a used function that is
+neither local or exported by any analyzed module nor exported by any
+library module. An <em id="undefined_function">undefined function</em> is an
+externally used function that is not exported by any analyzed module
+or library module. With this notion, a local function can be an
+undefined function, namely if it is externally used from some
+module. All unknown functions are also undefined functions; there is a
+<a href="xref_chapter.html#venn2">figure</a> in the User's Guide that illustrates
+this relationship.</p><p>The module attribute tag <code class="inline">deprecated</code> can be used to inform
 Xref about <em id="deprecated_function">deprecated functions</em> and optionally when
-functions are planned to be removed. A few examples show the idea:</p><ul><li><p><strong>-deprecated({f,1}).</strong> - The exported function <code class="inline">f/1</code> is deprecated.
-Nothing is said whether <code class="inline">f/1</code> will be removed or not.</p></li><li><p><strong>-deprecated({f,1,&quot;Use g/1 instead&quot;}).</strong> - As above but with a descriptive
+functions are planned to be removed. A few examples show the idea:</p><ul><li><p><code class="inline">-deprecated({f,1}).</code> - The exported function <code class="inline">f/1</code> is deprecated.
+Nothing is said whether <code class="inline">f/1</code> will be removed or not.</p></li><li><p><code class="inline">-deprecated({f,1,&quot;Use g/1 instead&quot;}).</code> - As above but with a descriptive
 string. The string is currently unused by <code class="inline">xref</code> but other tools can make use
-of it.</p></li><li><p><strong>-deprecated({f,'_'}).</strong> - All exported functions <code class="inline">f/0</code>, <code class="inline">f/1</code> and so on
-are deprecated.</p></li><li><p><strong>-deprecated(module).</strong> - All exported functions in the module are
-deprecated. Equivalent to <code class="inline">-deprecated({'_','_'}).</code>.</p></li><li><p><strong>-deprecated([{g,1,next_version}]).</strong> - The function <code class="inline">g/1</code> is deprecated
-and will be removed in next version.</p></li><li><p><strong>-deprecated([{g,2,next_major_release}]).</strong> - The function <code class="inline">g/2</code> is
-deprecated and will be removed in next major release.</p></li><li><p><strong>-deprecated([{g,3,eventually}]).</strong> - The function <code class="inline">g/3</code> is deprecated
-and will eventually be removed.</p></li><li><p><strong>-deprecated({'<em>','</em>',eventually}).</strong> - All exported functions in the
+of it.</p></li><li><p><code class="inline">-deprecated({f,'_'}).</code> - All exported functions <code class="inline">f/0</code>, <code class="inline">f/1</code>, and so on
+are deprecated.</p></li><li><p><code class="inline">-deprecated(module).</code> - All exported functions in the module are
+deprecated. Equivalent to <code class="inline">-deprecated({'_','_'}).</code>.</p></li><li><p><code class="inline">-deprecated([{g,1,next_version}]).</code> - The function <code class="inline">g/1</code> is deprecated
+and will be removed in next version.</p></li><li><p><code class="inline">-deprecated([{g,2,next_major_release}]).</code> - The function <code class="inline">g/2</code> is
+deprecated and will be removed in next major release.</p></li><li><p><code class="inline">-deprecated([{g,3,eventually}]).</code> - The function <code class="inline">g/3</code> is deprecated
+and will eventually be removed.</p></li><li><p><code class="inline">-deprecated({'_','_',eventually}).</code> - All exported functions in the
 module are deprecated and will eventually be removed.</p></li></ul><p>Before any analysis can take place, module data must be <em>set up</em>. For instance,
 the cross reference and the unknown functions are computed when all module data
-are known. The functions that need complete data (<code class="inline">analyze</code>, <code class="inline">q</code>, <code class="inline">variables</code>)
+are known. The functions that need complete data
+(<a href="#analyze/3"><code class="inline">analyze/2,3</code></a>, <a href="#q/3"><code class="inline">q/2,3</code></a>, <a href="#variables/2"><code class="inline">variables/1,2</code></a>
 take care of setting up data automatically. Module data need to be set up
-(again) after calls to any of the <code class="inline">add</code>, <code class="inline">replace</code>, <code class="inline">remove</code>, <code class="inline">set_library_path</code>
-or <code class="inline">update</code> functions.</p><p>The result of setting up module data is the <em id="call_graph">Call Graph</em>. A
+(again) after calls to any of the <code class="inline">add</code>, <code class="inline">replace</code>, <code class="inline">remove</code>,
+<a href="#set_library_path/3"><code class="inline">set_library_path/2,3</code></a>, or
+<a href="#update/2"><code class="inline">update/1,2</code></a> functions.</p><p>The result of setting up module data is the <em id="call_graph">Call Graph</em>. A
 (directed) graph consists of a set of vertices and a set of (directed) edges.
 The edges represent <em id="call">calls</em> (From, To) between functions, modules,
-applications or releases. From is said to call To, and To is said to be used by
+applications, or releases. From is said to call To, and To is said to be used by
 From. The vertices of the Call Graph are the functions of all module data: local
 and exported functions of analyzed modules; used BIFs; used exported functions
 of library modules; and unknown functions. The functions <code class="inline">module_info/0,1</code> added
@@ -241,12 +244,11 @@ or releases, depending on the type) that match the expression. Similarly, a
 expression. An example is <code class="inline">&quot;xref_.*&quot;:&quot;add_.*&quot;/&quot;(2|3)&quot;</code>, which matches all <code class="inline">add</code>
 functions of arity two or three of any of the xref modules. Another example, one
 that matches all functions of arity 10 or more: <code class="inline">_:_/&quot;[1-9].+&quot;</code>. Here <code class="inline">_</code> is an
-abbreviation for <code class="inline">&quot;.*&quot;</code>, that is, the regular expression that matches anything.</p><p>The syntax of <em id="variable">variables</em> is simple:</p><ul><li>Expression ::= Variable</li><li>Variable ::= - same as Erlang variables -</li></ul><p>There are two kinds of variables: predefined variables and user variables.
-<em id="predefined_variable">Predefined variables</em> hold set up module data, and
-cannot be assigned to but only used in queries. <em id="user_variable">User variables</em> on the other hand can be assigned to, and are typically used
-for temporary results while evaluating a query, and for keeping results of
-queries for use in subsequent queries. The predefined variables are (variables
-marked with (*) are available in <code class="inline">functions</code> mode only):</p><ul><li><p><strong><code class="inline">E</code></strong> - Call Graph Edges (*).</p></li><li><p><strong><code class="inline">V</code></strong> - Call Graph Vertices (*).</p></li><li><p><strong><code class="inline">M</code></strong> - Modules. All modules: analyzed modules, used library modules, and
+abbreviation for <code class="inline">&quot;.*&quot;</code>, that is, the regular expression that matches anything.</p><p>The syntax of <em id="variable">variables</em> is simple:</p><ul><li>Expression ::= Variable</li><li>Variable ::= - same as Erlang variables -</li></ul><p>There are two kinds of variables:</p><ul><li><p><strong id="predefined_variable">Predefined variables</strong> - hold module data, and
+cannot be assigned to but only used in queries.</p></li><li><p><strong id="user_variable">User variables</strong> - can be assigned to, and are
+typically used for temporary results while evaluating a query, and
+for keeping results of queries for use in subsequent queries.</p></li></ul><p>The predefined variables are (variables marked with (*) are available
+in <code class="inline">functions</code> mode only):</p><ul><li><p><strong><code class="inline">E</code></strong> - Call Graph Edges (*).</p></li><li><p><strong><code class="inline">V</code></strong> - Call Graph Vertices (*).</p></li><li><p><strong><code class="inline">M</code></strong> - Modules. All modules: analyzed modules, used library modules, and
 unknown modules.</p></li><li><p><strong><code class="inline">A</code></strong> - Applications.</p></li><li><p><strong><code class="inline">R</code></strong> - Releases.</p></li><li><p><strong><code class="inline">ME</code></strong> - Module Edges. All module calls.</p></li><li><p><strong><code class="inline">AE</code></strong> - Application Edges. All application calls.</p></li><li><p><strong><code class="inline">RE</code></strong> - Release Edges. All release calls.</p></li><li><p><strong><code class="inline">L</code></strong> - Local Functions (*). All local functions of analyzed modules.</p></li><li><p><strong><code class="inline">X</code></strong> - Exported Functions. All exported functions of analyzed modules and
 all used exported functions of library modules.</p></li><li><p><strong><code class="inline">F</code></strong> - Functions (*).</p></li><li><p><strong><code class="inline">B</code></strong> - Used BIFs. <code class="inline">B</code> is empty if <code class="inline">builtins</code> is <code class="inline">false</code> for all analyzed
 modules.</p></li><li><p><strong><code class="inline">U</code></strong> - Unknown Functions.</p></li><li><p><strong><code class="inline">UU</code></strong> - Unused Functions (*). All local and exported functions of analyzed
@@ -357,7 +359,7 @@ the function call with a line numbered function call, that is, each of the two
 functions of the call is replaced by a pair of the function and the line where
 the function is defined. The effect of the <code class="inline">XXL</code> operator can be undone by the
 LineOp operators. For instance, <code class="inline">(Lin) (XXL) (Lin) E</code> is equivalent to
-<code class="inline">(Lin) E</code>.</p><p>The <code class="inline">+</code>, <code class="inline">-</code>, <code class="inline">*</code> and <code class="inline">#</code> operators are defined for line number expressions,
+<code class="inline">(Lin) E</code>.</p><p>The <code class="inline">+</code>, <code class="inline">-</code>, <code class="inline">*</code>, and <code class="inline">#</code> operators are defined for line number expressions,
 provided the operands are compatible. The LineOp operators are also defined for
 modules, applications, and releases; the operand is implicitly converted to
 functions. Similarly, the cast operator is defined for the interpretation of the
@@ -383,7 +385,7 @@ called, all user variables are forgotten.</p><h2 id="module-see-also" class="sec
   <span class="text">See Also</span>
 </h2>
 <p><a href="../../../../lib/stdlib-5.2.1/doc/html/beam_lib.html"><code class="inline">beam_lib</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/digraph.html"><code class="inline">digraph</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/digraph_utils.html"><code class="inline">digraph_utils</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/re.html"><code class="inline">re</code></a>,
-<a href="xref_chapter.html">TOOLS User's Guide</a></p>
+<a href="xref_chapter.html">User's Guide for Xref</a></p>
   </section>
 
 
@@ -667,7 +669,7 @@ called, all user variables are forgotten.</p><h2 id="module-see-also" class="sec
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_application/3"><code class="inline">add_application/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_application/3"><code class="inline">add_application(XrefServer, Directory, [])</code></a>.</p></div>
 
     </div>
 
@@ -677,12 +679,9 @@ called, all user variables are forgotten.</p><h2 id="module-see-also" class="sec
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds an application, the modules of the application and
+        <div class="summary-synopsis"><p>Adds an application, the modules of the application, and
 <a href="xref.html#module_data">module data</a> of the modules to an
-<a href="xref.html#xref_server">Xref server</a>. The modules will be members of the
-application. The default is to use the base name of the directory with the
-version removed as application name, but this can be overridden by the <code class="inline">name</code>
-option. Returns the name of the application.</p></div>
+<a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -692,7 +691,7 @@ option. Returns the name of the application.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_directory/3"><code class="inline">add_directory/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_directory/3"><code class="inline">add_directory(Name, Directory, [])</code></a>.</p></div>
 
     </div>
 
@@ -703,11 +702,7 @@ option. Returns the name of the application.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Adds the modules found in the given directory and the
-<a href="xref.html#module_data">modules' data</a> to an <a href="xref.html#xref_server">Xref server</a>.
-The default is not to examine subdirectories, but if the option <code class="inline">recurse</code> has
-the value <code class="inline">true</code>, modules are searched for in subdirectories on all levels as
-well as in the given directory. Returns a sorted list of the names of the added
-modules.</p></div>
+<a href="xref.html#module_data">modules' data</a> to an <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -717,7 +712,7 @@ modules.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_module/3"><code class="inline">add_module/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_module/3"><code class="inline">add_module(Name, File, [])</code></a>.</p></div>
 
     </div>
 
@@ -728,8 +723,7 @@ modules.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Adds a module and its <a href="xref.html#module_data">module data</a> to an
-<a href="xref.html#xref_server">Xref server</a>. The module will not be member of any
-application. Returns the name of the module.</p></div>
+<a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -739,7 +733,7 @@ application. Returns the name of the module.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_release/3"><code class="inline">add_release/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_release/3"><code class="inline">add_release(Name, Directory, [])</code></a>.</p></div>
 
     </div>
 
@@ -751,10 +745,7 @@ application. Returns the name of the module.</p></div>
 
         <div class="summary-synopsis"><p>Adds a release, the applications of the release, the modules of the
 applications, and <a href="xref.html#module_data">module data</a> of the modules to an
-<a href="xref.html#xref_server">Xref server</a>. The applications will be members of the
-release, and the modules will be members of the applications. The default is to
-use the base name of the directory as release name, but this can be overridden
-by the <code class="inline">name</code> option. Returns the name of the release.</p></div>
+<a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -764,7 +755,7 @@ by the <code class="inline">name</code> option. Returns the name of the release.
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#analyze/3"><code class="inline">analyze/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#analyze/3"><code class="inline">analyze(XrefServer, Analysis, [])</code></a>.</p></div>
 
     </div>
 
@@ -774,11 +765,7 @@ by the <code class="inline">name</code> option. Returns the name of the release.
 
       </div>
 
-        <div class="summary-synopsis"><p><a href=""></a> Evaluates a predefined analysis. Returns a sorted list without
-duplicates of <a href="#t:call/0"><code class="inline">call/0</code></a> or <a href="#t:constant/0"><code class="inline">constant/0</code></a>, depending on the chosen analysis.
-The predefined analyses, which operate on all
-<a href="xref.html#analyzed_module">analyzed modules</a>, are (analyses marked with (*) are
-available in <code class="inline">functions</code><a href="xref.html#mode">mode</a> only)</p></div>
+        <div class="summary-synopsis"><p><a href=""></a> Evaluates a predefined analysis.</p></div>
 
     </div>
 
@@ -791,7 +778,7 @@ available in <code class="inline">functions</code><a href="xref.html#mode">mode<
         <div class="summary-synopsis"><p>The modules found in the given directory are checked for calls to
 <a href="xref.html#deprecated_function">deprecated functions</a>, calls to
 <a href="xref.html#undefined_function">undefined functions</a>, and for unused local
-functions. The code path is used as <a href="xref.html#library_path">library path</a>.</p></div>
+functions.</p></div>
 
     </div>
 
@@ -801,7 +788,8 @@ functions. The code path is used as <a href="xref.html#library_path">library pat
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#forget/2"><code class="inline">forget/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Removes all <a href="xref.html#user_variable">user variables</a> of an
+<a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -811,9 +799,8 @@ functions. The code path is used as <a href="xref.html#library_path">library pat
 
       </div>
 
-        <div class="summary-synopsis"><p><a href="#forget/1"><code class="inline">forget/1</code></a> and <a href="#forget/2"><code class="inline">forget/2</code></a> remove all or some of the
-<a href="xref.html#user_variable">user variables</a> of an
-<a href="xref.html#xref_server">Xref server</a>.</p></div>
+        <div class="summary-synopsis"><p>Removes the <a href="xref.html#user_variable">user variables</a> given by <code class="inline">Variables</code> from
+an <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -824,8 +811,7 @@ functions. The code path is used as <a href="xref.html#library_path">library pat
       </div>
 
         <div class="summary-synopsis"><p>Given the error returned by any function of this module, the function
-<code class="inline">format_error</code> returns a descriptive string of the error in English. For file
-errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#format_error/1"><code class="inline">file:format_error/1</code></a> is called.</p></div>
+<code class="inline">format_error</code> returns a descriptive string of the error in English.</p></div>
 
     </div>
 
@@ -835,7 +821,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#get_default/2"><code class="inline">get_default/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Returns a list of all options and their default values.</p></div>
 
     </div>
 
@@ -845,7 +831,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the default values of one or more options.</p></div>
+        <div class="summary-synopsis"><p>Returns the default value for option <code class="inline">Option</code>.</p></div>
 
     </div>
 
@@ -865,7 +851,9 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#info/3"><code class="inline">info/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>The <a href="#info/1"><code class="inline">info/1</code></a> function returns information as a list of pairs <code class="inline">{Tag, term()</code> in
+some order about the state and the <a href="xref.html#module_data">module data</a> of an
+<a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -875,7 +863,8 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#info/3"><code class="inline">info/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Returns information about all items belonging to category <code class="inline">Category</code>.
+See <a href="#info/3"><code class="inline">info/3</code></a> for details.</p></div>
 
     </div>
 
@@ -885,7 +874,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-        <div class="summary-synopsis"><p>The <code class="inline">info</code> functions return information as a list of pairs {Tag, term()} in
+        <div class="summary-synopsis"><p>The <code class="inline">info</code> functions return information as a list of pairs <code class="inline">{Tag, term()}</code> in
 some order about the state and the <a href="xref.html#module_data">module data</a> of an
 <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
@@ -901,7 +890,7 @@ some order about the state and the <a href="xref.html#module_data">module data</
 calling <code class="inline">code:which(Module)</code> is checked for calls to
 <a href="xref.html#deprecated_function">deprecated functions</a>, calls to
 <a href="xref.html#undefined_function">undefined functions</a>, and for unused local
-functions. The code path is used as <a href="xref.html#library_path">library path</a>.</p></div>
+functions.</p></div>
 
     </div>
 
@@ -911,7 +900,7 @@ functions. The code path is used as <a href="xref.html#library_path">library pat
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#q/3"><code class="inline">q/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#q/3"><code class="inline">q(XrefServer, Query, [])</code></a>.</p></div>
 
     </div>
 
@@ -923,7 +912,7 @@ functions. The code path is used as <a href="xref.html#library_path">library pat
 
         <div class="summary-synopsis"><p>Evaluates a <a href="xref.html#query">query</a> in the context of an
 <a href="xref.html#xref_server">Xref server</a>, and returns the value of the last
-statement. The syntax of the value depends on the expression</p></div>
+statement.</p></div>
 
     </div>
 
@@ -955,7 +944,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Removes releases and their applications, modules and
+        <div class="summary-synopsis"><p>Removes releases and their applications, modules, and
 <a href="xref.html#module_data">module data</a> from an <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
@@ -966,7 +955,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#replace_application/4"><code class="inline">replace_application/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#replace_application/4"><code class="inline">replace_application(XrefServer, Application, Directory, [])</code></a>.</p></div>
 
     </div>
 
@@ -977,9 +966,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Replaces the modules of an application with other modules read from an
-application directory. Release membership of the application is retained. Note
-that the name of the application is kept; the name of the given directory is not
-used.</p></div>
+application directory.</p></div>
 
     </div>
 
@@ -989,7 +976,7 @@ used.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#replace_module/4"><code class="inline">replace_module/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#replace_module/4"><code class="inline">replace_module(XrefServer, Module, File, [])</code></a>.</p></div>
 
     </div>
 
@@ -1000,10 +987,7 @@ used.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Replaces <a href="xref.html#module_data">module data</a> of an
-<a href="xref.html#analyzed_module">analyzed module</a> with data read from a BEAM file.
-Application membership of the module is retained, and so is the value of the
-<code class="inline">builtins</code> option of the module. An error is returned if the name of the read
-module differs from the given module.</p></div>
+<a href="xref.html#analyzed_module">analyzed module</a> with data read from a BEAM file.</p></div>
 
     </div>
 
@@ -1013,7 +997,7 @@ module differs from the given module.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#set_default/3"><code class="inline">set_default/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Sets default values for multiple options given by <code class="inline">OptionValues</code>.</p></div>
 
     </div>
 
@@ -1023,8 +1007,7 @@ module differs from the given module.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Sets the default value of one or more options. The options that can be set this
-way are</p></div>
+        <div class="summary-synopsis"><p>Sets the default value of one or more options.</p></div>
 
     </div>
 
@@ -1034,7 +1017,7 @@ way are</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#set_library_path/3"><code class="inline">set_library_path/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#set_library_path/3"><code class="inline">set_library_path(XrefServer, LibraryPath, [])</code></a>.</p></div>
 
     </div>
 
@@ -1044,11 +1027,7 @@ way are</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Sets the <a href="xref.html#library_path">library path</a>. If the given path is a list of
-directories, the set of <a href="xref.html#library_module">library modules</a> is determined
-by choosing the first module encountered while traversing the directories in the
-given order, for those modules that occur in more than one directory. By
-default, the library path is an empty list.</p></div>
+        <div class="summary-synopsis"><p>Sets the <a href="xref.html#library_path">library path</a>.</p></div>
 
     </div>
 
@@ -1058,9 +1037,7 @@ default, the library path is an empty list.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Creates an <a href="xref.html#xref_server">Xref server</a>. The process may optionally be
-given a name. The default <a href="xref.html#mode">mode</a> is <code class="inline">functions</code>. Options that are
-not recognized by Xref are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#start/4"><code class="inline">gen_server:start/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Creates an <a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -1070,9 +1047,7 @@ not recognized by Xref are passed on to <a href="../../../../lib/stdlib-5.2.1/do
 
       </div>
 
-        <div class="summary-synopsis"><p>Creates an <a href="xref.html#xref_server">Xref server</a> with a given name. The default
-<a href="xref.html#mode">mode</a> is <code class="inline">functions</code>. Options that are not recognized by Xref
-are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#start/4"><code class="inline">gen_server:start/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Creates an <a href="xref.html#xref_server">Xref server</a> with a given name.</p></div>
 
     </div>
 
@@ -1092,7 +1067,7 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#update/2"><code class="inline">update/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#update/2"><code class="inline">update(XrefServer, [])</code></a>.</p></div>
 
     </div>
 
@@ -1104,9 +1079,7 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
 
         <div class="summary-synopsis"><p>Replaces the <a href="xref.html#module_data">module data</a> of all
 <a href="xref.html#analyzed_module">analyzed modules</a> the BEAM files of which have been
-modified since last read by an <code class="inline">add</code> function or <code class="inline">update</code>. Application
-membership of the modules is retained, and so is the value of the <code class="inline">builtins</code>
-option. Returns a sorted list of the names of the replaced modules.</p></div>
+modified since last read by an <code class="inline">add</code> function or <code class="inline">update</code>.</p></div>
 
     </div>
 
@@ -1116,7 +1089,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#variables/2"><code class="inline">variables/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#variables/2"><code class="inline">variables(XrefServer, [])</code></a>.</p></div>
 
     </div>
 
@@ -1127,8 +1100,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Returns a sorted lists of the names of the variables of an
-<a href="xref.html#xref_server">Xref server</a>. The default is to return the
-<a href="xref.html#user_variable">user variables</a> only.</p></div>
+<a href="xref.html#xref_server">Xref server</a>.</p></div>
 
     </div>
 
@@ -1154,7 +1126,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">add_dir_rsn()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L923" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L954" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1189,7 +1161,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">add_mod_rsn()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L878" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L908" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1225,7 +1197,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">analysis()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1445" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1495" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1268,7 +1240,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">analyze_rsn()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1462" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1512" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1304,7 +1276,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">answer()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1563" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1615" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1342,7 +1314,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">app_spec()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1438" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1488" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1372,7 +1344,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">application()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L581" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L600" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1402,7 +1374,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">call()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L582" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L601" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1432,7 +1404,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">component()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1561" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1613" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1462,7 +1434,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">constant()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L583" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L602" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1492,7 +1464,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">define_at()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1562" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1614" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1522,7 +1494,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">depr_flag()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1439" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1489" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1552,7 +1524,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">directory()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L584" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L603" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1582,7 +1554,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">file()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L585" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L604" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1612,7 +1584,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">file_error()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L586" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L605" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1642,7 +1614,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">func_spec()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1442" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1492" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1672,7 +1644,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">funcall()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L587" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L606" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1702,7 +1674,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">function_name()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L588" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L607" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1732,7 +1704,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">info()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1146" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1183" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1779,7 +1751,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">library()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L589" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L608" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1809,7 +1781,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">library_path()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L590" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L609" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1839,7 +1811,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">mod_spec()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1443" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1493" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1869,7 +1841,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">mode()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L591" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L610" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1899,7 +1871,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">path()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L592" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L611" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1929,7 +1901,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">q_rsn()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1573" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1625" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1967,7 +1939,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">rel_spec()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1444" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1494" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1997,7 +1969,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">release()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L593" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L612" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2027,7 +1999,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">string_position()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L594" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L613" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2057,7 +2029,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">variable()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L595" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L614" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2087,7 +2059,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">xarity()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L596" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L615" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2117,7 +2089,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">xmfa()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L597" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L616" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2147,7 +2119,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">xref()</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L598" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L617" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2189,7 +2161,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">add_application(XrefServer, Directory)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L841" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L869" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2211,7 +2183,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#add_application/3"><code class="inline">add_application/3</code></a>.</p>
+<p>Equivalent to <a href="#add_application/3"><code class="inline">add_application(XrefServer, Directory, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_application/3">
@@ -2223,7 +2195,7 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
     </a>
     <h1 class="signature" translate="no">add_application(XrefServer, Directory, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L875" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L905" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2252,12 +2224,12 @@ option. Returns a sorted list of the names of the replaced modules.</p></div>
 
       </div>
 
-<p>Adds an application, the modules of the application and
+<p>Adds an application, the modules of the application, and
 <a href="xref.html#module_data">module data</a> of the modules to an
-<a href="xref.html#xref_server">Xref server</a>. The modules will be members of the
-application. The default is to use the base name of the directory with the
-version removed as application name, but this can be overridden by the <code class="inline">name</code>
-option. Returns the name of the application.</p><p>If the given directory has a subdirectory named <code class="inline">ebin</code>, modules (BEAM files) are
+<a href="xref.html#xref_server">Xref server</a>.</p><p>The modules will be members of the application. The default is to use
+the base name of the directory with the version removed as application
+name, but this can be overridden by the <code class="inline">name</code> option. Returns the
+name of the application.</p><p>If the given directory has a subdirectory named <code class="inline">ebin</code>, modules (BEAM files) are
 searched for in that directory, otherwise modules are searched for in the given
 directory.</p><p>If the <a href="xref.html#mode">mode</a> of the Xref server is <code class="inline">functions</code>, BEAM files that
 contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
@@ -2272,7 +2244,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
     </a>
     <h1 class="signature" translate="no">add_directory(XrefServer, Directory)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L940" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L971" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2295,7 +2267,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
 
       </div>
 
-<p>Equivalent to <a href="#add_directory/3"><code class="inline">add_directory/3</code></a>.</p>
+<p>Equivalent to <a href="#add_directory/3"><code class="inline">add_directory(Name, Directory, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_directory/3">
@@ -2307,7 +2279,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
     </a>
     <h1 class="signature" translate="no">add_directory(XrefServer, Directory, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L973" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1005" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2336,8 +2308,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
       </div>
 
 <p>Adds the modules found in the given directory and the
-<a href="xref.html#module_data">modules' data</a> to an <a href="xref.html#xref_server">Xref server</a>.
-The default is not to examine subdirectories, but if the option <code class="inline">recurse</code> has
+<a href="xref.html#module_data">modules' data</a> to an <a href="xref.html#xref_server">Xref server</a>.</p><p>The default is not to examine subdirectories, but if the option <code class="inline">recurse</code> has
 the value <code class="inline">true</code>, modules are searched for in subdirectories on all levels as
 well as in the given directory. Returns a sorted list of the names of the added
 modules.</p><p>The modules added will not be members of any applications.</p><p>If the <a href="xref.html#mode">mode</a> of the Xref server is <code class="inline">functions</code>, BEAM files that
@@ -2353,7 +2324,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
     </a>
     <h1 class="signature" translate="no">add_module(XrefServer, File)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L894" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L924" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2370,7 +2341,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
 
       </div>
 
-<p>Equivalent to <a href="#add_module/3"><code class="inline">add_module/3</code></a>.</p>
+<p>Equivalent to <a href="#add_module/3"><code class="inline">add_module(Name, File, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_module/3">
@@ -2382,7 +2353,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
     </a>
     <h1 class="signature" translate="no">add_module(XrefServer, File, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L920" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L951" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2409,8 +2380,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
       </div>
 
 <p>Adds a module and its <a href="xref.html#module_data">module data</a> to an
-<a href="xref.html#xref_server">Xref server</a>. The module will not be member of any
-application. Returns the name of the module.</p><p>If the <a href="xref.html#mode">mode</a> of the Xref server is <code class="inline">functions</code>, and the BEAM
+<a href="xref.html#xref_server">Xref server</a>.</p><p>The module will not be member of any application. Returns the name of the module.</p><p>If the <a href="xref.html#mode">mode</a> of the Xref server is <code class="inline">functions</code>, and the BEAM
 file contains no <a href="xref.html#debug_info">debug information</a>, the error message
 <code class="inline">no_debug_info</code> is returned.</p>
   </section>
@@ -2424,7 +2394,7 @@ file contains no <a href="xref.html#debug_info">debug information</a>, the error
     </a>
     <h1 class="signature" translate="no">add_release(XrefServer, Directory)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L792" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L818" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2447,7 +2417,7 @@ file contains no <a href="xref.html#debug_info">debug information</a>, the error
 
       </div>
 
-<p>Equivalent to <a href="#add_release/3"><code class="inline">add_release/3</code></a>.</p>
+<p>Equivalent to <a href="#add_release/3"><code class="inline">add_release(Name, Directory, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_release/3">
@@ -2459,7 +2429,7 @@ file contains no <a href="xref.html#debug_info">debug information</a>, the error
     </a>
     <h1 class="signature" translate="no">add_release(XrefServer, Directory, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L829" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L857" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2491,10 +2461,10 @@ file contains no <a href="xref.html#debug_info">debug information</a>, the error
 
 <p>Adds a release, the applications of the release, the modules of the
 applications, and <a href="xref.html#module_data">module data</a> of the modules to an
-<a href="xref.html#xref_server">Xref server</a>. The applications will be members of the
-release, and the modules will be members of the applications. The default is to
-use the base name of the directory as release name, but this can be overridden
-by the <code class="inline">name</code> option. Returns the name of the release.</p><p>If the given directory has a subdirectory named <code class="inline">lib</code>, the directories in that
+<a href="xref.html#xref_server">Xref server</a>.</p><p>The applications will be members of the release, and the modules will
+be members of the applications. The default is to use the base name of
+the directory as release name, but this can be overridden by the
+<code class="inline">name</code> option. Returns the name of the release.</p><p>If the given directory has a subdirectory named <code class="inline">lib</code>, the directories in that
 directory are assumed to be application directories, otherwise all
 subdirectories of the given directory are assumed to be application directories.
 If there are several versions of some application, the one with the highest
@@ -2511,7 +2481,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
     </a>
     <h1 class="signature" translate="no">analyze(XrefServer, Analysis)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1478" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1528" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2532,7 +2502,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
 
       </div>
 
-<p>Equivalent to <a href="#analyze/3"><code class="inline">analyze/3</code></a>.</p>
+<p>Equivalent to <a href="#analyze/3"><code class="inline">analyze(XrefServer, Analysis, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="analyze/3">
@@ -2544,7 +2514,7 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
     </a>
     <h1 class="signature" translate="no">analyze(XrefServer, Analysis, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1558" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1610" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2567,11 +2537,11 @@ contain no <a href="xref.html#debug_info">debug information</a> are ignored.</p>
 
       </div>
 
-<p><a href="" id="analyze"></a> Evaluates a predefined analysis. Returns a sorted list without
-duplicates of <a href="#t:call/0"><code class="inline">call/0</code></a> or <a href="#t:constant/0"><code class="inline">constant/0</code></a>, depending on the chosen analysis.
-The predefined analyses, which operate on all
-<a href="xref.html#analyzed_module">analyzed modules</a>, are (analyses marked with (*) are
-available in <code class="inline">functions</code><a href="xref.html#mode">mode</a> only):</p><ul><li><p><strong><code class="inline">undefined_function_calls</code>(*)</strong> - Returns a list of calls to
+<p><a href="" id="analyze"></a> Evaluates a predefined analysis.</p><p>Returns a sorted list without duplicates of <a href="#t:call/0"><code class="inline">call/0</code></a> or
+<a href="#t:constant/0"><code class="inline">constant/0</code></a>, depending on the chosen analysis.  The predefined
+analyses, which operate on all <a href="xref.html#analyzed_module">analyzed
+modules</a>, are (analyses marked with (*) are
+available only in <a href="xref.html#mode">mode <code class="inline">functions</code></a>):</p><ul><li><p><strong><code class="inline">undefined_function_calls</code>(*)</strong> - Returns a list of calls to
 <a href="xref.html#undefined_function">undefined functions</a>.</p></li><li><p><strong><code class="inline">undefined_functions</code></strong> - Returns a list of
 <a href="xref.html#undefined_function">undefined functions</a>.</p></li><li><p><strong><code class="inline">locals_not_used</code>(*)</strong> - Returns a list of local functions that have not
 been locally used.</p></li><li><p><strong><code class="inline">exports_not_used</code></strong> - Returns a list of exported functions that have not
@@ -2611,7 +2581,7 @@ given releases.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">d(Directory)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L709" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L732" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2640,7 +2610,7 @@ given releases.</p></li></ul>
 <p>The modules found in the given directory are checked for calls to
 <a href="xref.html#deprecated_function">deprecated functions</a>, calls to
 <a href="xref.html#undefined_function">undefined functions</a>, and for unused local
-functions. The code path is used as <a href="xref.html#library_path">library path</a>.</p><p>If some of the found BEAM files contain
+functions.</p><p>The code path is used as <a href="xref.html#library_path">library path</a>.</p><p>If some of the found BEAM files contain
 <a href="xref.html#debug_info">debug information</a>, then those modules are checked and a
 list of tuples is returned. The first element of each tuple is one of:</p><ul><li><code class="inline">deprecated</code>, the second element is a sorted list of calls to deprecated
 functions;</li><li><code class="inline">undefined</code>, the second element is a sorted list of calls to undefined
@@ -2658,7 +2628,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
     </a>
     <h1 class="signature" translate="no">forget(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1369" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1418" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2674,7 +2644,8 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
 
       </div>
 
-<p>Equivalent to <a href="#forget/2"><code class="inline">forget/2</code></a>.</p>
+<p>Removes all <a href="xref.html#user_variable">user variables</a> of an
+<a href="xref.html#xref_server">Xref server</a>.</p>
   </section>
 </section>
 <section class="detail" id="forget/2">
@@ -2686,7 +2657,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
     </a>
     <h1 class="signature" translate="no">forget(XrefServer, Variables)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1382" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1430" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2706,9 +2677,8 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
 
       </div>
 
-<p><a href="#forget/1"><code class="inline">forget/1</code></a> and <a href="#forget/2"><code class="inline">forget/2</code></a> remove all or some of the
-<a href="xref.html#user_variable">user variables</a> of an
-<a href="xref.html#xref_server">Xref server</a>.</p>
+<p>Removes the <a href="xref.html#user_variable">user variables</a> given by <code class="inline">Variables</code> from
+an <a href="xref.html#xref_server">Xref server</a>.</p>
   </section>
 </section>
 <section class="detail" id="format_error/1">
@@ -2720,7 +2690,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
     </a>
     <h1 class="signature" translate="no">format_error(Error)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1704" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1766" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2737,8 +2707,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
       </div>
 
 <p>Given the error returned by any function of this module, the function
-<code class="inline">format_error</code> returns a descriptive string of the error in English. For file
-errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#format_error/1"><code class="inline">file:format_error/1</code></a> is called.</p>
+<code class="inline">format_error</code> returns a descriptive string of the error in English.</p><p>For file errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#format_error/1"><code class="inline">file:format_error/1</code></a> is called.</p>
   </section>
 </section>
 <section class="detail" id="get_default/1">
@@ -2750,7 +2719,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
     </a>
     <h1 class="signature" translate="no">get_default(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1643" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1699" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2770,7 +2739,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-<p>Equivalent to <a href="#get_default/2"><code class="inline">get_default/2</code></a>.</p>
+<p>Returns a list of all options and their default values.</p>
   </section>
 </section>
 <section class="detail" id="get_default/2">
@@ -2782,7 +2751,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
     </a>
     <h1 class="signature" translate="no">get_default(XrefServer, Option)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1655" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1711" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2803,7 +2772,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-<p>Returns the default values of one or more options.</p>
+<p>Returns the default value for option <code class="inline">Option</code>.</p>
   </section>
 </section>
 <section class="detail" id="get_library_path/1">
@@ -2815,7 +2784,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
     </a>
     <h1 class="signature" translate="no">get_library_path(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1101" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1136" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2844,7 +2813,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
     </a>
     <h1 class="signature" translate="no">info(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1230" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2860,7 +2829,15 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-<p>Equivalent to <a href="#info/3"><code class="inline">info/3</code></a>.</p>
+<p>The <a href="#info/1"><code class="inline">info/1</code></a> function returns information as a list of pairs <code class="inline">{Tag, term()</code> in
+some order about the state and the <a href="xref.html#module_data">module data</a> of an
+<a href="xref.html#xref_server">Xref server</a>.</p><p><a href="#info/1"><code class="inline">info/1</code></a> returns information with the following tags (tags marked
+with (*) are only available in <code class="inline">functions</code> mode):</p><ul><li><code class="inline">library_path</code>, the <a href="xref.html#library_path">library path</a>;</li><li><code class="inline">mode</code>, the <a href="xref.html#mode">mode</a>;</li><li><code class="inline">no_releases</code>, number of releases;</li><li><code class="inline">no_applications</code>, total number of applications (of all releases);</li><li><code class="inline">no_analyzed_modules</code>, total number of
+<a href="xref.html#analyzed_module">analyzed modules</a>;</li><li><code class="inline">no_calls</code> (*), total number of calls (in all modules), regarding instances
+of one function call in different lines as separate calls;</li><li><code class="inline">no_function_calls</code> (*), total number of <a href="xref.html#local_call">local calls</a>,
+resolved <a href="xref.html#external_call">external calls</a> and
+<a href="xref.html#unresolved_call">unresolved calls</a>;</li><li><code class="inline">no_functions</code> (*), total number of local and exported functions;</li><li><code class="inline">no_inter_function_calls</code> (*), total number of calls of the
+<a href="xref.html#inter_call_graph">Inter Call Graph</a>.</li></ul>
   </section>
 </section>
 <section class="detail" id="info/2">
@@ -2872,7 +2849,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
     </a>
     <h1 class="signature" translate="no">info(XrefServer, Category)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1183" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1245" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2893,7 +2870,8 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-<p>Equivalent to <a href="#info/3"><code class="inline">info/3</code></a>.</p>
+<p>Returns information about all items belonging to category <code class="inline">Category</code>.
+See <a href="#info/3"><code class="inline">info/3</code></a> for details.</p>
   </section>
 </section>
 <section class="detail" id="info/3">
@@ -2905,7 +2883,7 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
     </a>
     <h1 class="signature" translate="no">info(XrefServer, Category, Items)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1327" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1371" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2933,16 +2911,10 @@ errors, the function <a href="../../../../lib/kernel-9.2.2/doc/html/file.html#fo
 
       </div>
 
-<p>The <code class="inline">info</code> functions return information as a list of pairs {Tag, term()} in
+<p>The <code class="inline">info</code> functions return information as a list of pairs <code class="inline">{Tag, term()}</code> in
 some order about the state and the <a href="xref.html#module_data">module data</a> of an
-<a href="xref.html#xref_server">Xref server</a>.</p><p><a href="#info/1"><code class="inline">info/1</code></a> returns information with the following tags (tags marked
-with (*) are available in <code class="inline">functions</code> mode only):</p><ul><li><code class="inline">library_path</code>, the <a href="xref.html#library_path">library path</a>;</li><li><code class="inline">mode</code>, the <a href="xref.html#mode">mode</a>;</li><li><code class="inline">no_releases</code>, number of releases;</li><li><code class="inline">no_applications</code>, total number of applications (of all releases);</li><li><code class="inline">no_analyzed_modules</code>, total number of
-<a href="xref.html#analyzed_module">analyzed modules</a>;</li><li><code class="inline">no_calls</code> (*), total number of calls (in all modules), regarding instances
-of one function call in different lines as separate calls;</li><li><code class="inline">no_function_calls</code> (*), total number of <a href="xref.html#local_call">local calls</a>,
-resolved <a href="xref.html#external_call">external calls</a> and
-<a href="xref.html#unresolved_call">unresolved calls</a>;</li><li><code class="inline">no_functions</code> (*), total number of local and exported functions;</li><li><code class="inline">no_inter_function_calls</code> (*), total number of calls of the
-<a href="xref.html#inter_call_graph">Inter Call Graph</a>.</li></ul><p><a href="#info/2"><code class="inline">info/2</code></a> and <a href="#info/3"><code class="inline">info/3</code></a> return information about all or
-some of the analyzed modules, applications, releases or library modules of an
+<a href="xref.html#xref_server">Xref server</a>.</p><p><a href="#info/2"><code class="inline">info/2</code></a> and <a href="#info/3"><code class="inline">info/3</code></a> return information about all or
+some of the analyzed modules, applications, releases, or library modules of an
 Xref server. The following information is returned for every analyzed module:</p><ul><li><code class="inline">application</code>, an empty list if the module does not belong to any application,
 otherwise a list of the application name;</li><li><code class="inline">builtins</code>, whether calls to BIFs are included in the module's data;</li><li><code class="inline">directory</code>, the directory where the module's BEAM file is located;</li><li><code class="inline">no_calls</code> (*), number of calls, regarding instances of one function call in
 different lines as separate calls;</li><li><code class="inline">no_function_calls</code> (*), number of local calls, resolved external calls and
@@ -2959,7 +2931,7 @@ of one function call in different lines as separate calls;</li><li><code class="
 unresolved calls of the release's modules;</li><li><code class="inline">no_functions</code> (*), number of local and exported functions of the release's
 modules;</li><li><code class="inline">no_inter_function_calls</code> (*), number of calls of the Inter Call Graph of the
 release's modules.</li></ul><p>The following information is returned for every library module:</p><ul><li><code class="inline">directory</code>, the directory where the
-<a href="xref.html#library_module">library module's</a> BEAM file is located.</li></ul><p>For every number of calls, functions etc. returned by the <code class="inline">no_</code> tags, there is a
+<a href="xref.html#library_module">library module's</a> BEAM file is located.</li></ul><p>For every number of calls, functions, and so on returned by the <code class="inline">no_</code> tags, there is a
 query returning the same number. Listed below are examples of such queries. Some
 of the queries return the sum of a two or more of the <code class="inline">no_</code> tags numbers. <code class="inline">mod</code>
 (<code class="inline">app</code>, <code class="inline">rel</code>) refers to any module (application, release).</p><ul><li><p><code class="inline">no_analyzed_modules</code></p><ul><li><code class="inline">&quot;# AM&quot;</code> (info/1)</li><li><code class="inline">&quot;# (Mod) app:App&quot;</code> (application)</li><li><code class="inline">&quot;# (Mod) rel:Rel&quot;</code> (release)</li></ul></li><li><p><code class="inline">no_applications</code></p><ul><li><code class="inline">&quot;# A&quot;</code> (info/1)</li></ul></li><li><p><code class="inline">no_calls</code>. The sum of the number of resolved and unresolved calls:</p><ul><li><code class="inline">&quot;# (XLin) E + # (LLin) E&quot;</code> (info/1)</li><li><p><code class="inline">&quot;T = E | mod:Mod, # (LLin) T + # (XLin) T&quot;</code> (module)</p></li><li><p><code class="inline">&quot;T = E | app:App, # (LLin) T + # (XLin) T&quot;</code> (application)</p></li><li><p><code class="inline">&quot;T = E | rel:Rel, # (LLin) T + # (XLin) T&quot;</code> (release)</p></li></ul></li><li><p><code class="inline">no_functions</code>. Functions in library modules and the functions
@@ -2978,7 +2950,7 @@ calls and unresolved calls:</p><ul><li><code class="inline">&quot;# LC + # XC&qu
     </a>
     <h1 class="signature" translate="no">m(FileOrModule)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L641" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L662" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3010,10 +2982,10 @@ calls and unresolved calls:</p><ul><li><code class="inline">&quot;# LC + # XC&qu
 calling <code class="inline">code:which(Module)</code> is checked for calls to
 <a href="xref.html#deprecated_function">deprecated functions</a>, calls to
 <a href="xref.html#undefined_function">undefined functions</a>, and for unused local
-functions. The code path is used as <a href="xref.html#library_path">library path</a>.</p><p>If the BEAM file contains <a href="xref.html#debug_info">debug information</a>, then a list
+functions.</p><p>The code path is used as <a href="xref.html#library_path">library path</a>.</p><p>If the BEAM file contains <a href="xref.html#debug_info">debug information</a>, a list
 of tuples is returned. The first element of each tuple is one of:</p><ul><li><code class="inline">deprecated</code>, the second element is a sorted list of calls to deprecated
 functions;</li><li><code class="inline">undefined</code>, the second element is a sorted list of calls to undefined
-functions;</li><li><code class="inline">unused</code>, the second element is a sorted list of unused local functions.</li></ul><p>If the BEAM file does not contain debug information, then a list of tuples is
+functions;</li><li><code class="inline">unused</code>, the second element is a sorted list of unused local functions.</li></ul><p>If the BEAM file does not contain debug information, a list of tuples is
 returned. The first element of each tuple is one of:</p><ul><li><code class="inline">deprecated</code>, the second element is a sorted list of externally used
 deprecated functions;</li><li><code class="inline">undefined</code>, the second element is a sorted list of undefined functions.</li></ul>
   </section>
@@ -3027,7 +2999,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
     </a>
     <h1 class="signature" translate="no">q(XrefServer, Query)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1591" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1643" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3044,7 +3016,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
 
       </div>
 
-<p>Equivalent to <a href="#q/3"><code class="inline">q/3</code></a>.</p>
+<p>Equivalent to <a href="#q/3"><code class="inline">q(XrefServer, Query, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="q/3">
@@ -3056,7 +3028,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
     </a>
     <h1 class="signature" translate="no">q(XrefServer, Query, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1634" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1688" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3081,7 +3053,7 @@ deprecated functions;</li><li><code class="inline">undefined</code>, the second 
 
 <p>Evaluates a <a href="xref.html#query">query</a> in the context of an
 <a href="xref.html#xref_server">Xref server</a>, and returns the value of the last
-statement. The syntax of the value depends on the expression:</p><ul><li>A set of calls is represented by a sorted list without duplicates of
+statement.</p><p>The syntax of the value depends on the expression:</p><ul><li>A set of calls is represented by a sorted list without duplicates of
 <a href="#t:call/0"><code class="inline">call/0</code></a>.</li><li>A set of constants is represented by a sorted list without duplicates of
 <a href="#t:constant/0"><code class="inline">constant/0</code></a>.</li><li>A set of strongly connected components is a sorted list without duplicates of
 <code class="inline">Component</code>.</li><li>A set of calls between strongly connected components is a sorted list without
@@ -3105,7 +3077,7 @@ list without duplicates of <code class="inline">AllLines</code>.</li></ul><p>For
     </a>
     <h1 class="signature" translate="no">remove_application(XrefServer, Applications)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1080" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1115" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3138,7 +3110,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
     </a>
     <h1 class="signature" translate="no">remove_module(XrefServer, Modules)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1067" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1102" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3171,7 +3143,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
     </a>
     <h1 class="signature" translate="no">remove_release(XrefServer, Releases)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1093" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1128" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3191,7 +3163,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
 
       </div>
 
-<p>Removes releases and their applications, modules and
+<p>Removes releases and their applications, modules, and
 <a href="xref.html#module_data">module data</a> from an <a href="xref.html#xref_server">Xref server</a>.</p>
   </section>
 </section>
@@ -3204,7 +3176,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
     </a>
     <h1 class="signature" translate="no">replace_application(XrefServer, Application, Directory)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1028" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1061" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3226,7 +3198,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
 
       </div>
 
-<p>Equivalent to <a href="#replace_application/4"><code class="inline">replace_application/4</code></a>.</p>
+<p>Equivalent to <a href="#replace_application/4"><code class="inline">replace_application(XrefServer, Application, Directory, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="replace_application/4">
@@ -3238,7 +3210,7 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
     </a>
     <h1 class="signature" translate="no">replace_application(XrefServer, Application, Directory, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1054" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1089" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3270,8 +3242,8 @@ from an <a href="xref.html#xref_server">Xref server</a>.</p>
       </div>
 
 <p>Replaces the modules of an application with other modules read from an
-application directory. Release membership of the application is retained. Note
-that the name of the application is kept; the name of the given directory is not
+application directory.</p><p>Release membership of the application is retained. Note that the name
+of the application is kept; the name of the given directory is not
 used.</p>
   </section>
 </section>
@@ -3284,7 +3256,7 @@ used.</p>
     </a>
     <h1 class="signature" translate="no">replace_module(XrefServer, Module, File)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L987" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1019" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3308,7 +3280,7 @@ used.</p>
 
       </div>
 
-<p>Equivalent to <a href="#replace_module/4"><code class="inline">replace_module/4</code></a>.</p>
+<p>Equivalent to <a href="#replace_module/4"><code class="inline">replace_module(XrefServer, Module, File, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="replace_module/4">
@@ -3320,7 +3292,7 @@ used.</p>
     </a>
     <h1 class="signature" translate="no">replace_module(XrefServer, Module, File, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1015" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1048" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3347,8 +3319,7 @@ used.</p>
       </div>
 
 <p>Replaces <a href="xref.html#module_data">module data</a> of an
-<a href="xref.html#analyzed_module">analyzed module</a> with data read from a BEAM file.
-Application membership of the module is retained, and so is the value of the
+<a href="xref.html#analyzed_module">analyzed module</a> with data read from a BEAM file.</p><p>Application membership of the module is retained, and so is the value of the
 <code class="inline">builtins</code> option of the module. An error is returned if the name of the read
 module differs from the given module.</p><p>The <code class="inline">update</code> function is an alternative for updating module data of recompiled
 modules.</p>
@@ -3363,7 +3334,7 @@ modules.</p>
     </a>
     <h1 class="signature" translate="no">set_default(XrefServer, OptionValues)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1669" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1729" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3386,7 +3357,7 @@ modules.</p>
 
       </div>
 
-<p>Equivalent to <a href="#set_default/3"><code class="inline">set_default/3</code></a>.</p>
+<p>Sets default values for multiple options given by <code class="inline">OptionValues</code>.</p><p>See <a href="#set_default/3"><code class="inline">set_default/3</code></a> for the name of options and their allowed values.</p>
   </section>
 </section>
 <section class="detail" id="set_default/3">
@@ -3398,7 +3369,7 @@ modules.</p>
     </a>
     <h1 class="signature" translate="no">set_default(XrefServer, Option, Value)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1693" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1754" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3420,8 +3391,7 @@ modules.</p>
 
       </div>
 
-<p>Sets the default value of one or more options. The options that can be set this
-way are:</p><ul><li><code class="inline">builtins</code>, with initial default value <code class="inline">false</code>;</li><li><code class="inline">recurse</code>, with initial default value <code class="inline">false</code>;</li><li><code class="inline">verbose</code>, with initial default value <code class="inline">false</code>;</li><li><code class="inline">warnings</code>, with initial default value <code class="inline">true</code>.</li></ul><p>The initial default values are set when creating an
+<p>Sets the default value of one or more options.</p><p>The options that can be set this way are:</p><ul><li><code class="inline">builtins</code>, with initial default value <code class="inline">false</code>;</li><li><code class="inline">recurse</code>, with initial default value <code class="inline">false</code>;</li><li><code class="inline">verbose</code>, with initial default value <code class="inline">false</code>;</li><li><code class="inline">warnings</code>, with initial default value <code class="inline">true</code>.</li></ul><p>The initial default values are set when creating an
 <a href="xref.html#xref_server">Xref server</a>.</p>
   </section>
 </section>
@@ -3434,7 +3404,7 @@ way are:</p><ul><li><code class="inline">builtins</code>, with initial default v
     </a>
     <h1 class="signature" translate="no">set_library_path(XrefServer, LibraryPath)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1113" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3457,7 +3427,7 @@ way are:</p><ul><li><code class="inline">builtins</code>, with initial default v
 
       </div>
 
-<p>Equivalent to <a href="#set_library_path/3"><code class="inline">set_library_path/3</code></a>.</p>
+<p>Equivalent to <a href="#set_library_path/3"><code class="inline">set_library_path(XrefServer, LibraryPath, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="set_library_path/3">
@@ -3469,7 +3439,7 @@ way are:</p><ul><li><code class="inline">builtins</code>, with initial default v
     </a>
     <h1 class="signature" translate="no">set_library_path(XrefServer, LibraryPath, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1143" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1180" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3491,17 +3461,17 @@ way are:</p><ul><li><code class="inline">builtins</code>, with initial default v
 
       </div>
 
-<p>Sets the <a href="xref.html#library_path">library path</a>. If the given path is a list of
-directories, the set of <a href="xref.html#library_module">library modules</a> is determined
-by choosing the first module encountered while traversing the directories in the
-given order, for those modules that occur in more than one directory. By
+<p>Sets the <a href="xref.html#library_path">library path</a>.</p><p>If the given path is a list of directories, the set of <a href="xref.html#library_module">library
+modules</a> is determined by choosing the first
+module encountered while traversing the directories in the given
+order, for those modules that occur in more than one directory. By
 default, the library path is an empty list.</p><p>The library path <code class="inline" id="code_path">code_path</code> is used by the functions
-<a href="#m/1"><code class="inline">m/1</code></a> and <a href="#d/1"><code class="inline">d/1</code></a>, but can also be set explicitly. Note however
-that the code path will be traversed once for each used
+<a href="#m/1"><code class="inline">m/1</code></a> and <a href="#d/1"><code class="inline">d/1</code></a>, but can also be set explicitly. However,
+note that the code path will be traversed once for each used
 <a href="xref.html#library_module">library module</a> while setting up module data. On the
 other hand, if there are only a few modules that are used but not analyzed,
 using <code class="inline">code_path</code> may be faster than setting the library path to
-<a href="../../../../lib/kernel-9.2.2/doc/html/code.html#get_path/0"><code class="inline">code:get_path()</code></a>.</p><p>If the library path is set to <code class="inline">code_path</code>, the set of library modules is not
+<a href="../../../../lib/kernel-9.2.2/doc/html/code.html#get_path/0"><code class="inline">code:get_path/0</code></a>.</p><p>If the library path is set to <code class="inline">code_path</code>, the set of library modules is not
 determined, and the <code class="inline">info</code> functions will return empty lists of library modules.</p>
   </section>
 </section>
@@ -3514,7 +3484,7 @@ determined, and the <code class="inline">info</code> functions will return empty
     </a>
     <h1 class="signature" translate="no">start(NameOrOptions)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L741" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L766" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3535,8 +3505,8 @@ determined, and the <code class="inline">info</code> functions will return empty
 
       </div>
 
-<p>Creates an <a href="xref.html#xref_server">Xref server</a>. The process may optionally be
-given a name. The default <a href="xref.html#mode">mode</a> is <code class="inline">functions</code>. Options that are
+<p>Creates an <a href="xref.html#xref_server">Xref server</a>.</p><p>The process can optionally be given a name. The default
+<a href="xref.html#mode">mode</a> is <code class="inline">functions</code>. Options that are
 not recognized by Xref are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#start/4"><code class="inline">gen_server:start/4</code></a>.</p>
   </section>
 </section>
@@ -3549,7 +3519,7 @@ not recognized by Xref are passed on to <a href="../../../../lib/stdlib-5.2.1/do
     </a>
     <h1 class="signature" translate="no">start(Name, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L759" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L785" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3566,9 +3536,8 @@ not recognized by Xref are passed on to <a href="../../../../lib/stdlib-5.2.1/do
 
       </div>
 
-<p>Creates an <a href="xref.html#xref_server">Xref server</a> with a given name. The default
-<a href="xref.html#mode">mode</a> is <code class="inline">functions</code>. Options that are not recognized by Xref
-are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#start/4"><code class="inline">gen_server:start/4</code></a>.</p>
+<p>Creates an <a href="xref.html#xref_server">Xref server</a> with a given name.</p><p>The default <a href="xref.html#mode">mode</a> is <code class="inline">functions</code>. Options that are
+not recognized by Xref are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#start/4"><code class="inline">gen_server:start/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="stop/1">
@@ -3580,7 +3549,7 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
     </a>
     <h1 class="signature" translate="no">stop(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L777" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L803" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3608,7 +3577,7 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
     </a>
     <h1 class="signature" translate="no">update(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1339" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1383" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3628,7 +3597,7 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
 
       </div>
 
-<p>Equivalent to <a href="#update/2"><code class="inline">update/2</code></a>.</p>
+<p>Equivalent to <a href="#update/2"><code class="inline">update(XrefServer, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="update/2">
@@ -3640,7 +3609,7 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
     </a>
     <h1 class="signature" translate="no">update(XrefServer, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1362" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1408" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3664,9 +3633,9 @@ are passed on to <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html#
 
 <p>Replaces the <a href="xref.html#module_data">module data</a> of all
 <a href="xref.html#analyzed_module">analyzed modules</a> the BEAM files of which have been
-modified since last read by an <code class="inline">add</code> function or <code class="inline">update</code>. Application
-membership of the modules is retained, and so is the value of the <code class="inline">builtins</code>
-option. Returns a sorted list of the names of the replaced modules.</p>
+modified since last read by an <code class="inline">add</code> function or <code class="inline">update</code>.</p><p>Application membership of the modules is retained, and so is the value
+of the <code class="inline">builtins</code>option. Returns a sorted list of the names of
+the replaced modules.</p>
   </section>
 </section>
 <section class="detail" id="variables/1">
@@ -3678,7 +3647,7 @@ option. Returns a sorted list of the names of the replaced modules.</p>
     </a>
     <h1 class="signature" translate="no">variables(XrefServer)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1391" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1439" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3697,7 +3666,7 @@ option. Returns a sorted list of the names of the replaced modules.</p>
 
       </div>
 
-<p>Equivalent to <a href="#variables/2"><code class="inline">variables/2</code></a>.</p>
+<p>Equivalent to <a href="#variables/2"><code class="inline">variables(XrefServer, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="variables/2">
@@ -3709,7 +3678,7 @@ option. Returns a sorted list of the names of the replaced modules.</p>
     </a>
     <h1 class="signature" translate="no">variables(XrefServer, Options)</h1>
 
-      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1409" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/FieldsOfGold06/otp/blob/eldap_spec_fix/lib/tools/src/xref.erl#L1459" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3731,8 +3700,8 @@ option. Returns a sorted list of the names of the replaced modules.</p>
       </div>
 
 <p>Returns a sorted lists of the names of the variables of an
-<a href="xref.html#xref_server">Xref server</a>. The default is to return the
-<a href="xref.html#user_variable">user variables</a> only.</p>
+<a href="xref.html#xref_server">Xref server</a>.</p><p>The default is to return only the
+<a href="xref.html#user_variable">user variables</a>.</p>
   </section>
 </section>
 
