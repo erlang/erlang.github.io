@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-85B2FEEA.js"></script>
+    <script src="dist/sidebar_items-AAC3A8F2.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -130,36 +130,37 @@ Pages
   <span>fprof - The File Trace Profiler</span>
 </h1>
 
-<p><code class="inline">fprof</code> is a profiling tool that can be used to get a picture of how much
+<p><a href="fprof.html"><code class="inline">fprof</code></a> is a profiling tool that can be used to get a picture of how much
 processing time different functions consumes and in which processes.</p><p><code class="inline">fprof</code> uses tracing with timestamps to collect profiling data. Therefore there
 is no need for special compilation of any module to be profiled.</p><p><code class="inline">fprof</code> presents wall clock times from the host machine OS, with the assumption
 that OS scheduling will randomly load the profiled functions in a fair way. Both
-<em>own time</em> i.e the time used by a function for its own execution, and
-<em>accumulated time</em> i.e execution time including called functions.</p><p>Profiling is essentially done in 3 steps:</p><ul><li><p><strong><code class="inline">1</code></strong> - Tracing; to file, as mentioned in the previous paragraph.</p></li><li><p><strong><code class="inline">2</code></strong> - Profiling; the trace file is read and raw profile data is collected
+<em>own time</em>, that is, the time used by a function for its own execution, and
+<em>accumulated time</em>, that is, execution time including called functions.</p><p>Profiling is essentially done in 3 steps:</p><ul><li><p>Tracing to a file.</p></li><li><p>Profiling: the trace file is read and raw profile data is collected
 into an internal RAM storage on the node. During this step the trace data may
-be dumped in text format to file or console.</p></li><li><p><strong><code class="inline">3</code></strong> - Analysing; the raw profile data is sorted and dumped in text format
-either to file or console.</p></li></ul><p>Since <code class="inline">fprof</code> uses trace to file, the runtime performance degradation is
-minimized, but still far from negligible, especially not for programs that use
-the filesystem heavily by themselves. Where you place the trace file is also
-important, e.g on Solaris <code class="inline">/tmp</code> is usually a good choice, while any NFS mounted
-disk is a lousy choice.</p><p>Fprof can also skip the file step and trace to a tracer process of its own that
-does the profiling in runtime.</p><p>The following sections show some examples of how to profile with Fprof. See also
-the reference manual <a href="fprof.html"><code class="inline">fprof</code></a>.</p><h2 id="profiling-from-the-source-code" class="section-heading">
+be dumped in text format to file or console.</p></li><li><p>Analysing: the raw profile data is sorted and dumped in text format
+either to file or console.</p></li></ul><p>Since <code class="inline">fprof</code> stores trace data to a file, the runtime performance degradation is
+minimized, but still far from negligible, especially for programs that themselves
+use the filesystem heavily. Where the trace file is placed is also important;
+on Unix systems <code class="inline">/tmp</code> is usually a good choice, while any
+network-mounted disk is a bad choice.</p><p><code class="inline">fprof</code> can also skip the file step and trace to a tracer process of its own that
+does the profiling in runtime.</p><p>The following sections show some examples of how to profile with <a href="fprof.html"><code class="inline">fprof</code></a>.</p><h2 id="profiling-from-the-source-code" class="section-heading">
   <a href="#profiling-from-the-source-code" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Profiling from the source code</span>
 </h2>
-<p>If you can edit and recompile the source code, it is convenient to insert
-<code class="inline">fprof:trace(start)</code> and <code class="inline">fprof:trace(stop)</code> before and after the code to be
-profiled. All spawned processes are also traced. If you want some other filename
-than the default try <code class="inline">fprof:trace(start, &quot;my_fprof.trace&quot;)</code>.</p><p>Then read the trace file and create the raw profile data with <code class="inline">fprof:profile()</code>,
-or perhaps <code class="inline">fprof:profile(file, &quot;my_fprof.trace&quot;)</code> for non-default filename.</p><p>Finally create an informative table dumped on the console with
-<code class="inline">fprof:analyse()</code>, or on file with <code class="inline">fprof:analyse(dest, [])</code>, or perhaps even
-<code class="inline">fprof:analyse([{dest, &quot;my_fprof.analysis&quot;}, {cols, 120}])</code> for a wider listing
-on non-default filename.</p><p>See the <a href="fprof.html"><code class="inline">fprof</code></a> manual page for more options and arguments to the functions
-<a href="fprof.html#trace/2">trace</a>, <a href="fprof.html#profile/0">profile</a> and
-<a href="fprof.html#analyse/0">analyse</a>.</p><h2 id="profiling-a-function" class="section-heading">
+<p>If you can edit and recompile the source code, it is convenient to
+insert <a href="fprof.html#trace/1"><code class="inline">fprof:trace(start)</code></a> and
+<a href="fprof.html#trace/1"><code class="inline">fprof:trace(stop)</code></a> before and after the code to be profiled.
+All spawned processes are also traced. If you want some other filename than
+the default, use <a href="fprof.html#trace/2"><code class="inline">fprof:trace(start, &quot;my_fprof.trace&quot;)</code></a>.</p><p>When execution is finished, the raw profile can be processed using
+<a href="fprof.html#profile/0"><code class="inline">fprof:profile()</code></a>,
+or <a href="fprof.html#profile/2"><code class="inline">fprof:profile(file, &quot;my_fprof.trace&quot;)</code></a>
+for a non-default filename.</p><p>Finally create an informative table dumped on the console with
+<a href="fprof.html#analyse/0"><code class="inline">fprof:analyse()</code></a>, or on file with
+<a href="fprof.html#analyse/2"><code class="inline">fprof:analyse(dest, [])</code></a>, or
+<a href="fprof.html#analyse/1"><code class="inline">fprof:analyse([{dest, &quot;my_fprof.analysis&quot;}, {cols, 120}])</code></a>
+for a wider listing of a non-default filename.</p><h2 id="profiling-a-function" class="section-heading">
   <a href="#profiling-a-function" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -167,10 +168,12 @@ on non-default filename.</p><p>See the <a href="fprof.html"><code class="inline"
 </h2>
 <p>If you have one function that does the task that you want to profile, and the
 function returns when the profiling should stop, it is convenient to use
-<code class="inline">fprof:apply(Module, Function, Args)</code> and related for the tracing step.</p><p>If the tracing should continue after the function returns, for example if it is
-a start function that spawns processes to be profiled, you can use
-<code class="inline">fprof:apply(M, F, Args, [continue | OtherOpts])</code>. The tracing has to be stopped
-at a suitable later time using <code class="inline">fprof:trace(stop)</code>.</p><h2 id="immediate-profiling" class="section-heading">
+<a href="fprof.html#apply/3"><code class="inline">fprof:apply(Module, Function, Args)</code></a> for the tracing step.</p><p>If the tracing should continue after the function has returned, for
+example if it is a start function that spawns processes to be
+profiled, use
+<a href="fprof.html#apply/4"><code class="inline">fprof:apply(M, F, Args, [continue | OtherOpts])</code></a>.
+The tracing has to be stopped at a suitable later time using
+<a href="fprof.html#trace/1"><code class="inline">fprof:trace(stop)</code></a>.</p><h2 id="immediate-profiling" class="section-heading">
   <a href="#immediate-profiling" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -178,10 +181,10 @@ at a suitable later time using <code class="inline">fprof:trace(stop)</code>.</p
 </h2>
 <p>It is also possible to trace immediately into the profiling process that creates
 the raw profile data, that is to short circuit the tracing and profiling steps
-so that the filesystem is not used.</p><p>Do something like this:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="1776237246-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Tracer</span><span class="p" data-group-id="1776237246-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">fprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="1776237246-2">(</span><span class="ss">start</span><span class="p" data-group-id="1776237246-2">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">fprof</span><span class="p">:</span><span class="nf">trace</span><span class="p" data-group-id="1776237246-3">(</span><span class="p" data-group-id="1776237246-4">[</span><span class="ss">start</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1776237246-5">{</span><span class="ss">tracer</span><span class="p">,</span><span class="w"> </span><span class="n">Tracer</span><span class="p" data-group-id="1776237246-5">}</span><span class="p" data-group-id="1776237246-4">]</span><span class="p" data-group-id="1776237246-3">)</span><span class="p">,</span><span class="w">
-</span><span class="c1">%% Code to profile</span><span class="w">
-</span><span class="nc">fprof</span><span class="p">:</span><span class="nf">trace</span><span class="p" data-group-id="1776237246-6">(</span><span class="ss">stop</span><span class="p" data-group-id="1776237246-6">)</span><span class="p">;</span></code></pre><p>This puts less load on the filesystem, but much more on the Erlang runtime
+so that the filesystem is not used for tracing.</p><p>Do something like this:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="4974571968-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Tracer</span><span class="p" data-group-id="4974571968-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">fprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="4974571968-2">(</span><span class="ss">start</span><span class="p" data-group-id="4974571968-2">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">fprof</span><span class="p">:</span><span class="nf">trace</span><span class="p" data-group-id="4974571968-3">(</span><span class="p" data-group-id="4974571968-4">[</span><span class="ss">start</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4974571968-5">{</span><span class="ss">tracer</span><span class="p">,</span><span class="w"> </span><span class="n">Tracer</span><span class="p" data-group-id="4974571968-5">}</span><span class="p" data-group-id="4974571968-4">]</span><span class="p" data-group-id="4974571968-3">)</span><span class="p">,</span><span class="w">
+</span><span class="c1">%% Run code to profile</span><span class="w">
+</span><span class="nc">fprof</span><span class="p">:</span><span class="nf">trace</span><span class="p" data-group-id="4974571968-6">(</span><span class="ss">stop</span><span class="p" data-group-id="4974571968-6">)</span><span class="p">;</span></code></pre><p>This puts less load on the filesystem, but much more load on the Erlang runtime
 system.</p>
 <div class="bottom-actions">
   <div class="bottom-actions-item">
