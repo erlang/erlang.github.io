@@ -143,7 +143,7 @@ displayed by <code class="inline">rup</code> and <code class="inline">top</code>
 as load up to the second mark in <code class="inline">xload</code>.</p><p>For example, <code class="inline">rup</code> displays a load of 128 as 0.50, and 512 as 2.00.</p><p>If the user wants to view load values as percentage of machine capacity, then
 this way of measuring presents a problem, because the load values are not
 restricted to a fixed interval. In this case, the following simple mathematical
-transformation can produce the load value as a percentage:</p><pre><code class="text">      PercentLoad = 100 * (1 - D/(D + Load))</code></pre><p><code class="inline">D</code> determines which load value should be associated with which percentage.
+transformation can produce the load value as a percentage:</p><pre><code class="text">PercentLoad = 100 * (1 - D/(D + Load))</code></pre><p><code class="inline">D</code> determines which load value should be associated with which percentage.
 Choosing <code class="inline">D</code> = 50 means that 128 is 60% load, 256 is 80%, 512 is 90%, and so on.</p><p>Another way of measuring system load is to divide the number of busy CPU cycles
 by the total number of CPU cycles. This produces values in the 0-100 range
 immediately. However, this method hides the fact that a machine can be more or
@@ -220,7 +220,8 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       </div>
 
-        <div class="summary-synopsis"><p>avg1() -&gt; SystemLoad | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Returns the average system load in the last minute, as described above. 0
+represents no load, 256 represents the load reported as 1.00 by <code class="inline">rup</code>.</p></div>
 
     </div>
 
@@ -230,7 +231,8 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       </div>
 
-        <div class="summary-synopsis"><p>avg5() -&gt; SystemLoad | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Returns the average system load in the last five minutes, as described above. 0
+represents no load, 256 represents the load reported as 1.00 by <code class="inline">rup</code>.</p></div>
 
     </div>
 
@@ -240,7 +242,8 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       </div>
 
-        <div class="summary-synopsis"><p>avg15() -&gt; SystemLoad | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Returns the average system load in the last 15 minutes, as described above. 0
+represents no load, 256 represents the load reported as 1.00 by <code class="inline">rup</code>.</p></div>
 
     </div>
 
@@ -250,7 +253,8 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       </div>
 
-        <div class="summary-synopsis"><p>nprocs() -&gt; UnixProcesses | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Returns the number of UNIX processes running on this machine. This is a crude
+way of measuring the system load, but it may be of interest in some cases.</p></div>
 
     </div>
 
@@ -260,7 +264,8 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       </div>
 
-        <div class="summary-synopsis"><p>util() -&gt; CpuUtil | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Returns CPU utilization since the last call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a>
+by the calling process.</p></div>
 
     </div>
 
@@ -270,7 +275,8 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       </div>
 
-        <div class="summary-synopsis"><p>util(Opts) -&gt; UtilSpec | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Returns CPU utilization since the last call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a>
+by the calling process, in more detail than <a href="#util/0"><code class="inline">util/0</code></a>.</p></div>
 
     </div>
 
@@ -428,7 +434,7 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
     </a>
     <h1 class="signature" translate="no">avg1()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L163" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L159" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -440,11 +446,11 @@ accessible by <code class="inline">cpu_sup</code>. If it is not, <code class="in
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> avg1() -> <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> avg1() -> SystemLoad :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
 
       </div>
 
-<p>avg1() -&gt; SystemLoad | {error, Reason}</p><p>Returns the average system load in the last minute, as described above. 0
+<p>Returns the average system load in the last minute, as described above. 0
 represents no load, 256 represents the load reported as 1.00 by <code class="inline">rup</code>.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is not available.</p>
   </section>
 </section>
@@ -457,7 +463,7 @@ represents no load, 256 represents the load reported as 1.00 by <code class="inl
     </a>
     <h1 class="signature" translate="no">avg5()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L176" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L170" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -469,11 +475,11 @@ represents no load, 256 represents the load reported as 1.00 by <code class="inl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> avg5() -> <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> avg5() -> SystemLoad :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
 
       </div>
 
-<p>avg5() -&gt; SystemLoad | {error, Reason}</p><p>Returns the average system load in the last five minutes, as described above. 0
+<p>Returns the average system load in the last five minutes, as described above. 0
 represents no load, 256 represents the load reported as 1.00 by <code class="inline">rup</code>.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is not available.</p>
   </section>
 </section>
@@ -486,7 +492,7 @@ represents no load, 256 represents the load reported as 1.00 by <code class="inl
     </a>
     <h1 class="signature" translate="no">avg15()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L189" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L181" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -498,11 +504,11 @@ represents no load, 256 represents the load reported as 1.00 by <code class="inl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> avg15() -> <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> avg15() -> SystemLoad :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
 
       </div>
 
-<p>avg15() -&gt; SystemLoad | {error, Reason}</p><p>Returns the average system load in the last 15 minutes, as described above. 0
+<p>Returns the average system load in the last 15 minutes, as described above. 0
 represents no load, 256 represents the load reported as 1.00 by <code class="inline">rup</code>.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is not available.</p>
   </section>
 </section>
@@ -515,7 +521,7 @@ represents no load, 256 represents the load reported as 1.00 by <code class="inl
     </a>
     <h1 class="signature" translate="no">nprocs()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L150" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -527,12 +533,12 @@ represents no load, 256 represents the load reported as 1.00 by <code class="inl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> nprocs() -> <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> nprocs() -> UnixProcesses :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:integer/0">integer</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
 
       </div>
 
-<p>nprocs() -&gt; UnixProcesses | {error, Reason}</p><p>Returns the number of UNIX processes running on this machine. This is a crude
-way of measuring the system load, but it may be of interest in some cases.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is not available.</p>
+<p>Returns the number of UNIX processes running on this machine. This is a crude
+way of measuring the system load, but it may be of interest in some cases.</p><p>Returns 0 if <a href="cpu_sup.html#content"><code class="inline">cpu_sup</code></a> is not available.</p>
   </section>
 </section>
 <section class="detail" id="util/0">
@@ -544,7 +550,7 @@ way of measuring the system load, but it may be of interest in some cases.</p><p
     </a>
     <h1 class="signature" translate="no">util()</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L302" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L290" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -556,16 +562,16 @@ way of measuring the system load, but it may be of interest in some cases.</p><p
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> util() -> <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:number/0">number</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> util() -> CpuUtil :: <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:number/0">number</a>() | {error, <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:any/0">any</a>()}.</pre>
 
       </div>
 
-<p>util() -&gt; CpuUtil | {error, Reason}</p><p>Returns CPU utilization since the last call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a>
+<p>Returns CPU utilization since the last call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a>
 by the calling process.</p><blockquote><h4 class="info">Note</h4><p>The returned value of the first call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a> by a
 process will on most systems be the CPU utilization since system boot, but
 this is not guaranteed and the value should therefore be regarded as garbage.
 This also applies to the first call after a restart of <code class="inline">cpu_sup</code>.</p></blockquote><p>The CPU utilization is defined as the sum of the percentage shares of the CPU
-cycles spent in all busy processor states (see <a href="#util/1"><code class="inline">util/1</code></a> below) in
+cycles spent in all busy processor states (see <a href="#util/1"><code class="inline">util/1</code></a>) in
 average on all CPUs.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is not available.</p>
   </section>
 </section>
@@ -578,7 +584,7 @@ average on all CPUs.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is n
     </a>
     <h1 class="signature" translate="no">util/1</h1>
 
-      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L266" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-code-doc/lib/os_mon/src/cpu_sup.erl#L256" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -594,7 +600,7 @@ average on all CPUs.</p><p>Returns 0 if <code class="inline">cpu_sup</code> is n
 
       </div>
 
-<p>util(Opts) -&gt; UtilSpec | {error, Reason}</p><p>Returns CPU utilization since the last call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a>
+<p>Returns CPU utilization since the last call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a>
 by the calling process, in more detail than <a href="#util/0"><code class="inline">util/0</code></a>.</p><blockquote><h4 class="info">Note</h4><p>The returned value of the first call to <a href="#util/0"><code class="inline">util/0</code></a> or <a href="#util/1"><code class="inline">util/1</code></a> by a
 process will on most systems be the CPU utilization since system boot, but
 this is not guaranteed and the value should therefore be regarded as garbage.
