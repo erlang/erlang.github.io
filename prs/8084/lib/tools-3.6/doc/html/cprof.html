@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-85B2FEEA.js"></script>
+    <script src="dist/sidebar_items-AAC3A8F2.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -135,22 +135,18 @@ Pages
   <section id="moduledoc">
 <p>A simple Call Count Profiling Tool using breakpoints for minimal runtime
 performance impact.</p><p>The <code class="inline">cprof</code> module is used to profile a program to find out how many times
-different functions are called. Breakpoints similar to local call trace, but
-containing a counter, are used to minimise runtime performance impact.</p><p>Since breakpoints are used there is no need for special compilation of any
-module to be profiled. For now these breakpoints can only be set on BEAM code so
-BIFs cannot be call count traced.</p><p>The size of the call counters is the host machine word size. One bit is used
+different functions are called. To minimize runtime performance impact,
+breakpoints containing counters are used.</p><p>Since breakpoints are used there is no need for special compilation of the
+modules to be profiled. These breakpoints can only be set on BEAM code, so
+BIFs cannot be call-count traced.</p><p>The size of the call counters is the host machine word size. One bit is used
 when pausing the counter, so the maximum counter value for a 32-bit host
-is 2147483647.</p><p>The profiling result is delivered as a term containing a sorted list of entries,
+is 2,147,483,647.</p><p>The profiling result is delivered as a term containing a sorted list of entries,
 one per module. Each module entry contains a sorted list of functions. The
-sorting order in both cases is of decreasing call count.</p><p>Call count tracing is very lightweight compared to other forms of tracing since
-no trace message has to be generated. Some measurements indicates performance
-degradation in the vicinity of 10 percent.</p><h2 id="module-see-also" class="section-heading">
-  <a href="#module-see-also" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">See Also</span>
-</h2>
-<p><a href="eprof.html"><code class="inline">eprof</code></a>(3), <a href="fprof.html"><code class="inline">fprof</code></a>(3), erlang(3), <a href="cprof_chapter.html">User's Guide</a></p>
+sorting order in both cases is of decreasing call count.</p><p>Call count tracing is lightweight compared to other forms of tracing,
+such as <a href="eprof.html"><code class="inline">eprof</code></a> or <a href="fprof.html"><code class="inline">fprof</code></a>, since no trace messages have to be
+generated. Some measurements indicates that the performance degradation is
+about 10 percent.</p><p>For more information and some examples, see the
+<a href="cprof_chapter.html">User's Guide for <code class="inline">cprof</code></a>.</p>
   </section>
 
 
@@ -202,28 +198,27 @@ degradation in the vicinity of 10 percent.</p><h2 id="module-see-also" class="se
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#analyse/2"><code class="inline">analyse/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#analyse/1"><code class="inline">analyse(1)</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#analyse/1" translate="no">analyse/1</a>
+        <a href="#analyse/1" translate="no">analyse(ModLimit)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#analyse/2"><code class="inline">analyse/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Collect call counters for one or more modules.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#analyse/2" translate="no">analyse(Mod, Limit)</a>
+        <a href="#analyse/2" translate="no">analyse(Module, Limit)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Collects and analyses the call counters presently in the node for either module
-<code class="inline">Mod</code>, or for all modules (except <code class="inline">cprof</code> itself), and returns</p></div>
+        <div class="summary-synopsis"><p>Collects and analyses all call counters for module <code class="inline">Module</code>.</p></div>
 
     </div>
 
@@ -234,8 +229,7 @@ degradation in the vicinity of 10 percent.</p><h2 id="module-see-also" class="se
       </div>
 
         <div class="summary-synopsis"><p>Pause call count tracing for all functions in all modules and stop it for all
-functions in modules to be loaded. This is the same as
-<code class="inline">(pause({'_','_','_'})+stop({on_load}))</code>.</p></div>
+functions in modules to be loaded.</p></div>
 
     </div>
 
@@ -245,7 +239,8 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#pause/3"><code class="inline">pause/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#pause/3"><code class="inline">pause(FuncSpec, '_', '_')</code></a>.</p></div>
 
     </div>
 
@@ -255,7 +250,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#pause/3"><code class="inline">pause/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#pause/3"><code class="inline">pause(Mod, Func, '_')</code></a>.</p></div>
 
     </div>
 
@@ -265,8 +260,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Pause call counters for matching functions in matching modules. The <code class="inline">FS</code>
-argument can be used to specify the first argument to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Pause call counters for matching functions in matching modules.</p></div>
 
     </div>
 
@@ -276,7 +270,7 @@ argument can be used to specify the first argument to <a href="../../../../erts-
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#restart/3"><code class="inline">restart/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#restart/3"><code class="inline">restart('_', '_', '_')</code></a>.</p></div>
 
     </div>
 
@@ -286,7 +280,8 @@ argument can be used to specify the first argument to <a href="../../../../erts-
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#restart/3"><code class="inline">restart/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#restart/3"><code class="inline">restart(FuncSpec, '_', '_')</code></a>.</p></div>
 
     </div>
 
@@ -296,7 +291,7 @@ argument can be used to specify the first argument to <a href="../../../../erts-
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#restart/3"><code class="inline">restart/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#restart/3"><code class="inline">restart(Mod, Func, '_')</code></a>.</p></div>
 
     </div>
 
@@ -307,8 +302,7 @@ argument can be used to specify the first argument to <a href="../../../../erts-
       </div>
 
         <div class="summary-synopsis"><p>Restart call counters for the matching functions in matching modules that are
-call count traced. The <code class="inline">FS</code> argument can be used to specify the first argument
-to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>.</p></div>
+call-count traced.</p></div>
 
     </div>
 
@@ -319,8 +313,7 @@ to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code 
       </div>
 
         <div class="summary-synopsis"><p>Start call count tracing for all functions in all modules, and also for all
-functions in modules to be loaded. This is the same as
-<code class="inline">(start({'_','_','_'})+start({on_load}))</code>.</p></div>
+functions in modules to be loaded.</p></div>
 
     </div>
 
@@ -330,7 +323,8 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start/3"><code class="inline">start/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#start/3"><code class="inline">start(FuncSpec, '_', '_')</code></a>.</p></div>
 
     </div>
 
@@ -340,7 +334,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start/3"><code class="inline">start/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#start/3"><code class="inline">start(Mod, Func, '_')</code></a>.</p></div>
 
     </div>
 
@@ -350,9 +344,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Start call count tracing for matching functions in matching modules. The <code class="inline">FS</code>
-argument can be used to specify the first argument to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>,
-for example <code class="inline">on_load</code>.</p></div>
+        <div class="summary-synopsis"><p>Start call count tracing for matching functions in matching modules.</p></div>
 
     </div>
 
@@ -363,8 +355,7 @@ for example <code class="inline">on_load</code>.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Stop call count tracing for all functions in all modules, and also for all
-functions in modules to be loaded. This is the same as
-<code class="inline">(stop({'_','_','_'})+stop({on_load}))</code>.</p></div>
+functions in modules to be loaded.</p></div>
 
     </div>
 
@@ -374,7 +365,8 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#stop/3"><code class="inline">stop/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#stop/3"><code class="inline">stop(FuncSpec, '_', '_')</code></a>.</p></div>
 
     </div>
 
@@ -384,7 +376,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#stop/3"><code class="inline">stop/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#stop/3"><code class="inline">stop(Mod, Func, '_')</code></a>.</p></div>
 
     </div>
 
@@ -394,9 +386,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-        <div class="summary-synopsis"><p>Stop call count tracing for matching functions in matching modules. The <code class="inline">FS</code>
-argument can be used to specify the first argument to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>,
-for example <code class="inline">on_load</code>.</p></div>
+        <div class="summary-synopsis"><p>Stop call count tracing for matching functions in matching modules.</p></div>
 
     </div>
 
@@ -422,7 +412,7 @@ for example <code class="inline">on_load</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">func_analysis_list()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L267" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L302" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -452,7 +442,7 @@ for example <code class="inline">on_load</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">mod_analysis()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L264" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L299" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -483,7 +473,7 @@ for example <code class="inline">on_load</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">mod_analysis_list()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L263" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L298" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -525,7 +515,7 @@ for example <code class="inline">on_load</code>.</p></div>
     </a>
     <h1 class="signature" translate="no">analyse()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L273" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L308" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -541,7 +531,7 @@ for example <code class="inline">on_load</code>.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#analyse/2"><code class="inline">analyse/2</code></a>.</p>
+<p>Equivalent to <a href="#analyse/1"><code class="inline">analyse(1)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="analyse/1">
@@ -551,9 +541,9 @@ for example <code class="inline">on_load</code>.</p></div>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">analyse/1</h1>
+    <h1 class="signature" translate="no">analyse(ModLimit)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L283" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L331" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -571,7 +561,11 @@ for example <code class="inline">on_load</code>.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#analyse/2"><code class="inline">analyse/2</code></a>.</p>
+<p>Collect call counters for one or more modules.</p><p>If <code class="inline">ModLimit</code> is a module name (an atom), this call is equivalent to
+<a href="#analyse/2"><code class="inline">analyse(ModLimit, 1)</code></a>.</p><p>If <code class="inline">ModLimit</code> is an integer, this function calls
+<a href="#analyse/2"><code class="inline">analyse(Module, ModLimit)</code></a> for each <code class="inline">Module</code> that is
+currently loaded (except the <code class="inline">cprof</code> module itself).
+The result from those calls are returned in a list.</p>
   </section>
 </section>
 <section class="detail" id="analyse/2">
@@ -581,9 +575,9 @@ for example <code class="inline">on_load</code>.</p></div>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">analyse(Mod, Limit)</h1>
+    <h1 class="signature" translate="no">analyse(Module, Limit)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L328" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L371" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -600,21 +594,12 @@ for example <code class="inline">on_load</code>.</p></div>
 
       </div>
 
-<p>Collects and analyses the call counters presently in the node for either module
-<code class="inline">Mod</code>, or for all modules (except <code class="inline">cprof</code> itself), and returns:</p><ul><li><p><strong><code class="inline">FuncAnalysisList</code></strong> - A list of tuples, one for each function in a module,
-in decreasing <code class="inline">FuncCallCount</code> order.</p></li><li><p><strong><code class="inline">ModCallCount</code></strong> - The sum of <code class="inline">FuncCallCount</code> values for all functions in
-module <code class="inline">Mod</code>.</p></li><li><p><strong><code class="inline">AllCallCount</code></strong> - The sum of <code class="inline">ModCallCount</code> values for all modules
-concerned in <code class="inline">ModAnalysisList</code>.</p></li><li><p><strong><code class="inline">ModAnalysisList</code></strong> - A list of tuples, one for each module except <code class="inline">cprof</code>,
-in decreasing <code class="inline">ModCallCount</code> order.</p></li></ul><p>If call counters are still running while <code class="inline">analyse/0..2</code> is executing, you might
-get an inconsistent result. This happens if the process executing <code class="inline">analyse/0..2</code>
-gets scheduled out so some other process can increment the counters that are
-being analysed, Calling <a href="#pause/0"><code class="inline">pause()</code></a> before analysing takes care of
-the problem.</p><p>If the <code class="inline">Mod</code> argument is given, the result contains a <code class="inline">ModAnalysis</code> tuple for
-module <code class="inline">Mod</code> only, otherwise the result contains one <code class="inline">ModAnalysis</code> tuple for all
-modules returned from <a href="../../../../lib/kernel-9.2.2/doc/html/code.html#all_loaded/0"><code class="inline">code:all_loaded()</code></a> except <code class="inline">cprof</code>
-itself.</p><p>All functions with a <code class="inline">FuncCallCount</code> lower than <code class="inline">Limit</code> are excluded from
-<code class="inline">FuncAnalysisList</code>. They are still included in <code class="inline">ModCallCount</code>, though. The
-default value for <code class="inline">Limit</code> is <code class="inline">1</code>.</p>
+<p>Collects and analyses all call counters for module <code class="inline">Module</code>.</p><p>This function returns:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="4687355473-1">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">ModuleCount</span><span class="p">,</span><span class="w"> </span><span class="n">FuncAnalysisList</span><span class="p" data-group-id="4687355473-1">}</span></code></pre><p>where <code class="inline">FuncAnalysisList</code> is a list of tuples, one for each function:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="0685596031-1">{</span><span class="p" data-group-id="0685596031-2">{</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">FunctionName</span><span class="p">,</span><span class="w"> </span><span class="n">Arity</span><span class="p" data-group-id="0685596031-2">}</span><span class="p">,</span><span class="w"> </span><span class="n">FuncCallCount</span><span class="p" data-group-id="0685596031-1">}</span></code></pre><p>If call counters are still running while <code class="inline">analyse/0,1,2</code> is executing, the result
+could be inconsistent. This happens if the process executing <code class="inline">analyse/0,1,2</code>
+is scheduled out so some other process can increment the counters that are
+being analysed. Calling <a href="#pause/0"><code class="inline">pause()</code></a> before analysing takes care of
+that problem.</p><p>All functions with a <code class="inline">FuncCallCount</code> lower than <code class="inline">Limit</code> are excluded from
+<code class="inline">FuncAnalysisList</code>. They are still included in <code class="inline">ModCallCount</code>, though.</p>
   </section>
 </section>
 <section class="detail" id="pause/0">
@@ -626,7 +611,7 @@ default value for <code class="inline">Limit</code> is <code class="inline">1</c
     </a>
     <h1 class="signature" translate="no">pause()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L220" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L247" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -643,8 +628,8 @@ default value for <code class="inline">Limit</code> is <code class="inline">1</c
       </div>
 
 <p>Pause call count tracing for all functions in all modules and stop it for all
-functions in modules to be loaded. This is the same as
-<code class="inline">(pause({'_','_','_'})+stop({on_load}))</code>.</p><p>See also <a href="#pause/1"><code class="inline">pause/1..3</code></a> below.</p>
+functions in modules to be loaded.</p><p>This call is equivalent to
+<a href="#pause/3"><code class="inline">pause('_', '_', '_') + stop({on_load})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="pause/1">
@@ -656,7 +641,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">pause(FuncSpec)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L227" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L264" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -672,7 +657,11 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Equivalent to <a href="#pause/3"><code class="inline">pause/3</code></a>.</p>
+<p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#pause/3"><code class="inline">pause(FuncSpec, '_', '_')</code></a>.</p><p>If <code class="inline">FuncSpec</code> is an MFA tuple, <code class="inline">{Module, Name, Arity</code>}, this call
+is equivalent to <a href="#pause/3"><code class="inline">pause(Module, Name, Arity)</code></a>.</p><p>If <code class="inline">FuncSpec</code> is tuple <code class="inline">{FS}</code>, <code class="inline">FS</code> is the first argument to
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. For example, if <code class="inline">FuncSpec</code> is <code class="inline">{on_load}</code>,
+call counters will be paused for all functions in modules to be loaded.</p>
   </section>
 </section>
 <section class="detail" id="pause/2">
@@ -684,7 +673,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">pause(Mod, Func)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L239" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L276" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -700,7 +689,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Equivalent to <a href="#pause/3"><code class="inline">pause/3</code></a>.</p>
+<p>Equivalent to <a href="#pause/3"><code class="inline">pause(Mod, Func, '_')</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="pause/3">
@@ -712,7 +701,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">pause(Mod, Func, Arity)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L258" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L294" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -729,10 +718,9 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Pause call counters for matching functions in matching modules. The <code class="inline">FS</code>
-argument can be used to specify the first argument to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>.</p><p>The call counters for all matching functions that has got call count breakpoints
+<p>Pause call counters for matching functions in matching modules.</p><p>The call counters for all matching functions that have call count breakpoints
 are paused at their current count.</p><p>Return the number of matching functions that can have call count breakpoints,
-the same as <a href="#start/0"><code class="inline">start/0..3</code></a> with the same arguments would have
+the same as <a href="#start/3"><code class="inline">start/*</code></a> with the same arguments would have
 returned.</p>
   </section>
 </section>
@@ -745,7 +733,7 @@ returned.</p>
     </a>
     <h1 class="signature" translate="no">restart()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L168" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L185" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -761,7 +749,7 @@ returned.</p>
 
       </div>
 
-<p>Equivalent to <a href="#restart/3"><code class="inline">restart/3</code></a>.</p>
+<p>Equivalent to <a href="#restart/3"><code class="inline">restart('_', '_', '_')</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="restart/1">
@@ -773,7 +761,7 @@ returned.</p>
     </a>
     <h1 class="signature" translate="no">restart(FuncSpec)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L175" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L203" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -789,7 +777,12 @@ returned.</p>
 
       </div>
 
-<p>Equivalent to <a href="#restart/3"><code class="inline">restart/3</code></a>.</p>
+<p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#restart/3"><code class="inline">restart(FuncSpec, '_', '_')</code></a>.</p><p>If <code class="inline">FuncSpec</code> is an MFA tuple, <code class="inline">{Module, Name, Arity</code>}, this call
+is equivalent to <a href="#restart/3"><code class="inline">restart(Module, Name, Arity)</code></a>.</p><p>If <code class="inline">FuncSpec</code> is tuple <code class="inline">{FS}</code>, <code class="inline">FS</code> is the first argument to
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. For example, if <code class="inline">FuncSpec</code> is <code class="inline">{on_load}</code>,
+call counters will be set to zero and running for all functions in
+modules to be loaded.</p>
   </section>
 </section>
 <section class="detail" id="restart/2">
@@ -801,7 +794,7 @@ returned.</p>
     </a>
     <h1 class="signature" translate="no">restart(Mod, Func)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L187" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L215" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -817,7 +810,7 @@ returned.</p>
 
       </div>
 
-<p>Equivalent to <a href="#restart/3"><code class="inline">restart/3</code></a>.</p>
+<p>Equivalent to <a href="#restart/3"><code class="inline">restart(Mod, Func, '_')</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="restart/3">
@@ -829,7 +822,7 @@ returned.</p>
     </a>
     <h1 class="signature" translate="no">restart(Mod, Func, Arity)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L207" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L234" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -847,10 +840,9 @@ returned.</p>
       </div>
 
 <p>Restart call counters for the matching functions in matching modules that are
-call count traced. The <code class="inline">FS</code> argument can be used to specify the first argument
-to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>.</p><p>The call counters for all matching functions that has got call count breakpoints
+call-count traced.</p><p>The call counters for all matching functions that has call count breakpoints
 are set to zero and running.</p><p>Return the number of matching functions that can have call count breakpoints,
-the same as <a href="#start/0"><code class="inline">start/0..3</code></a> with the same arguments would have
+the same as <a href="#start/3"><code class="inline">start/*</code></a> with the same arguments would have
 returned.</p>
   </section>
 </section>
@@ -880,8 +872,8 @@ returned.</p>
       </div>
 
 <p>Start call count tracing for all functions in all modules, and also for all
-functions in modules to be loaded. This is the same as
-<code class="inline">(start({'_','_','_'})+start({on_load}))</code>.</p><p>See also <a href="#start/1"><code class="inline">start/1..3</code></a> below.</p>
+functions in modules to be loaded.</p><p>This is equivalent to
+<a href="#start/3"><code class="inline">start('_', '_', '_') + start({on_load})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start/1">
@@ -893,7 +885,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">start(FuncSpec)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L77" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L88" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -909,7 +901,12 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Equivalent to <a href="#start/3"><code class="inline">start/3</code></a>.</p>
+<p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#start/3"><code class="inline">start(FuncSpec, '_', '_')</code></a>.</p><p>If <code class="inline">FuncSpec</code> is an MFA tuple, <code class="inline">{Module, Name, Arity</code>}, this call
+is equivalent to <a href="#start/3"><code class="inline">start(Module, Name, Arity)</code></a>.</p><p>If <code class="inline">FuncSpec</code> is tuple <code class="inline">{FS}</code>, <code class="inline">FS</code> is the first argument to
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. For example, if <code class="inline">FuncSpec</code> is <code class="inline">{on_load}</code>,
+call counters will be set to zero and running for all functions in
+modules to be loaded.</p>
   </section>
 </section>
 <section class="detail" id="start/2">
@@ -921,7 +918,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">start(Mod, Func)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L89" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L100" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -937,7 +934,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Equivalent to <a href="#start/3"><code class="inline">start/3</code></a>.</p>
+<p>Equivalent to <a href="#start/3"><code class="inline">start(Mod, Func, '_')</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start/3">
@@ -949,7 +946,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">start(Mod, Func, Arity)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L108" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L117" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -966,11 +963,9 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Start call count tracing for matching functions in matching modules. The <code class="inline">FS</code>
-argument can be used to specify the first argument to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>,
-for example <code class="inline">on_load</code>.</p><p>Set call count breakpoints on the matching functions that has no call count
+<p>Start call count tracing for matching functions in matching modules.</p><p>Set call count breakpoints on the matching functions that has no call count
 breakpoints. Call counters are set to zero and running for all matching
-functions.</p><p>Return the number of matching functions that has got call count breakpoints.</p>
+functions.</p><p>Return the number of matching functions that has call count breakpoints.</p>
   </section>
 </section>
 <section class="detail" id="stop/0">
@@ -982,7 +977,7 @@ functions.</p><p>Return the number of matching functions that has got call count
     </a>
     <h1 class="signature" translate="no">stop()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L122" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L131" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -999,8 +994,8 @@ functions.</p><p>Return the number of matching functions that has got call count
       </div>
 
 <p>Stop call count tracing for all functions in all modules, and also for all
-functions in modules to be loaded. This is the same as
-<code class="inline">(stop({'_','_','_'})+stop({on_load}))</code>.</p><p>See also <a href="#stop/1"><code class="inline">stop/1..3</code></a> below.</p>
+functions in modules to be loaded.</p><p>This is equivalent to
+<a href="#stop/3"><code class="inline">stop('_', '_', '_') + stop({on_load})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="stop/1">
@@ -1012,7 +1007,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">stop(FuncSpec)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L129" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1028,7 +1023,11 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Equivalent to <a href="#stop/3"><code class="inline">stop/3</code></a>.</p>
+<p>If <code class="inline">FuncSpec</code> is an atom, it is assumed to be a module name, and
+this call is equivalent to <a href="#stop/3"><code class="inline">stop(FuncSpec, '_', '_')</code></a>.</p><p>If <code class="inline">FuncSpec</code> is an MFA tuple, <code class="inline">{Module, Name, Arity</code>}, this call
+is equivalent to <a href="#stop/3"><code class="inline">stop(Module, Name, Arity)</code></a>.</p><p>If <code class="inline">FuncSpec</code> is tuple <code class="inline">{FS}</code>, <code class="inline">FS</code> is the first argument to
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. For example, if <code class="inline">FuncSpec</code> is <code class="inline">{on_load}</code>,
+call counters be disabled for all functions in modules to be loaded.</p>
   </section>
 </section>
 <section class="detail" id="stop/2">
@@ -1040,7 +1039,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">stop(Mod, Func)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L141" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L160" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1056,7 +1055,7 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Equivalent to <a href="#stop/3"><code class="inline">stop/3</code></a>.</p>
+<p>Equivalent to <a href="#stop/3"><code class="inline">stop(Mod, Func, '_')</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="stop/3">
@@ -1068,7 +1067,7 @@ functions in modules to be loaded. This is the same as
     </a>
     <h1 class="signature" translate="no">stop(Mod, Func, Arity)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L161" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/tools/src/cprof.erl#L178" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1084,11 +1083,9 @@ functions in modules to be loaded. This is the same as
 
       </div>
 
-<p>Stop call count tracing for matching functions in matching modules. The <code class="inline">FS</code>
-argument can be used to specify the first argument to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>,
-for example <code class="inline">on_load</code>.</p><p>Remove call count breakpoints from the matching functions that has call count
+<p>Stop call count tracing for matching functions in matching modules.</p><p>Remove call count breakpoints from the matching functions that has call count
 breakpoints.</p><p>Return the number of matching functions that can have call count breakpoints,
-the same as <a href="#start/0"><code class="inline">start/0..3</code></a> with the same arguments would have
+which is the same as <a href="#start/3"><code class="inline">start/*</code></a> with the same arguments would have
 returned.</p>
   </section>
 </section>
