@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-85B2FEEA.js"></script>
+    <script src="dist/sidebar_items-AAC3A8F2.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -133,216 +133,217 @@ Pages
 
 
   <section id="moduledoc">
-<p>Process Tracing Profiling Tool</p><p><code class="inline">tprof</code> provides convenience helpers for Erlang process profiling. Underlying
-mechanism is the Erlang trace BIFs.</p><blockquote><h4 class="warning">Warning</h4><p>This module aims to replace <code class="inline">eprof</code> and <code class="inline">cprof</code> into a unified API for
+<p>Process Tracing Profiling Tool</p><p><code class="inline">tprof</code> provides convenience helpers for Erlang process profiling using
+the trace BIFs.</p><blockquote><h4 class="warning">Warning</h4><p>This module aims to replace <code class="inline">eprof</code> and <code class="inline">cprof</code> into a unified API for
 measuring call count, time, and allocation. It is experimental in Erlang/OTP
 27.0.</p></blockquote><p>It is possible to analyze the number of calls, the time spent by function, and
 heap allocations by function. Profiling can be done ad-hoc or run in a
-server-aided mode for deeper introspection of the code running in production.</p><blockquote><h4 class="warning">Warning</h4><p>Avoid hot code reload for modules that are participating in the tracing.
-Reloading a module turns tracing off, discarding accumulated statistics.
-<code class="inline">tprof</code> may not report correct amounts when code reload happened during
-profiling session.</p></blockquote><p>The <code class="inline">type</code> option controls which type of profiling to perform. You can choose
-between <code class="inline">call_count</code>, <code class="inline">call_time</code>, and <code class="inline">call_memory</code>. The default is
-<code class="inline">call_count</code>, it has the smallest footprint on the system but it does not
-support per-process profiling. For this reason, all of the examples below use
-<code class="inline">call_memory</code>, which measures heap allocation, and provide a more complex
-feature set to demonstrate.</p><p>Heap allocations happen for all Erlang terms that do not fit a single machine
-word. For example, a function returning tuple of 2 elements needs to allocate
-this tuple on the process heap. Actual consumption is more than 2 machine words,
-because Erlang runtime needs to store tuple size and other internal information.</p><blockquote><h4 class="info">Note</h4><p>When profiling is enabled, expect a slowdown in the program execution.</p><p>For profiling convenience, measurements are accumulated for functions that are
-not enabled in trace pattern. Consider this call stack example:</p><pre><code class="text">top_traced_function(...)
+server-aided mode for deeper introspection of the code running in production.</p><blockquote><h4 class="warning">Warning</h4><p>Avoid hot code reloading for modules participating in the tracing.
+Reloading a module disables tracing and discards the accumulated statistics.
+The <code class="inline">tprof</code> results will probably be incorrect when the profiled code was
+reloading during a profiling session.</p></blockquote><p>There are three kinds of profiling supported by this module:</p><ul><li><code class="inline">call_count</code></li><li><code class="inline">call_time</code></li><li><code class="inline">call_memory</code></li></ul><p>The default is <code class="inline">call_count</code>, which has the smallest peformance impact
+and memory footprint, but it does not support per-process
+profiling.</p><p>Erlang terms that do not fit in a single machine word are allocated on
+the process heap. For example, a function returning a tuple of two
+elements needs to allocate the tuple on the process heap. The actual
+consumption is three words, because the runtime systems also need an
+extra word to store the tuple size.</p><blockquote><h4 class="info">Note</h4><p>Expect a slowdown in the program execution when profiling is enabled.</p><p>For profiling convenience, measurements are accumulated for functions that are
+not enabled in some trace pattern. Consider this call stack example:</p><pre><code class="text">top_traced_function(...)
 not_traced_function()
-bottom_traced_function()</code></pre><p>Allocations that happened within <code class="inline">not_traced_function</code> will be accounted into
-<code class="inline">top_traced_function</code>. However allocations happened within
-<code class="inline">bottom_traced_function</code> are not included in the <code class="inline">top_traced_function</code>. If you
-want to account only own allocations, you need to trace all functions.</p></blockquote><h2 id="module-ad-hoc-profiling" class="section-heading">
+bottom_traced_function()</code></pre><p>Allocations that happened within <code class="inline">not_traced_function</code> will be added to
+the allocations for <code class="inline">top_traced_function</code>. However, allocations that occurred
+within <code class="inline">bottom_traced_function</code> are not included in the <code class="inline">top_traced_function</code>.
+To only keep track of each function own allocations, it is necessary to
+trace all functions.</p></blockquote><h2 id="module-ad-hoc-profiling" class="section-heading">
   <a href="#module-ad-hoc-profiling" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Ad-hoc profiling</span>
 </h2>
-<p>Basic profiling providing accumulated memory allocation data. You can choose to
-print per-process statistics, total statistics, or omit printing and extract
-machine-readable data that you can later sort/print:</p><pre><code class="text">1&gt; tprof:profile(lists, seq, [1, 16], #{type =&gt; call_memory}).
+<p>Ad-hoc profiling is convenient for profiling a single function call.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="0411711401-1">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0411711401-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="0411711401-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0411711401-3">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p" data-group-id="0411711401-3">}</span><span class="p" data-group-id="0411711401-1">)</span><span class="p">.</span><span class="w">
 
-****** Process &lt;0.179.0&gt;    -- 100.00 % of total allocations ***
-FUNCTION          CALLS  WORDS  PER CALL  [     %]
-lists:seq_loop/3      5     32         6  [100.00]
-32            [ 100.0]
-ok</code></pre><p>By default tracing is enabled for all functions of all modules. When functions
-are created in the interactive shell, parts of shell code are also traced. It is
-however possible to limit the trace to specific functions or modules:</p><pre><code class="text">1&gt; tprof:profile(fun() -&gt; lists:seq(1, 16) end, #{type =&gt; call_memory}).
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.179</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">100.00</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">          </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="0411711401-4">[</span><span class="w">     </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">seq_loop</span><span class="p">/</span><span class="mi">3</span><span class="w">      </span><span class="mi">5</span><span class="w">     </span><span class="mi">32</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="0411711401-5">[</span><span class="mf">100.00</span><span class="p" data-group-id="0411711401-5">]</span><span class="w">
+</span><span class="mi">32</span><span class="w">            </span><span class="p" data-group-id="0411711401-6">[</span><span class="w"> </span><span class="mf">100.0</span><span class="p" data-group-id="0411711401-6">]</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>By default tracing is enabled for all functions in all modules. When funs
+are created in the interactive shell, parts of shell code are also traced:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="3943373352-1">(</span><span class="nf">fun</span><span class="p" data-group-id="3943373352-2">(</span><span class="p" data-group-id="3943373352-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="3943373352-3">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="3943373352-3">)</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3943373352-4">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p" data-group-id="3943373352-4">}</span><span class="p" data-group-id="3943373352-1">)</span><span class="p">.</span><span class="w">
 
-****** Process &lt;0.224.0&gt;    -- 100.00 % of total allocations ***
-FUNCTION                   CALLS  WORDS  PER CALL  [    %]
-erl_eval:match_list/6          1      3         3  [ 3.19]
-erl_eval:do_apply/7            1      3         3  [ 3.19]
-lists:reverse/1                1      4         4  [ 4.26]
-erl_eval:add_bindings/2        1      5         5  [ 5.32]
-erl_eval:expr_list/7           3      7         2  [ 7.45]
-erl_eval:ret_expr/3            4     16         4  [17.02]
-erl_eval:merge_bindings/4      3     24         8  [25.53]
-lists:seq_loop/3               5     32         6  [34.04]
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.224</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">100.00</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                   </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="3943373352-5">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">match_list</span><span class="p">/</span><span class="mi">6</span><span class="w">          </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="3943373352-6">[</span><span class="w"> </span><span class="mf">3.19</span><span class="p" data-group-id="3943373352-6">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">do_apply</span><span class="p">/</span><span class="mi">7</span><span class="w">            </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="3943373352-7">[</span><span class="w"> </span><span class="mf">3.19</span><span class="p" data-group-id="3943373352-7">]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">reverse</span><span class="p">/</span><span class="mi">1</span><span class="w">                </span><span class="mi">1</span><span class="w">      </span><span class="mi">4</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="p" data-group-id="3943373352-8">[</span><span class="w"> </span><span class="mf">4.26</span><span class="p" data-group-id="3943373352-8">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">add_bindings</span><span class="p">/</span><span class="mi">2</span><span class="w">        </span><span class="mi">1</span><span class="w">      </span><span class="mi">5</span><span class="w">         </span><span class="mi">5</span><span class="w">  </span><span class="p" data-group-id="3943373352-9">[</span><span class="w"> </span><span class="mf">5.32</span><span class="p" data-group-id="3943373352-9">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">expr_list</span><span class="p">/</span><span class="mi">7</span><span class="w">           </span><span class="mi">3</span><span class="w">      </span><span class="mi">7</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="3943373352-10">[</span><span class="w"> </span><span class="mf">7.45</span><span class="p" data-group-id="3943373352-10">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">ret_expr</span><span class="p">/</span><span class="mi">3</span><span class="w">            </span><span class="mi">4</span><span class="w">     </span><span class="mi">16</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="p" data-group-id="3943373352-11">[</span><span class="mf">17.02</span><span class="p" data-group-id="3943373352-11">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">merge_bindings</span><span class="p">/</span><span class="mi">4</span><span class="w">      </span><span class="mi">3</span><span class="w">     </span><span class="mi">24</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="3943373352-12">[</span><span class="mf">25.53</span><span class="p" data-group-id="3943373352-12">]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">seq_loop</span><span class="p">/</span><span class="mi">3</span><span class="w">               </span><span class="mi">5</span><span class="w">     </span><span class="mi">32</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="3943373352-13">[</span><span class="mf">34.04</span><span class="p" data-group-id="3943373352-13">]</span><span class="w">
 
-2&gt; tprof:profile(fun() -&gt; lists:seq(1, 16) end,
-                 #{type =&gt; call_memory, pattern =&gt; [{lists, seq_loop, '_'}]}).
-****** Process &lt;0.247.0&gt;    -- 100.00 % of total allocations ***
-FUNCTION          CALLS  WORDS  PER CALL  [     %]
-lists:seq_loop/3      5     32         6  [100.00]</code></pre><p>Ad-hoc profiling results may be printed in a few different ways. Following
-examples are using <code class="inline">test</code> module defined like this:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="5045996755-1">(</span><span class="ss">test</span><span class="p" data-group-id="5045996755-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5045996755-2">(</span><span class="p" data-group-id="5045996755-3">[</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="5045996755-3">]</span><span class="p" data-group-id="5045996755-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">test_spawn</span><span class="p" data-group-id="5045996755-4">(</span><span class="p" data-group-id="5045996755-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5045996755-5">{</span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="n">MRef</span><span class="p" data-group-id="5045996755-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">spawn_monitor</span><span class="p" data-group-id="5045996755-6">(</span><span class="nf">fun</span><span class="w"> </span><span class="p" data-group-id="5045996755-7">(</span><span class="p" data-group-id="5045996755-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="5045996755-8">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p" data-group-id="5045996755-8">)</span><span class="w"> </span><span class="k">end</span><span class="p" data-group-id="5045996755-6">)</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span></code></pre><p>However, it is possible to limit the trace to specific functions or modules:</p><pre><code class="makeup erlang" translate="no"><span class="p">&gt;&gt;</span><span class="p">&gt;&gt;</span><span class="p">&gt;&gt;</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">c3fe8f12d4</span><span class="w"> </span><span class="p" data-group-id="3378616823-1">(</span><span class="ss">fixup</span><span class="o">!</span><span class="w"> </span><span class="n">WIP</span><span class="p">:</span><span class="w"> </span><span class="n">Polish</span><span class="w"> </span><span class="err">`</span><span class="ss">tools</span><span class="err">`</span><span class="w"> </span><span class="ss">documentation</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="ss">migration</span><span class="w"> </span><span class="ss">to</span><span class="w"> </span><span class="n">ExDoc</span><span class="p" data-group-id="3378616823-1">)</span><span class="gp unselectable">
+2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="3378616823-2">(</span><span class="nf">fun</span><span class="p" data-group-id="3378616823-3">(</span><span class="p" data-group-id="3378616823-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="3378616823-4">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="3378616823-4">)</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
+                 </span><span class="p" data-group-id="3378616823-5">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p">,</span><span class="w"> </span><span class="ss">pattern</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3378616823-6">[</span><span class="p" data-group-id="3378616823-7">{</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq_loop</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="3378616823-7">}</span><span class="p" data-group-id="3378616823-6">]</span><span class="p" data-group-id="3378616823-5">}</span><span class="p" data-group-id="3378616823-2">)</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.247</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">100.00</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">          </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="3378616823-8">[</span><span class="w">     </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">seq_loop</span><span class="p">/</span><span class="mi">3</span><span class="w">      </span><span class="mi">5</span><span class="w">     </span><span class="mi">32</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="3378616823-9">[</span><span class="mf">100.00</span><span class="p" data-group-id="3378616823-9">]</span><span class="w">
+
+</span><span class="ss">ok</span></code></pre><p>Ad-hoc profiling results can be printed in a few different ways. The following
+examples use the <code class="inline">test</code> module defined like this:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="2790266749-1">(</span><span class="ss">test</span><span class="p" data-group-id="2790266749-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2790266749-2">(</span><span class="p" data-group-id="2790266749-3">[</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2790266749-3">]</span><span class="p" data-group-id="2790266749-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">test_spawn</span><span class="p" data-group-id="2790266749-4">(</span><span class="p" data-group-id="2790266749-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2790266749-5">{</span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="n">MRef</span><span class="p" data-group-id="2790266749-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">spawn_monitor</span><span class="p" data-group-id="2790266749-6">(</span><span class="nf">fun</span><span class="w"> </span><span class="p" data-group-id="2790266749-7">(</span><span class="p" data-group-id="2790266749-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="2790266749-8">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p" data-group-id="2790266749-8">)</span><span class="w"> </span><span class="k">end</span><span class="p" data-group-id="2790266749-6">)</span><span class="p">,</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-        </span><span class="p" data-group-id="5045996755-9">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MRef</span><span class="p">,</span><span class="w"> </span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="ss">normal</span><span class="p" data-group-id="5045996755-9">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="2790266749-9">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MRef</span><span class="p">,</span><span class="w"> </span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="ss">normal</span><span class="p" data-group-id="2790266749-9">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="ss">done</span><span class="w">
-    </span><span class="k">end</span><span class="p">.</span></code></pre><p>Default format prints per-process statistics.</p><pre><code class="text">2&gt; tprof:profile(test, test_spawn, [], #{type =&gt; call_memory}).
+    </span><span class="k">end</span><span class="p">.</span></code></pre><p>By default per-process statistics is shown:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="3953288666-1">(</span><span class="ss">test</span><span class="p">,</span><span class="w"> </span><span class="ss">test_spawn</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3953288666-2">[</span><span class="p" data-group-id="3953288666-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3953288666-3">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p" data-group-id="3953288666-3">}</span><span class="p" data-group-id="3953288666-1">)</span><span class="p">.</span><span class="w">
 
-****** Process &lt;0.176.0&gt;    -- 23.66 % of total allocations ***
-FUNCTION                CALLS  WORDS  PER CALL  [    %]
-erlang:spawn_monitor/1      1      2         2  [ 9.09]
-erlang:spawn_opt/4          1      6         6  [27.27]
-test:test_spawn/0           1     14        14  [63.64]
-                                    22            [100.0]
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.176</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">23.66</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="3953288666-4">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_monitor</span><span class="p">/</span><span class="mi">1</span><span class="w">      </span><span class="mi">1</span><span class="w">      </span><span class="mi">2</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="3953288666-5">[</span><span class="w"> </span><span class="mf">9.09</span><span class="p" data-group-id="3953288666-5">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_opt</span><span class="p">/</span><span class="mi">4</span><span class="w">          </span><span class="mi">1</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="3953288666-6">[</span><span class="mf">27.27</span><span class="p" data-group-id="3953288666-6">]</span><span class="w">
+</span><span class="nc">test</span><span class="p">:</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="w">           </span><span class="mi">1</span><span class="w">     </span><span class="mi">14</span><span class="w">        </span><span class="mi">14</span><span class="w">  </span><span class="p" data-group-id="3953288666-7">[</span><span class="mf">63.64</span><span class="p" data-group-id="3953288666-7">]</span><span class="w">
+                                    </span><span class="mi">22</span><span class="w">            </span><span class="p" data-group-id="3953288666-8">[</span><span class="mf">100.0</span><span class="p" data-group-id="3953288666-8">]</span><span class="w">
 
-****** Process &lt;0.177.0&gt;    -- 76.34 % of total allocations ***
-FUNCTION           CALLS  WORDS  PER CALL  [    %]
-erlang:apply/2         1      7         7  [ 9.86]
-lists:seq_loop/3       9     64         7  [90.14]
-                             71            [100.0]</code></pre><p>This example prints the combined memory allocation of all processes, sorted by
-total allocated words in the descending order</p><pre><code class="text">5&gt; tprof:profile(test, test_spawn, [],
-                 #{type =&gt; call_memory, report =&gt; {total, {measurement, descending}}}).
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.177</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">76.34</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">           </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="3953288666-9">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">apply</span><span class="p">/</span><span class="mi">2</span><span class="w">         </span><span class="mi">1</span><span class="w">      </span><span class="mi">7</span><span class="w">         </span><span class="mi">7</span><span class="w">  </span><span class="p" data-group-id="3953288666-10">[</span><span class="w"> </span><span class="mf">9.86</span><span class="p" data-group-id="3953288666-10">]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">seq_loop</span><span class="p">/</span><span class="mi">3</span><span class="w">       </span><span class="mi">9</span><span class="w">     </span><span class="mi">64</span><span class="w">         </span><span class="mi">7</span><span class="w">  </span><span class="p" data-group-id="3953288666-11">[</span><span class="mf">90.14</span><span class="p" data-group-id="3953288666-11">]</span><span class="w">
+                             </span><span class="mi">71</span><span class="w">            </span><span class="p" data-group-id="3953288666-12">[</span><span class="mf">100.0</span><span class="p" data-group-id="3953288666-12">]</span></code></pre><p>The following example prints the combined memory allocation of all
+processes, sorted by the total number of allocated words in descending
+order:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="5621864918-1">(</span><span class="ss">test</span><span class="p">,</span><span class="w"> </span><span class="ss">test_spawn</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5621864918-2">[</span><span class="p" data-group-id="5621864918-2">]</span><span class="p">,</span><span class="w">
+                 </span><span class="p" data-group-id="5621864918-3">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p">,</span><span class="w"> </span><span class="ss">report</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="5621864918-4">{</span><span class="ss">total</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5621864918-5">{</span><span class="ss">measurement</span><span class="p">,</span><span class="w"> </span><span class="ss">descending</span><span class="p" data-group-id="5621864918-5">}</span><span class="p" data-group-id="5621864918-4">}</span><span class="p" data-group-id="5621864918-3">}</span><span class="p" data-group-id="5621864918-1">)</span><span class="p">.</span><span class="w">
 
-FUNCTION                CALLS  WORDS  PER CALL  [    %]
-lists:seq_loop/3            9     64         7  [68.82]
-test:test_spawn/0           1     14        14  [15.05]
-erlang:apply/2              1      7         7  [ 7.53]
-erlang:spawn_opt/4          1      6         6  [ 6.45]
-erlang:spawn_monitor/1      1      2         2  [ 2.15]
-                                  93            [100.0]</code></pre><p>You can also collect the profile for further inspection.</p><pre><code class="text">6&gt; {done, ProfileData} = tprof:profile(fun test:test_spawn/0,
-                                       #{type =&gt; call_memory, report =&gt; return}).
-&lt;...&gt;
-7&gt; tprof:format(tprof:inspect(ProfileData, process, {percent, descending})).
+</span><span class="n">FUNCTION</span><span class="w">                </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="5621864918-6">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">seq_loop</span><span class="p">/</span><span class="mi">3</span><span class="w">            </span><span class="mi">9</span><span class="w">     </span><span class="mi">64</span><span class="w">         </span><span class="mi">7</span><span class="w">  </span><span class="p" data-group-id="5621864918-7">[</span><span class="mf">68.82</span><span class="p" data-group-id="5621864918-7">]</span><span class="w">
+</span><span class="nc">test</span><span class="p">:</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="w">           </span><span class="mi">1</span><span class="w">     </span><span class="mi">14</span><span class="w">        </span><span class="mi">14</span><span class="w">  </span><span class="p" data-group-id="5621864918-8">[</span><span class="mf">15.05</span><span class="p" data-group-id="5621864918-8">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">apply</span><span class="p">/</span><span class="mi">2</span><span class="w">              </span><span class="mi">1</span><span class="w">      </span><span class="mi">7</span><span class="w">         </span><span class="mi">7</span><span class="w">  </span><span class="p" data-group-id="5621864918-9">[</span><span class="w"> </span><span class="mf">7.53</span><span class="p" data-group-id="5621864918-9">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_opt</span><span class="p">/</span><span class="mi">4</span><span class="w">          </span><span class="mi">1</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="5621864918-10">[</span><span class="w"> </span><span class="mf">6.45</span><span class="p" data-group-id="5621864918-10">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_monitor</span><span class="p">/</span><span class="mi">1</span><span class="w">      </span><span class="mi">1</span><span class="w">      </span><span class="mi">2</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="5621864918-11">[</span><span class="w"> </span><span class="mf">2.15</span><span class="p" data-group-id="5621864918-11">]</span><span class="w">
+                                  </span><span class="mi">93</span><span class="w">            </span><span class="p" data-group-id="5621864918-12">[</span><span class="mf">100.0</span><span class="p" data-group-id="5621864918-12">]</span></code></pre><p>The profiling data can also be collected for further inspection:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">3&gt; </span><span class="p" data-group-id="7396179678-1">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">ProfileData</span><span class="p" data-group-id="7396179678-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="7396179678-2">(</span><span class="k">fun</span><span class="w"> </span><span class="nc">test</span><span class="p">:</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="w">
+                                       </span><span class="p" data-group-id="7396179678-3">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p">,</span><span class="w"> </span><span class="ss">report</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">return</span><span class="p" data-group-id="7396179678-3">}</span><span class="p" data-group-id="7396179678-2">)</span><span class="p">.</span><span class="w">
+</span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span><span class="gp unselectable">
+4&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7396179678-4">(</span><span class="nc">tprof</span><span class="p">:</span><span class="nf">inspect</span><span class="p" data-group-id="7396179678-5">(</span><span class="n">ProfileData</span><span class="p">,</span><span class="w"> </span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7396179678-6">{</span><span class="ss">percent</span><span class="p">,</span><span class="w"> </span><span class="ss">descending</span><span class="p" data-group-id="7396179678-6">}</span><span class="p" data-group-id="7396179678-5">)</span><span class="p" data-group-id="7396179678-4">)</span><span class="p">.</span><span class="w">
 
-****** Process &lt;0.223.0&gt;    -- 23.66 % of total allocations ***
-FUNCTION                CALLS  WORDS  PER CALL  [    %]
-test:test_spawn/0           1     14        14  [63.64]
-erlang:spawn_opt/4          1      6         6  [27.27]
-erlang:spawn_monitor/1      1      2         2  [ 9.09]
-22            [100.0]
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.223</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">23.66</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="7396179678-7">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">test</span><span class="p">:</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="w">           </span><span class="mi">1</span><span class="w">     </span><span class="mi">14</span><span class="w">        </span><span class="mi">14</span><span class="w">  </span><span class="p" data-group-id="7396179678-8">[</span><span class="mf">63.64</span><span class="p" data-group-id="7396179678-8">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_opt</span><span class="p">/</span><span class="mi">4</span><span class="w">          </span><span class="mi">1</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="7396179678-9">[</span><span class="mf">27.27</span><span class="p" data-group-id="7396179678-9">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_monitor</span><span class="p">/</span><span class="mi">1</span><span class="w">      </span><span class="mi">1</span><span class="w">      </span><span class="mi">2</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="7396179678-10">[</span><span class="w"> </span><span class="mf">9.09</span><span class="p" data-group-id="7396179678-10">]</span><span class="w">
+</span><span class="mi">22</span><span class="w">            </span><span class="p" data-group-id="7396179678-11">[</span><span class="mf">100.0</span><span class="p" data-group-id="7396179678-11">]</span><span class="w">
 
-****** Process &lt;0.224.0&gt;    -- 76.34 % of total allocations ***
-FUNCTION           CALLS  WORDS  PER CALL  [    %]
-lists:seq_loop/3       9     64         7  [90.14]
-erlang:apply/2         1      7         7  [ 9.86]
-71            [100.0]</code></pre><p>The processes which are profiled depends on the profiling type. <code class="inline">call_count</code>,
-the default, will count calls across all processes. The other types, <code class="inline">call_time</code>
-and <code class="inline">call_memory</code>, take into account all processes spawned from the
-user-provided function (using <code class="inline">set_on_spawn</code> argument for trace/3 BIF). You
-cannot restrict the profiled processes for <code class="inline">call_count</code>, but you can limit the
-trace to a single process for the other two:</p><pre><code class="text">2&gt; tprof:profile(test, test_spawn, [],
-                 #{type =&gt; call_memory, set_on_spawn =&gt; false}).
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.224</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">76.34</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">           </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="7396179678-12">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">seq_loop</span><span class="p">/</span><span class="mi">3</span><span class="w">       </span><span class="mi">9</span><span class="w">     </span><span class="mi">64</span><span class="w">         </span><span class="mi">7</span><span class="w">  </span><span class="p" data-group-id="7396179678-13">[</span><span class="mf">90.14</span><span class="p" data-group-id="7396179678-13">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">apply</span><span class="p">/</span><span class="mi">2</span><span class="w">         </span><span class="mi">1</span><span class="w">      </span><span class="mi">7</span><span class="w">         </span><span class="mi">7</span><span class="w">  </span><span class="p" data-group-id="7396179678-14">[</span><span class="w"> </span><span class="mf">9.86</span><span class="p" data-group-id="7396179678-14">]</span><span class="w">
+</span><span class="mi">71</span><span class="w">            </span><span class="p" data-group-id="7396179678-15">[</span><span class="mf">100.0</span><span class="p" data-group-id="7396179678-15">]</span></code></pre><p>Which processes that are profiled depends on the profiling type.</p><ul><li><p><code class="inline">call_count</code> (default) counts calls in all processes.</p></li><li><p><code class="inline">call_time</code> and <code class="inline">call_memory</code> limits the profiling to the processes
+spawned from the user-provided function (using the <code class="inline">set_on_spawn</code>
+option for <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace/3"><code class="inline">erlang:trace/3</code></a>).</p></li></ul><p><code class="inline">call_time</code> and <code class="inline">call_memory</code> can be restricted to profile a single process:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="0424369921-1">(</span><span class="ss">test</span><span class="p">,</span><span class="w"> </span><span class="ss">test_spawn</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0424369921-2">[</span><span class="p" data-group-id="0424369921-2">]</span><span class="p">,</span><span class="w">
+                 </span><span class="p" data-group-id="0424369921-3">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p">,</span><span class="w"> </span><span class="ss">set_on_spawn</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="0424369921-3">}</span><span class="p" data-group-id="0424369921-1">)</span><span class="p">.</span><span class="w">
 
-****** Process &lt;0.183.0&gt;    -- 100.00 % of total allocations ***
-FUNCTION                CALLS  WORDS  PER CALL  [    %]
-erlang:spawn_monitor/1      1      2         2  [ 9.09]
-erlang:spawn_opt/4          1      6         6  [27.27]
-test:test_spawn/0           1     14        14  [63.64]</code></pre><p><a href="" id="pg_example"></a></p><p>Erlang programs may perform expensive operations in processes that are different
-from the original one. You can include multiple, new or even all processes in
-the trace when measuring time or memory:</p><pre><code class="text">7&gt; pg:start_link().
-{ok,&lt;0.252.0&gt;}
-8&gt; tprof:profile(fun() -&gt; pg:join(group, self()) end,
-                 #{type =&gt; call_memory, rootset =&gt; [pg]}).
-****** Process &lt;0.252.0&gt;    -- 52.86 % of total allocations ***
-FUNCTION                      CALLS  WORDS  PER CALL  [    %]
-pg:leave_local_update_ets/5       1      2         2  [ 1.80]
-gen:reply/2                       1      3         3  [ 2.70]
-erlang:monitor/2                  1      3         3  [ 2.70]
-gen_server:try_handle_call/4      1      3         3  [ 2.70]
-gen_server:try_dispatch/4         1      3         3  [ 2.70]
-maps:iterator/1                   2      4         2  [ 3.60]
-maps:take/2                       1      6         6  [ 5.41]
-pg:join_local_update_ets/5        1      8         8  [ 7.21]
-pg:handle_info/2                  1      8         8  [ 7.21]
-pg:handle_call/3                  1      9         9  [ 8.11]
-gen_server:loop/7                 2      9         4  [ 8.11]
-ets:lookup/2                      2     10         5  [ 9.01]
-pg:join_local/3                   1     11        11  [ 9.91]
-pg:notify_group/5                 2     16         8  [14.41]
-erlang:setelement/3               2     16         8  [14.41]
-111            [100.0]
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.183</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">100.00</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="0424369921-4">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_monitor</span><span class="p">/</span><span class="mi">1</span><span class="w">      </span><span class="mi">1</span><span class="w">      </span><span class="mi">2</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="0424369921-5">[</span><span class="w"> </span><span class="mf">9.09</span><span class="p" data-group-id="0424369921-5">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">spawn_opt</span><span class="p">/</span><span class="mi">4</span><span class="w">          </span><span class="mi">1</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="0424369921-6">[</span><span class="mf">27.27</span><span class="p" data-group-id="0424369921-6">]</span><span class="w">
+</span><span class="nc">test</span><span class="p">:</span><span class="ss">test_spawn</span><span class="p">/</span><span class="mi">0</span><span class="w">           </span><span class="mi">1</span><span class="w">     </span><span class="mi">14</span><span class="w">        </span><span class="mi">14</span><span class="w">  </span><span class="p" data-group-id="0424369921-7">[</span><span class="mf">63.64</span><span class="p" data-group-id="0424369921-7">]</span></code></pre><p><a href="" id="pg_example"></a></p><p>Erlang programs can perform expensive operations in other processes
+than the original one. You can include multiple, new, or even all
+processes in the trace when measuring time or memory:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">7&gt; </span><span class="nc">pg</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="7048819565-1">(</span><span class="p" data-group-id="7048819565-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7048819565-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.252</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7048819565-2">}</span><span class="gp unselectable">
+8&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="7048819565-3">(</span><span class="nf">fun</span><span class="p" data-group-id="7048819565-4">(</span><span class="p" data-group-id="7048819565-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">pg</span><span class="p">:</span><span class="nf">join</span><span class="p" data-group-id="7048819565-5">(</span><span class="ss">group</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="7048819565-6">(</span><span class="p" data-group-id="7048819565-6">)</span><span class="p" data-group-id="7048819565-5">)</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
+                 </span><span class="p" data-group-id="7048819565-7">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p">,</span><span class="w"> </span><span class="ss">rootset</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="7048819565-8">[</span><span class="ss">pg</span><span class="p" data-group-id="7048819565-8">]</span><span class="p" data-group-id="7048819565-7">}</span><span class="p" data-group-id="7048819565-3">)</span><span class="p">.</span><span class="w">
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.252</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">52.86</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                      </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="7048819565-9">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">leave_local_update_ets</span><span class="p">/</span><span class="mi">5</span><span class="w">       </span><span class="mi">1</span><span class="w">      </span><span class="mi">2</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="7048819565-10">[</span><span class="w"> </span><span class="mf">1.80</span><span class="p" data-group-id="7048819565-10">]</span><span class="w">
+</span><span class="nc">gen</span><span class="p">:</span><span class="ss">reply</span><span class="p">/</span><span class="mi">2</span><span class="w">                       </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-11">[</span><span class="w"> </span><span class="mf">2.70</span><span class="p" data-group-id="7048819565-11">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">monitor</span><span class="p">/</span><span class="mi">2</span><span class="w">                  </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-12">[</span><span class="w"> </span><span class="mf">2.70</span><span class="p" data-group-id="7048819565-12">]</span><span class="w">
+</span><span class="nc">gen_server</span><span class="p">:</span><span class="ss">try_handle_call</span><span class="p">/</span><span class="mi">4</span><span class="w">      </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-13">[</span><span class="w"> </span><span class="mf">2.70</span><span class="p" data-group-id="7048819565-13">]</span><span class="w">
+</span><span class="nc">gen_server</span><span class="p">:</span><span class="ss">try_dispatch</span><span class="p">/</span><span class="mi">4</span><span class="w">         </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-14">[</span><span class="w"> </span><span class="mf">2.70</span><span class="p" data-group-id="7048819565-14">]</span><span class="w">
+</span><span class="nc">maps</span><span class="p">:</span><span class="ss">iterator</span><span class="p">/</span><span class="mi">1</span><span class="w">                   </span><span class="mi">2</span><span class="w">      </span><span class="mi">4</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="7048819565-15">[</span><span class="w"> </span><span class="mf">3.60</span><span class="p" data-group-id="7048819565-15">]</span><span class="w">
+</span><span class="nc">maps</span><span class="p">:</span><span class="ss">take</span><span class="p">/</span><span class="mi">2</span><span class="w">                       </span><span class="mi">1</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">6</span><span class="w">  </span><span class="p" data-group-id="7048819565-16">[</span><span class="w"> </span><span class="mf">5.41</span><span class="p" data-group-id="7048819565-16">]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">join_local_update_ets</span><span class="p">/</span><span class="mi">5</span><span class="w">        </span><span class="mi">1</span><span class="w">      </span><span class="mi">8</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="7048819565-17">[</span><span class="w"> </span><span class="mf">7.21</span><span class="p" data-group-id="7048819565-17">]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">handle_info</span><span class="p">/</span><span class="mi">2</span><span class="w">                  </span><span class="mi">1</span><span class="w">      </span><span class="mi">8</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="7048819565-18">[</span><span class="w"> </span><span class="mf">7.21</span><span class="p" data-group-id="7048819565-18">]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">handle_call</span><span class="p">/</span><span class="mi">3</span><span class="w">                  </span><span class="mi">1</span><span class="w">      </span><span class="mi">9</span><span class="w">         </span><span class="mi">9</span><span class="w">  </span><span class="p" data-group-id="7048819565-19">[</span><span class="w"> </span><span class="mf">8.11</span><span class="p" data-group-id="7048819565-19">]</span><span class="w">
+</span><span class="nc">gen_server</span><span class="p">:</span><span class="ss">loop</span><span class="p">/</span><span class="mi">7</span><span class="w">                 </span><span class="mi">2</span><span class="w">      </span><span class="mi">9</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="p" data-group-id="7048819565-20">[</span><span class="w"> </span><span class="mf">8.11</span><span class="p" data-group-id="7048819565-20">]</span><span class="w">
+</span><span class="nc">ets</span><span class="p">:</span><span class="ss">lookup</span><span class="p">/</span><span class="mi">2</span><span class="w">                      </span><span class="mi">2</span><span class="w">     </span><span class="mi">10</span><span class="w">         </span><span class="mi">5</span><span class="w">  </span><span class="p" data-group-id="7048819565-21">[</span><span class="w"> </span><span class="mf">9.01</span><span class="p" data-group-id="7048819565-21">]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">join_local</span><span class="p">/</span><span class="mi">3</span><span class="w">                   </span><span class="mi">1</span><span class="w">     </span><span class="mi">11</span><span class="w">        </span><span class="mi">11</span><span class="w">  </span><span class="p" data-group-id="7048819565-22">[</span><span class="w"> </span><span class="mf">9.91</span><span class="p" data-group-id="7048819565-22">]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">notify_group</span><span class="p">/</span><span class="mi">5</span><span class="w">                 </span><span class="mi">2</span><span class="w">     </span><span class="mi">16</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="7048819565-23">[</span><span class="mf">14.41</span><span class="p" data-group-id="7048819565-23">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">setelement</span><span class="p">/</span><span class="mi">3</span><span class="w">               </span><span class="mi">2</span><span class="w">     </span><span class="mi">16</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="7048819565-24">[</span><span class="mf">14.41</span><span class="p" data-group-id="7048819565-24">]</span><span class="w">
+</span><span class="mi">111</span><span class="w">            </span><span class="p" data-group-id="7048819565-25">[</span><span class="mf">100.0</span><span class="p" data-group-id="7048819565-25">]</span><span class="w">
 
-****** Process &lt;0.255.0&gt;    -- 47.14 % of total allocations ***
-FUNCTION                   CALLS  WORDS  PER CALL  [    %]
-erl_eval:match_list/6          1      3         3  [ 3.03]
-erlang:monitor/2               1      3         3  [ 3.03]
-lists:reverse/1                2      4         2  [ 4.04]
-pg:join/3                      1      4         4  [ 4.04]
-erl_eval:add_bindings/2        1      5         5  [ 5.05]
-erl_eval:do_apply/7            2      6         3  [ 6.06]
-gen:call/4                     1      8         8  [ 8.08]
-erl_eval:expr_list/7           4     10         2  [10.10]
-gen:do_call/4                  1     16        16  [16.16]
-erl_eval:ret_expr/3            4     16         4  [16.16]
-erl_eval:merge_bindings/4      3     24         8  [24.24]
-99            [100.0]</code></pre><p>There is no default limit on the profiling time. It is possible to define such
-limit for ad-hoc profile. If function being profiled does not return in a
-specified amount of time, process is terminated with <code class="inline">kill</code> reason. Any unlinked
-children started by the user-supplied function are kept, it is developer's
-responsibility to ensure cleanup.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">9&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="1395587575-1">(</span><span class="ss">timer</span><span class="p">,</span><span class="w"> </span><span class="ss">sleep</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1395587575-2">[</span><span class="mi">100000</span><span class="p" data-group-id="1395587575-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1395587575-3">#{</span><span class="ss">timeout</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="p" data-group-id="1395587575-3">}</span><span class="p" data-group-id="1395587575-1">)</span><span class="p">.</span></code></pre><p>By default, only one ad-hoc or server-aided profiling session is allowed at any
-point in time. It is possible to force multiple ad-hoc sessions concurrently,
-but it is developer responsibility to ensure non-overlapping trace patterns.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="8920654356-1">(</span><span class="nf">fun</span><span class="p" data-group-id="8920654356-2">(</span><span class="p" data-group-id="8920654356-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="8920654356-3">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p" data-group-id="8920654356-3">)</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="8920654356-4">#{</span><span class="ss">registered</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">false</span><span class="p">,</span><span class="w"> </span><span class="ss">pattern</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8920654356-5">[</span><span class="p" data-group-id="8920654356-6">{</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="8920654356-6">}</span><span class="p" data-group-id="8920654356-5">]</span><span class="p" data-group-id="8920654356-4">}</span><span class="p" data-group-id="8920654356-1">)</span><span class="p">.</span></code></pre><h2 id="module-server-aided-profiling" class="section-heading">
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.255</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">47.14</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                   </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="7048819565-26">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">match_list</span><span class="p">/</span><span class="mi">6</span><span class="w">          </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-27">[</span><span class="w"> </span><span class="mf">3.03</span><span class="p" data-group-id="7048819565-27">]</span><span class="w">
+</span><span class="nc">erlang</span><span class="p">:</span><span class="nb">monitor</span><span class="p">/</span><span class="mi">2</span><span class="w">               </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-28">[</span><span class="w"> </span><span class="mf">3.03</span><span class="p" data-group-id="7048819565-28">]</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="ss">reverse</span><span class="p">/</span><span class="mi">1</span><span class="w">                </span><span class="mi">2</span><span class="w">      </span><span class="mi">4</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="7048819565-29">[</span><span class="w"> </span><span class="mf">4.04</span><span class="p" data-group-id="7048819565-29">]</span><span class="w">
+</span><span class="nc">pg</span><span class="p">:</span><span class="ss">join</span><span class="p">/</span><span class="mi">3</span><span class="w">                      </span><span class="mi">1</span><span class="w">      </span><span class="mi">4</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="p" data-group-id="7048819565-30">[</span><span class="w"> </span><span class="mf">4.04</span><span class="p" data-group-id="7048819565-30">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">add_bindings</span><span class="p">/</span><span class="mi">2</span><span class="w">        </span><span class="mi">1</span><span class="w">      </span><span class="mi">5</span><span class="w">         </span><span class="mi">5</span><span class="w">  </span><span class="p" data-group-id="7048819565-31">[</span><span class="w"> </span><span class="mf">5.05</span><span class="p" data-group-id="7048819565-31">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">do_apply</span><span class="p">/</span><span class="mi">7</span><span class="w">            </span><span class="mi">2</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="7048819565-32">[</span><span class="w"> </span><span class="mf">6.06</span><span class="p" data-group-id="7048819565-32">]</span><span class="w">
+</span><span class="nc">gen</span><span class="p">:</span><span class="ss">call</span><span class="p">/</span><span class="mi">4</span><span class="w">                     </span><span class="mi">1</span><span class="w">      </span><span class="mi">8</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="7048819565-33">[</span><span class="w"> </span><span class="mf">8.08</span><span class="p" data-group-id="7048819565-33">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">expr_list</span><span class="p">/</span><span class="mi">7</span><span class="w">           </span><span class="mi">4</span><span class="w">     </span><span class="mi">10</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="7048819565-34">[</span><span class="mf">10.10</span><span class="p" data-group-id="7048819565-34">]</span><span class="w">
+</span><span class="nc">gen</span><span class="p">:</span><span class="ss">do_call</span><span class="p">/</span><span class="mi">4</span><span class="w">                  </span><span class="mi">1</span><span class="w">     </span><span class="mi">16</span><span class="w">        </span><span class="mi">16</span><span class="w">  </span><span class="p" data-group-id="7048819565-35">[</span><span class="mf">16.16</span><span class="p" data-group-id="7048819565-35">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">ret_expr</span><span class="p">/</span><span class="mi">3</span><span class="w">            </span><span class="mi">4</span><span class="w">     </span><span class="mi">16</span><span class="w">         </span><span class="mi">4</span><span class="w">  </span><span class="p" data-group-id="7048819565-36">[</span><span class="mf">16.16</span><span class="p" data-group-id="7048819565-36">]</span><span class="w">
+</span><span class="nc">erl_eval</span><span class="p">:</span><span class="ss">merge_bindings</span><span class="p">/</span><span class="mi">4</span><span class="w">      </span><span class="mi">3</span><span class="w">     </span><span class="mi">24</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="7048819565-37">[</span><span class="mf">24.24</span><span class="p" data-group-id="7048819565-37">]</span><span class="w">
+</span><span class="mi">99</span><span class="w">            </span><span class="p" data-group-id="7048819565-38">[</span><span class="mf">100.0</span><span class="p" data-group-id="7048819565-38">]</span></code></pre><p>By default, there is no limit for the profiling time. For ac-hoc
+profiling, is is possible to configure a time limit. If the profiled
+function does not return before that time expires, the process is
+terminated with reason <code class="inline">kill</code>. Any unlinked children processes started
+by the user-supplied function are kept; it is the responsibility of
+the developer to take care of such processes.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">9&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="3212976956-1">(</span><span class="ss">timer</span><span class="p">,</span><span class="w"> </span><span class="ss">sleep</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3212976956-2">[</span><span class="mi">100000</span><span class="p" data-group-id="3212976956-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3212976956-3">#{</span><span class="ss">timeout</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="p" data-group-id="3212976956-3">}</span><span class="p" data-group-id="3212976956-1">)</span><span class="p">.</span></code></pre><p>By default, only one ad-hoc or server-aided profiling session is
+allowed at any point in time. It is possible to force multiple ad-hoc
+sessions concurrently, but it is the responsibility of the developer
+to ensure that trace patterns do not overlap:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">profile</span><span class="p" data-group-id="8750433508-1">(</span><span class="nf">fun</span><span class="p" data-group-id="8750433508-2">(</span><span class="p" data-group-id="8750433508-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="8750433508-3">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p" data-group-id="8750433508-3">)</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8750433508-4">#{</span><span class="ss">registered</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">false</span><span class="p">,</span><span class="w"> </span><span class="ss">pattern</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8750433508-5">[</span><span class="p" data-group-id="8750433508-6">{</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="8750433508-6">}</span><span class="p" data-group-id="8750433508-5">]</span><span class="p" data-group-id="8750433508-4">}</span><span class="p" data-group-id="8750433508-1">)</span><span class="p">.</span></code></pre><h2 id="module-server-aided-profiling" class="section-heading">
   <a href="#module-server-aided-profiling" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Server-aided profiling</span>
 </h2>
-<p>Memory profiling can be done when your system is up and running. You can start
-the <code class="inline">tprof</code> server, add trace patterns and processes to trace while your system
-handles actual traffic. You can extract the data any time, inspect, and print.
-The example below traces activity of all processes supervised by kernel:</p><pre><code class="text">1&gt; tprof:start(#{type =&gt; call_memory}).
-{ok,&lt;0.200.0&gt;}
-2&gt; tprof:enable_trace({all_children, kernel_sup}).
-34
-3&gt; tprof:set_pattern('_', '_' , '_').
-16728
-4&gt; Sample = tprof:collect().
-[{gen_server,try_dispatch,4,[{&lt;0.154.0&gt;,2,6}]},
-{erlang,iolist_to_iovec,1,[{&lt;0.161.0&gt;,1,8}]},
-&lt;...&gt;
-5 &gt; tprof:format(tprof:inspect(Sample)).
+<p>Server-aided profiling can be done on a system that is up and
+running. To do that, start the <code class="inline">tprof</code> server, and then add trace
+patterns and processes to trace while the system handles actual
+traffic. Data can extracted, inspected, and printed at any time. The
+following example traces activity of all processes supervised by
+the Kernel supervisor:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="6501068618-1">(</span><span class="p" data-group-id="6501068618-2">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p" data-group-id="6501068618-2">}</span><span class="p" data-group-id="6501068618-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6501068618-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.200</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="6501068618-3">}</span><span class="gp unselectable">
+2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">enable_trace</span><span class="p" data-group-id="6501068618-4">(</span><span class="p" data-group-id="6501068618-5">{</span><span class="ss">all_children</span><span class="p">,</span><span class="w"> </span><span class="ss">kernel_sup</span><span class="p" data-group-id="6501068618-5">}</span><span class="p" data-group-id="6501068618-4">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">34</span><span class="gp unselectable">
+3&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="6501068618-6">(</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="6501068618-6">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">16728</span><span class="gp unselectable">
+4&gt; </span><span class="n">Sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">collect</span><span class="p" data-group-id="6501068618-7">(</span><span class="p" data-group-id="6501068618-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6501068618-8">[</span><span class="p" data-group-id="6501068618-9">{</span><span class="ss">gen_server</span><span class="p">,</span><span class="ss">try_dispatch</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="p" data-group-id="6501068618-10">[</span><span class="p" data-group-id="6501068618-11">{</span><span class="o">&lt;</span><span class="mf">0.154</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p" data-group-id="6501068618-11">}</span><span class="p" data-group-id="6501068618-10">]</span><span class="p" data-group-id="6501068618-9">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="6501068618-12">{</span><span class="ss">erlang</span><span class="p">,</span><span class="ss">iolist_to_iovec</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="6501068618-13">[</span><span class="p" data-group-id="6501068618-14">{</span><span class="o">&lt;</span><span class="mf">0.161</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p" data-group-id="6501068618-14">}</span><span class="p" data-group-id="6501068618-13">]</span><span class="p" data-group-id="6501068618-12">}</span><span class="p">,</span><span class="w">
+</span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span><span class="w">
+</span><span class="mi">5</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="6501068618-15">(</span><span class="nc">tprof</span><span class="p">:</span><span class="nf">inspect</span><span class="p" data-group-id="6501068618-16">(</span><span class="n">Sample</span><span class="p" data-group-id="6501068618-16">)</span><span class="p" data-group-id="6501068618-15">)</span><span class="p">.</span><span class="w">
 
-****** Process &lt;0.154.0&gt;    -- 14.21 % of total allocations ***
-FUNCTION                   CALLS  WORDS  PER CALL  [    %]
-maps:iterator/1                2      4         2  [15.38]
-gen_server:try_dispatch/4      2      6         3  [23.08]
-net_kernel:handle_info/2       2     16         8  [61.54]
-                                     26            [100.0]
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.154</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">14.21</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                   </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="6501068618-17">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">maps</span><span class="p">:</span><span class="ss">iterator</span><span class="p">/</span><span class="mi">1</span><span class="w">                </span><span class="mi">2</span><span class="w">      </span><span class="mi">4</span><span class="w">         </span><span class="mi">2</span><span class="w">  </span><span class="p" data-group-id="6501068618-18">[</span><span class="mf">15.38</span><span class="p" data-group-id="6501068618-18">]</span><span class="w">
+</span><span class="nc">gen_server</span><span class="p">:</span><span class="ss">try_dispatch</span><span class="p">/</span><span class="mi">4</span><span class="w">      </span><span class="mi">2</span><span class="w">      </span><span class="mi">6</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="6501068618-19">[</span><span class="mf">23.08</span><span class="p" data-group-id="6501068618-19">]</span><span class="w">
+</span><span class="nc">net_kernel</span><span class="p">:</span><span class="ss">handle_info</span><span class="p">/</span><span class="mi">2</span><span class="w">       </span><span class="mi">2</span><span class="w">     </span><span class="mi">16</span><span class="w">         </span><span class="mi">8</span><span class="w">  </span><span class="p" data-group-id="6501068618-20">[</span><span class="mf">61.54</span><span class="p" data-group-id="6501068618-20">]</span><span class="w">
+                                     </span><span class="mi">26</span><span class="w">            </span><span class="p" data-group-id="6501068618-21">[</span><span class="mf">100.0</span><span class="p" data-group-id="6501068618-21">]</span><span class="w">
 
-****** Process &lt;0.161.0&gt;    -- 85.79 % of total allocations ***
-FUNCTION                        CALLS  WORDS  PER CALL  [    %]
-disk_log:handle/2                   2      2         1  [ 1.27]
-disk_log_1:maybe_start_timer/1      1      3         3  [ 1.91]
-disk_log_1:mf_write_cache/1         1      3         3  [ 1.91]
-&lt;...&gt;</code></pre><p><a href="" id="inspect_example"></a></p><p>It is possible to profile the entire running system, and then examine individual
-processes:</p><pre><code class="text">1&gt; tprof:start(#{type =&gt; call_memory}).
-2&gt; tprof:enable_trace(processes), tprof:set_pattern('_', '_' , '_').
-9041
-3&gt; timer:sleep(10000), tprof:disable_trace(processes), Sample = tprof:collect().
-[{user_drv,server,3,[{&lt;0.64.0&gt;,12,136}]},
-{user_drv,contains_ctrl_g_or_ctrl_c,1,[{&lt;0.64.0&gt;,80,10}]},
-&lt;...&gt;
-4&gt; Inspected = tprof:inspect(Sample, process, words), Shell = maps:get(self(), Inspected).
-{2743,
-[{shell,{enc,0},1,2,2,0.07291286912139992},
-&lt;...&gt;
-5&gt; tprof:format(Shell).
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w"> </span><span class="n">Process</span><span class="w"> </span><span class="o">&lt;</span><span class="mf">0.161</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="w">    </span><span class="o">--</span><span class="w"> </span><span class="mf">85.79</span><span class="w"> </span><span class="c1">% of total allocations ***</span><span class="w">
+</span><span class="n">FUNCTION</span><span class="w">                        </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="6501068618-22">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="nc">disk_log</span><span class="p">:</span><span class="ss">handle</span><span class="p">/</span><span class="mi">2</span><span class="w">                   </span><span class="mi">2</span><span class="w">      </span><span class="mi">2</span><span class="w">         </span><span class="mi">1</span><span class="w">  </span><span class="p" data-group-id="6501068618-23">[</span><span class="w"> </span><span class="mf">1.27</span><span class="p" data-group-id="6501068618-23">]</span><span class="w">
+</span><span class="nc">disk_log_1</span><span class="p">:</span><span class="ss">maybe_start_timer</span><span class="p">/</span><span class="mi">1</span><span class="w">      </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="6501068618-24">[</span><span class="w"> </span><span class="mf">1.91</span><span class="p" data-group-id="6501068618-24">]</span><span class="w">
+</span><span class="nc">disk_log_1</span><span class="p">:</span><span class="ss">mf_write_cache</span><span class="p">/</span><span class="mi">1</span><span class="w">         </span><span class="mi">1</span><span class="w">      </span><span class="mi">3</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="6501068618-25">[</span><span class="w"> </span><span class="mf">1.91</span><span class="p" data-group-id="6501068618-25">]</span><span class="w">
+</span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span></code></pre><p><a href="" id="inspect_example"></a></p><p>It is possible to profile the entire running system, and then examine individual
+processes:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="2384465480-1">(</span><span class="p" data-group-id="2384465480-2">#{</span><span class="ss">type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">call_memory</span><span class="p" data-group-id="2384465480-2">}</span><span class="p" data-group-id="2384465480-1">)</span><span class="p">.</span><span class="gp unselectable">
+2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">enable_trace</span><span class="p" data-group-id="2384465480-3">(</span><span class="ss">processes</span><span class="p" data-group-id="2384465480-3">)</span><span class="p">,</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="2384465480-4">(</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="2384465480-4">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">9041</span><span class="gp unselectable">
+3&gt; </span><span class="nc">timer</span><span class="p">:</span><span class="nf">sleep</span><span class="p" data-group-id="2384465480-5">(</span><span class="mi">10000</span><span class="p" data-group-id="2384465480-5">)</span><span class="p">,</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">disable_trace</span><span class="p" data-group-id="2384465480-6">(</span><span class="ss">processes</span><span class="p" data-group-id="2384465480-6">)</span><span class="p">,</span><span class="w"> </span><span class="n">Sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">collect</span><span class="p" data-group-id="2384465480-7">(</span><span class="p" data-group-id="2384465480-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="2384465480-8">[</span><span class="p" data-group-id="2384465480-9">{</span><span class="ss">user_drv</span><span class="p">,</span><span class="ss">server</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="p" data-group-id="2384465480-10">[</span><span class="p" data-group-id="2384465480-11">{</span><span class="o">&lt;</span><span class="mf">0.64</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">136</span><span class="p" data-group-id="2384465480-11">}</span><span class="p" data-group-id="2384465480-10">]</span><span class="p" data-group-id="2384465480-9">}</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="2384465480-12">{</span><span class="ss">user_drv</span><span class="p">,</span><span class="ss">contains_ctrl_g_or_ctrl_c</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="2384465480-13">[</span><span class="p" data-group-id="2384465480-14">{</span><span class="o">&lt;</span><span class="mf">0.64</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">10</span><span class="p" data-group-id="2384465480-14">}</span><span class="p" data-group-id="2384465480-13">]</span><span class="p" data-group-id="2384465480-12">}</span><span class="p">,</span><span class="w">
+</span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span><span class="gp unselectable">
+4&gt; </span><span class="n">Inspected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">inspect</span><span class="p" data-group-id="2384465480-15">(</span><span class="n">Sample</span><span class="p">,</span><span class="w"> </span><span class="ss">process</span><span class="p">,</span><span class="w"> </span><span class="ss">words</span><span class="p" data-group-id="2384465480-15">)</span><span class="p">,</span><span class="w"> </span><span class="n">Shell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">maps</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="2384465480-16">(</span><span class="nf">self</span><span class="p" data-group-id="2384465480-17">(</span><span class="p" data-group-id="2384465480-17">)</span><span class="p">,</span><span class="w"> </span><span class="n">Inspected</span><span class="p" data-group-id="2384465480-16">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="2384465480-18">{</span><span class="mi">2743</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="2384465480-19">[</span><span class="p" data-group-id="2384465480-20">{</span><span class="ss">shell</span><span class="p">,</span><span class="p" data-group-id="2384465480-21">{</span><span class="ss">enc</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="2384465480-21">}</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.07291286912139992</span><span class="p" data-group-id="2384465480-20">}</span><span class="p">,</span><span class="w">
+</span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span><span class="gp unselectable">
+5&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2384465480-22">(</span><span class="n">Shell</span><span class="p" data-group-id="2384465480-22">)</span><span class="p">.</span><span class="w">
 
-FUNCTION                           CALLS  WORDS  PER CALL  [    %]
-&lt;...&gt;
-erl_lint:start/2                       2    300       150  [10.94]
-shell:used_records/1                 114    342         3  [12.47]</code></pre>
+</span><span class="n">FUNCTION</span><span class="w">                           </span><span class="n">CALLS</span><span class="w">  </span><span class="n">WORDS</span><span class="w">  </span><span class="n">PER</span><span class="w"> </span><span class="n">CALL</span><span class="w">  </span><span class="p" data-group-id="2384465480-23">[</span><span class="w">    </span><span class="c1">%]</span><span class="w">
+</span><span class="o">&lt;</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="o">&gt;</span><span class="w">
+</span><span class="nc">erl_lint</span><span class="p">:</span><span class="ss">start</span><span class="p">/</span><span class="mi">2</span><span class="w">                       </span><span class="mi">2</span><span class="w">    </span><span class="mi">300</span><span class="w">       </span><span class="mi">150</span><span class="w">  </span><span class="p" data-group-id="2384465480-24">[</span><span class="mf">10.94</span><span class="p" data-group-id="2384465480-24">]</span><span class="w">
+</span><span class="nc">shell</span><span class="p">:</span><span class="ss">used_records</span><span class="p">/</span><span class="mi">1</span><span class="w">                 </span><span class="mi">114</span><span class="w">    </span><span class="mi">342</span><span class="w">         </span><span class="mi">3</span><span class="w">  </span><span class="p" data-group-id="2384465480-25">[</span><span class="mf">12.47</span><span class="p" data-group-id="2384465480-25">]</span></code></pre>
   </section>
 
 
@@ -364,7 +365,7 @@ shell:used_records/1                 114    342         3  [12.47]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Column to sort by <a href="#inspect/3"><code class="inline">inspect/3</code></a>, or <a href="#profile/2"><code class="inline">profile</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Column to sort by <a href="#inspect/3"><code class="inline">inspect/3</code></a> or <a href="#profile/4"><code class="inline">profile/4</code></a>.</p></div>
 
     </div>
 
@@ -374,7 +375,7 @@ shell:used_records/1                 114    342         3  [12.47]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Either process identified (pid), or a registered process name.</p></div>
+        <div class="summary-synopsis"><p>A process identifier (pid) or a registered process name.</p></div>
 
     </div>
 
@@ -394,7 +395,7 @@ shell:used_records/1                 114    342         3  [12.47]</code></pre>
 
       </div>
 
-        <div class="summary-synopsis"><p>Ad-hoc profiler options, see <a href="#profile/2"><code class="inline">profile</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Ad-hoc profiler options; see <a href="#profile/4"><code class="inline">profile/4</code></a>.</p></div>
 
     </div>
 
@@ -452,7 +453,7 @@ or <code class="inline">all</code> if all code is traced.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Options for enabling profiling of the selected processes, see <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Options for enabling profiling of the selected processes; see <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a>.</p></div>
 
     </div>
 
@@ -484,7 +485,7 @@ or <code class="inline">all</code> if all code is traced.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Turns tracing off for the supplied pattern.</p></div>
+        <div class="summary-synopsis"><p>Disables tracing functions matching the supplied pattern.</p></div>
 
     </div>
 
@@ -504,8 +505,7 @@ or <code class="inline">all</code> if all code is traced.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The same as
-<a href="#disable_trace/2"><code class="inline">disable_trace</code> </a><code class="inline">(Spec, #{set_on_spawn =&gt; true})</code>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#disable_trace/2"><code class="inline">disable_trace(Spec, #{set_on_spawn =&gt; true})</code></a>.</p></div>
 
     </div>
 
@@ -515,8 +515,7 @@ or <code class="inline">all</code> if all code is traced.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Stops accumulating traces for specified processes. See <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a> for
-options description.</p></div>
+        <div class="summary-synopsis"><p>Stops accumulating traces for specified processes.</p></div>
 
     </div>
 
@@ -526,8 +525,7 @@ options description.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The same as
-<a href="#enable_trace/2"><code class="inline">enable_trace</code> </a><code class="inline">(Spec, #{set_on_spawn =&gt; true})</code>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#enable_trace/2"><code class="inline">enable_trace(Spec, #{set_on_spawn =&gt; true})</code></a>.</p></div>
 
     </div>
 
@@ -538,7 +536,7 @@ options description.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Similar to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace/3"><code class="inline">erlang:trace/3</code></a>, but supports a few more options for tracing
-convenience. Tracing per process is not supported by <code class="inline">call_count</code> profilers.</p></div>
+convenience.</p></div>
 
     </div>
 
@@ -548,7 +546,8 @@ convenience. Tracing per process is not supported by <code class="inline">call_c
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#format/2"><code class="inline">format/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Formats profile data transformed with <a href="#inspect/3"><code class="inline">inspect/3</code></a>, outputting to
+the default output device.</p></div>
 
     </div>
 
@@ -558,7 +557,8 @@ convenience. Tracing per process is not supported by <code class="inline">call_c
 
       </div>
 
-        <div class="summary-synopsis"><p>Formats profile transformed with <a href="#inspect/3"><code class="inline">inspect</code> </a>to a specified device.</p></div>
+        <div class="summary-synopsis"><p>Formats profile transformed with <a href="#inspect/3"><code class="inline">inspect/3</code></a>,
+outputting to device <code class="inline">IoDevice</code>.</p></div>
 
     </div>
 
@@ -578,16 +578,13 @@ convenience. Tracing per process is not supported by <code class="inline">call_c
 
       </div>
 
-        <div class="summary-synopsis"><p>The same as <a href="#inspect/3"><code class="inline">inspect</code> </a><code class="inline">(Profile, process, percent)</code>. Transforms
-raw profile into a map of process identifiers to a tuple containing total count
-of words allocated, and a list of all traced functions sorted in the ascending
-order by the allocation percentage.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#inspect/3"><code class="inline">inspect(Profile, process, percent)</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#inspect/3" translate="no">inspect/3</a>
+        <a href="#inspect/3" translate="no">inspect(Profile, Type, SortBy)</a>
 
       </div>
 
@@ -602,8 +599,7 @@ subsequent analysis and formatting.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Pauses trace collection for all currently traced functions, keeping all traces
-intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to resume trace collection.</p></div>
+        <div class="summary-synopsis"><p>Pauses trace collection for all currently traced functions, retaining existing traces.</p></div>
 
     </div>
 
@@ -613,7 +609,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/4"><code class="inline">profile/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/2"><code class="inline">profile(Fun, #{})</code></a>.</p></div>
 
     </div>
 
@@ -623,7 +619,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/4"><code class="inline">profile/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Does ad-hoc profiling of the call <code class="inline">Fun()</code>.</p></div>
 
     </div>
 
@@ -633,7 +629,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/4"><code class="inline">profile/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/4"><code class="inline">profile(Module, Function, Args, #{})</code></a>.</p></div>
 
     </div>
 
@@ -643,9 +639,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-        <div class="summary-synopsis"><p>Produces ad-hoc profile for function <code class="inline">Fun</code> or <code class="inline">Module</code>:<code class="inline">Function</code> call. By
-default, result is formatted to the output device, use <code class="inline">report</code> option to change
-this behaviour.</p></div>
+        <div class="summary-synopsis"><p>Does ad-hoc profiling for the call <code class="inline">apply(Module, Function, Args)</code>.</p></div>
 
     </div>
 
@@ -655,8 +649,7 @@ this behaviour.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Clears accumulated profiles. If profiling was paused prior to calling <code class="inline">restart</code>,
-it gets continued.</p></div>
+        <div class="summary-synopsis"><p>Clears accumulated profiles and starts profiling if it was paused.</p></div>
 
     </div>
 
@@ -666,9 +659,7 @@ it gets continued.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Turns tracing on for the supplied pattern. Requires running <code class="inline">tprof</code>. Patterns
-are additive, following the same rules as <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. Returns
-number of functions matching the supplied pattern.</p></div>
+        <div class="summary-synopsis"><p>Enables tracing for all functions matching the supplied pattern.</p></div>
 
     </div>
 
@@ -678,8 +669,7 @@ number of functions matching the supplied pattern.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Starts the server, not supervised. Profiling server stores current trace
-patterns and ensures a single instance of profiler is running.</p></div>
+        <div class="summary-synopsis"><p>Starts the server, not supervised.</p></div>
 
     </div>
 
@@ -689,7 +679,7 @@ patterns and ensures a single instance of profiler is running.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Starts the server, supervised by the calling process.</p></div>
+        <div class="summary-synopsis"><p>Starts the server supervised by the calling process.</p></div>
 
     </div>
 
@@ -699,7 +689,7 @@ patterns and ensures a single instance of profiler is running.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Stops the <code class="inline">tprof</code>, disabling tracing that has been enabled.</p></div>
+        <div class="summary-synopsis"><p>Stops the <code class="inline">tprof</code> server and disable tracing enabled by the server.</p></div>
 
     </div>
 
@@ -725,7 +715,7 @@ patterns and ensures a single instance of profiler is running.</p></div>
     </a>
     <h1 class="signature" translate="no">column()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L422" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L443" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -745,7 +735,7 @@ patterns and ensures a single instance of profiler is running.</p></div>
 
       </div>
 
-<p>Column to sort by <a href="#inspect/3"><code class="inline">inspect/3</code></a>, or <a href="#profile/2"><code class="inline">profile</code></a>.</p><ul><li><p><strong><code class="inline">module</code></strong> - Module name.</p></li><li><p><strong><code class="inline">function</code></strong> - Function name.</p></li><li><p><strong><code class="inline">calls</code></strong> - Number of calls to the function.</p></li><li><p><strong><code class="inline">measurement</code></strong> - Total measurement (call count, time, or heap allocation)
+<p>Column to sort by <a href="#inspect/3"><code class="inline">inspect/3</code></a> or <a href="#profile/4"><code class="inline">profile/4</code></a>.</p><ul><li><p><strong><code class="inline">module</code></strong> - Module name.</p></li><li><p><strong><code class="inline">function</code></strong> - Function name.</p></li><li><p><strong><code class="inline">calls</code></strong> - Number of calls to the function.</p></li><li><p><strong><code class="inline">measurement</code></strong> - Total measurement (call count, time, or heap allocation)
 throughout all calls to the function.</p></li><li><p><strong><code class="inline">measurement_per_call</code></strong> - Measurement (call count, time, or heap
 allocation) on average per function call.</p></li><li><p><strong><code class="inline">percent</code></strong> - Percentage of measurement to total amount during the entire
 profile collection.</p></li></ul>
@@ -760,7 +750,7 @@ profile collection.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">process()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L546" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L566" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -780,7 +770,7 @@ profile collection.</p></li></ul>
 
       </div>
 
-<p>Either process identified (pid), or a registered process name.</p>
+<p>A process identifier (pid) or a registered process name.</p>
   </section>
 </section>
 <section class="detail" id="t:profile_line/0">
@@ -792,7 +782,7 @@ profile collection.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">profile_line()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L414" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -830,7 +820,7 @@ profile collection.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">profile_options()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L440" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L461" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -858,7 +848,7 @@ profile collection.</p></li></ul>
 
       </div>
 
-<p>Ad-hoc profiler options, see <a href="#profile/2"><code class="inline">profile</code></a>.</p>
+<p>Ad-hoc profiler options; see <a href="#profile/4"><code class="inline">profile/4</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="t:profile_result/0">
@@ -870,7 +860,7 @@ profile collection.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">profile_result()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L401" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L422" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -903,7 +893,7 @@ by a selected column.</p>
     </a>
     <h1 class="signature" translate="no">rootset()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L434" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L455" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -935,7 +925,7 @@ by a selected column.</p>
     </a>
     <h1 class="signature" translate="no">sort_by()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L425" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L446" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -967,7 +957,7 @@ by a selected column.</p>
     </a>
     <h1 class="signature" translate="no">trace_info()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L388" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L409" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1003,7 +993,7 @@ by a selected column.</p>
     </a>
     <h1 class="signature" translate="no">trace_map()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L384" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L405" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1036,7 +1026,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">trace_options()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L429" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L450" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1056,7 +1046,7 @@ or <code class="inline">all</code> if all code is traced.</p>
 
       </div>
 
-<p>Options for enabling profiling of the selected processes, see <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a>.</p>
+<p>Options for enabling profiling of the selected processes; see <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="t:trace_pattern/0">
@@ -1068,7 +1058,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">trace_pattern()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L377" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L398" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1100,7 +1090,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">trace_type()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L374" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L395" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1144,7 +1134,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">clear_pattern(Mod, Fun, Arity)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L528" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L551" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1162,12 +1152,12 @@ or <code class="inline">all</code> if all code is traced.</p>
 
       </div>
 
-<p>Turns tracing off for the supplied pattern.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="4095977552-1">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="4095977552-1">)</span><span class="p">.</span><span class="w">
+<p>Disables tracing functions matching the supplied pattern.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="5896514792-1">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="5896514792-1">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">2</span><span class="gp unselectable">
-2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">clear_pattern</span><span class="p" data-group-id="4095977552-2">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="4095977552-2">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">clear_pattern</span><span class="p" data-group-id="5896514792-2">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="5896514792-2">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-3&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">get_trace_map</span><span class="p" data-group-id="4095977552-3">(</span><span class="p" data-group-id="4095977552-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="4095977552-4">#{</span><span class="ss">lists</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="4095977552-5">[</span><span class="p" data-group-id="4095977552-6">{</span><span class="ss">seq</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="4095977552-6">}</span><span class="p" data-group-id="4095977552-5">]</span><span class="p" data-group-id="4095977552-4">}</span></code></pre>
+3&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">get_trace_map</span><span class="p" data-group-id="5896514792-3">(</span><span class="p" data-group-id="5896514792-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5896514792-4">#{</span><span class="ss">lists</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="5896514792-5">[</span><span class="p" data-group-id="5896514792-6">{</span><span class="ss">seq</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="5896514792-6">}</span><span class="p" data-group-id="5896514792-5">]</span><span class="p" data-group-id="5896514792-4">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="continue/0">
@@ -1179,7 +1169,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">continue()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L677" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L698" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1209,7 +1199,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">disable_trace(Rootset)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L633" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L649" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1233,8 +1223,7 @@ or <code class="inline">all</code> if all code is traced.</p>
 
       </div>
 
-<p>The same as
-<a href="#disable_trace/2"><code class="inline">disable_trace</code> </a><code class="inline">(Spec, #{set_on_spawn =&gt; true})</code>.</p>
+<p>Equivalent to <a href="#disable_trace/2"><code class="inline">disable_trace(Spec, #{set_on_spawn =&gt; true})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="disable_trace/2">
@@ -1246,7 +1235,7 @@ or <code class="inline">all</code> if all code is traced.</p>
     </a>
     <h1 class="signature" translate="no">disable_trace/2</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L653" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L671" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1271,11 +1260,11 @@ or <code class="inline">all</code> if all code is traced.</p>
 
       </div>
 
-<p>Stops accumulating traces for specified processes. See <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a> for
-options description.</p><p>Profile accumulated before process is removed from the traced list is retained.
-This allows to enable tracing for many or even all processes in the system,
-sleep for a short period of time, then disable tracing for all processes,
-avoiding system overload, but keeping profile data.</p>
+<p>Stops accumulating traces for specified processes.</p><p>See <a href="#enable_trace/2"><code class="inline">enable_trace/2</code></a> for a description of the options.</p><p>The profile data accumulated before the process is removed from the
+traced list is retained. This makes it possible to enable tracing for
+many or all processes in the system, sleep for a short period of
+time, then disable tracing for all processes (to avoid system
+overload), but keeping profile data.</p>
   </section>
 </section>
 <section class="detail" id="enable_trace/1">
@@ -1287,7 +1276,7 @@ avoiding system overload, but keeping profile data.</p>
     </a>
     <h1 class="signature" translate="no">enable_trace(Rootset)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L563" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L577" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1311,8 +1300,7 @@ avoiding system overload, but keeping profile data.</p>
 
       </div>
 
-<p>The same as
-<a href="#enable_trace/2"><code class="inline">enable_trace</code> </a><code class="inline">(Spec, #{set_on_spawn =&gt; true})</code>.</p>
+<p>Equivalent to <a href="#enable_trace/2"><code class="inline">enable_trace(Spec, #{set_on_spawn =&gt; true})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="enable_trace/2">
@@ -1324,7 +1312,7 @@ avoiding system overload, but keeping profile data.</p>
     </a>
     <h1 class="signature" translate="no">enable_trace/2</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L611" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L627" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1349,7 +1337,7 @@ avoiding system overload, but keeping profile data.</p>
       </div>
 
 <p>Similar to <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace/3"><code class="inline">erlang:trace/3</code></a>, but supports a few more options for tracing
-convenience. Tracing per process is not supported by <code class="inline">call_count</code> profilers.</p><p><code class="inline">Spec</code> is either a process identifier (pid) for a local process, one of the
+convenience.</p><p>Tracing per process is not supported by <code class="inline">call_count</code> profilers.</p><p><code class="inline">Spec</code> is either a process identifier (pid) for a local process, one of the
 following atoms, or a list of local process identifiers or their registered
 names:</p><ul><li><p><strong><code class="inline">processes</code></strong> - All currently existing processes and all that will be
 created in the future.</p></li><li><p><strong><code class="inline">existing_processes</code></strong> - All currently existing processes.</p></li><li><p><strong><code class="inline">new_processes</code></strong> - All processes that will be created in the future.</p></li><li><p><strong><code class="inline">children</code></strong> - All currently running processes that were directly spawned by
@@ -1360,8 +1348,8 @@ facilitate tracing of supervision trees.</p></li></ul><blockquote><h4 class="inf
 tracing set. It is permitted to stop the profiling server (wiping out any
 accumulated data), restart the server, set entirely different tracing pattern
 keeping the list of traced processes for future use. Use
-<a href="#disable_trace/2"><code class="inline">disable_trace</code>(processes)</a> to clear the list of traced
-processes.</p></blockquote><p>Specify <code class="inline">Options</code> to modify tracing behaviour:</p><ul><li><strong><code class="inline">set_on_spawn</code></strong> - Automatically start tracing for processes spawned by the
+<a href="#disable_trace/2"><code class="inline">disable_trace(Processes)</code></a> to clear the list of traced
+processes.</p></blockquote><p>Specify <code class="inline">Options</code> to modify tracing behavior:</p><ul><li><strong><code class="inline">set_on_spawn</code></strong> - Automatically start tracing for processes spawned by the
 traced process. On by default.</li></ul>
   </section>
 </section>
@@ -1374,7 +1362,7 @@ traced process. On by default.</li></ul>
     </a>
     <h1 class="signature" translate="no">format(Inspected)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L736" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L759" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1392,7 +1380,8 @@ traced process. On by default.</li></ul>
 
       </div>
 
-<p>Equivalent to <a href="#format/2"><code class="inline">format/2</code></a>.</p>
+<p>Formats profile data transformed with <a href="#inspect/3"><code class="inline">inspect/3</code></a>, outputting to
+the default output device.</p>
   </section>
 </section>
 <section class="detail" id="format/2">
@@ -1404,7 +1393,7 @@ traced process. On by default.</li></ul>
     </a>
     <h1 class="signature" translate="no">format(IoDevice, Inspected)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L742" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L768" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1422,7 +1411,8 @@ traced process. On by default.</li></ul>
 
       </div>
 
-<p>Formats profile transformed with <a href="#inspect/3"><code class="inline">inspect</code> </a>to a specified device.</p>
+<p>Formats profile transformed with <a href="#inspect/3"><code class="inline">inspect/3</code></a>,
+outputting to device <code class="inline">IoDevice</code>.</p>
   </section>
 </section>
 <section class="detail" id="get_trace_map/0">
@@ -1434,7 +1424,7 @@ traced process. On by default.</li></ul>
     </a>
     <h1 class="signature" translate="no">get_trace_map()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L535" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L557" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1464,7 +1454,7 @@ traced process. On by default.</li></ul>
     </a>
     <h1 class="signature" translate="no">inspect(Profile)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L703" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L721" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1478,12 +1468,11 @@ traced process. On by default.</li></ul>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> inspect({<a href="#t:trace_type/0">trace_type</a>(), [<a href="#t:trace_info/0">trace_info</a>()]}) -> #{<a href="../../../../erts-14.2.3/doc/html/erlang.html#t:pid/0">pid</a>() | all => <a href="#t:profile_result/0">profile_result</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> inspect({<a href="#t:trace_type/0">trace_type</a>(), [<a href="#t:trace_info/0">trace_info</a>()]}) -> #{all => <a href="#t:profile_result/0">profile_result</a>()}.</pre>
 
       </div>
 
-<p>The same as <a href="#inspect/3"><code class="inline">inspect</code> </a><code class="inline">(Profile, process, percent)</code>. Transforms
-raw profile into a map of process identifiers to a tuple containing total count
+<p>Equivalent to <a href="#inspect/3"><code class="inline">inspect(Profile, process, percent)</code></a>.</p><p>Transforms raw profile into a map of process identifiers to a tuple containing total count
 of words allocated, and a list of all traced functions sorted in the ascending
 order by the allocation percentage.</p>
   </section>
@@ -1495,9 +1484,9 @@ order by the allocation percentage.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">inspect/3</h1>
+    <h1 class="signature" translate="no">inspect(Profile, Type, SortBy)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L722" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L742" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1517,10 +1506,9 @@ order by the allocation percentage.</p>
       </div>
 
 <p>Transforms raw data returned by tracing BIFs into a form convenient for
-subsequent analysis and formatting.</p><p>When <code class="inline">process</code> is given as second argument, it returns a map of process
-identifiers with corresponding profiling results sorted by the selected column.
-When the second argument is <code class="inline">total</code> or when profiling by <code class="inline">call_count</code>, the
-returned map has a single <code class="inline">all</code> key with profiling results from all processes.</p><p>Inspected profile can be leveraged to
+subsequent analysis and formatting.</p><ul><li><p>When the <code class="inline">Type</code> argument is <code class="inline">process</code>, this function returns a map of process
+identifiers with corresponding profiling results sorted by the selected column.</p></li><li><p>When <code class="inline">Type</code> argument is <code class="inline">total</code> or when profiling by <code class="inline">call_count</code>, this function
+returns a map with a single <code class="inline">all</code> key with profiling results from all processes.</p></li></ul><p>The inspected profile data can be leveraged to
 <a href="tprof.html#inspect_example">print profiling results</a>.</p>
   </section>
 </section>
@@ -1533,7 +1521,7 @@ returned map has a single <code class="inline">all</code> key with profiling res
     </a>
     <h1 class="signature" translate="no">pause()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L670" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L692" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1551,8 +1539,7 @@ returned map has a single <code class="inline">all</code> key with profiling res
 
       </div>
 
-<p>Pauses trace collection for all currently traced functions, keeping all traces
-intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to resume trace collection.</p>
+<p>Pauses trace collection for all currently traced functions, retaining existing traces.</p><p>Use <a href="#continue/0"><code class="inline">continue/0</code></a> to resume trace collection.</p>
   </section>
 </section>
 <section class="detail" id="profile/1">
@@ -1564,7 +1551,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
     </a>
     <h1 class="signature" translate="no">profile(Fun)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L752" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L777" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1582,7 +1569,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-<p>Equivalent to <a href="#profile/4"><code class="inline">profile/4</code></a>.</p>
+<p>Equivalent to <a href="#profile/2"><code class="inline">profile(Fun, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="profile/2">
@@ -1594,7 +1581,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
     </a>
     <h1 class="signature" translate="no">profile(Fun, Options)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L758" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L797" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1612,7 +1599,13 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-<p>Equivalent to <a href="#profile/4"><code class="inline">profile/4</code></a>.</p>
+<p>Does ad-hoc profiling of the call <code class="inline">Fun()</code>.</p><p>By default, the result is formatted to the output device; use the <code class="inline">report</code>
+option to change this behavior.</p><p>Ad-hoc profiling starts a new instance of <code class="inline">tprof</code> server, runs the
+profiling routine, extracts results, and shuts down the server. If the
+<code class="inline">tprof</code> server is already running (for server-aided profiling),
+the default ad-hoc profiler options block this call to avoid mixing
+results from several independent instances. Use the <code class="inline">registered =&gt; false</code>
+option to override this behavior.</p><p>See <a href="#profile/4"><code class="inline">profile/4</code></a> for a list of the supported options.</p>
   </section>
 </section>
 <section class="detail" id="profile/3">
@@ -1624,7 +1617,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
     </a>
     <h1 class="signature" translate="no">profile(Module, Function, Args)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L764" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L803" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1642,7 +1635,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-<p>Equivalent to <a href="#profile/4"><code class="inline">profile/4</code></a>.</p>
+<p>Equivalent to <a href="#profile/4"><code class="inline">profile(Module, Function, Args, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="profile/4">
@@ -1654,7 +1647,7 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
     </a>
     <h1 class="signature" translate="no">profile(Module, Function, Args, Options)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L809" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L850" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1673,23 +1666,22 @@ intact. Use <a href="#continue/0"><code class="inline">continue/0</code></a> to 
 
       </div>
 
-<p>Produces ad-hoc profile for function <code class="inline">Fun</code> or <code class="inline">Module</code>:<code class="inline">Function</code> call. By
-default, result is formatted to the output device, use <code class="inline">report</code> option to change
-this behaviour.</p><p>Ad-hoc profiling starts a new instance of <code class="inline">tprof</code> server, runs the profiling
-routine, extracts results and shuts the server down. If <code class="inline">tprof</code> is already
-running (for server-aided profiling), default ad-hoc profiler options block this
-call to avoid mixing results from several independent instances. Use
-<code class="inline">registered =&gt; false</code> option to override this behaviour.</p><p>Ad-hoc profiler supports following<code class="inline">Options</code>:</p><ul><li><p><strong><code class="inline">type</code></strong> - The type of profiling to perform.</p></li><li><p><strong><code class="inline">device</code></strong> - Specifies I/O devices to print the profile to. Useful to
-redirect text output to console or <code class="inline">standard_error</code>.</p></li><li><p><strong><code class="inline">pattern</code></strong> - Specifies trace pattern, or a list of trace patterns to
-enable. By default, all functions (<code class="inline">{'_', '_', '_'}</code>) are traced.</p></li><li><p><strong><code class="inline">registered</code></strong> - Specifies <code class="inline">tprof</code> registered process name. Use <code class="inline">false</code> to
-leave the process unregistered, or <code class="inline">{local, myname}</code> to register the process
-under a different name.</p></li><li><p><strong><code class="inline">report</code></strong> - Controls output format. The default is <code class="inline">process</code>, printing
+<p>Does ad-hoc profiling for the call <code class="inline">apply(Module, Function, Args)</code>.</p><p>By default, the result is formatted to the output device; use option <code class="inline">report</code>
+to change this behavior.</p><p>Ad-hoc profiling starts a new instance of <code class="inline">tprof</code> server, runs the
+profiling routine, extracts results, and shuts down the server. If the
+<code class="inline">tprof</code> server is already running (for server-aided profiling),
+the default ad-hoc profiler options block this call to avoid mixing
+results from several independent instances. Use the <code class="inline">registered =&gt; false</code>
+option to override this behavior.</p><p>The ad-hoc profiler supports the following <code class="inline">Options</code>:</p><ul><li><p><strong><code class="inline">type</code></strong> - The type of profiling to perform.</p></li><li><p><strong><code class="inline">device</code></strong> - Specifies I/O devices to print the profile to. Useful to
+redirect text output to console or <code class="inline">standard_error</code>.</p></li><li><p><strong><code class="inline">pattern</code></strong> - Specifies a trace pattern, or a list of trace patterns to
+enable. By default, all functions (<code class="inline">{'_', '_', '_'}</code>) are traced.</p></li><li><p><strong><code class="inline">registered</code></strong> - Specifies the <code class="inline">tprof</code> registered process
+name. Use <code class="inline">false</code> to leave the process unregistered, or <code class="inline">{local, myname}</code> to register the process under a different name.</p></li><li><p><strong><code class="inline">report</code></strong> - Controls output format. The default is <code class="inline">process</code>; printing
 per-process profiling data sorted by percentage of the total allocation.
 Specify <code class="inline">report =&gt; return</code> to suppress printing and get the raw data for
 further evaluation with <a href="#inspect/3"><code class="inline">inspect/3</code></a> and formatting with <a href="#format/2"><code class="inline">format/2</code></a>.</p></li><li><p><strong><code class="inline">rootset</code></strong> - Includes extra processes in the trace list. Useful for
 profiling allocations for <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_server.html"><code class="inline">gen_server</code></a>, calls, or other allocations caused
-by inter-process communications. See <a href="tprof.html#pg_example">example</a>.</p></li><li><p><strong><code class="inline">set_on_spawn</code></strong> - Automatically start tracing for processes spawned by the
-traced process. On by default.</p></li><li><p><strong><code class="inline">timeout</code></strong> - Terminate profiling after the specified amount of time
+by inter-process communications. See <a href="tprof.html#pg_example">this example</a>.</p></li><li><p><strong><code class="inline">set_on_spawn</code></strong> - Automatically start tracing for processes spawned by the
+traced process. Enabled by default.</p></li><li><p><strong><code class="inline">timeout</code></strong> - Terminate profiling after the specified amount of time
 (milliseconds).</p></li></ul>
   </section>
 </section>
@@ -1702,7 +1694,7 @@ traced process. On by default.</p></li><li><p><strong><code class="inline">timeo
     </a>
     <h1 class="signature" translate="no">restart()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L688" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L706" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1720,8 +1712,7 @@ traced process. On by default.</p></li><li><p><strong><code class="inline">timeo
 
       </div>
 
-<p>Clears accumulated profiles. If profiling was paused prior to calling <code class="inline">restart</code>,
-it gets continued.</p>
+<p>Clears accumulated profiles and starts profiling if it was paused.</p>
   </section>
 </section>
 <section class="detail" id="set_pattern/3">
@@ -1733,7 +1724,7 @@ it gets continued.</p>
     </a>
     <h1 class="signature" translate="no">set_pattern(Mod, Fun, Arity)</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L510" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L534" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1751,15 +1742,15 @@ it gets continued.</p>
 
       </div>
 
-<p>Turns tracing on for the supplied pattern. Requires running <code class="inline">tprof</code>. Patterns
-are additive, following the same rules as <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. Returns
-number of functions matching the supplied pattern.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="3148382594-1">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="3148382594-1">)</span><span class="p">.</span><span class="w">
+<p>Enables tracing for all functions matching the supplied pattern.</p><p>Requires that the <code class="inline">tprof</code> server is running. Patterns are additive, following
+the same rules as <a href="../../../../erts-14.2.3/doc/html/erlang.html#trace_pattern/3"><code class="inline">erlang:trace_pattern/3</code></a>. Returns the number of
+functions matching the supplied pattern.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="3463213924-1">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">seq</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="3463213924-1">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">2</span><span class="gp unselectable">
-2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="3148382594-2">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">keyfind</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3148382594-2">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="3463213924-2">(</span><span class="ss">lists</span><span class="p">,</span><span class="w"> </span><span class="ss">keyfind</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3463213924-2">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-3&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">get_trace_map</span><span class="p" data-group-id="3148382594-3">(</span><span class="p" data-group-id="3148382594-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="3148382594-4">#{</span><span class="ss">lists</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3148382594-5">[</span><span class="p" data-group-id="3148382594-6">{</span><span class="ss">keyfind</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="3148382594-6">}</span><span class="p">,</span><span class="p" data-group-id="3148382594-7">{</span><span class="ss">seq</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="3148382594-7">}</span><span class="p">,</span><span class="p" data-group-id="3148382594-8">{</span><span class="ss">seq</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="3148382594-8">}</span><span class="p" data-group-id="3148382594-5">]</span><span class="p" data-group-id="3148382594-4">}</span></code></pre><p>If there are no functions matching the pattern, error is returned</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="4722151377-1">(</span><span class="ss">no_module</span><span class="p">,</span><span class="w"> </span><span class="ss">func</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="4722151377-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="4722151377-2">{</span><span class="ss">error</span><span class="p">,</span><span class="p" data-group-id="4722151377-3">{</span><span class="nb">trace_pattern</span><span class="p">,</span><span class="ss">no_module</span><span class="p">,</span><span class="ss">func</span><span class="p">,</span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="4722151377-3">}</span><span class="p" data-group-id="4722151377-2">}</span></code></pre>
+3&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">get_trace_map</span><span class="p" data-group-id="3463213924-3">(</span><span class="p" data-group-id="3463213924-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="3463213924-4">#{</span><span class="ss">lists</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3463213924-5">[</span><span class="p" data-group-id="3463213924-6">{</span><span class="ss">keyfind</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="3463213924-6">}</span><span class="p">,</span><span class="p" data-group-id="3463213924-7">{</span><span class="ss">seq</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="3463213924-7">}</span><span class="p">,</span><span class="p" data-group-id="3463213924-8">{</span><span class="ss">seq</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="3463213924-8">}</span><span class="p" data-group-id="3463213924-5">]</span><span class="p" data-group-id="3463213924-4">}</span></code></pre><p>If no functions match the pattern, an <code class="inline">error</code> tuple is returned:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">tprof</span><span class="p">:</span><span class="nf">set_pattern</span><span class="p" data-group-id="9516259714-1">(</span><span class="ss">no_module</span><span class="p">,</span><span class="w"> </span><span class="ss">func</span><span class="p">,</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="9516259714-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9516259714-2">{</span><span class="ss">error</span><span class="p">,</span><span class="p" data-group-id="9516259714-3">{</span><span class="nb">trace_pattern</span><span class="p">,</span><span class="ss">no_module</span><span class="p">,</span><span class="ss">func</span><span class="p">,</span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="9516259714-3">}</span><span class="p" data-group-id="9516259714-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="start/0">
@@ -1771,7 +1762,7 @@ number of functions matching the supplied pattern.</p><pre><code class="makeup e
     </a>
     <h1 class="signature" translate="no">start()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L459" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L482" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1789,8 +1780,8 @@ number of functions matching the supplied pattern.</p><pre><code class="makeup e
 
       </div>
 
-<p>Starts the server, not supervised. Profiling server stores current trace
-patterns and ensures a single instance of profiler is running.</p>
+<p>Starts the server, not supervised.</p><p>Profiling server stores current trace patterns and ensures that a single
+instance of the profiler is running.</p>
   </section>
 </section>
 <section class="detail" id="start_link/0">
@@ -1802,7 +1793,7 @@ patterns and ensures a single instance of profiler is running.</p>
     </a>
     <h1 class="signature" translate="no">start_link()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L472" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L494" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1820,7 +1811,7 @@ patterns and ensures a single instance of profiler is running.</p>
 
       </div>
 
-<p>Starts the server, supervised by the calling process.</p>
+<p>Starts the server supervised by the calling process.</p>
   </section>
 </section>
 <section class="detail" id="stop/0">
@@ -1832,7 +1823,7 @@ patterns and ensures a single instance of profiler is running.</p>
     </a>
     <h1 class="signature" translate="no">stop()</h1>
 
-      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L484" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/jakobsvenningsson/otp/blob/stdlib/erl-tar-abs-filenames-always-keep-leading-slash/lib/tools/src/tprof.erl#L506" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1850,7 +1841,7 @@ patterns and ensures a single instance of profiler is running.</p>
 
       </div>
 
-<p>Stops the <code class="inline">tprof</code>, disabling tracing that has been enabled.</p>
+<p>Stops the <code class="inline">tprof</code> server and disable tracing enabled by the server.</p>
   </section>
 </section>
 
