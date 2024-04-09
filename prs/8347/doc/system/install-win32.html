@@ -8,13 +8,13 @@
     <meta name="project" content="Erlang System Documentation v27.0-rc2">
 
 
-    <title>Building Erlang/OTP on Windows — Erlang System Documentation v27.0-rc2</title>
+    <title>How to Build Erlang/OTP on Windows — Erlang System Documentation v27.0-rc2</title>
     <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-5D6931E3.js"></script>
+    <script src="dist/sidebar_items-C6865BFD.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -117,7 +117,7 @@ Pages
     </a>
 
 
-  <span>Building Erlang/OTP on Windows</span>
+  <span>How to Build Erlang/OTP on Windows</span>
 </h1>
 
 <h2 id="introduction" class="section-heading">
@@ -129,8 +129,7 @@ Pages
 <p>This section describes how to build the Erlang emulator and the OTP
 libraries on Windows. Note that the Windows binary releases are still
 a preferred alternative if one does not have Microsoft’s development
-tools and/or don’t want to install WSL. You can download the binary
-releases from <a href="https://erlang.org/downloads">https://erlang.org/downloads</a>.</p><p>The instructions apply to Windows 10 (v.1809 and later) supporting the
+tools and/or don’t want to install WSL.</p><p>The instructions apply to Windows 10 (v.1809 and later) supporting the
 WSL.1 (Windows Subsystem for Linux v.1) and using Ubuntu 18.04 release.</p><p>The procedure described uses WSL as a build environment.  You run the
 bash shell in WSL and use the gnu configure/make etc to do
 the build. The emulator C-source code is, however, mostly compiled
@@ -206,14 +205,14 @@ download and install, available here:
 URL: <a href="http://wiki.openssl.org/index.php/Binaries">http://wiki.openssl.org/index.php/Binaries</a></p><p>Install into <code class="inline">C:/OpenSSL-Win64</code> (or <code class="inline">C:/OpenSSL-Win32</code>)</p></li><li><p>  wxWidgets (optional)
 You need this to build wx to use gui's in debugger and observer.</p><p>We recommend v3.2.2.1 or later.
 Unpack into <code class="inline">c:/opt/local64/pgm/wxWidgets-3.2.2.1</code></p><p>If the <code class="inline">wxUSE_POSTSCRIPT</code> isn't enabled in  <code class="inline">c:/opt/local64/pgm/wxWidgets-3.2.2.1/include/wx/msw/setup.h</code>,
-enable it.</p><p>We recommend to enable for wxWebView wxUSE_WEBVIEW_EDGE.</p><ul><li>  Download the nuget package 'Microsoft.Web.WebView2' (Version 0.9.488 or newer)</li><li>  Extract the package (it's a zip archive) to wxWidgets/3rdparty/webview2 (you should have 3rdparty/webview2/build/native/include/WebView2.h file after unpacking it)</li><li>  Enable wxUSE_WEBVIEW_EDGE in <code class="inline">c:/opt/local64/pgm/wxWidgets-3.2.2.1/include/wx/msw/setup.h</code></li></ul><p>Build with:</p><pre><code class="text">C:\...\&gt; cd c:\opt\local64\pgm\wxWidgets-3.2.2.1\build\msw
-C:\...\&gt; nmake TARGET_CPU=amd64 BUILD=release SHARED=0 DIR_SUFFIX_CPU= -f makefile.vc</code></pre><p>Remove the <code class="inline">TARGET_CPU=amd64</code> for 32bit build.</p></li><li><p>  Get the Erlang source distribution (from <a href="http://www.erlang.org/download.html">http://www.erlang.org/download.html</a>).
+enable it.</p><p>We recommend to enable for wxWebView wxUSE_WEBVIEW_EDGE.</p><ul><li>  Download the nuget package 'Microsoft.Web.WebView2' (Version 0.9.488 or newer)</li><li>  Extract the package (it's a zip archive) to wxWidgets/3rdparty/webview2 (you should have 3rdparty/webview2/build/native/include/WebView2.h file after unpacking it)</li><li>  Enable wxUSE_WEBVIEW_EDGE in <code class="inline">c:/opt/local64/pgm/wxWidgets-3.2.2.1/include/wx/msw/setup.h</code></li></ul><p>Build with:</p><pre><code class="makeup erlang" translate="no"><span class="n">C</span><span class="p">:</span><span class="err">\</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="err">\</span><span class="o">&gt;</span><span class="w"> </span><span class="ss">cd</span><span class="w"> </span><span class="nc">c</span><span class="p">:</span><span class="err">\</span><span class="ss">opt</span><span class="err">\</span><span class="ss">local64</span><span class="err">\</span><span class="ss">pgm</span><span class="err">\</span><span class="ss">wxWidgets</span><span class="o">-</span><span class="mf">3.2</span><span class="p">.</span><span class="mf">2.1</span><span class="err">\</span><span class="ss">build</span><span class="err">\</span><span class="ss">msw</span><span class="w">
+</span><span class="n">C</span><span class="p">:</span><span class="err">\</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="err">\</span><span class="o">&gt;</span><span class="w"> </span><span class="ss">nmake</span><span class="w"> </span><span class="n">TARGET_CPU</span><span class="o">=</span><span class="ss">amd64</span><span class="w"> </span><span class="n">BUILD</span><span class="o">=</span><span class="ss">release</span><span class="w"> </span><span class="n">SHARED</span><span class="o">=</span><span class="mi">0</span><span class="w"> </span><span class="n">DIR_SUFFIX_CPU</span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="ss">f</span><span class="w"> </span><span class="ss">makefile</span><span class="p">.</span><span class="ss">vc</span></code></pre><p>Remove the <code class="inline">TARGET_CPU=amd64</code> for 32bit build.</p></li><li><p>  Get the Erlang source distribution (from <a href="http://www.erlang.org/download.html">http://www.erlang.org/download.html</a>).
 The same as for Unix platforms. Preferably use tar to
 unpack the source tar.gz (<code class="inline">tar zxf otp_src_27.tar.gz</code>) to somewhere
 on the windows disk, <code class="inline">/mnt/c/path/to/otp_src</code></p><p>NOTE: It is important that source on the windows disk.</p><p>Set the environment <code class="inline">ERL_TOP</code> to point to the root directory of the
 source distribution. Let's say I stood in <code class="inline">/mnt/c/src</code> and unpacked
-<code class="inline">otp_src_27.tar.gz</code>, I then add the following to <code class="inline">.profile</code>:</p><pre><code class="text">ERL_TOP=/mnt/c/src/otp_src_27
-export ERL_TOP</code></pre></li></ul><h2 id="the-shell-environment" class="section-heading">
+<code class="inline">otp_src_27.tar.gz</code>, I then add the following to <code class="inline">.profile</code>:</p><pre><code class="makeup erlang" translate="no"><span class="n">ERL_TOP</span><span class="o">=</span><span class="o">/</span><span class="ss">mnt</span><span class="o">/</span><span class="ss">c</span><span class="o">/</span><span class="ss">src</span><span class="o">/</span><span class="ss">otp_src_27</span><span class="w">
+</span><span class="ss">export</span><span class="w"> </span><span class="n">ERL_TOP</span></code></pre></li></ul><h2 id="the-shell-environment" class="section-heading">
   <a href="#the-shell-environment" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -304,7 +303,7 @@ If you want to copy the result to a release directory (say
 </span></code></pre><p>and sometimes</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">cd $ERL_TOP
 </span><span class="gp unselectable">$ </span><span class="">make local_setup
 </span></code></pre><p>So now when you run <code class="inline">$ERL_TOP/erl.exe</code>, you should have a debug compiled
-emulator, which you will see if you do a:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">system_info</span><span class="p" data-group-id="0519331226-1">(</span><span class="ss">system_version</span><span class="p" data-group-id="0519331226-1">)</span><span class="p">.</span></code></pre><p>in the erlang shell. If the returned string contains <code class="inline">[debug]</code>, you
+emulator, which you will see if you do a:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">system_info</span><span class="p" data-group-id="6825535071-1">(</span><span class="ss">system_version</span><span class="p" data-group-id="6825535071-1">)</span><span class="p">.</span></code></pre><p>in the erlang shell. If the returned string contains <code class="inline">[debug]</code>, you
 got a debug compiled emulator.</p><p>To hack the erlang libraries, you simply do a <code class="inline">make opt</code> in the
 specific &quot;applications&quot; directory, like:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">cd $ERL_TOP/lib/stdlib
 </span><span class="gp unselectable">$ </span><span class="">make opt
@@ -327,11 +326,11 @@ release area, you do like with the emulator:</p><pre><code class="makeup shell" 
 </span></code></pre><p>Remember that:</p><ul><li><p>  Windows specific C-code goes in the <code class="inline">$ERL_TOP/erts/emulator/sys/win32</code>,
 <code class="inline">$ERL_TOP/erts/emulator/drivers/win32</code> or <code class="inline">$ERL_TOP/erts/etc/win32</code>.</p></li><li><p>  Windows specific erlang code should be used conditionally and the
 host OS tested in <em>runtime</em>, the exactly same beam files should be
-distributed for every platform! So write code like:</p><pre><code class="makeup erlang" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">os</span><span class="p">:</span><span class="nf">type</span><span class="p" data-group-id="8386194579-1">(</span><span class="p" data-group-id="8386194579-1">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-    </span><span class="p" data-group-id="8386194579-2">{</span><span class="ss">win32</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="8386194579-2">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="nf">do_windows_specific</span><span class="p" data-group-id="8386194579-3">(</span><span class="p" data-group-id="8386194579-3">)</span><span class="p">;</span><span class="w">
+distributed for every platform! So write code like:</p><pre><code class="makeup erlang" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">os</span><span class="p">:</span><span class="nf">type</span><span class="p" data-group-id="3225670848-1">(</span><span class="p" data-group-id="3225670848-1">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+    </span><span class="p" data-group-id="3225670848-2">{</span><span class="ss">win32</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="3225670848-2">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="nf">do_windows_specific</span><span class="p" data-group-id="3225670848-3">(</span><span class="p" data-group-id="3225670848-3">)</span><span class="p">;</span><span class="w">
     </span><span class="n">Other</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="nf">do_fallback_or_exit</span><span class="p" data-group-id="8386194579-4">(</span><span class="p" data-group-id="8386194579-4">)</span><span class="w">
+        </span><span class="nf">do_fallback_or_exit</span><span class="p" data-group-id="3225670848-4">(</span><span class="p" data-group-id="3225670848-4">)</span><span class="w">
 </span><span class="k">end</span><span class="p">,</span></code></pre></li></ul><p>That's basically all you need to get going.</p><h2 id="frequently-asked-questions" class="section-heading">
   <a href="#frequently-asked-questions" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
