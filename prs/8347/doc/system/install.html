@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-C6865BFD.js"></script>
+    <script src="dist/sidebar_items-5D6931E3.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -129,7 +129,7 @@ Pages
 <p>This document describes how to build and install Erlang/OTP-27.
 Erlang/OTP should be possible to build from source on any Unix/Linux system,
 including macOS. You are advised to read the whole document
-before attempting to build and install Erlang/OTP.</p><p>The source code can be downloaded from the official site of Erlang/OTP or GitHub.</p><ul><li><a href="http://www.erlang.org">http://www.erlang.org</a></li><li><a href="https://github.com/erlang/otp">https://github.com/erlang/otp</a></li></ul><h2 id="required-utilities" class="section-heading">
+before attempting to build and install Erlang/OTP.</p><p>The source code can be downloaded from the official site of Erlang/OTP or GitHub.</p><ul><li><a href="http://www.erlang.org/downloads">http://www.erlang.org/downloads</a></li><li><a href="https://github.com/erlang/otp">https://github.com/erlang/otp</a></li></ul><h2 id="required-utilities" class="section-heading">
   <a href="#required-utilities" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -203,7 +203,8 @@ from github.</p></li></ul><h2 id="how-to-build-and-install-erlang-otp" class="se
   </a>
   <span class="text">How to Build and Install Erlang/OTP</span>
 </h2>
-<p>The following instructions are for building <a href="https://github.com/erlang/otp/releases/download/OTP-27.0-rc2/otp_src_27.0-rc2.tar.gz" title="">the released source tar ball</a>.</p><p>The variable <code class="inline">$ERL_TOP</code> will be mentioned a lot of times. It refers to
+<p>The following instructions are for building <a href="https://github.com/erlang/otp/releases/download/OTP-27.0-rc2/otp_src_27.0-rc2.tar.gz" title="">the released source tar ball</a>
+or from a <a href="https://github.com/erlang/otp">git clone</a>.</p><p>The variable <code class="inline">$ERL_TOP</code> will be mentioned a lot of times. It refers to
 the top directory in the source tree. More information about <code class="inline">$ERL_TOP</code>
 can be found in the <a href="#advanced-configuration-and-build-of-erlang-otp_make-and-ERLTOP" title="">make and $ERL_TOP</a> section below.</p><h3 id="unpacking-1" class="section-heading">
   <a href="#unpacking-1" class="hover-link">
@@ -213,6 +214,7 @@ can be found in the <a href="#advanced-configuration-and-build-of-erlang-otp_mak
 </h3>
 <p>Start by unpacking the Erlang/OTP distribution file with your GNU
 compatible TAR program.</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">tar -zxf otp_src_27.0-rc2.tar.gz    # Assuming bash/sh
+</span></code></pre><p>or clone from github:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">git clone https://github.com/erlang/otp otp_src_27.0-rc2
 </span></code></pre><p>Now change directory into the base directory and set the <code class="inline">$ERL_TOP</code> variable.</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">cd otp_src_27.0-rc2
 </span><span class="gp unselectable">$ </span><span class="">export ERL_TOP=`pwd`    # Assuming bash/sh
 </span></code></pre><h3 id="configuring" class="section-heading">
@@ -247,7 +249,7 @@ First you will need to build and release the test suites.</p><pre><code class="m
 Now, it's time to start the smoke test.</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">cd release/tests/test_server
 </span><span class="gp unselectable">$ </span><span class="">$ERL_TOP/bin/erl -s ts install -s ts smoke_test batch -s init stop
 </span></code></pre><p>To verify that everything is ok you should open <code class="inline">$ERL_TOP/release/tests/test_server/index.html</code>
-in your web browser and make sure that there are zero failed test cases.</p><blockquote><p><em>NOTE</em>: On builds without <code class="inline">crypto</code>, <code class="inline">ssl</code> and <code class="inline">ssh</code> there is a failed test case
+in your web browser and make sure that there are zero failed test cases.</p><blockquote><h4 class="info">Note</h4><p>On builds without <code class="inline">crypto</code>, <code class="inline">ssl</code> and <code class="inline">ssh</code> there is a failed test case
 for undefined functions. Verify that the failed test case log only shows calls
 to skipped applications.</p></blockquote><h3 id="installing-1" class="section-heading">
   <a href="#installing-1" class="hover-link">
@@ -280,8 +282,7 @@ the <code class="inline">$PATH</code>.</p><pre><code class="makeup shell" transl
 See <a href="#building-documentation">Building Documentation</a> for information on how to
 install ExDoc.</p><p>Build the documentation using:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">make docs
 </span></code></pre><p>It is possible to limit which types of documentation is build by passing the <code class="inline">DOC_TARGETS</code>
-environment variable to <code class="inline">make docs</code>.
-Example:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">make docs DOC_TARGETS=chunks
+environment variable to <code class="inline">make docs</code>.</p><p><em>Example</em>:</p><pre><code class="makeup shell" translate="no"><span class="gp unselectable">$ </span><span class="">make docs DOC_TARGETS=chunks
 </span></code></pre><p>The currently available types are: <code class="inline">html</code> and <code class="inline">chunks</code>. Where:</p><ul><li><em>chunks</em> - Build <a href="../../lib/kernel-9.2.2/doc/html/eep48_chapter.html">EEP-48</a> documentation chunks.</li><li><em>html</em> - Build html and epub documentation.</li></ul><h3 id="how-to-install-the-documentation" class="section-heading">
   <a href="#how-to-install-the-documentation" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -414,7 +415,14 @@ time source with elapsed time during suspend.</li><li>  <code class="inline">--d
 monotonic time source with elapsed time during suspend.</li><li>  <code class="inline">--with-clock-resolution=high|low</code> - Try to find clock sources for OS system
 time, and OS monotonic time with higher or lower resolution than chosen by
 default. Note that both alternatives may have a negative impact on the performance
-and scalability compared to the default clock sources chosen.</li><li>  <code class="inline">--disable-saved-compile-time</code> - Disable saving of compile date and time
+and scalability compared to the default clock sources chosen.</li><li>  <code class="inline">--enable-ensure-os-monotonic-time</code> - Enable functionality ensuring the
+monotonicity of monotonic timestamps delivered by the OS. When a
+non-monotonic timestamp is detected, it will be replaced by the last
+delivered monotonic timestamp before being used by Erlang's time
+functionality. Note that you do <em>not</em> want to enable this unless the OS
+monotonic time source on the system fails to produce monotonic timestamps.
+This since ensuring the monotonicity of OS monotonic timestamps will hurt
+scalability and performance of the system.</li><li>  <code class="inline">--disable-saved-compile-time</code> - Disable saving of compile date and time
 in the emulator binary.</li><li>  <code class="inline">--enable-ei-dynamic-lib</code> - Make erl_interface build a shared library in addition
 to the archive normally built.</li><li>  <code class="inline">--disable-year2038</code> - Don't support timestamps after mid-January 2038. By
 default <code class="inline">configure</code> will try to enable support for timestamps after
@@ -427,11 +435,11 @@ platforms.</li></ul><p>If you or your system has special requirements please rea
 additional configuration information.</p><p><a href="" id="advanced-configuration-and-build-of-erlang-otp_Configuring_Important-Variables-Inspected-by-configure"></a></p><h4>Important Variables Inspected by configure</h4><h5>Compiler and Linker</h5><ul><li>  <code class="inline">CC</code> - C compiler.</li><li>  <code class="inline">CFLAGS</code> - C compiler flags. Defaults to &quot;-g -O2&quot;. If you set it,
 these will be removed.</li><li>  <code class="inline">STATIC_CFLAGS</code> - Static C compiler flags.</li><li>  <code class="inline">CFLAG_RUNTIME_LIBRARY_PATH</code> - This flag should set runtime library
 search path for the shared libraries. Note that this actually is a
-linker flag, but it needs to be passed via the compiler.</li><li>  <code class="inline">CPP</code> - C pre-processor.</li><li>  <code class="inline">CPPFLAGS</code> - C pre-processor flags.</li><li>  <code class="inline">CXX</code> - C++ compiler.</li><li>  <code class="inline">CXXFLAGS</code> - C++ compiler flags.</li><li>  <code class="inline">LD</code> - Linker.</li><li>  <code class="inline">LDFLAGS</code> - Linker flags.</li><li>  <code class="inline">LIBS</code> - Libraries.</li></ul><h5>Dynamic Erlang Driver Linking</h5><blockquote><p><em>NOTE</em>: Either set all or none of the <code class="inline">DED_LD*</code> variables (with the exception
+linker flag, but it needs to be passed via the compiler.</li><li>  <code class="inline">CPP</code> - C pre-processor.</li><li>  <code class="inline">CPPFLAGS</code> - C pre-processor flags.</li><li>  <code class="inline">CXX</code> - C++ compiler.</li><li>  <code class="inline">CXXFLAGS</code> - C++ compiler flags.</li><li>  <code class="inline">LD</code> - Linker.</li><li>  <code class="inline">LDFLAGS</code> - Linker flags.</li><li>  <code class="inline">LIBS</code> - Libraries.</li></ul><h5>Dynamic Erlang Driver Linking</h5><blockquote><h4 class="info">Note</h4><p>Either set all or none of the <code class="inline">DED_LD*</code> variables (with the exception
 of <code class="inline">DED_LDFLAGS_CONFTEST</code>).</p></blockquote><ul><li>  <code class="inline">DED_LD</code> - Linker for Dynamically loaded Erlang Drivers.</li><li>  <code class="inline">DED_LDFLAGS</code> - Linker flags to use with <code class="inline">DED_LD</code>.</li><li>  <code class="inline">DED_LDFLAGS_CONFTEST</code> - Linker flags to use with <code class="inline">DED_LD</code> in configure
 link tests if <code class="inline">DED_LDFLAGS</code> cannot be used in such tests. If not set,
 <code class="inline">DED_LDFLAGS</code> will be used in configure tests.</li><li>  <code class="inline">DED_LD_FLAG_RUNTIME_LIBRARY_PATH</code> - This flag should set runtime library
-search path for shared libraries when linking with <code class="inline">DED_LD</code>.</li></ul><h5>Large File Support</h5><blockquote><p><em>NOTE</em>: Either set all or none of the <code class="inline">LFS_*</code> variables.</p></blockquote><ul><li>  <code class="inline">LFS_CFLAGS</code> - Large file support C compiler flags.</li><li>  <code class="inline">LFS_LDFLAGS</code> - Large file support linker flags.</li><li>  <code class="inline">LFS_LIBS</code> - Large file support libraries.</li></ul><h5>Other Tools</h5><ul><li>  <code class="inline">RANLIB</code> - <code class="inline">ranlib</code> archive index tool.</li><li>  <code class="inline">AR</code> - <code class="inline">ar</code> archiving tool.</li><li>  <code class="inline">GETCONF</code> - <code class="inline">getconf</code> system configuration inspection tool. <code class="inline">getconf</code> is
+search path for shared libraries when linking with <code class="inline">DED_LD</code>.</li></ul><h5>Large File Support</h5><blockquote><h4 class="info">Note</h4><p>Either set all or none of the <code class="inline">LFS_*</code> variables.</p></blockquote><ul><li>  <code class="inline">LFS_CFLAGS</code> - Large file support C compiler flags.</li><li>  <code class="inline">LFS_LDFLAGS</code> - Large file support linker flags.</li><li>  <code class="inline">LFS_LIBS</code> - Large file support libraries.</li></ul><h5>Other Tools</h5><ul><li>  <code class="inline">RANLIB</code> - <code class="inline">ranlib</code> archive index tool.</li><li>  <code class="inline">AR</code> - <code class="inline">ar</code> archiving tool.</li><li>  <code class="inline">GETCONF</code> - <code class="inline">getconf</code> system configuration inspection tool. <code class="inline">getconf</code> is
 currently used for finding out large file support flags to use, and
 on Linux systems for finding out if we have an NPTL thread library or
 not.</li></ul><h4>Updating configure Scripts</h4><p>Generated <code class="inline">configure</code> scripts are nowadays included in the git repository.</p><p>If you modify any <code class="inline">configure.in</code> files or the <code class="inline">erts/aclocal.m4</code> file, you need
@@ -473,7 +481,7 @@ of its execution if it cannot find any other alternative than this.</li></ol><h3
 </span><span class="gp unselectable">$ </span><span class="">make
 </span></code></pre><p>If you've upgraded the source with a patch you may need to clean up from previous
 builds before the new build.
-Make sure to read the <a href="#advanced-configuration-and-build-of-erlang-otp_Building_Prebuilt-Source-Release" title="">Pre-built Source Release</a> section below before doing a <code class="inline">make clean</code>.</p><p>Other useful information can be found at our GitHub wiki:</p><ul><li><a href="https://github.com/erlang/otp/wiki">https://github.com/erlang/otp/wiki</a></li></ul><p><a href="" id="advanced-configuration-and-build-of-erlang-otp_Building_Within-Git"></a></p><h4>Within Git</h4><p>Build the same way as when building the unpacked tar file.</p><p><a href="" id="advanced-configuration-and-build-of-erlang-otp_Building_macOS-Darwin"></a></p><h4>macOS (Darwin)</h4><p>Make sure that the command <code class="inline">hostname</code> returns a valid fully qualified host
+Make sure to read the <a href="#advanced-configuration-and-build-of-erlang-otp_Building_Prebuilt-Source-Release" title="">Pre-built Source Release</a> section below before doing a <code class="inline">make clean</code>.</p><p>Other useful information can be found here:</p><ul><li><a href="https://github.com/erlang/otp/wiki">Erlang/OTP GitHub wiki</a></li><li><a href="https://github.com/erlang/otp/blob/master/CONTRIBUTING.md">Contributing to Erlang/OTP</a></li><li><a href="https://github.com/erlang/otp/blob/master/HOWTO/DEVELOPMENT.md">Developing Erlang/OTP</a></li></ul><p><a href="" id="advanced-configuration-and-build-of-erlang-otp_Building_macOS-Darwin"></a></p><h4>macOS (Darwin)</h4><p>Make sure that the command <code class="inline">hostname</code> returns a valid fully qualified host
 name (this is configured in <code class="inline">/etc/hostconfig</code>). Otherwise you might experience
 problems when running distributed systems.</p><p>If you develop linked-in drivers (shared library) you need to link using
 <code class="inline">gcc</code> and the flags <code class="inline">-bundle -flat_namespace -undefined suppress</code>. You also
@@ -508,7 +516,7 @@ working run the following command:</p><pre><code class="makeup shell" translate=
 build results already pre-built. If you want to remove these pre-built
 files, invoke <code class="inline">./otp_build remove_prebuilt_files</code> from the <code class="inline">$ERL_TOP</code>
 directory. After you have done this, you can build exactly the same way
-as before, but the build process will take a much longer time.</p><blockquote><p><em>WARNING</em>: Doing <code class="inline">make clean</code> in an arbitrary directory of the source
+as before, but the build process will take a much longer time.</p><blockquote><h4 class="warning">Warning</h4><p>Doing <code class="inline">make clean</code> in an arbitrary directory of the source
 tree, may remove files needed for bootstrapping the build.</p><p>Doing <code class="inline">./otp_build save_bootstrap</code> from the <code class="inline">$ERL_TOP</code> directory before
 doing <code class="inline">make clean</code> will ensure that it will be possible to build after
 doing <code class="inline">make clean</code>. <code class="inline">./otp_build save_bootstrap</code> will be invoked
@@ -612,12 +620,12 @@ This is not an exhaustive list, but we try to keep it as up to date as possible.
 <div class="bottom-actions">
   <div class="bottom-actions-item">
 
-      <a href="install-binary.html" class="bottom-actions-button" rel="prev">
+      <a href="installation_guide.html" class="bottom-actions-button" rel="prev">
         <span class="subheader">
           ← Previous Page
         </span>
         <span class="title">
-Installing the Binary Release
+Introduction
         </span>
       </a>
 
