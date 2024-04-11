@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-B0FDD196.js"></script>
+    <script src="dist/sidebar_items-CEF0AA31.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -133,7 +133,7 @@ Pages
 
 
   <section id="moduledoc">
-<p>A disk-based term logging facility.</p><p><code class="inline">disk_log</code> is a disk-based term logger that enables efficient logging of items
+<p><code class="inline">disk_log</code> is a disk-based term logger that enables efficient logging of items
 on files.</p><p>Three types of logs are supported:</p><ul><li><p><strong>halt logs</strong> - Appends items to a single file, which size can be limited by
 the <code class="inline">disk_log</code> module.</p></li><li><p><strong>wrap logs</strong> - Uses a sequence of wrap log files of limited size. As a wrap
 log file is filled up, further items are logged on to the next file in the
@@ -173,29 +173,29 @@ but return the control to the caller more or less immediately.</p><p>When using 
 prefixing each of the functions with a <code class="inline">b</code> (for &quot;binary&quot;), we get the
 corresponding <code class="inline">blog()</code> functions for the external format. These functions log
 one or more chunks of bytes. For example, to log the string <code class="inline">&quot;hello&quot;</code> in ASCII
-format, you can use <code class="inline">disk_log:blog(Log, &quot;hello&quot;)</code>, or
-<code class="inline">disk_log:blog(Log, list_to_binary(&quot;hello&quot;))</code>. The two alternatives are equally
-efficient.</p><p>The <code class="inline">blog()</code> functions can also be used for internally formatted logs, but in
+format, you can use <a href="#blog/2"><code class="inline">disk_log:blog(Log, &quot;hello&quot;)</code></a>, or
+<a href="#blog/2">`disk_log:blog(Log, list_to_binary(&quot;hello&quot;))</a>`. The two alternatives
+are equally efficient.</p><p>The <code class="inline">blog()</code> functions can also be used for internally formatted logs, but in
 this case they must be called with binaries constructed with calls to
 <a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>. There is no check to ensure
 this, it is entirely the responsibility of the caller. If these functions are
 called with binaries that do not correspond to Erlang terms, the
-<a href="#chunk/2"><code class="inline">chunk/2,3</code></a> and automatic repair functions fail. The corresponding
-terms (not the binaries) are returned when <code class="inline">chunk/2,3</code> is called.</p><p>An open disk log is only accessible from the node where the disk log process
+<a href="#chunk/3"><code class="inline">chunk/2,3</code></a> and automatic repair functions fail. The corresponding
+terms (not the binaries) are returned when <a href="#chunk/3"><code class="inline">chunk/2,3</code></a> is called.</p><p>An open disk log is only accessible from the node where the disk log process
 runs. All processes on the node where the disk log process runs can log items or
 otherwise change, inspect, or close the log.</p><p>Errors are reported differently for asynchronous log attempts and other uses of
-the <code class="inline">disk_log</code> module. When used synchronously, this module replies with an
+the <a href="disk_log.html#content"><code class="inline">disk_log</code></a> module. When used synchronously, this module replies with an
 error message, but when called asynchronously, this module does not know where
 to send the error message. Instead, owners subscribing to notifications receive
-an <code class="inline">error_status</code> message.</p><p>The <code class="inline">disk_log</code> module does not report errors to the <a href="error_logger.html"><code class="inline">error_logger</code></a> module. It
+an <code class="inline">error_status</code> message.</p><p>The <a href="disk_log.html#content"><code class="inline">disk_log</code></a> module does not report errors to the <a href="error_logger.html"><code class="inline">error_logger</code></a> module. It
 is up to the caller to decide whether to employ the error logger. Function
 <a href="#format_error/1"><code class="inline">format_error/1</code></a> can be used to produce readable messages from error replies.
 However, information events are sent to the error logger in two situations,
 namely when a log is repaired, or when a file is missing while reading chunks.</p><p>Error message <code class="inline">no_such_log</code> means that the specified disk log is not open.
 Nothing is said about whether the disk log files exist or not.</p><blockquote><h4 class="info">Note</h4><p>If an attempt to reopen or truncate a log fails (see
-<a href="#reopen/2"><code class="inline">reopen/2,3</code></a> and <a href="#truncate/1"><code class="inline">truncate/1,2</code></a>) the disk log
+<a href="#reopen/3"><code class="inline">reopen/2,3</code></a> and <a href="#truncate/2"><code class="inline">truncate/1,2</code></a>) the disk log
 process terminates immediately. Before the process terminates, links to owners
-and blocking processes (see <a href="#block/1"><code class="inline">block/1,2</code></a>) are removed. The effect
+and blocking processes (see <a href="#block/2"><code class="inline">block/1,2</code></a>) are removed. The effect
 is that the links work in one direction only. Any process using a disk log
 must check for error message <code class="inline">no_such_log</code> if some other process truncates or
 reopens the log simultaneously.</p></blockquote><h2 id="module-see-also" class="section-heading">
@@ -266,8 +266,8 @@ reopens the log simultaneously.</p></blockquote><h2 id="module-see-also" class="
 
       </div>
 
-        <div class="summary-synopsis"><p>Chunk continuation returned by <code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, or
-<a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Chunk continuation returned by <a href="#chunk/3"><code class="inline">chunk/2,3</code></a>,
+<a href="#bchunk/3"><code class="inline">bchunk/2,3</code></a>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p></div>
 
     </div>
 
@@ -469,7 +469,7 @@ reopens the log simultaneously.</p></blockquote><h2 id="module-see-also" class="
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#balog/2"><code class="inline">balog/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Asynchronously version of <a href="#log/2"><code class="inline">log/2</code></a>.</p></div>
 
     </div>
 
@@ -479,7 +479,7 @@ reopens the log simultaneously.</p></blockquote><h2 id="module-see-also" class="
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#balog_terms/2"><code class="inline">balog_terms/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Asynchronously version of <a href="#log_terms/2"><code class="inline">log_terms/2</code></a>.</p></div>
 
     </div>
 
@@ -489,11 +489,7 @@ reopens the log simultaneously.</p></blockquote><h2 id="module-see-also" class="
 
       </div>
 
-        <div class="summary-synopsis"><p>Asynchronously append an item to a disk log. <a href="#alog/2"><code class="inline">alog/2</code></a> is used for
-internally formatted logs and <a href="#balog/2"><code class="inline">balog/2</code></a> for externally formatted
-logs. <a href="#balog/2"><code class="inline">balog/2</code></a> can also be used for internally formatted logs if
-the binary is constructed with a call to
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Asynchronously version of <a href="#blog/2"><code class="inline">blog/2</code></a>.</p></div>
 
     </div>
 
@@ -503,12 +499,7 @@ the binary is constructed with a call to
 
       </div>
 
-        <div class="summary-synopsis"><p>Asynchronously append a list of items to a disk log.
-<a href="#alog_terms/2"><code class="inline">alog_terms/2</code></a> is used for internally formatted logs and
-<a href="#balog_terms/2"><code class="inline">balog_terms/2</code></a> for externally formatted logs.
-<a href="#balog_terms/2"><code class="inline">balog_terms/2</code></a> can also be used for internally formatted
-logs if the binaries are constructed with calls to
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Asynchronously version of <a href="#blog_terms/2"><code class="inline">blog_terms/2</code></a>.</p></div>
 
     </div>
 
@@ -518,7 +509,7 @@ logs if the binaries are constructed with calls to
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/3"><code class="inline">chunk/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#bchunk/3"><code class="inline">bchunk(Log, Cont, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -528,7 +519,9 @@ logs if the binaries are constructed with calls to
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/3"><code class="inline">chunk/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/3"><code class="inline">chunk(Log, Continuation, N)</code></a> except that
+it returns the binaries read from the file, that is it does not call
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#binary_to_term/1"><code class="inline">binary_to_term/1</code></a>.</p></div>
 
     </div>
 
@@ -538,7 +531,7 @@ logs if the binaries are constructed with calls to
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#block/2"><code class="inline">block/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#block/2"><code class="inline">block(Log, true)</code></a>.</p></div>
 
     </div>
 
@@ -548,11 +541,7 @@ logs if the binaries are constructed with calls to
 
       </div>
 
-        <div class="summary-synopsis"><p>With a call to <code class="inline">block/1,2</code> a process can block a log. If the blocking process is
-not an owner of the log, a temporary link is created between the disk log
-process and the blocking process. The link ensures that the disk log is
-unblocked if the blocking process terminates without first closing or unblocking
-the log.</p></div>
+        <div class="summary-synopsis"><p>With a call to <a href="#block/2"><code class="inline">block/2</code></a> a process can block a log.</p></div>
 
     </div>
 
@@ -562,7 +551,7 @@ the log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#log/2"><code class="inline">log/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#log/2"><code class="inline">log/2</code></a> except that it is used for externally formatted logs.</p></div>
 
     </div>
 
@@ -572,7 +561,7 @@ the log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#log_terms/2"><code class="inline">log_terms/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#log_terms/2"><code class="inline">log_terms/2</code></a> except that it is used for externally formatted logs.</p></div>
 
     </div>
 
@@ -582,7 +571,7 @@ the log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#reopen/3"><code class="inline">reopen/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <code class="inline">reopen</code> except that it is used for externally formatted logs.</p></div>
 
     </div>
 
@@ -592,7 +581,7 @@ the log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#truncate/2"><code class="inline">truncate/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#truncate/2"><code class="inline">truncate/2</code></a> for externally formatted logs.</p></div>
 
     </div>
 
@@ -634,7 +623,7 @@ size.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/3"><code class="inline">chunk/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#chunk/3"><code class="inline">chunk(Log, Continuation, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -644,10 +633,7 @@ size.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Efficiently reads the terms that are appended to an internally formatted log. It
-minimizes disk I/O by reading 64 kilobyte chunks from the file. Functions
-<code class="inline">bchunk/2,3</code> return the binaries read from the file, they do not call
-<code class="inline">binary_to_term()</code>. Apart from that, they work just like <code class="inline">chunk/2,3</code>.</p></div>
+        <div class="summary-synopsis"><p>Efficiently reads the terms that are appended to an internally formatted log.</p></div>
 
     </div>
 
@@ -658,7 +644,7 @@ minimizes disk I/O by reading 64 kilobyte chunks from the file. Functions
       </div>
 
         <div class="summary-synopsis"><p>Returns the pair <code class="inline">{node, Node}</code>, describing the chunk continuation returned by
-<code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p></div>
+<code class="inline">chunk/2,3</code>, <a href="#bchunk/3"><code class="inline">bchunk/2,3</code></a>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p></div>
 
     </div>
 
@@ -668,11 +654,8 @@ minimizes disk I/O by reading 64 kilobyte chunks from the file. Functions
 
       </div>
 
-        <div class="summary-synopsis"><p>Can be used with <code class="inline">chunk/2,3</code> and <code class="inline">bchunk/2,3</code> to search through an internally
-formatted wrap log. It takes as argument a continuation as returned by
-<code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>, and steps
-forward (or backward) <code class="inline">Step</code> files in the wrap log. The continuation returned,
-points to the first log item in the new current file.</p></div>
+        <div class="summary-synopsis"><p>Can be used with <a href="#chunk/3"><code class="inline">chunk/2,3</code></a> and <a href="#chunk/3"><code class="inline">bchunk/2,3</code></a> to
+search through an internally formatted wrap log.</p></div>
 
     </div>
 
@@ -682,10 +665,7 @@ points to the first log item in the new current file.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p><a href=""></a> Closes a disk log properly. An internally formatted log must
-be closed before the Erlang system is stopped. Otherwise, the log is regarded as
-unclosed and the automatic repair procedure is activated next time the log is
-opened.</p></div>
+        <div class="summary-synopsis"><p>Closes a disk log properly.</p></div>
 
     </div>
 
@@ -696,9 +676,7 @@ opened.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Given the error returned by any function in this module, this function returns a
-descriptive string of the error in English. For file errors, function
-<a href="#format_error/1"><code class="inline">format_error/1</code></a> in module <a href="file.html#format_error/1"><code class="inline">file</code></a>
-is called.</p></div>
+descriptive string of the error in English.</p></div>
 
     </div>
 
@@ -732,11 +710,8 @@ the amount of disk space allocated by the disk log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Synchronously appends a term to a disk log. Returns <code class="inline">ok</code> or <code class="inline">{error, Reason}</code>
-when the term is written to disk. Terms are written by the ordinary <code class="inline">write()</code>
-function of the operating system. Hence, it is not guaranteed that the term is
-written to disk, it can linger in the operating system kernel for a while. To
-ensure that the item is written to disk, function <a href="#sync/1"><code class="inline">sync/1</code></a> must be called.</p></div>
+        <div class="summary-synopsis"><p>Synchronously appends a term to a internally formatted disk log. Returns <code class="inline">ok</code>
+or <code class="inline">{error, Reason}</code> when the term is written to disk.</p></div>
 
     </div>
 
@@ -746,11 +721,7 @@ ensure that the item is written to disk, function <a href="#sync/1"><code class=
 
       </div>
 
-        <div class="summary-synopsis"><p>Synchronously appends a list of items to the log. It is more efficient to use
-these functions instead of functions <a href="#log/2"><code class="inline">log/2</code></a> and
-<a href="#blog/2"><code class="inline">blog/2</code></a>. The specified list is split into as large sublists as
-possible (limited by the size of wrap log files), and each sublist is logged as
-one single item, which reduces the overhead.</p></div>
+        <div class="summary-synopsis"><p>Synchronously appends a list of items to an internally formatted log.</p></div>
 
     </div>
 
@@ -772,7 +743,7 @@ amount of disk space allocated by the disk log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Parameter <code class="inline">ArgL</code> is a list of the following options</p></div>
+        <div class="summary-synopsis"><p>Open a new disk_log file for reading or writing.</p></div>
 
     </div>
 
@@ -793,7 +764,8 @@ amount of disk space allocated by the disk log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#reopen/3"><code class="inline">reopen/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#reopen/3"><code class="inline">reopen(Log, File, Head)</code></a> where <code class="inline">Head</code> is
+the <code class="inline">Head</code> specified in <a href="#open/1"><code class="inline">open/1</code></a>.</p></div>
 
     </div>
 
@@ -803,12 +775,8 @@ amount of disk space allocated by the disk log.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Renames the log file to <code class="inline">File</code> and then recreates a new log file. If a
-wrap/rotate log exists, <code class="inline">File</code> is used as the base name of the renamed files. By
-default the header given to <a href="#open/1"><code class="inline">open/1</code></a> is written first in the newly
-opened log file, but if argument <code class="inline">Head</code> or <code class="inline">BHead</code> is specified, this item is
-used instead. The header argument is used only once. Next time a wrap/rotate log
-file is opened, the header given to <a href="#open/1"><code class="inline">open/1</code></a> is used.</p></div>
+        <div class="summary-synopsis"><p>Renames an internally formatted log file to <code class="inline">File</code> and then recreates a new log file. If a
+wrap/rotate log exists, <code class="inline">File</code> is used as the base name of the renamed files.</p></div>
 
     </div>
 
@@ -829,7 +797,8 @@ rather expensive operation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#truncate/2"><code class="inline">truncate/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#truncate/2"><code class="inline">truncate(Log, Head)</code></a> where <code class="inline">Head</code> is
+the <code class="inline">Head</code> specified in <a href="#open/1"><code class="inline">open/1</code></a>.</p></div>
 
     </div>
 
@@ -839,11 +808,8 @@ rather expensive operation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Removes all items from a disk log. If argument <code class="inline">Head</code> or <code class="inline">BHead</code> is specified,
-this item is written first in the newly truncated log, otherwise the header
-given to <a href="#open/1"><code class="inline">open/1</code></a> is used. The header argument is used only once.
-Next time a wrap/rotate log file is opened, the header given to
-<a href="#open/1"><code class="inline">open/1</code></a> is used.</p></div>
+        <div class="summary-synopsis"><p>Removes all items from an internally formatted disk log. The argument <code class="inline">Head</code> or
+is written first in the newly truncated log.</p></div>
 
     </div>
 
@@ -879,7 +845,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">bchunk_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1074" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1085" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -913,7 +879,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">block_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L766" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L777" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -943,7 +909,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">chunk_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L946" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L958" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -980,7 +946,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">chunk_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L954" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L966" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1014,7 +980,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">close_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L534" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L542" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1044,7 +1010,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">continuation()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L202" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L200" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1060,8 +1026,8 @@ Next time a wrap/rotate log file is opened, the header given to
 
       </div>
 
-<p>Chunk continuation returned by <code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, or
-<a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p>
+<p>Chunk continuation returned by <a href="#chunk/3"><code class="inline">chunk/2,3</code></a>,
+<a href="#bchunk/3"><code class="inline">bchunk/2,3</code></a>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="t:dlog_format/0">
@@ -1133,7 +1099,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">dlog_info()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L817" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L829" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1375,7 +1341,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">file_error()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L204" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L202" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1405,7 +1371,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">inc_wrap_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L675" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L686" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1435,7 +1401,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">invalid_header()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L205" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L203" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1532,7 +1498,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">next_file_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L650" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L661" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1569,7 +1535,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">notify_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L477" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L478" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1599,7 +1565,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">open_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L216" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L214" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1642,7 +1608,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">open_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L231" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L229" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1678,7 +1644,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">reopen_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L601" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L610" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1715,7 +1681,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">sync_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L753" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L764" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1749,7 +1715,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">trunc_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L556" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L565" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1784,7 +1750,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">unblock_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L796" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L807" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1826,7 +1792,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">all()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1183" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1856,7 +1822,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">alog(Log, Term)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L483" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L492" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1872,7 +1838,11 @@ Next time a wrap/rotate log file is opened, the header given to
 
       </div>
 
-<p>Equivalent to <a href="#balog/2"><code class="inline">balog/2</code></a>.</p>
+<p>Asynchronously version of <a href="#log/2"><code class="inline">log/2</code></a>.</p><p>Owners subscribing to notifications receive message <code class="inline">read_only</code>, <code class="inline">blocked_log</code>,
+or <code class="inline">format_external</code> if the item cannot be written on the log, and possibly one
+of the messages <code class="inline">wrap</code>, <code class="inline">full</code>, or <code class="inline">error_status</code> if an item is written on the
+log. Message <code class="inline">error_status</code> is sent if something is wrong with the header
+function or if a file error occurs.</p>
   </section>
 </section>
 <section class="detail" id="alog_terms/2">
@@ -1884,7 +1854,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">alog_terms(Log, TermList)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L490" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L507" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1900,7 +1870,11 @@ Next time a wrap/rotate log file is opened, the header given to
 
       </div>
 
-<p>Equivalent to <a href="#balog_terms/2"><code class="inline">balog_terms/2</code></a>.</p>
+<p>Asynchronously version of <a href="#log_terms/2"><code class="inline">log_terms/2</code></a>.</p><p>Owners subscribing to notifications receive message <code class="inline">read_only</code>, <code class="inline">blocked_log</code>,
+or <code class="inline">format_external</code> if the items cannot be written on the log, and possibly one
+or more of the messages <code class="inline">wrap</code>, <code class="inline">full</code>, and <code class="inline">error_status</code> if items are written
+on the log. Message <code class="inline">error_status</code> is sent if something is wrong with the header
+function or if a file error occurs.</p>
   </section>
 </section>
 <section class="detail" id="balog/2">
@@ -1912,7 +1886,7 @@ Next time a wrap/rotate log file is opened, the header given to
     </a>
     <h1 class="signature" translate="no">balog(Log, Bytes)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L510" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L523" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1928,11 +1902,7 @@ Next time a wrap/rotate log file is opened, the header given to
 
       </div>
 
-<p>Asynchronously append an item to a disk log. <a href="#alog/2"><code class="inline">alog/2</code></a> is used for
-internally formatted logs and <a href="#balog/2"><code class="inline">balog/2</code></a> for externally formatted
-logs. <a href="#balog/2"><code class="inline">balog/2</code></a> can also be used for internally formatted logs if
-the binary is constructed with a call to
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p><p>Owners subscribing to notifications receive message <code class="inline">read_only</code>, <code class="inline">blocked_log</code>,
+<p>Asynchronously version of <a href="#blog/2"><code class="inline">blog/2</code></a>.</p><p>Owners subscribing to notifications receive message <code class="inline">read_only</code>, <code class="inline">blocked_log</code>,
 or <code class="inline">format_external</code> if the item cannot be written on the log, and possibly one
 of the messages <code class="inline">wrap</code>, <code class="inline">full</code>, or <code class="inline">error_status</code> if an item is written on the
 log. Message <code class="inline">error_status</code> is sent if something is wrong with the header
@@ -1948,7 +1918,7 @@ function or if a file error occurs.</p>
     </a>
     <h1 class="signature" translate="no">balog_terms(Log, ByteList)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L530" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L538" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1964,12 +1934,7 @@ function or if a file error occurs.</p>
 
       </div>
 
-<p>Asynchronously append a list of items to a disk log.
-<a href="#alog_terms/2"><code class="inline">alog_terms/2</code></a> is used for internally formatted logs and
-<a href="#balog_terms/2"><code class="inline">balog_terms/2</code></a> for externally formatted logs.
-<a href="#balog_terms/2"><code class="inline">balog_terms/2</code></a> can also be used for internally formatted
-logs if the binaries are constructed with calls to
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p><p>Owners subscribing to notifications receive message <code class="inline">read_only</code>, <code class="inline">blocked_log</code>,
+<p>Asynchronously version of <a href="#blog_terms/2"><code class="inline">blog_terms/2</code></a>.</p><p>Owners subscribing to notifications receive message <code class="inline">read_only</code>, <code class="inline">blocked_log</code>,
 or <code class="inline">format_external</code> if the items cannot be written on the log, and possibly one
 or more of the messages <code class="inline">wrap</code>, <code class="inline">full</code>, and <code class="inline">error_status</code> if items are written
 on the log. Message <code class="inline">error_status</code> is sent if something is wrong with the header
@@ -1985,7 +1950,7 @@ function or if a file error occurs.</p>
     </a>
     <h1 class="signature" translate="no">bchunk(Log, Continuation)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1086" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1097" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2002,7 +1967,7 @@ function or if a file error occurs.</p>
 
       </div>
 
-<p>Equivalent to <a href="#chunk/3"><code class="inline">chunk/3</code></a>.</p>
+<p>Equivalent to <a href="#bchunk/3"><code class="inline">bchunk(Log, Cont, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="bchunk/3">
@@ -2014,7 +1979,7 @@ function or if a file error occurs.</p>
     </a>
     <h1 class="signature" translate="no">bchunk(Log, Continuation, N)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1094" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1109" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2031,7 +1996,9 @@ function or if a file error occurs.</p>
 
       </div>
 
-<p>Equivalent to <a href="#chunk/3"><code class="inline">chunk/3</code></a>.</p>
+<p>Equivalent to <a href="#chunk/3"><code class="inline">chunk(Log, Continuation, N)</code></a> except that
+it returns the binaries read from the file, that is it does not call
+<a href="../../../../erts-14.2.3/doc/html/erlang.html#binary_to_term/1"><code class="inline">binary_to_term/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="block/1">
@@ -2043,7 +2010,7 @@ function or if a file error occurs.</p>
     </a>
     <h1 class="signature" translate="no">block(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L771" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L782" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2059,7 +2026,7 @@ function or if a file error occurs.</p>
 
       </div>
 
-<p>Equivalent to <a href="#block/2"><code class="inline">block/2</code></a>.</p>
+<p>Equivalent to <a href="#block/2"><code class="inline">block(Log, true)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="block/2">
@@ -2071,7 +2038,7 @@ function or if a file error occurs.</p>
     </a>
     <h1 class="signature" translate="no">block(Log, QueueLogRecords)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L793" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L804" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2088,18 +2055,16 @@ function or if a file error occurs.</p>
 
       </div>
 
-<p>With a call to <code class="inline">block/1,2</code> a process can block a log. If the blocking process is
-not an owner of the log, a temporary link is created between the disk log
-process and the blocking process. The link ensures that the disk log is
+<p>With a call to <a href="#block/2"><code class="inline">block/2</code></a> a process can block a log.</p><p>If the blocking process is not an owner of the log, a temporary link is created
+between the disk log process and the blocking process. The link ensures that the disk log is
 unblocked if the blocking process terminates without first closing or unblocking
 the log.</p><p>Any process can probe a blocked log with <a href="#info/1"><code class="inline">info/1</code></a> or close it with
-<a href="#close/1"><code class="inline">close/1</code></a>. The blocking process can also use functions <code class="inline">chunk/2,3</code>,
-<code class="inline">bchunk/2,3</code>, <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>, and <a href="#unblock/1"><code class="inline">unblock/1</code></a>
+<a href="#close/1"><code class="inline">close/1</code></a>. The blocking process can also use functions <a href="#chunk/3"><code class="inline">chunk/2,3</code></a>,
+<a href="#chunk/3"><code class="inline">bchunk/2,3</code></a>, <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>, and <a href="#unblock/1"><code class="inline">unblock/1</code></a>
 without being affected by the block. Any other attempt than those mentioned so
 far to update or read a blocked log suspends the calling process until the log
 is unblocked or returns error message <code class="inline">{blocked_log, Log}</code>, depending on whether
-the value of <code class="inline">QueueLogRecords</code> is <code class="inline">true</code> or <code class="inline">false</code>. <code class="inline">QueueLogRecords</code> defaults
-to <code class="inline">true</code>, which is used by <a href="#block/1"><code class="inline">block/1</code></a>.</p>
+the value of <code class="inline">QueueLogRecords</code> is <code class="inline">true</code> or <code class="inline">false</code>.</p>
   </section>
 </section>
 <section class="detail" id="blog/2">
@@ -2111,7 +2076,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">blog(Log, Bytes)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L441" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L443" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2127,7 +2092,8 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
 
       </div>
 
-<p>Equivalent to <a href="#log/2"><code class="inline">log/2</code></a>.</p>
+<p>Equivalent to <a href="#log/2"><code class="inline">log/2</code></a> except that it is used for externally formatted logs.</p><p><a href="#blog/2"><code class="inline">blog/2</code></a> can also be used for internally formatted logs
+if the binaries are constructed with calls to <a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="blog_terms/2">
@@ -2139,7 +2105,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">blog_terms(Log, BytesList)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L473" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L474" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2156,7 +2122,8 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
 
       </div>
 
-<p>Equivalent to <a href="#log_terms/2"><code class="inline">log_terms/2</code></a>.</p>
+<p>Equivalent to <a href="#log_terms/2"><code class="inline">log_terms/2</code></a> except that it is used for externally formatted logs.</p><p><a href="#blog_terms/2"><code class="inline">blog_terms/2</code></a> can also be used for internally formatted logs
+if the binaries are constructed with calls to <a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="breopen/3">
@@ -2168,7 +2135,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">breopen(Log, File, BHead)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L647" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L658" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2185,7 +2152,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
 
       </div>
 
-<p>Equivalent to <a href="#reopen/3"><code class="inline">reopen/3</code></a>.</p>
+<p>Equivalent to <code class="inline">reopen</code> except that it is used for externally formatted logs.</p>
   </section>
 </section>
 <section class="detail" id="btruncate/2">
@@ -2197,7 +2164,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">btruncate(Log, BHead)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L598" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L607" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2213,7 +2180,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
 
       </div>
 
-<p>Equivalent to <a href="#truncate/2"><code class="inline">truncate/2</code></a>.</p>
+<p>Equivalent to <a href="#truncate/2"><code class="inline">truncate/2</code></a> for externally formatted logs.</p>
   </section>
 </section>
 <section class="detail" id="change_header/2">
@@ -2225,7 +2192,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">change_header(Log, Header)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L750" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L761" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2262,7 +2229,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">change_notify(Log, Owner, Notify)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L740" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L751" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2299,7 +2266,7 @@ to <code class="inline">true</code>, which is used by <a href="#block/1"><code c
     </a>
     <h1 class="signature" translate="no">change_size(Log, Size)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L730" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L741" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2355,7 +2322,7 @@ next time they are used.</p><p>If the log size is decreased, for example, to sav
     </a>
     <h1 class="signature" translate="no">chunk(Log, Continuation)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L965" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L977" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2371,7 +2338,7 @@ next time they are used.</p><p>If the log size is decreased, for example, to sav
 
       </div>
 
-<p>Equivalent to <a href="#chunk/3"><code class="inline">chunk/3</code></a>.</p>
+<p>Equivalent to <a href="#chunk/3"><code class="inline">chunk(Log, Continuation, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="chunk/3">
@@ -2383,7 +2350,7 @@ next time they are used.</p><p>If the log size is decreased, for example, to sav
     </a>
     <h1 class="signature" translate="no">chunk(Log, Continuation, N)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1008" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1019" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2400,26 +2367,23 @@ next time they are used.</p><p>If the log size is decreased, for example, to sav
 
       </div>
 
-<p>Efficiently reads the terms that are appended to an internally formatted log. It
-minimizes disk I/O by reading 64 kilobyte chunks from the file. Functions
-<code class="inline">bchunk/2,3</code> return the binaries read from the file, they do not call
-<code class="inline">binary_to_term()</code>. Apart from that, they work just like <code class="inline">chunk/2,3</code>.</p><p>The first time <code class="inline">chunk()</code> (or <code class="inline">bchunk()</code>) is called, an initial continuation, the
+<p>Efficiently reads the terms that are appended to an internally formatted log.</p><p>It minimizes disk I/O by reading 64 kilobyte chunks from the file.</p><p>The first time <code class="inline">chunk()</code> is called, an initial continuation, the
 atom <code class="inline">start</code>, must be provided.</p><p>When <a href="#chunk/3"><code class="inline">chunk/3</code></a> is called, <code class="inline">N</code> controls the maximum number of terms
-that are read from the log in each chunk. Defaults to <code class="inline">infinity</code>, which means
+that are read from the log in each chunk. <code class="inline">infinity</code> means
 that all the terms contained in the 64 kilobyte chunk are read. If less than <code class="inline">N</code>
 terms are returned, this does not necessarily mean that the end of the file is
-reached.</p><p><code class="inline">chunk()</code> returns a tuple <code class="inline">{Continuation2, Terms}</code>, where <code class="inline">Terms</code> is a list of
+reached.</p><p><a href="#chunk/3"><code class="inline">chunk/3</code></a> returns a tuple <code class="inline">{Continuation2, Terms}</code>, where <code class="inline">Terms</code> is a list of
 terms found in the log. <code class="inline">Continuation2</code> is yet another continuation, which must
 be passed on to any subsequent calls to <code class="inline">chunk()</code>. With a series of calls to
-<code class="inline">chunk()</code>, all terms from a log can be extracted.</p><p><code class="inline">chunk()</code> returns a tuple <code class="inline">{Continuation2, Terms, Badbytes}</code> if the log is
+<code class="inline">chunk()</code>, all terms from a log can be extracted.</p><p><a href="#chunk/3"><code class="inline">chunk/3</code></a> returns a tuple <code class="inline">{Continuation2, Terms, Badbytes}</code> if the log is
 opened in read-only mode and the read chunk is corrupt. <code class="inline">Badbytes</code> is the number
 of bytes in the file found not to be Erlang terms in the chunk. Notice that the
 log is not repaired. When trying to read chunks from a log opened in read-write
 mode, tuple <code class="inline">{corrupt_log_file, FileName}</code> is returned if the read chunk is
-corrupt.</p><p><code class="inline">chunk()</code> returns <code class="inline">eof</code> when the end of the log is reached, or <code class="inline">{error, Reason}</code>
+corrupt.</p><p><a href="#chunk/3"><code class="inline">chunk/3</code></a> returns <code class="inline">eof</code> when the end of the log is reached, or <code class="inline">{error, Reason}</code>
 if an error occurs. If a wrap log file is missing, a message is output on the
-error log.</p><p>When <code class="inline">chunk/2,3</code> is used with wrap logs, the returned continuation might not be
-valid in the next call to <code class="inline">chunk()</code>. This is because the log can wrap and delete
+error log.</p><p>When <a href="#chunk/3"><code class="inline">chunk/2,3</code></a> is used with wrap logs, the returned continuation might not be
+valid in the next call to <a href="#chunk/3"><code class="inline">chunk/3</code></a>. This is because the log can wrap and delete
 the file into which the continuation points. To prevent this, the log can be
 blocked during the search.</p>
   </section>
@@ -2433,7 +2397,7 @@ blocked during the search.</p>
     </a>
     <h1 class="signature" translate="no">chunk_info(Continuation)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1157" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1174" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2454,7 +2418,7 @@ blocked during the search.</p>
       </div>
 
 <p>Returns the pair <code class="inline">{node, Node}</code>, describing the chunk continuation returned by
-<code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p><p>Terms are read from the disk log running on <code class="inline">Node</code>.</p>
+<code class="inline">chunk/2,3</code>, <a href="#bchunk/3"><code class="inline">bchunk/2,3</code></a>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>.</p><p>Terms are read from the disk log running on <code class="inline">Node</code>.</p>
   </section>
 </section>
 <section class="detail" id="chunk_step/3">
@@ -2466,7 +2430,7 @@ blocked during the search.</p>
     </a>
     <h1 class="signature" translate="no">chunk_step(Log, Continuation, Step)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1137" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L1154" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2492,9 +2456,9 @@ blocked during the search.</p>
 
       </div>
 
-<p>Can be used with <code class="inline">chunk/2,3</code> and <code class="inline">bchunk/2,3</code> to search through an internally
-formatted wrap log. It takes as argument a continuation as returned by
-<code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>, and steps
+<p>Can be used with <a href="#chunk/3"><code class="inline">chunk/2,3</code></a> and <a href="#chunk/3"><code class="inline">bchunk/2,3</code></a> to
+search through an internally formatted wrap log.</p><p>It takes as argument a continuation as returned by <a href="#chunk/3"><code class="inline">chunk/2,3</code></a>,
+<a href="#bchunk/3"><code class="inline">bchunk/2,3</code></a>, or <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a>, and steps
 forward (or backward) <code class="inline">Step</code> files in the wrap log. The continuation returned,
 points to the first log item in the new current file.</p><p>If atom <code class="inline">start</code> is specified as continuation, the first file of the wrap log is
 chosen as the new current file.</p><p>If the wrap log is not full because all files are not yet used,
@@ -2510,7 +2474,7 @@ chosen as the new current file.</p><p>If the wrap log is not full because all fi
     </a>
     <h1 class="signature" translate="no">close(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L553" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L562" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2526,10 +2490,9 @@ chosen as the new current file.</p><p>If the wrap log is not full because all fi
 
       </div>
 
-<p><a href="" id="close_1"></a> Closes a disk log properly. An internally formatted log must
-be closed before the Erlang system is stopped. Otherwise, the log is regarded as
-unclosed and the automatic repair procedure is activated next time the log is
-opened.</p><p>The disk log process is not terminated as long as there are owners or users of
+<p>Closes a disk log properly.</p><p>An internally formatted log must be closed before the Erlang system is stopped.
+Otherwise, the log is regarded as unclosed and the automatic repair procedure is
+activated next time the log is opened.</p><p>The disk log process is not terminated as long as there are owners or users of
 the log. All owners must close the log, possibly by terminating. Also, any other
 process, not only the processes that have opened the log anonymously, can
 decrement the <code class="inline">users</code> counter by closing the log. Attempts to close a log by a
@@ -2545,7 +2508,7 @@ process that is not an owner are ignored if there are no users.</p><p>If the log
     </a>
     <h1 class="signature" translate="no">format_error(Error)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L814" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L826" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2562,9 +2525,8 @@ process that is not an owner are ignored if there are no users.</p><p>If the log
       </div>
 
 <p>Given the error returned by any function in this module, this function returns a
-descriptive string of the error in English. For file errors, function
-<a href="#format_error/1"><code class="inline">format_error/1</code></a> in module <a href="file.html#format_error/1"><code class="inline">file</code></a>
-is called.</p>
+descriptive string of the error in English.</p><p>For file errors, function <a href="#format_error/1"><code class="inline">format_error/1</code></a> in module
+<a href="file.html#format_error/1"><code class="inline">file</code></a> is called.</p>
   </section>
 </section>
 <section class="detail" id="inc_wrap_file/1">
@@ -2576,7 +2538,7 @@ is called.</p>
     </a>
     <h1 class="signature" translate="no">inc_wrap_file(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L688" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L699" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2612,7 +2574,7 @@ error occurs with a reason tag of <code class="inline">invalid_header</code> or 
     </a>
     <h1 class="signature" translate="no">info(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L923" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L935" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2658,7 +2620,7 @@ the range <code class="inline">1..MaxNoFiles</code>, where <code class="inline">
 and a new one is opened or <a href="#inc_wrap_file/1"><code class="inline">inc_wrap_file/1</code></a> has been
 called since the disk log was last opened (<a href="#info/1"><code class="inline">info/1</code></a> was last
 called). The first time <code class="inline">info/2</code> is called after a log was (re)opened or
-truncated, the two values are equal.</p></li></ul><p>Notice that functions <code class="inline">chunk/2,3</code>, <code class="inline">bchunk/2,3</code>, and
+truncated, the two values are equal.</p></li></ul><p>Notice that functions <a href="#chunk/3"><code class="inline">chunk/2,3</code></a>, <a href="#bchunk/3"><code class="inline">bchunk/2,3</code></a>, and
 <a href="#chunk_step/3"><code class="inline">chunk_step/3</code></a> do not affect any value returned by
 <a href="#info/1"><code class="inline">info/1</code></a>.</p>
   </section>
@@ -2672,7 +2634,7 @@ truncated, the two values are equal.</p></li></ul><p>Notice that functions <code
     </a>
     <h1 class="signature" translate="no">log(Log, Term)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L434" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L431" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2688,14 +2650,11 @@ truncated, the two values are equal.</p></li></ul><p>Notice that functions <code
 
       </div>
 
-<p>Synchronously appends a term to a disk log. Returns <code class="inline">ok</code> or <code class="inline">{error, Reason}</code>
-when the term is written to disk. Terms are written by the ordinary <code class="inline">write()</code>
-function of the operating system. Hence, it is not guaranteed that the term is
-written to disk, it can linger in the operating system kernel for a while. To
-ensure that the item is written to disk, function <a href="#sync/1"><code class="inline">sync/1</code></a> must be called.</p><p><a href="#log/2"><code class="inline">log/2</code></a> is used for internally formatted logs, and
-<a href="#blog/2"><code class="inline">blog/2</code></a> for externally formatted logs. <a href="#blog/2"><code class="inline">blog/2</code></a> can
-also be used for internally formatted logs if the binary is constructed with a
-call to <a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p><p>Owners subscribing to notifications are notified of an error with an
+<p>Synchronously appends a term to a internally formatted disk log. Returns <code class="inline">ok</code>
+or <code class="inline">{error, Reason}</code> when the term is written to disk.</p><p>Terms are written by the ordinary <code class="inline">write()</code> function of the operating system.
+Hence, it is not guaranteed that the term is written to disk, it can linger in
+the operating system kernel for a while. To ensure that the item is written to disk,
+function <a href="#sync/1"><code class="inline">sync/1</code></a> must be called.</p><p>Owners subscribing to notifications are notified of an error with an
 <code class="inline">error_status</code> message if the error reason tag is <code class="inline">invalid_header</code> or
 <code class="inline">file_error</code>.</p>
   </section>
@@ -2709,7 +2668,7 @@ call to <a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1">
     </a>
     <h1 class="signature" translate="no">log_terms(Log, TermList)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L464" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L460" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2726,15 +2685,9 @@ call to <a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1">
 
       </div>
 
-<p>Synchronously appends a list of items to the log. It is more efficient to use
-these functions instead of functions <a href="#log/2"><code class="inline">log/2</code></a> and
-<a href="#blog/2"><code class="inline">blog/2</code></a>. The specified list is split into as large sublists as
-possible (limited by the size of wrap log files), and each sublist is logged as
-one single item, which reduces the overhead.</p><p><a href="#log_terms/2"><code class="inline">log_terms/2</code></a> is used for internally formatted logs, and
-<a href="#blog_terms/2"><code class="inline">blog_terms/2</code></a> for externally formatted logs.
-<a href="#blog_terms/2"><code class="inline">blog_terms/2</code></a> can also be used for internally formatted logs
-if the binaries are constructed with calls to
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>.</p><p>Owners subscribing to notifications are notified of an error with an
+<p>Synchronously appends a list of items to an internally formatted log.</p><p>It is more efficient to use this functions instead of <a href="#log/2"><code class="inline">log/2</code></a>. The specified
+list is split into as large sublists as possible (limited by the size of wrap log files),
+and each sublist is logged as one single item, which reduces the overhead.</p><p>Owners subscribing to notifications are notified of an error with an
 <code class="inline">error_status</code> message if the error reason tag is <code class="inline">invalid_header</code> or
 <code class="inline">file_error</code>.</p>
   </section>
@@ -2748,7 +2701,7 @@ if the binaries are constructed with calls to
     </a>
     <h1 class="signature" translate="no">next_file(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L672" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L683" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2799,7 +2752,7 @@ it and opens a new active file for logging.</p>
 
       </div>
 
-<p>Parameter <code class="inline">ArgL</code> is a list of the following options:</p><ul><li><p><strong><code class="inline">{name, Log}</code></strong> - Specifies the log name. This name must be passed on as a
+<p>Open a new disk_log file for reading or writing.</p><p>Parameter <code class="inline">ArgL</code> is a list of the following options:</p><ul><li><p><strong><code class="inline">{name, Log}</code></strong> - Specifies the log name. This name must be passed on as a
 parameter in all subsequent logging operations. A name must always be
 supplied.</p></li><li><p><strong><code class="inline">{file, FileName}</code></strong> - Specifies the name of the file to be used for logged
 terms. If this value is omitted and the log name is an atom or a string, the
@@ -2837,8 +2790,9 @@ to the current log size when opening an existing wrap log for the first
 time, that is, when creating the disk log process.</p></blockquote><p>Rotate logs write at most <code class="inline">MaxNoBytes</code> bytes on the active log file and keep
 the latest <code class="inline">MaxNoFiles</code> compressed files. Regardless of <code class="inline">MaxNoBytes</code>, at least
 the header (if there is one) and one item are written on each rotate log file
-before rotation.</p><p>When opening an already open halt log, option <code class="inline">size</code> is ignored.</p></li><li><p><strong><code class="inline">{notify, boolean()}</code><a href="" id="notify"></a> </strong><br/> If <code class="inline">true</code>, the log owners are notified when certain log events occur. Defaults
-to <code class="inline">false</code>. The owners are sent one of the following messages when an event occurs:</p><ul><li><p><strong><code class="inline">{disk_log, Node, Log, {wrap, NoLostItems}}</code></strong> - Sent when a wrap log has
+before rotation.</p><p>When opening an already open halt log, option <code class="inline">size</code> is ignored.</p></li><li><p><strong id="notify"><code class="inline">{notify, boolean()}</code></strong> - If <code class="inline">true</code>, the log owners are notified
+when certain log events occur. Defaults to <code class="inline">false</code>. The owners are sent one of the
+following messages when an event occurs:</p><ul><li><p><strong><code class="inline">{disk_log, Node, Log, {wrap, NoLostItems}}</code></strong> - Sent when a wrap log has
 filled up one of its files and a new file is opened. <code class="inline">NoLostItems</code> is the
 number of previously logged items that were lost when truncating existing
 files.</p></li><li><p><strong><code class="inline">{disk_log, Node, Log, {truncated, NoLostItems}}</code></strong> - Sent when a log is
@@ -2900,7 +2854,7 @@ function returns <code class="inline">{error, Reason}</code> for all other error
     </a>
     <h1 class="signature" translate="no">pid2name(Pid)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L935" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L947" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2929,7 +2883,7 @@ function returns <code class="inline">{error, Reason}</code> for all other error
     </a>
     <h1 class="signature" translate="no">reopen(Log, File)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L614" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L626" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2945,7 +2899,8 @@ function returns <code class="inline">{error, Reason}</code> for all other error
 
       </div>
 
-<p>Equivalent to <a href="#reopen/3"><code class="inline">reopen/3</code></a>.</p>
+<p>Equivalent to <a href="#reopen/3"><code class="inline">reopen(Log, File, Head)</code></a> where <code class="inline">Head</code> is
+the <code class="inline">Head</code> specified in <a href="#open/1"><code class="inline">open/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="reopen/3">
@@ -2957,7 +2912,7 @@ function returns <code class="inline">{error, Reason}</code> for all other error
     </a>
     <h1 class="signature" translate="no">reopen(Log, File, Head)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L639" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L648" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2974,13 +2929,10 @@ function returns <code class="inline">{error, Reason}</code> for all other error
 
       </div>
 
-<p>Renames the log file to <code class="inline">File</code> and then recreates a new log file. If a
-wrap/rotate log exists, <code class="inline">File</code> is used as the base name of the renamed files. By
-default the header given to <a href="#open/1"><code class="inline">open/1</code></a> is written first in the newly
-opened log file, but if argument <code class="inline">Head</code> or <code class="inline">BHead</code> is specified, this item is
-used instead. The header argument is used only once. Next time a wrap/rotate log
-file is opened, the header given to <a href="#open/1"><code class="inline">open/1</code></a> is used.</p><p><code class="inline">reopen/2,3</code> are used for internally formatted logs, and
-<a href="#breopen/3"><code class="inline">breopen/3</code></a> for externally formatted logs.</p><p>Owners subscribing to notifications receive a <code class="inline">truncate</code> message.</p><p>Upon failure to reopen the log, the disk log process terminates with the EXIT
+<p>Renames an internally formatted log file to <code class="inline">File</code> and then recreates a new log file. If a
+wrap/rotate log exists, <code class="inline">File</code> is used as the base name of the renamed files.</p><p>Writes the value of <code class="inline">Head</code> first in the newly opened log file. The header argument
+is used only once. Next time a wrap/rotate log file is opened, the header given to
+<a href="#open/1"><code class="inline">open/1</code></a> is used.</p><p>Owners subscribing to notifications receive a <code class="inline">truncate</code> message.</p><p>Upon failure to reopen the log, the disk log process terminates with the EXIT
 message <code class="inline">{{failed,Error},[{disk_log,Fun,Arity}]}</code>. Other processes having
 requests queued receive the message
 <code class="inline">{disk_log, Node, {error, disk_log_stopped}}</code>.</p>
@@ -2995,7 +2947,7 @@ requests queued receive the message
     </a>
     <h1 class="signature" translate="no">sync(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L763" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L774" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3024,7 +2976,7 @@ rather expensive operation.</p>
     </a>
     <h1 class="signature" translate="no">truncate(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L565" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L580" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3040,7 +2992,9 @@ rather expensive operation.</p>
 
       </div>
 
-<p>Equivalent to <a href="#truncate/2"><code class="inline">truncate/2</code></a>.</p>
+<p>Equivalent to <a href="#truncate/2"><code class="inline">truncate(Log, Head)</code></a> where <code class="inline">Head</code> is
+the <code class="inline">Head</code> specified in <a href="#open/1"><code class="inline">open/1</code></a>.</p><p>This function can be used for both internally and externally
+formatted logs.</p>
   </section>
 </section>
 <section class="detail" id="truncate/2">
@@ -3052,7 +3006,7 @@ rather expensive operation.</p>
     </a>
     <h1 class="signature" translate="no">truncate(Log, Head)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L591" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L600" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3068,13 +3022,9 @@ rather expensive operation.</p>
 
       </div>
 
-<p>Removes all items from a disk log. If argument <code class="inline">Head</code> or <code class="inline">BHead</code> is specified,
-this item is written first in the newly truncated log, otherwise the header
-given to <a href="#open/1"><code class="inline">open/1</code></a> is used. The header argument is used only once.
-Next time a wrap/rotate log file is opened, the header given to
-<a href="#open/1"><code class="inline">open/1</code></a> is used.</p><p><a href="#truncate/1"><code class="inline">truncate/1</code></a> is used for both internally and externally
-formatted logs.</p><p><a href="#truncate/2"><code class="inline">truncate/2</code></a> is used for internally formatted logs, and
-<a href="#btruncate/2"><code class="inline">btruncate/2</code></a> for externally formatted logs.</p><p>Owners subscribing to notifications receive a <code class="inline">truncate</code> message.</p><p>If the attempt to truncate the log fails, the disk log process terminates with
+<p>Removes all items from an internally formatted disk log. The argument <code class="inline">Head</code> or
+is written first in the newly truncated log.</p><p>The header argument is used only once. Next time a wrap/rotate log file is opened,
+the header given to <a href="#open/1"><code class="inline">open/1</code></a> is used.</p><p>Owners subscribing to notifications receive a <code class="inline">truncate</code> message.</p><p>If the attempt to truncate the log fails, the disk log process terminates with
 the EXIT message <code class="inline">{{failed,Reason},[{disk_log,Fun,Arity}]}</code>. Other processes
 having requests queued receive the message
 <code class="inline">{disk_log, Node, {error, disk_log_stopped}}</code>.</p>
@@ -3089,7 +3039,7 @@ having requests queued receive the message
     </a>
     <h1 class="signature" translate="no">unblock(Log)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L803" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/disk_log.erl#L814" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

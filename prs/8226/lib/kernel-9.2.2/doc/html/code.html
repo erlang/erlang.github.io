@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-B0FDD196.js"></script>
+    <script src="dist/sidebar_items-CEF0AA31.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -133,16 +133,18 @@ Pages
 
 
   <section id="moduledoc">
-<p>Erlang code server.</p><p>This module contains the interface to the Erlang <em>code server</em>, which deals with
+<p>Interface to the Erlang code server process.</p><p>This module contains the interface to the Erlang <em>code server</em>, which deals with
 the loading of compiled code into a running Erlang runtime system.</p><p>The runtime system can be started in <em>interactive</em> or <em>embedded</em> mode. Which one
-is decided by the command-line flag <code class="inline">-mode</code>:</p><pre><code class="text">% erl -mode interactive</code></pre><p>The modes are as follows:</p><ul><li>In interactive mode, which is default, only some code is loaded during system
-startup, basically the modules needed by the runtime system. Other code is
-dynamically loaded when first referenced. When a call to a function in a
-certain module is made, and the module is not loaded, the code server searches
-for and tries to load the module.</li><li>In embedded mode, modules are not auto loaded. Trying to use a module that has
-not been loaded results in an error. This mode is recommended when the boot
-script loads all modules, as it is typically done in OTP releases. (Code can
-still be loaded later by explicitly ordering the code server to do so).</li></ul><p>To prevent accidentally reloading of modules affecting the Erlang runtime
+is decided by the command-line flag <code class="inline">-mode</code>:</p><pre><code class="makeup bash" translate="no"><span class="">% erl -mode embedded
+</span></code></pre><p>The modes are as follows:</p><ul><li><p>In <em>interactive</em> mode, which is default, only the modules needed by
+the runtime system are loaded during system startup. Other code is
+dynamically loaded when first referenced. When a call to a function
+in a certain module is made, and that module is not loaded, the code
+server searches for and tries to load that module.</p></li><li><p>In <em>embedded</em> mode, modules are not auto-loaded. Trying to use a
+module that has not been loaded results in an error. This mode is
+recommended when the boot script loads all modules, as it is
+typically done in OTP releases. (Code can still be loaded later by
+explicitly ordering the code server to do so).</p></li></ul><p>To prevent accidentally reloading of modules affecting the Erlang runtime
 system, directories <code class="inline">kernel</code>, <code class="inline">stdlib</code>, and <code class="inline">compiler</code> are considered <em>sticky</em>.
 This means that the system issues a warning and rejects the request if a user
 tries to reload a module residing in any of them. The feature can be disabled by
@@ -152,8 +154,8 @@ using command-line flag <code class="inline">-nostick</code>.</p><h2 id="module-
   </a>
   <span class="text">Code Path</span>
 </h2>
-<p>In interactive mode, the code server maintains a search path, usually called the
-<em>code path</em>, consisting of a list of directories, which it searches sequentially
+<p>In interactive mode, the code server maintains a <em>code path</em>,
+consisting of a list of directories, which it searches sequentially
 when trying to load a module.</p><p>Initially, the code path consists of the current working directory and all
 Erlang object code directories under library directory <code class="inline">$OTPROOT/lib</code>, where
 <code class="inline">$OTPROOT</code> is the installation directory of Erlang/OTP, <code class="inline">code:root_dir()</code>.
@@ -169,15 +171,16 @@ which are placed before any additional applications. In other words, modules
 found in any of the additional library directories override modules with the
 same name in OTP, except for modules in Kernel and STDLIB.</p><p>Environment variable <code class="inline">ERL_LIBS</code> (if defined) is to contain a colon-separated
 (for Unix-like systems) or semicolon-separated (for Windows) list of additional
-libraries.</p><p><em>Example:</em></p><p>On a Unix-like system, <code class="inline">ERL_LIBS</code> can be set to the following</p><pre><code class="text">/usr/local/jungerl:/home/some_user/my_erlang_lib</code></pre><p>On Windows, use semi-colon as separator.</p><p>The code paths specified by <code class="inline">$OTPROOT</code>, <code class="inline">ERL_LIBS</code>, and boot scripts have their
-listings cached by default (except for &quot;.&quot;) since OTP 26.0. The code server will
+libraries.</p><p><em>Example:</em></p><p>On a Unix-like system, <code class="inline">ERL_LIBS</code> can be set to the following:</p><pre><code class="text">/usr/local/jungerl:/home/some_user/my_erlang_lib</code></pre><p>The code paths specified by <code class="inline">$OTPROOT</code>, <code class="inline">ERL_LIBS</code>, and boot scripts have their
+listings cached by default (except for <code class="inline">&quot;.&quot;</code>) The code server will
 lookup the contents in their directories once and avoid future file system
-traversals. Therefore modules added to such directories after the Erlang VM
-boots won't be picked up. You can disable this behaviour by setting
-<code class="inline">-cache_boot_paths false</code> or by calling <code class="inline">code:set_path(code:get_path())</code>.</p><p>The functions in this module and the command line options <code class="inline">-pa</code> and <code class="inline">-pz</code> are
-not cached by default. However, many of the functions that manipulate the code
-path accept the <code class="inline">cache</code> atom as an optional argument, which will enable caching
-on selected paths.</p><h2 id="module-loading-of-code-from-archive-files" class="section-heading">
+traversals. Therefore, modules added to such directories after the Erlang VM
+boots will not be picked up. This behaviour can be disabled by setting
+<code class="inline">-cache_boot_paths false</code> or by calling <code class="inline">code:set_path(code:get_path())</code>.</p><blockquote><h4 class="info">Change</h4><p>The support for caching directories in the code path was added
+in Erlang/OTP 26.</p></blockquote><p>Directories given by the command line options <code class="inline">-pa</code> and <code class="inline">-pz</code> are not
+cached by default. Many of the functions that manipulate the code path
+accept the <code class="inline">cache</code> atom as an optional argument to enable caching
+selectively.</p><h2 id="module-loading-of-code-from-archive-files" class="section-heading">
   <a href="#module-loading-of-code-from-archive-files" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -195,11 +198,11 @@ structure for an application. If you, for example, create an archive of
 <code class="inline">mnesia-4.4.7</code>, the archive file must be named <code class="inline">mnesia-4.4.7.ez</code> and it must
 contain a top directory named <code class="inline">mnesia-4.4.7</code>. If the version part of the name is
 omitted, it must also be omitted in the archive. That is, a <code class="inline">mnesia.ez</code> archive
-must contain a <code class="inline">mnesia</code> top directory.</p><p>An archive file for an application can, for example, be created like this:</p><pre><code class="makeup erlang" translate="no"><span class="nc">zip</span><span class="p">:</span><span class="nf">create</span><span class="p" data-group-id="6496675106-1">(</span><span class="s">&quot;mnesia-4.4.7.ez&quot;</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="6496675106-2">[</span><span class="s">&quot;mnesia-4.4.7&quot;</span><span class="p" data-group-id="6496675106-2">]</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="6496675106-3">[</span><span class="p" data-group-id="6496675106-4">{</span><span class="ss">cwd</span><span class="p">,</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="6496675106-5">(</span><span class="p" data-group-id="6496675106-5">)</span><span class="p" data-group-id="6496675106-4">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="6496675106-6">{</span><span class="ss">compress</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="6496675106-6">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="6496675106-7">{</span><span class="ss">uncompress</span><span class="p">,</span><span class="p" data-group-id="6496675106-8">[</span><span class="s">&quot;.beam&quot;</span><span class="p">,</span><span class="s">&quot;.app&quot;</span><span class="p" data-group-id="6496675106-8">]</span><span class="p" data-group-id="6496675106-7">}</span><span class="p" data-group-id="6496675106-3">]</span><span class="p" data-group-id="6496675106-1">)</span><span class="p">.</span></code></pre><p>Any file in the archive can be compressed, but to speed up the access of
+must contain a <code class="inline">mnesia</code> top directory.</p><p>An archive file for an application can, for example, be created like this:</p><pre><code class="makeup erlang" translate="no"><span class="nc">zip</span><span class="p">:</span><span class="nf">create</span><span class="p" data-group-id="5698117910-1">(</span><span class="s">&quot;mnesia-4.4.7.ez&quot;</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="5698117910-2">[</span><span class="s">&quot;mnesia-4.4.7&quot;</span><span class="p" data-group-id="5698117910-2">]</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="5698117910-3">[</span><span class="p" data-group-id="5698117910-4">{</span><span class="ss">cwd</span><span class="p">,</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="5698117910-5">(</span><span class="p" data-group-id="5698117910-5">)</span><span class="p" data-group-id="5698117910-4">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="5698117910-6">{</span><span class="ss">compress</span><span class="p">,</span><span class="w"> </span><span class="ss">all</span><span class="p" data-group-id="5698117910-6">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w"> </span><span class="p" data-group-id="5698117910-7">{</span><span class="ss">uncompress</span><span class="p">,</span><span class="p" data-group-id="5698117910-8">[</span><span class="s">&quot;.beam&quot;</span><span class="p">,</span><span class="s">&quot;.app&quot;</span><span class="p" data-group-id="5698117910-8">]</span><span class="p" data-group-id="5698117910-7">}</span><span class="p" data-group-id="5698117910-3">]</span><span class="p" data-group-id="5698117910-1">)</span><span class="p">.</span></code></pre><p>Any file in the archive can be compressed, but to speed up the access of
 frequently read files, it can be a good idea to store <code class="inline">beam</code> and <code class="inline">app</code> files
 uncompressed in the archive.</p><p>Normally the top directory of an application is located in library directory
 <code class="inline">$OTPROOT/lib</code> or in a directory referred to by environment variable <code class="inline">ERL_LIBS</code>.
@@ -233,7 +236,7 @@ name of the <code class="inline">escript</code> and no restrictions on how many 
 stored in the embedded archive. Single Beam files can also reside on the top
 level in the archive. At startup, the top directory in the embedded archive and
 all (second level) <code class="inline">ebin</code> directories in the embedded archive are added to the
-code path. See <a href="../../../../erts-14.2.3/doc/html/escript_cmd.html"><code class="inline">erts:escript(1)</code></a>.</p><p>A future-proof way for <code class="inline">escript</code> scripts to read data files from the archive is
+code path. See <a href="../../../../erts-14.2.3/doc/html/escript_cmd.html"><code class="inline">escript</code></a>.</p><p>A future-proof way for <code class="inline">escript</code> scripts to read data files from the archive is
 to use the <a href="../../../../lib/stdlib-5.2.1/doc/html/escript.html#extract/2"><code class="inline">escript:extract/2</code></a> function.</p><p>When the choice of directories in the code path is <code class="inline">strict</code> (which is
 the default as of Erlang/OTP 27), the directory that ends up in the
 code path is exactly the stated one. This means that if, for example,
@@ -249,7 +252,8 @@ interprets the <code class="inline">boot script</code>. The interpretation of th
 the <code class="inline">boot script</code> can be <code class="inline">strict</code> or <code class="inline">relaxed</code>. It is particularly useful to set
 the flag to <code class="inline">relaxed</code> when elaborating with code loading from archives without
 editing the <code class="inline">boot script</code>. The default has changed to <code class="inline">strict</code> in OTP 27 and the
-option is scheduled for removal in OTP 28. See <a href="../../../../erts-14.2.3/doc/html/init.html"><code class="inline">erts:init(3)</code></a>.</p><h2 id="module-current-and-old-code" class="section-heading">
+option is scheduled for removal in OTP 28. See module <a href="../../../../erts-14.2.3/doc/html/init.html"><code class="inline">init</code></a> in the
+Erts application.</p><h2 id="module-current-and-old-code" class="section-heading">
   <a href="#module-current-and-old-code" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -257,18 +261,66 @@ option is scheduled for removal in OTP 28. See <a href="../../../../erts-14.2.3/
 </h2>
 <p>The code for a module can exist in two variants in a system: <em>current code</em> and
 <em>old code</em>. When a module is loaded into the system for the first time, the
-module code becomes 'current' and the global <em>export table</em> is updated with
-references to all functions exported from the module.</p><p>If then a new instance of the module is loaded (for example, because of error
-correction), the code of the previous instance becomes 'old', and all export
-entries referring to the previous instance are removed. After that, the new
-instance is loaded as for the first time, and becomes 'current'.</p><p>Both old and current code for a module are valid, and can even be evaluated
+module code becomes <em>current</em> and the global <em>export table</em> is updated with
+references to all functions exported from the module.</p><p>When a new instance of the module is loaded, the code of the previous
+instance becomes <em>old</em>, and all export entries referring to the
+previous instance are removed. After that, the new instance is loaded
+as for the first time, and becomes current.</p><p>Both old and current code for a module are valid, and can even be executed
 concurrently. The difference is that exported functions in old code are
 unavailable. Hence, a global call cannot be made to an exported function in old
-code, but old code can still be evaluated because of processes lingering in it.</p><p>If a third instance of the module is loaded, the code server removes (purges)
+code, but old code can still be executed because of processes lingering in it.</p><p>If a third instance of the module is loaded, the code server removes (purges)
 the old code and any processes lingering in it are terminated. Then the third
-instance becomes 'current' and the previously current code becomes 'old'.</p><p>For more information about old and current code, and how to make a process
+instance becomes current and the previously current code becomes old.</p><p>For more information about old and current code, and how to make a process
 switch from old to current code, see section Compilation and Code Loading in the
-<a href="../../../../doc/system/code_loading.html">Erlang Reference Manual</a>.</p><h2 id="module-argument-types-and-invalid-arguments" class="section-heading">
+<a href="../../../../doc/system/code_loading.html">Erlang Reference Manual</a>.</p><h2 id="module-native-coverage-support" class="section-heading">
+  <a href="#module-native-coverage-support" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Native Coverage Support</span>
+</h2>
+<p>In runtime systems that use the JIT, native coverage is a light-weight
+way to find out which functions or lines that have been executed, or
+how many times each function or line has been executed.</p><blockquote><h4 class="info">Change</h4><p>The support for native coverage was added in Erlang/OTP 27.</p></blockquote><p>Native coverage works by instrumenting code at load-time. When a
+module has been instrumented for native coverage collection it is not
+possible to later disable the coverage collection, except by reloading
+the module. However, the overhead for keeping coverage collection
+running is often neligible, especially for <a href="#t:coverage_mode/0">coverage
+mode</a> <code class="inline">function</code> that only keeps track of which
+functions that have been executed.</p><p>The <a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a> tool in the Tools application will automatically use the
+native coverage support if the runtime system supports it.</p><p>It is only necessary to use the functionality described next if
+<a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a> is not sufficient, for example:</p><ul><li><p>If one wants to collect coverage information for the code that runs
+when the runtime system is starting (module <a href="../../../../erts-14.2.3/doc/html/init.html"><code class="inline">init</code></a> and so on).
+<a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a> can only be used when the Erlang system has started, and
+it will reload every module that is to be analyzed.</p></li><li><p>If it is necessary to collect coverage information with the absolute
+minimum disturbance of the test system. <a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a> always counts how
+many times each line is executed (coverage mode <code class="inline">line_counters</code>),
+but by using native coverage one can use a less expensive coverage
+mode such as <code class="inline">function</code>, which has almost negligible overhead.</p></li></ul><h3 id="module-short-summary-of-using-native-coverage" class="section-heading">
+  <a href="#module-short-summary-of-using-native-coverage" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Short summary of using native coverage</span>
+</h3>
+<p>If the <code class="inline">line</code> or <code class="inline">line_counters</code> coverage mode is to be used,
+the code to be tested must be compiled with option
+<a href="../../../../lib/compiler-8.4.2/doc/html/compile.html#line_coverage"><code class="inline">line_coverage</code></a>.</p><p>Use <a href="#set_coverage_mode/1">set_coverage_mode(Mode)</a> to set a
+<a href="#t:coverage_mode/0">coverage mode</a> for all code subsequently
+loaded, or set it with option <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a>
+for <code class="inline">erl</code>.</p><p>Optionally reset coverage information for all
+modules that are to be tested by calling
+<a href="#reset_coverage/1">reset_coverage(Module)</a>.</p><p>Run the code whose coverage information is to be collected.</p><p>Read out the counters for all interesting modules by calling
+<a href="#get_coverage/2">get_coverage(Level, Module)</a>, where <code class="inline">Level</code>
+is either <code class="inline">function</code> or <code class="inline">line</code>.</p><h3 id="module-the-other-native-coverage-bifs" class="section-heading">
+  <a href="#module-the-other-native-coverage-bifs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">The other native coverage BIFs</span>
+</h3>
+<p>The following BIFs are sometimes useful, for example to fail gracefully
+if the runtime system does not support native coverage:</p><ul><li><p><a href="#coverage_support/0">coverage_support()</a> - check whether
+the runtime system supports native coverage</p></li><li><p><a href="#get_coverage_mode/0">get_coverage_mode()</a> - get the current
+coverage mode</p></li><li><p><a href="#get_coverage_mode/1">get_coverage_mode(Module)</a> - get the coverage
+mode for module <code class="inline">Module</code></p></li></ul><h2 id="module-argument-types-and-invalid-arguments" class="section-heading">
   <a href="#module-argument-types-and-invalid-arguments" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -411,7 +463,7 @@ was called.</p></li><li><p><strong><code class="inline">sticky_directory</code><
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz(Dir, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -421,7 +473,7 @@ was called.</p></li><li><p><strong><code class="inline">sticky_directory</code><
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz(Dir, Cache)</code></a>.</p></div>
 
     </div>
 
@@ -431,7 +483,7 @@ was called.</p></li><li><p><strong><code class="inline">sticky_directory</code><
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_patha/2"><code class="inline">add_patha/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_patha/2"><code class="inline">add_patha(Dir, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -441,8 +493,7 @@ was called.</p></li><li><p><strong><code class="inline">sticky_directory</code><
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds <code class="inline">Dir</code> to the beginning of the code path. If <code class="inline">Dir</code> exists, it is removed
-from the old position in the code path.</p></div>
+        <div class="summary-synopsis"><p>Adds <code class="inline">Dir</code> to the beginning of the code path.</p></div>
 
     </div>
 
@@ -452,7 +503,7 @@ from the old position in the code path.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz(Dirs, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -462,7 +513,7 @@ from the old position in the code path.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz(Dirs, Cache)</code></a>.</p></div>
 
     </div>
 
@@ -472,7 +523,7 @@ from the old position in the code path.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsa/2"><code class="inline">add_pathsa/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsa/2"><code class="inline">add_pathsa(Dirs, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -482,10 +533,7 @@ from the old position in the code path.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Traverses <code class="inline">Dirs</code> and adds each <code class="inline">Dir</code> to the beginning of the code path. This
-means that the order of <code class="inline">Dirs</code> is reversed in the resulting code path. For
-example, if you add <code class="inline">[Dir1,Dir2]</code>, the resulting path will be
-<code class="inline">[Dir2,Dir1|OldCodePath]</code>.</p></div>
+        <div class="summary-synopsis"><p>Traverses <code class="inline">Dirs</code> and adds each <code class="inline">Dir</code> to the beginning of the code path.</p></div>
 
     </div>
 
@@ -495,7 +543,7 @@ example, if you add <code class="inline">[Dir1,Dir2]</code>, the resulting path 
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz(Dirs, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -505,8 +553,7 @@ example, if you add <code class="inline">[Dir1,Dir2]</code>, the resulting path 
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds the directories in <code class="inline">Dirs</code> to the end of the code path. If a <code class="inline">Dir</code> exists,
-it is not added.</p></div>
+        <div class="summary-synopsis"><p>Adds the directories in <code class="inline">Dirs</code> to the end of the code path.</p></div>
 
     </div>
 
@@ -516,7 +563,7 @@ it is not added.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz(Dir, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -526,8 +573,7 @@ it is not added.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds <code class="inline">Dir</code> to the code path. The directory is added as the last directory in the
-new path. If <code class="inline">Dir</code> already exists in the path, it is not added.</p></div>
+        <div class="summary-synopsis"><p>Adds <code class="inline">Dir</code> as the directory last in the code path.</p></div>
 
     </div>
 
@@ -537,10 +583,7 @@ new path. If <code class="inline">Dir</code> already exists in the path, it is n
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns a list of tuples <code class="inline">{Module, Filename, Loaded}</code> for all available modules.
-A module is considered to be available if it either is loaded or would be loaded
-if called. <code class="inline">Filename</code> is normally the absolute filename, as described for
-<a href="#is_loaded/1"><code class="inline">is_loaded/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Returns a list of tuples <code class="inline">{Module, Filename, Loaded}</code> for all available modules.</p></div>
 
     </div>
 
@@ -550,8 +593,7 @@ if called. <code class="inline">Filename</code> is normally the absolute filenam
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns a list of tuples <code class="inline">{Module, Loaded}</code> for all loaded modules. <code class="inline">Loaded</code> is
-normally the absolute filename, as described for <a href="#is_loaded/1"><code class="inline">is_loaded/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Returns a list of tuples <code class="inline">{Module, Loaded}</code> for all loaded modules.</p></div>
 
     </div>
 
@@ -561,9 +603,7 @@ normally the absolute filename, as described for <a href="#is_loaded/1"><code cl
 
       </div>
 
-        <div class="summary-synopsis"><p>Tries to load all of the modules in the list <code class="inline">Modules</code> atomically. That means
-that either all modules are loaded at the same time, or none of the modules are
-loaded if there is a problem with any of the modules.</p></div>
+        <div class="summary-synopsis"><p>Tries to load all of the modules in the list <code class="inline">Modules</code> atomically.</p></div>
 
     </div>
 
@@ -584,8 +624,7 @@ and writes a report to <code class="inline">stdout</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Clear the code path cache. If a directory is cached, its cache is cleared once
-and then it will be recalculated and cached once more in a future traversal.</p></div>
+        <div class="summary-synopsis"><p>Clears the code path cache.</p></div>
 
     </div>
 
@@ -595,7 +634,7 @@ and then it will be recalculated and cached once more in a future traversal.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the compiler library directory. Equivalent to <code class="inline">code:lib_dir(compiler)</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns the compiler library directory.</p></div>
 
     </div>
 
@@ -615,10 +654,7 @@ and then it will be recalculated and cached once more in a future traversal.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>Deletes a directory from the code path. The argument can be an atom <code class="inline">Name</code>, in
-which case the directory with the name <code class="inline">.../Name[-Vsn][/ebin]</code> is deleted from
-the code path. Also, the complete directory name <code class="inline">Dir</code> can be specified as
-argument.</p></div>
+        <div class="summary-synopsis"><p>Deletes a directory from the code path.</p></div>
 
     </div>
 
@@ -628,9 +664,7 @@ argument.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Deletes directories from the code path. The argument is a list of either atoms
-or complete directory names. If an atom <code class="inline">Name</code>, the directory with the name
-<code class="inline">.../Name[-Vsn][/ebin]</code> is deleted from the code path.</p></div>
+        <div class="summary-synopsis"><p>Deletes directories from the code path.</p></div>
 
     </div>
 
@@ -641,8 +675,7 @@ or complete directory names. If an atom <code class="inline">Name</code>, the di
       </div>
 
         <div class="summary-synopsis"><p>Removes the current code for <code class="inline">Module</code>, that is, the current code for <code class="inline">Module</code> is
-made old. This means that processes can continue to execute the code in the
-module, but no external function calls can be made to it.</p></div>
+made old.</p></div>
 
     </div>
 
@@ -653,8 +686,7 @@ module, but no external function calls can be made to it.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Tries to load a module in the same way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>, unless the module is
-already loaded. If called concurrently, this function ensures only one process
-attempts to load said module at a given time.</p></div>
+already loaded.</p></div>
 
     </div>
 
@@ -665,8 +697,7 @@ attempts to load said module at a given time.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Tries to load any modules not already loaded in the list <code class="inline">Modules</code> in the same
-way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>. Unlike <a href="#ensure_loaded/1"><code class="inline">ensure_loaded/1</code></a>, modules are loaded even in
-<code class="inline">embedded</code> mode.</p></div>
+way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>.</p></div>
 
     </div>
 
@@ -677,8 +708,7 @@ way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>. Unlik
       </div>
 
         <div class="summary-synopsis"><p>Tries to load code for all modules that have been previously prepared by
-<a href="#prepare_loading/1"><code class="inline">prepare_loading/1</code></a>. The loading occurs atomically, meaning that either all
-modules are loaded at the same time, or none of the modules are loaded.</p></div>
+<a href="#prepare_loading/1"><code class="inline">prepare_loading/1</code></a>.</p></div>
 
     </div>
 
@@ -688,8 +718,7 @@ modules are loaded at the same time, or none of the modules are loaded.</p></div
 
       </div>
 
-        <div class="summary-synopsis"><p>If Level is <code class="inline">function</code>, returns line coverage for the given module according to
-its coverage mode</p></div>
+        <div class="summary-synopsis"><p>Return either <code class="inline">function</code> or <code class="inline">line</code> coverage data for module <code class="inline">Module</code>.</p></div>
 
     </div>
 
@@ -699,7 +728,7 @@ its coverage mode</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the current coverage mode as set by option
+        <div class="summary-synopsis"><p>Returns the coverage mode as set by option
 <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code> or <a href="#set_coverage_mode/1"><code class="inline">set_coverage_mode/1</code></a>.</p></div>
 
     </div>
@@ -716,14 +745,12 @@ its coverage mode</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_doc/1" translate="no">get_doc(Mod)</a>
+        <a href="#get_doc/1" translate="no">get_doc(Module)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Searches the code path for EEP-48 style documentation and returns it if
-available. If no documentation can be found the function tries to generate
-documentation from the debug information in the module. If no debug information
-is available, this function will return <code class="inline">{error,missing}</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns <a href="https://www.erlang.org/eeps/eep-0048.html">EEP 48</a> style
+documentation for <code class="inline">Module</code> if available.</p></div>
 
     </div>
 
@@ -744,11 +771,7 @@ is available, this function will return <code class="inline">{error,missing}</co
 
       </div>
 
-        <div class="summary-synopsis"><p>Searches the code path for the object code of module <code class="inline">Module</code>. Returns
-<code class="inline">{Module, Binary, Filename}</code> if successful, otherwise <code class="inline">error</code>. <code class="inline">Binary</code> is a
-binary data object, which contains the object code for the module. This can be
-useful if code is to be loaded on a remote node in a distributed system. For
-example, loading module <code class="inline">Module</code> on a node <code class="inline">Node</code> is done as follows</p></div>
+        <div class="summary-synopsis"><p>Returns the object code for module <code class="inline">Module</code> if found in the code path.</p></div>
 
     </div>
 
@@ -768,8 +791,7 @@ example, loading module <code class="inline">Module</code> on a node <code class
 
       </div>
 
-        <div class="summary-synopsis"><p>Checks if <code class="inline">Module</code> is loaded. If it is, <code class="inline">{file, Loaded}</code> is returned, otherwise
-<code class="inline">false</code>.</p></div>
+        <div class="summary-synopsis"><p>Checks whether <code class="inline">Module</code> is loaded.</p></div>
 
     </div>
 
@@ -802,8 +824,8 @@ directory of Erlang/OTP.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the path for the &quot;library directory&quot;, the top directory, for an
-application <code class="inline">Name</code> located under <code class="inline">$OTPROOT/lib</code> or on a directory referred to
+        <div class="summary-synopsis"><p>Returns the path for the <em>library directory</em>, the top directory, for an
+application <code class="inline">Name</code> located under <code class="inline">$OTPROOT/lib</code> or in a directory referred to
 with environment variable <code class="inline">ERL_LIBS</code>.</p></div>
 
     </div>
@@ -816,7 +838,8 @@ with environment variable <code class="inline">ERL_LIBS</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><blockquote><h4 class="info">Change</h4><p>This function is deprecated and will be removed in a future release.</p></div>
+        <div class="summary-synopsis"><p>Returns the path to a subdirectory directly under the top directory of an
+application.</p></div>
 
     </div>
 
@@ -826,11 +849,8 @@ with environment variable <code class="inline">ERL_LIBS</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Same as <a href="#load_file/1"><code class="inline">load_file(Module)</code></a>, but <code class="inline">Filename</code> is an absolute or
-relative filename. The code path is not searched. It returns a value in the same
-way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>. Notice that <code class="inline">Filename</code> must not contain the extension (for
-example, <code class="inline">.beam</code>) because <a href="#load_abs/1"><code class="inline">load_abs/1</code></a> adds the correct
-extension.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#load_file/1"><code class="inline">load_file(Module)</code></a>, except that <code class="inline">Filename</code> is
+an absolute or relative filename.</p></div>
 
     </div>
 
@@ -840,10 +860,7 @@ extension.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This function can be used to load object code on remote Erlang nodes. Argument
-<code class="inline">Binary</code> must contain object code for <code class="inline">Module</code>. <code class="inline">Filename</code> is only used by the
-code server to keep a record of from which file the object code for <code class="inline">Module</code>
-comes. Thus, <code class="inline">Filename</code> is not opened and read by the code server.</p></div>
+        <div class="summary-synopsis"><p>Loads object code from a binary.</p></div>
 
     </div>
 
@@ -853,11 +870,7 @@ comes. Thus, <code class="inline">Filename</code> is not opened and read by the 
 
       </div>
 
-        <div class="summary-synopsis"><p>Tries to load the Erlang module <code class="inline">Module</code>, using the code path. It looks for the
-object code file with an extension corresponding to the Erlang machine used, for
-example, <code class="inline">Module.beam</code>. The loading fails if the module name found in the object
-code differs from the name <code class="inline">Module</code>. <a href="#load_binary/3"><code class="inline">load_binary/3</code></a> must be used to load object
-code with a module name that is different from the file name.</p></div>
+        <div class="summary-synopsis"><p>Tries to load the Erlang module <code class="inline">Module</code> using the code path.</p></div>
 
     </div>
 
@@ -868,7 +881,7 @@ code with a module name that is different from the file name.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Returns the list of all currently loaded modules for which <a href="#module_status/1"><code class="inline">module_status/1</code></a>
-returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><code class="inline">all_loaded/0</code></a>.</p></div>
+returns <code class="inline">modified</code>.</p></div>
 
     </div>
 
@@ -888,7 +901,7 @@ returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><
 
       </div>
 
-        <div class="summary-synopsis"><p>The status of a module can be one of</p></div>
+        <div class="summary-synopsis"><p>Returns the status of <code class="inline">Module</code> in relation to object file on disk.</p></div>
 
     </div>
 
@@ -898,8 +911,7 @@ returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the object code file extension corresponding to the Erlang machine used,
-namely <code class="inline">.beam</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns the object code file extension corresponding to the Erlang machine used.</p></div>
 
     </div>
 
@@ -909,8 +921,7 @@ namely <code class="inline">.beam</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Prepares to load the modules in the list <code class="inline">Modules</code>. Finish the loading by
-calling <a href="#finish_loading/1">finish_loading(Prepared)</a>.</p></div>
+        <div class="summary-synopsis"><p>Prepares to load the modules in the list <code class="inline">Modules</code>.</p></div>
 
     </div>
 
@@ -920,8 +931,7 @@ calling <a href="#finish_loading/1">finish_loading(Prepared)</a>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the path to the <code class="inline">priv</code> directory in an application. Equivalent to
-<code class="inline">code:lib_dir(Name, priv)</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns the path to the <code class="inline">priv</code> directory in an application.</p></div>
 
     </div>
 
@@ -931,9 +941,7 @@ calling <a href="#finish_loading/1">finish_loading(Prepared)</a>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Purges the code for <code class="inline">Module</code>, that is, removes code marked as old. If some
-processes still linger in the old code, these processes are killed before the
-code is removed.</p></div>
+        <div class="summary-synopsis"><p>Purges the code for <code class="inline">Module</code>, that is, removes code marked as old.</p></div>
 
     </div>
 
@@ -943,7 +951,7 @@ code is removed.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#replace_path/3"><code class="inline">replace_path/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#replace_path/3"><code class="inline">replace_path(Name, Dir, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -954,10 +962,7 @@ code is removed.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Replaces an old occurrence of a directory named <code class="inline">.../Name[-Vsn][/ebin]</code> in the
-code path, with <code class="inline">Dir</code>. If <code class="inline">Name</code> does not exist, it adds the new directory <code class="inline">Dir</code>
-last in the code path. The new directory must also be named
-<code class="inline">.../Name[-Vsn][/ebin]</code>. This function is to be used if a new version of the
-directory (library) is added to a running system.</p></div>
+code path, with <code class="inline">Dir</code>.</p></div>
 
     </div>
 
@@ -967,7 +972,7 @@ directory (library) is added to a running system.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Reset coverage information for module Module.</p></div>
+        <div class="summary-synopsis"><p>Resets coverage information for module <code class="inline">Module</code>.</p></div>
 
     </div>
 
@@ -989,7 +994,7 @@ installed.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Sets the coverage mode for modules that are subsequently loaded, similar to
-option <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code></p></div>
+option <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code>.</p></div>
 
     </div>
 
@@ -999,7 +1004,7 @@ option <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcov
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#set_path/2"><code class="inline">set_path/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#set_path/2"><code class="inline">set_path(PathList, nocache)</code></a>.</p></div>
 
     </div>
 
@@ -1050,9 +1055,7 @@ no processes linger in it.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Searches the code path for <code class="inline">Filename</code>, a file of arbitrary type. If found, the
-full name is returned. <code class="inline">non_existing</code> is returned if the file cannot be found.
-The function can be useful, for example, to locate application resource files.</p></div>
+        <div class="summary-synopsis"><p>Searches the code path for <code class="inline">Filename</code>, which is a file of arbitrary type.</p></div>
 
     </div>
 
@@ -1089,7 +1092,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">add_path_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L931" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1037" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1119,7 +1122,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">cache()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L356" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L432" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1149,7 +1152,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">coverage_mode()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L341" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L417" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1177,7 +1180,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">load_error_rsn()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L357" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L433" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1205,7 +1208,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">load_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L362" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L438" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1233,7 +1236,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">loaded_filename()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L365" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L441" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1263,7 +1266,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">loaded_ret_atoms()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L364" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L440" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1293,7 +1296,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">module_status()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1884" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2019" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1321,7 +1324,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">prepared_code()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L369" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L445" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1349,7 +1352,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">replace_path_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1090" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1204" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1379,7 +1382,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">set_path_ret()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L881" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L987" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1421,7 +1424,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">add_path(Dir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L936" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1042" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1439,7 +1442,7 @@ file containing object code for <code class="inline">Module</code> and returns t
 
       </div>
 
-<p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz(Dir, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_path/2">
@@ -1451,7 +1454,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">add_path(Dir, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L942" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1048" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1469,7 +1472,7 @@ file containing object code for <code class="inline">Module</code> and returns t
 
       </div>
 
-<p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz(Dir, Cache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_patha/1">
@@ -1481,7 +1484,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">add_patha(Dir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L972" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1079" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1499,7 +1502,7 @@ file containing object code for <code class="inline">Module</code> and returns t
 
       </div>
 
-<p>Equivalent to <a href="#add_patha/2"><code class="inline">add_patha/2</code></a>.</p>
+<p>Equivalent to <a href="#add_patha/2"><code class="inline">add_patha(Dir, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_patha/2">
@@ -1511,7 +1514,7 @@ file containing object code for <code class="inline">Module</code> and returns t
     </a>
     <h1 class="signature" translate="no">add_patha(Dir, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L988" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1096" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1529,11 +1532,10 @@ file containing object code for <code class="inline">Module</code> and returns t
 
       </div>
 
-<p>Adds <code class="inline">Dir</code> to the beginning of the code path. If <code class="inline">Dir</code> exists, it is removed
-from the old position in the code path.</p><p>An optional second argument may be set to the atom <code class="inline">cache</code> to control if the
-contents of the directory must be cached on first traversal. Defaults to
-<code class="inline">nocache</code>.</p><p>Returns <code class="inline">true</code> if successful, or <code class="inline">{error, bad_directory}</code> if <code class="inline">Dir</code> is not the
-name of a directory.</p>
+<p>Adds <code class="inline">Dir</code> to the beginning of the code path.</p><p>If <code class="inline">Dir</code> exists, it is removed from the old position in the code path.</p><p>Argument <code class="inline">Cache</code> controls whether the content of the directory
+should be cached on first traversal. If <code class="inline">Cache</code> is <code class="inline">cache</code> the directory
+contents will be cached; if <code class="inline">Cache</code> is <code class="inline">nocache</code> it will not be cached.</p><p>Returns <code class="inline">true</code> if successful, or <code class="inline">{error, bad_directory}</code> if <code class="inline">Dir</code> is
+not the name of a directory.</p>
   </section>
 </section>
 <section class="detail" id="add_paths/1">
@@ -1545,7 +1547,7 @@ name of a directory.</p>
     </a>
     <h1 class="signature" translate="no">add_paths(Dirs)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L996" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1104" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1563,7 +1565,7 @@ name of a directory.</p>
 
       </div>
 
-<p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz(Dirs, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_paths/2">
@@ -1575,7 +1577,7 @@ name of a directory.</p>
     </a>
     <h1 class="signature" translate="no">add_paths(Dirs, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1002" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1110" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1593,7 +1595,7 @@ name of a directory.</p>
 
       </div>
 
-<p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz(Dirs, Cache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_pathsa/1">
@@ -1605,7 +1607,7 @@ name of a directory.</p>
     </a>
     <h1 class="signature" translate="no">add_pathsa(Dirs)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1031" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1141" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1623,7 +1625,7 @@ name of a directory.</p>
 
       </div>
 
-<p>Equivalent to <a href="#add_pathsa/2"><code class="inline">add_pathsa/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathsa/2"><code class="inline">add_pathsa(Dirs, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_pathsa/2">
@@ -1635,7 +1637,7 @@ name of a directory.</p>
     </a>
     <h1 class="signature" translate="no">add_pathsa(Dirs, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1050" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1161" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1653,12 +1655,11 @@ name of a directory.</p>
 
       </div>
 
-<p>Traverses <code class="inline">Dirs</code> and adds each <code class="inline">Dir</code> to the beginning of the code path. This
-means that the order of <code class="inline">Dirs</code> is reversed in the resulting code path. For
-example, if you add <code class="inline">[Dir1,Dir2]</code>, the resulting path will be
-<code class="inline">[Dir2,Dir1|OldCodePath]</code>.</p><p>If a <code class="inline">Dir</code> already exists in the code path, it is removed from the old position.</p><p>An optional second argument may be set to the atom <code class="inline">cache</code> to control if the
-contents of the directory must be cached on first traversal. Defaults to
-<code class="inline">nocache</code>.</p><p>Always returns <code class="inline">ok</code>, regardless of the validity of each individual <code class="inline">Dir</code>.</p>
+<p>Traverses <code class="inline">Dirs</code> and adds each <code class="inline">Dir</code> to the beginning of the code path.</p><p>This means that the order of <code class="inline">Dirs</code> is reversed in the resulting code
+path. For example, if <code class="inline">Dirs</code> is <code class="inline">[Dir1,Dir2]</code>, the resulting path will
+be <code class="inline">[Dir2,Dir1|OldCodePath]</code>.</p><p>If a <code class="inline">Dir</code> already exists in the code path, it is removed from the old position.</p><p>Argument <code class="inline">Cache</code> controls whether the content of the directory
+should be cached on first traversal. If <code class="inline">Cache</code> is <code class="inline">cache</code> the directory
+contents will be cached; if <code class="inline">Cache</code> is <code class="inline">nocache</code> it will not be cached.</p><p>Always returns <code class="inline">ok</code>, regardless of the validity of each individual <code class="inline">Dir</code>.</p>
   </section>
 </section>
 <section class="detail" id="add_pathsz/1">
@@ -1670,7 +1671,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">add_pathsz(Dirs)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1008" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1117" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1688,7 +1689,7 @@ contents of the directory must be cached on first traversal. Defaults to
 
       </div>
 
-<p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathsz/2"><code class="inline">add_pathsz(Dirs, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_pathsz/2">
@@ -1700,7 +1701,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">add_pathsz(Dirs, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1023" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1133" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1718,10 +1719,9 @@ contents of the directory must be cached on first traversal. Defaults to
 
       </div>
 
-<p>Adds the directories in <code class="inline">Dirs</code> to the end of the code path. If a <code class="inline">Dir</code> exists,
-it is not added.</p><p>An optional second argument may be set to the atom <code class="inline">cache</code> to control if the
-contents of the directory must be cached on first traversal. Defaults to
-<code class="inline">nocache</code>.</p><p>Always returns <code class="inline">ok</code>, regardless of the validity of each individual <code class="inline">Dir</code>.</p>
+<p>Adds the directories in <code class="inline">Dirs</code> to the end of the code path.</p><p>Directories that are already present in the path will not be added.</p><p>Argument <code class="inline">Cache</code> controls whether the content of the directory
+should be cached on first traversal. If <code class="inline">Cache</code> is <code class="inline">cache</code> the directory
+contents will be cached; if <code class="inline">Cache</code> is <code class="inline">nocache</code> it will not be cached.</p><p>Always returns <code class="inline">ok</code>, regardless of the validity of each individual <code class="inline">Dir</code>.</p>
   </section>
 </section>
 <section class="detail" id="add_pathz/1">
@@ -1733,7 +1733,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">add_pathz(Dir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L948" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1054" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1751,7 +1751,7 @@ contents of the directory must be cached on first traversal. Defaults to
 
       </div>
 
-<p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz/2</code></a>.</p>
+<p>Equivalent to <a href="#add_pathz/2"><code class="inline">add_pathz(Dir, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_pathz/2">
@@ -1763,7 +1763,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">add_pathz(Dir, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L964" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1071" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1781,11 +1781,10 @@ contents of the directory must be cached on first traversal. Defaults to
 
       </div>
 
-<p>Adds <code class="inline">Dir</code> to the code path. The directory is added as the last directory in the
-new path. If <code class="inline">Dir</code> already exists in the path, it is not added.</p><p>An optional second argument may be set to the atom <code class="inline">cache</code> to control if the
-contents of the directory must be cached on first traversal. Defaults to
-<code class="inline">nocache</code>.</p><p>Returns <code class="inline">true</code> if successful, or <code class="inline">{error, bad_directory}</code> if <code class="inline">Dir</code> is not the
-name of a directory.</p>
+<p>Adds <code class="inline">Dir</code> as the directory last in the code path.</p><p>If <code class="inline">Dir</code> already exists in the path, it is not added.</p><p>Argument <code class="inline">Cache</code> controls whether the content of the directory
+should be cached on first traversal. If <code class="inline">Cache</code> is <code class="inline">cache</code> the directory
+contents will be cached; if <code class="inline">Cache</code> is <code class="inline">nocache</code> it will not be cached.</p><p>Returns <code class="inline">true</code> if successful, or <code class="inline">{error, bad_directory}</code> if <code class="inline">Dir</code> is
+not the name of a directory.</p>
   </section>
 </section>
 <section class="detail" id="all_available/0">
@@ -1797,7 +1796,7 @@ name of a directory.</p>
     </a>
     <h1 class="signature" translate="no">all_available()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L687" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L780" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1816,8 +1815,7 @@ name of a directory.</p>
 
       </div>
 
-<p>Returns a list of tuples <code class="inline">{Module, Filename, Loaded}</code> for all available modules.
-A module is considered to be available if it either is loaded or would be loaded
+<p>Returns a list of tuples <code class="inline">{Module, Filename, Loaded}</code> for all available modules.</p><p>A module is considered to be available if it either is loaded or would be loaded
 if called. <code class="inline">Filename</code> is normally the absolute filename, as described for
 <a href="#is_loaded/1"><code class="inline">is_loaded/1</code></a>.</p>
   </section>
@@ -1831,7 +1829,7 @@ if called. <code class="inline">Filename</code> is normally the absolute filenam
     </a>
     <h1 class="signature" translate="no">all_loaded()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L674" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L766" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1847,8 +1845,7 @@ if called. <code class="inline">Filename</code> is normally the absolute filenam
 
       </div>
 
-<p>Returns a list of tuples <code class="inline">{Module, Loaded}</code> for all loaded modules. <code class="inline">Loaded</code> is
-normally the absolute filename, as described for <a href="#is_loaded/1"><code class="inline">is_loaded/1</code></a>.</p>
+<p>Returns a list of tuples <code class="inline">{Module, Loaded}</code> for all loaded modules.</p><p><code class="inline">Loaded</code> is normally the absolute filename, as described for <a href="#is_loaded/1"><code class="inline">is_loaded/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="atomic_load/1">
@@ -1860,7 +1857,7 @@ normally the absolute filename, as described for <a href="#is_loaded/1"><code cl
     </a>
     <h1 class="signature" translate="no">atomic_load(Modules)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1265" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1386" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1886,18 +1883,18 @@ normally the absolute filename, as described for <a href="#is_loaded/1"><code cl
 
       </div>
 
-<p>Tries to load all of the modules in the list <code class="inline">Modules</code> atomically. That means
-that either all modules are loaded at the same time, or none of the modules are
-loaded if there is a problem with any of the modules.</p><p>Loading can fail for one the following reasons:</p><ul><li><p><strong><code class="inline">badfile</code></strong> - The object code has an incorrect format or the module name in
+<p>Tries to load all of the modules in the list <code class="inline">Modules</code> atomically.</p><p>That means that either all modules are loaded at the same time, or
+none of the modules are loaded if there is a problem with any of the
+modules.</p><p>Loading can fail for one the following reasons:</p><ul><li><p><strong><code class="inline">badfile</code></strong> - The object code has an incorrect format or the module name in
 the object code is not the expected module name.</p></li><li><p><strong><code class="inline">nofile</code></strong> - No file with object code exists.</p></li><li><p><strong><code class="inline">on_load_not_allowed</code></strong> - A module contains an
 <a href="../../../../doc/system/code_loading.html#on_load">-on_load function</a>.</p></li><li><p><strong><code class="inline">duplicated</code></strong> - A module is included more than once in <code class="inline">Modules</code>.</p></li><li><p><strong><code class="inline">not_purged</code></strong> - The object code cannot be loaded because an old version of
 the code already exists.</p></li><li><p><strong><code class="inline">sticky_directory</code></strong> - The object code resides in a sticky directory.</p></li><li><p><strong><code class="inline">pending_on_load</code></strong> - A previously loaded module contains an <code class="inline">-on_load</code>
 function that never finished.</p></li></ul><p>If it is important to minimize the time that an application is inactive while
 changing code, use <a href="#prepare_loading/1"><code class="inline">prepare_loading/1</code></a> and <a href="#finish_loading/1"><code class="inline">finish_loading/1</code></a> instead of
-<a href="#atomic_load/1"><code class="inline">atomic_load/1</code></a>. Here is an example:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="2894148118-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Prepared</span><span class="p" data-group-id="2894148118-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">prepare_loading</span><span class="p" data-group-id="2894148118-2">(</span><span class="n">Modules</span><span class="p" data-group-id="2894148118-2">)</span><span class="p">,</span><span class="w">
+<a href="#atomic_load/1"><code class="inline">atomic_load/1</code></a>. Here is an example:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="6134484540-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Prepared</span><span class="p" data-group-id="6134484540-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">prepare_loading</span><span class="p" data-group-id="6134484540-2">(</span><span class="n">Modules</span><span class="p" data-group-id="6134484540-2">)</span><span class="p">,</span><span class="w">
 </span><span class="c1">%% Put the application into an inactive state or do any</span><span class="w">
 </span><span class="c1">%% other preparation needed before changing the code.</span><span class="w">
-</span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">finish_loading</span><span class="p" data-group-id="2894148118-3">(</span><span class="n">Prepared</span><span class="p" data-group-id="2894148118-3">)</span><span class="p">,</span><span class="w">
+</span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">finish_loading</span><span class="p" data-group-id="6134484540-3">(</span><span class="n">Prepared</span><span class="p" data-group-id="6134484540-3">)</span><span class="p">,</span><span class="w">
 </span><span class="c1">%% Resume the application.</span></code></pre>
   </section>
 </section>
@@ -1910,7 +1907,7 @@ changing code, use <a href="#prepare_loading/1"><code class="inline">prepare_loa
     </a>
     <h1 class="signature" translate="no">clash()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1819" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1954" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1939,7 +1936,7 @@ and writes a report to <code class="inline">stdout</code>.</p>
     </a>
     <h1 class="signature" translate="no">clear_cache()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1155" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1273" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1957,11 +1954,11 @@ and writes a report to <code class="inline">stdout</code>.</p>
 
       </div>
 
-<p>Clear the code path cache. If a directory is cached, its cache is cleared once
-and then it will be recalculated and cached once more in a future traversal.</p><p>If you want to clear the cache for a single path, you might re-add it to the
-code path (with <a href="#add_path/2"><code class="inline">add_path/2</code></a>) or replace it (with
-<a href="#replace_path/3"><code class="inline">replace_path/3</code></a>). If you want to disable all cache, you can
-reset the code path with <code class="inline">code:set_path(code:get_path())</code>.</p><p>Always returns <code class="inline">ok</code>.</p>
+<p>Clears the code path cache.</p><p>If a directory is cached, its cache is cleared once and then it will
+be recalculated and cached once more in a future traversal.</p><p>To clear the cache for a single path, either re-add it to the code
+path (with <a href="#add_path/2"><code class="inline">add_path/2</code></a>) or replace it (with
+<a href="#replace_path/3"><code class="inline">replace_path/3</code></a>). To disable all caching, reset
+the code path with <code class="inline">code:set_path(code:get_path())</code>.</p><p>Always returns <code class="inline">ok</code>.</p>
   </section>
 </section>
 <section class="detail" id="compiler_dir/0">
@@ -1973,7 +1970,7 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
     </a>
     <h1 class="signature" translate="no">compiler_dir()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L829" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L936" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1989,7 +1986,7 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
 
       </div>
 
-<p>Returns the compiler library directory. Equivalent to <code class="inline">code:lib_dir(compiler)</code>.</p>
+<p>Returns the compiler library directory.</p><p>Equivalent to <a href="#lib_dir/1"><code class="inline">code:lib_dir(compiler)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="coverage_support/0">
@@ -2001,7 +1998,7 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
     </a>
     <h1 class="signature" translate="no">coverage_support()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2330" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2019,7 +2016,7 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
 
       </div>
 
-<p>Returns <code class="inline">true</code> if the system supports coverage and <code class="inline">false</code> otherwise.</p>
+<p>Returns <code class="inline">true</code> if the system supports coverage and <code class="inline">false</code> otherwise.</p><p><em>See also:</em> <a href="#module-native-coverage-support">Native Coverage Support</a></p>
   </section>
 </section>
 <section class="detail" id="del_path/1">
@@ -2031,7 +2028,7 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
     </a>
     <h1 class="signature" translate="no">del_path(NameOrDir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1073" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1185" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2048,10 +2045,9 @@ reset the code path with <code class="inline">code:set_path(code:get_path())</co
 
       </div>
 
-<p>Deletes a directory from the code path. The argument can be an atom <code class="inline">Name</code>, in
-which case the directory with the name <code class="inline">.../Name[-Vsn][/ebin]</code> is deleted from
-the code path. Also, the complete directory name <code class="inline">Dir</code> can be specified as
-argument.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code></strong> - If successful</p></li><li><p><strong><code class="inline">false</code></strong> - If the directory is not found</p></li><li><p><strong><code class="inline">{error, bad_name}</code></strong> - If the argument is invalid</p></li></ul>
+<p>Deletes a directory from the code path.</p><p>The argument can be an atom <code class="inline">Name</code>, in which case the directory with
+the name <code class="inline">.../Name[-Vsn][/ebin]</code> is deleted from the code path. Also,
+the complete directory name <code class="inline">Dir</code> can be specified as argument.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code></strong> - If successful</p></li><li><p><strong><code class="inline">false</code></strong> - If the directory is not found</p></li><li><p><strong><code class="inline">{error, bad_name}</code></strong> - If the argument is invalid</p></li></ul>
   </section>
 </section>
 <section class="detail" id="del_paths/1">
@@ -2063,7 +2059,7 @@ argument.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code><
     </a>
     <h1 class="signature" translate="no">del_paths(NamesOrDirs)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1088" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1202" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2082,9 +2078,9 @@ argument.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code><
 
       </div>
 
-<p>Deletes directories from the code path. The argument is a list of either atoms
-or complete directory names. If an atom <code class="inline">Name</code>, the directory with the name
-<code class="inline">.../Name[-Vsn][/ebin]</code> is deleted from the code path.</p><p>Always returns <code class="inline">ok</code>, regardless of the validity of each individual
+<p>Deletes directories from the code path.</p><p>The argument is a list of either atoms or complete directory names. If
+<code class="inline">Name</code> is an atom, the directory with the name <code class="inline">.../Name[-Vsn][/ebin]</code> is
+deleted from the code path.</p><p>Always returns <code class="inline">ok</code>, regardless of the validity of each individual
 <code class="inline">NamesOrDirs</code>.</p>
   </section>
 </section>
@@ -2097,7 +2093,7 @@ or complete directory names. If an atom <code class="inline">Name</code>, the di
     </a>
     <h1 class="signature" translate="no">delete(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L584" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L671" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2114,7 +2110,7 @@ or complete directory names. If an atom <code class="inline">Name</code>, the di
       </div>
 
 <p>Removes the current code for <code class="inline">Module</code>, that is, the current code for <code class="inline">Module</code> is
-made old. This means that processes can continue to execute the code in the
+made old.</p><p>This means that processes can continue to execute the code in the
 module, but no external function calls can be made to it.</p><p>Returns <code class="inline">true</code> if successful, or <code class="inline">false</code> if there is old code for <code class="inline">Module</code> that
 must be purged first, or if <code class="inline">Module</code> is not a (loaded) module.</p>
   </section>
@@ -2128,7 +2124,7 @@ must be purged first, or if <code class="inline">Module</code> is not a (loaded)
     </a>
     <h1 class="signature" translate="no">ensure_loaded(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L473" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L554" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2146,7 +2142,7 @@ must be purged first, or if <code class="inline">Module</code> is not a (loaded)
       </div>
 
 <p>Tries to load a module in the same way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>, unless the module is
-already loaded. If called concurrently, this function ensures only one process
+already loaded.</p><p>If called concurrently, this function ensures that only one process
 attempts to load said module at a given time.</p><p>In embedded mode, it does not load a module that is not already loaded, but
 returns <code class="inline">{error, embedded}</code> instead. See
 <a href="code.html#error_reasons">Error Reasons for Code-Loading Functions</a> for a
@@ -2162,7 +2158,7 @@ description of other possible error reasons.</p>
     </a>
     <h1 class="signature" translate="no">ensure_modules_loaded(Modules)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1177" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1296" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2182,8 +2178,7 @@ description of other possible error reasons.</p>
       </div>
 
 <p>Tries to load any modules not already loaded in the list <code class="inline">Modules</code> in the same
-way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>. Unlike <a href="#ensure_loaded/1"><code class="inline">ensure_loaded/1</code></a>, modules are loaded even in
-<code class="inline">embedded</code> mode.</p><p>Returns <code class="inline">ok</code> if successful, or <code class="inline">{error,[{Module,Reason}]}</code> if loading of some
+way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>.</p><p>Unlike <a href="#ensure_loaded/1"><code class="inline">ensure_loaded/1</code></a>, modules are loaded even in <code class="inline">embedded</code> mode.</p><p>Returns <code class="inline">ok</code> if successful, or <code class="inline">{error,[{Module,Reason}]}</code> if loading of some
 modules fails. See
 <a href="code.html#error_reasons">Error Reasons for Code-Loading Functions</a> for a
 description of other possible error reasons.</p>
@@ -2198,7 +2193,7 @@ description of other possible error reasons.</p>
     </a>
     <h1 class="signature" translate="no">finish_loading(Prepared)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1332" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1457" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2221,8 +2216,8 @@ description of other possible error reasons.</p>
       </div>
 
 <p>Tries to load code for all modules that have been previously prepared by
-<a href="#prepare_loading/1"><code class="inline">prepare_loading/1</code></a>. The loading occurs atomically, meaning that either all
-modules are loaded at the same time, or none of the modules are loaded.</p><p>This function can fail with one of the following error reasons:</p><ul><li><p><strong><code class="inline">not_purged</code></strong> - The object code cannot be loaded because an old version of
+<a href="#prepare_loading/1"><code class="inline">prepare_loading/1</code></a>.</p><p>The loading occurs atomically, meaning that either all modules are
+loaded at the same time, or none of the modules are loaded.</p><p>This function can fail with one of the following error reasons:</p><ul><li><p><strong><code class="inline">not_purged</code></strong> - The object code cannot be loaded because an old version of
 the code already exists.</p></li><li><p><strong><code class="inline">sticky_directory</code></strong> - The object code resides in a sticky directory.</p></li><li><p><strong><code class="inline">pending_on_load</code></strong> - A previously loaded module contains an <code class="inline">-on_load</code>
 function that never finished.</p></li></ul>
   </section>
@@ -2236,7 +2231,7 @@ function that never finished.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">get_coverage(Level, Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2059" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2201" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2265,8 +2260,8 @@ function that never finished.</p></li></ul>
 
       </div>
 
-<p>If Level is <code class="inline">function</code>, returns line coverage for the given module according to
-its coverage mode:</p><ul><li><p><strong><code class="inline">function</code></strong> - For each function in module Module, a boolean indicating
+<p>Return either <code class="inline">function</code> or <code class="inline">line</code> coverage data for module <code class="inline">Module</code>.</p><p>If Level is <code class="inline">function</code>, returns function coverage for the given module
+according to its <a href="#t:coverage_mode/0">coverage mode</a>:</p><ul><li><p><strong><code class="inline">function</code></strong> - For each function in module Module, a boolean indicating
 whether that function has been executed at least once is returned.</p></li><li><p><strong><code class="inline">function_counters</code></strong> - For each function in module Module, an integer
 giving the number of times that line has been executed is returned.</p></li><li><p><strong><code class="inline">line</code></strong> - For each function in module Module, a boolean indicating whether
 that function has been executed at least once is returned.</p></li><li><p><strong><code class="inline">line_counters</code></strong> - For each function in module Module, a boolean indicating
@@ -2277,7 +2272,7 @@ coverage mode:</p><ul><li><p><strong><code class="inline">line</code></strong> -
 whether that line has been executed at least once is returned.</p></li><li><p><strong><code class="inline">line_counters</code></strong> - For each executable line in the module, an integer
 giving the number of times that line was executed is returned.</p></li></ul><p>Level <code class="inline">cover_id_line</code> is used by the <a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a> tool.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Level</code> is not <code class="inline">function</code> or <code class="inline">line</code>.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> was not loaded in another coverage mode than
 <code class="inline">none</code>.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If Level is <code class="inline">line</code> and <code class="inline">Module</code> has not been loaded with either
-<code class="inline">line</code> or <code class="inline">line_counters</code> enabled.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul>
+<code class="inline">line</code> or <code class="inline">line_counters</code> enabled.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul><p><em>See also:</em> <a href="#module-native-coverage-support">Native Coverage Support</a></p>
   </section>
 </section>
 <section class="detail" id="get_coverage_mode/0">
@@ -2289,7 +2284,7 @@ giving the number of times that line was executed is returned.</p></li></ul><p>L
     </a>
     <h1 class="signature" translate="no">get_coverage_mode()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2073" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2217" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2307,8 +2302,8 @@ giving the number of times that line was executed is returned.</p></li></ul><p>L
 
       </div>
 
-<p>Returns the current coverage mode as set by option
-<a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code> or <a href="#set_coverage_mode/1"><code class="inline">set_coverage_mode/1</code></a>.</p><p>Failure:</p><ul><li><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</li></ul>
+<p>Returns the coverage mode as set by option
+<a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code> or <a href="#set_coverage_mode/1"><code class="inline">set_coverage_mode/1</code></a>.</p><p>Failure:</p><ul><li><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</li></ul><p><em>See also:</em> <a href="#module-native-coverage-support">Native Coverage Support</a></p>
   </section>
 </section>
 <section class="detail" id="get_coverage_mode/1">
@@ -2320,7 +2315,7 @@ giving the number of times that line was executed is returned.</p></li></ul><p>L
     </a>
     <h1 class="signature" translate="no">get_coverage_mode(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2091" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2237" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2338,7 +2333,7 @@ giving the number of times that line was executed is returned.</p></li></ul><p>L
 
       </div>
 
-<p>Get coverage mode for the given module.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul>
+<p>Get coverage mode for the given module.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul><p><em>See also:</em> <a href="#module-native-coverage-support">Native Coverage Support</a></p>
   </section>
 </section>
 <section class="detail" id="get_doc/1">
@@ -2348,9 +2343,9 @@ giving the number of times that line was executed is returned.</p></li></ul><p>L
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">get_doc(Mod)</h1>
+    <h1 class="signature" translate="no">get_doc(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1702" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1837" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2378,11 +2373,13 @@ giving the number of times that line was executed is returned.</p></li></ul><p>L
 
       </div>
 
-<p>Searches the code path for EEP-48 style documentation and returns it if
-available. If no documentation can be found the function tries to generate
-documentation from the debug information in the module. If no debug information
-is available, this function will return <code class="inline">{error,missing}</code>.</p><p>For more information about the documentation chunk see
-<a href="eep48_chapter.html">Documentation Storage and Format</a> in Kernel's User's Guide.</p>
+<p>Returns <a href="https://www.erlang.org/eeps/eep-0048.html">EEP 48</a> style
+documentation for <code class="inline">Module</code> if available.</p><p>If <code class="inline">Module</code> is not found in the code path, this function returns
+<code class="inline">{error,non_existing}</code>.</p><p>If no documentation can be found this function attempts to generate
+documentation from the debug information in the module. If no debug
+information is available, this function returns <code class="inline">{error,missing}</code>.</p><p>For more information about the documentation chunk see
+<a href="eep48_chapter.html">Documentation Storage and Format</a> in
+Kernel's User's Guide.</p>
   </section>
 </section>
 <section class="detail" id="get_mode/0">
@@ -2394,7 +2391,7 @@ is available, this function will return <code class="inline">{error,missing}</co
     </a>
     <h1 class="signature" translate="no">get_mode()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1140" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1256" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2428,7 +2425,7 @@ in embedded mode, the code must be loaded with <a href="#load_binary/3"><code cl
     </a>
     <h1 class="signature" translate="no">get_object_code(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L656" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L747" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2445,13 +2442,13 @@ in embedded mode, the code must be loaded with <a href="#load_binary/3"><code cl
 
       </div>
 
-<p>Searches the code path for the object code of module <code class="inline">Module</code>. Returns
-<code class="inline">{Module, Binary, Filename}</code> if successful, otherwise <code class="inline">error</code>. <code class="inline">Binary</code> is a
-binary data object, which contains the object code for the module. This can be
-useful if code is to be loaded on a remote node in a distributed system. For
-example, loading module <code class="inline">Module</code> on a node <code class="inline">Node</code> is done as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="9167854211-1">{</span><span class="p">_</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p" data-group-id="9167854211-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">get_object_code</span><span class="p" data-group-id="9167854211-2">(</span><span class="n">Module</span><span class="p" data-group-id="9167854211-2">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">rpc</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="9167854211-3">(</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="ss">code</span><span class="p">,</span><span class="w"> </span><span class="ss">load_binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9167854211-4">[</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p" data-group-id="9167854211-4">]</span><span class="p" data-group-id="9167854211-3">)</span><span class="p">,</span><span class="w">
+<p>Returns the object code for module <code class="inline">Module</code> if found in the code path.</p><p>Returns <code class="inline">{Module, Binary, Filename}</code> if successful, otherwise
+<code class="inline">error</code>. <code class="inline">Binary</code> is a binary data object, which contains the object
+code for the module. This is useful if code is to be loaded on a
+remote node in a distributed system. For example, loading module
+<code class="inline">Module</code> on a node <code class="inline">Node</code> is done as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="4940148122-1">{</span><span class="p">_</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p" data-group-id="4940148122-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">get_object_code</span><span class="p" data-group-id="4940148122-2">(</span><span class="n">Module</span><span class="p" data-group-id="4940148122-2">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">erpc</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="4940148122-3">(</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="ss">code</span><span class="p">,</span><span class="w"> </span><span class="ss">load_binary</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4940148122-4">[</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Filename</span><span class="p">,</span><span class="w"> </span><span class="n">Binary</span><span class="p" data-group-id="4940148122-4">]</span><span class="p" data-group-id="4940148122-3">)</span><span class="p">,</span><span class="w">
 </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre>
   </section>
 </section>
@@ -2464,7 +2461,7 @@ example, loading module <code class="inline">Module</code> on a node <code class
     </a>
     <h1 class="signature" translate="no">get_path()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L929" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1035" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2492,7 +2489,7 @@ example, loading module <code class="inline">Module</code> on a node <code class
     </a>
     <h1 class="signature" translate="no">is_loaded(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L635" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L724" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2508,11 +2505,10 @@ example, loading module <code class="inline">Module</code> on a node <code class
 
       </div>
 
-<p>Checks if <code class="inline">Module</code> is loaded. If it is, <code class="inline">{file, Loaded}</code> is returned, otherwise
-<code class="inline">false</code>.</p><p>Normally, <code class="inline">Loaded</code> is the absolute filename <code class="inline">Filename</code> from which the code is
+<p>Checks whether <code class="inline">Module</code> is loaded.</p><p>If it is, <code class="inline">{file, Loaded}</code> is returned, otherwise <code class="inline">false</code>.</p><p>Normally, <code class="inline">Loaded</code> is the absolute filename <code class="inline">Filename</code> from which the code is
 obtained. If the module is preloaded (see <a href="../../../../lib/sasl-4.2.1/doc/html/script.html"><code class="inline">script(4)</code></a>),
-<code class="inline">Loaded==preloaded</code>. If the module is Cover-compiled (see <a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a>),
-<code class="inline">Loaded==cover_compiled</code>.</p>
+<code class="inline">Loaded =:= preloaded</code>. If the module is Cover-compiled (see <a href="../../../../lib/tools-3.6/doc/html/cover.html"><code class="inline">cover</code></a>),
+<code class="inline">Loaded =:= cover_compiled</code>.</p>
   </section>
 </section>
 <section class="detail" id="is_sticky/1">
@@ -2524,7 +2520,7 @@ obtained. If the module is preloaded (see <a href="../../../../lib/sasl-4.2.1/do
     </a>
     <h1 class="signature" translate="no">is_sticky(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L878" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L984" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2554,7 +2550,7 @@ sticky directory (in other words: an attempt to reload the module will fail), or
     </a>
     <h1 class="signature" translate="no">lib_dir()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L760" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L854" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2571,8 +2567,8 @@ sticky directory (in other words: an attempt to reload the module will fail), or
       </div>
 
 <p>Returns the library directory, <code class="inline">$OTPROOT/lib</code>, where <code class="inline">$OTPROOT</code> is the root
-directory of Erlang/OTP.</p><p><em>Example:</em></p><pre><code class="text">&gt; code:lib_dir().
-&quot;/usr/local/otp/lib&quot;</code></pre>
+directory of Erlang/OTP.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="1924020847-1">(</span><span class="p" data-group-id="1924020847-1">)</span><span class="p">.</span><span class="w">
+</span><span class="s">&quot;/usr/local/otp/lib&quot;</span></code></pre>
   </section>
 </section>
 <section class="detail" id="lib_dir/1">
@@ -2584,7 +2580,7 @@ directory of Erlang/OTP.</p><p><em>Example:</em></p><pre><code class="text">&gt;
     </a>
     <h1 class="signature" translate="no">lib_dir(Name)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L797" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L896" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2600,8 +2596,8 @@ directory of Erlang/OTP.</p><p><em>Example:</em></p><pre><code class="text">&gt;
 
       </div>
 
-<p>Returns the path for the &quot;library directory&quot;, the top directory, for an
-application <code class="inline">Name</code> located under <code class="inline">$OTPROOT/lib</code> or on a directory referred to
+<p>Returns the path for the <em>library directory</em>, the top directory, for an
+application <code class="inline">Name</code> located under <code class="inline">$OTPROOT/lib</code> or in a directory referred to
 with environment variable <code class="inline">ERL_LIBS</code>.</p><p>If a regular directory called <code class="inline">Name</code> or <code class="inline">Name-Vsn</code> exists in the code path with
 an <code class="inline">ebin</code> subdirectory, the path to this directory is returned (not the <code class="inline">ebin</code>
 directory).</p><p>If the directory refers to a directory in an archive, the archive name is
@@ -2609,8 +2605,9 @@ stripped away before the path is returned. For example, if directory
 <code class="inline">/usr/local/otp/lib/mnesia-4.2.2.ez/mnesia-4.2.2/ebin</code> is in the path,
 <code class="inline">/usr/local/otp/lib/mnesia-4.2.2/ebin</code> is returned. This means that the library
 directory for an application is the same, regardless if the application resides
-in an archive or not.</p><p><em>Example:</em></p><pre><code class="text">&gt; code:lib_dir(mnesia).
-&quot;/usr/local/otp/lib/mnesia-4.2.2&quot;</code></pre><p>Returns <code class="inline">{error, bad_name}</code> if <code class="inline">Name</code> is not the name of an application under
+in an archive or not.</p><blockquote><h4 class="info">Warning</h4><p>Archives are experimental. In a future release, they can be removed or
+their behavior can change.</p></blockquote><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="6964256136-1">(</span><span class="ss">mnesia</span><span class="p" data-group-id="6964256136-1">)</span><span class="p">.</span><span class="w">
+</span><span class="s">&quot;/usr/local/otp/lib/mnesia-4.23&quot;</span></code></pre><p>Returns <code class="inline">{error, bad_name}</code> if <code class="inline">Name</code> is not the name of an application under
 <code class="inline">$OTPROOT/lib</code> or on a directory referred to through environment variable
 <code class="inline">ERL_LIBS</code>. Fails with an exception if <code class="inline">Name</code> has the wrong type.</p><blockquote><h4 class="warning">Warning</h4><p>For backward compatibility, <code class="inline">Name</code> is also allowed to be a string. That will
 probably change in a future release.</p></blockquote>
@@ -2625,7 +2622,7 @@ probably change in a future release.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">lib_dir(Name, SubDir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L825" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L928" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2645,13 +2642,15 @@ probably change in a future release.</p></blockquote>
 
       </div>
 
-<blockquote><h4 class="info">Change</h4><p>This function is deprecated and will be removed in a future release.</p></blockquote><p>Returns the path to a subdirectory directly under the top directory of an
-application. Normally the subdirectories reside under the top directory for the
+<p>Returns the path to a subdirectory directly under the top directory of an
+application.</p><blockquote><h4 class="info">Change</h4><p>This function is part of the archive support, which is an experimental
+feature that will be changed or removed in a future release.</p></blockquote><p>Normally the subdirectories reside under the top directory for the
 application, but when applications at least partly reside in an archive, the
 situation is different. Some of the subdirectories can reside as regular
 directories while others reside in an archive file. It is not checked whether
-this directory exists.</p><p>Instead of using this function, use <a href="#lib_dir/1"><code class="inline">code:lib_dir/1</code></a>.</p><p><em>Example:</em></p><pre><code class="text">&gt; filename:join(code:lib_dir(megaco), &quot;priv&quot;).
-&quot;/usr/local/otp/lib/megaco-3.9.1.1/priv&quot;</code></pre><p>Fails with an exception if <code class="inline">Name</code> or <code class="inline">SubDir</code> has the wrong type.</p>
+this directory exists.</p><p>Instead of using this function, use <a href="#lib_dir/1"><code class="inline">code:lib_dir/1</code></a>
+and <a href="../../../../lib/stdlib-5.2.1/doc/html/filename.html#join/2"><code class="inline">filename:join/2</code></a>.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">filename</span><span class="p">:</span><span class="nf">join</span><span class="p" data-group-id="0635228207-1">(</span><span class="nc">code</span><span class="p">:</span><span class="nf">lib_dir</span><span class="p" data-group-id="0635228207-2">(</span><span class="ss">megaco</span><span class="p" data-group-id="0635228207-2">)</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;priv&quot;</span><span class="p" data-group-id="0635228207-1">)</span><span class="p">.</span><span class="w">
+</span><span class="s">&quot;/usr/local/otp/lib/megaco-3.9.1.1/priv&quot;</span></code></pre><p>Fails with an exception if <code class="inline">Name</code> or <code class="inline">SubDir</code> has the wrong type.</p>
   </section>
 </section>
 <section class="detail" id="load_abs/1">
@@ -2663,7 +2662,7 @@ this directory exists.</p><p>Instead of using this function, use <a href="#lib_d
     </a>
     <h1 class="signature" translate="no">load_abs(Filename)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L513" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L596" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2679,11 +2678,11 @@ this directory exists.</p><p>Instead of using this function, use <a href="#lib_d
 
       </div>
 
-<p>Same as <a href="#load_file/1"><code class="inline">load_file(Module)</code></a>, but <code class="inline">Filename</code> is an absolute or
-relative filename. The code path is not searched. It returns a value in the same
-way as <a href="#load_file/1"><code class="inline">load_file/1</code></a>. Notice that <code class="inline">Filename</code> must not contain the extension (for
-example, <code class="inline">.beam</code>) because <a href="#load_abs/1"><code class="inline">load_abs/1</code></a> adds the correct
-extension.</p>
+<p>Equivalent to <a href="#load_file/1"><code class="inline">load_file(Module)</code></a>, except that <code class="inline">Filename</code> is
+an absolute or relative filename.</p><p>The code path is not searched. It returns a value in the same way as
+<a href="#load_file/1"><code class="inline">load_file/1</code></a>. Notice that <code class="inline">Filename</code> must not contain the extension
+(for example, <code class="inline">.beam</code>) because <a href="#load_abs/1"><code class="inline">load_abs/1</code></a> adds the
+correct extension.</p>
   </section>
 </section>
 <section class="detail" id="load_binary/3">
@@ -2695,7 +2694,7 @@ extension.</p>
     </a>
     <h1 class="signature" translate="no">load_binary(Module, Filename, Binary)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L551" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L636" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2716,10 +2715,10 @@ extension.</p>
 
       </div>
 
-<p>This function can be used to load object code on remote Erlang nodes. Argument
+<p>Loads object code from a binary.</p><p>This function can be used to load object code on remote Erlang nodes. Argument
 <code class="inline">Binary</code> must contain object code for <code class="inline">Module</code>. <code class="inline">Filename</code> is only used by the
 code server to keep a record of from which file the object code for <code class="inline">Module</code>
-comes. Thus, <code class="inline">Filename</code> is not opened and read by the code server.</p><p>Returns <code class="inline">{module, Module}</code> if successful, or <code class="inline">{error, Reason}</code> if loading fails.
+originates. Thus, <code class="inline">Filename</code> is not opened and read by the code server.</p><p>Returns <code class="inline">{module, Module}</code> if successful, or <code class="inline">{error, Reason}</code> if loading fails.
 See <a href="code.html#error_reasons">Error Reasons for Code-Loading Functions</a> for a
 description of the possible error reasons.</p>
   </section>
@@ -2733,7 +2732,7 @@ description of the possible error reasons.</p>
     </a>
     <h1 class="signature" translate="no">load_file(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L454" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L533" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2749,11 +2748,11 @@ description of the possible error reasons.</p>
 
       </div>
 
-<p>Tries to load the Erlang module <code class="inline">Module</code>, using the code path. It looks for the
-object code file with an extension corresponding to the Erlang machine used, for
-example, <code class="inline">Module.beam</code>. The loading fails if the module name found in the object
-code differs from the name <code class="inline">Module</code>. <a href="#load_binary/3"><code class="inline">load_binary/3</code></a> must be used to load object
-code with a module name that is different from the file name.</p><p>Returns <code class="inline">{module, Module}</code> if successful, or <code class="inline">{error, Reason}</code> if loading fails.
+<p>Tries to load the Erlang module <code class="inline">Module</code> using the code path.</p><p>It looks for the object code file with an extension corresponding to
+the Erlang machine used, for example, <code class="inline">Module.beam</code>. The loading fails
+if the module name found in the object code differs from the name
+<code class="inline">Module</code>. Use <a href="#load_binary/3"><code class="inline">load_binary/3</code></a> to load object code with a module name
+that is different from the file name.</p><p>Returns <code class="inline">{module, Module}</code> if successful, or <code class="inline">{error, Reason}</code> if loading fails.
 See <a href="code.html#error_reasons">Error Reasons for Code-Loading Functions</a> for a
 description of the possible error reasons.</p>
   </section>
@@ -2767,7 +2766,7 @@ description of the possible error reasons.</p>
     </a>
     <h1 class="signature" translate="no">modified_modules()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1985" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2123" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2786,7 +2785,7 @@ description of the possible error reasons.</p>
       </div>
 
 <p>Returns the list of all currently loaded modules for which <a href="#module_status/1"><code class="inline">module_status/1</code></a>
-returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><code class="inline">all_loaded/0</code></a>.</p>
+returns <code class="inline">modified</code>.</p><p>See also <a href="#all_loaded/0"><code class="inline">all_loaded/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="module_status/0">
@@ -2798,7 +2797,7 @@ returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><
     </a>
     <h1 class="signature" translate="no">module_status()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1890" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2025" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2828,7 +2827,7 @@ returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><
     </a>
     <h1 class="signature" translate="no">module_status(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1919" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2055" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2846,11 +2845,11 @@ returns <code class="inline">modified</code>. See also <a href="#all_loaded/0"><
 
       </div>
 
-<p>The status of a module can be one of:</p><ul><li><p><strong><code class="inline">not_loaded</code></strong> - If <code class="inline">Module</code> is not currently loaded.</p></li><li><p><strong><code class="inline">loaded</code></strong> - If <code class="inline">Module</code> is loaded and the object file exists and contains
-the same code.</p></li><li><p><strong><code class="inline">removed</code></strong> - If <code class="inline">Module</code> is loaded but no corresponding object file can be
-found in the code path.</p></li><li><p><strong><code class="inline">modified</code></strong> - If <code class="inline">Module</code> is loaded but the object file contains code with
+<p>Returns the status of <code class="inline">Module</code> in relation to object file on disk.</p><p>The status of a module can be one of:</p><ul><li><p><strong><code class="inline">not_loaded</code></strong> - If <code class="inline">Module</code> is not currently loaded.</p></li><li><p><strong><code class="inline">loaded</code></strong> - If <code class="inline">Module</code> is loaded, and the object file exists and contains
+the same code.</p></li><li><p><strong><code class="inline">removed</code></strong> - If <code class="inline">Module</code> is loaded, but no corresponding object file can be
+found in the code path.</p></li><li><p><strong><code class="inline">modified</code></strong> - If <code class="inline">Module</code> is loaded, but the object file contains code with
 a different MD5 checksum.</p></li></ul><p>Preloaded modules are always reported as <code class="inline">loaded</code>, without inspecting the
-contents on disk. Cover compiled modules will always be reported as <code class="inline">modified</code>
+contents on disk. Cover-compiled modules will always be reported as <code class="inline">modified</code>
 if an object file exists, or as <code class="inline">removed</code> otherwise. Modules whose load path is
 an empty string (which is the convention for auto-generated code) will only be
 reported as <code class="inline">loaded</code> or <code class="inline">not_loaded</code>.</p><p>See also <a href="#modified_modules/0"><code class="inline">modified_modules/0</code></a>.</p>
@@ -2865,7 +2864,7 @@ reported as <code class="inline">loaded</code> or <code class="inline">not_loade
     </a>
     <h1 class="signature" translate="no">objfile_extension()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L438" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L515" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2881,8 +2880,7 @@ reported as <code class="inline">loaded</code> or <code class="inline">not_loade
 
       </div>
 
-<p>Returns the object code file extension corresponding to the Erlang machine used,
-namely <code class="inline">.beam</code>.</p>
+<p>Returns the object code file extension corresponding to the Erlang machine used.</p><p>For the official Erlang/OTP release, the return value is always <code class="inline">.beam</code>.</p>
   </section>
 </section>
 <section class="detail" id="prepare_loading/1">
@@ -2894,7 +2892,7 @@ namely <code class="inline">.beam</code>.</p>
     </a>
     <h1 class="signature" translate="no">prepare_loading(Modules)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1301" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1424" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2919,8 +2917,8 @@ namely <code class="inline">.beam</code>.</p>
 
       </div>
 
-<p>Prepares to load the modules in the list <code class="inline">Modules</code>. Finish the loading by
-calling <a href="#finish_loading/1">finish_loading(Prepared)</a>.</p><p>This function can fail with one of the following error reasons:</p><ul><li><p><strong><code class="inline">badfile</code></strong> - The object code has an incorrect format or the module name in
+<p>Prepares to load the modules in the list <code class="inline">Modules</code>.</p><p>Finish the loading by calling
+<a href="#finish_loading/1">finish_loading(Prepared)</a>.</p><p>This function can fail with one of the following error reasons:</p><ul><li><p><strong><code class="inline">badfile</code></strong> - The object code has an incorrect format or the module name in
 the object code is not the expected module name.</p></li><li><p><strong><code class="inline">nofile</code></strong> - No file with object code exists.</p></li><li><p><strong><code class="inline">on_load_not_allowed</code></strong> - A module contains an
 <a href="../../../../doc/system/code_loading.html#on_load">-on_load function</a>.</p></li><li><p><strong><code class="inline">duplicated</code></strong> - A module is included more than once in <code class="inline">Modules</code>.</p></li></ul>
   </section>
@@ -2934,7 +2932,7 @@ the object code is not the expected module name.</p></li><li><p><strong><code cl
     </a>
     <h1 class="signature" translate="no">priv_dir(Name)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L843" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L949" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2950,8 +2948,7 @@ the object code is not the expected module name.</p></li><li><p><strong><code cl
 
       </div>
 
-<p>Returns the path to the <code class="inline">priv</code> directory in an application. Equivalent to
-<code class="inline">code:lib_dir(Name, priv)</code>.</p><blockquote><h4 class="warning">Warning</h4><p>For backward compatibility, <code class="inline">Name</code> is also allowed to be a string. That will
+<p>Returns the path to the <code class="inline">priv</code> directory in an application.</p><blockquote><h4 class="warning">Warning</h4><p>For backward compatibility, <code class="inline">Name</code> is also allowed to be a string. That will
 probably change in a future release.</p></blockquote>
   </section>
 </section>
@@ -2964,7 +2961,7 @@ probably change in a future release.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">purge(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L603" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L691" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2980,12 +2977,11 @@ probably change in a future release.</p></blockquote>
 
       </div>
 
-<p>Purges the code for <code class="inline">Module</code>, that is, removes code marked as old. If some
-processes still linger in the old code, these processes are killed before the
-code is removed.</p><blockquote><h4 class="info">Note</h4><p>As of ERTS version 9.0, a process is only considered to be lingering in the
+<p>Purges the code for <code class="inline">Module</code>, that is, removes code marked as old.</p><p>If some processes still linger in the old code, these processes are
+killed before the code is removed.</p><blockquote><h4 class="info">Change</h4><p>As of Erlang/OTP 20.0, a process is only considered to be lingering in the
 code if it has direct references to the code. For more information see
 documentation of <a href="../../../../erts-14.2.3/doc/html/erlang.html#check_process_code/3"><code class="inline">erlang:check_process_code/3</code></a>, which is used in order to
-determine this.</p></blockquote><p>Returns <code class="inline">true</code> if successful and any process is needed to be killed, otherwise
+determine whether a process is lingering.</p></blockquote><p>Returns <code class="inline">true</code> if successful and any process is needed to be killed, otherwise
 <code class="inline">false</code>.</p>
   </section>
 </section>
@@ -2998,7 +2994,7 @@ determine this.</p></blockquote><p>Returns <code class="inline">true</code> if s
     </a>
     <h1 class="signature" translate="no">replace_path(Name, Dir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1097" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1211" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3016,7 +3012,7 @@ determine this.</p></blockquote><p>Returns <code class="inline">true</code> if s
 
       </div>
 
-<p>Equivalent to <a href="#replace_path/3"><code class="inline">replace_path/3</code></a>.</p>
+<p>Equivalent to <a href="#replace_path/3"><code class="inline">replace_path(Name, Dir, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="replace_path/3">
@@ -3028,7 +3024,7 @@ determine this.</p></blockquote><p>Returns <code class="inline">true</code> if s
     </a>
     <h1 class="signature" translate="no">replace_path(Name, Dir, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1241" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3047,12 +3043,12 @@ determine this.</p></blockquote><p>Returns <code class="inline">true</code> if s
       </div>
 
 <p>Replaces an old occurrence of a directory named <code class="inline">.../Name[-Vsn][/ebin]</code> in the
-code path, with <code class="inline">Dir</code>. If <code class="inline">Name</code> does not exist, it adds the new directory <code class="inline">Dir</code>
-last in the code path. The new directory must also be named
-<code class="inline">.../Name[-Vsn][/ebin]</code>. This function is to be used if a new version of the
-directory (library) is added to a running system.</p><p>An optional third argument may be set to the atom <code class="inline">cache</code> to control if the
-contents of the directory must be cached on first traversal. Defaults to
-<code class="inline">nocache</code>.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code></strong> - If successful</p></li><li><p><strong><code class="inline">{error, bad_name}</code></strong> - If <code class="inline">Name</code> is not found</p></li><li><p><strong><code class="inline">{error, bad_directory}</code></strong> - If <code class="inline">Dir</code> does not exist</p></li><li><p><strong><code class="inline">{error, {badarg, [Name, Dir]}}</code></strong> - If <code class="inline">Name</code> or <code class="inline">Dir</code> is invalid</p></li></ul>
+code path, with <code class="inline">Dir</code>.</p><p>If <code class="inline">Name</code> does not exist, it adds the new directory <code class="inline">Dir</code> last in the
+code path. The new directory must also be named
+<code class="inline">.../Name[-Vsn][/ebin]</code>. This function is to be used if a new version
+of the directory (library) is added to a running system.</p><p>Argument <code class="inline">Cache</code> controls whether the content of the directory
+should be cached on first traversal. If <code class="inline">Cache</code> is <code class="inline">cache</code> the directory
+contents will be cached; if <code class="inline">Cache</code> is <code class="inline">nocache</code> it will not be cached.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code></strong> - If successful</p></li><li><p><strong><code class="inline">{error, bad_name}</code></strong> - If <code class="inline">Name</code> is not found</p></li><li><p><strong><code class="inline">{error, bad_directory}</code></strong> - If <code class="inline">Dir</code> does not exist</p></li><li><p><strong><code class="inline">{error, {badarg, [Name, Dir]}}</code></strong> - If <code class="inline">Name</code> or <code class="inline">Dir</code> is invalid</p></li></ul>
   </section>
 </section>
 <section class="detail" id="reset_coverage/1">
@@ -3064,7 +3060,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">reset_coverage(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2319" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3082,7 +3078,10 @@ contents of the directory must be cached on first traversal. Defaults to
 
       </div>
 
-<p>Reset coverage information for module Module.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> was not loaded with coverage enabled.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul>
+<p>Resets coverage information for module <code class="inline">Module</code>.</p><p>If the <a href="#t:coverage_mode/0">coverage mode</a> is either <code class="inline">function</code> or
+<code class="inline">line</code>, all booleans for <code class="inline">Module</code> keeping track of executed functions
+or lines are set to <code class="inline">false</code>.</p><p>If the coverage mode is either <code class="inline">function_counters</code> or
+<code class="inline">line_counters</code>, all counters for <code class="inline">Module</code> are reset to zero.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> is not an atom.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> does not refer to a loaded module.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Module</code> was not loaded with coverage enabled.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul><p><em>See also:</em> <a href="#module-native-coverage-support">Native Coverage Support</a></p>
   </section>
 </section>
 <section class="detail" id="root_dir/0">
@@ -3094,7 +3093,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">root_dir()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L746" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L840" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3111,8 +3110,8 @@ contents of the directory must be cached on first traversal. Defaults to
       </div>
 
 <p>Returns the root directory of Erlang/OTP, which is the directory where it is
-installed.</p><p><em>Example:</em></p><pre><code class="text">&gt; code:root_dir().
-&quot;/usr/local/otp&quot;</code></pre>
+installed.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">code</span><span class="p">:</span><span class="nf">root_dir</span><span class="p" data-group-id="4392834981-1">(</span><span class="p" data-group-id="4392834981-1">)</span><span class="p">.</span><span class="w">
+</span><span class="s">&quot;/usr/local/otp&quot;</span></code></pre>
   </section>
 </section>
 <section class="detail" id="set_coverage_mode/1">
@@ -3124,7 +3123,7 @@ installed.</p><p><em>Example:</em></p><pre><code class="text">&gt; code:root_dir
     </a>
     <h1 class="signature" translate="no">set_coverage_mode(Mode)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2140" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L2291" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3143,7 +3142,8 @@ installed.</p><p><em>Example:</em></p><pre><code class="text">&gt; code:root_dir
       </div>
 
 <p>Sets the coverage mode for modules that are subsequently loaded, similar to
-option <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code>:</p><ul><li><p><strong><code class="inline">function</code></strong> - All modules that are loaded will be instrumented to keep
+option <a href="../../../../erts-14.2.3/doc/html/erl_cmd.html#%2BJPcover">+JPcover</a> for <code class="inline">erl</code>.</p><p>The coverage mode will have the following effect on code that is
+loaded following this call:</p><ul><li><p><strong><code class="inline">function</code></strong> - All modules that are loaded will be instrumented to keep
 track of which functions are executed. Information about which functions that
 have been executed can be retrieved by calling
 <a href="#get_coverage/2"><code class="inline">get_coverage(function, Module)</code></a>.</p></li><li><p><strong><code class="inline">function_counters</code></strong> - All modules that are loaded will be instrumented to
@@ -3163,7 +3163,7 @@ about how many times each line has been executed can be retrieved by calling
 functions that have been executed can be retrieved by calling
 <a href="#get_coverage/2"><code class="inline">get_coverage(function, Module)</code></a> (note that in this mode,
 counters for the number of times each function has been executed <strong>cannot</strong> be
-retrieved).</p></li><li><p><strong><code class="inline">none</code></strong> - Modules will be loaded without coverage instrumentation.</p></li></ul><p>Returns the previous coverage mode.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Mode</code> is not a valid coverage mode.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul>
+retrieved).</p></li><li><p><strong><code class="inline">none</code></strong> - Modules will be loaded without coverage instrumentation.</p></li></ul><p>Returns the previous coverage mode.</p><p>Failures:</p><ul><li><p><strong><code class="inline">badarg</code></strong> - If <code class="inline">Mode</code> is not a valid coverage mode.</p></li><li><p><strong><code class="inline">badarg</code></strong> - If the runtime system does not support coverage.</p></li></ul><p><em>See also:</em> <a href="#module-native-coverage-support">Native Coverage Support</a></p>
   </section>
 </section>
 <section class="detail" id="set_path/1">
@@ -3175,7 +3175,7 @@ retrieved).</p></li><li><p><strong><code class="inline">none</code></strong> - M
     </a>
     <h1 class="signature" translate="no">set_path(Path)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L886" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L992" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3193,7 +3193,7 @@ retrieved).</p></li><li><p><strong><code class="inline">none</code></strong> - M
 
       </div>
 
-<p>Equivalent to <a href="#set_path/2"><code class="inline">set_path/2</code></a>.</p>
+<p>Equivalent to <a href="#set_path/2"><code class="inline">set_path(PathList, nocache)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="set_path/2">
@@ -3205,7 +3205,7 @@ retrieved).</p></li><li><p><strong><code class="inline">none</code></strong> - M
     </a>
     <h1 class="signature" translate="no">set_path(PathList, Cache)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L904" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1010" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3223,9 +3223,9 @@ retrieved).</p></li><li><p><strong><code class="inline">none</code></strong> - M
 
       </div>
 
-<p>Sets the code path to the list of directories <code class="inline">Path</code>.</p><p>An optional second argument may be set to the atom <code class="inline">cache</code> to control if the
-contents of the directory must be cached on first traversal. Defaults to
-<code class="inline">nocache</code>.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code></strong> - If successful</p></li><li><p><strong><code class="inline">{error, bad_directory}</code></strong> - If any <code class="inline">Dir</code> is not a directory name</p></li></ul>
+<p>Sets the code path to the list of directories <code class="inline">Path</code>.</p><p>Argument <code class="inline">Cache</code> controls whether the content of the directory
+should be cached on first traversal. If <code class="inline">Cache</code> is <code class="inline">cache</code> the directory
+contents will be cached; if <code class="inline">Cache</code> is <code class="inline">nocache</code> it will not be cached.</p><p>Returns:</p><ul><li><p><strong><code class="inline">true</code></strong> - If successful</p></li><li><p><strong><code class="inline">{error, bad_directory}</code></strong> - If any <code class="inline">Dir</code> is not a directory name</p></li></ul>
   </section>
 </section>
 <section class="detail" id="soft_purge/1">
@@ -3237,7 +3237,7 @@ contents of the directory must be cached on first traversal. Defaults to
     </a>
     <h1 class="signature" translate="no">soft_purge(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L621" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L709" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3254,10 +3254,10 @@ contents of the directory must be cached on first traversal. Defaults to
       </div>
 
 <p>Purges the code for <code class="inline">Module</code>, that is, removes code marked as old, but only if
-no processes linger in it.</p><blockquote><h4 class="info">Note</h4><p>As of ERTS version 9.0, a process is only considered to be lingering in the
+no processes linger in it.</p><blockquote><h4 class="info">Change</h4><p>As of Erlang/OTP 20.0, a process is only considered to be lingering in the
 code if it has direct references to the code. For more information see
 documentation of <a href="../../../../erts-14.2.3/doc/html/erlang.html#check_process_code/3"><code class="inline">erlang:check_process_code/3</code></a>, which is used in order to
-determine this.</p></blockquote><p>Returns <code class="inline">false</code> if the module cannot be purged because of processes lingering in
+determine whether a process is lingering.</p></blockquote><p>Returns <code class="inline">false</code> if the module cannot be purged because of processes lingering in
 old code, otherwise <code class="inline">true</code>.</p>
   </section>
 </section>
@@ -3270,7 +3270,7 @@ old code, otherwise <code class="inline">true</code>.</p>
     </a>
     <h1 class="signature" translate="no">stick_dir(Dir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L852" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L958" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3298,7 +3298,7 @@ old code, otherwise <code class="inline">true</code>.</p>
     </a>
     <h1 class="signature" translate="no">unstick_dir(Dir)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L861" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L967" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3326,7 +3326,7 @@ old code, otherwise <code class="inline">true</code>.</p>
     </a>
     <h1 class="signature" translate="no">where_is_file(Filename)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1656" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1783" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3343,9 +3343,9 @@ old code, otherwise <code class="inline">true</code>.</p>
 
       </div>
 
-<p>Searches the code path for <code class="inline">Filename</code>, a file of arbitrary type. If found, the
-full name is returned. <code class="inline">non_existing</code> is returned if the file cannot be found.
-The function can be useful, for example, to locate application resource files.</p>
+<p>Searches the code path for <code class="inline">Filename</code>, which is a file of arbitrary type.</p><p>If found, the full name is returned. <code class="inline">non_existing</code> is returned if the
+file cannot be found.  The function can be useful, for example, to
+locate application resource files.</p>
   </section>
 </section>
 <section class="detail" id="which/1">
@@ -3357,7 +3357,7 @@ The function can be useful, for example, to locate application resource files.</
     </a>
     <h1 class="signature" translate="no">which(Module)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1634" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/code.erl#L1759" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3374,8 +3374,8 @@ The function can be useful, for example, to locate application resource files.</
       </div>
 
 <p>If the module is not loaded, this function searches the code path for the first
-file containing object code for <code class="inline">Module</code> and returns the absolute filename.</p><p>If the module is loaded, it returns the name of the file containing the loaded
-object code.</p><p>If the module is preloaded, <code class="inline">preloaded</code> is returned.</p><p>If the module is Cover-compiled, <code class="inline">cover_compiled</code> is returned.</p><p>If the module cannot be found, <code class="inline">non_existing</code> is returned.</p>
+file containing object code for <code class="inline">Module</code> and returns the absolute filename.</p><ul><li><p>If the module is loaded, it returns the name of the file containing the loaded
+object code.</p></li><li><p>If the module is preloaded, <code class="inline">preloaded</code> is returned.</p></li><li><p>If the module is Cover-compiled, <code class="inline">cover_compiled</code> is returned.</p></li><li><p>If the module cannot be found, <code class="inline">non_existing</code> is returned.</p></li></ul>
   </section>
 </section>
 

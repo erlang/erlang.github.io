@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-85B2FEEA.js"></script>
+    <script src="dist/sidebar_items-AAC3A8F2.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -181,17 +181,18 @@ stopped.</p><p>When using Eprof, expect a slowdown in program execution.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#analyze/2"><code class="inline">analyze/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#analyze/2"><code class="inline">analyze(procs, [])</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#analyze/1" translate="no">analyze(Type)</a>
+        <a href="#analyze/1" translate="no">analyze(TypeOpts)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#analyze/2"><code class="inline">analyze/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">TypeOpts</code> is an atom, it is assumed to be a module name, and this
+call is equivalent to <a href="#analyze/2"><code class="inline">analyze(TypeOpts, [])</code></a>.</p></div>
 
     </div>
 
@@ -201,8 +202,7 @@ stopped.</p><p>When using Eprof, expect a slowdown in program execution.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>Call this function when profiling has been stopped to display the results per
-process, that is</p></div>
+        <div class="summary-synopsis"><p>Call this function when profiling has been stopped to display the results.</p></div>
 
     </div>
 
@@ -212,29 +212,31 @@ process, that is</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This function ensures that the results displayed by
-<a href="#analyze/0"><code class="inline">analyze/0,1,2</code></a> are printed both to the file <code class="inline">File</code> and the
+        <div class="summary-synopsis"><p>Call this function to ensure that the results displayed by
+<a href="#analyze/0"><code class="inline">analyze/0,1,2</code></a> are printed to the file <code class="inline">File</code> as well as to the
 screen.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#profile/1" translate="no">profile/1</a>
+        <a href="#profile/1" translate="no">profile(FunRootset)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">FunRootset</code> is a fun, this call is equivalent to
+<a href="#profile/2"><code class="inline">profile([], FunRootset)</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#profile/2" translate="no">profile/2</a>
+        <a href="#profile/2" translate="no">profile(Arg1, Arg2)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">Arg1</code> is a fun and <code class="inline">Arg2</code> is list, this call is equivalent to
+<a href="#profile/4"><code class="inline">profile([], Arg1, {'_','_','_'}, Arg2)</code></a>.</p></div>
 
     </div>
 
@@ -244,17 +246,19 @@ screen.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/4"><code class="inline">profile(Rootset, Fun, Pattern, [{set_on_spawn, true}])</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#profile/4" translate="no">profile/4</a>
+        <a href="#profile/4" translate="no">profile(Rootset, Arg1, Arg2, Arg3)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p></div>
+        <div class="summary-synopsis"><p>This function spawns a process that applies a fun or an an function,
+and then starts profiling for the spawned proceses as well as the
+processes in <code class="inline">Rootset</code> (and any new processes spawned from them).</p></div>
 
     </div>
 
@@ -264,7 +268,7 @@ screen.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#profile/6"><code class="inline">profile(Rootset, Module, Function, Args, Pattern, [{set_on_spawn, true}])</code></a>.</p></div>
 
     </div>
 
@@ -274,11 +278,8 @@ screen.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This function first spawns a process <code class="inline">P</code> which evaluates <code class="inline">Fun()</code> or
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#apply/3"><code class="inline">apply(Module,Function,Args)</code></a>. Then, it starts profiling for <code class="inline">P</code>
-and the processes in <code class="inline">Rootset</code> (and any new processes spawned from them).
-Information about activity in any profiled process is stored in the Eprof
-database.</p></div>
+        <div class="summary-synopsis"><p>This function spawns a process <code class="inline">P</code> that <a href="../../../../erts-14.2.3/doc/html/erlang.html#apply/3"><code class="inline">apply(Module, Function, Args)</code></a>, and then starts profiling for <code class="inline">P</code> and the
+processes in <code class="inline">Rootset</code> (and any new processes spawned from them).</p></div>
 
     </div>
 
@@ -298,7 +299,7 @@ database.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start_profiling/3"><code class="inline">start_profiling/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#start_profiling/2"><code class="inline">start_profiling(Rootset, {'_', '_', '_'})</code></a>.</p></div>
 
     </div>
 
@@ -308,7 +309,7 @@ database.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#start_profiling/3"><code class="inline">start_profiling/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#start_profiling/3"><code class="inline">start_profiling(Rootset, Pattern, {'_', '_', '_'})</code></a>.</p></div>
 
     </div>
 
@@ -319,8 +320,7 @@ database.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Starts profiling for the processes in <code class="inline">Rootset</code> (and any new processes spawned
-from them). Information about activity in any profiled process is stored in the
-Eprof database.</p></div>
+from them).</p></div>
 
     </div>
 
@@ -366,7 +366,7 @@ Eprof database.</p></div>
     </a>
     <h1 class="signature" translate="no">analyze_type()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L104" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L105" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -396,7 +396,7 @@ Eprof database.</p></div>
     </a>
     <h1 class="signature" translate="no">trace_pattern_mfa()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L196" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -438,7 +438,7 @@ Eprof database.</p></div>
     </a>
     <h1 class="signature" translate="no">analyze()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L101" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L102" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -456,7 +456,7 @@ Eprof database.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#analyze/2"><code class="inline">analyze/2</code></a>.</p>
+<p>Equivalent to <a href="#analyze/2"><code class="inline">analyze(procs, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="analyze/1">
@@ -466,9 +466,9 @@ Eprof database.</p></div>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">analyze(Type)</h1>
+    <h1 class="signature" translate="no">analyze(TypeOpts)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L111" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L118" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -482,11 +482,13 @@ Eprof database.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> analyze(Type) -> ok | nothing_to_analyze when Type :: <a href="#t:analyze_type/0">analyze_type</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> analyze(TypeOpts) -> ok | nothing_to_analyze when TypeOpts :: <a href="#t:analyze_type/0">analyze_type</a>().</pre>
 
       </div>
 
-<p>Equivalent to <a href="#analyze/2"><code class="inline">analyze/2</code></a>.</p>
+<p>If <code class="inline">TypeOpts</code> is an atom, it is assumed to be a module name, and this
+call is equivalent to <a href="#analyze/2"><code class="inline">analyze(TypeOpts, [])</code></a>.</p><p>Otherwise, if <code class="inline">TypeOpts</code> is a list, it assumed to be a list of options, and this
+call is equivalent to <a href="#analyze/2"><code class="inline">analyze(procs, TypeOpts)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="analyze/2">
@@ -498,7 +500,7 @@ Eprof database.</p></div>
     </a>
     <h1 class="signature" translate="no">analyze(Type, Options)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L138" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L143" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -522,10 +524,9 @@ Eprof database.</p></div>
 
       </div>
 
-<p>Call this function when profiling has been stopped to display the results per
-process, that is:</p><ul><li>how much time has been used by each process, and</li><li>in which function calls this time has been spent.</li></ul><p>Call <code class="inline">analyze</code> with <code class="inline">total</code> option when profiling has been stopped to display
-the results per function call, that is in which function calls the time has been
-spent.</p><p>Time is shown as percentage of total time and as absolute time.</p>
+<p>Call this function when profiling has been stopped to display the results.</p><p>If <code class="inline">Type</code> is <code class="inline">procs</code>, the time spent in each function is shown separately
+for each profiled process.</p><p>If <code class="inline">Type</code> is <code class="inline">total</code>, the time spent in each function is shown combined
+for each profiled process.</p><p>Time is shown as percentage of total time and as absolute time in micro seconds.</p>
   </section>
 </section>
 <section class="detail" id="log/1">
@@ -537,7 +538,7 @@ spent.</p><p>Time is shown as percentage of total time and as absolute time.</p>
     </a>
     <h1 class="signature" translate="no">log(File)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L285" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L324" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -553,8 +554,8 @@ spent.</p><p>Time is shown as percentage of total time and as absolute time.</p>
 
       </div>
 
-<p>This function ensures that the results displayed by
-<a href="#analyze/0"><code class="inline">analyze/0,1,2</code></a> are printed both to the file <code class="inline">File</code> and the
+<p>Call this function to ensure that the results displayed by
+<a href="#analyze/0"><code class="inline">analyze/0,1,2</code></a> are printed to the file <code class="inline">File</code> as well as to the
 screen.</p>
   </section>
 </section>
@@ -565,15 +566,13 @@ screen.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">profile/1</h1>
+    <h1 class="signature" translate="no">profile(FunRootset)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L152" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L164" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
 
   </div>
 
@@ -587,7 +586,9 @@ screen.</p>
 
       </div>
 
-<p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p>
+<p>If <code class="inline">FunRootset</code> is a fun, this call is equivalent to
+<a href="#profile/2"><code class="inline">profile([], FunRootset)</code></a>.</p><p>If <code class="inline">FunRootset</code> is a list, it is assumed to be a <code class="inline">Rootset</code>, and this
+call is equivalent to <a href="#start_profiling/1"><code class="inline">start_profiling(Rootset)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="profile/2">
@@ -597,15 +598,13 @@ screen.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">profile/2</h1>
+    <h1 class="signature" translate="no">profile(Arg1, Arg2)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L190" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
 
   </div>
 
@@ -628,7 +627,9 @@ screen.</p>
 
       </div>
 
-<p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p>
+<p>If <code class="inline">Arg1</code> is a fun and <code class="inline">Arg2</code> is list, this call is equivalent to
+<a href="#profile/4"><code class="inline">profile([], Arg1, {'_','_','_'}, Arg2)</code></a>.</p><p>If <code class="inline">Arg1</code> is a list and <code class="inline">Arg2</code> is a fun, this call is equivalent to
+<a href="#profile/4"><code class="inline">profile(Arg1, Arg2, {'_','_','_'}, Arg1)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="profile/3">
@@ -640,13 +641,13 @@ screen.</p>
     </a>
     <h1 class="signature" translate="no">profile(Rootset, Fun, Pattern)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L189" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L207" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
+      <span class="note">(since OTP R14B)</span>
 
   </div>
 
@@ -664,7 +665,7 @@ screen.</p>
 
       </div>
 
-<p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p>
+<p>Equivalent to <a href="#profile/4"><code class="inline">profile(Rootset, Fun, Pattern, [{set_on_spawn, true}])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="profile/4">
@@ -674,15 +675,13 @@ screen.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">profile/4</h1>
+    <h1 class="signature" translate="no">profile(Rootset, Arg1, Arg2, Arg3)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L211" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L246" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
 
   </div>
 
@@ -709,7 +708,13 @@ screen.</p>
 
       </div>
 
-<p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p>
+<p>This function spawns a process that applies a fun or an an function,
+and then starts profiling for the spawned proceses as well as the
+processes in <code class="inline">Rootset</code> (and any new processes spawned from them).</p><p>If <code class="inline">Arg1</code> is a fun, <code class="inline">Arg2</code> is expected to be a trace pattern, and
+<code class="inline">Arg3</code> a list of options. In that case, this call is equivalent to:</p><p><a href="#profile/6"><code class="inline">profile(Rootset, erlang, apply, [Arg1, []], Arg2, Arg3)</code></a></p><p>If <code class="inline">Arg1</code> is an atom, <code class="inline">Arg1</code> is assumed to be a module name, <code class="inline">Arg2</code> the
+name of the function in that module, and <code class="inline">Arg3</code> a list of arguments to
+be used when calling that function. In that case, this call is equivalent
+to:</p><p><a href="#profile/6"><code class="inline">profile(Rootset, Arg1, Arg2, Arg3, {'_','_','_'}, [{set_on_spawn, true}])</code></a></p>
   </section>
 </section>
 <section class="detail" id="profile/5">
@@ -721,13 +726,13 @@ screen.</p>
     </a>
     <h1 class="signature" translate="no">profile(Rootset, Module, Function, Args, Pattern)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L229" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L266" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
+      <span class="note">(since OTP R14B)</span>
 
   </div>
 
@@ -747,7 +752,7 @@ screen.</p>
 
       </div>
 
-<p>Equivalent to <a href="#profile/6"><code class="inline">profile/6</code></a>.</p>
+<p>Equivalent to <a href="#profile/6"><code class="inline">profile(Rootset, Module, Function, Args, Pattern, [{set_on_spawn, true}])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="profile/6">
@@ -759,13 +764,13 @@ screen.</p>
     </a>
     <h1 class="signature" translate="no">profile(Rootset, Module, Function, Args, Pattern, Options)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L265" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L304" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
+      <span class="note">(since OTP R16B01)</span>
 
   </div>
 
@@ -786,11 +791,9 @@ screen.</p>
 
       </div>
 
-<p>This function first spawns a process <code class="inline">P</code> which evaluates <code class="inline">Fun()</code> or
-<a href="../../../../erts-14.2.3/doc/html/erlang.html#apply/3"><code class="inline">apply(Module,Function,Args)</code></a>. Then, it starts profiling for <code class="inline">P</code>
-and the processes in <code class="inline">Rootset</code> (and any new processes spawned from them).
-Information about activity in any profiled process is stored in the Eprof
-database.</p><p><code class="inline">Rootset</code> is a list of pids and registered names.</p><p>If tracing could be enabled for <code class="inline">P</code> and all processes in <code class="inline">Rootset</code>, the function
+<p>This function spawns a process <code class="inline">P</code> that <a href="../../../../erts-14.2.3/doc/html/erlang.html#apply/3"><code class="inline">apply(Module, Function, Args)</code></a>, and then starts profiling for <code class="inline">P</code> and the
+processes in <code class="inline">Rootset</code> (and any new processes spawned from them).</p><p><code class="inline">Rootset</code> is a list of pids and registered names.</p><p>Information about activity in any profiled process is stored in the Eprof
+database.</p><p>If tracing could be enabled for <code class="inline">P</code> and all processes in <code class="inline">Rootset</code>, the function
 returns <code class="inline">{ok,Value}</code> when <code class="inline">Fun()</code>/<code class="inline">apply</code> returns with the value <code class="inline">Value</code>, or
 <code class="inline">{error,Reason}</code> if <code class="inline">Fun()</code>/<code class="inline">apply</code> fails with exit reason <code class="inline">Reason</code>. Otherwise
 it returns <code class="inline">{error, Reason}</code> immediately.</p><p>The <code class="inline">set_on_spawn</code> option will active call time tracing for all processes
@@ -835,13 +838,11 @@ synchronous and that no work continues after the function has returned a value.<
     </a>
     <h1 class="signature" translate="no">start_profiling(Rootset)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L295" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L333" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
 
   </div>
 
@@ -854,7 +855,7 @@ synchronous and that no work continues after the function has returned a value.<
 
       </div>
 
-<p>Equivalent to <a href="#start_profiling/3"><code class="inline">start_profiling/3</code></a>.</p>
+<p>Equivalent to <a href="#start_profiling/2"><code class="inline">start_profiling(Rootset, {'_', '_', '_'})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start_profiling/2">
@@ -866,13 +867,13 @@ synchronous and that no work continues after the function has returned a value.<
     </a>
     <h1 class="signature" translate="no">start_profiling(Rootset, Pattern)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L305" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L343" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
+      <span class="note">(since OTP R14B)</span>
 
   </div>
 
@@ -888,7 +889,7 @@ synchronous and that no work continues after the function has returned a value.<
 
       </div>
 
-<p>Equivalent to <a href="#start_profiling/3"><code class="inline">start_profiling/3</code></a>.</p>
+<p>Equivalent to <a href="#start_profiling/3"><code class="inline">start_profiling(Rootset, Pattern, {'_', '_', '_'})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="start_profiling/3">
@@ -900,13 +901,13 @@ synchronous and that no work continues after the function has returned a value.<
     </a>
     <h1 class="signature" translate="no">start_profiling(Rootset, Pattern, Options)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L333" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L373" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
 
-      <span class="note">(since OTP R14B,OTP R16B01)</span>
+      <span class="note">(since OTP R16B01)</span>
 
   </div>
 
@@ -924,7 +925,7 @@ synchronous and that no work continues after the function has returned a value.<
       </div>
 
 <p>Starts profiling for the processes in <code class="inline">Rootset</code> (and any new processes spawned
-from them). Information about activity in any profiled process is stored in the
+from them).</p><p>Information about activity in any profiled process is stored in the
 Eprof database.</p><p><code class="inline">Rootset</code> is a list of pids and registered names.</p><p>The function returns <code class="inline">profiling</code> if tracing could be enabled for all processes
 in <code class="inline">Rootset</code>, or <code class="inline">error</code> otherwise.</p><p>A pattern can be selected to narrow the profiling. For instance a specific
 module can be selected, and only the code executed in that module will be
@@ -969,7 +970,7 @@ spawned by processes in the rootset. This is the default behaviour.</p>
     </a>
     <h1 class="signature" translate="no">stop_profiling()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L340" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/tools/src/eprof.erl#L380" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

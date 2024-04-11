@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-B0FDD196.js"></script>
+    <script src="dist/sidebar_items-CEF0AA31.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -133,16 +133,16 @@ Pages
 
 
   <section id="moduledoc">
-<p>Erlang error logger.</p><blockquote><h4 class="info">Note</h4><p>In Erlang/OTP 21.0, a new API for logging was added. The old <code class="inline">error_logger</code>
+<p>Erlang error logger.</p><blockquote><h4 class="info">Note</h4><p>In Erlang/OTP 21.0, a new API for logging was added. The old <a href="error_logger.html#content"><code class="inline">error_logger</code></a>
 module can still be used by legacy code, but log events are redirected to the
-new Logger API. New code should use the Logger API directly.</p><p><code class="inline">error_logger</code> is no longer started by default, but is automatically started
-when an event handler is added with <code class="inline">error_logger:add_report_handler/1,2</code>. The
-<code class="inline">error_logger</code> module is then also added as a handler to the new logger.</p><p>See <a href="logger.html"><code class="inline">logger</code></a> and the <a href="logger_chapter.html">Logging</a> chapter in the User's
+new Logger API. New code should use the Logger API directly.</p><p><a href="error_logger.html#content"><code class="inline">error_logger</code></a> is no longer started by default, but is automatically started
+when an event handler is added with <a href="#add_report_handler/2"><code class="inline">error_logger:add_report_handler/1,2</code></a>. The
+<a href="error_logger.html#content"><code class="inline">error_logger</code></a> module is then also added as a handler to the new logger.</p><p>See <a href="logger.html"><code class="inline">logger</code></a> and the <a href="logger_chapter.html">Logging</a> chapter in the User's
 Guide for more information.</p></blockquote><p>The Erlang <em>error logger</em> is an event manager (see
 <a href="../../../../doc/system/design_principles.html">OTP Design Principles</a> and <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>),
-registered as <code class="inline">error_logger</code>.</p><p>Error logger is no longer started by default, but is automatically started when
+registered as <a href="error_logger.html#content"><code class="inline">error_logger</code></a>.</p><p>Error logger is no longer started by default, but is automatically started when
 an event handler is added with
-<a href="#add_report_handler/1"><code class="inline">add_report_handler/1,2</code></a>. The <code class="inline">error_logger</code> module is
+<a href="#add_report_handler/1"><code class="inline">add_report_handler/1,2</code></a>. The <a href="error_logger.html#content"><code class="inline">error_logger</code></a> module is
 then also added as a handler to the new logger, causing log events to be
 forwarded from logger to error logger, and consequently to all installed error
 logger event handlers.</p><p>User-defined event handlers can be added to handle application-specific events.</p><p>Existing event handlers provided by STDLIB and SASL are still available, but are
@@ -158,29 +158,30 @@ user-defined event handlers, the warning events can be tagged as <code class="in
 </h2>
 <p>All event handlers added to the error logger must handle the following events.
 <code class="inline">Gleader</code> is the group leader pid of the process that sent the event, and <code class="inline">Pid</code>
-is the process that sent the event.</p><ul><li><p><strong><code class="inline">{error, Gleader, {Pid, Format, Data}}</code></strong> - Generated when <code class="inline">error_msg/1,2</code>
-or <code class="inline">format</code> is called.</p></li><li><p><strong><code class="inline">{error_report, Gleader, {Pid, std_error, Report}}</code></strong> - Generated when
-<a href="#error_report/1"><code class="inline">error_report/1</code></a> is called.</p></li><li><p><strong><code class="inline">{error_report, Gleader, {Pid, Type, Report}}</code></strong> - Generated when
-<a href="#error_report/2"><code class="inline">error_report/2</code></a> is called.</p></li><li><p><strong><code class="inline">{warning_msg, Gleader, {Pid, Format, Data}}</code></strong> - Generated when
-<code class="inline">warning_msg/1,2</code> is called if warnings are set to be tagged as warnings.</p></li><li><p><strong><code class="inline">{warning_report, Gleader, {Pid, std_warning, Report}}</code></strong> - Generated when
-<a href="#warning_report/1"><code class="inline">warning_report/1</code></a> is called if warnings are set to be
-tagged as warnings.</p></li><li><p><strong><code class="inline">{warning_report, Gleader, {Pid, Type, Report}}</code></strong> - Generated when
+is the process that sent the event.</p><ul><li><p><strong><code class="inline">{error, Gleader, {Pid, Format, Data}}</code></strong> -
+Generated when <a href="#error_msg/2"><code class="inline">error_msg/1,2</code></a> or <a href="#format/2"><code class="inline">format/2</code></a> is called.</p></li><li><p><strong><code class="inline">{error_report, Gleader, {Pid, std_error, Report}}</code></strong> -
+Generated when <a href="#error_report/1"><code class="inline">error_report/1</code></a> is called.</p></li><li><p><strong><code class="inline">{error_report, Gleader, {Pid, Type, Report}}</code></strong> -
+Generated when <a href="#error_report/2"><code class="inline">error_report/2</code></a> is called.</p></li><li><p><strong><code class="inline">{warning_msg, Gleader, {Pid, Format, Data}}</code></strong> -
+Generated when <a href="#warning_msg/2"><code class="inline">warning_msg/1,2</code></a> is called if warnings are set to
+be tagged as warnings.</p></li><li><p><strong><code class="inline">{warning_report, Gleader, {Pid, std_warning, Report}}</code></strong> -
+Generated when <a href="#warning_report/1"><code class="inline">warning_report/1</code></a> is called if warnings are
+set to be tagged as warnings.</p></li><li><p><strong><code class="inline">{warning_report, Gleader, {Pid, Type, Report}}</code></strong> - Generated when
 <a href="#warning_report/2"><code class="inline">warning_report/2</code></a> is called if warnings are set to be
-tagged as warnings.</p></li><li><p><strong><code class="inline">{info_msg, Gleader, {Pid, Format, Data}}</code></strong> - Generated when <code class="inline">info_msg/1,2</code>
-is called.</p></li><li><p><strong><code class="inline">{info_report, Gleader, {Pid, std_info, Report}}</code></strong> - Generated when
-<a href="#info_report/1"><code class="inline">info_report/1</code></a> is called.</p></li><li><p><strong><code class="inline">{info_report, Gleader, {Pid, Type, Report}}</code></strong> - Generated when
-<a href="#info_report/2"><code class="inline">info_report/2</code></a> is called.</p></li></ul><p>Notice that some system-internal events can also be received. Therefore a
+tagged as warnings.</p></li><li><p><strong><code class="inline">{info_msg, Gleader, {Pid, Format, Data}}</code></strong> -
+Generated when <a href="#info_msg/2"><code class="inline">info_msg/1,2</code></a> is called.</p></li><li><p><strong><code class="inline">{info_report, Gleader, {Pid, std_info, Report}}</code></strong> -
+Generated when <a href="#info_report/1"><code class="inline">info_report/1</code></a> is called.</p></li><li><p><strong><code class="inline">{info_report, Gleader, {Pid, Type, Report}}</code></strong> -
+Generated when <a href="#info_report/2"><code class="inline">info_report/2</code></a> is called.</p></li></ul><p>Notice that some system-internal events can also be received. Therefore a
 catch-all clause last in the definition of the event handler callback function
-<code class="inline">Module:handle_event/2</code> is necessary. This also applies for
-<code class="inline">Module:handle_info/2</code>, as the event handler must also take care of some
+<a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html#c:handle_event/2"><code class="inline">gen_event:handle_event/2</code></a> is necessary. This also applies for
+<a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html#c:handle_info/2"><code class="inline">gen_event:handle_info/2</code></a>, as the event handler must also take care of some
 system-internal messages.</p><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">See Also</span>
 </h2>
-<p><a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>, <a href="logger.html"><code class="inline">logger</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/log_mf_h.html"><code class="inline">log_mf_h</code></a>, <a href="kernel_app.html"><code class="inline">kernel(6)</code></a>,
-<a href="../../../../lib/sasl-4.2.1/doc/html/sasl_app.html"><code class="inline">sasl(6)</code></a></p>
+<p><a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>, <a href="logger.html"><code class="inline">logger</code></a>, <a href="../../../../lib/stdlib-5.2.1/doc/html/log_mf_h.html"><code class="inline">log_mf_h</code></a>, <a href="kernel_app.html"><code class="inline">kernel</code></a>,
+<a href="../../../../lib/sasl-4.2.1/doc/html/sasl_app.html"><code class="inline">sasl</code></a></p>
   </section>
 
 
@@ -224,7 +225,7 @@ system-internal messages.</p><h2 id="module-see-also" class="section-heading">
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#add_report_handler/2"><code class="inline">add_report_handler/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#add_report_handler/2"><code class="inline">add_report_handler(Handler, [])</code></a>.</p></div>
 
     </div>
 
@@ -235,7 +236,7 @@ system-internal messages.</p><h2 id="module-see-also" class="section-heading">
       </div>
 
         <div class="summary-synopsis"><p>Adds a new event handler to the error logger. The event handler must be
-implemented as a <code class="inline">gen_event</code> callback module, see <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>.</p></div>
+implemented as a <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a> callback module.</p></div>
 
     </div>
 
@@ -246,7 +247,7 @@ implemented as a <code class="inline">gen_event</code> callback module, see <a h
       </div>
 
         <div class="summary-synopsis"><p>Deletes an event handler from the error logger by calling
-<code class="inline">gen_event:delete_handler(error_logger, Handler, [])</code>, see <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>.</p></div>
+<a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html#delete_handler/3"><code class="inline">gen_event:delete_handler(error_logger, Handler, [])</code></a>.</p></div>
 
     </div>
 
@@ -256,7 +257,7 @@ implemented as a <code class="inline">gen_event</code> callback module, see <a h
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#format/2"><code class="inline">format/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#error_msg/2"><code class="inline">error_msg(Format, [])</code></a>.</p></div>
 
     </div>
 
@@ -266,7 +267,8 @@ implemented as a <code class="inline">gen_event</code> callback module, see <a h
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#format/2"><code class="inline">format/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Log a standard error event. The <code class="inline">Format</code> and <code class="inline">Data</code> arguments are the same as
+the arguments of <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a> in STDLIB.</p></div>
 
     </div>
 
@@ -300,8 +302,7 @@ event handlers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Log a standard error event. The <code class="inline">Format</code> and <code class="inline">Data</code> arguments are the same as
-the arguments of <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a> in STDLIB.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#error_msg/2"><code class="inline">error_msg(Format, Data)</code></a>.</p></div>
 
     </div>
 
@@ -312,8 +313,8 @@ the arguments of <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2
       </div>
 
         <div class="summary-synopsis"><p>Returns <a href="../../../../erts-14.2.3/doc/html/erlang.html#max/2"><code class="inline">max(10, Depth)</code></a>, where <code class="inline">Depth</code> is the value of
-<code class="inline">error_logger_format_depth</code> in the Kernel application, if Depth is an integer.
-Otherwise, <code class="inline">unlimited</code> is returned.</p></div>
+<a href="kernel_app.html#error_logger_format_depth"><code class="inline">error_logger_format_depth</code></a> in the
+Kernel application, if Depth is an integer. Otherwise, <code class="inline">unlimited</code> is returned.</p></div>
 
     </div>
 
@@ -323,7 +324,7 @@ Otherwise, <code class="inline">unlimited</code> is returned.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#info_msg/2"><code class="inline">info_msg/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#info_msg/2"><code class="inline">info_msg(Format, [])</code></a>.</p></div>
 
     </div>
 
@@ -389,9 +390,7 @@ events to the terminal.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the current mapping for warning events. Events sent using
-<code class="inline">warning_msg/1,2</code> or <code class="inline">warning_report/1,2</code> are tagged as errors, warnings
-(default), or info, depending on the value of command-line flag <code class="inline">+W</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns the current mapping for warning events.</p></div>
 
     </div>
 
@@ -401,7 +400,7 @@ events to the terminal.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#warning_msg/2"><code class="inline">warning_msg/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#warning_msg/2"><code class="inline">warning_msg(Format, [])</code></a>.</p></div>
 
     </div>
 
@@ -462,7 +461,7 @@ event handlers.</p></div>
     </a>
     <h1 class="signature" translate="no">open_error()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L836" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L839" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -492,7 +491,7 @@ event handlers.</p></div>
     </a>
     <h1 class="signature" translate="no">report()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L418" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L421" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -534,7 +533,7 @@ event handlers.</p></div>
     </a>
     <h1 class="signature" translate="no">add_report_handler(Handler)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L771" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L774" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -550,7 +549,7 @@ event handlers.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#add_report_handler/2"><code class="inline">add_report_handler/2</code></a>.</p>
+<p>Equivalent to <a href="#add_report_handler/2"><code class="inline">add_report_handler(Handler, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="add_report_handler/2">
@@ -562,7 +561,7 @@ event handlers.</p></div>
     </a>
     <h1 class="signature" translate="no">add_report_handler(Handler, Args)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L793" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L796" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -583,11 +582,11 @@ event handlers.</p></div>
       </div>
 
 <p>Adds a new event handler to the error logger. The event handler must be
-implemented as a <code class="inline">gen_event</code> callback module, see <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>.</p><p><code class="inline">Handler</code> is typically the name of the callback module and <code class="inline">Args</code> is an optional
+implemented as a <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a> callback module.</p><p><code class="inline">Handler</code> is typically the name of the callback module and <code class="inline">Args</code> is an optional
 term (defaults to []) passed to the initialization callback function
-<code class="inline">Handler:init/1</code>. The function returns <code class="inline">ok</code> if successful.</p><p>The event handler must be able to handle the events in this module, see section
-<a href="error_logger.html#module-events">Events</a>.</p><p>The first time this function is called, <code class="inline">error_logger</code> is added as a Logger
-handler, and the <code class="inline">error_logger</code> process is started.</p>
+<a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html#c:init/1"><code class="inline">gen_event:init/1</code></a>. The function returns <code class="inline">ok</code> if successful.</p><p>The event handler must be able to handle the events in this module, see section
+<a href="error_logger.html#module-events">Events</a>.</p><p>The first time this function is called, <a href="error_logger.html#content"><code class="inline">error_logger</code></a> is added as a Logger
+handler, and the <a href="error_logger.html#content"><code class="inline">error_logger</code></a> process is started.</p>
   </section>
 </section>
 <section class="detail" id="delete_report_handler/1">
@@ -599,7 +598,7 @@ handler, and the <code class="inline">error_logger</code> process is started.</p
     </a>
     <h1 class="signature" translate="no">delete_report_handler(Handler)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L808" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L811" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -617,8 +616,8 @@ handler, and the <code class="inline">error_logger</code> process is started.</p
       </div>
 
 <p>Deletes an event handler from the error logger by calling
-<code class="inline">gen_event:delete_handler(error_logger, Handler, [])</code>, see <a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>.</p><p>If no more event handlers exist after the deletion, <code class="inline">error_logger</code> is removed as
-a Logger handler, and the <code class="inline">error_logger</code> process is stopped.</p>
+<a href="../../../../lib/stdlib-5.2.1/doc/html/gen_event.html#delete_handler/3"><code class="inline">gen_event:delete_handler(error_logger, Handler, [])</code></a>.</p><p>If no more event handlers exist after the deletion, <a href="error_logger.html#content"><code class="inline">error_logger</code></a> is removed as
+a Logger handler, and the <a href="error_logger.html#content"><code class="inline">error_logger</code></a> process is stopped.</p>
   </section>
 </section>
 <section class="detail" id="error_msg/1">
@@ -630,7 +629,7 @@ a Logger handler, and the <code class="inline">error_logger</code> process is st
     </a>
     <h1 class="signature" translate="no">error_msg(Format)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L362" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L365" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -646,7 +645,7 @@ a Logger handler, and the <code class="inline">error_logger</code> process is st
 
       </div>
 
-<p>Equivalent to <a href="#format/2"><code class="inline">format/2</code></a>.</p>
+<p>Equivalent to <a href="#error_msg/2"><code class="inline">error_msg(Format, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="error_msg/2">
@@ -658,7 +657,7 @@ a Logger handler, and the <code class="inline">error_logger</code> process is st
     </a>
     <h1 class="signature" translate="no">error_msg(Format, Data)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L370" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L400" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -674,7 +673,16 @@ a Logger handler, and the <code class="inline">error_logger</code> process is st
 
       </div>
 
-<p>Equivalent to <a href="#format/2"><code class="inline">format/2</code></a>.</p>
+<p>Log a standard error event. The <code class="inline">Format</code> and <code class="inline">Data</code> arguments are the same as
+the arguments of <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a> in STDLIB.</p><p>Error logger forwards the event to Logger, including metadata that allows
+backwards compatibility with legacy error logger event handlers.</p><p>The event is handled by the default Logger handler.</p><p>This function is kept for backwards compatibility and must not be used by new
+code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_ERROR</code></a> macro or
+<a href="logger.html#error/1"><code class="inline">logger:error/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="text">1&gt; error_logger:error_msg(&quot;An error occurred in ~p&quot;, [a_module]).
+=ERROR REPORT==== 22-May-2018::11:18:43.376917 ===
+An error occurred in a_module
+ok</code></pre><blockquote><h4 class="warning">Warning</h4><p>If the Unicode translation modifier (<code class="inline">t</code>) is used in the format string, all
+event handlers must ensure that the formatted output is correctly encoded for
+the I/O device.</p></blockquote>
   </section>
 </section>
 <section class="detail" id="error_report/1">
@@ -686,7 +694,7 @@ a Logger handler, and the <code class="inline">error_logger</code> process is st
     </a>
     <h1 class="signature" translate="no">error_report(Report)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L450" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L453" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -706,16 +714,16 @@ a Logger handler, and the <code class="inline">error_logger</code> process is st
 metadata that allows backwards compatibility with legacy error logger event
 handlers.</p><p>The event is handled by the default Logger handler.</p><p>This functions is kept for backwards compatibility and must not be used by new
 code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_ERROR</code></a> macro or
-<a href="logger.html#error/1"><code class="inline">logger:error/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">error_logger</span><span class="p">:</span><span class="nf">error_report</span><span class="p" data-group-id="3633245885-1">(</span><span class="p" data-group-id="3633245885-2">[</span><span class="p" data-group-id="3633245885-3">{</span><span class="ss">tag1</span><span class="p">,</span><span class="ss">data1</span><span class="p" data-group-id="3633245885-3">}</span><span class="p">,</span><span class="ss">a_term</span><span class="p">,</span><span class="p" data-group-id="3633245885-4">{</span><span class="ss">tag2</span><span class="p">,</span><span class="ss">data</span><span class="p" data-group-id="3633245885-4">}</span><span class="p" data-group-id="3633245885-2">]</span><span class="p" data-group-id="3633245885-1">)</span><span class="p">.</span><span class="w">
-</span><span class="o">=</span><span class="n">ERROR</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="n">May</span><span class="o">-</span><span class="mi">2018</span><span class="p">:</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mf">23.699306</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
-    </span><span class="nc">tag1</span><span class="p">:</span><span class="w"> </span><span class="ss">data1</span><span class="w">
-    </span><span class="ss">a_term</span><span class="w">
-    </span><span class="nc">tag2</span><span class="p">:</span><span class="w"> </span><span class="ss">data</span><span class="w">
-</span><span class="ss">ok</span><span class="gp unselectable">
-3&gt; </span><span class="nc">error_logger</span><span class="p">:</span><span class="nf">error_report</span><span class="p" data-group-id="3633245885-5">(</span><span class="s">&quot;Serious error in my module&quot;</span><span class="p" data-group-id="3633245885-5">)</span><span class="p">.</span><span class="w">
-</span><span class="o">=</span><span class="n">ERROR</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="n">May</span><span class="o">-</span><span class="mi">2018</span><span class="p">:</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mf">45.972445</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
-</span><span class="n">Serious</span><span class="w"> </span><span class="ss">error</span><span class="w"> </span><span class="ss">in</span><span class="w"> </span><span class="ss">my</span><span class="w"> </span><span class="ss">module</span><span class="w">
-</span><span class="ss">ok</span></code></pre>
+<a href="logger.html#error/1"><code class="inline">logger:error/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="text">2&gt; error_logger:error_report([{tag1,data1},a_term,{tag2,data}]).
+=ERROR REPORT==== 22-May-2018::11:24:23.699306 ===
+    tag1: data1
+    a_term
+    tag2: data
+ok
+3&gt; error_logger:error_report(&quot;Serious error in my module&quot;).
+=ERROR REPORT==== 22-May-2018::11:24:45.972445 ===
+Serious error in my module
+ok</code></pre>
   </section>
 </section>
 <section class="detail" id="error_report/2">
@@ -727,7 +735,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_ERRO
     </a>
     <h1 class="signature" translate="no">error_report(Type, Report)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L474" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L477" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -763,7 +771,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_ERRO
     </a>
     <h1 class="signature" translate="no">format(Format, Data)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L409" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L412" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -779,16 +787,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_ERRO
 
       </div>
 
-<p>Log a standard error event. The <code class="inline">Format</code> and <code class="inline">Data</code> arguments are the same as
-the arguments of <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a> in STDLIB.</p><p>Error logger forwards the event to Logger, including metadata that allows
-backwards compatibility with legacy error logger event handlers.</p><p>The event is handled by the default Logger handler.</p><p>These functions are kept for backwards compatibility and must not be used by new
-code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_ERROR</code></a> macro or
-<a href="logger.html#error/1"><code class="inline">logger:error/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">error_logger</span><span class="p">:</span><span class="nf">error_msg</span><span class="p" data-group-id="7247793806-1">(</span><span class="s">&quot;An error occurred in </span><span class="si">~p</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7247793806-2">[</span><span class="ss">a_module</span><span class="p" data-group-id="7247793806-2">]</span><span class="p" data-group-id="7247793806-1">)</span><span class="p">.</span><span class="w">
-</span><span class="o">=</span><span class="n">ERROR</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="n">May</span><span class="o">-</span><span class="mi">2018</span><span class="p">:</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span><span class="mi">18</span><span class="p">:</span><span class="mf">43.376917</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
-</span><span class="n">An</span><span class="w"> </span><span class="ss">error</span><span class="w"> </span><span class="ss">occurred</span><span class="w"> </span><span class="ss">in</span><span class="w"> </span><span class="ss">a_module</span><span class="w">
-</span><span class="ss">ok</span></code></pre><blockquote><h4 class="warning">Warning</h4><p>If the Unicode translation modifier (<code class="inline">t</code>) is used in the format string, all
-event handlers must ensure that the formatted output is correctly encoded for
-the I/O device.</p></blockquote>
+<p>Equivalent to <a href="#error_msg/2"><code class="inline">error_msg(Format, Data)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="get_format_depth/0">
@@ -800,7 +799,7 @@ the I/O device.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">get_format_depth()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L981" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L984" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -819,8 +818,8 @@ the I/O device.</p></blockquote>
       </div>
 
 <p>Returns <a href="../../../../erts-14.2.3/doc/html/erlang.html#max/2"><code class="inline">max(10, Depth)</code></a>, where <code class="inline">Depth</code> is the value of
-<code class="inline">error_logger_format_depth</code> in the Kernel application, if Depth is an integer.
-Otherwise, <code class="inline">unlimited</code> is returned.</p><blockquote><h4 class="info">Note</h4><p>The <code class="inline">error_logger_format_depth</code> variable is
+<a href="kernel_app.html#error_logger_format_depth"><code class="inline">error_logger_format_depth</code></a> in the
+Kernel application, if Depth is an integer. Otherwise, <code class="inline">unlimited</code> is returned.</p><blockquote><h4 class="info">Note</h4><p>The <a href="kernel_app.html#error_logger_format_depth"><code class="inline">error_logger_format_depth</code></a> variable is
 <a href="kernel_app.html#deprecated-configuration-parameters">deprecated</a> since the
 <a href="logger.html">Logger API</a> was introduced in Erlang/OTP 21.0. The variable, and
 this function, are kept for backwards compatibility since they still might be
@@ -836,7 +835,7 @@ used by legacy report handlers.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">info_msg(Format)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L654" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L657" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -852,7 +851,7 @@ used by legacy report handlers.</p></blockquote>
 
       </div>
 
-<p>Equivalent to <a href="#info_msg/2"><code class="inline">info_msg/2</code></a>.</p>
+<p>Equivalent to <a href="#info_msg/2"><code class="inline">info_msg(Format, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="info_msg/2">
@@ -864,7 +863,7 @@ used by legacy report handlers.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">info_msg(Format, Data)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L689" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L692" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -884,10 +883,10 @@ used by legacy report handlers.</p></blockquote>
 as the arguments of <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a> in STDLIB.</p><p>Error logger forwards the event to Logger, including metadata that allows
 backwards compatibility with legacy error logger event handlers.</p><p>The event is handled by the default Logger handler.</p><p>These functions are kept for backwards compatibility and must not be used by new
 code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_INFO</code></a> macro or
-<a href="logger.html#info/1"><code class="inline">logger:info/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">error_logger</span><span class="p">:</span><span class="nf">info_msg</span><span class="p" data-group-id="2148235594-1">(</span><span class="s">&quot;Something happened in </span><span class="si">~p</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2148235594-2">[</span><span class="ss">a_module</span><span class="p" data-group-id="2148235594-2">]</span><span class="p" data-group-id="2148235594-1">)</span><span class="p">.</span><span class="w">
-</span><span class="o">=</span><span class="n">INFO</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="n">May</span><span class="o">-</span><span class="mi">2018</span><span class="p">:</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mf">32.612462</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
-</span><span class="n">Something</span><span class="w"> </span><span class="ss">happened</span><span class="w"> </span><span class="ss">in</span><span class="w"> </span><span class="ss">a_module</span><span class="w">
-</span><span class="ss">ok</span></code></pre><blockquote><h4 class="warning">Warning</h4><p>If the Unicode translation modifier (<code class="inline">t</code>) is used in the format string, all
+<a href="logger.html#info/1"><code class="inline">logger:info/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="text">1&gt; error_logger:info_msg(&quot;Something happened in ~p&quot;, [a_module]).
+=INFO REPORT==== 22-May-2018::12:03:32.612462 ===
+Something happened in a_module
+ok</code></pre><blockquote><h4 class="warning">Warning</h4><p>If the Unicode translation modifier (<code class="inline">t</code>) is used in the format string, all
 event handlers must ensure that the formatted output is correctly encoded for
 the I/O device.</p></blockquote>
   </section>
@@ -901,7 +900,7 @@ the I/O device.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">info_report(Report)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L615" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L618" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -921,16 +920,16 @@ the I/O device.</p></blockquote>
 including metadata that allows backwards compatibility with legacy error logger
 event handlers.</p><p>The event is handled by the default Logger handler.</p><p>This functions is kept for backwards compatibility and must not be used by new
 code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_INFO</code></a> macro or
-<a href="logger.html#info/1"><code class="inline">logger:info/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">error_logger</span><span class="p">:</span><span class="nf">info_report</span><span class="p" data-group-id="0338902907-1">(</span><span class="p" data-group-id="0338902907-2">[</span><span class="p" data-group-id="0338902907-3">{</span><span class="ss">tag1</span><span class="p">,</span><span class="ss">data1</span><span class="p" data-group-id="0338902907-3">}</span><span class="p">,</span><span class="ss">a_term</span><span class="p">,</span><span class="p" data-group-id="0338902907-4">{</span><span class="ss">tag2</span><span class="p">,</span><span class="ss">data</span><span class="p" data-group-id="0338902907-4">}</span><span class="p" data-group-id="0338902907-2">]</span><span class="p" data-group-id="0338902907-1">)</span><span class="p">.</span><span class="w">
-</span><span class="o">=</span><span class="n">INFO</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="n">May</span><span class="o">-</span><span class="mi">2018</span><span class="p">:</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="mf">35.994440</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
-    </span><span class="nc">tag1</span><span class="p">:</span><span class="w"> </span><span class="ss">data1</span><span class="w">
-    </span><span class="ss">a_term</span><span class="w">
-    </span><span class="nc">tag2</span><span class="p">:</span><span class="w"> </span><span class="ss">data</span><span class="w">
-</span><span class="ss">ok</span><span class="gp unselectable">
-3&gt; </span><span class="nc">error_logger</span><span class="p">:</span><span class="nf">info_report</span><span class="p" data-group-id="0338902907-5">(</span><span class="s">&quot;Something strange happened&quot;</span><span class="p" data-group-id="0338902907-5">)</span><span class="p">.</span><span class="w">
-</span><span class="o">=</span><span class="n">INFO</span><span class="w"> </span><span class="n">REPORT</span><span class="o">==</span><span class="o">==</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="n">May</span><span class="o">-</span><span class="mi">2018</span><span class="p">:</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="mf">49.066872</span><span class="w"> </span><span class="o">==</span><span class="o">=</span><span class="w">
-</span><span class="n">Something</span><span class="w"> </span><span class="ss">strange</span><span class="w"> </span><span class="ss">happened</span><span class="w">
-</span><span class="ss">ok</span></code></pre>
+<a href="logger.html#info/1"><code class="inline">logger:info/1,2,3</code></a> instead.</p><p><em>Example:</em></p><pre><code class="text">2&gt; error_logger:info_report([{tag1,data1},a_term,{tag2,data}]).
+=INFO REPORT==== 22-May-2018::12:06:35.994440 ===
+    tag1: data1
+    a_term
+    tag2: data
+ok
+3&gt; error_logger:info_report(&quot;Something strange happened&quot;).
+=INFO REPORT==== 22-May-2018::12:06:49.066872 ===
+Something strange happened
+ok</code></pre>
   </section>
 </section>
 <section class="detail" id="info_report/2">
@@ -942,7 +941,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_INFO
     </a>
     <h1 class="signature" translate="no">info_report(Type, Report)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L639" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L642" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -978,7 +977,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_INFO
     </a>
     <h1 class="signature" translate="no">logfile/1</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L875" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L878" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -999,7 +998,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_INFO
       </div>
 
 <p>Enables or disables printout of standard events to a file.</p><p>This is done by adding or deleting the <code class="inline">error_logger_file_h</code> event handler, and
-thus indirectly adding <code class="inline">error_logger</code> as a Logger handler.</p><p>Notice that this function does not manipulate the Logger configuration directly,
+thus indirectly adding <a href="error_logger.html#content"><code class="inline">error_logger</code></a> as a Logger handler.</p><p>Notice that this function does not manipulate the Logger configuration directly,
 meaning that if the default Logger handler is already logging to a file, this
 function can potentially cause logging to a second file.</p><p>This function is useful as a shortcut during development and testing, but must
 not be used in a production system. See section <a href="logger_chapter.html">Logging</a> in
@@ -1021,7 +1020,7 @@ enabled, or an error tuple if another error occurred (for example, if
     </a>
     <h1 class="signature" translate="no">tty(Flag)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L923" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L926" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1054,7 +1053,7 @@ live systems.</p>
     </a>
     <h1 class="signature" translate="no">warning_map()</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L175" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L178" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1070,8 +1069,8 @@ live systems.</p>
 
       </div>
 
-<p>Returns the current mapping for warning events. Events sent using
-<code class="inline">warning_msg/1,2</code> or <code class="inline">warning_report/1,2</code> are tagged as errors, warnings
+<p>Returns the current mapping for warning events.</p><p>Events sent using <a href="#warning_msg/2"><code class="inline">warning_msg/1,2</code></a> or
+<a href="#warning_report/2"><code class="inline">warning_report/1,2</code></a> are tagged as errors, warnings
 (default), or info, depending on the value of command-line flag <code class="inline">+W</code>.</p><p><em>Example:</em></p><pre><code class="text">os$ erl
 Erlang (BEAM) emulator version 5.4.8 [hipe] [threads:0] [kernel-poll]
 
@@ -1108,7 +1107,7 @@ ok</code></pre>
     </a>
     <h1 class="signature" translate="no">warning_msg(Format)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L546" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L549" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1124,7 +1123,7 @@ ok</code></pre>
 
       </div>
 
-<p>Equivalent to <a href="#warning_msg/2"><code class="inline">warning_msg/2</code></a>.</p>
+<p>Equivalent to <a href="#warning_msg/2"><code class="inline">warning_msg(Format, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="warning_msg/2">
@@ -1136,7 +1135,7 @@ ok</code></pre>
     </a>
     <h1 class="signature" translate="no">warning_msg(Format, Data)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L573" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L576" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1171,7 +1170,7 @@ the I/O device.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">warning_report(Report)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L504" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L507" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1204,7 +1203,7 @@ code. Use the <a href="logger.html#module-macros"><code class="inline">?LOG_WARN
     </a>
     <h1 class="signature" translate="no">warning_report(Type, Report)</h1>
 
-      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L530" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Maria-12648430/otp/blob/fix_ssh_connect_trapping_exits/lib/kernel/src/error_logger.erl#L533" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
