@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-3642742D.js"></script>
+    <script src="dist/sidebar_items-70D74695.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -139,7 +139,7 @@ to a final printable string (<a href="../../../../lib/stdlib-5.2.1/doc/html/unic
 which can be written to the output device of the handler. See sections
 <a href="logger_chapter.html#handlers">Handlers</a> and
 <a href="logger_chapter.html#formatters">Formatters</a> in the Kernel User's Guide for more
-information.</p><p><code class="inline">logger_formatter</code> is the default formatter used by Logger.</p><h2 id="module-see-also" class="section-heading">
+information.</p><p><a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> is the default formatter used by Logger.</p><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -189,14 +189,7 @@ following keys can be set as configuration parameters</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The template is a list of atoms, atom lists, tuples and strings. The atoms
-<code class="inline">level</code> or <code class="inline">msg</code>, are treated as placeholders for the severity level and the log
-message, respectively. Other atoms or atom lists are interpreted as placeholders
-for metadata, where atoms are expected to match top level keys, and atom lists
-represent paths to sub keys when the metadata is a nested map. For example the
-list <code class="inline">[key1,key2]</code> is replaced by the value of the <code class="inline">key2</code> field in the nested
-map below. The atom <code class="inline">key1</code> on its own is replaced by the complete value of the
-<code class="inline">key1</code> field. The values are converted to strings.</p></div>
+        <div class="summary-synopsis"><p>The template to be used by a logger formatter.</p></div>
 
     </div>
 
@@ -212,7 +205,9 @@ map below. The atom <code class="inline">key1</code> on its own is replaced by t
 
       </div>
 
-        <div class="summary-synopsis"><p>This callback function is optional.</p></div>
+        <div class="summary-synopsis"><p>The function is called by a Logger when formatter configuration is set or
+modified. The formatter must validate the given configuration and return <code class="inline">ok</code> if
+it is correct, and <code class="inline">{error,Reason}</code> if it is faulty.</p></div>
 
     </div>
 
@@ -222,7 +217,9 @@ map below. The atom <code class="inline">key1</code> on its own is replaced by t
 
       </div>
 
-        <div class="summary-synopsis"><p>This callback function is mandatory.</p></div>
+        <div class="summary-synopsis"><p>The function can be called by a log handler to convert a log event term to a
+printable string. The returned value can, for example, be printed as a log entry
+to the console or a file using <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#put_chars/1"><code class="inline">io:put_chars/1,2</code></a>.</p></div>
 
     </div>
 
@@ -250,8 +247,7 @@ is set or modified. It returns <code class="inline">ok</code> if the configurati
 
       </div>
 
-        <div class="summary-synopsis"><p>This the formatter callback function to be called from handlers. The log event
-is processed as follows</p></div>
+        <div class="summary-synopsis"><p>This the formatter callback function to be called from handlers.</p></div>
 
     </div>
 
@@ -361,7 +357,7 @@ changed to <code class="inline">&quot;Z&quot;</code>, meaning that timestamps ar
     </a>
     <h1 class="signature" translate="no">metakey()</h1>
 
-      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L233" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L235" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -393,7 +389,7 @@ changed to <code class="inline">&quot;Z&quot;</code>, meaning that timestamps ar
     </a>
     <h1 class="signature" translate="no">template()</h1>
 
-      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L231" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L233" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -413,7 +409,7 @@ changed to <code class="inline">&quot;Z&quot;</code>, meaning that timestamps ar
 
       </div>
 
-<p>The template is a list of atoms, atom lists, tuples and strings. The atoms
+<p>The template to be used by a logger formatter.</p><p>The template is a list of atoms, atom lists, tuples and strings. The atoms
 <code class="inline">level</code> or <code class="inline">msg</code>, are treated as placeholders for the severity level and the log
 message, respectively. Other atoms or atom lists are interpreted as placeholders
 for metadata, where atoms are expected to match top level keys, and atom lists
@@ -482,9 +478,9 @@ exit_reason: &quot;It crashed&quot;</code></pre></li></ul>
 
       </div>
 
-<p>This callback function is optional.</p><p>The function is called by a Logger when formatter configuration is set or
+<p>The function is called by a Logger when formatter configuration is set or
 modified. The formatter must validate the given configuration and return <code class="inline">ok</code> if
-it is correct, and <code class="inline">{error,Reason}</code> if it is faulty.</p><p>The following Logger API functions can trigger this callback:</p><ul><li><a href="logger.html#add_handler/3"><code class="inline">logger:add_handler/3</code></a></li><li><a href="logger.html#set_handler_config/2"><code class="inline">logger:set_handler_config/2,3</code></a></li><li><a href="logger.html#update_handler_config/2"><code class="inline">logger:update_handler_config/2,3</code></a></li><li><a href="logger.html#update_formatter_config/2"><code class="inline">logger:update_formatter_config/2</code></a></li></ul><p>See <a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> for an example implementation. <code class="inline">logger_formatter</code> is
+it is correct, and <code class="inline">{error,Reason}</code> if it is faulty.</p><p>The following Logger API functions can trigger this callback:</p><ul><li><a href="logger.html#add_handler/3"><code class="inline">logger:add_handler/3</code></a></li><li><a href="logger.html#set_handler_config/2"><code class="inline">logger:set_handler_config/2,3</code></a></li><li><a href="logger.html#update_handler_config/2"><code class="inline">logger:update_handler_config/2,3</code></a></li><li><a href="logger.html#update_formatter_config/2"><code class="inline">logger:update_formatter_config/2</code></a></li></ul><p>See <a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> for an example implementation. <a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> is
 the default formatter used by Logger.</p>
   </section>
 </section>
@@ -497,7 +493,7 @@ the default formatter used by Logger.</p>
     </a>
     <h1 class="signature" translate="no">format(LogEvent, Config)</h1>
 
-      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L270" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L268" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -519,9 +515,9 @@ the default formatter used by Logger.</p>
 
       </div>
 
-<p>This callback function is mandatory.</p><p>The function can be called by a log handler to convert a log event term to a
+<p>The function can be called by a log handler to convert a log event term to a
 printable string. The returned value can, for example, be printed as a log entry
-to the console or a file using <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#put_chars/1"><code class="inline">io:put_chars/1,2</code></a>.</p><p>See <a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> for an example implementation. <code class="inline">logger_formatter</code> is
+to the console or a file using <a href="../../../../lib/stdlib-5.2.1/doc/html/io.html#put_chars/1"><code class="inline">io:put_chars/1,2</code></a>.</p><p>See <a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> for an example implementation. <a href="logger_formatter.html#content"><code class="inline">logger_formatter</code></a> is
 the default formatter used by Logger.</p>
   </section>
 </section>
@@ -546,7 +542,7 @@ the default formatter used by Logger.</p>
     </a>
     <h1 class="signature" translate="no">check_config(Config)</h1>
 
-      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L720" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L719" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -578,7 +574,7 @@ is set or modified. It returns <code class="inline">ok</code> if the configurati
     </a>
     <h1 class="signature" translate="no">format(LogEvent, Config)</h1>
 
-      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L297" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/dgud/otp/blob/dgud/ssl/test-cuddling/lib/kernel/src/logger_formatter.erl#L296" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -597,8 +593,7 @@ is set or modified. It returns <code class="inline">ok</code> if the configurati
 
       </div>
 
-<p>This the formatter callback function to be called from handlers. The log event
-is processed as follows:</p><ul><li>If the message is on report form, it is converted to <code class="inline">{Format,Args}</code> by
+<p>This the formatter callback function to be called from handlers.</p><p>The log event is processed as follows:</p><ul><li>If the message is on report form, it is converted to <code class="inline">{Format,Args}</code> by
 calling the report callback. See section
 <a href="logger_chapter.html#log_message">Log Message</a> in the Kernel User's Guide for
 more information about report callbacks and valid forms of log messages.</li><li>The message size is limited according to the values of configuration
