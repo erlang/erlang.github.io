@@ -139,15 +139,15 @@ for Unix and Windows.</p><p>Periodically checks the disks. For each disk or part
 certain amount of the available space, the alarm
 <code class="inline">{{disk_almost_full, MountedOn}, []}</code> is set.</p><ul><li><p><strong>On Unix</strong> - All (locally) mounted disks are checked, including the swap disk
 if it is present.</p></li><li><p><strong>On WIN32</strong> - All logical drives of type &quot;FIXED_DISK&quot; are checked.</p></li></ul><p>Alarms are reported to the SASL alarm handler, see <a href="../../../../lib/sasl-4.2.1/doc/html/alarm_handler.html"><code class="inline">alarm_handler</code></a>. To set an
-alarm, <code class="inline">alarm_handler:set_alarm(Alarm)</code> is called where <code class="inline">Alarm</code> is the alarm
-specified above.</p><p>The alarms are cleared automatically when the alarm cause is no longer valid.</p><p><a href="" id="config"></a></p><h2 id="module-configuration" class="section-heading">
+alarm, <a href="../../../../lib/sasl-4.2.1/doc/html/alarm_handler.html#set_alarm/1"><code class="inline">alarm_handler:set_alarm(Alarm)</code></a> is called
+where <code class="inline">Alarm</code> is the alarm specified above.</p><p>The alarms are cleared automatically when the alarm cause is no longer valid.</p><h2 id="module-configuration" class="section-heading">
   <a href="#module-configuration" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Configuration</span>
 </h2>
 <p>The following configuration parameters can be used to change the default values
-for time interval and threshold:</p><ul><li><p><strong><code class="inline">disk_space_check_interval = ``t:time/0</code></strong> - The time interval for the
+for time interval and threshold:</p><ul><li><p><strong><code class="inline">disk_space_check_interval =</code> <a href="#t:time/0"><code class="inline">time/0</code></a></strong> - The time interval for the
 periodic disk space check. The default is 30 minutes.</p></li><li><p><strong><code class="inline">disk_almost_full_threshold = float()</code></strong> - The threshold, as percentage of
 total disk space, for how much disk can be utilized before the
 <code class="inline">disk_almost_full</code> alarm is set. The default is 0.80 (80%).</p></li><li><p><strong><code class="inline">disksup_posix_only = bool()</code></strong> - Specifies whether the <code class="inline">disksup</code> helper
@@ -155,14 +155,14 @@ process should only use POSIX conformant commands (<code class="inline">true</co
 is <code class="inline">false</code>. Setting this parameter to <code class="inline">true</code> can be necessary on embedded
 systems with stripped-down versions of Unix tools like <code class="inline">df</code>. The returned disk
 data and alarms can be different when using this option.</p><p>The parameter is ignored on platforms that are known to not be POSIX
-compatible (Windows and SunOS).</p></li></ul><p>See <a href="../../../../lib/kernel-9.2.2/doc/html/config.html">config(4)</a> for information about how to change the
+compatible (Windows and SunOS).</p></li></ul><p>See <a href="../../../../lib/kernel-9.2.2/doc/html/config.html">config</a> for information about how to change the
 value of configuration parameters.</p><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">See Also</span>
 </h2>
-<p><a href="../../../../lib/sasl-4.2.1/doc/html/alarm_handler.html"><code class="inline">alarm_handler</code></a>, <a href="os_mon_app.html">os_mon(3)</a></p>
+<p><a href="../../../../lib/sasl-4.2.1/doc/html/alarm_handler.html"><code class="inline">alarm_handler</code></a>, <a href="os_mon_app.html">os_mon</a></p>
   </section>
 
 
@@ -184,7 +184,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>Supported units</p></div>
+        <div class="summary-synopsis"><p>Time unit used for disklog APIs.</p></div>
 
     </div>
 
@@ -200,7 +200,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>get_almost_full_threshold() -&gt; Percent</p></div>
+        <div class="summary-synopsis"><p>Returns the threshold, in percent, for disk space utilization.</p></div>
 
     </div>
 
@@ -210,7 +210,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>get_check_interval() -&gt; MS</p></div>
+        <div class="summary-synopsis"><p>Returns the time interval, in milliseconds, for the periodic disk space check.</p></div>
 
     </div>
 
@@ -220,7 +220,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>get_disk_data() -&gt; [DiskData]</p></div>
+        <div class="summary-synopsis"><p>Returns the result of the latest disk check.</p></div>
 
     </div>
 
@@ -230,7 +230,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>get_disk_info() -&gt; [DiskData]</p></div>
+        <div class="summary-synopsis"><p>Immediately fetches total space, available space and capacity for local disks.</p></div>
 
     </div>
 
@@ -240,7 +240,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>get_disk_info(Path) -&gt; DiskData</p></div>
+        <div class="summary-synopsis"><p>Immediately fetches total space, available space and capacity for a path.</p></div>
 
     </div>
 
@@ -250,7 +250,8 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>set_almost_full_threshold(Float) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Changes the threshold, given as a float (<code class="inline">0.0 =&lt; Float =&lt; 1.0</code>), for disk space
+utilization.</p></div>
 
     </div>
 
@@ -260,7 +261,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-        <div class="summary-synopsis"><p>set_check_interval(Time) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Changes the time interval for the periodic disk space check.</p></div>
 
     </div>
 
@@ -304,7 +305,7 @@ value of configuration parameters.</p><h2 id="module-see-also" class="section-he
 
       </div>
 
-<p>Supported units:</p><ul><li><p><strong><code class="inline">integer() &gt;= 1</code></strong> - The time interval in minutes.</p></li><li><p><strong><code class="inline">{TimeUnit, Time}</code></strong> - The time interval <code class="inline">Time</code> in a time unit specified by
+<p>Time unit used for disklog APIs.</p><p>Supported units are:</p><ul><li><p><strong><code class="inline">integer() &gt;= 1</code></strong> - The time interval in minutes.</p></li><li><p><strong><code class="inline">{TimeUnit, Time}</code></strong> - The time interval <code class="inline">Time</code> in a time unit specified by
 <code class="inline">TimeUnit</code> where <code class="inline">TimeUnit</code> is of the type <a href="../../../../erts-14.2.3/doc/html/erlang.html#t:time_unit/0"><code class="inline">erlang:time_unit/0</code></a> and <code class="inline">Time</code>
 is a positive integer. The time interval needs to be at least one millisecond
 long.</p></li></ul>
@@ -331,7 +332,7 @@ long.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">get_almost_full_threshold()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L205" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L197" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -347,7 +348,7 @@ long.</p></li></ul>
 
       </div>
 
-<p>get_almost_full_threshold() -&gt; Percent</p><p>Returns the threshold, in percent, for disk space utilization.</p>
+<p>Returns the threshold, in percent, for disk space utilization.</p>
   </section>
 </section>
 <section class="detail" id="get_check_interval/0">
@@ -359,7 +360,7 @@ long.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">get_check_interval()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L174" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -375,7 +376,7 @@ long.</p></li></ul>
 
       </div>
 
-<p>get_check_interval() -&gt; MS</p><p>Returns the time interval, in milliseconds, for the periodic disk space check.</p>
+<p>Returns the time interval, in milliseconds, for the periodic disk space check.</p>
   </section>
 </section>
 <section class="detail" id="get_disk_data/0">
@@ -408,9 +409,9 @@ long.</p></li></ul>
 
       </div>
 
-<p>get_disk_data() -&gt; [DiskData]</p><p>Returns the result of the latest disk check. <code class="inline">Id</code> is a string that identifies
-the disk or partition. <code class="inline">TotalKiB</code> is the total size of the disk or partition in
-kibibytes. <code class="inline">Capacity</code> is the percentage of disk space used.</p><p>The function is asynchronous in the sense that it does not invoke a disk check,
+<p>Returns the result of the latest disk check.</p><p><code class="inline">Id</code> is a string that identifies the disk or partition. <code class="inline">TotalKiB</code> is the
+total size of the disk or partition in kibibytes. <code class="inline">Capacity</code> is the
+percentage of disk space used.</p><p>The function is asynchronous in the sense that it does not invoke a disk check,
 but returns the latest available value.</p><p>Returns <code class="inline">[{&quot;none&quot;,0,0}]</code> if <code class="inline">disksup</code> is not available.</p>
   </section>
 </section>
@@ -423,7 +424,7 @@ but returns the latest available value.</p><p>Returns <code class="inline">[{&qu
     </a>
     <h1 class="signature" translate="no">get_disk_info()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L148" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L147" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -447,8 +448,7 @@ but returns the latest available value.</p><p>Returns <code class="inline">[{&qu
 
       </div>
 
-<p>get_disk_info() -&gt; [DiskData]</p><p>Immediately fetches total space, available space and capacity for local disks.
-<code class="inline">Id</code> is a string that identifies the disk or partition. <code class="inline">TotalKiB</code> is the total
+<p>Immediately fetches total space, available space and capacity for local disks.</p><p><code class="inline">Id</code> is a string that identifies the disk or partition. <code class="inline">TotalKiB</code> is the total
 size of the disk or partition in kibibytes. <code class="inline">AvailableKiB</code> is the disk space
 used in kibibytes. <code class="inline">Capacity</code> is the percentage of disk space used.</p><p>Returns <code class="inline">[{&quot;none&quot;,0,0,0}]</code> if <code class="inline">disksup</code> is not available.</p>
   </section>
@@ -462,7 +462,7 @@ used in kibibytes. <code class="inline">Capacity</code> is the percentage of dis
     </a>
     <h1 class="signature" translate="no">get_disk_info(Path)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L169" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L167" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -486,8 +486,7 @@ used in kibibytes. <code class="inline">Capacity</code> is the percentage of dis
 
       </div>
 
-<p>get_disk_info(Path) -&gt; DiskData</p><p>Immediately fetches total space, available space and capacity for a path. <code class="inline">Id</code>
-is a string that identifies the disk or partition. <code class="inline">TotalKiB</code> is the total size
+<p>Immediately fetches total space, available space and capacity for a path.</p><p><code class="inline">Id</code> is a string that identifies the disk or partition. <code class="inline">TotalKiB</code> is the total size
 of the disk or partition in kibibytes. <code class="inline">AvailableKiB</code> is the disk space used in
 kibibytes. <code class="inline">Capacity</code> is the percentage of disk space used.</p><p>Returns <code class="inline">[{Path,0,0,0}]</code> if the <code class="inline">Path</code> is invalid or space can't be determined.
 Returns <code class="inline">[{&quot;none&quot;,0,0,0}]</code> if <code class="inline">disksup</code> is not available.</p>
@@ -502,7 +501,7 @@ Returns <code class="inline">[{&quot;none&quot;,0,0,0}]</code> if <code class="i
     </a>
     <h1 class="signature" translate="no">set_almost_full_threshold(Float)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L218" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L208" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -518,10 +517,10 @@ Returns <code class="inline">[{&quot;none&quot;,0,0,0}]</code> if <code class="i
 
       </div>
 
-<p>set_almost_full_threshold(Float) -&gt; ok</p><p>Changes the threshold, given as a float (0.0 =&lt; Float =&lt; 1.0), for disk space
+<p>Changes the threshold, given as a float (<code class="inline">0.0 =&lt; Float =&lt; 1.0</code>), for disk space
 utilization.</p><p>The change will take effect during the next disk space check and is non-persist.
 That is, in case of a process restart, this value is forgotten and the default
-value will be used. See <a href="disksup.html#config">Configuration</a> above.</p>
+value will be used. See <a href="disksup.html#module-configuration">Configuration</a> above.</p>
   </section>
 </section>
 <section class="detail" id="set_check_interval/1">
@@ -533,7 +532,7 @@ value will be used. See <a href="disksup.html#config">Configuration</a> above.</
     </a>
     <h1 class="signature" translate="no">set_check_interval(Value)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L191" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/tools/fix-tprof-trace-sessions/lib/os_mon/src/disksup.erl#L185" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -549,9 +548,9 @@ value will be used. See <a href="disksup.html#config">Configuration</a> above.</
 
       </div>
 
-<p>set_check_interval(Time) -&gt; ok</p><p>Changes the time interval for the periodic disk space check.</p><p>The change will take effect after the next disk space check and is non-persist.
+<p>Changes the time interval for the periodic disk space check.</p><p>The change will take effect after the next disk space check and is non-persist.
 That is, in case of a process restart, this value is forgotten and the default
-value will be used. See <a href="disksup.html#config">Configuration</a> above.</p>
+value will be used. See <a href="disksup.html#module-configuration">Configuration</a> above.</p>
   </section>
 </section>
 
