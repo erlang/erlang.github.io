@@ -1,0 +1,4 @@
+-module(otp_9147).
+-export_type([undef/0]).
+-record(undef, {f1 :: F1 :: a | b}).
+-type undef() :: #undef{}.
