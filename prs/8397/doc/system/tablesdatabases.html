@@ -4,21 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.2">
-    <meta name="project" content="Erlang System Documentation v27.0-rc2">
+    <meta name="generator" content="ExDoc v0.32.1">
+    <meta name="project" content="Erlang System Documentation v27.0-rc3">
 
 
-    <title>Tables and Databases — Erlang System Documentation v27.0-rc2</title>
-    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
+    <title>Tables and Databases — Erlang System Documentation v27.0-rc3</title>
+    <link rel="stylesheet" href="dist/html-erlang-X76CAHZ3.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
+    <script src="dist/handlebars.templates-IHH6HKET.js"></script>
     <script src="dist/sidebar_items-5D6931E3.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-JRPQ5PR6.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-GXQ6W6IF.js"></script>
 
 <style>.dark img { background-color: white; }</style>
   </head>
@@ -37,13 +35,11 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
 <button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
-
-<div class="background-layer"></div>
 
 <nav id="sidebar" class="sidebar">
 
@@ -59,7 +55,7 @@
 Erlang System Documentation
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v27.0-rc2
+          v27.0-rc3
         </div>
       </div>
     </div>
@@ -83,42 +79,42 @@ Pages
 
 <main class="content">
   <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-      <div class="top-search">
-        <div class="search-settings">
-          <form class="search-bar" action="search.html">
-            <label class="search-label">
-              <span class="sr-only">Search documentation of Erlang System Documentation</span>
-              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-            </label>
-            <button type="submit" class="search-button" aria-label="Submit Search">
-              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
-            </button>
-            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-              <i class="ri-close-line ri-lg" title="Cancel search"></i>
-            </button>
-          </form>
-          <div class="autocomplete">
-          </div>
-          <button class="icon-settings display-settings">
-            <i class="ri-settings-3-line"></i>
-            <span class="sr-only">Settings</span>
+
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Erlang System Documentation</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
           </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
         </div>
-
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
       </div>
+    </div>
 
-<h1>
+<div id="top-content">
+  <h1>
 
-    <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-trace-doc/system/doc/efficiency_guide/tablesdatabases.md#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+      <a href="https://github.com/bjorng/otp/blob/bjorn/kernel/polish-trace-doc/system/doc/efficiency_guide/tablesdatabases.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
 
 
-  <span>Tables and Databases</span>
-</h1>
+    <span>Tables and Databases</span>
+  </h1>
 
 <h2 id="ets-dets-and-mnesia" class="section-heading">
   <a href="#ets-dets-and-mnesia" class="hover-link">
@@ -155,11 +151,11 @@ follows:</p><pre><code class="text">#person{age = 42, _ = '_'}.</code></pre><h3 
 <p>The <code class="inline">delete</code> operation is considered successful if the element was not present
 in the table. Hence all attempts to check that the element is present in the
 Ets/Mnesia table before deletion are unnecessary. Here follows an example for
-Ets tables:</p><p><strong>DO</strong></p><pre><code class="text">ets:delete(Tab, Key),</code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="0232439239-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="0232439239-1">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-    </span><span class="p" data-group-id="0232439239-2">[</span><span class="p" data-group-id="0232439239-2">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+Ets tables:</p><p><strong>DO</strong></p><pre><code class="text">ets:delete(Tab, Key),</code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="0944341293-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="0944341293-1">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+    </span><span class="p" data-group-id="0944341293-2">[</span><span class="p" data-group-id="0944341293-2">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
         </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-    </span><span class="p" data-group-id="0232439239-3">[</span><span class="p">_</span><span class="p">|</span><span class="p">_</span><span class="p" data-group-id="0232439239-3">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="nc">ets</span><span class="p">:</span><span class="nf">delete</span><span class="p" data-group-id="0232439239-4">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="0232439239-4">)</span><span class="w">
+    </span><span class="p" data-group-id="0944341293-3">[</span><span class="p">_</span><span class="p">|</span><span class="p">_</span><span class="p" data-group-id="0944341293-3">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="nc">ets</span><span class="p">:</span><span class="nf">delete</span><span class="p" data-group-id="0944341293-4">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="0944341293-4">)</span><span class="w">
 </span><span class="k">end</span><span class="p">,</span></code></pre><h3 id="fetching-data" class="section-heading">
   <a href="#fetching-data" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -171,49 +167,49 @@ You export the interface function <code class="inline">print_person/1</code>, wh
 functions <code class="inline">print_name/1</code>, <code class="inline">print_age/1</code>, and <code class="inline">print_occupation/1</code>.</p><blockquote><h4 class="info">Note</h4><p>If the function <code class="inline">print_name/1</code>, and so on, had been interface functions, the
 situation would have been different, as you do not want the user of the
 interface to know about the internal data representation.</p></blockquote><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="c1">%%% Interface function</span><span class="w">
-</span><span class="nf">print_person</span><span class="p" data-group-id="2161822233-1">(</span><span class="n">PersonId</span><span class="p" data-group-id="2161822233-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">print_person</span><span class="p" data-group-id="7548886765-1">(</span><span class="n">PersonId</span><span class="p" data-group-id="7548886765-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Look up the person in the named table person,</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="2161822233-2">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="2161822233-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="2161822233-3">[</span><span class="n">Person</span><span class="p" data-group-id="2161822233-3">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nf">print_name</span><span class="p" data-group-id="2161822233-4">(</span><span class="n">Person</span><span class="p" data-group-id="2161822233-4">)</span><span class="p">,</span><span class="w">
-            </span><span class="nf">print_age</span><span class="p" data-group-id="2161822233-5">(</span><span class="n">Person</span><span class="p" data-group-id="2161822233-5">)</span><span class="p">,</span><span class="w">
-            </span><span class="nf">print_occupation</span><span class="p" data-group-id="2161822233-6">(</span><span class="n">Person</span><span class="p" data-group-id="2161822233-6">)</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="2161822233-7">[</span><span class="p" data-group-id="2161822233-7">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2161822233-8">(</span><span class="s">&quot;No person with ID = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2161822233-9">[</span><span class="n">PersonID</span><span class="p" data-group-id="2161822233-9">]</span><span class="p" data-group-id="2161822233-8">)</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="7548886765-2">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="7548886765-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="7548886765-3">[</span><span class="n">Person</span><span class="p" data-group-id="7548886765-3">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nf">print_name</span><span class="p" data-group-id="7548886765-4">(</span><span class="n">Person</span><span class="p" data-group-id="7548886765-4">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">print_age</span><span class="p" data-group-id="7548886765-5">(</span><span class="n">Person</span><span class="p" data-group-id="7548886765-5">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">print_occupation</span><span class="p" data-group-id="7548886765-6">(</span><span class="n">Person</span><span class="p" data-group-id="7548886765-6">)</span><span class="p">;</span><span class="w">
+        </span><span class="p" data-group-id="7548886765-7">[</span><span class="p" data-group-id="7548886765-7">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7548886765-8">(</span><span class="s">&quot;No person with ID = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7548886765-9">[</span><span class="n">PersonID</span><span class="p" data-group-id="7548886765-9">]</span><span class="p" data-group-id="7548886765-8">)</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% Internal functions</span><span class="w">
-</span><span class="nf">print_name</span><span class="p" data-group-id="2161822233-10">(</span><span class="n">Person</span><span class="p" data-group-id="2161822233-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2161822233-11">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2161822233-12">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="p" data-group-id="2161822233-12">]</span><span class="p" data-group-id="2161822233-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">print_name</span><span class="p" data-group-id="7548886765-10">(</span><span class="n">Person</span><span class="p" data-group-id="7548886765-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7548886765-11">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7548886765-12">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="p" data-group-id="7548886765-12">]</span><span class="p" data-group-id="7548886765-11">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">print_age</span><span class="p" data-group-id="2161822233-13">(</span><span class="n">Person</span><span class="p" data-group-id="2161822233-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2161822233-14">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2161822233-15">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="2161822233-15">]</span><span class="p" data-group-id="2161822233-14">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">print_age</span><span class="p" data-group-id="7548886765-13">(</span><span class="n">Person</span><span class="p" data-group-id="7548886765-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7548886765-14">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7548886765-15">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="7548886765-15">]</span><span class="p" data-group-id="7548886765-14">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">print_occupation</span><span class="p" data-group-id="2161822233-16">(</span><span class="n">Person</span><span class="p" data-group-id="2161822233-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2161822233-17">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2161822233-18">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">occupation</span><span class="p" data-group-id="2161822233-18">]</span><span class="p" data-group-id="2161822233-17">)</span><span class="p">.</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="c1">%%% Interface function</span><span class="w">
-</span><span class="nf">print_person</span><span class="p" data-group-id="9017480856-1">(</span><span class="n">PersonId</span><span class="p" data-group-id="9017480856-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">print_occupation</span><span class="p" data-group-id="7548886765-16">(</span><span class="n">Person</span><span class="p" data-group-id="7548886765-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7548886765-17">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7548886765-18">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">occupation</span><span class="p" data-group-id="7548886765-18">]</span><span class="p" data-group-id="7548886765-17">)</span><span class="p">.</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="c1">%%% Interface function</span><span class="w">
+</span><span class="nf">print_person</span><span class="p" data-group-id="1344188919-1">(</span><span class="n">PersonId</span><span class="p" data-group-id="1344188919-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Look up the person in the named table person,</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="9017480856-2">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="9017480856-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="9017480856-3">[</span><span class="n">Person</span><span class="p" data-group-id="9017480856-3">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nf">print_name</span><span class="p" data-group-id="9017480856-4">(</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-4">)</span><span class="p">,</span><span class="w">
-            </span><span class="nf">print_age</span><span class="p" data-group-id="9017480856-5">(</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-5">)</span><span class="p">,</span><span class="w">
-            </span><span class="nf">print_occupation</span><span class="p" data-group-id="9017480856-6">(</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-6">)</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="9017480856-7">[</span><span class="p" data-group-id="9017480856-7">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9017480856-8">(</span><span class="s">&quot;No person with ID = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9017480856-9">[</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-9">]</span><span class="p" data-group-id="9017480856-8">)</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="1344188919-2">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="1344188919-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="1344188919-3">[</span><span class="n">Person</span><span class="p" data-group-id="1344188919-3">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nf">print_name</span><span class="p" data-group-id="1344188919-4">(</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-4">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">print_age</span><span class="p" data-group-id="1344188919-5">(</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-5">)</span><span class="p">,</span><span class="w">
+            </span><span class="nf">print_occupation</span><span class="p" data-group-id="1344188919-6">(</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-6">)</span><span class="p">;</span><span class="w">
+        </span><span class="p" data-group-id="1344188919-7">[</span><span class="p" data-group-id="1344188919-7">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="1344188919-8">(</span><span class="s">&quot;No person with ID = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1344188919-9">[</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-9">]</span><span class="p" data-group-id="1344188919-8">)</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% Internal functions</span><span class="w">
-</span><span class="nf">print_name</span><span class="p" data-group-id="9017480856-10">(</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="9017480856-11">[</span><span class="n">Person</span><span class="p" data-group-id="9017480856-11">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="9017480856-12">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="9017480856-12">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9017480856-13">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9017480856-14">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="p" data-group-id="9017480856-14">]</span><span class="p" data-group-id="9017480856-13">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">print_name</span><span class="p" data-group-id="1344188919-10">(</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1344188919-11">[</span><span class="n">Person</span><span class="p" data-group-id="1344188919-11">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="1344188919-12">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="1344188919-12">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="1344188919-13">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1344188919-14">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="p" data-group-id="1344188919-14">]</span><span class="p" data-group-id="1344188919-13">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">print_age</span><span class="p" data-group-id="9017480856-15">(</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-15">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="9017480856-16">[</span><span class="n">Person</span><span class="p" data-group-id="9017480856-16">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="9017480856-17">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="9017480856-17">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9017480856-18">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9017480856-19">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="9017480856-19">]</span><span class="p" data-group-id="9017480856-18">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">print_age</span><span class="p" data-group-id="1344188919-15">(</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-15">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1344188919-16">[</span><span class="n">Person</span><span class="p" data-group-id="1344188919-16">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="1344188919-17">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="1344188919-17">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="1344188919-18">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1344188919-19">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="1344188919-19">]</span><span class="p" data-group-id="1344188919-18">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">print_occupation</span><span class="p" data-group-id="9017480856-20">(</span><span class="n">PersonID</span><span class="p" data-group-id="9017480856-20">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="9017480856-21">[</span><span class="n">Person</span><span class="p" data-group-id="9017480856-21">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="9017480856-22">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="9017480856-22">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9017480856-23">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9017480856-24">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">occupation</span><span class="p" data-group-id="9017480856-24">]</span><span class="p" data-group-id="9017480856-23">)</span><span class="p">.</span></code></pre><h3 id="non-persistent-database-storage" class="section-heading">
+</span><span class="nf">print_occupation</span><span class="p" data-group-id="1344188919-20">(</span><span class="n">PersonID</span><span class="p" data-group-id="1344188919-20">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1344188919-21">[</span><span class="n">Person</span><span class="p" data-group-id="1344188919-21">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="1344188919-22">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="n">PersonId</span><span class="p" data-group-id="1344188919-22">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="1344188919-23">(</span><span class="s">&quot;No person </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1344188919-24">[</span><span class="n">Person</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">occupation</span><span class="p" data-group-id="1344188919-24">]</span><span class="p" data-group-id="1344188919-23">)</span><span class="p">.</span></code></pre><h3 id="non-persistent-database-storage" class="section-heading">
   <a href="#non-persistent-database-storage" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -235,30 +231,30 @@ Ets writes is always faster than Mnesia writes.</p><h3 id="tab2list" class="sect
  #person{idno = 4, name = &quot;Carl&quot;,  age = 25, occupation = &quot;mailman&quot;}]</code></pre><p>If you <em>must</em> return all data stored in the Ets table, you can use
 <a href="../../lib/stdlib-5.2.2/doc/html/ets.html#tab2list/1"><code class="inline">ets:tab2list/1</code></a>. However, usually you are only interested in a subset of the
 information in which case <a href="../../lib/stdlib-5.2.2/doc/html/ets.html#tab2list/1"><code class="inline">ets:tab2list/1</code></a> is expensive. If you only want to
-extract one field from each record, for example, the age of every person, then:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nc">ets</span><span class="p">:</span><span class="nf">select</span><span class="p" data-group-id="6740774702-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6740774702-2">[</span><span class="p" data-group-id="6740774702-3">{</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="6740774702-4">{</span><span class="ss">idno</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
+extract one field from each record, for example, the age of every person, then:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nc">ets</span><span class="p">:</span><span class="nf">select</span><span class="p" data-group-id="4679063815-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4679063815-2">[</span><span class="p" data-group-id="4679063815-3">{</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="4679063815-4">{</span><span class="ss">idno</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
                           </span><span class="ss">name</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
                           </span><span class="ss">age</span><span class="o">=</span><span class="ss">&#39;$1&#39;</span><span class="p">,</span><span class="w">
-                          </span><span class="ss">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="6740774702-4">}</span><span class="p">,</span><span class="w">
-                </span><span class="p" data-group-id="6740774702-5">[</span><span class="p" data-group-id="6740774702-5">]</span><span class="p">,</span><span class="w">
-                </span><span class="p" data-group-id="6740774702-6">[</span><span class="ss">&#39;$1&#39;</span><span class="p" data-group-id="6740774702-6">]</span><span class="p" data-group-id="6740774702-3">}</span><span class="p" data-group-id="6740774702-2">]</span><span class="p" data-group-id="6740774702-1">)</span><span class="p">,</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="n">TabList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">tab2list</span><span class="p" data-group-id="4260040834-1">(</span><span class="n">Tab</span><span class="p" data-group-id="4260040834-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">lists</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="4260040834-2">(</span><span class="nf">fun</span><span class="p" data-group-id="4260040834-3">(</span><span class="n">X</span><span class="p" data-group-id="4260040834-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">TabList</span><span class="p" data-group-id="4260040834-2">)</span><span class="p">,</span></code></pre><p>If you are only interested in the age of all persons named &quot;Bryan&quot;, then:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nc">ets</span><span class="p">:</span><span class="nf">select</span><span class="p" data-group-id="6612732518-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6612732518-2">[</span><span class="p" data-group-id="6612732518-3">{</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="6612732518-4">{</span><span class="ss">idno</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
+                          </span><span class="ss">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="4679063815-4">}</span><span class="p">,</span><span class="w">
+                </span><span class="p" data-group-id="4679063815-5">[</span><span class="p" data-group-id="4679063815-5">]</span><span class="p">,</span><span class="w">
+                </span><span class="p" data-group-id="4679063815-6">[</span><span class="ss">&#39;$1&#39;</span><span class="p" data-group-id="4679063815-6">]</span><span class="p" data-group-id="4679063815-3">}</span><span class="p" data-group-id="4679063815-2">]</span><span class="p" data-group-id="4679063815-1">)</span><span class="p">,</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="n">TabList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">tab2list</span><span class="p" data-group-id="4911223302-1">(</span><span class="n">Tab</span><span class="p" data-group-id="4911223302-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="4911223302-2">(</span><span class="nf">fun</span><span class="p" data-group-id="4911223302-3">(</span><span class="n">X</span><span class="p" data-group-id="4911223302-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">TabList</span><span class="p" data-group-id="4911223302-2">)</span><span class="p">,</span></code></pre><p>If you are only interested in the age of all persons named &quot;Bryan&quot;, then:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nc">ets</span><span class="p">:</span><span class="nf">select</span><span class="p" data-group-id="2197411875-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2197411875-2">[</span><span class="p" data-group-id="2197411875-3">{</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="2197411875-4">{</span><span class="ss">idno</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
                           </span><span class="ss">name</span><span class="o">=</span><span class="s">&quot;Bryan&quot;</span><span class="p">,</span><span class="w">
                           </span><span class="ss">age</span><span class="o">=</span><span class="ss">&#39;$1&#39;</span><span class="p">,</span><span class="w">
-                          </span><span class="ss">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="6612732518-4">}</span><span class="p">,</span><span class="w">
-                </span><span class="p" data-group-id="6612732518-5">[</span><span class="p" data-group-id="6612732518-5">]</span><span class="p">,</span><span class="w">
-                </span><span class="p" data-group-id="6612732518-6">[</span><span class="ss">&#39;$1&#39;</span><span class="p" data-group-id="6612732518-6">]</span><span class="p" data-group-id="6612732518-3">}</span><span class="p" data-group-id="6612732518-2">]</span><span class="p" data-group-id="6612732518-1">)</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="n">TabList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">tab2list</span><span class="p" data-group-id="7165934893-1">(</span><span class="n">Tab</span><span class="p" data-group-id="7165934893-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">lists</span><span class="p">:</span><span class="nf">foldl</span><span class="p" data-group-id="7165934893-2">(</span><span class="nf">fun</span><span class="p" data-group-id="7165934893-3">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="7165934893-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="w"> </span><span class="k">of</span><span class="w">
+                          </span><span class="ss">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="2197411875-4">}</span><span class="p">,</span><span class="w">
+                </span><span class="p" data-group-id="2197411875-5">[</span><span class="p" data-group-id="2197411875-5">]</span><span class="p">,</span><span class="w">
+                </span><span class="p" data-group-id="2197411875-6">[</span><span class="ss">&#39;$1&#39;</span><span class="p" data-group-id="2197411875-6">]</span><span class="p" data-group-id="2197411875-3">}</span><span class="p" data-group-id="2197411875-2">]</span><span class="p" data-group-id="2197411875-1">)</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="n">TabList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">tab2list</span><span class="p" data-group-id="1204188386-1">(</span><span class="n">Tab</span><span class="p" data-group-id="1204188386-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="nf">foldl</span><span class="p" data-group-id="1204188386-2">(</span><span class="nf">fun</span><span class="p" data-group-id="1204188386-3">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="1204188386-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="w"> </span><span class="k">of</span><span class="w">
                                 </span><span class="s">&quot;Bryan&quot;</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                                    </span><span class="p" data-group-id="7165934893-4">[</span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p">|</span><span class="n">Acc</span><span class="p" data-group-id="7165934893-4">]</span><span class="p">;</span><span class="w">
+                                    </span><span class="p" data-group-id="1204188386-4">[</span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p">|</span><span class="n">Acc</span><span class="p" data-group-id="1204188386-4">]</span><span class="p">;</span><span class="w">
                                  </span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
                                      </span><span class="n">Acc</span><span class="w">
                            </span><span class="k">end</span><span class="w">
-             </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7165934893-5">[</span><span class="p" data-group-id="7165934893-5">]</span><span class="p">,</span><span class="w"> </span><span class="n">TabList</span><span class="p" data-group-id="7165934893-2">)</span></code></pre><p>If you need all information stored in the Ets table about persons named &quot;Bryan&quot;,
-then:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nc">ets</span><span class="p">:</span><span class="nf">select</span><span class="p" data-group-id="0713474214-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0713474214-2">[</span><span class="p" data-group-id="0713474214-3">{</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="0713474214-4">{</span><span class="ss">idno</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
+             </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1204188386-5">[</span><span class="p" data-group-id="1204188386-5">]</span><span class="p">,</span><span class="w"> </span><span class="n">TabList</span><span class="p" data-group-id="1204188386-2">)</span></code></pre><p>If you need all information stored in the Ets table about persons named &quot;Bryan&quot;,
+then:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nc">ets</span><span class="p">:</span><span class="nf">select</span><span class="p" data-group-id="8141386381-1">(</span><span class="n">Tab</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8141386381-2">[</span><span class="p" data-group-id="8141386381-3">{</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="8141386381-4">{</span><span class="ss">idno</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
                           </span><span class="ss">name</span><span class="o">=</span><span class="s">&quot;Bryan&quot;</span><span class="p">,</span><span class="w">
                           </span><span class="ss">age</span><span class="o">=</span><span class="ss">&#39;_&#39;</span><span class="p">,</span><span class="w">
-                          </span><span class="ss">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="0713474214-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0713474214-5">[</span><span class="p" data-group-id="0713474214-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0713474214-6">[</span><span class="ss">&#39;$_&#39;</span><span class="p" data-group-id="0713474214-6">]</span><span class="p" data-group-id="0713474214-3">}</span><span class="p" data-group-id="0713474214-2">]</span><span class="p" data-group-id="0713474214-1">)</span><span class="p">,</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="n">TabList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">tab2list</span><span class="p" data-group-id="2176906818-1">(</span><span class="n">Tab</span><span class="p" data-group-id="2176906818-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">lists</span><span class="p">:</span><span class="nf">filter</span><span class="p" data-group-id="2176906818-2">(</span><span class="nf">fun</span><span class="p" data-group-id="2176906818-3">(</span><span class="n">X</span><span class="p" data-group-id="2176906818-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Bryan&quot;</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">TabList</span><span class="p" data-group-id="2176906818-2">)</span><span class="p">,</span></code></pre><h3 id="ordered_set-tables" class="section-heading">
+                          </span><span class="ss">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&#39;_&#39;</span><span class="p" data-group-id="8141386381-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8141386381-5">[</span><span class="p" data-group-id="8141386381-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8141386381-6">[</span><span class="ss">&#39;$_&#39;</span><span class="p" data-group-id="8141386381-6">]</span><span class="p" data-group-id="8141386381-3">}</span><span class="p" data-group-id="8141386381-2">]</span><span class="p" data-group-id="8141386381-1">)</span><span class="p">,</span></code></pre><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="n">TabList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">tab2list</span><span class="p" data-group-id="1746928770-1">(</span><span class="n">Tab</span><span class="p" data-group-id="1746928770-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="nf">filter</span><span class="p" data-group-id="1746928770-2">(</span><span class="nf">fun</span><span class="p" data-group-id="1746928770-3">(</span><span class="n">X</span><span class="p" data-group-id="1746928770-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">X</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;Bryan&quot;</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">TabList</span><span class="p" data-group-id="1746928770-2">)</span><span class="p">,</span></code></pre><h3 id="ordered_set-tables" class="section-heading">
   <a href="#ordered_set-tables" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -302,12 +298,12 @@ keys would appear more than once) and can have the following contents:</p><pre><
  #index_entry{name=&quot;Bryan&quot;, idno=2},
  #index_entry{name=&quot;Bryan&quot;, idno=3},
  #index_entry{name=&quot;Carl&quot;, idno=4}]</code></pre><p>Given this index table, a lookup of the <code class="inline">age</code> fields for all persons named
-&quot;Bryan&quot; can be done as follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">MatchingIDs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="7435436686-1">(</span><span class="n">IndexTable</span><span class="p">,</span><span class="s">&quot;Bryan&quot;</span><span class="p" data-group-id="7435436686-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">lists</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="7435436686-2">(</span><span class="nf">fun</span><span class="p" data-group-id="7435436686-3">(</span><span class="o">#</span><span class="ss">index_entry</span><span class="p" data-group-id="7435436686-4">{</span><span class="ss">idno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ID</span><span class="p" data-group-id="7435436686-4">}</span><span class="p" data-group-id="7435436686-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                 </span><span class="p" data-group-id="7435436686-5">[</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="7435436686-6">{</span><span class="ss">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Age</span><span class="p" data-group-id="7435436686-6">}</span><span class="p" data-group-id="7435436686-5">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="7435436686-7">(</span><span class="n">PersonTable</span><span class="p">,</span><span class="w"> </span><span class="n">ID</span><span class="p" data-group-id="7435436686-7">)</span><span class="p">,</span><span class="w">
+&quot;Bryan&quot; can be done as follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">MatchingIDs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="5769053424-1">(</span><span class="n">IndexTable</span><span class="p">,</span><span class="s">&quot;Bryan&quot;</span><span class="p" data-group-id="5769053424-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">lists</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="5769053424-2">(</span><span class="nf">fun</span><span class="p" data-group-id="5769053424-3">(</span><span class="o">#</span><span class="ss">index_entry</span><span class="p" data-group-id="5769053424-4">{</span><span class="ss">idno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ID</span><span class="p" data-group-id="5769053424-4">}</span><span class="p" data-group-id="5769053424-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                 </span><span class="p" data-group-id="5769053424-5">[</span><span class="o">#</span><span class="ss">person</span><span class="p" data-group-id="5769053424-6">{</span><span class="ss">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Age</span><span class="p" data-group-id="5769053424-6">}</span><span class="p" data-group-id="5769053424-5">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ets</span><span class="p">:</span><span class="nf">lookup</span><span class="p" data-group-id="5769053424-7">(</span><span class="n">PersonTable</span><span class="p">,</span><span class="w"> </span><span class="n">ID</span><span class="p" data-group-id="5769053424-7">)</span><span class="p">,</span><span class="w">
                  </span><span class="n">Age</span><span class="w">
           </span><span class="k">end</span><span class="p">,</span><span class="w">
-          </span><span class="n">MatchingIDs</span><span class="p" data-group-id="7435436686-2">)</span><span class="p">,</span></code></pre><p>Notice that this code does not use <a href="../../lib/stdlib-5.2.2/doc/html/ets.html#match/2"><code class="inline">ets:match/2</code></a>, but instead uses the
+          </span><span class="n">MatchingIDs</span><span class="p" data-group-id="5769053424-2">)</span><span class="p">,</span></code></pre><p>Notice that this code does not use <a href="../../lib/stdlib-5.2.2/doc/html/ets.html#match/2"><code class="inline">ets:match/2</code></a>, but instead uses the
 <a href="../../lib/stdlib-5.2.2/doc/html/ets.html#lookup/2"><code class="inline">ets:lookup/2</code></a> call. The <a href="../../lib/stdlib-5.2.2/doc/html/lists.html#map/2"><code class="inline">lists:map/2</code></a> call is only used to traverse the <code class="inline">idno</code>s
 matching the name &quot;Bryan&quot; in the table; thus the number of lookups in the master
 table is minimized.</p><p>Keeping an index table introduces some overhead when inserting records in the
@@ -330,17 +326,17 @@ lose performance using <a href="../../lib/mnesia-4.23/doc/html/mnesia.html#selec
 <a href="../../lib/mnesia-4.23/doc/html/mnesia.html#match_object/1"><code class="inline">mnesia:match_object()</code></a> as these function traverse
 the whole table. Instead, you can create a secondary index and use
 <a href="../../lib/mnesia-4.23/doc/html/mnesia.html#index_read/3"><code class="inline">mnesia:index_read/3</code></a> to get faster access at the expense of using more
-memory.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">record</span><span class="p" data-group-id="0035880722-1">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0035880722-2">{</span><span class="ss">idno</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">,</span><span class="w"> </span><span class="ss">occupation</span><span class="p" data-group-id="0035880722-2">}</span><span class="p" data-group-id="0035880722-1">)</span><span class="p">.</span><span class="w">
+memory.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">record</span><span class="p" data-group-id="5660584647-1">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5660584647-2">{</span><span class="ss">idno</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p">,</span><span class="w"> </span><span class="ss">occupation</span><span class="p" data-group-id="5660584647-2">}</span><span class="p" data-group-id="5660584647-1">)</span><span class="p">.</span><span class="w">
         </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="0035880722-3">{</span><span class="ss">atomic</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p" data-group-id="0035880722-3">}</span><span class="w"> </span><span class="o">=</span><span class="w">
-</span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">create_table</span><span class="p" data-group-id="0035880722-4">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0035880722-5">[</span><span class="p" data-group-id="0035880722-6">{</span><span class="ss">index</span><span class="p">,</span><span class="p" data-group-id="0035880722-7">[</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="0035880722-7">]</span><span class="p" data-group-id="0035880722-6">}</span><span class="p">,</span><span class="w">
-                              </span><span class="p" data-group-id="0035880722-8">{</span><span class="ss">attributes</span><span class="p">,</span><span class="w">
-                                    </span><span class="nf">record_info</span><span class="p" data-group-id="0035880722-9">(</span><span class="ss">fields</span><span class="p">,</span><span class="w"> </span><span class="ss">person</span><span class="p" data-group-id="0035880722-9">)</span><span class="p" data-group-id="0035880722-8">}</span><span class="p" data-group-id="0035880722-5">]</span><span class="p" data-group-id="0035880722-4">)</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="0035880722-10">{</span><span class="ss">atomic</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p" data-group-id="0035880722-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">add_table_index</span><span class="p" data-group-id="0035880722-11">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p" data-group-id="0035880722-11">)</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="5660584647-3">{</span><span class="ss">atomic</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p" data-group-id="5660584647-3">}</span><span class="w"> </span><span class="o">=</span><span class="w">
+</span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">create_table</span><span class="p" data-group-id="5660584647-4">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5660584647-5">[</span><span class="p" data-group-id="5660584647-6">{</span><span class="ss">index</span><span class="p">,</span><span class="p" data-group-id="5660584647-7">[</span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="5660584647-7">]</span><span class="p" data-group-id="5660584647-6">}</span><span class="p">,</span><span class="w">
+                              </span><span class="p" data-group-id="5660584647-8">{</span><span class="ss">attributes</span><span class="p">,</span><span class="w">
+                                    </span><span class="nf">record_info</span><span class="p" data-group-id="5660584647-9">(</span><span class="ss">fields</span><span class="p">,</span><span class="w"> </span><span class="ss">person</span><span class="p" data-group-id="5660584647-9">)</span><span class="p" data-group-id="5660584647-8">}</span><span class="p" data-group-id="5660584647-5">]</span><span class="p" data-group-id="5660584647-4">)</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="5660584647-10">{</span><span class="ss">atomic</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p" data-group-id="5660584647-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">add_table_index</span><span class="p" data-group-id="5660584647-11">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="ss">age</span><span class="p" data-group-id="5660584647-11">)</span><span class="p">,</span><span class="w">
 </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
 
 </span><span class="n">PersonsAge42</span><span class="w"> </span><span class="o">=</span><span class="w">
-     </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">dirty_index_read</span><span class="p" data-group-id="0035880722-12">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="0035880722-12">)</span><span class="p">,</span></code></pre><h3 id="transactions" class="section-heading">
+     </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">dirty_index_read</span><span class="p" data-group-id="5660584647-12">(</span><span class="ss">person</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="ss">person</span><span class="p">.</span><span class="ss">age</span><span class="p" data-group-id="5660584647-12">)</span><span class="p">,</span></code></pre><h3 id="transactions" class="section-heading">
   <a href="#transactions" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -354,20 +350,22 @@ consistency guarantee; this is usually solved by only letting one process update
 the table. Other processes must send update requests to that process.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% Using transaction</span><span class="w">
 
-</span><span class="n">Fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="8289582642-1">(</span><span class="p" data-group-id="8289582642-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-          </span><span class="p" data-group-id="8289582642-2">[</span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">read</span><span class="p" data-group-id="8289582642-3">(</span><span class="p" data-group-id="8289582642-4">{</span><span class="n">Table</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="8289582642-4">}</span><span class="p" data-group-id="8289582642-3">)</span><span class="p">,</span><span class="w">
-           </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">read</span><span class="p" data-group-id="8289582642-5">(</span><span class="p" data-group-id="8289582642-6">{</span><span class="n">Table2</span><span class="p">,</span><span class="w"> </span><span class="n">Key2</span><span class="p" data-group-id="8289582642-6">}</span><span class="p" data-group-id="8289582642-5">)</span><span class="p" data-group-id="8289582642-2">]</span><span class="w">
+</span><span class="n">Fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="7109191744-1">(</span><span class="p" data-group-id="7109191744-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+          </span><span class="p" data-group-id="7109191744-2">[</span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">read</span><span class="p" data-group-id="7109191744-3">(</span><span class="p" data-group-id="7109191744-4">{</span><span class="n">Table</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="7109191744-4">}</span><span class="p" data-group-id="7109191744-3">)</span><span class="p">,</span><span class="w">
+           </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">read</span><span class="p" data-group-id="7109191744-5">(</span><span class="p" data-group-id="7109191744-6">{</span><span class="n">Table2</span><span class="p">,</span><span class="w"> </span><span class="n">Key2</span><span class="p" data-group-id="7109191744-6">}</span><span class="p" data-group-id="7109191744-5">)</span><span class="p" data-group-id="7109191744-2">]</span><span class="w">
       </span><span class="k">end</span><span class="p">,</span><span class="w">
 
-</span><span class="p" data-group-id="8289582642-7">{</span><span class="ss">atomic</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8289582642-8">[</span><span class="n">Result1</span><span class="p">,</span><span class="w"> </span><span class="n">Result2</span><span class="p" data-group-id="8289582642-8">]</span><span class="p" data-group-id="8289582642-7">}</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">transaction</span><span class="p" data-group-id="8289582642-9">(</span><span class="n">Fun</span><span class="p" data-group-id="8289582642-9">)</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="7109191744-7">{</span><span class="ss">atomic</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7109191744-8">[</span><span class="n">Result1</span><span class="p">,</span><span class="w"> </span><span class="n">Result2</span><span class="p" data-group-id="7109191744-8">]</span><span class="p" data-group-id="7109191744-7">}</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">transaction</span><span class="p" data-group-id="7109191744-9">(</span><span class="n">Fun</span><span class="p" data-group-id="7109191744-9">)</span><span class="p">,</span><span class="w">
 </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Same thing using dirty operations</span><span class="w">
 </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w">
 
-</span><span class="n">Result1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">dirty_read</span><span class="p" data-group-id="8289582642-10">(</span><span class="p" data-group-id="8289582642-11">{</span><span class="n">Table</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="8289582642-11">}</span><span class="p" data-group-id="8289582642-10">)</span><span class="p">,</span><span class="w">
-</span><span class="n">Result2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">dirty_read</span><span class="p" data-group-id="8289582642-12">(</span><span class="p" data-group-id="8289582642-13">{</span><span class="n">Table2</span><span class="p">,</span><span class="w"> </span><span class="n">Key2</span><span class="p" data-group-id="8289582642-13">}</span><span class="p" data-group-id="8289582642-12">)</span><span class="p">,</span></code></pre>
-<div class="bottom-actions">
+</span><span class="n">Result1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">dirty_read</span><span class="p" data-group-id="7109191744-10">(</span><span class="p" data-group-id="7109191744-11">{</span><span class="n">Table</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p" data-group-id="7109191744-11">}</span><span class="p" data-group-id="7109191744-10">)</span><span class="p">,</span><span class="w">
+</span><span class="n">Result2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mnesia</span><span class="p">:</span><span class="nf">dirty_read</span><span class="p" data-group-id="7109191744-12">(</span><span class="p" data-group-id="7109191744-13">{</span><span class="n">Table2</span><span class="p">,</span><span class="w"> </span><span class="n">Key2</span><span class="p" data-group-id="7109191744-13">}</span><span class="p" data-group-id="7109191744-12">)</span><span class="p">,</span></code></pre>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
   <div class="bottom-actions-item">
 
       <a href="eff_guide_functions.html" class="bottom-actions-button" rel="prev">
@@ -393,31 +391,30 @@ Processes
 
   </div>
 </div>
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-              <a href="Erlang System Documentation.epub" title="ePub version">
-                Download ePub version
-              </a>
+            <a href="Erlang System Documentation.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-          </span>
-        </p>
+        </span>
+      </p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.1) for the
 
-            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+          <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
-        </p>
+      </p>
 <p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
-      </footer>
-    </div>
+    </footer>
   </div>
 </main>
 </div>
