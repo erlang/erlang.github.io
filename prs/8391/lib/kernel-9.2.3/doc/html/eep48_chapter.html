@@ -1,277 +1,298 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.2">
-    <meta name="project" content="kernel v9.2.3">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:erl="http://erlang.org" xmlns:fn="http://www.w3.org/2005/02/xpath-functions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../../../doc/otp_doc.css" type="text/css">
+<title>Erlang -- EEP-48: Documentation storage and format</title>
+</head>
+<body>
+<div id="container">
+<script id="js" type="text/javascript" language="JavaScript" src="../../../../doc/js/flipmenu/flipmenu.js"></script><script id="js2" type="text/javascript" src="../../../../doc/js/erlresolvelinks.js"></script><script id="js3" type="text/javascript" src="../../../../doc/js/topbar.js"></script><script language="JavaScript" type="text/javascript">
+            <!--
+              function setscrollpos() {
+                var objf = document.getElementById('loadscrollpos');
+                if (objf) {
+                  document.getElementById("leftnav").firstChild.scrollTop = objf.offsetTop - 10;
+                }
+              }
 
+              function addEvent(obj, evType, fn){
+                if (obj.addEventListener){
+                obj.addEventListener(evType, fn, true);
+                return true;
+              } else if (obj.attachEvent){
+                var r = obj.attachEvent("on"+evType, fn);
+                return r;
+              } else {
+                return false;
+              }
+             }
 
-    <title>EEP-48: Documentation storage and format — kernel v9.2.3</title>
-    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
+             addEvent(window, 'load', setscrollpos);
 
-
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-03C971D5.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-JRPQ5PR6.js"></script>
-
-<style>.dark img { background-color: white; }</style>
-  </head>
-  <body data-type="extras" class="page-extra">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
-
-<div class="main">
-
-<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
-  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-</button>
-
-<div class="background-layer"></div>
-
-<nav id="sidebar" class="sidebar">
-
-  <div class="sidebar-header">
-    <div class="sidebar-projectInfo">
-
-        <a href="../../../../doc/index.html" class="sidebar-projectImage">
-          <img src="assets/logo.png" alt="kernel" />
-        </a>
-
-      <div>
-        <a href="../../../../doc/index.html" class="sidebar-projectName" translate="no">
-kernel
-        </a>
-        <div class="sidebar-projectVersion" translate="no">
-          v9.2.3
-        </div>
-      </div>
-    </div>
-    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
-  </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
-</nav>
-
-<main class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-      <div class="top-search">
-        <div class="search-settings">
-          <form class="search-bar" action="search.html">
-            <label class="search-label">
-              <span class="sr-only">Search documentation of kernel</span>
-              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-            </label>
-            <button type="submit" class="search-button" aria-label="Submit Search">
-              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
-            </button>
-            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-              <i class="ri-close-line ri-lg" title="Cancel search"></i>
-            </button>
-          </form>
-          <div class="autocomplete">
-          </div>
-          <button class="icon-settings display-settings">
-            <i class="ri-settings-3-line"></i>
-            <span class="sr-only">Settings</span>
-          </button>
-        </div>
-
-      </div>
-
-<h1>
-
-    <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/kernel/doc/guides/eep48_chapter.md#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
-
-
-  <span>EEP-48: Documentation storage and format</span>
-</h1>
-
-<p>This User's Guide describes the documentation storage format initially described
-in <a href="https://www.erlang.org/erlang-enhancement-proposals/eep-0048.html">EEP-48</a>.
-By standardizing how API documentation is stored, it will be possible to write
-tools that work across languages.</p><p>To fetch the EEP-48 documentation for a module, use <a href="code.html#get_doc/1"><code class="inline">code:get_doc/1</code></a>.</p><p>To render the EEP-48 documentation for an Erlang module, use
-<a href="../../../../lib/stdlib-5.2.2/doc/html/shell_docs.html#render/2"><code class="inline">shell_docs:render/2</code></a>.</p><h2 id="the-docs-storage" class="section-heading">
-  <a href="#the-docs-storage" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">The &quot;Docs&quot; storage</span>
-</h2>
-<p>To look for documentation for a module named <code class="inline">example</code>, a tool should:</p><p>Look for <code class="inline">example.beam</code> in the code path, parse the BEAM file, and retrieve the
-<code class="inline">Docs</code> chunk. If the chunk is not available, it should look for <code class="inline">&quot;example.beam&quot;</code>
-in the code path and find the <code class="inline">doc/chunks/example.chunk</code> file in the application
-that defines the <code class="inline">example</code> module. If no <code class="inline">.chunk</code> file exists,
-documentation is not available.</p><p>The choice of using a chunk or the filesystem is completely up to the language
-or library. In both cases, the documentation can be added or removed at any
-moment by stripping the <code class="inline">Docs</code> chunk (using <a href="../../../../lib/stdlib-5.2.2/doc/html/beam_lib.html"><code class="inline">beam_lib</code></a>) or by removing the
-<code class="inline">doc/chunks</code> directory.</p><p>For example, languages such as Elixir and LFE attach the <code class="inline">Docs</code> chunk at
-compilation time, which can be controlled via a compiler flag, while
-other languages might want to generate the documentation separate from
-the compilation of the source code.</p><h2 id="the-docs-format" class="section-heading">
-  <a href="#the-docs-format" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">The &quot;Docs&quot; format</span>
-</h2>
-<p>In both storages, the documentation is written in the exactly same format: an
-Erlang term serialized to binary via
-<a href="../../../../erts-14.2.4/doc/html/erlang.html#term_to_binary/1"><code class="inline">term_to_binary/1</code></a>. The term can be optionally
-compressed when serialized. It must follow the type specification below:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="7016393605-1">{</span><span class="ss">docs_v1</span><span class="p">,</span><span class="w">
- </span><span class="n">Anno</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nc">erl_anno</span><span class="p">:</span><span class="nf">anno</span><span class="p" data-group-id="7016393605-2">(</span><span class="p" data-group-id="7016393605-2">)</span><span class="p">,</span><span class="w">
- </span><span class="n">BeamLanguage</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nf">atom</span><span class="p" data-group-id="7016393605-3">(</span><span class="p" data-group-id="7016393605-3">)</span><span class="p">,</span><span class="w">
- </span><span class="n">Format</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nf">binary</span><span class="p" data-group-id="7016393605-4">(</span><span class="p" data-group-id="7016393605-4">)</span><span class="p">,</span><span class="w">
- </span><span class="n">ModuleDoc</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7016393605-5">#{</span><span class="n">DocLanguage</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">DocValue</span><span class="p" data-group-id="7016393605-5">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">none</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">hidden</span><span class="p">,</span><span class="w">
- </span><span class="n">Metadata</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nf">map</span><span class="p" data-group-id="7016393605-6">(</span><span class="p" data-group-id="7016393605-6">)</span><span class="p">,</span><span class="w">
- </span><span class="n">Docs</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w">
-   </span><span class="p" data-group-id="7016393605-7">[</span><span class="p" data-group-id="7016393605-8">{</span><span class="p" data-group-id="7016393605-9">{</span><span class="n">Kind</span><span class="p">,</span><span class="w"> </span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Arity</span><span class="p" data-group-id="7016393605-9">}</span><span class="p">,</span><span class="w">
-     </span><span class="n">Anno</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nc">erl_anno</span><span class="p">:</span><span class="nf">anno</span><span class="p" data-group-id="7016393605-10">(</span><span class="p" data-group-id="7016393605-10">)</span><span class="p">,</span><span class="w">
-     </span><span class="n">Signature</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7016393605-11">[</span><span class="nf">binary</span><span class="p" data-group-id="7016393605-12">(</span><span class="p" data-group-id="7016393605-12">)</span><span class="p" data-group-id="7016393605-11">]</span><span class="p">,</span><span class="w">
-     </span><span class="n">Doc</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7016393605-13">#{</span><span class="n">DocLanguage</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">DocValue</span><span class="p" data-group-id="7016393605-13">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">none</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">hidden</span><span class="p">,</span><span class="w">
-     </span><span class="n">Metadata</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nf">map</span><span class="p" data-group-id="7016393605-14">(</span><span class="p" data-group-id="7016393605-14">)</span><span class="w">
-    </span><span class="p" data-group-id="7016393605-8">}</span><span class="p" data-group-id="7016393605-7">]</span><span class="p" data-group-id="7016393605-1">}</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="n">DocLanguage</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nf">binary</span><span class="p" data-group-id="7016393605-15">(</span><span class="p" data-group-id="7016393605-15">)</span><span class="p">,</span><span class="w">
-             </span><span class="n">DocValue</span><span class="w"> </span><span class="p">:</span><span class="p">:</span><span class="w"> </span><span class="nf">binary</span><span class="p" data-group-id="7016393605-16">(</span><span class="p" data-group-id="7016393605-16">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">term</span><span class="p" data-group-id="7016393605-17">(</span><span class="p" data-group-id="7016393605-17">)</span></code></pre><p>where in the root tuple we have:</p><ul><li><p><strong><code class="inline">Anno</code></strong> - annotation (line, column, file) of the definition itself (see
-<a href="../../../../lib/stdlib-5.2.2/doc/html/erl_anno.html"><code class="inline">erl_anno</code></a>)</p></li><li><p><strong><code class="inline">BeamLanguage</code></strong> - an atom representing the language, for example: <code class="inline">erlang</code>,
-<code class="inline">elixir</code>, <code class="inline">lfe</code>, <code class="inline">alpaca</code>, and so on</p></li><li><p><strong><code class="inline">Format</code></strong> - the mime type of the documentation, such as <code class="inline">&lt;&lt;&quot;text/markdown&quot;&gt;&gt;</code>
-or <code class="inline">&lt;&lt;&quot;application/erlang+html&quot;&gt;&gt;</code>. For details of the format used by Erlang
-see the <a href="../../../../lib/edoc-1.2.1/doc/html/doc_storage.html"><code class="inline">EEP-48 Chapter</code></a> in EDoc's User's
-Guide.</p></li><li><p><strong><code class="inline">ModuleDoc</code></strong> - a map with the documentation language as key, such as
-<code class="inline">&lt;&lt;&quot;en&quot;&gt;&gt;</code> or <code class="inline">&lt;&lt;&quot;pt_BR&quot;&gt;&gt;</code>, and the documentation as a binary value. It can
-be atom <code class="inline">none</code> if no documentation exists or the atom <code class="inline">hidden</code> if
-documentation has been explicitly disabled for this entry.</p></li><li><p><strong><code class="inline">Metadata</code></strong> - a map of atom keys with any term as value. This can be used to
-add annotations like the <code class="inline">authors</code> of a module, <code class="inline">deprecated</code>, or anything else
-a language or documentation tool finds relevant.</p></li><li><p><strong><code class="inline">Docs</code></strong> - a list of documentation for other entities (such as functions and
-types) in the module.</p></li></ul><p>For each entry in Docs, we have:</p><ul><li><p><strong><code class="inline">{Kind, Name, Arity}</code></strong> - the kind, name and arity identifying the function,
-callback, type, and so on. The official entities are: <code class="inline">function</code>, <code class="inline">type</code>, and
-<code class="inline">callback</code>. Other languages will add their own. For instance, Elixir and LFE
-might add <code class="inline">macro</code>.</p></li><li><p><strong><code class="inline">Anno</code></strong> - annotation (line, column, file) of the module documentation or of
-the definition itself (see <a href="../../../../lib/stdlib-5.2.2/doc/html/erl_anno.html"><code class="inline">erl_anno</code></a>).</p></li><li><p><strong><code class="inline">Signature</code></strong> - the signature of the entity. It is is a list of binaries.
-Each entry represents a binary in the signature that can be joined with
-whitespace or newline. For example,
-<code class="inline">[&lt;&lt;&quot;binary_to_atom(Binary, Encoding)&quot;&gt;&gt;, &lt;&lt;&quot;when is_binary(Binary)&quot;&gt;&gt;]</code> can
-be rendered as a single line or two lines. It exists exclusively for
-exhibition purposes.</p></li><li><p><strong><code class="inline">Doc</code></strong> - a map with the documentation language as key, such as <code class="inline">&lt;&lt;&quot;en&quot;&gt;&gt;</code> or
-<code class="inline">&lt;&lt;&quot;pt_BR&quot;&gt;&gt;</code>, and the documentation as a value. The documentation can either be
-a binary or any Erlang term, both described by <code class="inline">Format</code>. If it is an Erlang
-term, then <code class="inline">Format</code> must be <code class="inline">&lt;&lt;&quot;application/erlang+SUFFIX&quot;&gt;&gt;</code>, such as
-<code class="inline">&lt;&lt;&quot;application/erlang+html&quot;&gt;&gt;</code> when the documentation is an Erlang
-representation of an HTML document. <code class="inline">Doc</code> can also be atom <code class="inline">none</code>
-if no documentation exists or the atom <code class="inline">hidden</code> if documentation has been
-explicitly disabled for this entry.</p></li><li><p><strong><code class="inline">Metadata</code></strong> - a map of atom keys with any term as value.</p></li></ul><p>This shared format is the heart of the EEP as it is what effectively allows
-cross-language collaboration.</p><p>The Metadata field exists to allow languages, tools, and libraries to add custom
-information to each entry. This EEP documents the following metadata keys:</p><ul><li><p><strong><code class="inline">authors := [binary()]</code></strong> - a list of authors as binaries.</p></li><li><p><strong><code class="inline">cross_references := [module() | {module(), {Kind, Name, Arity}}]</code></strong> - a
-list of modules or module entries that can be used as cross references when
-generating documentation.</p></li><li><p><strong><code class="inline">deprecated := binary()</code></strong> - when present, it means the current entry is
-deprecated with a binary that represents the reason for deprecation and a
-recommendation to replace the deprecated code.</p></li><li><p><strong><code class="inline">since := binary()</code></strong> - a binary representing the version such entry was
-added, such as <code class="inline">&lt;&lt;&quot;1.3.0&quot;&gt;&gt;</code> or <code class="inline">&lt;&lt;&quot;20.0&quot;&gt;&gt;</code>.</p></li><li><p><strong><code class="inline">edit_url := binary()</code></strong> - a binary representing a URL to change the
-documentation itself.</p></li></ul><p>Any key may be added to Metadata at any time. Keys that are frequently used by
-the community can be standardized in future versions.</p><h2 id="see-also" class="section-heading">
-  <a href="#see-also" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">See Also</span>
-</h2>
-<p><a href="../../../../lib/stdlib-5.2.2/doc/html/erl_anno.html"><code class="inline">erl_anno</code></a>, <a href="../../../../lib/stdlib-5.2.2/doc/html/shell_docs.html"><code class="inline">shell_docs</code></a>,
-<a href="../../../../lib/edoc-1.2.1/doc/html/doc_storage.html"><code class="inline">EEP-48 Chapter in EDoc's User's Guide</code></a>,
-<a href="code.html#get_doc/1"><code class="inline">code:get_doc/1</code></a></p>
-<div class="bottom-actions">
-  <div class="bottom-actions-item">
-
-      <a href="logger_cookbook.html" class="bottom-actions-button" rel="prev">
-        <span class="subheader">
-          ← Previous Page
-        </span>
-        <span class="title">
-Logging Cookbook
-        </span>
-      </a>
-
-  </div>
-  <div class="bottom-actions-item">
-
-      <a href="app.html" class="bottom-actions-button" rel="next">
-        <span class="subheader">
-          Next Page →
-        </span>
-        <span class="title">
-app
-        </span>
-      </a>
-
-  </div>
+             //-->
+</script><div class="topbar">
+<div class="topbar-expand "><button onclick="toggleDisplay();"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" viewBox="0 0 54 54" width="24" height="24"><g><path style="fill:#000000;" d="M27,54c-0.552,0-1-0.448-1-1V8c0-0.552,0.448-1,1-1s1,0.448,1,1v45C28,53.552,27.552,54,27,54z"></path><path style="fill:#000000;" d="M11,25c-0.256,0-0.512-0.098-0.707-0.293c-0.391-0.391-0.391-1.023,0-1.414l16-16                                      c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414l-16,16C11.512,24.902,11.256,25,11,25z"></path><path style="fill:#000000;" d="M43,25c-0.256,0-0.512-0.098-0.707-0.293l-16-16c-0.391-0.391-0.391-1.023,0-1.414                                      s1.023-0.391,1.414,0l16,16c0.391,0.391,0.391,1.023,0,1.414C43.512,24.902,43.256,25,43,25z"></path><path style="fill:#000000;" d="M43,2H11c-0.552,0-1-0.448-1-1s0.448-1,1-1h32c0.552,0,1,0.448,1,1S43.552,2,43,2z"></path></g></svg></button></div>
+<div class="topbar-title"><h1 id="EEP-48: Documentation storage and format">5 
+                EEP-48: Documentation storage and format</h1></div>
+<div class="search-expand "></div>
 </div>
-      <footer class="footer">
-        <p>
+<aside class="hide-mobile" id="leftnav"><nav class="leftnav-tube"><div class="erlang-logo-wrapper"><a href="../../../../doc/index.html"><img alt="Erlang Logo" src="../../../../doc/erlang-logo.png" class="erlang-logo"></a></div>
+<p class="section-title">Kernel</p>
+<p class="section-subtitle">User's Guide</p>
+<p class="section-version">Version 9.2.3</p>
+<ul class="panel-sections">
+<li><a href="users_guide.html">User's Guide</a></li>
+<li><a href="index.html">Reference Manual</a></li>
+<li><a href="notes.html">Release Notes</a></li>
+<li><a href="../pdf/kernel-9.2.3.pdf">PDF</a></li>
+<li><a href="../../../../doc/index.html">Top</a></li>
+</ul>
+<ul class="expand-collapse-items">
+<li><a href="javascript:openAllFlips()">Expand All</a></li>
+<li><a href="javascript:closeAllFlips()">Contract All</a></li>
+</ul>
+<h3 id="chapters">Chapters</h3>
+<ul class="flipMenu" imagepath="../../../../doc/js/flipmenu">
+<li id="no" title="Introduction" expanded="false">Introduction<ul>
+<li><a href="introduction.html">
+              Top of chapter
+            </a></li>
+<li title="Scope"><a href="introduction.html#scope">Scope</a></li>
+<li title="Prerequisites"><a href="introduction.html#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li id="no" title="Socket Usage" expanded="false">Socket Usage<ul>
+<li><a href="socket_usage.html">
+              Top of chapter
+            </a></li>
+<li title="Introduction"><a href="socket_usage.html#introduction">Introduction</a></li>
+<li title="Socket Registry"><a href="socket_usage.html#socket-registry">Socket Registry</a></li>
+<li title="Socket Options"><a href="socket_usage.html#socket-options">Socket Options</a></li>
+</ul>
+</li>
+<li id="no" title="Logging" expanded="false">Logging<ul>
+<li><a href="logger_chapter.html">
+              Top of chapter
+            </a></li>
+<li title="Overview"><a href="logger_chapter.html#overview">Overview</a></li>
+<li title="Logger API"><a href="logger_chapter.html#logger-api">Logger API</a></li>
+<li title="Filters"><a href="logger_chapter.html#filters">Filters</a></li>
+<li title="Handlers"><a href="logger_chapter.html#handlers">Handlers</a></li>
+<li title="Formatters"><a href="logger_chapter.html#formatters">Formatters</a></li>
+<li title="Configuration"><a href="logger_chapter.html#configuration">Configuration</a></li>
+<li title="Backwards Compatibility with error_logger"><a href="logger_chapter.html#backwards-compatibility-with-error_logger">Backwards Compatibility with error_logger</a></li>
+<li title="Error Handling"><a href="logger_chapter.html#error-handling">Error Handling</a></li>
+<li title="Example: Add a handler to log info events to file"><a href="logger_chapter.html#example--add-a-handler-to-log-info-events-to-file">Example: Add a handler to log info events to file</a></li>
+<li title="Example: Implement a handler"><a href="logger_chapter.html#example--implement-a-handler">Example: Implement a handler</a></li>
+<li title="Protecting the Handler from Overload"><a href="logger_chapter.html#protecting-the-handler-from-overload">Protecting the Handler from Overload</a></li>
+<li title="Logger Proxy"><a href="logger_chapter.html#logger-proxy">Logger Proxy</a></li>
+<li title="See Also"><a href="logger_chapter.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li id="no" title="Logging Cookbook" expanded="false">Logging Cookbook<ul>
+<li><a href="logger_cookbook.html">
+              Top of chapter
+            </a></li>
+<li title="Get Logger information"><a href="logger_cookbook.html#get-logger-information">Get Logger information</a></li>
+<li title="Configure the Logger"><a href="logger_cookbook.html#configure-the-logger">Configure the Logger</a></li>
+<li title="Configure Logger formatter"><a href="logger_cookbook.html#configure-logger-formatter">Configure Logger formatter</a></li>
+<li title="Configuring handlers"><a href="logger_cookbook.html#configuring-handlers">Configuring handlers</a></li>
+<li title="Logging"><a href="logger_cookbook.html#logging">Logging</a></li>
+<li title="Filters"><a href="logger_cookbook.html#filters">Filters</a></li>
+</ul>
+</li>
+<li id="loadscrollpos" title="EEP-48: Documentation storage and format" expanded="true">EEP-48: Documentation storage and format<ul>
+<li><a href="eep48_chapter.html">
+              Top of chapter
+            </a></li>
+<li title='the "Docs" storage'><a href="eep48_chapter.html#the--docs--storage">the "Docs" storage</a></li>
+<li title='the "Docs" format'><a href="eep48_chapter.html#the--docs--format">the "Docs" format</a></li>
+<li title="See Also"><a href="eep48_chapter.html#see-also">See Also</a></li>
+</ul>
+</li>
+</ul></nav></aside><div id="content">
+<div class="innertube">
+<h1 id="EEP-48: Documentation storage and format">5 EEP-48: Documentation storage and format</h1>
+  
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+  <p>This User's Guide describes the documentation storage format initially described in
+    <span class="bold_code bc-20"><a href="https://www.erlang.org/erlang-enhancement-proposals/eep-0048.html">EEP-48</a></span>.
+    By standardizing how API documentation is stored, it will be possible to write tools that
+    work across languages.</p>
 
-              <a href="kernel.epub" title="ePub version">
-                Download ePub version
-              </a>
+  <p>To fetch the EEP-48 documentation for a module you can use
+    <span class="bold_code bc-15"><a href="code.html#get_doc-1"><span class="code">code:get_doc/1</span></a></span>.</p>
 
-          </span>
-        </p>
+  <p>To render the EEP-48 documentation for an Erlang module you can use
+    <span class="bold_code bc-13"><a href="javascript:erlhref('../../../../doc/../','stdlib','shell_docs.html#render-2');"><span class="code">shell_docs:render/2</span></a></span>.</p>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
+  <h3 id="the--docs--storage" class="title-link" onMouseOver="document.getElementById('ghlink-the--docs--storage-idm2159').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-the--docs--storage-idm2159').style.visibility = 'hidden';">
+<div class="title-name">5.1 
+        the "Docs" storage</div>
+<div class="title-anchors"><span id="ghlink-the--docs--storage-idm2159" class="ghlink-after"><a href="#the--docs--storage" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/eep48_chapter.xml#L44" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+</h3>
+    
+    <p>To look for documentation for a module name example, a tool should:</p>
 
-            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+    <p>Look for <span class="code">example.beam</span> in the code path, parse the BEAM file and
+      retrieve the <span class="code">Docs</span> chunk. If the chunk is not available, it should look
+      for "example.beam" in the code path and find the <span class="code">doc/chunks/example.chunk</span>
+      file in the application that defines the <span class="code">example</span> module. If a .chunk file is not
+      available, then documentation is not available.</p>
 
-        </p>
-<p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
-      </footer>
-    </div>
-  </div>
-</main>
+    <p>The choice of using a chunk or the filesystem is completely up to the language or library.
+      In both cases, the documentation can be added or removed at any moment by stripping
+      the <span class="code">Docs</span> chunk or by removing the doc/chunks directory.</p>
+
+    <p>For example, languages like Elixir and LFE attach the <span class="code">Docs</span> chunk at
+      compilation time, which can be controlled via a compiler flag. On the other hand,
+      projects like OTP itself will likely generate the doc/chunks entries on a separate
+      command, completely unrelated from code compilation.</p>
+  
+
+  <h3 id="the--docs--format" class="title-link" onMouseOver="document.getElementById('ghlink-the--docs--format-idm2171').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-the--docs--format-idm2171').style.visibility = 'hidden';">
+<div class="title-name">5.2 
+        the "Docs" format</div>
+<div class="title-anchors"><span id="ghlink-the--docs--format-idm2171" class="ghlink-after"><a href="#the--docs--format" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/eep48_chapter.xml#L64" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+</h3>
+    
+    <p>In both storages, the documentation is written in the exactly same format:
+      an Erlang term serialized to binary via <span class="bold_code bc-13"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#term_to_binary-1');">
+      <span class="code">term_to_binary/1</span></a></span>. The term may be optionally compressed when serialized.
+      It must follow the type specification below:</p>
+
+    <div class="example example-none"><pre>{docs_v1,
+ Anno :: erl_anno:anno(),
+ BeamLanguage :: atom(),
+ Format :: binary(),
+ ModuleDoc :: #{DocLanguage := DocValue} | none | hidden,
+ Metadata :: map(),
+ Docs ::
+   [{{Kind, Name, Arity},
+     Anno :: erl_anno:anno(),
+     Signature :: [binary()],
+     Doc :: #{DocLanguage := DocValue} | none | hidden,
+     Metadata :: map()
+    }]} when DocLanguage :: binary(),
+             DocValue :: binary() | term()</pre></div>
+    <p>where in the root tuple we have:</p>
+    <dl>
+      <dt class="title-link"><strong>Anno</strong></dt>
+      <dd>annotation (line, column, file) of the definition itself (see
+        <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','stdlib','erl_anno.html');"><span class="code">erl_anno(3)</span></a></span>)</dd>
+
+      <dt class="title-link"><strong>BeamLanguage</strong></dt>
+      <dd>an atom representing the language, for example: erlang, elixir, lfe, alpaca, etc</dd>
+
+      <dt class="title-link"><strong>Format</strong></dt>
+      <dd>the mime type of the documentation, such as &lt;&lt;"text/markdown"&gt;&gt; or
+        &lt;&lt;"application/erlang+html"&gt;&gt;. For details of the format used by Erlang
+        see the <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','erl_docgen','doc_storage.html');"><span class="code">EEP-48 Chapter</span></a></span>
+        in Erl_Docgen's User's Guide.</dd>
+
+      <dt class="title-link"><strong>ModuleDoc</strong></dt>
+      <dd>a map with the documentation language as key, such as <span class="code">&lt;&lt;"en"&gt;&gt;</span> or
+        <span class="code">&lt;&lt;"pt_BR"&gt;&gt;</span>, and the documentation as a binary value. It may be the
+        atom <span class="code">none</span> in case there is no documentation or the atom <span class="code">hidden</span> if documentation
+        has been explicitly disabled for this entry.</dd>
+
+      <dt class="title-link"><strong>Metadata</strong></dt>
+      <dd>a map of atom keys with any term as value. This can be used to add annotations like the
+        <span class="code">authors</span> of a module, <span class="code">deprecated</span>, or anything else a language or documentation
+        tool may find relevant.</dd>
+
+      <dt class="title-link"><strong>Docs</strong></dt>
+      <dd>a list of documentation for other entities (such as functions and types)
+        in the module.</dd>
+    </dl>
+
+    <p>For each entry in Docs, we have:</p>
+
+    <dl>
+      <dt class="title-link"><strong>{Kind, Name, Arity}</strong></dt>
+      <dd>the kind, name and arity identifying the function, callback, type, etc.
+        The official entities are: <span class="code">function</span>, <span class="code">type</span> and <span class="code">callback</span>.
+        Other languages will add their own. For instance, Elixir and LFE may add macro.</dd>
+
+      <dt class="title-link"><strong>Anno</strong></dt>
+      <dd>annotation (line, column, file) of the module documentation or of the definition itself
+        (see <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','stdlib','erl_anno.html');"><span class="code">erl_anno(3)</span></a></span>).</dd>
+
+      <dt class="title-link"><strong>Signature</strong></dt>
+      <dd>the signature of the entity. It is is a list of binaries. Each entry represents a
+        binary in the signature that can be joined with a whitespace or a newline. For example,
+        <span class="code">[&lt;&lt;"binary_to_atom(Binary, Encoding)"&gt;&gt;,
+        &lt;&lt;"when is_binary(Binary)"&gt;&gt;]</span> may be rendered as
+        a single line or two lines. It exists exclusively for exhibition purposes.</dd>
+
+      <dt class="title-link"><strong>Doc</strong></dt>
+      <dd>a map with the documentation language as key, such as &lt;&lt;"en"&gt;&gt; or
+        &lt;&lt;"pt_BR"&gt;&gt;, and the documentation as a value. The documentation may
+        either be a binary or any Erlang term, both described by <span class="code">Format</span>. If it is an
+        Erlang term, then the Format must be &lt;&lt;"application/erlang+SUFFIX",&gt;&gt;
+        such as &lt;&lt;"application/erlang+html"&gt;&gt; when the documentation is an Erlang
+        representation of an HTML document. The Doc may also be atom <span class="code">none</span> in case there is
+        no documentation or the atom <span class="code">hidden</span> if documentation has been explicitly
+        disabled for this entry.</dd>
+
+      <dt class="title-link"><strong>Metadata</strong></dt>
+      <dd>a map of atom keys with any term as value.</dd>
+    </dl>
+
+    <p>This shared format is the heart of the EEP as it is what effectively
+      allows cross-language collaboration.</p>
+
+    <p>The Metadata field exists to allow languages, tools and libraries to add
+      custom information to each entry. This EEP documents the following metadata keys:</p>
+
+    <dl>
+      <dt class="title-link"><strong>authors := [binary()]</strong></dt>
+      <dd>a list of authors as binaries.</dd>
+
+      <dt class="title-link"><strong>cross_references := [module() | {module(), {Kind, Name, Arity}}]</strong></dt>
+      <dd>a list of modules or module entries that can be used as cross references
+        when generating documentation.</dd>
+
+      <dt class="title-link"><strong>deprecated := binary()</strong></dt>
+      <dd>when present, it means the current entry is deprecated with a binary
+        that represents the reason for deprecation and a recommendation to replace
+        the deprecated code.</dd>
+
+      <dt class="title-link"><strong>since := binary()</strong></dt>
+      <dd>a binary representing the version such entry was added, such
+        as &lt;&lt;"1.3.0"&gt;&gt; or &lt;&lt;"20.0"&gt;&gt;.</dd>
+
+      <dt class="title-link"><strong>edit_url := binary()</strong></dt>
+      <dd>a binary representing a URL to change the documentation itself.</dd>
+    </dl>
+
+    <p>Any key may be added to Metadata at any time. Keys that are frequently
+      used by the community can be standardized in future versions.</p>
+  
+
+  <h3 id="see-also" class="title-link" onMouseOver="document.getElementById('ghlink-see-also-idm2236').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-see-also-idm2236').style.visibility = 'hidden';">
+<div class="title-name">5.3 
+        See Also</div>
+<div class="title-anchors"><span id="ghlink-see-also-idm2236" class="ghlink-after"><a href="#see-also" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/kernel/doc/src/eep48_chapter.xml#L182" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+</h3>
+    
+    <p>
+      <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','stdlib','erl_anno.html');"><span class="code">erl_anno(3)</span></a></span>,
+      <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','stdlib','shell_docs.html');"><span class="code">shell_docs(3)</span></a></span>,
+      <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','erl_docgen','doc_storage.html');"><span class="code">EEP-48 Chapter in Erl_Docgen's User's Guide</span></a></span>,
+      <span class="bold_code bc-15"><a href="code.html#get_doc-1"><span class="code">code:get_doc/1</span></a></span>
+    </p>
+  
 </div>
-
-
-  </body>
+<div class="footer">
+<hr>
+<p>Copyright © 1997-2024 Ericsson AB. All Rights Reserved.</p>
+</div>
+</div>
+</div>
+<script type="text/javascript">window.__otpTopDocDir = '../../../../doc/js/';</script><script type="text/javascript" src="../../../../doc/js/highlight.js"></script>
+</body>
 </html>

@@ -1,649 +1,470 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.2">
-    <meta name="project" content="runtime_tools v2.0.1">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns:erl="http://erlang.org" xmlns:fn="http://www.w3.org/2005/02/xpath-functions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../../../doc/otp_doc.css" type="text/css">
+<title>Erlang -- instrument</title>
+</head>
+<body>
+<div id="container">
+<script id="js" type="text/javascript" language="JavaScript" src="../../../../doc/js/flipmenu/flipmenu.js"></script><script id="js2" type="text/javascript" src="../../../../doc/js/erlresolvelinks.js"></script><script id="js3" type="text/javascript" src="../../../../doc/js/topbar.js"></script><script language="JavaScript" type="text/javascript">
+            <!--
+              function setscrollpos() {
+                var objf = document.getElementById('loadscrollpos');
+                if (objf) {
+                  document.getElementById("leftnav").firstChild.scrollTop = objf.offsetTop - 10;
+                }
+              }
 
+              function addEvent(obj, evType, fn){
+                if (obj.addEventListener){
+                obj.addEventListener(evType, fn, true);
+                return true;
+              } else if (obj.attachEvent){
+                var r = obj.attachEvent("on"+evType, fn);
+                return r;
+              } else {
+                return false;
+              }
+             }
 
-    <title>instrument — runtime_tools v2.0.1</title>
-    <link rel="stylesheet" href="dist/html-erlang-DUKXLSAT.css" />
+             addEvent(window, 'load', setscrollpos);
 
-
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-A7S2WMC7.js"></script>
-    <script src="dist/sidebar_items-3B3D9B96.js"></script>
-
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-JRPQ5PR6.js"></script>
-
-<style>.dark img { background-color: white; }</style>
-  </head>
-  <body data-type="modules" class="page-module">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
-
-<div class="main">
-
-<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
-  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
-</button>
-
-<div class="background-layer"></div>
-
-<nav id="sidebar" class="sidebar">
-
-  <div class="sidebar-header">
-    <div class="sidebar-projectInfo">
-
-        <a href="../../../../doc/index.html" class="sidebar-projectImage">
-          <img src="assets/logo.png" alt="runtime_tools" />
-        </a>
-
-      <div>
-        <a href="../../../../doc/index.html" class="sidebar-projectName" translate="no">
-runtime_tools
-        </a>
-        <div class="sidebar-projectVersion" translate="no">
-          v2.0.1
-        </div>
-      </div>
-    </div>
-    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
+             //-->
+</script><div class="topbar">
+<div class="topbar-expand "><button onclick="toggleDisplay();"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" viewBox="0 0 54 54" width="24" height="24"><g><path style="fill:#000000;" d="M27,54c-0.552,0-1-0.448-1-1V8c0-0.552,0.448-1,1-1s1,0.448,1,1v45C28,53.552,27.552,54,27,54z"></path><path style="fill:#000000;" d="M11,25c-0.256,0-0.512-0.098-0.707-0.293c-0.391-0.391-0.391-1.023,0-1.414l16-16                                      c0.391-0.391,1.023-0.391,1.414,0s0.391,1.023,0,1.414l-16,16C11.512,24.902,11.256,25,11,25z"></path><path style="fill:#000000;" d="M43,25c-0.256,0-0.512-0.098-0.707-0.293l-16-16c-0.391-0.391-0.391-1.023,0-1.414                                      s1.023-0.391,1.414,0l16,16c0.391,0.391,0.391,1.023,0,1.414C43.512,24.902,43.256,25,43,25z"></path><path style="fill:#000000;" d="M43,2H11c-0.552,0-1-0.448-1-1s0.448-1,1-1h32c0.552,0,1,0.448,1,1S43.552,2,43,2z"></path></g></svg></button></div>
+<div class="topbar-title"><h1 id="instrument">instrument</h1></div>
+<div class="search-expand "></div>
+</div>
+<aside class="hide-mobile" id="leftnav"><nav class="leftnav-tube"><div class="erlang-logo-wrapper"><a href="../../../../doc/index.html"><img alt="Erlang Logo" src="../../../../doc/erlang-logo.png" class="erlang-logo"></a></div>
+<p class="section-title">Runtime_Tools</p>
+<p class="section-subtitle">Reference Manual</p>
+<p class="section-version">Version 2.0.1</p>
+<ul class="panel-sections">
+<li><a href="users_guide.html">User's Guide</a></li>
+<li><a href="index.html">Reference Manual</a></li>
+<li><a href="notes.html">Release Notes</a></li>
+<li><a href="../pdf/runtime_tools-2.0.1.pdf">PDF</a></li>
+<li><a href="../../../../doc/index.html">Top</a></li>
+</ul>
+<ul class="expand-collapse-items">
+<li><a href="javascript:openAllFlips()">Expand All</a></li>
+<li><a href="javascript:closeAllFlips()">Contract All</a></li>
+</ul>
+<h3 id="toc">Table of Contents</h3>
+<ul class="flipMenu">
+<li title="runtime_tools (App)"><a href="runtime_tools_app.html">runtime_tools (App)
+                </a></li>
+<li id="no" title="dbg " expanded="false">dbg<ul>
+<li><a href="dbg.html">
+                  Top of manual page
+                </a></li>
+    <li title="c-3"><a href="dbg.html#c-3">c/3</a></li>
+    <li title="c-4"><a href="dbg.html#c-4">c/4</a></li>
+    <li title="cn-1"><a href="dbg.html#cn-1">cn/1</a></li>
+    <li title="ctp-0"><a href="dbg.html#ctp-0">ctp/0</a></li>
+    <li title="ctp-1"><a href="dbg.html#ctp-1">ctp/1</a></li>
+    <li title="ctp-2"><a href="dbg.html#ctp-2">ctp/2</a></li>
+    <li title="ctp-3"><a href="dbg.html#ctp-3">ctp/3</a></li>
+    <li title="ctp-1"><a href="dbg.html#ctp-1">ctp/1</a></li>
+    <li title="ctpe-1"><a href="dbg.html#ctpe-1">ctpe/1</a></li>
+    <li title="ctpg-0"><a href="dbg.html#ctpg-0">ctpg/0</a></li>
+    <li title="ctpg-1"><a href="dbg.html#ctpg-1">ctpg/1</a></li>
+    <li title="ctpg-2"><a href="dbg.html#ctpg-2">ctpg/2</a></li>
+    <li title="ctpg-3"><a href="dbg.html#ctpg-3">ctpg/3</a></li>
+    <li title="ctpg-1"><a href="dbg.html#ctpg-1">ctpg/1</a></li>
+    <li title="ctpl-0"><a href="dbg.html#ctpl-0">ctpl/0</a></li>
+    <li title="ctpl-1"><a href="dbg.html#ctpl-1">ctpl/1</a></li>
+    <li title="ctpl-2"><a href="dbg.html#ctpl-2">ctpl/2</a></li>
+    <li title="ctpl-3"><a href="dbg.html#ctpl-3">ctpl/3</a></li>
+    <li title="ctpl-1"><a href="dbg.html#ctpl-1">ctpl/1</a></li>
+    <li title="dtp-0"><a href="dbg.html#dtp-0">dtp/0</a></li>
+    <li title="dtp-1"><a href="dbg.html#dtp-1">dtp/1</a></li>
+    <li title="flush_trace_port-0"><a href="dbg.html#flush_trace_port-0">flush_trace_port/0</a></li>
+    <li title="flush_trace_port-1"><a href="dbg.html#flush_trace_port-1">flush_trace_port/1</a></li>
+    <li title="fun2ms-1"><a href="dbg.html#fun2ms-1">fun2ms/1</a></li>
+    <li title="get_tracer-0"><a href="dbg.html#get_tracer-0">get_tracer/0</a></li>
+    <li title="get_tracer-1"><a href="dbg.html#get_tracer-1">get_tracer/1</a></li>
+    <li title="h-0"><a href="dbg.html#h-0">h/0</a></li>
+    <li title="h-1"><a href="dbg.html#h-1">h/1</a></li>
+    <li title="i-0"><a href="dbg.html#i-0">i/0</a></li>
+    <li title="ln-0"><a href="dbg.html#ln-0">ln/0</a></li>
+    <li title="ltp-0"><a href="dbg.html#ltp-0">ltp/0</a></li>
+    <li title="n-1"><a href="dbg.html#n-1">n/1</a></li>
+    <li title="p-1"><a href="dbg.html#p-1">p/1</a></li>
+    <li title="p-2"><a href="dbg.html#p-2">p/2</a></li>
+    <li title="rtp-1"><a href="dbg.html#rtp-1">rtp/1</a></li>
+    <li title="stop-0"><a href="dbg.html#stop-0">stop/0</a></li>
+    <li title="stop_trace_client-1"><a href="dbg.html#stop_trace_client-1">stop_trace_client/1</a></li>
+    <li title="tp-2"><a href="dbg.html#tp-2">tp/2</a></li>
+    <li title="tp-3"><a href="dbg.html#tp-3">tp/3</a></li>
+    <li title="tp-4"><a href="dbg.html#tp-4">tp/4</a></li>
+    <li title="tp-2"><a href="dbg.html#tp-2">tp/2</a></li>
+    <li title="tpe-2"><a href="dbg.html#tpe-2">tpe/2</a></li>
+    <li title="tpl-2"><a href="dbg.html#tpl-2">tpl/2</a></li>
+    <li title="tpl-3"><a href="dbg.html#tpl-3">tpl/3</a></li>
+    <li title="tpl-4"><a href="dbg.html#tpl-4">tpl/4</a></li>
+    <li title="tpl-2"><a href="dbg.html#tpl-2">tpl/2</a></li>
+    <li title="trace_client-2"><a href="dbg.html#trace_client-2">trace_client/2</a></li>
+    <li title="trace_client-3"><a href="dbg.html#trace_client-3">trace_client/3</a></li>
+    <li title="trace_port-2"><a href="dbg.html#trace_port-2">trace_port/2</a></li>
+    <li title="trace_port_control-1"><a href="dbg.html#trace_port_control-1">trace_port_control/1</a></li>
+    <li title="trace_port_control-2"><a href="dbg.html#trace_port_control-2">trace_port_control/2</a></li>
+    <li title="tracer-0"><a href="dbg.html#tracer-0">tracer/0</a></li>
+    <li title="tracer-2"><a href="dbg.html#tracer-2">tracer/2</a></li>
+    <li title="tracer-3"><a href="dbg.html#tracer-3">tracer/3</a></li>
+    <li title="wtp-1"><a href="dbg.html#wtp-1">wtp/1</a></li>
     </ul>
-  </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
-</nav>
-
-<main class="content">
-  <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-      <div class="top-search">
-        <div class="search-settings">
-          <form class="search-bar" action="search.html">
-            <label class="search-label">
-              <span class="sr-only">Search documentation of runtime_tools</span>
-              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-            </label>
-            <button type="submit" class="search-button" aria-label="Submit Search">
-              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
-            </button>
-            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-              <i class="ri-close-line ri-lg" title="Cancel search"></i>
-            </button>
-          </form>
-          <div class="autocomplete">
-          </div>
-          <button class="icon-settings display-settings">
-            <i class="ri-settings-3-line"></i>
-            <span class="sr-only">Settings</span>
-          </button>
-        </div>
-
-      </div>
-
-<h1>
-
-    <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L20" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
-
-  <span translate="no">instrument</span> 
-  <small class="app-vsn" translate="no">(runtime_tools v2.0.1)</small>
-
-</h1>
-
-
-  <section id="moduledoc">
-<p>Analysis and Utility Functions for Instrumentation</p><p>The module <code class="inline">instrument</code> contains support for studying the resource usage in an
-Erlang runtime system. Currently, only the allocation of memory can be studied.</p><blockquote><h4 class="info">Note</h4><p>Since this module inspects internal details of the runtime system it may
-differ greatly from one version to another. We make no compatibility
-guarantees in this module.</p></blockquote><h2 id="module-see-also" class="section-heading">
-  <a href="#module-see-also" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">See Also</span>
-</h2>
-<p><a href="../../../../erts-14.2.4/doc/html/erts_alloc.html">erts_alloc(3)</a>, <a href="../../../../erts-14.2.4/doc/html/erl_cmd.html">erl(1)</a></p>
-  </section>
-
-
-  <section id="summary" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#summary">
-        <i class="ri-link-m" aria-hidden="true"></i>
-      </a>
-      <span class="text">Summary</span>
-    </h1>
-<div class="summary-types summary">
-  <h2>
-    <a href="#types">Types</a>
-  </h2>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#t:allocation_origin/0" translate="no">allocation_origin()</a>
-
-      </div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#t:allocation_summary/0" translate="no">allocation_summary()</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>A summary of allocated block sizes (including their headers) grouped by their
-<code class="inline">Origin</code> and <code class="inline">Type</code>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#t:block_histogram/0" translate="no">block_histogram()</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>A histogram of block sizes where each interval's upper bound is twice as high as
-the one before it.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#t:carrier_info_list/0" translate="no">carrier_info_list()</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p><code class="inline">AllocatorType</code> is the type of the allocator that employs this carrier.</p></div>
-
-    </div>
-
+</li>
+<li id="no" title="dyntrace " expanded="false">dyntrace<ul>
+<li><a href="dyntrace.html">
+                  Top of manual page
+                </a></li>
+    <li title="available-0"><a href="dyntrace.html#available-0">available/0</a></li>
+    <li title="get_tag-0"><a href="dyntrace.html#get_tag-0">get_tag/0</a></li>
+    <li title="get_tag-0"><a href="dyntrace.html#get_tag-0">get_tag/0</a></li>
+    <li title="p-0"><a href="dyntrace.html#p-0">p/0</a></li>
+    <li title="p-1"><a href="dyntrace.html#p-1">p/1</a></li>
+    <li title="p-2"><a href="dyntrace.html#p-2">p/2</a></li>
+    <li title="p-3"><a href="dyntrace.html#p-3">p/3</a></li>
+    <li title="p-4"><a href="dyntrace.html#p-4">p/4</a></li>
+    <li title="p-5"><a href="dyntrace.html#p-5">p/5</a></li>
+    <li title="p-6"><a href="dyntrace.html#p-6">p/6</a></li>
+    <li title="p-7"><a href="dyntrace.html#p-7">p/7</a></li>
+    <li title="p-8"><a href="dyntrace.html#p-8">p/8</a></li>
+    <li title="put_tag-1"><a href="dyntrace.html#put_tag-1">put_tag/1</a></li>
+    <li title="restore_tag-1"><a href="dyntrace.html#restore_tag-1">restore_tag/1</a></li>
+    <li title="spread_tag-1"><a href="dyntrace.html#spread_tag-1">spread_tag/1</a></li>
+    </ul>
+</li>
+<li id="loadscrollpos" title="instrument " expanded="true">instrument<ul>
+<li><a href="instrument.html">
+                  Top of manual page
+                </a></li>
+    <li title="allocations-0"><a href="instrument.html#allocations-0">allocations/0</a></li>
+    <li title="allocations-1"><a href="instrument.html#allocations-1">allocations/1</a></li>
+    <li title="carriers-0"><a href="instrument.html#carriers-0">carriers/0</a></li>
+    <li title="carriers-1"><a href="instrument.html#carriers-1">carriers/1</a></li>
+    </ul>
+</li>
+<li id="no" title="msacc " expanded="false">msacc<ul>
+<li><a href="msacc.html">
+                  Top of manual page
+                </a></li>
+    <li title="available-0"><a href="msacc.html#available-0">available/0</a></li>
+    <li title="from_file-1"><a href="msacc.html#from_file-1">from_file/1</a></li>
+    <li title="print-0"><a href="msacc.html#print-0">print/0</a></li>
+    <li title="print-1"><a href="msacc.html#print-1">print/1</a></li>
+    <li title="print-2"><a href="msacc.html#print-2">print/2</a></li>
+    <li title="print-3"><a href="msacc.html#print-3">print/3</a></li>
+    <li title="reset-0"><a href="msacc.html#reset-0">reset/0</a></li>
+    <li title="start-0"><a href="msacc.html#start-0">start/0</a></li>
+    <li title="start-1"><a href="msacc.html#start-1">start/1</a></li>
+    <li title="stats-0"><a href="msacc.html#stats-0">stats/0</a></li>
+    <li title="stats-2"><a href="msacc.html#stats-2">stats/2</a></li>
+    <li title="stop-0"><a href="msacc.html#stop-0">stop/0</a></li>
+    <li title="to_file-1"><a href="msacc.html#to_file-1">to_file/1</a></li>
+    </ul>
+</li>
+<li id="no" title="scheduler " expanded="false">scheduler<ul>
+<li><a href="scheduler.html">
+                  Top of manual page
+                </a></li>
+    <li title="get_sample-0"><a href="scheduler.html#get_sample-0">get_sample/0</a></li>
+    <li title="get_sample_all-0"><a href="scheduler.html#get_sample_all-0">get_sample_all/0</a></li>
+    <li title="sample-0"><a href="scheduler.html#sample-0">sample/0</a></li>
+    <li title="sample_all-0"><a href="scheduler.html#sample_all-0">sample_all/0</a></li>
+    <li title="utilization-1"><a href="scheduler.html#utilization-1">utilization/1</a></li>
+    <li title="utilization-2"><a href="scheduler.html#utilization-2">utilization/2</a></li>
+    </ul>
+</li>
+<li id="no" title="system_information " expanded="false">system_information<ul>
+<li><a href="system_information.html">
+                  Top of manual page
+                </a></li>
+    <li title="sanity_check-0"><a href="system_information.html#sanity_check-0">sanity_check/0</a></li>
+    <li title="to_file-1"><a href="system_information.html#to_file-1">to_file/1</a></li>
+    </ul>
+</li>
+</ul></nav></aside><div id="content">
+<div class="innertube"></div>
+<!-- refpage --><div class="innertube"><center><h1>instrument</h1></center></div>
+  
+  <div class="innertube">
+<h3 id="module" class="title-link" onMouseOver="document.getElementById('ghlink-module-idm2216').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-module-idm2216').style.visibility = 'hidden';">
+<div class="title-name">Module</div>
+<div class="title-anchors"><span id="ghlink-module-idm2216" class="ghlink-after"><a href="#module" title="Link to this place!"><span class="paperclip-after"></span></a></span></div>
+</h3>
+<div class="REFBODY module-body">instrument</div>
 </div>
-<div class="summary-functions summary">
-  <h2>
-    <a href="#functions">Functions</a>
-  </h2>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#allocations/0" translate="no">allocations()</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Equivalent to <a href="#allocations/1"><code class="inline">allocations(#{})</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#allocations/1" translate="no">allocations(Options)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Returns a summary of all tagged allocations in the system, optionally filtered
-by allocator type and scheduler id.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#carriers/0" translate="no">carriers()</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Equivalent to <a href="#carriers/1"><code class="inline">carriers(#{})</code></a>.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#carriers/1" translate="no">carriers(Options)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Returns a summary of all carriers in the system, optionally filtered by
-allocator type and scheduler id.</p></div>
-
-    </div>
-
+  <div class="innertube">
+<h3 id="module-summary" class="title-link" onMouseOver="document.getElementById('ghlink-module-summary-idm2217').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-module-summary-idm2217').style.visibility = 'hidden';">
+<div class="title-name">Module Summary</div>
+<div class="title-anchors"><span id="ghlink-module-summary-idm2217" class="ghlink-after"><a href="#module-summary" title="Link to this place!"><span class="paperclip-after"></span></a></span></div>
+</h3>
+<div class="REFBODY module-summary-body">Analysis and Utility Functions for Instrumentation</div>
 </div>
-
-  </section>
-
-
-  <section id="types" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#types">
-        <i class="ri-link-m" aria-hidden="true"></i>
-      </a>
-      <span class="text">Types</span>
-    </h1>
-    <div class="types-list">
-<section class="detail" id="t:allocation_origin/0">
-
-  <div class="detail-header">
-    <a href="#t:allocation_origin/0" class="detail-link" title="Link to this type">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature" translate="no">allocation_origin()</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L85" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(not exported)</span>
-
+  <section class="description"><div class="innertube">
+<h3 id="description" class="title-link" onMouseOver="document.getElementById('ghlink-description-idm2218').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-description-idm2218').style.visibility = 'hidden';">
+<div class="title-name">Description</div>
+<div class="title-anchors"><span id="ghlink-description-idm2218" class="ghlink-after"><a href="#description" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L37" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+</h3>
+<div class="REFBODY description-body"><p>
+    <p>The module <span class="code">instrument</span> contains support for studying the resource
+      usage in an Erlang runtime system. Currently, only the allocation of
+      memory can be studied.</p>
+    <div class="note">
+<div class="label">Note</div>
+<div class="content"><p>
+      <p>Since this module inspects internal details of the runtime system it
+      may differ greatly from one version to another. We make no compatibility
+      guarantees in this module.</p>
+    </p></div>
+</div>
+  </p></div>
+</div></section>
+  <div class="innertube">
+<h3 id="data-types" class="title-link" onMouseOver="document.getElementById('ghlink-data-types-idm2223').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-data-types-idm2223').style.visibility = 'hidden';">
+<div class="title-name">Data Types</div>
+<div class="title-anchors"><span id="ghlink-data-types-idm2223" class="ghlink-after"><a href="#data-types" title="Link to this place!"><span class="paperclip-after"></span></a></span></div>
+</h3>
+    <article class="data-types-body"><h4 id="type-block_histogram" class="title-link data-type-name" onMouseOver="document.getElementById('ghlink-type-block_histogram').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-type-block_histogram').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-type-block_histogram" class="ghlink-before"><a href="#type-block_histogram" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L48" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<div class="title-name">
+      <span class="bold_code bc-4"><a name="type-block_histogram">block_histogram()</a> = <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-tuple');">tuple()</a></span></span><br>
+</div>
+</h4>
+<div class="data-type-desc"><div class="REFBODY rb-7">
+        <p>A histogram of block sizes where each interval's upper bound is 
+          twice as high as the one before it.</p>
+        <p>The upper bound of the first interval is provided by the function
+           that returned the histogram, and the last interval has no upper
+           bound.</p>
+        <p>For example, the histogram below has 40 (<span class="code">message</span>) blocks
+           between 256-512 bytes in size, 78 blocks between 512-1024 bytes,2
+           blocks between 1-2KB, and 2 blocks between 2-4KB.</p>
+        <div class="example example-none"><pre>&gt; instrument:allocations(#{ histogram_start =&gt; 128, histogram_width =&gt; 15 }).
+{ok, {128, 0, #{ message =&gt; {0,40,78,2,2,0,0,0,0,0,0,0,0,0,0}, ... } }}</pre></div>
+      </div></div></article>
+    <article class="data-types-body"><h4 id="type-allocation_summary" class="title-link data-type-name" onMouseOver="document.getElementById('ghlink-type-allocation_summary').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-type-allocation_summary').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-type-allocation_summary" class="ghlink-before"><a href="#type-allocation_summary" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L65" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<div class="title-name">
+      <span class="bold_code bc-4"><a name="type-allocation_summary">allocation_summary()</a> = <br>    {HistogramStart :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>,<br>     UnscannedSize :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>,<br>     Allocations ::<br>         #{Origin :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-atom');">atom()</a></span> =&gt;<br>               #{Type :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-atom');">atom()</a></span> =&gt; <span class="bold_code bc-17"><a href="#type-block_histogram">block_histogram()</a></span>}}}</span><br>
+</div>
+</h4>
+<div class="data-type-desc"><div class="REFBODY rb-7">
+        <p>A summary of allocated block sizes (including their headers) grouped
+          by their <span class="code">Origin</span> and <span class="code">Type</span>.</p>
+        <p><span class="code">Origin</span> is generally which NIF or driver that
+          allocated the blocks, or 'system' if it could not be determined.</p>
+        <p><span class="code">Type</span> is the allocation category that the blocks
+          belong to, e.g. <span class="code">db_term</span>, <span class="code">message</span> or <span class="code">binary</span>. The
+          categories correspond to those in
+          <span class="bold_code bc-20"><a href="https://github.com/erlang/otp/blob/master/erts/emulator/beam/erl_alloc.types">
+          erl_alloc.types</a></span>.</p>
+        <p>If one or more carriers could not be scanned in full without harming
+          the responsiveness of the system, <span class="code">UnscannedSize</span>
+          is the number of bytes that had to be skipped.</p>
+       </div></div></article>
+    <article class="data-types-body"><h4 id="type-carrier_info_list" class="title-link data-type-name" onMouseOver="document.getElementById('ghlink-type-carrier_info_list').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-type-carrier_info_list').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-type-carrier_info_list" class="ghlink-before"><a href="#type-carrier_info_list" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L82" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<div class="title-name">
+      <span class="bold_code bc-4"><a name="type-carrier_info_list">carrier_info_list()</a> = <br>    {HistogramStart :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>,<br>     Carriers ::<br>         [{AllocatorType :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-atom');">atom()</a></span>,<br>           InPool :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-boolean');">boolean()</a></span>,<br>           TotalSize :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>,<br>           UnscannedSize :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>,<br>           Allocations ::<br>               [{Type :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-atom');">atom()</a></span>,<br>                 Count :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>,<br>                 Size :: <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>}],<br>           FreeBlocks :: <span class="bold_code bc-17"><a href="#type-block_histogram">block_histogram()</a></span>}]}</span><br>
+</div>
+</h4>
+<div class="data-type-desc"><div class="REFBODY rb-7">
+        <p><span class="code">AllocatorType</span> is the type of the allocator that
+          employs this carrier.</p>
+        <p><span class="code">InPool</span> is whether the carrier is in the
+          migration pool.</p>
+        <p><span class="code">TotalSize</span> is the total size of the carrier,
+          including its header.</p>
+        <p><span class="code">Allocations</span> is a summary of the allocated blocks
+          in the carrier. Note that carriers may contain multiple different
+          block types when carrier pools are shared between different allocator
+          types (see the <span class="bold_code bc-13"><a href="javascript:erlhref('../../../../doc/../','erts','erts_alloc.html#M_cp');"><span class="code">erts_alloc</span>
+          </a></span> documentation for more details).</p>
+        <p><span class="code">FreeBlocks</span> is a histogram of the free block
+          sizes in the carrier.</p>
+        <p>If the carrier could not be scanned in full without harming the
+          responsiveness of the system, <span class="code">UnscannedSize</span> is
+          the number of bytes that had to be skipped.</p>
+       </div></div></article>
   </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-type</span> allocation_origin() :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:mfa/0">mfa</a>() | <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:pid/0">pid</a>() | <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:port/0">port</a>().</pre>
-
-      </div>
-
-
-  </section>
-</section>
-<section class="detail" id="t:allocation_summary/0">
-
-  <div class="detail-header">
-    <a href="#t:allocation_summary/0" class="detail-link" title="Link to this type">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature" translate="no">allocation_summary()</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L79" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(not exported)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-type</span> allocation_summary() ::
-    {HistogramStart :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-     UnscannedSize :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-     Allocations :: #{Origin :: <a href="#t:allocation_origin/0">allocation_origin</a>() => #{Type :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:atom/0">atom</a>() => <a href="#t:block_histogram/0">block_histogram</a>()}}}.</pre>
-
-      </div>
-
-<p>A summary of allocated block sizes (including their headers) grouped by their
-<code class="inline">Origin</code> and <code class="inline">Type</code>.</p><p><code class="inline">Origin</code> is generally which NIF or driver that allocated the blocks, or 'system'
-if it could not be determined.</p><p><code class="inline">Type</code> is the allocation category that the blocks belong to, e.g. <code class="inline">db_term</code>,
-<code class="inline">message</code> or <code class="inline">binary</code>. The categories correspond to those in
-<a href="https://github.com/erlang/otp/blob/master/erts/emulator/beam/erl_alloc.types">erl_alloc.types</a>.</p><p>If one or more carriers could not be scanned in full without harming the
-responsiveness of the system, <code class="inline">UnscannedSize</code> is the number of bytes that had to
-be skipped.</p>
-  </section>
-</section>
-<section class="detail" id="t:block_histogram/0">
-
-  <div class="detail-header">
-    <a href="#t:block_histogram/0" class="detail-link" title="Link to this type">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature" translate="no">block_histogram()</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L62" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(not exported)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-type</span> block_histogram() :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:tuple/0">tuple</a>().</pre>
-
-      </div>
-
-<p>A histogram of block sizes where each interval's upper bound is twice as high as
-the one before it.</p><p>The upper bound of the first interval is provided by the function that returned
-the histogram, and the last interval has no upper bound.</p><p>For example, the histogram below has 40 (<code class="inline">message</code>) blocks between 128-256 bytes
-in size, 78 blocks between 256-512 bytes,2 blocks between 512-1024 bytes, and 2
-blocks between 1-2KB.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">instrument</span><span class="p">:</span><span class="nf">allocations</span><span class="p" data-group-id="7080037593-1">(</span><span class="p" data-group-id="7080037593-2">#{</span><span class="w"> </span><span class="ss">histogram_start</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="ss">histogram_width</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p" data-group-id="7080037593-2">}</span><span class="p" data-group-id="7080037593-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="7080037593-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7080037593-4">{</span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7080037593-5">#{</span><span class="w"> </span><span class="ss">message</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="7080037593-6">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">78</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="7080037593-6">}</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w"> </span><span class="p" data-group-id="7080037593-5">}</span><span class="w"> </span><span class="p" data-group-id="7080037593-4">}</span><span class="p" data-group-id="7080037593-3">}</span></code></pre>
-  </section>
-</section>
-<section class="detail" id="t:carrier_info_list/0">
-
-  <div class="detail-header">
-    <a href="#t:carrier_info_list/0" class="detail-link" title="Link to this type">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature" translate="no">carrier_info_list()</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L272" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(not exported)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-type</span> carrier_info_list() ::
-    {HistogramStart :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-     Carriers ::
-         [{AllocatorType :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:atom/0">atom</a>(),
-           InPool :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:boolean/0">boolean</a>(),
-           TotalSize :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-           UnscannedSize :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-           Allocations ::
-               [{Type :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:atom/0">atom</a>(), Count :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Size :: <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()}],
-           FreeBlocks :: <a href="#t:block_histogram/0">block_histogram</a>()}]}.</pre>
-
-      </div>
-
-<p><code class="inline">AllocatorType</code> is the type of the allocator that employs this carrier.</p><p><code class="inline">InPool</code> is whether the carrier is in the migration pool.</p><p><code class="inline">TotalSize</code> is the total size of the carrier, including its header.</p><p><code class="inline">Allocations</code> is a summary of the allocated blocks in the carrier. Note that
-carriers may contain multiple different block types when carrier pools are
-shared between different allocator types (see the
-<a href="../../../../erts-14.2.4/doc/html/erts_alloc.html#M_cp"><code class="inline">erts_alloc</code> </a>documentation for more details).</p><p><code class="inline">FreeBlocks</code> is a histogram of the free block sizes in the carrier.</p><p>If the carrier could not be scanned in full without harming the responsiveness
-of the system, <code class="inline">UnscannedSize</code> is the number of bytes that had to be skipped.</p>
-  </section>
-</section>
-
-    </div>
-  </section>
-
-  <section id="functions" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#functions">
-        <i class="ri-link-m" aria-hidden="true"></i>
-      </a>
-      <span class="text">Functions</span>
-    </h1>
-    <div class="functions-list">
-<section class="detail" id="allocations/0">
-
-  <div class="detail-header">
-    <a href="#allocations/0" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">allocations()</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L92" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(since OTP 21.0)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> allocations() -> {ok, Result} | {error, Reason}
-               when Result :: <a href="#t:allocation_summary/0">allocation_summary</a>(), Reason :: not_enabled.</pre>
-
-      </div>
-
-<p>Equivalent to <a href="#allocations/1"><code class="inline">allocations(#{})</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="allocations/1">
-
-  <div class="detail-header">
-    <a href="#allocations/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">allocations(Options)</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L171" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(since OTP 21.0)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> allocations(Options) -> {ok, Result} | {error, Reason}
-               when
-                   Result :: <a href="#t:allocation_summary/0">allocation_summary</a>(),
-                   Reason :: not_enabled,
-                   Options ::
-                       #{scheduler_ids => [<a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()],
-                         allocator_types => [<a href="../../../../erts-14.2.4/doc/html/erlang.html#t:atom/0">atom</a>()],
-                         histogram_start => <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>(),
-                         histogram_width => <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>(),
-                         flags => [per_process | per_port | per_mfa]}.</pre>
-
-      </div>
-
-<p>Returns a summary of all tagged allocations in the system, optionally filtered
-by allocator type and scheduler id.</p><p>Only binaries and allocations made by NIFs and drivers are tagged by default,
-but this can be configured an a per-allocator basis with the
-<a href="../../../../erts-14.2.4/doc/html/erts_alloc.html#M_atags"><code class="inline">+M&lt;S&gt;atags</code> </a>emulator option.</p><p>If the specified allocator types are not enabled, the call will fail with
-<code class="inline">{error, not_enabled}</code>.</p><p>The following options can be used:</p><ul><li><p><strong><code class="inline">allocator_types</code></strong> - The allocator types that will be searched.</p><p>Specifying a specific allocator type may lead to strange results when carrier
-migration between different allocator types has been enabled: you may see
-unexpected types (e.g. process heaps when searching binary_alloc), or fewer
-blocks than expected if the carriers the blocks are on have been migrated out
-to an allocator of a different type.</p><p>Defaults to all <code class="inline">alloc_util</code> allocators.</p></li><li><p><strong><code class="inline">scheduler_ids</code></strong> - The scheduler ids whose allocator instances will be
-searched. A scheduler id of 0 will refer to the global instance that is not
-tied to any particular scheduler. Defaults to all schedulers and the global
-instance.</p></li><li><p><strong><code class="inline">histogram_start</code></strong> - The upper bound of the first interval in the allocated
-block size histograms. Defaults to 128.</p></li><li><p><strong><code class="inline">histogram_width</code></strong> - The number of intervals in the allocated block size
-histograms. Defaults to 18.</p></li><li><p><strong><code class="inline">flags</code></strong> - Controls how to group the output, for example showing
-allocations on a per-process basis (when possible) rather than only a
-NIF/driver-basis. Defaults to <code class="inline">[]</code>.</p></li></ul><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">instrument</span><span class="p">:</span><span class="nf">allocations</span><span class="p" data-group-id="3527254796-1">(</span><span class="p" data-group-id="3527254796-2">#{</span><span class="w"> </span><span class="ss">histogram_start</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="ss">histogram_width</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p" data-group-id="3527254796-2">}</span><span class="p" data-group-id="3527254796-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="3527254796-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="3527254796-4">{</span><span class="mi">128</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="w">
-     </span><span class="p" data-group-id="3527254796-5">#{</span><span class="ss">udp_inet</span><span class="w"> </span><span class="p">=&gt;</span><span class="w">
-           </span><span class="p" data-group-id="3527254796-6">#{</span><span class="ss">driver_event_state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-7">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-7">}</span><span class="p" data-group-id="3527254796-6">}</span><span class="p">,</span><span class="w">
-       </span><span class="ss">system</span><span class="w"> </span><span class="p">=&gt;</span><span class="w">
-           </span><span class="p" data-group-id="3527254796-8">#{</span><span class="ss">heap</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-9">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3527254796-9">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">db_term</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-10">{</span><span class="mi">271</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">52</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-10">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">code</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-11">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-11">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">binary</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-12">{</span><span class="mi">18</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-12">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">message</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-13">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">78</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-13">}</span><span class="p">,</span><span class="w">
-             </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="w"> </span><span class="p" data-group-id="3527254796-8">}</span><span class="w">
-       </span><span class="ss">spawn_forker</span><span class="w"> </span><span class="p">=&gt;</span><span class="w">
-           </span><span class="p" data-group-id="3527254796-14">#{</span><span class="ss">driver_select_data_state</span><span class="w"> </span><span class="p">=&gt;</span><span class="w">
-                 </span><span class="p" data-group-id="3527254796-15">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-15">}</span><span class="p" data-group-id="3527254796-14">}</span><span class="p">,</span><span class="w">
-       </span><span class="ss">ram_file_drv</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-16">#{</span><span class="ss">drv_binary</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-17">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-17">}</span><span class="p" data-group-id="3527254796-16">}</span><span class="p">,</span><span class="w">
-       </span><span class="ss">prim_file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w">
-           </span><span class="p" data-group-id="3527254796-18">#{</span><span class="ss">process_specific_data</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-19">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-19">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">nif_trap_export_entry</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-20">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-20">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">monitor_extended</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-21">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-21">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">drv_binary</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-22">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-22">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">binary</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-23">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-23">}</span><span class="p" data-group-id="3527254796-18">}</span><span class="p">,</span><span class="w">
-       </span><span class="ss">prim_buffer</span><span class="w"> </span><span class="p">=&gt;</span><span class="w">
-           </span><span class="p" data-group-id="3527254796-24">#{</span><span class="ss">nif_internal</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-25">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-25">}</span><span class="p">,</span><span class="w">
-             </span><span class="ss">binary</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="3527254796-26">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3527254796-26">}</span><span class="p" data-group-id="3527254796-24">}</span><span class="p" data-group-id="3527254796-5">}</span><span class="p" data-group-id="3527254796-4">}</span><span class="p" data-group-id="3527254796-3">}</span></code></pre>
-  </section>
-</section>
-<section class="detail" id="carriers/0">
-
-  <div class="detail-header">
-    <a href="#carriers/0" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">carriers()</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L288" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(since OTP 21.0)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> carriers() -> {ok, Result} | {error, Reason}
-            when Result :: <a href="#t:carrier_info_list/0">carrier_info_list</a>(), Reason :: not_enabled.</pre>
-
-      </div>
-
-<p>Equivalent to <a href="#carriers/1"><code class="inline">carriers(#{})</code></a>.</p>
-  </section>
-</section>
-<section class="detail" id="carriers/1">
-
-  <div class="detail-header">
-    <a href="#carriers/1" class="detail-link" title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">carriers(Options)</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/kernel/fix-jcl-odd-edlin-results/lib/runtime_tools/src/instrument.erl#L336" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-      <span class="note">(since OTP 21.0)</span>
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> carriers(Options) -> {ok, Result} | {error, Reason}
-            when
-                Result :: <a href="#t:carrier_info_list/0">carrier_info_list</a>(),
-                Reason :: not_enabled,
-                Options ::
-                    #{scheduler_ids => [<a href="../../../../erts-14.2.4/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()],
-                      allocator_types => [<a href="../../../../erts-14.2.4/doc/html/erlang.html#t:atom/0">atom</a>()],
-                      histogram_start => <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>(),
-                      histogram_width => <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>()}.</pre>
-
-      </div>
-
-<p>Returns a summary of all carriers in the system, optionally filtered by
-allocator type and scheduler id.</p><p>If the specified allocator types are not enabled, the call will fail with
-<code class="inline">{error, not_enabled}</code>.</p><p>The following options can be used:</p><ul><li><p><strong><code class="inline">allocator_types</code></strong> - The allocator types that will be searched. Defaults to
-all <code class="inline">alloc_util</code> allocators.</p></li><li><p><strong><code class="inline">scheduler_ids</code></strong> - The scheduler ids whose allocator instances will be
-searched. A scheduler id of 0 will refer to the global instance that is not
-tied to any particular scheduler. Defaults to all schedulers and the global
-instance.</p></li><li><p><strong><code class="inline">histogram_start</code></strong> - The upper bound of the first interval in the free
-block size histograms. Defaults to 512.</p></li><li><p><strong><code class="inline">histogram_width</code></strong> - The number of intervals in the free block size
-histograms. Defaults to 14.</p></li></ul><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">instrument</span><span class="p">:</span><span class="nf">carriers</span><span class="p" data-group-id="6576143656-1">(</span><span class="p" data-group-id="6576143656-2">#{</span><span class="w"> </span><span class="ss">histogram_start</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">512</span><span class="p">,</span><span class="w"> </span><span class="ss">histogram_width</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="p" data-group-id="6576143656-2">}</span><span class="p" data-group-id="6576143656-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="6576143656-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="6576143656-4">{</span><span class="mi">512</span><span class="p">,</span><span class="w">
-     </span><span class="p" data-group-id="6576143656-5">[</span><span class="p" data-group-id="6576143656-6">{</span><span class="ss">driver_alloc</span><span class="p">,</span><span class="ss">false</span><span class="p">,</span><span class="mi">262144</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="w">
-                    </span><span class="p" data-group-id="6576143656-7">[</span><span class="p" data-group-id="6576143656-8">{</span><span class="ss">driver_alloc</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">32784</span><span class="p" data-group-id="6576143656-8">}</span><span class="p" data-group-id="6576143656-7">]</span><span class="p">,</span><span class="w">
-                    </span><span class="p" data-group-id="6576143656-9">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="6576143656-9">}</span><span class="p" data-group-id="6576143656-6">}</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="6576143656-10">{</span><span class="ss">binary_alloc</span><span class="p">,</span><span class="ss">false</span><span class="p">,</span><span class="mi">32768</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="w">
-                    </span><span class="p" data-group-id="6576143656-11">[</span><span class="p" data-group-id="6576143656-12">{</span><span class="ss">binary_alloc</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">4304</span><span class="p" data-group-id="6576143656-12">}</span><span class="p" data-group-id="6576143656-11">]</span><span class="p">,</span><span class="w">
-                    </span><span class="p" data-group-id="6576143656-13">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6576143656-13">}</span><span class="p" data-group-id="6576143656-10">}</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="6576143656-14">{</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="6576143656-14">}</span><span class="p">|</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="6576143656-5">]</span><span class="p" data-group-id="6576143656-4">}</span><span class="p" data-group-id="6576143656-3">}</span></code></pre>
-  </section>
-</section>
-
-    </div>
-  </section>
-
-      <footer class="footer">
-        <p>
-
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
-
-              <a href="runtime_tools.epub" title="ePub version">
-                Download ePub version
-              </a>
-
-          </span>
-        </p>
-
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.2) for the
-
-            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
-
-        </p>
-<p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
-      </footer>
-    </div>
-  </div>
-</main>
+  <div class="innertube"><h3 id="export" class="title-link" onMouseOver="document.getElementById('ghlink-export-idm2276').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-export-idm2276').style.visibility = 'hidden';">
+<div class="title-name">Exports</div>
+<div class="title-anchors"><span id="ghlink-export-idm2276" class="ghlink-after"><a href="#export" title="Link to this place!"><span class="paperclip-after"></span></a></span></div>
+</h3></div>
+<div class="exports-body">
+<article class="func"><h4 id="allocations-0" class="bold_code title-link func-head" onMouseOver="document.getElementById('ghlink-allocations-0-idp1').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-allocations-0-idp1').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-allocations-0-idp1" class="ghlink-before"><a href="#allocations-0" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L106" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<span class="title-name">allocations() -&gt; {ok, Result} | {error, Reason}</span><div class="title-since"><span class="since">OTP 21.0</span></div>
+</h4>
+<div class="REFBODY fun-types">
+<h3 id="types" class="func-types-title">Types</h3>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Result = <span class="bold_code bc-17"><a href="#type-allocation_summary">allocation_summary()</a></span></span></div>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Reason = not_enabled</span></div>
+</div>
+<div class="exports-tube"><div class="REFBODY rb-7">
+        <p>Shorthand for
+          <span class="bold_code bc-17"><a href="#allocations-1"><span class="code">allocations(#{})</span>.</a></span></p>
+      </div></div></article><article class="func"><h4 id="allocations-1" class="bold_code title-link func-head" onMouseOver="document.getElementById('ghlink-allocations-1-idp2').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-allocations-1-idp2').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-allocations-1-idp2" class="ghlink-before"><a href="#allocations-1" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L115" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<span class="title-name">allocations(Options) -&gt; {ok, Result} | {error, Reason}</span><div class="title-since"><span class="since">OTP 21.0</span></div>
+</h4>
+<div class="REFBODY fun-types">
+<h3 id="types" class="func-types-title">Types</h3>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Result = <span class="bold_code bc-17"><a href="#type-allocation_summary">allocation_summary()</a></span></span></div>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Reason = not_enabled</span></div>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Options = <br>    #{scheduler_ids =&gt; [<span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>],<br>      allocator_types =&gt; [<span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-atom');">atom()</a></span>],<br>      histogram_start =&gt; <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-pos_integer');">integer() &gt;= 1</a></span>,<br>      histogram_width =&gt; <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-pos_integer');">integer() &gt;= 1</a></span>}</span></div>
+</div>
+<div class="exports-tube"><div class="REFBODY rb-7">
+        <p>Returns a summary of all tagged allocations in the system,
+          optionally filtered by allocator type and scheduler id.</p>
+        <p>Only binaries and allocations made by NIFs and drivers are tagged by
+          default, but this can be configured an a per-allocator basis with the
+          <span class="bold_code bc-13"><a href="javascript:erlhref('../../../../doc/../','erts','erts_alloc.html#M_atags');"><span class="code">+M&lt;S&gt;atags</span>
+          </a></span> emulator option.</p>
+        <p>If the specified allocator types are not enabled, the call will fail
+          with <span class="code">{error, not_enabled}</span>.</p>
+        <p>The following options can be used:</p>
+        <dl>
+          <dt class="title-link"><strong><span class="code">allocator_types</span></strong></dt>
+          <dd>
+            <p>The allocator types that will be searched.</p>
+            <p>Specifying a specific allocator type may lead to strange results
+              when carrier migration between different allocator types has been
+              enabled: you may see unexpected types (e.g. process heaps when
+              searching binary_alloc), or fewer blocks than expected if the
+              carriers the blocks are on have been migrated out to an allocator
+              of a different type.</p>
+            <p>Defaults to all <span class="code">alloc_util</span> allocators.</p>
+          </dd>
+          <dt class="title-link"><strong><span class="code">scheduler_ids</span></strong></dt>
+          <dd>
+            <p>The scheduler ids whose allocator instances will be searched. A
+              scheduler id of 0 will refer to the global instance that is not
+              tied to any particular scheduler. Defaults to all schedulers and
+              the global instance.</p>
+          </dd>
+          <dt class="title-link"><strong><span class="code">histogram_start</span></strong></dt>
+          <dd>
+            <p>The upper bound of the first interval in the allocated block
+              size histograms. Defaults to 128.</p>
+          </dd>
+          <dt class="title-link"><strong><span class="code">histogram_width</span></strong></dt>
+          <dd>
+            <p>The number of intervals in the allocated block size histograms.
+              Defaults to 18.</p>
+          </dd>
+        </dl>
+        <p><strong>Example:</strong></p>
+        <div class="example example-none"><pre>&gt; instrument:allocations(#{ histogram_start =&gt; 128, histogram_width =&gt; 15 }).
+{ok,{128,0,
+     #{udp_inet =&gt;
+           #{driver_event_state =&gt; {0,0,0,0,0,0,0,0,0,1,0,0,0,0,0}},
+       system =&gt;
+           #{heap =&gt; {0,0,0,0,20,4,2,2,2,3,0,1,0,0,1},
+             db_term =&gt; {271,3,1,52,80,1,0,0,0,0,0,0,0,0,0},
+             code =&gt; {0,0,0,5,3,6,11,22,19,20,10,2,1,0,0},
+             binary =&gt; {18,0,0,0,7,0,0,1,0,0,0,0,0,0,0},
+             message =&gt; {0,40,78,2,2,0,0,0,0,0,0,0,0,0,0},
+             ... }
+       spawn_forker =&gt;
+           #{driver_select_data_state =&gt;
+                 {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}},
+       ram_file_drv =&gt; #{drv_binary =&gt; {0,0,0,0,0,0,1,0,0,0,0,0,0,0,0}},
+       prim_file =&gt;
+           #{process_specific_data =&gt; {2,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+             nif_trap_export_entry =&gt; {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0},
+             monitor_extended =&gt; {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
+             drv_binary =&gt; {0,0,0,0,0,0,1,0,3,5,0,0,0,1,0},
+             binary =&gt; {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0}},
+       prim_buffer =&gt;
+           #{nif_internal =&gt; {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0},
+             binary =&gt; {0,4,0,0,0,0,0,0,0,0,0,0,0,0,0}}}}}</pre></div>
+      </div></div></article><article class="func"><h4 id="carriers-0" class="bold_code title-link func-head" onMouseOver="document.getElementById('ghlink-carriers-0-idp3').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-carriers-0-idp3').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-carriers-0-idp3" class="ghlink-before"><a href="#carriers-0" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L189" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<span class="title-name">carriers() -&gt; {ok, Result} | {error, Reason}</span><div class="title-since"><span class="since">OTP 21.0</span></div>
+</h4>
+<div class="REFBODY fun-types">
+<h3 id="types" class="func-types-title">Types</h3>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Result = <span class="bold_code bc-17"><a href="#type-carrier_info_list">carrier_info_list()</a></span></span></div>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Reason = not_enabled</span></div>
+</div>
+<div class="exports-tube"><div class="REFBODY rb-7">
+        <p>Shorthand for
+          <span class="bold_code bc-17"><a href="#carriers-1"><span class="code">carriers(#{})</span>.</a></span></p>
+      </div></div></article><article class="func"><h4 id="carriers-1" class="bold_code title-link func-head" onMouseOver="document.getElementById('ghlink-carriers-1-idp4').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-carriers-1-idp4').style.visibility = 'hidden';">
+<div class="title-anchors"><span id="ghlink-carriers-1-idp4" class="ghlink-before"><a href="#carriers-1" title="Link to this place!"><span class="paperclip-before"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L198" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-before"></span></a></span></div>
+<span class="title-name">carriers(Options) -&gt; {ok, Result} | {error, Reason}</span><div class="title-since"><span class="since">OTP 21.0</span></div>
+</h4>
+<div class="REFBODY fun-types">
+<h3 id="types" class="func-types-title">Types</h3>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Result = <span class="bold_code bc-17"><a href="#type-carrier_info_list">carrier_info_list()</a></span></span></div>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Reason = not_enabled</span></div>
+<div class="REFTYPES rt-1"><span class="bold_code bc-2">Options = <br>    #{scheduler_ids =&gt; [<span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-non_neg_integer');">integer() &gt;= 0</a></span>],<br>      allocator_types =&gt; [<span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-atom');">atom()</a></span>],<br>      histogram_start =&gt; <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-pos_integer');">integer() &gt;= 1</a></span>,<br>      histogram_width =&gt; <span class="bold_code bc-14"><a href="javascript:erlhref('../../../../doc/../','erts','erlang.html#type-pos_integer');">integer() &gt;= 1</a></span>}</span></div>
+</div>
+<div class="exports-tube"><div class="REFBODY rb-7">
+        <p>Returns a summary of all carriers in the system, optionally filtered
+          by allocator type and scheduler id.</p>
+        <p>If the specified allocator types are not enabled, the call will fail
+          with <span class="code">{error, not_enabled}</span>.</p>
+        <p>The following options can be used:</p>
+        <dl>
+          <dt class="title-link"><strong><span class="code">allocator_types</span></strong></dt>
+          <dd>
+            <p>The allocator types that will be searched. Defaults to all
+              <span class="code">alloc_util</span> allocators.</p>
+          </dd>
+          <dt class="title-link"><strong><span class="code">scheduler_ids</span></strong></dt>
+          <dd>
+            <p>The scheduler ids whose allocator instances will be searched. A
+              scheduler id of 0 will refer to the global instance that is not
+              tied to any particular scheduler. Defaults to all schedulers and
+              the global instance.</p>
+          </dd>
+          <dt class="title-link"><strong><span class="code">histogram_start</span></strong></dt>
+          <dd>
+            <p>The upper bound of the first interval in the free block size
+              histograms. Defaults to 512.</p>
+          </dd>
+          <dt class="title-link"><strong><span class="code">histogram_width</span></strong></dt>
+          <dd>
+            <p>The number of intervals in the free block size histograms.
+              Defaults to 14.</p>
+          </dd>
+        </dl>
+        <p><strong>Example:</strong></p>
+        <div class="example example-none"><pre>&gt; instrument:carriers(#{ histogram_start =&gt; 512, histogram_width =&gt; 8 }).
+{ok,{512,
+     [{driver_alloc,false,262144,0,
+                    [{driver_alloc,1,32784}],
+                    {0,0,0,0,0,0,0,1}},
+      {binary_alloc,false,32768,0,
+                    [{binary_alloc,15,4304}],
+                    {3,0,0,0,1,0,0,0}},
+      {...}|...]}}</pre></div>
+      </div></div></article>
 </div>
 
-
-  </body>
+  <section class="innertube"><h3 id="see-also" class="title-link" onMouseOver="document.getElementById('ghlink-see-also-idm2354').style.visibility = 'visible';" onMouseOut="document.getElementById('ghlink-see-also-idm2354').style.visibility = 'hidden';">
+<div class="title-name">See Also</div>
+<div class="title-anchors"><span id="ghlink-see-also-idm2354" class="ghlink-after"><a href="#see-also" title="Link to this place!"><span class="paperclip-after"></span></a><a href="https://github.com/erlang/otp/edit/maint/lib/runtime_tools/doc/src/instrument.xml#L249" title="Found an issue with the documentation? Fix it by clicking here!"><span class="pencil-after"></span></a></span></div>
+</h3>
+<div class="REFBODY rb-3">
+    
+    <p><span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','erts','erts_alloc.html');">erts_alloc(3)</a></span>,
+      <span class="bold_code bc-18"><a href="javascript:erlhref('../../../../doc/../','erts','erl.html');">erl(1)</a></span></p>
+  </div></section>
+<div class="footer">
+<hr>
+<p>Copyright © 1999-2024 Ericsson AB. All Rights Reserved.</p>
+</div>
+</div>
+</div>
+<script type="text/javascript">window.__otpTopDocDir = '../../../../doc/js/';</script><script type="text/javascript" src="../../../../doc/js/highlight.js"></script>
+</body>
 </html>
