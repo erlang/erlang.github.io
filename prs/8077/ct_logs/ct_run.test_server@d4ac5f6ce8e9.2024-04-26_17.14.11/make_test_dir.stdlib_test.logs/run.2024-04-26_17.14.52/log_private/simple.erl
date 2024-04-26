@@ -1,1 +1,0 @@
--module(simple). -export([t/0]). t() ->     t([]). t(L) ->     lists:member(a, L). 
