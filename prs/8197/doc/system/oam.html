@@ -136,32 +136,7 @@ the client-server principle, where the manager (client) sends a request from a
 manager to an agent (server) when it accesses management information. The agent
 sends a reply back to the manager. There are two main differences to the normal
 client-server model:</p><ul><li>Usually a few managers communicate with many agents.</li><li>The agent can spontaneously send a notification, for example, an alarm, to the
-manager.</li></ul><p>The following picture illustrates the idea:</p><pre><code class="mermaid">---
-title: Terminology
----
-
-flowchart TB
-
-    subgraph NMS[&quot;Network Management System&quot;]
-        Manager
-    end
-
-    subgraph NE[&quot;Network Element&quot;]
-        Agent
-    end
-
-    subgraph NET
-        MIB[Management Information Base]
-    end
-
-    Manager -.- Agent
-    Manager -.-|sees| MIB
-    MIB -.-|sees| Agent
-
-    style MIB fill-opacity:0, stroke-width:0px;
-
-    Agent --&gt; Res1
-    Agent --&gt; Res2</code></pre><p>The manager is often referred to as the <em>Network Management System (NMS)</em>, to
+manager.</li></ul><p>The following picture illustrates the idea:</p><p><img src="assets/terminology.gif" alt="Terminology" title="Terminology"/></p><p>The manager is often referred to as the <em>Network Management System (NMS)</em>, to
 emphasize that it usually is realized as a program that presents data to an
 operator.</p><p>The agent is an entity that executes within a <em>Network Element (NE)</em>. In OTP,
 the NE can be a distributed system, meaning that the distributed system is
@@ -198,57 +173,15 @@ to be managed. For example, if an application is to be managed by SNMP and HTTP,
 two sets of instrumentation functions are defined; one that maps SNMP requests
 to the resources, and one that, for example, generates an HTML page for some
 resources.</p><p>When a manager makes a request to the agent, the following illustrates the
-situation:</p><pre><code class="mermaid">---
-title: Request to An Agent by a Manager
----
-
-flowchart TB
-    NET --&gt; Agent
-    style NET fill-opacity:0, stroke-width:0px;
-
-    subgraph NE[&quot;Network Element&quot;]
-        Agent
-    end
-
-    Agent --&gt; i1[Instrumentation]
-    Agent --&gt; i2[Instrumentation]
-
-    i1 --&gt; Res1
-
-    i2 --&gt; Res1
-    i2 --&gt; Res2
-    i2 --&gt; Res3</code></pre><p>The mapping between an instrumentation function and a resource is not
+situation:</p><p><img src="assets/snmp_model_1.gif" alt="Request to An Agent by a Manager" title="Request to An Agent by a Manager"/></p><p>The mapping between an instrumentation function and a resource is not
 necessarily 1-1. It is also possible to write one instrumentation function for
 each resource, and use that function from different protocols.</p><p>The agent receives a request and maps it to calls to one or more instrumentation
 functions. These functions perform operations on the resources to implement the
 semantics associated with the MO.</p><p>For example, a system that is managed with SNMP and HTTP can be structured as
-follows:</p><pre><code class="mermaid">---
-title: Structure of a System Managed with SNMP and HTTP
----
-
-flowchart TB
-    s1[SNMP Server] --&gt; i1[Instrumentation]
-    s2[HTTP Server] --&gt; i2[Instrumentation]
-
-    i1 --&gt; Res1
-    i1 --&gt; Res2
-
-    i2 --&gt; Res1
-    i2 --&gt; Res2
-    i2 --&gt; Res3</code></pre><p>The resources can send notifications to the manager as well. Examples of
+follows:</p><p><img src="assets/snmp_model_2.gif" alt="Structure of a System Managed with SNMP and HTTP" title="Structure of a System Managed with SNMP and HTTP"/></p><p>The resources can send notifications to the manager as well. Examples of
 notifications are events and alarms. The resource needs to generate
 protocol-independent notifications. The following picture illustrates how this
-is achieved:</p><pre><code class="mermaid">---
-title: Notification Handling
----
-
-flowchart BT
-    Res1 --&gt; gen_event
-    Res2 --&gt; gen_event
-    Res3 --&gt; gen_event
-
-    gen_event --&gt; i1[Instrumentation] --&gt; s1[SNMP Server]
-    gen_event --&gt; i2[Instrumentation] --&gt; s2[HTTP Server]</code></pre><p>The main idea is that the resource sends the notifications as Erlang terms to a
+is achieved:</p><p><img src="assets/snmp_model_3.gif" alt="Notification Handling" title="Notification Handling"/></p><p>The main idea is that the resource sends the notifications as Erlang terms to a
 dedicated <code class="inline">gen_event</code> process. Into this process, handlers for the different
 management protocols are installed. When an event is received by this process,
 it is forwarded to each installed handler. The handlers are responsible for
@@ -275,9 +208,9 @@ application. All other OTP MIBs import some objects from this MIB.</p><p>Each MI
 <code class="inline">mibs/&lt;MIB&gt;.mib</code> in the application directory. The generated <code class="inline">.hrl</code> files with
 constant declarations are stored under <code class="inline">include/&lt;MIB&gt;.hrl</code>, and the compiled
 MIBs are stored under <code class="inline">priv/mibs/&lt;MIB&gt;.bin</code>.</p><p>An application that needs to import an MIB into another MIB is to use the <code class="inline">il</code>
-option to the SNMP MIB compiler:</p><pre><code class="makeup erlang" translate="no"><span class="nc">snmp</span><span class="p">:</span><span class="nf">c</span><span class="p" data-group-id="8935257308-1">(</span><span class="s">&quot;MY-MIB&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8935257308-2">[</span><span class="p" data-group-id="8935257308-3">{</span><span class="ss">il</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8935257308-4">[</span><span class="s">&quot;snmp/priv/mibs&quot;</span><span class="p" data-group-id="8935257308-4">]</span><span class="p" data-group-id="8935257308-3">}</span><span class="p" data-group-id="8935257308-2">]</span><span class="p" data-group-id="8935257308-1">)</span><span class="p">.</span></code></pre><p>If the application needs to include a generated <code class="inline">.hrl</code> file, it is to use the
-<code class="inline">-include_lib</code> directive to the Erlang compiler:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="7907114912-1">(</span><span class="ss">my_mib</span><span class="p" data-group-id="7907114912-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="7907114912-2">(</span><span class="s">&quot;snmp/include/OTP-REG.hrl&quot;</span><span class="p" data-group-id="7907114912-2">)</span><span class="p">.</span></code></pre><p>Here is a list of some of the MIBs defined in the OTP system:</p><ul><li><code class="inline">OTP-REG</code> (in SNMP) contains the top-level OTP registration objects, used by
+option to the SNMP MIB compiler:</p><pre><code class="makeup erlang" translate="no"><span class="nc">snmp</span><span class="p">:</span><span class="nf">c</span><span class="p" data-group-id="9247329609-1">(</span><span class="s">&quot;MY-MIB&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9247329609-2">[</span><span class="p" data-group-id="9247329609-3">{</span><span class="ss">il</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9247329609-4">[</span><span class="s">&quot;snmp/priv/mibs&quot;</span><span class="p" data-group-id="9247329609-4">]</span><span class="p" data-group-id="9247329609-3">}</span><span class="p" data-group-id="9247329609-2">]</span><span class="p" data-group-id="9247329609-1">)</span><span class="p">.</span></code></pre><p>If the application needs to include a generated <code class="inline">.hrl</code> file, it is to use the
+<code class="inline">-include_lib</code> directive to the Erlang compiler:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="9374260334-1">(</span><span class="ss">my_mib</span><span class="p" data-group-id="9374260334-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="9374260334-2">(</span><span class="s">&quot;snmp/include/OTP-REG.hrl&quot;</span><span class="p" data-group-id="9374260334-2">)</span><span class="p">.</span></code></pre><p>Here is a list of some of the MIBs defined in the OTP system:</p><ul><li><code class="inline">OTP-REG</code> (in SNMP) contains the top-level OTP registration objects, used by
 all other MIBs.</li><li><code class="inline">OTP-TC</code> (in SNMP) contains the general Textual Conventions, which can be used
 by any other MIB.</li><li><code class="inline">OTP-SNMPEA-MIB</code> (in <code class="inline">snmp</code>) contains objects for instrumentation and control
 of the extensible SNMP agent itself. The agent also implements the standard
