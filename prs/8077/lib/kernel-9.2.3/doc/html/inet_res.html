@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-IHH6HKET.js"></script>
-    <script src="dist/sidebar_items-4EAF7BC0.js"></script>
+    <script src="dist/sidebar_items-686F810F.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
@@ -129,35 +129,37 @@ Pages
 
 
     <section id="moduledoc">
-<p>A rudimentary DNS client.</p><p>This module performs DNS name resolving to recursive name servers.</p><p>See also <a href="../../../../erts-14.2.4/doc/html/inet_cfg.html">ERTS User's Guide: Inet Configuration</a> for more
-information about how to configure an Erlang runtime system for IP
-communication, and how to enable this DNS client by defining <code class="inline">'dns'</code> as a lookup
-method. The DNS client then acts as a backend for the resolving functions in
-<a href="inet.html"><code class="inline">inet</code></a>.</p><p>This DNS client can resolve DNS records even if it is not used for normal name
-resolving in the node.</p><p>This is not a full-fledged resolver, only a DNS client that relies on asking
+<p>A rudimentary DNS client.</p><p>This module performs DNS name resolving towards recursive name servers.</p><p>See also <a href="../../../../erts-14.2.4/doc/html/inet_cfg.html">ERTS User's Guide: Inet Configuration</a>
+or more information about how to configure an Erlang runtime system for IP
+communication, and how to enable this DNS client by defining <code class="inline">'dns'</code>
+as a lookup method. The DNS client then acts as a backend for
+the resolving functions in <a href="inet.html"><code class="inline">inet</code></a>.</p><p>This DNS client can resolve DNS records even if it is not used
+for normal name resolving in the node.</p><p>This is not a full-fledged resolver, only a DNS client that relies on asking
 trusted recursive name servers.</p><h2 id="module-name-resolving" class="section-heading">
   <a href="#module-name-resolving" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Name Resolving</span>
 </h2>
-<p>UDP queries are used unless resolver option <code class="inline">usevc</code> is <code class="inline">true</code>, which forces TCP
-queries. If the query is too large for UDP, TCP is used instead. For regular DNS
-queries, 512 bytes is the size limit.</p><p>When EDNS is enabled (resolver option <code class="inline">edns</code> is set to the EDNS version (that
-is, <code class="inline">0</code> instead of <code class="inline">false</code>), resolver option <code class="inline">udp_payload_size</code> sets the limit.
-If a name server replies with the TC bit set (truncation), indicating that the
-answer is incomplete, the query is retried to that name server using TCP.
-Resolver option <code class="inline">udp_payload_size</code> also sets the advertised size for the maximum
-allowed reply size, if EDNS is enabled, otherwise the name server uses the limit
-512 bytes. If the reply is larger, it gets truncated, forcing a TCP requery.</p><p>For UDP queries, resolver options <code class="inline">timeout</code> and <code class="inline">retry</code> control retransmission.
-Each name server in the <code class="inline">nameservers</code> list is tried with a time-out of
-<code class="inline">timeout</code>/<code class="inline">retry</code>. Then all name servers are tried again, doubling the time-out,
-for a total of <code class="inline">retry</code> times.</p><p><a href="" id="servfail_retry_timeout"></a></p><p>But before all name servers are tried again, there is a (user configurable)
-timeout, <code class="inline">servfail_retry_timeout</code>. The point of this is to prevent the new query
-to be handled by a server's servfail cache (a client that is too eager will
-actually only get what is in the servfail cache). If there is too little time
-left of the resolver call's timeout to do a retry, the resolver call may return
-before the call's timeout has expired.</p><p>For queries not using the <code class="inline">search</code> list, if the query to all <code class="inline">nameservers</code>
+<p>UDP queries are used unless resolver option <code class="inline">usevc</code> is <code class="inline">true</code>,
+which forces TCP queries.  If the query is too large for UDP,
+TCP is used instead. For regular DNS queries, 512 bytes is the size limit.</p><p>When EDNS is enabled (resolver option <code class="inline">edns</code> is set to the EDNS version
+(that is; <code class="inline">0</code> instead of <code class="inline">false</code>), resolver option <code class="inline">udp_payload_size</code>
+sets the payload size limit.  If a name server replies with the TC bit set
+(truncation), indicating that the answer is incomplete, the query is retried
+towards the same name server using TCP.  Resolver option <code class="inline">udp_payload_size</code>
+also sets the advertised size for the maximum allowed reply size,
+if EDNS is enabled, otherwise the name server uses the limit 512 bytes.
+If the reply is larger, it gets truncated, forcing a TCP requery.</p><p>For UDP queries, resolver options <code class="inline">timeout</code> and <code class="inline">retry</code> control
+retransmission.  Each name server in the <code class="inline">nameservers</code> list is tried
+with a time-out of <code class="inline">timeout</code>/<code class="inline">retry</code>. Then all name servers are tried again,
+doubling the time-out, for a total of <code class="inline">retry</code> times.</p><p><a href="" id="servfail_retry_timeout"></a></p><p>But before all name servers are tried again, there is a (user configurable)
+time-out, <code class="inline">servfail_retry_timeout</code>. The point of this is to prevent
+the new query to be handled by a server's servfail cache (a client
+that is too eager will actually only get what is in the servfail cache).
+If there is too little time left of the resolver call's time-out
+to do a retry, the resolver call may return before the call's time-out
+has expired.</p><p>For queries not using the <code class="inline">search</code> list, if the query to all <code class="inline">nameservers</code>
 results in <code class="inline">{error,nxdomain}</code> or an empty answer, the same query is tried for
 <code class="inline">alt_nameservers</code>.</p><h2 id="module-resolver-types" class="section-heading">
   <a href="#module-resolver-types" class="hover-link">
@@ -171,22 +173,22 @@ results in <code class="inline">{error,nxdomain}</code> or an empty answer, the 
   </a>
   <span class="text">DNS Types</span>
 </h2>
-<p><a href="" id="dns_types"></a> The following data types concern the DNS client:</p><h2 id="module-example" class="section-heading">
+<p>The following data types concern the DNS client:</p><h2 id="module-example" class="section-heading">
   <a href="#module-example" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Example</span>
 </h2>
 <p>This access functions example shows how <a href="#lookup/3"><code class="inline">lookup/3</code></a> can be implemented using
-<a href="#resolve/3"><code class="inline">resolve/3</code></a> from outside the module:</p><pre><code class="makeup erlang" translate="no"><span class="nf">example_lookup</span><span class="p" data-group-id="1261637634-1">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p" data-group-id="1261637634-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">inet_res</span><span class="p">:</span><span class="nf">resolve</span><span class="p" data-group-id="1261637634-2">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p" data-group-id="1261637634-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="1261637634-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Msg</span><span class="p" data-group-id="1261637634-3">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="1261637634-4">[</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="1261637634-5">(</span><span class="n">RR</span><span class="p">,</span><span class="w"> </span><span class="ss">data</span><span class="p" data-group-id="1261637634-5">)</span><span class="w">
-             </span><span class="p">||</span><span class="w"> </span><span class="n">RR</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="1261637634-6">(</span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="ss">anlist</span><span class="p" data-group-id="1261637634-6">)</span><span class="p">,</span><span class="w">
-                 </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="1261637634-7">(</span><span class="n">RR</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p" data-group-id="1261637634-7">)</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="n">Type</span><span class="p">,</span><span class="w">
-                 </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="1261637634-8">(</span><span class="n">RR</span><span class="p">,</span><span class="w"> </span><span class="ss">class</span><span class="p" data-group-id="1261637634-8">)</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="n">Class</span><span class="p" data-group-id="1261637634-4">]</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="1261637634-9">{</span><span class="ss">error</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="1261637634-9">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="1261637634-10">[</span><span class="p" data-group-id="1261637634-10">]</span><span class="w">
+<a href="#resolve/3"><code class="inline">resolve/3</code></a> from outside the module:</p><pre><code class="makeup erlang" translate="no"><span class="nf">example_lookup</span><span class="p" data-group-id="5110301623-1">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p" data-group-id="5110301623-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">inet_res</span><span class="p">:</span><span class="nf">resolve</span><span class="p" data-group-id="5110301623-2">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="n">Class</span><span class="p">,</span><span class="w"> </span><span class="n">Type</span><span class="p" data-group-id="5110301623-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="5110301623-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Msg</span><span class="p" data-group-id="5110301623-3">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="5110301623-4">[</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="5110301623-5">(</span><span class="n">RR</span><span class="p">,</span><span class="w"> </span><span class="ss">data</span><span class="p" data-group-id="5110301623-5">)</span><span class="w">
+             </span><span class="p">||</span><span class="w"> </span><span class="n">RR</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="5110301623-6">(</span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="ss">anlist</span><span class="p" data-group-id="5110301623-6">)</span><span class="p">,</span><span class="w">
+                 </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="5110301623-7">(</span><span class="n">RR</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p" data-group-id="5110301623-7">)</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="n">Type</span><span class="p">,</span><span class="w">
+                 </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="5110301623-8">(</span><span class="n">RR</span><span class="p">,</span><span class="w"> </span><span class="ss">class</span><span class="p" data-group-id="5110301623-8">)</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="n">Class</span><span class="p" data-group-id="5110301623-4">]</span><span class="p">;</span><span class="w">
+        </span><span class="p" data-group-id="5110301623-9">{</span><span class="ss">error</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="5110301623-9">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="5110301623-10">[</span><span class="p" data-group-id="5110301623-10">]</span><span class="w">
      </span><span class="k">end</span><span class="p">.</span></code></pre>
     </section>
 
@@ -218,7 +220,7 @@ results in <code class="inline">{error,nxdomain}</code> or an empty answer, the 
 
       </div>
 
-        <div class="summary-synopsis"><p><code class="inline">Regexp</code> is a string with characters encoded in the UTF-8 coding standard.</p></div>
+        <div class="summary-synopsis"><p>DNS record data (content)</p></div>
 
     </div>
 
@@ -228,9 +230,7 @@ results in <code class="inline">{error,nxdomain}</code> or an empty answer, the 
 
       </div>
 
-        <div class="summary-synopsis"><p>This is the start of a hierarchy of opaque data structures that can be examined
-with access functions in <code class="inline">inet_dns</code>, which return lists of <code class="inline">{Field,Value}</code>
-tuples. The arity 2 functions only return the value for a specified field.</p></div>
+        <div class="summary-synopsis"><p>A DNS message.</p></div>
 
     </div>
 
@@ -257,6 +257,8 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
         <a href="#t:hostent/0" translate="no">hostent()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Extended variant of <a href="inet.html#t:hostent/0"><code class="inline">inet:hostent/0</code></a>.</p></div>
 
     </div>
 
@@ -296,7 +298,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#nnslookup/5"><code class="inline">nnslookup/5</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#nnslookup/5"><code class="inline">nnslookup(Name, Class, Type, NSs, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -306,7 +308,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Resolves a DNS record of the specified type and class for the specified name.</p></div>
+        <div class="summary-synopsis"><p>Resolve a DNS query.</p></div>
 
     </div>
 
@@ -316,7 +318,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#nslookup/4"><code class="inline">nslookup/4</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#nslookup/4"><code class="inline">nslookup(Name, Class, Type, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -326,7 +328,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Resolves a DNS record of the specified type and class for the specified name.</p></div>
+        <div class="summary-synopsis"><p>Resolve a DNS query.</p></div>
 
     </div>
 
@@ -342,7 +344,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#getbyname/3"><code class="inline">getbyname/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#getbyname/3"><code class="inline">getbyname(Name, Type, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -352,10 +354,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Resolves a DNS record of the specified <code class="inline">Type</code> for the specified host, of class
-<code class="inline">in</code>. Returns, on success, when resolving a <code class="inline">Type = a|aaaa</code> DNS record, a
-<code class="inline">#hostent{}</code> record with <code class="inline">#hostent.h_addrtype = inet|inet6</code>, respectively; see
-<a href="inet.html#t:hostent/0"><code class="inline">inet:hostent/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Resolve a DNS query.</p></div>
 
     </div>
 
@@ -365,7 +364,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#gethostbyaddr/2"><code class="inline">gethostbyaddr/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#gethostbyaddr/2"><code class="inline">gethostbyaddr(Address, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -375,7 +374,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Backend functions used by <a href="inet.html#gethostbyaddr/1"><code class="inline">inet:gethostbyaddr/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Backend function used by <a href="inet.html#gethostbyaddr/1"><code class="inline">inet:gethostbyaddr/1</code></a>.</p></div>
 
     </div>
 
@@ -385,7 +384,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#gethostbyname/3"><code class="inline">gethostbyname/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Backend functions used by <a href="inet.html#gethostbyname/1"><code class="inline">inet:gethostbyname/1,2</code></a>.</p></div>
 
     </div>
 
@@ -395,7 +394,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#gethostbyname/3"><code class="inline">gethostbyname/3</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#gethostbyname/3"><code class="inline">gethostbyname(Name, Family, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -415,7 +414,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#lookup/5"><code class="inline">lookup/5</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#lookup/5"><code class="inline">lookup(Name, Class, Type, [], infinity)</code></a>.</p></div>
 
     </div>
 
@@ -425,7 +424,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#lookup/5"><code class="inline">lookup/5</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#lookup/5"><code class="inline">lookup(Name, Class, Type, Opts, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -435,11 +434,7 @@ tuples. The arity 2 functions only return the value for a specified field.</p></
 
       </div>
 
-        <div class="summary-synopsis"><p>Resolves the DNS data for the record of the specified type and class for the
-specified name. On success, filters out the answer records with the correct
-<code class="inline">Class</code> and <code class="inline">Type</code>, and returns a list of their data fields. So, a lookup for
-type <code class="inline">any</code> gives an empty answer, as the answer records have specific types that
-are not <code class="inline">any</code>. An empty answer or a failed lookup returns an empty list.</p></div>
+        <div class="summary-synopsis"><p>Look up DNS data.</p></div>
 
     </div>
 
@@ -449,7 +444,7 @@ are not <code class="inline">any</code>. An empty answer or a failed lookup retu
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#resolve/5"><code class="inline">resolve/5</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#resolve/5"><code class="inline">resolve(Name, Class, Type, [], infinity)</code></a>.</p></div>
 
     </div>
 
@@ -459,7 +454,7 @@ are not <code class="inline">any</code>. An empty answer or a failed lookup retu
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#resolve/5"><code class="inline">resolve/5</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#resolve/5"><code class="inline">resolve(Name, Class, Type, Opts, infinity)</code></a>.</p></div>
 
     </div>
 
@@ -469,9 +464,7 @@ are not <code class="inline">any</code>. An empty answer or a failed lookup retu
 
       </div>
 
-        <div class="summary-synopsis"><p>Resolves a DNS record of the specified type and class for the specified name.
-The returned <a href="#t:dns_msg/0"><code class="inline">dns_msg/0</code></a> can be examined using access functions in <code class="inline">inet_db</code>,
-as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p></div>
+        <div class="summary-synopsis"><p>Resolve a DNS query.</p></div>
 
     </div>
 
@@ -497,7 +490,7 @@ as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p><
     </a>
     <h1 class="signature" translate="no">dns_class()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L156" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L160" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -527,7 +520,7 @@ as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p><
     </a>
     <h1 class="signature" translate="no">dns_data()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L229" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L243" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -568,7 +561,8 @@ as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p><
 
       </div>
 
-<p><code class="inline">Regexp</code> is a string with characters encoded in the UTF-8 coding standard.</p>
+<p>DNS record data (content)</p><p>The basic type of each data element is specified in this type.</p><p><code class="inline">Regexp</code> is a UTF-8 <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:string/0"><code class="inline">string/0</code></a>.  The other <a href="../../../../erts-14.2.4/doc/html/erlang.html#t:string/0"><code class="inline">string/0</code></a>s
+are actually Latin-1 strings.</p>
   </section>
 </section>
 <section class="detail" id="t:dns_msg/0">
@@ -580,7 +574,7 @@ as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p><
     </a>
     <h1 class="signature" translate="no">dns_msg()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L226" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L233" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -598,59 +592,60 @@ as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p><
 
       </div>
 
-<p>This is the start of a hierarchy of opaque data structures that can be examined
-with access functions in <code class="inline">inet_dns</code>, which return lists of <code class="inline">{Field,Value}</code>
-tuples. The arity 2 functions only return the value for a specified field.</p><pre><code class="makeup erlang" translate="no"><span class="nf">dns_msg</span><span class="p" data-group-id="5039666969-1">(</span><span class="p" data-group-id="5039666969-1">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsMsg</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="5039666969-2">(</span><span class="n">DnsMsg</span><span class="p" data-group-id="5039666969-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5039666969-3">[</span><span class="w"> </span><span class="p" data-group-id="5039666969-4">{</span><span class="ss">header</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_header</span><span class="p" data-group-id="5039666969-5">(</span><span class="p" data-group-id="5039666969-5">)</span><span class="p" data-group-id="5039666969-4">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-6">{</span><span class="ss">qdlist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_query</span><span class="p" data-group-id="5039666969-7">(</span><span class="p" data-group-id="5039666969-7">)</span><span class="p" data-group-id="5039666969-6">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-8">{</span><span class="ss">anlist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr</span><span class="p" data-group-id="5039666969-9">(</span><span class="p" data-group-id="5039666969-9">)</span><span class="p" data-group-id="5039666969-8">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-10">{</span><span class="ss">nslist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr</span><span class="p" data-group-id="5039666969-11">(</span><span class="p" data-group-id="5039666969-11">)</span><span class="p" data-group-id="5039666969-10">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-12">{</span><span class="ss">arlist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr</span><span class="p" data-group-id="5039666969-13">(</span><span class="p" data-group-id="5039666969-13">)</span><span class="p" data-group-id="5039666969-12">}</span><span class="w"> </span><span class="p" data-group-id="5039666969-3">]</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="5039666969-14">(</span><span class="n">DnsMsg</span><span class="p">,</span><span class="w"> </span><span class="ss">header</span><span class="p" data-group-id="5039666969-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">dns_header</span><span class="p" data-group-id="5039666969-15">(</span><span class="p" data-group-id="5039666969-15">)</span><span class="w"> </span><span class="c1">% for example</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="5039666969-16">(</span><span class="n">DnsMsg</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="5039666969-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="w">
+<p>A DNS message.</p><p>This is the start of a hierarchy of opaque data structures that can be
+examined with access functions in <code class="inline">inet_dns</code>, which return lists of
+<code class="inline">{Field,Value}</code> tuples. The arity 2 functions return the value
+for a specified field.</p><pre><code class="makeup erlang" translate="no"><span class="nf">dns_msg</span><span class="p" data-group-id="2338631990-1">(</span><span class="p" data-group-id="2338631990-1">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsMsg</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="2338631990-2">(</span><span class="n">DnsMsg</span><span class="p" data-group-id="2338631990-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="2338631990-3">[</span><span class="w"> </span><span class="p" data-group-id="2338631990-4">{</span><span class="ss">header</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_header</span><span class="p" data-group-id="2338631990-5">(</span><span class="p" data-group-id="2338631990-5">)</span><span class="p" data-group-id="2338631990-4">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-6">{</span><span class="ss">qdlist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_query</span><span class="p" data-group-id="2338631990-7">(</span><span class="p" data-group-id="2338631990-7">)</span><span class="p" data-group-id="2338631990-6">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-8">{</span><span class="ss">anlist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr</span><span class="p" data-group-id="2338631990-9">(</span><span class="p" data-group-id="2338631990-9">)</span><span class="p" data-group-id="2338631990-8">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-10">{</span><span class="ss">nslist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr</span><span class="p" data-group-id="2338631990-11">(</span><span class="p" data-group-id="2338631990-11">)</span><span class="p" data-group-id="2338631990-10">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-12">{</span><span class="ss">arlist</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr</span><span class="p" data-group-id="2338631990-13">(</span><span class="p" data-group-id="2338631990-13">)</span><span class="p" data-group-id="2338631990-12">}</span><span class="w"> </span><span class="p" data-group-id="2338631990-3">]</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="2338631990-14">(</span><span class="n">DnsMsg</span><span class="p">,</span><span class="w"> </span><span class="ss">header</span><span class="p" data-group-id="2338631990-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">dns_header</span><span class="p" data-group-id="2338631990-15">(</span><span class="p" data-group-id="2338631990-15">)</span><span class="w"> </span><span class="c1">% for example</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">msg</span><span class="p" data-group-id="2338631990-16">(</span><span class="n">DnsMsg</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="2338631990-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="w">
 
-</span><span class="nf">dns_header</span><span class="p" data-group-id="5039666969-17">(</span><span class="p" data-group-id="5039666969-17">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsHeader</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">header</span><span class="p" data-group-id="5039666969-18">(</span><span class="n">DnsHeader</span><span class="p" data-group-id="5039666969-18">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5039666969-19">[</span><span class="w"> </span><span class="p" data-group-id="5039666969-20">{</span><span class="ss">id</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-21">(</span><span class="p" data-group-id="5039666969-21">)</span><span class="p" data-group-id="5039666969-20">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-22">{</span><span class="ss">qr</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="5039666969-23">(</span><span class="p" data-group-id="5039666969-23">)</span><span class="p" data-group-id="5039666969-22">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-24">{</span><span class="ss">opcode</span><span class="p">,</span><span class="w"> </span><span class="k">query</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">iquery</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-25">(</span><span class="p" data-group-id="5039666969-25">)</span><span class="p" data-group-id="5039666969-24">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-26">{</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="5039666969-27">(</span><span class="p" data-group-id="5039666969-27">)</span><span class="p" data-group-id="5039666969-26">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-28">{</span><span class="ss">tc</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="5039666969-29">(</span><span class="p" data-group-id="5039666969-29">)</span><span class="p" data-group-id="5039666969-28">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-30">{</span><span class="ss">rd</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="5039666969-31">(</span><span class="p" data-group-id="5039666969-31">)</span><span class="p" data-group-id="5039666969-30">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-32">{</span><span class="ss">ra</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="5039666969-33">(</span><span class="p" data-group-id="5039666969-33">)</span><span class="p" data-group-id="5039666969-32">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-34">{</span><span class="ss">pr</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="5039666969-35">(</span><span class="p" data-group-id="5039666969-35">)</span><span class="p" data-group-id="5039666969-34">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-36">{</span><span class="ss">rcode</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-37">(</span><span class="mi">0</span><span class="p">.</span><span class="p">.</span><span class="mi">16</span><span class="p" data-group-id="5039666969-37">)</span><span class="p" data-group-id="5039666969-36">}</span><span class="w"> </span><span class="p" data-group-id="5039666969-19">]</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">header</span><span class="p" data-group-id="5039666969-38">(</span><span class="n">DnsHeader</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="5039666969-38">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="w">
+</span><span class="nf">dns_header</span><span class="p" data-group-id="2338631990-17">(</span><span class="p" data-group-id="2338631990-17">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsHeader</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">header</span><span class="p" data-group-id="2338631990-18">(</span><span class="n">DnsHeader</span><span class="p" data-group-id="2338631990-18">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="2338631990-19">[</span><span class="w"> </span><span class="p" data-group-id="2338631990-20">{</span><span class="ss">id</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-21">(</span><span class="p" data-group-id="2338631990-21">)</span><span class="p" data-group-id="2338631990-20">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-22">{</span><span class="ss">qr</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="2338631990-23">(</span><span class="p" data-group-id="2338631990-23">)</span><span class="p" data-group-id="2338631990-22">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-24">{</span><span class="ss">opcode</span><span class="p">,</span><span class="w"> </span><span class="k">query</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">iquery</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-25">(</span><span class="p" data-group-id="2338631990-25">)</span><span class="p" data-group-id="2338631990-24">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-26">{</span><span class="ss">aa</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="2338631990-27">(</span><span class="p" data-group-id="2338631990-27">)</span><span class="p" data-group-id="2338631990-26">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-28">{</span><span class="ss">tc</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="2338631990-29">(</span><span class="p" data-group-id="2338631990-29">)</span><span class="p" data-group-id="2338631990-28">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-30">{</span><span class="ss">rd</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="2338631990-31">(</span><span class="p" data-group-id="2338631990-31">)</span><span class="p" data-group-id="2338631990-30">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-32">{</span><span class="ss">ra</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="2338631990-33">(</span><span class="p" data-group-id="2338631990-33">)</span><span class="p" data-group-id="2338631990-32">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-34">{</span><span class="ss">pr</span><span class="p">,</span><span class="w"> </span><span class="nf">boolean</span><span class="p" data-group-id="2338631990-35">(</span><span class="p" data-group-id="2338631990-35">)</span><span class="p" data-group-id="2338631990-34">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-36">{</span><span class="ss">rcode</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-37">(</span><span class="mi">0</span><span class="p">.</span><span class="p">.</span><span class="mi">16</span><span class="p" data-group-id="2338631990-37">)</span><span class="p" data-group-id="2338631990-36">}</span><span class="w"> </span><span class="p" data-group-id="2338631990-19">]</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">header</span><span class="p" data-group-id="2338631990-38">(</span><span class="n">DnsHeader</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="2338631990-38">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="w">
 
-</span><span class="nf">query_type</span><span class="p" data-group-id="5039666969-39">(</span><span class="p" data-group-id="5039666969-39">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">axfr</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">mailb</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">maila</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">any</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">dns_rr_type</span><span class="p" data-group-id="5039666969-40">(</span><span class="p" data-group-id="5039666969-40">)</span><span class="w">
+</span><span class="nf">query_type</span><span class="p" data-group-id="2338631990-39">(</span><span class="p" data-group-id="2338631990-39">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">axfr</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">mailb</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">maila</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="ss">any</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">dns_rr_type</span><span class="p" data-group-id="2338631990-40">(</span><span class="p" data-group-id="2338631990-40">)</span><span class="w">
 
-</span><span class="nf">dns_query</span><span class="p" data-group-id="5039666969-41">(</span><span class="p" data-group-id="5039666969-41">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsQuery</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">dns_query</span><span class="p" data-group-id="5039666969-42">(</span><span class="n">DnsQuery</span><span class="p" data-group-id="5039666969-42">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5039666969-43">[</span><span class="w"> </span><span class="p" data-group-id="5039666969-44">{</span><span class="ss">domain</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_name</span><span class="p" data-group-id="5039666969-45">(</span><span class="p" data-group-id="5039666969-45">)</span><span class="p" data-group-id="5039666969-44">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-46">{</span><span class="ss">type</span><span class="p">,</span><span class="w"> </span><span class="nf">query_type</span><span class="p" data-group-id="5039666969-47">(</span><span class="p" data-group-id="5039666969-47">)</span><span class="p" data-group-id="5039666969-46">}</span><span class="w">
-        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-48">{</span><span class="ss">class</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_class</span><span class="p" data-group-id="5039666969-49">(</span><span class="p" data-group-id="5039666969-49">)</span><span class="p" data-group-id="5039666969-48">}</span><span class="w"> </span><span class="p" data-group-id="5039666969-43">]</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">dns_query</span><span class="p" data-group-id="5039666969-50">(</span><span class="n">DnsQuery</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="5039666969-50">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="w">
+</span><span class="nf">dns_query</span><span class="p" data-group-id="2338631990-41">(</span><span class="p" data-group-id="2338631990-41">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsQuery</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">dns_query</span><span class="p" data-group-id="2338631990-42">(</span><span class="n">DnsQuery</span><span class="p" data-group-id="2338631990-42">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="2338631990-43">[</span><span class="w"> </span><span class="p" data-group-id="2338631990-44">{</span><span class="ss">domain</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_name</span><span class="p" data-group-id="2338631990-45">(</span><span class="p" data-group-id="2338631990-45">)</span><span class="p" data-group-id="2338631990-44">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-46">{</span><span class="ss">type</span><span class="p">,</span><span class="w"> </span><span class="nf">query_type</span><span class="p" data-group-id="2338631990-47">(</span><span class="p" data-group-id="2338631990-47">)</span><span class="p" data-group-id="2338631990-46">}</span><span class="w">
+        </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-48">{</span><span class="ss">class</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_class</span><span class="p" data-group-id="2338631990-49">(</span><span class="p" data-group-id="2338631990-49">)</span><span class="p" data-group-id="2338631990-48">}</span><span class="w"> </span><span class="p" data-group-id="2338631990-43">]</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">dns_query</span><span class="p" data-group-id="2338631990-50">(</span><span class="n">DnsQuery</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="2338631990-50">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span><span class="w">
 
-</span><span class="nf">dns_rr</span><span class="p" data-group-id="5039666969-51">(</span><span class="p" data-group-id="5039666969-51">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsRr</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="5039666969-52">(</span><span class="n">DnsRr</span><span class="p" data-group-id="5039666969-52">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">DnsRrFields</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="n">DnsRrOptFields</span><span class="w">
-    </span><span class="n">DnsRrFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5039666969-53">[</span><span class="w"> </span><span class="p" data-group-id="5039666969-54">{</span><span class="ss">domain</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_name</span><span class="p" data-group-id="5039666969-55">(</span><span class="p" data-group-id="5039666969-55">)</span><span class="p" data-group-id="5039666969-54">}</span><span class="w">
-                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-56">{</span><span class="ss">type</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr_type</span><span class="p" data-group-id="5039666969-57">(</span><span class="p" data-group-id="5039666969-57">)</span><span class="p" data-group-id="5039666969-56">}</span><span class="w">
-                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-58">{</span><span class="ss">class</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_class</span><span class="p" data-group-id="5039666969-59">(</span><span class="p" data-group-id="5039666969-59">)</span><span class="p" data-group-id="5039666969-58">}</span><span class="w">
-                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-60">{</span><span class="ss">ttl</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-61">(</span><span class="p" data-group-id="5039666969-61">)</span><span class="p" data-group-id="5039666969-60">}</span><span class="w">
-                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-62">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_data</span><span class="p" data-group-id="5039666969-63">(</span><span class="p" data-group-id="5039666969-63">)</span><span class="p" data-group-id="5039666969-62">}</span><span class="w"> </span><span class="p" data-group-id="5039666969-53">]</span><span class="w">
-    </span><span class="n">DnsRrOptFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5039666969-64">[</span><span class="w"> </span><span class="p" data-group-id="5039666969-65">{</span><span class="ss">domain</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_name</span><span class="p" data-group-id="5039666969-66">(</span><span class="p" data-group-id="5039666969-66">)</span><span class="p" data-group-id="5039666969-65">}</span><span class="w">
-                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-67">{</span><span class="ss">type</span><span class="p">,</span><span class="w"> </span><span class="ss">opt</span><span class="p" data-group-id="5039666969-67">}</span><span class="w">
-                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-68">{</span><span class="ss">udp_payload_size</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-69">(</span><span class="p" data-group-id="5039666969-69">)</span><span class="p" data-group-id="5039666969-68">}</span><span class="w">
-                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-70">{</span><span class="ss">ext_rcode</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-71">(</span><span class="p" data-group-id="5039666969-71">)</span><span class="p" data-group-id="5039666969-70">}</span><span class="w">
-                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-72">{</span><span class="ss">version</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-73">(</span><span class="p" data-group-id="5039666969-73">)</span><span class="p" data-group-id="5039666969-72">}</span><span class="w">
-                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-74">{</span><span class="ss">z</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="5039666969-75">(</span><span class="p" data-group-id="5039666969-75">)</span><span class="p" data-group-id="5039666969-74">}</span><span class="w">
-                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5039666969-76">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_data</span><span class="p" data-group-id="5039666969-77">(</span><span class="p" data-group-id="5039666969-77">)</span><span class="p" data-group-id="5039666969-76">}</span><span class="w"> </span><span class="p" data-group-id="5039666969-64">]</span><span class="w">
-    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="5039666969-78">(</span><span class="n">DnsRr</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="5039666969-78">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span></code></pre><p>There is an information function for the types above:</p><pre><code class="makeup erlang" translate="no"><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8120255041-1">(</span><span class="nf">dns_msg</span><span class="p" data-group-id="8120255041-2">(</span><span class="p" data-group-id="8120255041-2">)</span><span class="p" data-group-id="8120255041-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">msg</span><span class="p">;</span><span class="w">
-</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8120255041-3">(</span><span class="nf">dns_header</span><span class="p" data-group-id="8120255041-4">(</span><span class="p" data-group-id="8120255041-4">)</span><span class="p" data-group-id="8120255041-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">header</span><span class="p">;</span><span class="w">
-</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8120255041-5">(</span><span class="nf">dns_query</span><span class="p" data-group-id="8120255041-6">(</span><span class="p" data-group-id="8120255041-6">)</span><span class="p" data-group-id="8120255041-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">dns_query</span><span class="p">;</span><span class="w">
-</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8120255041-7">(</span><span class="nf">dns_rr</span><span class="p" data-group-id="8120255041-8">(</span><span class="p" data-group-id="8120255041-8">)</span><span class="p" data-group-id="8120255041-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">rr</span><span class="p">;</span><span class="w">
-</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8120255041-9">(</span><span class="p">_</span><span class="p" data-group-id="8120255041-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">undefined</span><span class="p">.</span></code></pre><p>So, <code class="inline">inet_dns:(inet_dns:record_type(X))(X)</code> converts any of these data
+</span><span class="nf">dns_rr</span><span class="p" data-group-id="2338631990-51">(</span><span class="p" data-group-id="2338631990-51">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DnsRr</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="2338631990-52">(</span><span class="n">DnsRr</span><span class="p" data-group-id="2338631990-52">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">DnsRrFields</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="n">DnsRrOptFields</span><span class="w">
+    </span><span class="n">DnsRrFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2338631990-53">[</span><span class="w"> </span><span class="p" data-group-id="2338631990-54">{</span><span class="ss">domain</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_name</span><span class="p" data-group-id="2338631990-55">(</span><span class="p" data-group-id="2338631990-55">)</span><span class="p" data-group-id="2338631990-54">}</span><span class="w">
+                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-56">{</span><span class="ss">type</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_rr_type</span><span class="p" data-group-id="2338631990-57">(</span><span class="p" data-group-id="2338631990-57">)</span><span class="p" data-group-id="2338631990-56">}</span><span class="w">
+                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-58">{</span><span class="ss">class</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_class</span><span class="p" data-group-id="2338631990-59">(</span><span class="p" data-group-id="2338631990-59">)</span><span class="p" data-group-id="2338631990-58">}</span><span class="w">
+                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-60">{</span><span class="ss">ttl</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-61">(</span><span class="p" data-group-id="2338631990-61">)</span><span class="p" data-group-id="2338631990-60">}</span><span class="w">
+                  </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-62">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_data</span><span class="p" data-group-id="2338631990-63">(</span><span class="p" data-group-id="2338631990-63">)</span><span class="p" data-group-id="2338631990-62">}</span><span class="w"> </span><span class="p" data-group-id="2338631990-53">]</span><span class="w">
+    </span><span class="n">DnsRrOptFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2338631990-64">[</span><span class="w"> </span><span class="p" data-group-id="2338631990-65">{</span><span class="ss">domain</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_name</span><span class="p" data-group-id="2338631990-66">(</span><span class="p" data-group-id="2338631990-66">)</span><span class="p" data-group-id="2338631990-65">}</span><span class="w">
+                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-67">{</span><span class="ss">type</span><span class="p">,</span><span class="w"> </span><span class="ss">opt</span><span class="p" data-group-id="2338631990-67">}</span><span class="w">
+                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-68">{</span><span class="ss">udp_payload_size</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-69">(</span><span class="p" data-group-id="2338631990-69">)</span><span class="p" data-group-id="2338631990-68">}</span><span class="w">
+                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-70">{</span><span class="ss">ext_rcode</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-71">(</span><span class="p" data-group-id="2338631990-71">)</span><span class="p" data-group-id="2338631990-70">}</span><span class="w">
+                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-72">{</span><span class="ss">version</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-73">(</span><span class="p" data-group-id="2338631990-73">)</span><span class="p" data-group-id="2338631990-72">}</span><span class="w">
+                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-74">{</span><span class="ss">z</span><span class="p">,</span><span class="w"> </span><span class="nf">integer</span><span class="p" data-group-id="2338631990-75">(</span><span class="p" data-group-id="2338631990-75">)</span><span class="p" data-group-id="2338631990-74">}</span><span class="w">
+                     </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2338631990-76">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="nf">dns_data</span><span class="p" data-group-id="2338631990-77">(</span><span class="p" data-group-id="2338631990-77">)</span><span class="p" data-group-id="2338631990-76">}</span><span class="w"> </span><span class="p" data-group-id="2338631990-64">]</span><span class="w">
+    </span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">rr</span><span class="p" data-group-id="2338631990-78">(</span><span class="n">DnsRr</span><span class="p">,</span><span class="w"> </span><span class="n">Field</span><span class="p" data-group-id="2338631990-78">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Value</span></code></pre><p>There is an information function for the types above:</p><pre><code class="makeup erlang" translate="no"><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8039715622-1">(</span><span class="nf">dns_msg</span><span class="p" data-group-id="8039715622-2">(</span><span class="p" data-group-id="8039715622-2">)</span><span class="p" data-group-id="8039715622-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">msg</span><span class="p">;</span><span class="w">
+</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8039715622-3">(</span><span class="nf">dns_header</span><span class="p" data-group-id="8039715622-4">(</span><span class="p" data-group-id="8039715622-4">)</span><span class="p" data-group-id="8039715622-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">header</span><span class="p">;</span><span class="w">
+</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8039715622-5">(</span><span class="nf">dns_query</span><span class="p" data-group-id="8039715622-6">(</span><span class="p" data-group-id="8039715622-6">)</span><span class="p" data-group-id="8039715622-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">dns_query</span><span class="p">;</span><span class="w">
+</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8039715622-7">(</span><span class="nf">dns_rr</span><span class="p" data-group-id="8039715622-8">(</span><span class="p" data-group-id="8039715622-8">)</span><span class="p" data-group-id="8039715622-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">rr</span><span class="p">;</span><span class="w">
+</span><span class="nc">inet_dns</span><span class="p">:</span><span class="nf">record_type</span><span class="p" data-group-id="8039715622-9">(</span><span class="p">_</span><span class="p" data-group-id="8039715622-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">undefined</span><span class="p">.</span></code></pre><p>So, <code class="inline">inet_dns:(inet_dns:record_type(X))(X)</code> converts any of these data
 structures into a <code class="inline">{Field,Value}</code> list.</p>
   </section>
 </section>
@@ -663,7 +658,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">dns_name()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L150" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L154" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -693,7 +688,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">dns_rr_type()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L152" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L156" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -725,13 +720,11 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">hostent()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L676" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L727" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
 
-
-      <span class="note">(not exported)</span>
 
   </div>
 
@@ -740,6 +733,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> hostent() ::
+    <a href="inet.html#t:hostent/0">inet:hostent</a>() |
     {hostent,
      H_name :: <a href="inet.html#t:hostname/0">inet:hostname</a>(),
      H_aliases :: [<a href="inet.html#t:hostname/0">inet:hostname</a>()],
@@ -749,7 +743,10 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-
+<p>Extended variant of <a href="inet.html#t:hostent/0"><code class="inline">inet:hostent/0</code></a>.</p><p>Allows <a href="#t:dns_rr_type/0"><code class="inline">dns_rr_type/0</code></a> for the
+<a href="inet.html#t:hostent/0"><code class="inline">#hostent{}.h_addrtype</code></a> field, and
+<code class="inline">[</code><a href="#t:dns_data/0"><code class="inline">dns_data/0</code></a><code class="inline">]</code> for the
+<a href="inet.html#t:hostent/0"><code class="inline">#hostent{}.h_addr_list</code></a> field.</p>
   </section>
 </section>
 <section class="detail" id="t:nameserver/0">
@@ -761,7 +758,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">nameserver()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L144" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -789,7 +786,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">res_error()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L146" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L150" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -817,7 +814,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">res_option()</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L131" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L135" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -868,7 +865,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">nnslookup(Name, Class, Type, Nameservers)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L440" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L473" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -890,7 +887,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-<p>Equivalent to <a href="#nnslookup/5"><code class="inline">nnslookup/5</code></a>.</p>
+<p>Equivalent to <a href="#nnslookup/5"><code class="inline">nnslookup(Name, Class, Type, NSs, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="nnslookup/5">
@@ -902,7 +899,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">nnslookup(Name, Class, Type, Nameservers, Timeout)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L454" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L492" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -925,7 +922,8 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-<p>Resolves a DNS record of the specified type and class for the specified name.</p>
+<p>Resolve a DNS query.</p><p>Like <a href="#nslookup/4"><code class="inline">nslookup/4</code></a> but calls <a href="#resolve/5"><code class="inline">resolve/5</code></a> with both the arguments
+<code class="inline">Opts = [{nameservers, Nameservers}]</code> and <code class="inline">Timeout</code>.</p>
   </section>
 </section>
 <section class="detail" id="nslookup/3">
@@ -937,7 +935,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">nslookup(Name, Class, Type)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L405" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L425" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -958,7 +956,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-<p>Equivalent to <a href="#nslookup/4"><code class="inline">nslookup/4</code></a>.</p>
+<p>Equivalent to <a href="#nslookup/4"><code class="inline">nslookup(Name, Class, Type, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="nslookup/4">
@@ -970,7 +968,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">nslookup/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L425" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L456" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -999,7 +997,10 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-<p>Resolves a DNS record of the specified type and class for the specified name.</p>
+<p>Resolve a DNS query.</p><p>This function is a legacy wrapper to <a href="#resolve/5"><code class="inline">resolve/5</code></a> that simplifies
+errors matching <code class="inline">{error, {Reason, _}}</code> into <code class="inline">{error, Reason}</code>
+or <code class="inline">{error, einval}</code>.</p><p>With argument <code class="inline">Timeout</code> calls <a href="#resolve/5"><code class="inline">resolve/5</code></a> with <code class="inline">Opts = []</code>.</p><p>With argument <code class="inline">Nameservers</code> calls <a href="#resolve/5"><code class="inline">resolve/5</code></a> with
+<code class="inline">Opts = [{nameservers, Nameservers}]</code> and <code class="inline">Timeout = infinity</code>.</p>
   </section>
 </section>
 
@@ -1023,7 +1024,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">getbyname(Name, Type)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L691" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L743" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1044,7 +1045,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-<p>Equivalent to <a href="#getbyname/3"><code class="inline">getbyname/3</code></a>.</p>
+<p>Equivalent to <a href="#getbyname/3"><code class="inline">getbyname(Name, Type, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="getbyname/3">
@@ -1056,7 +1057,7 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
     </a>
     <h1 class="signature" translate="no">getbyname(Name, Type, Timeout)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L718" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L772" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1078,17 +1079,17 @@ structures into a <code class="inline">{Field,Value}</code> list.</p>
 
       </div>
 
-<p>Resolves a DNS record of the specified <code class="inline">Type</code> for the specified host, of class
-<code class="inline">in</code>. Returns, on success, when resolving a <code class="inline">Type = a|aaaa</code> DNS record, a
-<code class="inline">#hostent{}</code> record with <code class="inline">#hostent.h_addrtype = inet|inet6</code>, respectively; see
-<a href="inet.html#t:hostent/0"><code class="inline">inet:hostent/0</code></a>.</p><p>When resolving other <code class="inline">Type = dns_rr_type()</code>:s (of class <code class="inline">in</code>), also returns a
-<code class="inline">#hostent{}</code> record but with <a href="#t:dns_rr_type/0"><code class="inline">dns_rr_type/0</code></a> in <code class="inline">#hostent.h_addrtype</code>, and the
-resolved <a href="#t:dns_data/0"><code class="inline">dns_data/0</code></a> in <code class="inline">#hostent.h_addr_list</code>; see <a href="#t:hostent/0"><code class="inline">hostent/0</code></a>.</p><p>This function uses resolver option <code class="inline">search</code> that is a list of domain names. If
-the name to resolve contains no dots, it is prepended to each domain name in the
-search list, and they are tried in order. If the name contains dots, it is first
-tried as an absolute name and if that fails, the search list is used. If the
-name has a trailing dot, it is supposed to be an absolute name and the search
-list is not used.</p>
+<p>Resolve a DNS query.</p><p>Resolves a DNS query of the specified <code class="inline">Type</code> for the specified host,
+of class<code class="inline">in</code>.  Returns, on success, when resolving a <code class="inline">Type = a|aaaa</code>
+DNS record, a <code class="inline">#hostent{}</code> record with <code class="inline">#hostent.h_addrtype = inet|inet6</code>,
+respectively; see <a href="inet.html#t:hostent/0"><code class="inline">inet:hostent/0</code></a>.</p><p>When resolving other <code class="inline">Type = dns_rr_type()</code>:s (of class <code class="inline">in</code>), also returns
+a <code class="inline">#hostent{}</code> record but with <a href="#t:dns_rr_type/0"><code class="inline">dns_rr_type/0</code></a> in <code class="inline">#hostent.h_addrtype</code>,
+and the resolved <a href="#t:dns_data/0"><code class="inline">dns_data/0</code></a> in <code class="inline">#hostent.h_addr_list</code>; see <a href="#t:hostent/0"><code class="inline">hostent/0</code></a>.</p><p>This function uses resolver option <code class="inline">search</code> that is a list of domain names.
+If the name to resolve contains no dots, it is prepended to each domain
+name in the search list, and they are tried in order.  If the name
+contains dots, it is first tried as an absolute name and if that fails,
+the search list is used. If the name has a trailing dot, it is supposed
+to be an absolute name and the search list is not used.</p>
   </section>
 </section>
 <section class="detail" id="gethostbyaddr/1">
@@ -1100,7 +1101,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">gethostbyaddr(Address)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L547" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L585" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1120,7 +1121,7 @@ list is not used.</p>
 
       </div>
 
-<p>Equivalent to <a href="#gethostbyaddr/2"><code class="inline">gethostbyaddr/2</code></a>.</p>
+<p>Equivalent to <a href="#gethostbyaddr/2"><code class="inline">gethostbyaddr(Address, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="gethostbyaddr/2">
@@ -1132,7 +1133,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">gethostbyaddr(Address, Timeout)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L556" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L594" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1153,7 +1154,7 @@ list is not used.</p>
 
       </div>
 
-<p>Backend functions used by <a href="inet.html#gethostbyaddr/1"><code class="inline">inet:gethostbyaddr/1</code></a>.</p>
+<p>Backend function used by <a href="inet.html#gethostbyaddr/1"><code class="inline">inet:gethostbyaddr/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="gethostbyname/1">
@@ -1165,7 +1166,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">gethostbyname(Name)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L617" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L662" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1185,7 +1186,9 @@ list is not used.</p>
 
       </div>
 
-<p>Equivalent to <a href="#gethostbyname/3"><code class="inline">gethostbyname/3</code></a>.</p>
+<p>Backend functions used by <a href="inet.html#gethostbyname/1"><code class="inline">inet:gethostbyname/1,2</code></a>.</p><p>If resolver option <code class="inline">inet6</code> is <code class="inline">true</code>, equivalent to
+<a href="#gethostbyname/3"><code class="inline">gethostbyname(Name, inet6, infinity)</code></a>,
+otherwise <a href="#gethostbyname/3"><code class="inline">gethostbyname(Name, inet, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="gethostbyname/2">
@@ -1197,7 +1200,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">gethostbyname(Name, Family)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L632" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L677" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1218,7 +1221,7 @@ list is not used.</p>
 
       </div>
 
-<p>Equivalent to <a href="#gethostbyname/3"><code class="inline">gethostbyname/3</code></a>.</p>
+<p>Equivalent to <a href="#gethostbyname/3"><code class="inline">gethostbyname(Name, Family, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="gethostbyname/3">
@@ -1230,7 +1233,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">gethostbyname(Name, Family, Timeout)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L651" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L694" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1253,7 +1256,7 @@ list is not used.</p>
       </div>
 
 <p>Backend functions used by <a href="inet.html#gethostbyname/1"><code class="inline">inet:gethostbyname/1,2</code></a>.</p><p>This function uses resolver option <code class="inline">search</code> just like
-<a href="#getbyname/2"><code class="inline">getbyname/2,3</code></a>.</p><p>If resolver option <code class="inline">inet6</code> is <code class="inline">true</code>, an IPv6 address is looked up.</p>
+<a href="#getbyname/2"><code class="inline">getbyname/2,3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="lookup/3">
@@ -1265,7 +1268,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">lookup(Name, Class, Type)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L348" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L365" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1282,7 +1285,7 @@ list is not used.</p>
 
       </div>
 
-<p>Equivalent to <a href="#lookup/5"><code class="inline">lookup/5</code></a>.</p>
+<p>Equivalent to <a href="#lookup/5"><code class="inline">lookup(Name, Class, Type, [], infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="lookup/4">
@@ -1294,7 +1297,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">lookup(Name, Class, Type, Opts)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L358" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L375" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1315,7 +1318,7 @@ list is not used.</p>
 
       </div>
 
-<p>Equivalent to <a href="#lookup/5"><code class="inline">lookup/5</code></a>.</p>
+<p>Equivalent to <a href="#lookup/5"><code class="inline">lookup(Name, Class, Type, Opts, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="lookup/5">
@@ -1327,7 +1330,7 @@ list is not used.</p>
     </a>
     <h1 class="signature" translate="no">lookup(Name, Class, Type, Opts, Timeout)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L378" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L398" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1349,11 +1352,12 @@ list is not used.</p>
 
       </div>
 
-<p>Resolves the DNS data for the record of the specified type and class for the
-specified name. On success, filters out the answer records with the correct
-<code class="inline">Class</code> and <code class="inline">Type</code>, and returns a list of their data fields. So, a lookup for
-type <code class="inline">any</code> gives an empty answer, as the answer records have specific types that
-are not <code class="inline">any</code>. An empty answer or a failed lookup returns an empty list.</p><p>Calls <a href="#resolve/3"><code class="inline">resolve/*</code></a> with the same arguments and filters the result,
+<p>Look up DNS data.</p><p>Resolves the DNS data for the record <code class="inline">Name</code> of the specified
+<code class="inline">Type</code> and <code class="inline">Class</code>. On success, filters out the answer records
+with the correct <code class="inline">Class</code> and <code class="inline">Type</code>, and returns a list of their data fields.
+So, a lookup for type <code class="inline">any</code> gives an empty answer, as the answer records
+have specific types that are not <code class="inline">any</code>. An empty answer or a failed lookup
+returns an empty list.</p><p>Calls <a href="#resolve/3"><code class="inline">resolve/*</code></a> with the same arguments and filters the result,
 so <code class="inline">Opts</code> is described for those functions.</p>
   </section>
 </section>
@@ -1366,7 +1370,7 @@ so <code class="inline">Opts</code> is described for those functions.</p>
     </a>
     <h1 class="signature" translate="no">resolve(Name, Class, Type)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L264" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L278" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1388,7 +1392,7 @@ so <code class="inline">Opts</code> is described for those functions.</p>
 
       </div>
 
-<p>Equivalent to <a href="#resolve/5"><code class="inline">resolve/5</code></a>.</p>
+<p>Equivalent to <a href="#resolve/5"><code class="inline">resolve(Name, Class, Type, [], infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="resolve/4">
@@ -1400,7 +1404,7 @@ so <code class="inline">Opts</code> is described for those functions.</p>
     </a>
     <h1 class="signature" translate="no">resolve(Name, Class, Type, Opts)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L278" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L292" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1424,7 +1428,7 @@ so <code class="inline">Opts</code> is described for those functions.</p>
 
       </div>
 
-<p>Equivalent to <a href="#resolve/5"><code class="inline">resolve/5</code></a>.</p>
+<p>Equivalent to <a href="#resolve/5"><code class="inline">resolve(Name, Class, Type, Opts, infinity)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="resolve/5">
@@ -1436,7 +1440,7 @@ so <code class="inline">Opts</code> is described for those functions.</p>
     </a>
     <h1 class="signature" translate="no">resolve(Name, Class, Type, Opts, Timeout)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L325" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/stdlib/markdown_to_erlang+html/OTP-18956/lib/kernel/src/inet_res.erl#L342" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1461,25 +1465,26 @@ so <code class="inline">Opts</code> is described for those functions.</p>
 
       </div>
 
-<p>Resolves a DNS record of the specified type and class for the specified name.
-The returned <a href="#t:dns_msg/0"><code class="inline">dns_msg/0</code></a> can be examined using access functions in <code class="inline">inet_db</code>,
-as described in section in <a href="inet_res.html#dns_types">DNS Types</a>.</p><p>If <code class="inline">Name</code> is an <code class="inline">ip_address()</code>, the domain name to query for is generated as the
-standard reverse <code class="inline">&quot;.IN-ADDR.ARPA.&quot;</code> name for an IPv4 address, or the
-<code class="inline">&quot;.IP6.ARPA.&quot;</code> name for an IPv6 address. In this case, you most probably want to
-use <code class="inline">Class = in</code> and <code class="inline">Type = ptr</code>, but it is not done automatically.</p><p><code class="inline">Opts</code> overrides the corresponding resolver options. If option <code class="inline">nameservers</code> is
-specified, it is assumed that it is the complete list of name serves, so
-resolver option <code class="inline">alt_nameserves</code> is ignored. However, if option <code class="inline">alt_nameserves</code>
-is also specified to this function, it is used.</p><p>Option <code class="inline">verbose</code> (or rather <code class="inline">{verbose,true}</code>) causes diagnostics printout
-through <a href="../../../../lib/stdlib-5.2.2/doc/html/io.html#format/3"><code class="inline">io:format/2</code></a> of queries, replies retransmissions, and
-so on, similar to from utilities, such as <code class="inline">dig</code> and <code class="inline">nslookup</code>.</p><p>Option <code class="inline">nxdomain_reply</code> (or rather <code class="inline">{nxdomain_reply,true}</code>) causes nxdomain
-errors from DNS servers to be returned as <code class="inline">{error, {nxdomain, dns_msg()}}</code>.
+<p>Resolve a DNS query.</p><p>Resolves a DNS query for the specified <code class="inline">Type</code>, <code class="inline">Class</code>, and  <code class="inline">Name</code>,
+into a DNS message possibly containing Resource Records.
+The returned <a href="#t:dns_msg/0"><code class="inline">dns_msg/0</code></a> can be examined using access functions
+in <code class="inline">inet_db</code>, as described in section in <a href="#module-dns-types">DNS Types</a>.</p><p>If <code class="inline">Name</code> is an <code class="inline">ip_address()</code>, the domain name to query about is generated
+as the standard reverse <code class="inline">&quot;.IN-ADDR.ARPA.&quot;</code> name for an IPv4 address, or the
+<code class="inline">&quot;.IP6.ARPA.&quot;</code> name for an IPv6 address.  In this case, you most probably
+want to use <code class="inline">Class = in</code> and <code class="inline">Type = ptr</code>, but it is not done automatically.</p><p><code class="inline">Opts</code> overrides the corresponding resolver options. If option <code class="inline">nameservers</code>
+is specified, it is assumed that it is the complete list of name serves,
+so resolver option <code class="inline">alt_nameserves</code> is ignored. However, if option
+<code class="inline">alt_nameserves</code> is also specified to this function, it is used.</p><p>Option <code class="inline">verbose</code> (or rather <code class="inline">{verbose,true}</code>) causes diagnostics printout
+through <a href="../../../../lib/stdlib-5.2.2/doc/html/io.html#format/3"><code class="inline">io:format/2</code></a> of queries, replies, retransmissions,
+and so on, similar to utilities such as <code class="inline">dig</code> and <code class="inline">nslookup</code>.</p><p>Option <code class="inline">nxdomain_reply</code> (or rather <code class="inline">{nxdomain_reply, true}</code>) causes NXDOMAIN
+errors from DNS servers to be returned as <code class="inline">{error, {nxdomain, dns_msg()}}</code>.
 <a href="#t:dns_msg/0"><code class="inline">dns_msg/0</code></a> contains the additional sections that where included by the
-answering server. This is mainly useful to inspect the SOA record to get the TTL
-for negative caching.</p><p>If <code class="inline">Opt</code> is any atom, it is interpreted as <code class="inline">{Opt,true}</code> unless the atom string
-starts with <code class="inline">&quot;no&quot;</code>, making the interpretation <code class="inline">{Opt,false}</code>. For example,
-<code class="inline">usevc</code> is an alias for <code class="inline">{usevc,true}</code> and <code class="inline">nousevc</code> is an alias for
-<code class="inline">{usevc,false}</code>.</p><p>Option <code class="inline">inet6</code> has no effect on this function. You probably want to use
-<code class="inline">Type = a | aaaa</code> instead.</p>
+answering server. This is mainly useful to inspect the SOA record
+to get the TTL for negative caching.</p><p>If <code class="inline">Opt</code> is any atom, it is interpreted as <code class="inline">{Opt,true}</code> unless
+the atom string starts with <code class="inline">&quot;no&quot;</code>, making the interpretation <code class="inline">{Opt,false}</code>.
+For example, <code class="inline">usevc</code> is an alias for <code class="inline">{usevc, true}</code> and <code class="inline">nousevc</code>
+is an alias for <code class="inline">{usevc, false}</code>.</p><p>Option <code class="inline">inet6</code> has no effect on this function. You probably want to use
+<code class="inline">Type = a | aaaa</code> instead.</p>
   </section>
 </section>
 
