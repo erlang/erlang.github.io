@@ -18,7 +18,7 @@
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
-<style>.dark img { background-color: white; }</style>
+
   </head>
   <body data-type="extras" class="page-extra">
     <script>
@@ -208,9 +208,9 @@ application. All other OTP MIBs import some objects from this MIB.</p><p>Each MI
 <code class="inline">mibs/&lt;MIB&gt;.mib</code> in the application directory. The generated <code class="inline">.hrl</code> files with
 constant declarations are stored under <code class="inline">include/&lt;MIB&gt;.hrl</code>, and the compiled
 MIBs are stored under <code class="inline">priv/mibs/&lt;MIB&gt;.bin</code>.</p><p>An application that needs to import an MIB into another MIB is to use the <code class="inline">il</code>
-option to the SNMP MIB compiler:</p><pre><code class="makeup erlang" translate="no"><span class="nc">snmp</span><span class="p">:</span><span class="nf">c</span><span class="p" data-group-id="9274384043-1">(</span><span class="s">&quot;MY-MIB&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9274384043-2">[</span><span class="p" data-group-id="9274384043-3">{</span><span class="ss">il</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9274384043-4">[</span><span class="s">&quot;snmp/priv/mibs&quot;</span><span class="p" data-group-id="9274384043-4">]</span><span class="p" data-group-id="9274384043-3">}</span><span class="p" data-group-id="9274384043-2">]</span><span class="p" data-group-id="9274384043-1">)</span><span class="p">.</span></code></pre><p>If the application needs to include a generated <code class="inline">.hrl</code> file, it is to use the
-<code class="inline">-include_lib</code> directive to the Erlang compiler:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="2092670871-1">(</span><span class="ss">my_mib</span><span class="p" data-group-id="2092670871-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="2092670871-2">(</span><span class="s">&quot;snmp/include/OTP-REG.hrl&quot;</span><span class="p" data-group-id="2092670871-2">)</span><span class="p">.</span></code></pre><p>Here is a list of some of the MIBs defined in the OTP system:</p><ul><li><code class="inline">OTP-REG</code> (in SNMP) contains the top-level OTP registration objects, used by
+option to the SNMP MIB compiler:</p><pre><code class="makeup erlang" translate="no"><span class="nc">snmp</span><span class="p">:</span><span class="nf">c</span><span class="p" data-group-id="8597073624-1">(</span><span class="s">&quot;MY-MIB&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8597073624-2">[</span><span class="p" data-group-id="8597073624-3">{</span><span class="ss">il</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8597073624-4">[</span><span class="s">&quot;snmp/priv/mibs&quot;</span><span class="p" data-group-id="8597073624-4">]</span><span class="p" data-group-id="8597073624-3">}</span><span class="p" data-group-id="8597073624-2">]</span><span class="p" data-group-id="8597073624-1">)</span><span class="p">.</span></code></pre><p>If the application needs to include a generated <code class="inline">.hrl</code> file, it is to use the
+<code class="inline">-include_lib</code> directive to the Erlang compiler:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="1850624937-1">(</span><span class="ss">my_mib</span><span class="p" data-group-id="1850624937-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="1850624937-2">(</span><span class="s">&quot;snmp/include/OTP-REG.hrl&quot;</span><span class="p" data-group-id="1850624937-2">)</span><span class="p">.</span></code></pre><p>Here is a list of some of the MIBs defined in the OTP system:</p><ul><li><code class="inline">OTP-REG</code> (in SNMP) contains the top-level OTP registration objects, used by
 all other MIBs.</li><li><code class="inline">OTP-TC</code> (in SNMP) contains the general Textual Conventions, which can be used
 by any other MIB.</li><li><code class="inline">OTP-SNMPEA-MIB</code> (in <code class="inline">snmp</code>) contains objects for instrumentation and control
 of the extensible SNMP agent itself. The agent also implements the standard
@@ -276,6 +276,28 @@ Introduction
 </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
 
   </body>
 </html>
