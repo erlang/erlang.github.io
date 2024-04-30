@@ -18,7 +18,7 @@
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
-<style>.dark img { background-color: white; }</style>
+
   </head>
   <body data-type="modules" class="page-module">
     <script>
@@ -201,9 +201,9 @@ collected into a larger term, for example, a map or a tuple.</p><h2 id="module-e
 <p>The following example shows how lock contention for ETS tables can be minimized
 by having one ETS table for each scheduler. The table identifiers for the ETS
 tables are stored as a single persistent term:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="c1">%% There is one ETS table for each scheduler.</span><span class="w">
-    </span><span class="n">Sid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">system_info</span><span class="p" data-group-id="6646606409-1">(</span><span class="ss">scheduler_id</span><span class="p" data-group-id="6646606409-1">)</span><span class="p">,</span><span class="w">
-    </span><span class="n">Tid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element</span><span class="p" data-group-id="6646606409-2">(</span><span class="n">Sid</span><span class="p">,</span><span class="w"> </span><span class="nc">persistent_term</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="6646606409-3">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p" data-group-id="6646606409-3">)</span><span class="p" data-group-id="6646606409-2">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">ets</span><span class="p">:</span><span class="nf">update_counter</span><span class="p" data-group-id="6646606409-4">(</span><span class="n">Tid</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6646606409-4">)</span><span class="p">.</span></code></pre>
+    </span><span class="n">Sid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">system_info</span><span class="p" data-group-id="4492875115-1">(</span><span class="ss">scheduler_id</span><span class="p" data-group-id="4492875115-1">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">Tid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">element</span><span class="p" data-group-id="4492875115-2">(</span><span class="n">Sid</span><span class="p">,</span><span class="w"> </span><span class="nc">persistent_term</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="4492875115-3">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p" data-group-id="4492875115-3">)</span><span class="p" data-group-id="4492875115-2">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">ets</span><span class="p">:</span><span class="nf">update_counter</span><span class="p" data-group-id="4492875115-4">(</span><span class="n">Tid</span><span class="p">,</span><span class="w"> </span><span class="n">Key</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="4492875115-4">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -620,6 +620,28 @@ GC has been initiated when <a href="#put/2"><code class="inline">put/2</code></a
 </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
 
   </body>
 </html>

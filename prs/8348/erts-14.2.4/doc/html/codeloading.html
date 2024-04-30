@@ -18,7 +18,7 @@
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
-<style>.dark img { background-color: white; }</style>
+
   </head>
   <body data-type="extras" class="page-extra">
     <script>
@@ -168,8 +168,8 @@ free to schedule other work while the second loader is waiting. (See
 <code class="inline">erts_try_seize_code_load_permission</code> and
 <code class="inline">erts_release_code_load_permission</code>).</p><p>The ability to prepare several modules in parallel is not currently
 used as almost all code loading is serialized by the code_server
-process. The BIF interface is however prepared for this.</p><pre><code class="makeup erlang" translate="no"><span class="w">  </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">prepare_loading</span><span class="p" data-group-id="8740708129-1">(</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="8740708129-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">LoaderState</span><span class="w">
-  </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">finish_loading</span><span class="p" data-group-id="8740708129-2">(</span><span class="p" data-group-id="8740708129-3">[</span><span class="n">LoaderState</span><span class="p" data-group-id="8740708129-3">]</span><span class="p" data-group-id="8740708129-2">)</span></code></pre><p>The idea is that <code class="inline">prepare_loading</code> could be called in parallel for
+process. The BIF interface is however prepared for this.</p><pre><code class="makeup erlang" translate="no"><span class="w">  </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">prepare_loading</span><span class="p" data-group-id="5586479002-1">(</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5586479002-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">LoaderState</span><span class="w">
+  </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">finish_loading</span><span class="p" data-group-id="5586479002-2">(</span><span class="p" data-group-id="5586479002-3">[</span><span class="n">LoaderState</span><span class="p" data-group-id="5586479002-3">]</span><span class="p" data-group-id="5586479002-2">)</span></code></pre><p>The idea is that <code class="inline">prepare_loading</code> could be called in parallel for
 different modules and returns a &quot;magic binary&quot; containing the internal
 state of each prepared module. Function <code class="inline">finish_loading</code> could take a
 list of such states and do the finishing of all of them in one go.</p><p>Currently we use the legacy BIF <code class="inline">erlang:load_module</code> which is now
@@ -326,6 +326,28 @@ Counting Instructions
 </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
 
   </body>
 </html>
