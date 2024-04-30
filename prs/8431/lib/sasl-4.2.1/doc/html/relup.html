@@ -18,7 +18,7 @@
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
-<style>.dark img { background-color: white; }</style>
+
   </head>
   <body data-type="extras" class="page-extra">
     <script>
@@ -144,9 +144,9 @@ files (<code class="inline">.appup</code>) as input.</p><h2 id="file-syntax" cla
 </h2>
 <p>In a target system, the release upgrade file is to be located in directory
 <code class="inline">$ROOT/releases/Vsn</code>.</p><p>The <code class="inline">relup</code> file contains one single Erlang term, which defines the instructions
-used to upgrade the release. The file has the following syntax:</p><pre><code class="makeup c" translate="no"><span class="p" data-group-id="2794430708-1">{</span><span class="no">Vsn</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="2794430708-2">[</span><span class="p" data-group-id="2794430708-3">{</span><span class="no">UpFromVsn</span><span class="p">,</span><span class="w"> </span><span class="no">Descr</span><span class="p">,</span><span class="w"> </span><span class="no">Instructions</span><span class="p" data-group-id="2794430708-3">}</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="2794430708-2">]</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="2794430708-4">[</span><span class="p" data-group-id="2794430708-5">{</span><span class="no">DownToVsn</span><span class="p">,</span><span class="w"> </span><span class="no">Descr</span><span class="p">,</span><span class="w"> </span><span class="no">Instructions</span><span class="p" data-group-id="2794430708-5">}</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="2794430708-4">]</span><span class="p" data-group-id="2794430708-1">}</span><span class="p">.</span></code></pre><ul><li><p><strong><code class="inline">Vsn = string()</code></strong> - Current release version.</p></li><li><p><strong><code class="inline">UpFromVsn = string()</code></strong> - Earlier version of the release to upgrade from.</p></li><li><p><strong><code class="inline">Descr = term()</code></strong> - A user-defined parameter passed from the function
+used to upgrade the release. The file has the following syntax:</p><pre><code class="makeup c" translate="no"><span class="p" data-group-id="2516811572-1">{</span><span class="no">Vsn</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2516811572-2">[</span><span class="p" data-group-id="2516811572-3">{</span><span class="no">UpFromVsn</span><span class="p">,</span><span class="w"> </span><span class="no">Descr</span><span class="p">,</span><span class="w"> </span><span class="no">Instructions</span><span class="p" data-group-id="2516811572-3">}</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="2516811572-2">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2516811572-4">[</span><span class="p" data-group-id="2516811572-5">{</span><span class="no">DownToVsn</span><span class="p">,</span><span class="w"> </span><span class="no">Descr</span><span class="p">,</span><span class="w"> </span><span class="no">Instructions</span><span class="p" data-group-id="2516811572-5">}</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="2516811572-4">]</span><span class="p" data-group-id="2516811572-1">}</span><span class="p">.</span></code></pre><ul><li><p><strong><code class="inline">Vsn = string()</code></strong> - Current release version.</p></li><li><p><strong><code class="inline">UpFromVsn = string()</code></strong> - Earlier version of the release to upgrade from.</p></li><li><p><strong><code class="inline">Descr = term()</code></strong> - A user-defined parameter passed from the function
 <a href="systools.html#make_relup/3"><code class="inline">systools:make_relup/3,4</code></a>. It is used in the return
 value of
 <a href="release_handler.html#install_release/1"><code class="inline">release_handler:install_release/1,2</code></a>.</p></li><li><p><strong><code class="inline">Instructions</code></strong> - A list of low-level release upgrade instructions, see
@@ -217,6 +217,28 @@ script
 </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
 
   </body>
 </html>
