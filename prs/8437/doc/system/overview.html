@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-IHH6HKET.js"></script>
-    <script src="dist/sidebar_items-5D6931E3.js"></script>
+    <script src="dist/sidebar_items-00C3D513.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
@@ -123,7 +123,7 @@ Pages
   <span class="text">Built-In Mechanisms</span>
 </h2>
 <p>Two interoperability mechanisms are built into the Erlang runtime system,
-<em>distributed Erlang</em> and <em>ports</em>. A variation of ports is <em>linked-in drivers</em>.</p><p><a href="" id="dist"></a></p><h3 id="distributed-erlang" class="section-heading">
+<em>distributed Erlang</em>, <em>ports</em>, and <em>nifs</em>. A variation of ports is <em>linked-in drivers</em>.</p><h3 id="distributed-erlang" class="section-heading">
   <a href="#distributed-erlang" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -133,14 +133,14 @@ Pages
 A distributed Erlang node can connect to, and monitor, other nodes. It can also
 spawn processes at other nodes. Message passing and error handling between
 processes at different nodes are transparent. A number of useful STDLIB modules
-are available in a distributed Erlang system. For example, <code class="inline">global</code>, which
+are available in a distributed Erlang system. For example, <a href="../../lib/kernel-9.2.4/doc/html/global.html"><code class="inline">global</code></a>, which
 provides global name registration. The distribution mechanism is implemented
 using TCP/IP sockets.</p><p><em>When to use:</em> Distributed Erlang is primarily used for Erlang-Erlang
 communication. It can also be used for communication between Erlang and C, if
 the C program is implemented as a C node, see
-<a href="overview.html#cnode">C and Java Libraries</a>.</p><p><em>Where to read more:</em> Distributed Erlang and some distributed programming
+<a href="overview.html#c-nodes">C and Java Libraries</a>.</p><p><em>Where to read more:</em> Distributed Erlang and some distributed programming
 techniques are described in the Erlang book.</p><p>For more information, see
-<a href="../../doc/system/conc_prog.html#distributed-programming">Distributed Programming</a>.</p><p>Relevant manual pages are the following:</p><ul><li><a href="../../erts-14.2.4/doc/html/erlang.html"><code class="inline">erlang</code></a> manual page in ERTS (describes the BIFs)</li><li><a href="../../lib/kernel-9.2.3/doc/html/global.html"><code class="inline">global</code></a> manual page in Kernel</li><li><a href="../../lib/kernel-9.2.3/doc/html/net_adm.html"><code class="inline">net_adm</code></a> manual page in Kernel</li><li><a href="../../lib/kernel-9.2.3/doc/html/pg.html"><code class="inline">pg</code></a> manual page in Kernel</li><li><a href="../../lib/kernel-9.2.3/doc/html/rpc.html"><code class="inline">rpc</code></a> manual page in Kernel</li><li><a href="../../lib/stdlib-5.2.2/doc/html/pool.html"><code class="inline">pool</code></a> manual page in STDLIB</li><li><a href="../../lib/stdlib-5.2.2/doc/html/slave.html"><code class="inline">slave</code></a> manual page in STDLIB</li></ul><h3 id="ports-and-linked-in-drivers" class="section-heading">
+<a href="../../doc/system/conc_prog.html#distributed-programming">Distributed Programming</a>.</p><p>Relevant manual pages are the following:</p><ul><li><a href="../../erts-14.2.5/doc/html/erlang.html"><code class="inline">erlang</code></a> manual page in ERTS (describes the BIFs)</li><li><a href="../../lib/kernel-9.2.4/doc/html/global.html"><code class="inline">global</code></a> manual page in Kernel</li><li><a href="../../lib/kernel-9.2.4/doc/html/net_adm.html"><code class="inline">net_adm</code></a> manual page in Kernel</li><li><a href="../../lib/kernel-9.2.4/doc/html/pg.html"><code class="inline">pg</code></a> manual page in Kernel</li><li><a href="../../lib/kernel-9.2.4/doc/html/rpc.html"><code class="inline">rpc</code></a> manual page in Kernel</li><li><a href="../../lib/stdlib-5.2.3/doc/html/pool.html"><code class="inline">pool</code></a> manual page in STDLIB</li><li><a href="../../lib/stdlib-5.2.3/doc/html/slave.html"><code class="inline">slave</code></a> manual page in STDLIB</li></ul><h3 id="ports-and-linked-in-drivers" class="section-heading">
   <a href="#ports-and-linked-in-drivers" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -149,8 +149,8 @@ techniques are described in the Erlang book.</p><p>For more information, see
 <p>Ports provide the basic mechanism for communication with the external world,
 from Erlang's point of view. The ports provide a byte-oriented interface to an
 external program. When a port is created, Erlang can communicate with it by
-sending and receiving lists of bytes (not Erlang terms). This means that the
-programmer might have to invent a suitable encoding and decoding scheme.</p><p>The implementation of the port mechanism depends on the platform. For UNIX,
+sending and receiving <a href="../../erts-14.2.5/doc/html/erlang.html#t:iolist/0">lists of bytes</a> or <a href="../../erts-14.2.5/doc/html/erlang.html#t:binary/0">binaries</a> (not Erlang terms).
+This means that the programmer might have to invent a suitable encoding and decoding scheme.</p><p>The implementation of the port mechanism depends on the platform. For UNIX,
 pipes are used and the external program is assumed to read from standard input
 and write to standard output. The external program can be written in any
 programming language as long as it can handle the interprocess communication
@@ -161,11 +161,26 @@ C according to certain principles, and dynamically link it to the Erlang runtime
 system. This is called a <em>linked-in driver</em>.</p><p><em>When to use:</em> Ports can be used for all kinds of interoperability situations
 where the Erlang program and the other program runs on the same machine.
 Programming is fairly straight-forward.</p><p>Linked-in drivers involves writing certain call-back functions in C. This
-requires very good skills as the code is linked to the Erlang runtime system.</p><blockquote><h4 class="warning">Warning</h4><p>A faulty linked-in driver causes the entire Erlang runtime system to leak
+requires very good skills as the code is linked to the Erlang runtime system.
+It is recommended to use <a href="#native-implemented-functions-nifs">NIFs</a>
+instead of linked-in drivers as they provide a richer feature set and can use
+<a href="../../erts-14.2.5/doc/html/erl_nif.html#dirty_nifs">dirty schedulers for lengthy work</a>.</p><blockquote><h4 class="warning">Warning</h4><p>A faulty linked-in driver causes the entire Erlang runtime system to leak
 memory, hang, or crash.</p></blockquote><p><em>Where to read more:</em> Ports are described in section &quot;Miscellaneous Items&quot; of
-the Erlang book. Linked-in drivers are described in Appendix E.</p><p>The BIF <a href="../../erts-14.2.4/doc/html/erlang.html#open_port/2"><code class="inline">open_port/2</code></a> is documented in the <a href="../../erts-14.2.4/doc/html/erlang.html"><code class="inline">erlang</code></a> manual
-page in ERTS.</p><p>For linked-in drivers, the programmer needs to read the <a href="../../lib/kernel-9.2.3/doc/html/erl_ddll.html"><code class="inline">erl_ddll</code></a> manual page
-in Kernel.</p><p><em>Examples:</em> Port example in <a href="c_port.html">Ports</a>.</p><h2 id="c-and-java-libraries" class="section-heading">
+the Erlang book. Linked-in drivers are described in Appendix E.</p><p>The BIF <a href="../../erts-14.2.5/doc/html/erlang.html#open_port/2"><code class="inline">open_port/2</code></a> is documented in the <a href="../../erts-14.2.5/doc/html/erlang.html"><code class="inline">erlang</code></a> manual
+page in ERTS.</p><p>For linked-in drivers, the programmer needs to read the <a href="../../lib/kernel-9.2.4/doc/html/erl_ddll.html"><code class="inline">erl_ddll</code></a> manual page
+in Kernel.</p><p><em>Examples:</em> Port example in <a href="c_port.html">Ports</a>.</p><h3 id="native-implemented-functions-nifs" class="section-heading">
+  <a href="#native-implemented-functions-nifs" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Native implemented functions (Nifs)</span>
+</h3>
+<p>NIFs provide an alternative to a port using linked-in drivers to link C code into
+the Erlang runtime system. NIFs make it possible to provide C implementation of
+normal Erlang functions when interacting with the OS or some other external library.</p><blockquote><h4 class="warning">Warning</h4><p>A faulty NIFs causes the entire Erlang runtime system to leak
+memory, hang, crash, or leak sensitive information.</p></blockquote><p><em>When to use:</em> Since a faulty NIF can cause many different problems related to both
+stability and security it is recommended to use an external Port if possible. If the
+overhead is not acceptable then a NIF is a good solution for interacting with any
+native code, be it in C, C++ or Rust.</p><p><em>Where to read more:</em> NIFs are described in <a href="../../erts-14.2.5/doc/html/erl_nif.html">API functions for an Erlang NIF library</a>.</p><p><em>Examples:</em> Port example in <a href="nif.html">NIFs</a>.</p><h2 id="c-and-java-libraries" class="section-heading">
   <a href="#c-and-java-libraries" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -187,7 +202,7 @@ used for unpacking the binary and convert it into a struct similar to an Erlang
 term. Such a struct can be manipulated in different ways, be converted to the
 Erlang external format, and sent to Erlang.</p><p><em>When to use:</em> In C code, in conjunction with Erlang binaries.</p><p><em>Where to read more:</em> See the Erlang Interface User's Guide, Command Reference,
 and Library Reference. In Erlang/OTP R5B, and earlier versions, the information
-is part of the Kernel application.</p><p><em>Examples:</em> Erl_Interface example in <a href="erl_interface.html">Erl_Interface</a>.</p><p><a href="" id="cnode"></a></p><h3 id="c-nodes" class="section-heading">
+is part of the Kernel application.</p><p><em>Examples:</em> Erl_Interface example in <a href="erl_interface.html">Erl_Interface</a>.</p><h3 id="c-nodes" class="section-heading">
   <a href="#c-nodes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -203,7 +218,7 @@ limitations or application characteristics, or both.</p><p><em>Where to read mor
 <a href="erl_interface.html">Erl_Interface</a> documentation. The programmer also needs to be
 familiar with TCP/IP sockets, see Sockets in
 <a href="overview.html#sockets">Standard Protocols</a> and Distributed Erlang in
-<a href="overview.html#dist">Built-In Mechanisms</a>.</p><p><em>Example:</em> C node example in <a href="cnode.html">C Nodes</a>.</p><h3 id="jinterface" class="section-heading">
+<a href="overview.html#distributed-erlang">Built-In Mechanisms</a>.</p><p><em>Example:</em> C node example in <a href="cnode.html">C Nodes</a>.</p><h3 id="jinterface" class="section-heading">
   <a href="#jinterface" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -237,7 +252,7 @@ network programming. A suggestion is <em>UNIX Network Programming, Volume 1:
 Networking APIs - Sockets and XTI</em> by W. Richard Stevens, ISBN: 013490012X.</p><p>In Erlang/OTP, access to TCP/IP and UDP sockets is provided by the modules
 <code class="inline">gen_tcp</code> and <code class="inline">gen_udp</code> in Kernel. Both are easy to use and do not require
 detailed knowledge about the socket concept.</p><p><em>When to use:</em> For programs running on the same or on another machine than the
-Erlang program.</p><p><em>Where to read more:</em> See the <a href="../../lib/kernel-9.2.3/doc/html/gen_tcp.html"><code class="inline">gen_tcp</code></a> and the <a href="../../lib/kernel-9.2.3/doc/html/gen_udp.html"><code class="inline">gen_udp</code></a> manual pages in
+Erlang program.</p><p><em>Where to read more:</em> See the <a href="../../lib/kernel-9.2.4/doc/html/gen_tcp.html"><code class="inline">gen_tcp</code></a> and the <a href="../../lib/kernel-9.2.4/doc/html/gen_udp.html"><code class="inline">gen_udp</code></a> manual pages in
 Kernel.</p><h2 id="ic-and-corba" class="section-heading">
   <a href="#ic-and-corba" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -246,16 +261,7 @@ Kernel.</p><h2 id="ic-and-corba" class="section-heading">
 </h2>
 <p>IC (Erlang IDL Compiler) is an interface generator that, given an IDL interface
 specification, automatically generates stub code in Erlang, C, or Java. See the
-IC User's Guide and IC Reference Manual.</p><p>For details, see the <a href="https://github.com/erlang/corba">corba repository</a>.</p><h2 id="old-applications" class="section-heading">
-  <a href="#old-applications" class="hover-link">
-    <i class="ri-link-m" aria-hidden="true"></i>
-  </a>
-  <span class="text">Old Applications</span>
-</h2>
-<p>Two old applications are of interest regarding interoperability. Both have been
-replaced by IC and are mentioned here for reference only:</p><ul><li><p>IG - Removed from Erlang/OTP R6B.</p><p>IG (Interface Generator) automatically generated code for port or socket
-communication between an Erlang program and a C program, given a C header file
-with certain keywords.</p></li><li><p>Jive - Removed from Erlang/OTP R7B.</p><p>Jive provided a simple interface between an Erlang program and a Java program.</p></li></ul>
+IC User's Guide and IC Reference Manual.</p><p>For details, see the <a href="https://github.com/erlang/corba">corba repository</a>.</p>
 </div>
 
 <div class="bottom-actions" id="bottom-actions">

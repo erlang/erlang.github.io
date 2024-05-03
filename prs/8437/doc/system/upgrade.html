@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-IHH6HKET.js"></script>
-    <script src="dist/sidebar_items-5D6931E3.js"></script>
+    <script src="dist/sidebar_items-00C3D513.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-GXQ6W6IF.js"></script>
 
@@ -123,8 +123,7 @@ Pages
   <span class="text">Introduction</span>
 </h2>
 <p><a href="" id="upgrade"></a></p><p>As of Erlang/OTP 17, most applications deliver a valid application upgrade file
-(<code class="inline">appup</code>). In earlier releases, a majority of the applications in Erlang/OTP did
-not support upgrade. Many of the applications use the <code class="inline">restart_application</code>
+(<code class="inline">appup</code>). Many of the applications use the <code class="inline">restart_application</code>
 instruction. These are applications for which it is not crucial to support real
 soft upgrade, for example, tools and library applications. The
 <code class="inline">restart_application</code> instruction ensures that all modules in the application
@@ -134,34 +133,38 @@ are reloaded and thereby running the new code.</p><h2 id="upgrade-of-core-applic
   </a>
   <span class="text">Upgrade of Core Applications</span>
 </h2>
-<p>The core applications ERTS, Kernel, STDLIB, and SASL never allow real soft
-upgrade, but require the Erlang emulator to be restarted. This is indicated to
-the <code class="inline">release_handler</code> by the upgrade instruction <code class="inline">restart_new_emulator</code>. This
-instruction is always the very first instruction executed, and it restarts the
-emulator with the new versions of the above mentioned core applications and the
-old versions of all other applications. When the node is back up, all other
-upgrade instructions are executed, making sure each application is finally
-running its new version.</p><p>It might seem strange to do a two-step upgrade instead of just restarting the
-emulator with the new version of all applications. The reason for this design
-decision is to allow <code class="inline">code_change</code> functions to have side effects, for example,
-changing data on disk. It also guarantees that the upgrade mechanism for
+<p>The core applications ERTS, Kernel, STDLIB, and SASL never allow real
+soft upgrade, but require the Erlang runtime system to be
+restarted. This is indicated to the <code class="inline">release_handler</code> by the upgrade
+instruction <code class="inline">restart_new_emulator</code>. This instruction is always the
+very first instruction executed, and it restarts the runtime system
+with the new versions of the previously mentioned core applications
+and the old versions of all other applications. When the node is back
+up, all other upgrade instructions are executed, making sure each
+application is finally running its new version.</p><p>It might seem strange to do a two-step upgrade instead of just
+restarting the runtime system with the new version of all
+applications. The reason for this design decision is to allow
+<code class="inline">code_change</code> functions to have side effects, for example, changing
+data on disk. It also guarantees that the upgrade mechanism for
 non-core applications does not differ depending on whether or not core
-applications are changed at the same time.</p><p>If, however, the more brutal variant is preferred, the the release upgrade file
-can be handwritten using only the single upgrade instruction <code class="inline">restart_emulator</code>.
-This instruction, in contrast to <code class="inline">restart_new_emulator</code>, causes the emulator to
-restart with the new versions of <em>all</em> applications.</p><p><em>Note:</em> If other instructions are included before <code class="inline">restart_emulator</code> in the
-handwritten <code class="inline">relup</code> file, they are executed in the old emulator. This is a big
-risk since there is no guarantee that new beam code can be loaded into the old
-emulator. Adding instructions after <code class="inline">restart_emulator</code> has no effect as the
-<code class="inline">release_handler</code> will not execute them.</p><p>For information about the release upgrade file, see the
-<a href="../../lib/sasl-4.2.1/doc/html/relup.html">relup(4)</a> manual page in SASL. For more information about
-upgrade instructions, see the <a href="../../lib/sasl-4.2.1/doc/html/appup.html">appup(4)</a> manual page in SASL.</p><h2 id="applications-that-still-do-not-allow-code-upgrade" class="section-heading">
+applications are changed at the same time.</p><p>If, however, the more brutal variant is preferred, the release
+upgrade file can be handwritten using only the single upgrade
+instruction <code class="inline">restart_emulator</code>.  This instruction, in contrast to
+<code class="inline">restart_new_emulator</code>, causes the runtime system to restart with the
+new versions of <em>all</em> applications.</p><p><em>Note:</em> If other instructions are included before <code class="inline">restart_emulator</code>
+in the handwritten <code class="inline">relup</code> file, they are executed in the old runtime
+system. This is a big risk since there is no guarantee that new BEAM
+code can be loaded into the old runtime system. Adding instructions
+after <code class="inline">restart_emulator</code> has no effect as the <code class="inline">release_handler</code> will
+not execute them.</p><p>For information about the release upgrade file, see
+<a href="../../lib/sasl-4.2.1/doc/html/relup.html">relup</a> in SASL. For more information about
+upgrade instructions, see <a href="../../lib/sasl-4.2.1/doc/html/appup.html">appup</a> in SASL.</p><h2 id="applications-that-still-do-not-allow-code-upgrade" class="section-heading">
   <a href="#applications-that-still-do-not-allow-code-upgrade" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Applications that Still do Not Allow Code Upgrade</span>
 </h2>
-<p>A few applications, such as erl_interface, do not support upgrade. This is
+<p>A few applications, such as Erl_interface, do not support upgrade. This is
 indicated by an application upgrade file containing only <code class="inline">{Vsn,[],[]}</code>. Any
 attempt at creating a release upgrade file with such input fails. The only way
 to force an upgrade involving applications like this is to handwrite the file
