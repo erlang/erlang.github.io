@@ -1916,110 +1916,111 @@
 <a name="1906"/> 1906:         {ssh_cm, ConnectionRef, {data, ChannelId, 0, &lt;&lt;Expect:ExpSz/binary, _/binary&gt;&gt;}} = R -&gt;
 <a name="1907"/> 1907:             ct:log(&quot;~p:~p Got expected ~p&quot;,[?MODULE,?LINE,R]);
 <a name="1908"/> 1908:         Other -&gt;
-<a name="1909"/> 1909:             ct:log(&quot;~p:~p Got unexpected ~p~nExpect: ~p~n&quot;,
-<a name="1910"/> 1910:                    [?MODULE,?LINE, Other, {ssh_cm, ConnectionRef, {data, ChannelId, 0, Expect}} ])
-<a name="1911"/> 1911:     after 5000 -&gt;
-<a name="1912"/> 1912:             {fail,&quot;Exec Timeout&quot;}
-<a name="1913"/> 1913:     end.
-<a name="1914"/> 1914: 
-<a name="1915"/> 1915: <i>%%%----------------------------------------------------------------</i>
-<a name="big_cat_rx-2"/><a name="1916"/> 1916: <b>big_cat_rx</b>(ConnectionRef, ChannelId) -&gt;
-<a name="big_cat_rx-last_expr"/><a name="1917"/> 1917: <b>    big_cat_rx</b>(ConnectionRef, ChannelId, []).
-<a name="1918"/> 1918: 
-<a name="big_cat_rx-3"/><a name="1919"/> 1919: <b>big_cat_rx</b>(ConnectionRef, ChannelId, Acc) -&gt;
-<a name="big_cat_rx-last_expr"/><a name="1920"/> 1920:     receive
-<a name="1921"/> 1921: 	{ssh_cm, ConnectionRef, {data, ChannelId, 0, Data}} -&gt;
-<a name="1922"/> 1922: 	    big_cat_rx(ConnectionRef, ChannelId, [Data | Acc]);
-<a name="1923"/> 1923: 	{ssh_cm, ConnectionRef, {eof, ChannelId}} -&gt;
-<a name="1924"/> 1924: 	    {ok, iolist_to_binary(lists:reverse(Acc))}
-<a name="1925"/> 1925:     after ?EXEC_TIMEOUT -&gt;
-<a name="1926"/> 1926: 	    timeout
-<a name="1927"/> 1927:     end.
-<a name="1928"/> 1928: 
-<a name="collect_data-3"/><a name="1929"/> 1929: <b>collect_data</b>(ConnectionRef, ChannelId, EchoSize) -&gt;
-<a name="1930"/> 1930:     ct:log(&quot;~p:~p Listener ~p running! ConnectionRef=~p, ChannelId=~p&quot;,[?MODULE,?LINE,self(),ConnectionRef,ChannelId]),
-<a name="collect_data-last_expr"/><a name="1931"/> 1931: <b>    collect_data</b>(ConnectionRef, ChannelId, EchoSize, [], 0).
-<a name="1932"/> 1932: 
-<a name="collect_data-5"/><a name="1933"/> 1933: <b>collect_data</b>(ConnectionRef, ChannelId, EchoSize, Acc, Sum) -&gt;
-<a name="1934"/> 1934:     TO = 5000,
-<a name="collect_data-last_expr"/><a name="1935"/> 1935:     receive
-<a name="1936"/> 1936: 	{ssh_cm, ConnectionRef, {data, ChannelId, 0, Data}} when is_binary(Data) -&gt;
-<a name="1937"/> 1937: 	    ct:log(&quot;~p:~p collect_data: received ~p bytes. total ~p bytes,  want ~p more&quot;,
-<a name="1938"/> 1938: 		   [?MODULE,?LINE,size(Data),Sum+size(Data),EchoSize-Sum]),
-<a name="1939"/> 1939: 	    collect_data(ConnectionRef, ChannelId, EchoSize, [Data | Acc], Sum+size(Data));
-<a name="1940"/> 1940: 	{ssh_cm, ConnectionRef, Msg={eof, ChannelId}} -&gt;
-<a name="1941"/> 1941: 	    collect_data_report_end(Acc, Msg, EchoSize);
-<a name="1942"/> 1942: 
-<a name="1943"/> 1943: 	{ssh_cm, ConnectionRef, Msg={closed,ChannelId}} -&gt;
-<a name="1944"/> 1944: 	    collect_data_report_end(Acc, Msg, EchoSize);
-<a name="1945"/> 1945: 
-<a name="1946"/> 1946: 	Msg -&gt;
-<a name="1947"/> 1947: 	    ct:log(&quot;~p:~p collect_data: ***** unexpected message *****~n~p&quot;,[?MODULE,?LINE,Msg]),
-<a name="1948"/> 1948: 	    collect_data(ConnectionRef, ChannelId, EchoSize, Acc, Sum)
-<a name="1949"/> 1949: 
-<a name="1950"/> 1950:     after TO -&gt;
-<a name="1951"/> 1951: 	    ct:log(&quot;~p:~p collect_data: ----- Nothing received for ~p seconds -----~n&quot;,[?MODULE,?LINE,TO]),
-<a name="1952"/> 1952: 	    collect_data(ConnectionRef, ChannelId, EchoSize, Acc, Sum)
-<a name="1953"/> 1953:     end.
-<a name="1954"/> 1954: 
-<a name="collect_data_report_end-3"/><a name="1955"/> 1955: <b>collect_data_report_end</b>(Acc, Msg, EchoSize) -&gt;
-<a name="collect_data_report_end-last_expr"/><a name="1956"/> 1956:     try
-<a name="1957"/> 1957: 	iolist_to_binary(lists:reverse(Acc))
-<a name="1958"/> 1958:     of
-<a name="1959"/> 1959: 	Bin -&gt;
-<a name="1960"/> 1960: 	    ct:log(&quot;~p:~p collect_data: received ~p.~nGot in total ~p bytes,  want ~p more&quot;,
-<a name="1961"/> 1961: 		   [?MODULE,?LINE,Msg,size(Bin),EchoSize,size(Bin)]),
-<a name="1962"/> 1962: 	    Bin
-<a name="1963"/> 1963:     catch
-<a name="1964"/> 1964: 	C:E -&gt;
-<a name="1965"/> 1965: 	    ct:log(&quot;~p:~p collect_data: received ~p.~nAcc is strange...~nException=~p:~p~nAcc=~p&quot;,
-<a name="1966"/> 1966: 		   [?MODULE,?LINE,Msg,C,E,Acc]),
-<a name="1967"/> 1967: 	    {error,{C,E}}
-<a name="1968"/> 1968:     end.
-<a name="1969"/> 1969: 
-<a name="1970"/> 1970: <i>%%%-------------------------------------------------------------------</i>
-<a name="1971"/> 1971: <i>%% This is taken from the ssh example code.</i>
-<a name="start_our_shell-2"/><a name="1972"/> 1972: <b>start_our_shell</b>(_User, _Peer) -&gt;
-<a name="start_our_shell-last_expr"/><a name="1973"/> 1973: <b>    spawn</b>(fun() -&gt;
-<a name="1974"/> 1974: 		  io:format(&quot;Enter command\n&quot;)
-<a name="1975"/> 1975: 		  %% Don't actually loop, just exit
-<a name="1976"/> 1976:           end).
-<a name="1977"/> 1977: 
-<a name="start_our_shell2-2"/><a name="1978"/> 1978: <b>start_our_shell2</b>(_User, _Peer) -&gt;
-<a name="start_our_shell2-last_expr"/><a name="1979"/> 1979: <b>    spawn</b>(fun() -&gt;
-<a name="1980"/> 1980:                   io:format(&quot;Enter command\n&quot;),
-<a name="1981"/> 1981:                   read_write_loop1(&quot;&gt; &quot;, 1)
-<a name="1982"/> 1982:           end).
-<a name="1983"/> 1983: 
-<a name="ssh_exec_echo-1"/><a name="1984"/> 1984: <b>ssh_exec_echo</b>(Cmd) -&gt;
-<a name="ssh_exec_echo-last_expr"/><a name="1985"/> 1985: <b>    spawn</b>(fun() -&gt;
-<a name="1986"/> 1986:                   io:format(&quot;echo ~s\n&quot;, [Cmd])
-<a name="1987"/> 1987:           end).
-<a name="1988"/> 1988: 
-<a name="ssh_exec_echo-2"/><a name="1989"/> 1989: <b>ssh_exec_echo</b>(Cmd, User) -&gt;
-<a name="ssh_exec_echo-last_expr"/><a name="1990"/> 1990: <b>    spawn</b>(fun() -&gt;
-<a name="1991"/> 1991:                   io:format(&quot;echo ~s ~s\n&quot;,[User,Cmd])
-<a name="1992"/> 1992:           end).
-<a name="1993"/> 1993: 
-<a name="receive_bytes-4"/><a name="1994"/> 1994: <b>receive_bytes</b>(_, _, 0, _) -&gt;
-<a name="1995"/> 1995:     ct:log(&quot;ALL DATA RECEIVED Budget = 0&quot;),
-<a name="1996"/> 1996:     ct:log(&quot;================================ ExpectBudget = 0 (reception completed)&quot;),
-<a name="1997"/> 1997:     ok;
-<a name="1998"/> 1998: <b>receive_bytes</b>(ConnectionRef, ChannelId0, Budget, AccSize) when Budget &gt; 0 -&gt;
-<a name="receive_bytes-last_expr"/><a name="1999"/> 1999:     receive
-<a name="2000"/> 2000:         {ssh_cm, ConnectionRef, {data, ChannelId0, 0, D}} -&gt;
-<a name="2001"/> 2001:             Fmt = &quot;================================ ExpectBudget = &quot;
-<a name="2002"/> 2002:                 &quot;~p bytes Received/Total = ~p/~p bytes&quot;,
-<a name="2003"/> 2003:             Args = [Budget, byte_size(D), AccSize + byte_size(D)],
-<a name="2004"/> 2004:             ct:log(Fmt, Args),
-<a name="2005"/> 2005:             receive_bytes(ConnectionRef, ChannelId0,
-<a name="2006"/> 2006:                           Budget - byte_size(D), AccSize + byte_size(D))
-<a name="2007"/> 2007:     after
-<a name="2008"/> 2008:         10000 -&gt;
-<a name="2009"/> 2009:             ct:log(&quot;process_info(self(), messages) = ~p&quot;,
-<a name="2010"/> 2010:                    [process_info(self(), messages)]),
-<a name="2011"/> 2011:             ct:fail(&quot;timeout ~p:~p&quot;,[?MODULE,?LINE])
-<a name="2012"/> 2012:     end.
+<a name="1909"/> 1909:             %% FIXME - should this testcase fail when unexpected data is received?
+<a name="1910"/> 1910:             ct:log(&quot;~p:~p Got unexpected ~p~nExpect: ~p~n&quot;,
+<a name="1911"/> 1911:                    [?MODULE,?LINE, Other, {ssh_cm, ConnectionRef, {data, ChannelId, 0, Expect}} ])
+<a name="1912"/> 1912:     after 5000 -&gt;
+<a name="1913"/> 1913:             {fail,&quot;Exec Timeout&quot;}
+<a name="1914"/> 1914:     end.
+<a name="1915"/> 1915: 
+<a name="1916"/> 1916: <i>%%%----------------------------------------------------------------</i>
+<a name="big_cat_rx-2"/><a name="1917"/> 1917: <b>big_cat_rx</b>(ConnectionRef, ChannelId) -&gt;
+<a name="big_cat_rx-last_expr"/><a name="1918"/> 1918: <b>    big_cat_rx</b>(ConnectionRef, ChannelId, []).
+<a name="1919"/> 1919: 
+<a name="big_cat_rx-3"/><a name="1920"/> 1920: <b>big_cat_rx</b>(ConnectionRef, ChannelId, Acc) -&gt;
+<a name="big_cat_rx-last_expr"/><a name="1921"/> 1921:     receive
+<a name="1922"/> 1922: 	{ssh_cm, ConnectionRef, {data, ChannelId, 0, Data}} -&gt;
+<a name="1923"/> 1923: 	    big_cat_rx(ConnectionRef, ChannelId, [Data | Acc]);
+<a name="1924"/> 1924: 	{ssh_cm, ConnectionRef, {eof, ChannelId}} -&gt;
+<a name="1925"/> 1925: 	    {ok, iolist_to_binary(lists:reverse(Acc))}
+<a name="1926"/> 1926:     after ?EXEC_TIMEOUT -&gt;
+<a name="1927"/> 1927: 	    timeout
+<a name="1928"/> 1928:     end.
+<a name="1929"/> 1929: 
+<a name="collect_data-3"/><a name="1930"/> 1930: <b>collect_data</b>(ConnectionRef, ChannelId, EchoSize) -&gt;
+<a name="1931"/> 1931:     ct:log(&quot;~p:~p Listener ~p running! ConnectionRef=~p, ChannelId=~p&quot;,[?MODULE,?LINE,self(),ConnectionRef,ChannelId]),
+<a name="collect_data-last_expr"/><a name="1932"/> 1932: <b>    collect_data</b>(ConnectionRef, ChannelId, EchoSize, [], 0).
+<a name="1933"/> 1933: 
+<a name="collect_data-5"/><a name="1934"/> 1934: <b>collect_data</b>(ConnectionRef, ChannelId, EchoSize, Acc, Sum) -&gt;
+<a name="1935"/> 1935:     TO = 5000,
+<a name="collect_data-last_expr"/><a name="1936"/> 1936:     receive
+<a name="1937"/> 1937: 	{ssh_cm, ConnectionRef, {data, ChannelId, 0, Data}} when is_binary(Data) -&gt;
+<a name="1938"/> 1938: 	    ct:log(&quot;~p:~p collect_data: received ~p bytes. total ~p bytes,  want ~p more&quot;,
+<a name="1939"/> 1939: 		   [?MODULE,?LINE,size(Data),Sum+size(Data),EchoSize-Sum]),
+<a name="1940"/> 1940: 	    collect_data(ConnectionRef, ChannelId, EchoSize, [Data | Acc], Sum+size(Data));
+<a name="1941"/> 1941: 	{ssh_cm, ConnectionRef, Msg={eof, ChannelId}} -&gt;
+<a name="1942"/> 1942: 	    collect_data_report_end(Acc, Msg, EchoSize);
+<a name="1943"/> 1943: 
+<a name="1944"/> 1944: 	{ssh_cm, ConnectionRef, Msg={closed,ChannelId}} -&gt;
+<a name="1945"/> 1945: 	    collect_data_report_end(Acc, Msg, EchoSize);
+<a name="1946"/> 1946: 
+<a name="1947"/> 1947: 	Msg -&gt;
+<a name="1948"/> 1948: 	    ct:log(&quot;~p:~p collect_data: ***** unexpected message *****~n~p&quot;,[?MODULE,?LINE,Msg]),
+<a name="1949"/> 1949: 	    collect_data(ConnectionRef, ChannelId, EchoSize, Acc, Sum)
+<a name="1950"/> 1950: 
+<a name="1951"/> 1951:     after TO -&gt;
+<a name="1952"/> 1952: 	    ct:log(&quot;~p:~p collect_data: ----- Nothing received for ~p seconds -----~n&quot;,[?MODULE,?LINE,TO]),
+<a name="1953"/> 1953: 	    collect_data(ConnectionRef, ChannelId, EchoSize, Acc, Sum)
+<a name="1954"/> 1954:     end.
+<a name="1955"/> 1955: 
+<a name="collect_data_report_end-3"/><a name="1956"/> 1956: <b>collect_data_report_end</b>(Acc, Msg, EchoSize) -&gt;
+<a name="collect_data_report_end-last_expr"/><a name="1957"/> 1957:     try
+<a name="1958"/> 1958: 	iolist_to_binary(lists:reverse(Acc))
+<a name="1959"/> 1959:     of
+<a name="1960"/> 1960: 	Bin -&gt;
+<a name="1961"/> 1961: 	    ct:log(&quot;~p:~p collect_data: received ~p.~nGot in total ~p bytes,  want ~p more&quot;,
+<a name="1962"/> 1962: 		   [?MODULE,?LINE,Msg,size(Bin),EchoSize,size(Bin)]),
+<a name="1963"/> 1963: 	    Bin
+<a name="1964"/> 1964:     catch
+<a name="1965"/> 1965: 	C:E -&gt;
+<a name="1966"/> 1966: 	    ct:log(&quot;~p:~p collect_data: received ~p.~nAcc is strange...~nException=~p:~p~nAcc=~p&quot;,
+<a name="1967"/> 1967: 		   [?MODULE,?LINE,Msg,C,E,Acc]),
+<a name="1968"/> 1968: 	    {error,{C,E}}
+<a name="1969"/> 1969:     end.
+<a name="1970"/> 1970: 
+<a name="1971"/> 1971: <i>%%%-------------------------------------------------------------------</i>
+<a name="1972"/> 1972: <i>%% This is taken from the ssh example code.</i>
+<a name="start_our_shell-2"/><a name="1973"/> 1973: <b>start_our_shell</b>(_User, _Peer) -&gt;
+<a name="start_our_shell-last_expr"/><a name="1974"/> 1974: <b>    spawn</b>(fun() -&gt;
+<a name="1975"/> 1975: 		  io:format(&quot;Enter command\n&quot;)
+<a name="1976"/> 1976: 		  %% Don't actually loop, just exit
+<a name="1977"/> 1977:           end).
+<a name="1978"/> 1978: 
+<a name="start_our_shell2-2"/><a name="1979"/> 1979: <b>start_our_shell2</b>(_User, _Peer) -&gt;
+<a name="start_our_shell2-last_expr"/><a name="1980"/> 1980: <b>    spawn</b>(fun() -&gt;
+<a name="1981"/> 1981:                   io:format(&quot;Enter command\n&quot;),
+<a name="1982"/> 1982:                   read_write_loop1(&quot;&gt; &quot;, 1)
+<a name="1983"/> 1983:           end).
+<a name="1984"/> 1984: 
+<a name="ssh_exec_echo-1"/><a name="1985"/> 1985: <b>ssh_exec_echo</b>(Cmd) -&gt;
+<a name="ssh_exec_echo-last_expr"/><a name="1986"/> 1986: <b>    spawn</b>(fun() -&gt;
+<a name="1987"/> 1987:                   io:format(&quot;echo ~s\n&quot;, [Cmd])
+<a name="1988"/> 1988:           end).
+<a name="1989"/> 1989: 
+<a name="ssh_exec_echo-2"/><a name="1990"/> 1990: <b>ssh_exec_echo</b>(Cmd, User) -&gt;
+<a name="ssh_exec_echo-last_expr"/><a name="1991"/> 1991: <b>    spawn</b>(fun() -&gt;
+<a name="1992"/> 1992:                   io:format(&quot;echo ~s ~s\n&quot;,[User,Cmd])
+<a name="1993"/> 1993:           end).
+<a name="1994"/> 1994: <i>%% FIXME - upon refactoring this test suite, check if function below is reduntant to collect_data</i>
+<a name="receive_bytes-4"/><a name="1995"/> 1995: <b>receive_bytes</b>(_, _, 0, _) -&gt;
+<a name="1996"/> 1996:     ct:log(&quot;ALL DATA RECEIVED Budget = 0&quot;),
+<a name="1997"/> 1997:     ct:log(&quot;================================ ExpectBudget = 0 (reception completed)&quot;),
+<a name="1998"/> 1998:     ok;
+<a name="1999"/> 1999: <b>receive_bytes</b>(ConnectionRef, ChannelId0, Budget, AccSize) when Budget &gt; 0 -&gt;
+<a name="receive_bytes-last_expr"/><a name="2000"/> 2000:     receive
+<a name="2001"/> 2001:         {ssh_cm, ConnectionRef, {data, ChannelId0, 0, D}} -&gt;
+<a name="2002"/> 2002:             Fmt = &quot;================================ ExpectBudget = &quot;
+<a name="2003"/> 2003:                 &quot;~p bytes Received/Total = ~p/~p bytes&quot;,
+<a name="2004"/> 2004:             Args = [Budget, byte_size(D), AccSize + byte_size(D)],
+<a name="2005"/> 2005:             ct:log(Fmt, Args),
+<a name="2006"/> 2006:             receive_bytes(ConnectionRef, ChannelId0,
+<a name="2007"/> 2007:                           Budget - byte_size(D), AccSize + byte_size(D))
+<a name="2008"/> 2008:     after
+<a name="2009"/> 2009:         10000 -&gt;
+<a name="2010"/> 2010:             ct:log(&quot;process_info(self(), messages) = ~p&quot;,
+<a name="2011"/> 2011:                    [process_info(self(), messages)]),
+<a name="2012"/> 2012:             ct:fail(&quot;timeout ~p:~p&quot;,[?MODULE,?LINE])
+<a name="2013"/> 2013:     end.
 </pre>
 </body>
 </html>
