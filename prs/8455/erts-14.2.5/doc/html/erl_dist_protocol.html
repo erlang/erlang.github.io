@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.32.1">
+    <meta name="generator" content="ExDoc v0.32.2">
     <meta name="project" content="erts v14.2.5">
 
 
     <title>Distribution Protocol — erts v14.2.5</title>
-    <link rel="stylesheet" href="dist/html-erlang-X76CAHZ3.css" />
+    <link rel="stylesheet" href="dist/html-erlang-EBZIIHAS.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-IHH6HKET.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
     <script src="dist/sidebar_items-71364DD1.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-GXQ6W6IF.js"></script>
+    <script async src="dist/html-BHYOTRCH.js"></script>
 
 
   </head>
@@ -143,7 +143,45 @@ for details on how to setup a secure distributed node.</p></blockquote><h2 id="e
   </a>
   <span class="text">EPMD Protocol</span>
 </h2>
-<p>The requests served by the EPMD are summarized in the following figure.</p><p><img src="assets/erl_ext_fig.gif" alt="Summary of EPMD Requests" title="Summary of EPMD Requests"/></p><p>Each request <code class="inline">*_REQ</code> is preceded by a 2 byte length field. Thus, the overall
+<p>The EPMD Protocol supports various tasks:</p><ul><li>Registering a Node</li><li>Unregistering a Node</li><li>Getting the Distributing Port of Another Node</li><li>Getting all Registered Names</li><li>Dumping all Data from EPMD</li><li>Killing EPMD</li><li><code class="inline">STOP_REQ</code> (Not Used)</li></ul><p>The requests served by the EPMD for these tasks are summarized in the following figure.</p><pre><code class="mermaid">---
+title: Summary of EPMD Requests
+---
+
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+
+    Note over EPMD: Register a Node in EPMD
+    client -&gt;&gt; EPMD: ALIVE2_REQ
+    alt
+        EPMD --&gt;&gt; client: ALIVE2_X_RESP
+    else
+        EPMD --&gt;&gt; client: ALIVE2_RESP
+    end
+
+    Note over EPMD: Unregister a Node in EPMD
+    client -&gt;&gt; EPMD: ALIVE_CLOSE_REQ
+
+    Note over client: Get the Distribution Port of Another Node
+    client -&gt;&gt; EPMD: PORT_PLEASE2_REQ
+    EPMD --&gt;&gt; client: PORT2_RESP
+
+    Note over client: Get All Registered Names from EPMD
+    client -&gt;&gt; EPMD: NAMES_REQ
+    EPMD --&gt;&gt; client: NAMES_RESP
+
+    Note over EPMD: Dump all Data from EPMD
+    client -&gt;&gt; EPMD: DUMP_REQ
+    EPMD --&gt;&gt; client: DUMP_RESP
+
+    Note over EPMD: Kill EPMD
+    client -&gt;&gt; EPMD: KILL_REQ
+    EPMD --&gt;&gt; client: KILL_RESP
+
+    Note over EPMD: STOP_REQ (Not Used)
+    client -&gt;&gt; EPMD: STOP_REQ
+    EPMD --&gt;&gt; client: STOP_OK_RESP
+    EPMD --&gt;&gt; client: STOP_NOTOK_RESP</code></pre><p>Each request <code class="inline">*_REQ</code> is preceded by a 2 byte length field. Thus, the overall
 request format is as follows:</p><table><thead><tr><th style="text-align: left;">2</th><th style="text-align: left;">n</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">Length</code></td><td style="text-align: left;"><code class="inline">Request</code></td></tr></tbody></table><p><em>Table: Request Format</em></p><h3 id="register-a-node-in-epmd" class="section-heading">
   <a href="#register-a-node-in-epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -152,7 +190,19 @@ request format is as follows:</p><table><thead><tr><th style="text-align: left;"
 </h3>
 <p>When a distributed node is started it registers itself in the EPMD. The message
 <code class="inline">ALIVE2_REQ</code> described below is sent from the node to the EPMD. The response
-from the EPMD is <code class="inline">ALIVE2_X_RESP</code> (or <code class="inline">ALIVE2_RESP</code>).</p><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">1</th><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">Nlen</th><th style="text-align: left;">2</th><th style="text-align: left;">Elen</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">120</code></td><td style="text-align: left;"><code class="inline">PortNo</code></td><td style="text-align: left;"><code class="inline">NodeType</code></td><td style="text-align: left;"><code class="inline">Protocol</code></td><td style="text-align: left;"><code class="inline">HighestVersion</code></td><td style="text-align: left;"><code class="inline">LowestVersion</code></td><td style="text-align: left;"><code class="inline">Nlen</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td><td style="text-align: left;"><code class="inline">Elen</code></td><td style="text-align: left;"><code class="inline">Extra</code></td></tr></tbody></table><p><em>Table: ALIVE2_REQ (120)</em></p><ul><li><p><strong><code class="inline">PortNo</code></strong> - The port number on which the node accept connection requests.</p></li><li><p><strong><code class="inline">NodeType</code></strong> - 77 = normal Erlang node, 72 = hidden node (C-node), ...</p></li><li><p><strong><code class="inline">Protocol</code></strong> - 0 = TCP/IPv4, ...</p></li><li><p><strong><code class="inline">HighestVersion</code></strong> - The highest distribution protocol version this node can
+from the EPMD is <code class="inline">ALIVE2_X_RESP</code> (or <code class="inline">ALIVE2_RESP</code>):</p><pre><code class="mermaid">---
+title: Register a Node in EPMD
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+
+    client -&gt;&gt; EPMD: ALIVE2_REQ
+    alt
+        EPMD --&gt;&gt; client: ALIVE2_X_RESP
+    else
+        EPMD --&gt;&gt; client: ALIVE2_RESP
+    end</code></pre><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">1</th><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">Nlen</th><th style="text-align: left;">2</th><th style="text-align: left;">Elen</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">120</code></td><td style="text-align: left;"><code class="inline">PortNo</code></td><td style="text-align: left;"><code class="inline">NodeType</code></td><td style="text-align: left;"><code class="inline">Protocol</code></td><td style="text-align: left;"><code class="inline">HighestVersion</code></td><td style="text-align: left;"><code class="inline">LowestVersion</code></td><td style="text-align: left;"><code class="inline">Nlen</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td><td style="text-align: left;"><code class="inline">Elen</code></td><td style="text-align: left;"><code class="inline">Extra</code></td></tr></tbody></table><p><em>Table: ALIVE2_REQ (120)</em></p><ul><li><p><strong><code class="inline">PortNo</code></strong> - The port number on which the node accept connection requests.</p></li><li><p><strong><code class="inline">NodeType</code></strong> - 77 = normal Erlang node, 72 = hidden node (C-node), ...</p></li><li><p><strong><code class="inline">Protocol</code></strong> - 0 = TCP/IPv4, ...</p></li><li><p><strong><code class="inline">HighestVersion</code></strong> - The highest distribution protocol version this node can
 handle. The value in OTP 23 and later is 6. Older nodes only support
 version 5.</p></li><li><p><strong><code class="inline">LowestVersion</code></strong> - The lowest distribution version that this node can
 handle. The value in OTP 25 and later is 6 as support for connections to nodes
@@ -167,7 +217,14 @@ then the response is <code class="inline">ALIVE2_X_RESP</code> otherwise it is t
   <span class="text">Unregister a Node from EPMD</span>
 </h3>
 <p>A node unregisters itself from the EPMD by closing the TCP connection to EPMD
-established when the node was registered.</p><h3 id="get-the-distribution-port-of-another-node" class="section-heading">
+established when the node was registered:</p><pre><code class="mermaid">---
+title: Register a Node in EPMD
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+    
+    client -&gt;&gt; EPMD: ALIVE_CLOSE_REQ</code></pre><h3 id="get-the-distribution-port-of-another-node" class="section-heading">
   <a href="#get-the-distribution-port-of-another-node" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -175,7 +232,15 @@ established when the node was registered.</p><h3 id="get-the-distribution-port-o
 </h3>
 <p>When one node wants to connect to another node it starts with a
 <code class="inline">PORT_PLEASE2_REQ</code> request to the EPMD on the host where the node resides to get
-the distribution port that the node listens to.</p><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">N</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">122</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td></tr></tbody></table><p><em>Table: PORT_PLEASE2_REQ (122)</em></p><p>where N = <code class="inline">Length</code> - 1.</p><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">119</code></td><td style="text-align: left;"><code class="inline">Result</code></td></tr></tbody></table><p><em>Table: PORT2_RESP (119) Response Indicating Error, Result &gt; 0</em></p><p>or</p><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">1</th><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">Nlen</th><th style="text-align: left;">2</th><th style="text-align: left;">Elen</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">119</code></td><td style="text-align: left;"><code class="inline">Result</code></td><td style="text-align: left;"><code class="inline">PortNo</code></td><td style="text-align: left;"><code class="inline">NodeType</code></td><td style="text-align: left;"><code class="inline">Protocol</code></td><td style="text-align: left;"><code class="inline">HighestVersion</code></td><td style="text-align: left;"><code class="inline">LowestVersion</code></td><td style="text-align: left;"><code class="inline">Nlen</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td><td style="text-align: left;"><code class="inline">Elen</code></td><td style="text-align: left;">&gt;<code class="inline">Extra</code></td></tr></tbody></table><p><em>Table: PORT2_RESP, Result = 0</em></p><p>If <code class="inline">Result</code> &gt; 0, the packet only consists of <code class="inline">[119, Result]</code>.</p><p>The EPMD closes the socket when it has sent the information.</p><h3 id="get-all-registered-names-from-epmd" class="section-heading">
+the distribution port that the node listens to:</p><pre><code class="mermaid">---
+title: Get the Distribution Port of Another Node
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+    
+    client -&gt;&gt; EPMD: PORT_PLEASE2_REQ
+    EPMD --&gt;&gt; client: PORT2_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">N</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">122</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td></tr></tbody></table><p><em>Table: PORT_PLEASE2_REQ (122)</em></p><p>where N = <code class="inline">Length</code> - 1.</p><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">119</code></td><td style="text-align: left;"><code class="inline">Result</code></td></tr></tbody></table><p><em>Table: PORT2_RESP (119) Response Indicating Error, Result &gt; 0</em></p><p>or</p><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">1</th><th style="text-align: left;">1</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">2</th><th style="text-align: left;">Nlen</th><th style="text-align: left;">2</th><th style="text-align: left;">Elen</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">119</code></td><td style="text-align: left;"><code class="inline">Result</code></td><td style="text-align: left;"><code class="inline">PortNo</code></td><td style="text-align: left;"><code class="inline">NodeType</code></td><td style="text-align: left;"><code class="inline">Protocol</code></td><td style="text-align: left;"><code class="inline">HighestVersion</code></td><td style="text-align: left;"><code class="inline">LowestVersion</code></td><td style="text-align: left;"><code class="inline">Nlen</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td><td style="text-align: left;"><code class="inline">Elen</code></td><td style="text-align: left;">&gt;<code class="inline">Extra</code></td></tr></tbody></table><p><em>Table: PORT2_RESP, Result = 0</em></p><p>If <code class="inline">Result</code> &gt; 0, the packet only consists of <code class="inline">[119, Result]</code>.</p><p>The EPMD closes the socket when it has sent the information.</p><h3 id="get-all-registered-names-from-epmd" class="section-heading">
   <a href="#get-all-registered-names-from-epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -183,29 +248,62 @@ the distribution port that the node listens to.</p><table><thead><tr><th style="
 </h3>
 <p>This request is used through the Erlang function
 <a href="../../../lib/kernel-9.2.4/doc/html/net_adm.html#names/1"><code class="inline">net_adm:names/1,2</code></a>. A TCP connection is opened to the EPMD
-and this request is sent.</p><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">110</code></td></tr></tbody></table><p><em>Table: NAMES_REQ (110)</em></p><p>The response for a <code class="inline">NAMES_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">4</th><th style="text-align: left;"></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">EPMDPortNo</code></td><td style="text-align: left;"><code class="inline">NodeInfo*</code></td></tr></tbody></table><p><em>Table: NAMES_RESP</em></p><p><code class="inline">NodeInfo</code> is a string written for each active node. When all <code class="inline">NodeInfo</code> has
-been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0804681296-1">(</span><span class="s">&quot;name ~ts at port </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0804681296-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="0804681296-2">]</span><span class="p" data-group-id="0804681296-1">)</span><span class="p">.</span></code></pre><h3 id="dump-all-data-from-epmd" class="section-heading">
+and this request is sent:</p><pre><code class="mermaid">---
+title: Get All Registered Names from EPMD
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+    
+    client -&gt;&gt; EPMD: NAMES_REQ
+    EPMD --&gt;&gt; client: NAMES_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">110</code></td></tr></tbody></table><p><em>Table: NAMES_REQ (110)</em></p><p>The response for a <code class="inline">NAMES_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">4</th><th style="text-align: left;"></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">EPMDPortNo</code></td><td style="text-align: left;"><code class="inline">NodeInfo*</code></td></tr></tbody></table><p><em>Table: NAMES_RESP</em></p><p><code class="inline">NodeInfo</code> is a string written for each active node. When all <code class="inline">NodeInfo</code> has
+been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="2116192581-1">(</span><span class="s">&quot;name ~ts at port </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2116192581-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="2116192581-2">]</span><span class="p" data-group-id="2116192581-1">)</span><span class="p">.</span></code></pre><h3 id="dump-all-data-from-epmd" class="section-heading">
   <a href="#dump-all-data-from-epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Dump All Data from EPMD</span>
 </h3>
-<p>This request is not really used, it is to be regarded as a debug feature.</p><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">100</code></td></tr></tbody></table><p><em>Table: DUMP_REQ</em></p><p>The response for a <code class="inline">DUMP_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">4</th><th style="text-align: left;"></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">EPMDPortNo</code></td><td style="text-align: left;"><code class="inline">NodeInfo*</code></td></tr></tbody></table><p><em>Table: DUMP_RESP</em></p><p><code class="inline">NodeInfo</code> is a string written for each node kept in the EPMD. When all
-<code class="inline">NodeInfo</code> has been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="8252549846-1">(</span><span class="s">&quot;active name     ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
-          </span><span class="p" data-group-id="8252549846-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="8252549846-2">]</span><span class="p" data-group-id="8252549846-1">)</span><span class="p">.</span></code></pre><p>or</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7727379869-1">(</span><span class="s">&quot;old/unused name ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="s"> </span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
-          </span><span class="p" data-group-id="7727379869-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="7727379869-2">]</span><span class="p" data-group-id="7727379869-1">)</span><span class="p">.</span></code></pre><h3 id="kill-epmd" class="section-heading">
+<p>This request is not really used, it is to be regarded as a debug feature.</p><pre><code class="mermaid">---
+title: Dump All Data from EPMD
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+    
+    client -&gt;&gt; EPMD: DUMP_REQ
+    EPMD --&gt;&gt; client: DUMP_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">100</code></td></tr></tbody></table><p><em>Table: DUMP_REQ</em></p><p>The response for a <code class="inline">DUMP_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">4</th><th style="text-align: left;"></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">EPMDPortNo</code></td><td style="text-align: left;"><code class="inline">NodeInfo*</code></td></tr></tbody></table><p><em>Table: DUMP_RESP</em></p><p><code class="inline">NodeInfo</code> is a string written for each node kept in the EPMD. When all
+<code class="inline">NodeInfo</code> has been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9689160633-1">(</span><span class="s">&quot;active name     ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
+          </span><span class="p" data-group-id="9689160633-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="9689160633-2">]</span><span class="p" data-group-id="9689160633-1">)</span><span class="p">.</span></code></pre><p>or</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0515936471-1">(</span><span class="s">&quot;old/unused name ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="s"> </span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
+          </span><span class="p" data-group-id="0515936471-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="0515936471-2">]</span><span class="p" data-group-id="0515936471-1">)</span><span class="p">.</span></code></pre><h3 id="kill-epmd" class="section-heading">
   <a href="#kill-epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Kill EPMD</span>
 </h3>
-<p>This request kills the running EPMD. It is almost never used.</p><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">107</code></td></tr></tbody></table><p><em>Table: KILL_REQ</em></p><p>The response for a <code class="inline">KILL_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">2</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">OKString</code></td></tr></tbody></table><p><em>Table: KILL_RESP</em></p><p>where <code class="inline">OKString</code> is &quot;OK&quot;.</p><h3 id="stop_req-not-used" class="section-heading">
+<p>This request kills the running EPMD. It is almost never used.</p><pre><code class="mermaid">---
+title: Kill EPMD
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+    
+    client -&gt;&gt; EPMD: KILL_REQ
+    EPMD --&gt;&gt; client: KILL_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">107</code></td></tr></tbody></table><p><em>Table: KILL_REQ</em></p><p>The response for a <code class="inline">KILL_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">2</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">OKString</code></td></tr></tbody></table><p><em>Table: KILL_RESP</em></p><p>where <code class="inline">OKString</code> is &quot;OK&quot;.</p><h3 id="stop_req-not-used" class="section-heading">
   <a href="#stop_req-not-used" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">STOP_REQ (Not Used)</span>
 </h3>
-<table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">n</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">115</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td></tr></tbody></table><p><em>Table: STOP_REQ</em></p><p>where n = <code class="inline">Length</code> - 1.</p><p>The response for a <code class="inline">STOP_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">7</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">OKString</code></td></tr></tbody></table><p><em>Table: STOP_RESP</em></p><p>where <code class="inline">OKString</code> is &quot;STOPPED&quot;.</p><p>A negative response can look as follows:</p><table><thead><tr><th style="text-align: left;">7</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">NOKString</code></td></tr></tbody></table><p><em>Table: STOP_NOTOK_RESP</em></p><p>where <code class="inline">NOKString</code> is &quot;NOEXIST&quot;.</p><p><a href="" id="distribution_handshake"></a></p><h2 id="distribution-handshake" class="section-heading">
+<pre><code class="mermaid">---
+title: STOP_REQ (Not Used)
+---
+sequenceDiagram
+    participant client as Client (or Node)
+    participant EPMD
+    
+    client -&gt;&gt; EPMD: STOP_REQ
+    EPMD --&gt;&gt; client: STOP_OK_RESP
+    EPMD --&gt;&gt; client: STOP_NOTOK_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th><th style="text-align: left;">n</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">115</code></td><td style="text-align: left;"><code class="inline">NodeName</code></td></tr></tbody></table><p><em>Table: STOP_REQ</em></p><p>where n = <code class="inline">Length</code> - 1.</p><p>The response for a <code class="inline">STOP_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">7</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">OKString</code></td></tr></tbody></table><p><em>Table: STOP_RESP</em></p><p>where <code class="inline">OKString</code> is &quot;STOPPED&quot;.</p><p>A negative response can look as follows:</p><table><thead><tr><th style="text-align: left;">7</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">NOKString</code></td></tr></tbody></table><p><em>Table: STOP_NOTOK_RESP</em></p><p>where <code class="inline">NOKString</code> is &quot;NOEXIST&quot;.</p><p><a href="" id="distribution_handshake"></a></p><h2 id="distribution-handshake" class="section-heading">
   <a href="#distribution-handshake" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -314,7 +412,7 @@ received from <code class="inline">A</code>. The digest is then sent to <code cl
   </a>
   <span class="text">Semigraphic View</span>
 </h3>
-<pre><code class="makeup erlang" translate="no"><span class="n">A</span><span class="w"> </span><span class="p" data-group-id="2658346737-1">(</span><span class="ss">initiator</span><span class="p" data-group-id="2658346737-1">)</span><span class="w">                                      </span><span class="n">B</span><span class="w"> </span><span class="p" data-group-id="2658346737-2">(</span><span class="ss">acceptor</span><span class="p" data-group-id="2658346737-2">)</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="n">A</span><span class="w"> </span><span class="p" data-group-id="3027155907-1">(</span><span class="ss">initiator</span><span class="p" data-group-id="3027155907-1">)</span><span class="w">                                      </span><span class="n">B</span><span class="w"> </span><span class="p" data-group-id="3027155907-2">(</span><span class="ss">acceptor</span><span class="p" data-group-id="3027155907-2">)</span><span class="w">
 
 </span><span class="n">TCP</span><span class="w"> </span><span class="ss">connect</span><span class="w"> </span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">&gt;</span><span class="w">
                                                    </span><span class="n">TCP</span><span class="w"> </span><span class="ss">accept</span><span class="w">
@@ -324,36 +422,36 @@ received from <code class="inline">A</code>. The digest is then sent to <code cl
 
   </span><span class="o">&lt;-</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="w"> </span><span class="ss">send_status</span><span class="w">
 </span><span class="nf">recv_status</span><span class="w">
-</span><span class="p" data-group-id="2658346737-3">(</span><span class="k">if</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="ss">was</span><span class="w"> </span><span class="ss">&#39;alive&#39;</span><span class="w">
+</span><span class="p" data-group-id="3027155907-3">(</span><span class="k">if</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="ss">was</span><span class="w"> </span><span class="ss">&#39;alive&#39;</span><span class="w">
  </span><span class="ss">send_status</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                                                   </span><span class="ss">recv_status</span><span class="p" data-group-id="2658346737-3">)</span><span class="w">
+                                                   </span><span class="ss">recv_status</span><span class="p" data-group-id="3027155907-3">)</span><span class="w">
 
-                          </span><span class="p" data-group-id="2658346737-4">(</span><span class="n">ChB</span><span class="p" data-group-id="2658346737-4">)</span><span class="w">                      </span><span class="n">ChB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="2658346737-5">(</span><span class="p" data-group-id="2658346737-5">)</span><span class="w">
+                          </span><span class="p" data-group-id="3027155907-4">(</span><span class="n">ChB</span><span class="p" data-group-id="3027155907-4">)</span><span class="w">                      </span><span class="n">ChB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="3027155907-5">(</span><span class="p" data-group-id="3027155907-5">)</span><span class="w">
   </span><span class="o">&lt;-</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="w"> </span><span class="ss">send_challenge</span><span class="w">
 </span><span class="nf">recv_challenge</span><span class="w">
 
-</span><span class="p" data-group-id="2658346737-6">(</span><span class="k">if</span><span class="w"> </span><span class="ss">old</span><span class="w"> </span><span class="ss">send_name</span><span class="w">
+</span><span class="p" data-group-id="3027155907-6">(</span><span class="k">if</span><span class="w"> </span><span class="ss">old</span><span class="w"> </span><span class="ss">send_name</span><span class="w">
  </span><span class="ss">send_complement</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                                                   </span><span class="ss">recv_complement</span><span class="p" data-group-id="2658346737-6">)</span><span class="w">
+                                                   </span><span class="ss">recv_complement</span><span class="p" data-group-id="3027155907-6">)</span><span class="w">
 
-</span><span class="n">ChA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="2658346737-7">(</span><span class="p" data-group-id="2658346737-7">)</span><span class="p">,</span><span class="w">
-</span><span class="n">OCA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="2658346737-8">(</span><span class="n">B</span><span class="p" data-group-id="2658346737-8">)</span><span class="p">,</span><span class="w">
-</span><span class="n">DiA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="2658346737-9">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">OCA</span><span class="p" data-group-id="2658346737-9">)</span><span class="w">
-                          </span><span class="p" data-group-id="2658346737-10">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">DiA</span><span class="p" data-group-id="2658346737-10">)</span><span class="w">
+</span><span class="n">ChA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="3027155907-7">(</span><span class="p" data-group-id="3027155907-7">)</span><span class="p">,</span><span class="w">
+</span><span class="n">OCA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="3027155907-8">(</span><span class="n">B</span><span class="p" data-group-id="3027155907-8">)</span><span class="p">,</span><span class="w">
+</span><span class="n">DiA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="3027155907-9">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">OCA</span><span class="p" data-group-id="3027155907-9">)</span><span class="w">
+                          </span><span class="p" data-group-id="3027155907-10">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">DiA</span><span class="p" data-group-id="3027155907-10">)</span><span class="w">
 </span><span class="ss">send_challenge_reply</span><span class="w"> </span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="p">-&gt;</span><span class="w">
                                                    </span><span class="ss">recv_challenge_reply</span><span class="w">
-                                                   </span><span class="n">ICB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="2658346737-11">(</span><span class="n">A</span><span class="p" data-group-id="2658346737-11">)</span><span class="p">,</span><span class="w">
+                                                   </span><span class="n">ICB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="3027155907-11">(</span><span class="n">A</span><span class="p" data-group-id="3027155907-11">)</span><span class="p">,</span><span class="w">
                                                    </span><span class="nc">check</span><span class="p">:</span><span class="w">
-                                                   </span><span class="n">DiA</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="2658346737-12">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">ICB</span><span class="p" data-group-id="2658346737-12">)</span><span class="o">?</span><span class="w">
+                                                   </span><span class="n">DiA</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="3027155907-12">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">ICB</span><span class="p" data-group-id="3027155907-12">)</span><span class="o">?</span><span class="w">
 </span><span class="w">                                                   </span><span class="p">-</span><span class="w"> </span><span class="na">if</span><span class="w"> </span><span class="n">OK</span><span class="p">:</span><span class="w">
-                                                    </span><span class="n">OCB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="2658346737-13">(</span><span class="n">A</span><span class="p" data-group-id="2658346737-13">)</span><span class="p">,</span><span class="w">
-                                                    </span><span class="n">DiB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="2658346737-14">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">OCB</span><span class="p" data-group-id="2658346737-14">)</span><span class="w">
-                          </span><span class="p" data-group-id="2658346737-15">(</span><span class="n">DiB</span><span class="p" data-group-id="2658346737-15">)</span><span class="w">
+                                                    </span><span class="n">OCB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="3027155907-13">(</span><span class="n">A</span><span class="p" data-group-id="3027155907-13">)</span><span class="p">,</span><span class="w">
+                                                    </span><span class="n">DiB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="3027155907-14">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">OCB</span><span class="p" data-group-id="3027155907-14">)</span><span class="w">
+                          </span><span class="p" data-group-id="3027155907-15">(</span><span class="n">DiB</span><span class="p" data-group-id="3027155907-15">)</span><span class="w">
   </span><span class="o">&lt;-</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="w"> </span><span class="ss">send_challenge_ack</span><span class="w">
 </span><span class="ss">recv_challenge_ack</span><span class="w">                                  </span><span class="n">DONE</span><span class="w">
-</span><span class="n">ICA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="2658346737-16">(</span><span class="n">B</span><span class="p" data-group-id="2658346737-16">)</span><span class="p">,</span><span class="w">                                </span><span class="o">-</span><span class="w"> </span><span class="nc">else</span><span class="p">:</span><span class="w">
+</span><span class="n">ICA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="3027155907-16">(</span><span class="n">B</span><span class="p" data-group-id="3027155907-16">)</span><span class="p">,</span><span class="w">                                </span><span class="o">-</span><span class="w"> </span><span class="nc">else</span><span class="p">:</span><span class="w">
 </span><span class="nc">check</span><span class="p">:</span><span class="w">                                              </span><span class="n">CLOSE</span><span class="w">
-</span><span class="n">DiB</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="2658346737-17">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">ICA</span><span class="p" data-group-id="2658346737-17">)</span><span class="o">?</span><span class="w">
+</span><span class="n">DiB</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="3027155907-17">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">ICA</span><span class="p" data-group-id="3027155907-17">)</span><span class="o">?</span><span class="w">
 </span><span class="p">-</span><span class="w"> </span><span class="na">if</span><span class="w"> </span><span class="n">OK</span><span class="p">:</span><span class="w">
  </span><span class="n">DONE</span><span class="w">
 </span><span class="p">-</span><span class="w"> </span><span class="na">else</span><span class="p">:</span><span class="w">
@@ -664,7 +762,7 @@ epmd
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
@@ -675,7 +773,7 @@ epmd
 </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     mermaid.initialize({

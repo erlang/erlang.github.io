@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.32.1">
+    <meta name="generator" content="ExDoc v0.32.2">
     <meta name="project" content="stdlib v5.2.3">
 
 
     <title>gen_statem — stdlib v5.2.3</title>
-    <link rel="stylesheet" href="dist/html-erlang-X76CAHZ3.css" />
+    <link rel="stylesheet" href="dist/html-erlang-EBZIIHAS.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-IHH6HKET.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
     <script src="dist/sidebar_items-AB8AB253.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-GXQ6W6IF.js"></script>
+    <script async src="dist/html-BHYOTRCH.js"></script>
 
 
   </head>
@@ -256,97 +256,97 @@ significantly delayed.</p></blockquote><h2 id="module-example" class="section-he
 <p>The following example shows a simple pushbutton model for a toggling pushbutton
 implemented with <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">state_functions</code>. You
 can push the button and it replies if it went on or off, and you can ask for a
-count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="4204578850-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="4204578850-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="4204578850-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="4204578850-2">)</span><span class="p">.</span><span class="w">
+count of how many times it has been pushed to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="2060516849-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="2060516849-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="2060516849-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="2060516849-2">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4204578850-3">(</span><span class="p" data-group-id="4204578850-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="4204578850-4">]</span><span class="p" data-group-id="4204578850-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4204578850-5">(</span><span class="p" data-group-id="4204578850-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="4204578850-6">]</span><span class="p" data-group-id="4204578850-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4204578850-7">(</span><span class="p" data-group-id="4204578850-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="4204578850-8">]</span><span class="p" data-group-id="4204578850-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2060516849-3">(</span><span class="p" data-group-id="2060516849-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2060516849-4">]</span><span class="p" data-group-id="2060516849-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2060516849-5">(</span><span class="p" data-group-id="2060516849-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="2060516849-6">]</span><span class="p" data-group-id="2060516849-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="2060516849-7">(</span><span class="p" data-group-id="2060516849-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="2060516849-8">]</span><span class="p" data-group-id="2060516849-7">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">name</span><span class="p" data-group-id="4204578850-9">(</span><span class="p" data-group-id="4204578850-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
+</span><span class="nf">name</span><span class="p" data-group-id="2060516849-9">(</span><span class="p" data-group-id="2060516849-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
 
 </span><span class="c1">%% API.  This example uses a registered name name()</span><span class="w">
 </span><span class="c1">%% and does not link to the caller.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="4204578850-10">(</span><span class="p" data-group-id="4204578850-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="4204578850-11">(</span><span class="p" data-group-id="4204578850-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="4204578850-13">(</span><span class="p" data-group-id="4204578850-13">)</span><span class="p" data-group-id="4204578850-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4204578850-14">[</span><span class="p" data-group-id="4204578850-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4204578850-15">[</span><span class="p" data-group-id="4204578850-15">]</span><span class="p" data-group-id="4204578850-11">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">push</span><span class="p" data-group-id="4204578850-16">(</span><span class="p" data-group-id="4204578850-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="4204578850-17">(</span><span class="nf">name</span><span class="p" data-group-id="4204578850-18">(</span><span class="p" data-group-id="4204578850-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="4204578850-17">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">get_count</span><span class="p" data-group-id="4204578850-19">(</span><span class="p" data-group-id="4204578850-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="4204578850-20">(</span><span class="nf">name</span><span class="p" data-group-id="4204578850-21">(</span><span class="p" data-group-id="4204578850-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="4204578850-20">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="4204578850-22">(</span><span class="p" data-group-id="4204578850-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="4204578850-23">(</span><span class="nf">name</span><span class="p" data-group-id="4204578850-24">(</span><span class="p" data-group-id="4204578850-24">)</span><span class="p" data-group-id="4204578850-23">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="2060516849-10">(</span><span class="p" data-group-id="2060516849-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="2060516849-11">(</span><span class="p" data-group-id="2060516849-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="2060516849-13">(</span><span class="p" data-group-id="2060516849-13">)</span><span class="p" data-group-id="2060516849-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2060516849-14">[</span><span class="p" data-group-id="2060516849-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2060516849-15">[</span><span class="p" data-group-id="2060516849-15">]</span><span class="p" data-group-id="2060516849-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">push</span><span class="p" data-group-id="2060516849-16">(</span><span class="p" data-group-id="2060516849-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2060516849-17">(</span><span class="nf">name</span><span class="p" data-group-id="2060516849-18">(</span><span class="p" data-group-id="2060516849-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="2060516849-17">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">get_count</span><span class="p" data-group-id="2060516849-19">(</span><span class="p" data-group-id="2060516849-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="2060516849-20">(</span><span class="nf">name</span><span class="p" data-group-id="2060516849-21">(</span><span class="p" data-group-id="2060516849-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="2060516849-20">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="2060516849-22">(</span><span class="p" data-group-id="2060516849-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="2060516849-23">(</span><span class="nf">name</span><span class="p" data-group-id="2060516849-24">(</span><span class="p" data-group-id="2060516849-24">)</span><span class="p" data-group-id="2060516849-23">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Mandatory callback functions</span><span class="w">
-</span><span class="nf">terminate</span><span class="p" data-group-id="4204578850-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="4204578850-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="2060516849-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="2060516849-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">void</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="4204578850-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="4204578850-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="4204578850-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4204578850-27">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="4204578850-28">(</span><span class="p" data-group-id="4204578850-29">[</span><span class="p" data-group-id="4204578850-29">]</span><span class="p" data-group-id="4204578850-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="2060516849-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="2060516849-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2060516849-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2060516849-27">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="2060516849-28">(</span><span class="p" data-group-id="2060516849-29">[</span><span class="p" data-group-id="2060516849-29">]</span><span class="p" data-group-id="2060516849-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Set the initial state + data.  Data is used only as a counter.</span><span class="w">
     </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="4204578850-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4204578850-30">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="4204578850-31">(</span><span class="p" data-group-id="4204578850-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2060516849-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2060516849-30">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="2060516849-31">(</span><span class="p" data-group-id="2060516849-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">off</span><span class="p" data-group-id="4204578850-32">(</span><span class="p" data-group-id="4204578850-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="4204578850-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="2060516849-32">(</span><span class="p" data-group-id="2060516849-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2060516849-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="4204578850-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="4204578850-35">[</span><span class="p" data-group-id="4204578850-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="4204578850-36">}</span><span class="p" data-group-id="4204578850-35">]</span><span class="p" data-group-id="4204578850-34">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">off</span><span class="p" data-group-id="4204578850-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="4204578850-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-38">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2060516849-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="2060516849-35">[</span><span class="p" data-group-id="2060516849-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="2060516849-36">}</span><span class="p" data-group-id="2060516849-35">]</span><span class="p" data-group-id="2060516849-34">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="2060516849-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="2060516849-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-38">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">on</span><span class="p" data-group-id="4204578850-39">(</span><span class="p" data-group-id="4204578850-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="4204578850-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="2060516849-39">(</span><span class="p" data-group-id="2060516849-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2060516849-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="4204578850-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="4204578850-42">[</span><span class="p" data-group-id="4204578850-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="4204578850-43">}</span><span class="p" data-group-id="4204578850-42">]</span><span class="p" data-group-id="4204578850-41">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">on</span><span class="p" data-group-id="4204578850-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="4204578850-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-45">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2060516849-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2060516849-42">[</span><span class="p" data-group-id="2060516849-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="2060516849-43">}</span><span class="p" data-group-id="2060516849-42">]</span><span class="p" data-group-id="2060516849-41">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="2060516849-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="2060516849-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-45">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Handle events common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="4204578850-46">(</span><span class="p" data-group-id="4204578850-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="4204578850-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2060516849-46">(</span><span class="p" data-group-id="2060516849-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2060516849-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="4204578850-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="4204578850-49">[</span><span class="p" data-group-id="4204578850-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4204578850-50">}</span><span class="p" data-group-id="4204578850-49">]</span><span class="p" data-group-id="4204578850-48">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="4204578850-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4204578850-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2060516849-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2060516849-49">[</span><span class="p" data-group-id="2060516849-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2060516849-50">}</span><span class="p" data-group-id="2060516849-49">]</span><span class="p" data-group-id="2060516849-48">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2060516849-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2060516849-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="4204578850-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="4204578850-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="7625874724-1">(</span><span class="p" data-group-id="7625874724-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="7625874724-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7625874724-2">}</span><span class="gp unselectable">
-2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7625874724-3">(</span><span class="p" data-group-id="7625874724-3">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="2060516849-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2060516849-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="7423986949-1">(</span><span class="p" data-group-id="7423986949-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7423986949-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="7423986949-2">}</span><span class="gp unselectable">
+2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7423986949-3">(</span><span class="p" data-group-id="7423986949-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">0</span><span class="gp unselectable">
-3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7625874724-4">(</span><span class="p" data-group-id="7625874724-4">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7423986949-4">(</span><span class="p" data-group-id="7423986949-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">on</span><span class="gp unselectable">
-4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7625874724-5">(</span><span class="p" data-group-id="7625874724-5">)</span><span class="p">.</span><span class="w">
+4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7423986949-5">(</span><span class="p" data-group-id="7423986949-5">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7625874724-6">(</span><span class="p" data-group-id="7625874724-6">)</span><span class="p">.</span><span class="w">
+5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7423986949-6">(</span><span class="p" data-group-id="7423986949-6">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">off</span><span class="gp unselectable">
-6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7625874724-7">(</span><span class="p" data-group-id="7625874724-7">)</span><span class="p">.</span><span class="w">
+6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="7423986949-7">(</span><span class="p" data-group-id="7423986949-7">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="7625874724-8">(</span><span class="p" data-group-id="7625874724-8">)</span><span class="p">.</span><span class="w">
+7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="7423986949-8">(</span><span class="p" data-group-id="7423986949-8">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7625874724-9">(</span><span class="p" data-group-id="7625874724-9">)</span><span class="p">.</span><span class="w">
+8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="7423986949-9">(</span><span class="p" data-group-id="7423986949-9">)</span><span class="p">.</span><span class="w">
 </span><span class="gt">** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}}
      in function  gen:do_for_proc/2 (gen.erl, line 261)
      in call from gen_statem:call/3 (gen_statem.erl, line 386)</span></code></pre><p>To compare styles, here follows the same example using
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">handle_event_function</code>, or rather the
 code to replace after function <a href="#c:init/1"><code class="inline">init/1</code></a> of the <code class="inline">pushbutton.erl</code>
-example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="1637681844-1">(</span><span class="p" data-group-id="1637681844-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
+example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="7226826960-1">(</span><span class="p" data-group-id="7226826960-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="1637681844-2">(</span><span class="p" data-group-id="1637681844-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1637681844-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1637681844-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="7226826960-2">(</span><span class="p" data-group-id="7226826960-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7226826960-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7226826960-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="1637681844-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="1637681844-5">[</span><span class="p" data-group-id="1637681844-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="1637681844-6">}</span><span class="p" data-group-id="1637681844-5">]</span><span class="p" data-group-id="1637681844-4">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="1637681844-7">(</span><span class="p" data-group-id="1637681844-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1637681844-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1637681844-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7226826960-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="7226826960-5">[</span><span class="p" data-group-id="7226826960-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="7226826960-6">}</span><span class="p" data-group-id="7226826960-5">]</span><span class="p" data-group-id="7226826960-4">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="7226826960-7">(</span><span class="p" data-group-id="7226826960-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7226826960-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7226826960-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="1637681844-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="1637681844-10">[</span><span class="p" data-group-id="1637681844-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="1637681844-11">}</span><span class="p" data-group-id="1637681844-10">]</span><span class="p" data-group-id="1637681844-9">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="7226826960-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="7226826960-10">[</span><span class="p" data-group-id="7226826960-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="7226826960-11">}</span><span class="p" data-group-id="7226826960-10">]</span><span class="p" data-group-id="7226826960-9">}</span><span class="p">;</span><span class="w">
 </span><span class="c1">%%</span><span class="w">
 </span><span class="c1">%% Event handling common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="1637681844-12">(</span><span class="p" data-group-id="1637681844-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1637681844-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1637681844-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="7226826960-12">(</span><span class="p" data-group-id="7226826960-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="7226826960-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7226826960-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="1637681844-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="1637681844-15">[</span><span class="p" data-group-id="1637681844-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1637681844-16">}</span><span class="p" data-group-id="1637681844-15">]</span><span class="p" data-group-id="1637681844-14">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="1637681844-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1637681844-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7226826960-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="7226826960-15">[</span><span class="p" data-group-id="7226826960-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7226826960-16">}</span><span class="p" data-group-id="7226826960-15">]</span><span class="p" data-group-id="7226826960-14">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="7226826960-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="7226826960-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="1637681844-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1637681844-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
+    </span><span class="p" data-group-id="7226826960-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="7226826960-18">}</span><span class="p">.</span></code></pre><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -372,7 +372,7 @@ example file above:</p><pre><code class="makeup erlang" translate="no"><span cla
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:action/0" translate="no">action()</a>
+        <a href="#t:action/0" data-no-tooltip translate="no">action()</a>
 
       </div>
 
@@ -385,7 +385,7 @@ to <a href="#enter_loop/5"><code class="inline">enter_loop/5,6</code></a>.</p></
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:callback_mode/0" translate="no">callback_mode()</a>
+        <a href="#t:callback_mode/0" data-no-tooltip translate="no">callback_mode()</a>
 
       </div>
 
@@ -396,7 +396,7 @@ to <a href="#enter_loop/5"><code class="inline">enter_loop/5,6</code></a>.</p></
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:callback_mode_result/0" translate="no">callback_mode_result()</a>
+        <a href="#t:callback_mode_result/0" data-no-tooltip translate="no">callback_mode_result()</a>
 
       </div>
 
@@ -408,7 +408,7 @@ selects <a href="#t:callback_mode/0"><em>callback mode</em></a> and whether to d
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:data/0" translate="no">data()</a>
+        <a href="#t:data/0" data-no-tooltip translate="no">data()</a>
 
       </div>
 
@@ -422,7 +422,7 @@ item is to be made a part of the state.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:enter_action/0" translate="no">enter_action()</a>
+        <a href="#t:enter_action/0" data-no-tooltip translate="no">enter_action()</a>
 
       </div>
 
@@ -435,7 +435,7 @@ item is to be made a part of the state.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:enter_loop_opt/0" translate="no">enter_loop_opt()</a>
+        <a href="#t:enter_loop_opt/0" data-no-tooltip translate="no">enter_loop_opt()</a>
 
       </div>
 
@@ -446,7 +446,7 @@ item is to be made a part of the state.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:event_content/0" translate="no">event_content()</a>
+        <a href="#t:event_content/0" data-no-tooltip translate="no">event_content()</a>
 
       </div>
 
@@ -456,7 +456,7 @@ item is to be made a part of the state.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:event_handler_result/1" translate="no">event_handler_result(StateType)</a>
+        <a href="#t:event_handler_result/1" data-no-tooltip translate="no">event_handler_result(StateType)</a>
 
       </div>
 
@@ -464,7 +464,7 @@ item is to be made a part of the state.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:event_handler_result/2" translate="no">event_handler_result(StateType, DataType)</a>
+        <a href="#t:event_handler_result/2" data-no-tooltip translate="no">event_handler_result(StateType, DataType)</a>
 
       </div>
 
@@ -476,7 +476,7 @@ item is to be made a part of the state.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:event_timeout/0" translate="no">event_timeout()</a>
+        <a href="#t:event_timeout/0" data-no-tooltip translate="no">event_timeout()</a>
 
       </div>
 
@@ -490,7 +490,7 @@ supported.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:event_type/0" translate="no">event_type()</a>
+        <a href="#t:event_type/0" data-no-tooltip translate="no">event_type()</a>
 
       </div>
 
@@ -501,7 +501,7 @@ supported.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:external_event_type/0" translate="no">external_event_type()</a>
+        <a href="#t:external_event_type/0" data-no-tooltip translate="no">external_event_type()</a>
 
       </div>
 
@@ -515,7 +515,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:format_status/0" translate="no">format_status()</a>
+        <a href="#t:format_status/0" data-no-tooltip translate="no">format_status()</a>
 
       </div>
 
@@ -525,7 +525,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:from/0" translate="no">from()</a>
+        <a href="#t:from/0" data-no-tooltip translate="no">from()</a>
 
       </div>
 
@@ -537,7 +537,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:generic_timeout/0" translate="no">generic_timeout()</a>
+        <a href="#t:generic_timeout/0" data-no-tooltip translate="no">generic_timeout()</a>
 
       </div>
 
@@ -551,7 +551,7 @@ supported.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:handle_event_result/0" translate="no">handle_event_result()</a>
+        <a href="#t:handle_event_result/0" data-no-tooltip translate="no">handle_event_result()</a>
 
       </div>
 
@@ -559,7 +559,7 @@ supported.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:hibernate/0" translate="no">hibernate()</a>
+        <a href="#t:hibernate/0" data-no-tooltip translate="no">hibernate()</a>
 
       </div>
 
@@ -570,7 +570,7 @@ going into <code class="inline">receive</code> to wait for a new external event.
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:init_result/1" translate="no">init_result(StateType)</a>
+        <a href="#t:init_result/1" data-no-tooltip translate="no">init_result(StateType)</a>
 
       </div>
 
@@ -578,7 +578,7 @@ going into <code class="inline">receive</code> to wait for a new external event.
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:init_result/2" translate="no">init_result(StateType, DataType)</a>
+        <a href="#t:init_result/2" data-no-tooltip translate="no">init_result(StateType, DataType)</a>
 
       </div>
 
@@ -589,7 +589,7 @@ the initial server <a href="#t:data/0"><code class="inline">data/0</code></a> of
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:postpone/0" translate="no">postpone()</a>
+        <a href="#t:postpone/0" data-no-tooltip translate="no">postpone()</a>
 
       </div>
 
@@ -600,7 +600,7 @@ the initial server <a href="#t:data/0"><code class="inline">data/0</code></a> of
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:reply_action/0" translate="no">reply_action()</a>
+        <a href="#t:reply_action/0" data-no-tooltip translate="no">reply_action()</a>
 
       </div>
 
@@ -613,7 +613,7 @@ the initial server <a href="#t:data/0"><code class="inline">data/0</code></a> of
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:reply_tag/0" translate="no">reply_tag()</a>
+        <a href="#t:reply_tag/0" data-no-tooltip translate="no">reply_tag()</a>
 
       </div>
 
@@ -623,7 +623,7 @@ the initial server <a href="#t:data/0"><code class="inline">data/0</code></a> of
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:request_id/0" translate="no">request_id()</a>
+        <a href="#t:request_id/0" data-no-tooltip translate="no">request_id()</a>
 
       </div>
 
@@ -633,7 +633,7 @@ the initial server <a href="#t:data/0"><code class="inline">data/0</code></a> of
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:request_id_collection/0" translate="no">request_id_collection()</a>
+        <a href="#t:request_id_collection/0" data-no-tooltip translate="no">request_id_collection()</a>
 
       </div>
 
@@ -645,7 +645,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:response_timeout/0" translate="no">response_timeout()</a>
+        <a href="#t:response_timeout/0" data-no-tooltip translate="no">response_timeout()</a>
 
       </div>
 
@@ -657,7 +657,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:server_name/0" translate="no">server_name()</a>
+        <a href="#t:server_name/0" data-no-tooltip translate="no">server_name()</a>
 
       </div>
 
@@ -668,7 +668,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:server_ref/0" translate="no">server_ref()</a>
+        <a href="#t:server_ref/0" data-no-tooltip translate="no">server_ref()</a>
 
       </div>
 
@@ -678,7 +678,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:start_mon_ret/0" translate="no">start_mon_ret()</a>
+        <a href="#t:start_mon_ret/0" data-no-tooltip translate="no">start_mon_ret()</a>
 
       </div>
 
@@ -688,7 +688,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:start_opt/0" translate="no">start_opt()</a>
+        <a href="#t:start_opt/0" data-no-tooltip translate="no">start_opt()</a>
 
       </div>
 
@@ -699,7 +699,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:start_ret/0" translate="no">start_ret()</a>
+        <a href="#t:start_ret/0" data-no-tooltip translate="no">start_ret()</a>
 
       </div>
 
@@ -710,7 +710,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state/0" translate="no">state()</a>
+        <a href="#t:state/0" data-no-tooltip translate="no">state()</a>
 
       </div>
 
@@ -722,7 +722,7 @@ postponed events are retried.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_callback_result/1" translate="no">state_callback_result(ActionType)</a>
+        <a href="#t:state_callback_result/1" data-no-tooltip translate="no">state_callback_result(ActionType)</a>
 
       </div>
 
@@ -730,7 +730,7 @@ postponed events are retried.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_callback_result/2" translate="no">state_callback_result(ActionType, DataType)</a>
+        <a href="#t:state_callback_result/2" data-no-tooltip translate="no">state_callback_result(ActionType, DataType)</a>
 
       </div>
 
@@ -742,7 +742,7 @@ was called with an event.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_enter/0" translate="no">state_enter()</a>
+        <a href="#t:state_enter/0" data-no-tooltip translate="no">state_enter()</a>
 
       </div>
 
@@ -754,7 +754,7 @@ starting the <code class="inline">gen_statem</code> and after code change using 
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_enter_result/1" translate="no">state_enter_result(State)</a>
+        <a href="#t:state_enter_result/1" data-no-tooltip translate="no">state_enter_result(State)</a>
 
       </div>
 
@@ -762,7 +762,7 @@ starting the <code class="inline">gen_statem</code> and after code change using 
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_enter_result/2" translate="no">state_enter_result(State, DataType)</a>
+        <a href="#t:state_enter_result/2" data-no-tooltip translate="no">state_enter_result(State, DataType)</a>
 
       </div>
 
@@ -773,7 +773,7 @@ was called with a <a href="#t:state_enter/0"><em>state enter call</em></a>.</p><
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_function_result/0" translate="no">state_function_result()</a>
+        <a href="#t:state_function_result/0" data-no-tooltip translate="no">state_function_result()</a>
 
       </div>
 
@@ -781,7 +781,7 @@ was called with a <a href="#t:state_enter/0"><em>state enter call</em></a>.</p><
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_name/0" translate="no">state_name()</a>
+        <a href="#t:state_name/0" data-no-tooltip translate="no">state_name()</a>
 
       </div>
 
@@ -795,7 +795,7 @@ it would collide with the optional callback function
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:state_timeout/0" translate="no">state_timeout()</a>
+        <a href="#t:state_timeout/0" data-no-tooltip translate="no">state_timeout()</a>
 
       </div>
 
@@ -809,7 +809,7 @@ supported.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:timeout_action/0" translate="no">timeout_action()</a>
+        <a href="#t:timeout_action/0" data-no-tooltip translate="no">timeout_action()</a>
 
       </div>
 
@@ -822,7 +822,7 @@ supported.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:timeout_cancel_action/0" translate="no">timeout_cancel_action()</a>
+        <a href="#t:timeout_cancel_action/0" data-no-tooltip translate="no">timeout_cancel_action()</a>
 
       </div>
 
@@ -834,7 +834,7 @@ time-out.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:timeout_event_type/0" translate="no">timeout_event_type()</a>
+        <a href="#t:timeout_event_type/0" data-no-tooltip translate="no">timeout_event_type()</a>
 
       </div>
 
@@ -845,7 +845,7 @@ itself with the corresponding <a href="#t:timeout_action/0"><code class="inline"
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:timeout_option/0" translate="no">timeout_option()</a>
+        <a href="#t:timeout_option/0" data-no-tooltip translate="no">timeout_option()</a>
 
       </div>
 
@@ -857,7 +857,7 @@ relative, which is the default. See
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:timeout_update_action/0" translate="no">timeout_update_action()</a>
+        <a href="#t:timeout_update_action/0" data-no-tooltip translate="no">timeout_update_action()</a>
 
       </div>
 
@@ -868,7 +868,7 @@ relative, which is the default. See
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#t:transition_option/0" translate="no">transition_option()</a>
+        <a href="#t:transition_option/0" data-no-tooltip translate="no">transition_option()</a>
 
       </div>
 
@@ -887,7 +887,7 @@ returns. Here are the sequence of steps for a <em>state transition</em></p></div
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:callback_mode/0" translate="no">callback_mode()</a>
+        <a href="#c:callback_mode/0" data-no-tooltip translate="no">callback_mode()</a>
 
       </div>
 
@@ -898,7 +898,7 @@ returns. Here are the sequence of steps for a <em>state transition</em></p></div
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:code_change/4" translate="no">code_change(OldVsn, OldState, OldData, Extra)</a>
+        <a href="#c:code_change/4" data-no-tooltip translate="no">code_change(OldVsn, OldState, OldData, Extra)</a>
 
       </div>
 
@@ -912,7 +912,7 @@ the <a href="../../../../lib/sasl-4.2.1/doc/html/appup.html"><code class="inline
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:format_status/1" translate="no">format_status(Status)</a>
+        <a href="#c:format_status/1" data-no-tooltip translate="no">format_status(Status)</a>
 
       </div>
 
@@ -923,7 +923,7 @@ server state for debugging and logging purposes.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:format_status/2" translate="no">format_status/2</a>
+        <a href="#c:format_status/2" data-no-tooltip translate="no">format_status/2</a>
 
           <span class="deprecated" title="the callback gen_statem:format_status(_,_) is deprecated; use format_status/1 instead">deprecated</span>
 
@@ -936,7 +936,7 @@ server state for debugging and logging purposes.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:handle_event/4" translate="no">handle_event/4</a>
+        <a href="#c:handle_event/4" data-no-tooltip translate="no">handle_event/4</a>
 
       </div>
 
@@ -950,7 +950,7 @@ normal process message, one of these functions is called. If
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:init/1" translate="no">init(Args)</a>
+        <a href="#c:init/1" data-no-tooltip translate="no">init(Args)</a>
 
       </div>
 
@@ -963,7 +963,7 @@ server data.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:StateName/3" translate="no">'StateName'/3</a>
+        <a href="#c:StateName/3" data-no-tooltip translate="no">'StateName'/3</a>
 
       </div>
 
@@ -973,7 +973,7 @@ server data.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:terminate/3" translate="no">terminate/3</a>
+        <a href="#c:terminate/3" data-no-tooltip translate="no">terminate/3</a>
 
       </div>
 
@@ -992,7 +992,7 @@ return value is ignored.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#call/2" translate="no">call(ServerRef, Request)</a>
+        <a href="#call/2" data-no-tooltip translate="no">call(ServerRef, Request)</a>
 
       </div>
 
@@ -1002,7 +1002,7 @@ return value is ignored.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#call/3" translate="no">call(ServerRef, Request, Timeout)</a>
+        <a href="#call/3" data-no-tooltip translate="no">call(ServerRef, Request, Timeout)</a>
 
       </div>
 
@@ -1013,7 +1013,7 @@ sending a request and waiting until its reply arrives.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#cast/2" translate="no">cast(ServerRef, Msg)</a>
+        <a href="#cast/2" data-no-tooltip translate="no">cast(ServerRef, Msg)</a>
 
       </div>
 
@@ -1025,7 +1025,7 @@ does not exist.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#check_response/2" translate="no">check_response(Msg, ReqId)</a>
+        <a href="#check_response/2" data-no-tooltip translate="no">check_response(Msg, ReqId)</a>
 
       </div>
 
@@ -1035,7 +1035,7 @@ does not exist.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#check_response/3" translate="no">check_response(Msg, ReqIdCollection, Delete)</a>
+        <a href="#check_response/3" data-no-tooltip translate="no">check_response(Msg, ReqIdCollection, Delete)</a>
 
       </div>
 
@@ -1048,7 +1048,7 @@ all requests must have been made by the process calling this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#enter_loop/4" translate="no">enter_loop(Module, Opts, State, Data)</a>
+        <a href="#enter_loop/4" data-no-tooltip translate="no">enter_loop(Module, Opts, State, Data)</a>
 
       </div>
 
@@ -1059,7 +1059,7 @@ must have been registered. This creates an anonymous server.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#enter_loop/5" translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</a>
+        <a href="#enter_loop/5" data-no-tooltip translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</a>
 
       </div>
 
@@ -1071,7 +1071,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#enter_loop/6" translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</a>
+        <a href="#enter_loop/6" data-no-tooltip translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</a>
 
       </div>
 
@@ -1081,7 +1081,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#receive_response/1" translate="no">receive_response(ReqId)</a>
+        <a href="#receive_response/1" data-no-tooltip translate="no">receive_response(ReqId)</a>
 
       </div>
 
@@ -1091,7 +1091,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#receive_response/2" translate="no">receive_response(ReqId, Timeout)</a>
+        <a href="#receive_response/2" data-no-tooltip translate="no">receive_response(ReqId, Timeout)</a>
 
       </div>
 
@@ -1104,7 +1104,7 @@ made.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#receive_response/3" translate="no">receive_response(ReqIdCollection, Timeout, Delete)</a>
+        <a href="#receive_response/3" data-no-tooltip translate="no">receive_response(ReqIdCollection, Timeout, Delete)</a>
 
       </div>
 
@@ -1117,7 +1117,7 @@ all requests must have been made by the process calling this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reply/1" translate="no">reply(Replies)</a>
+        <a href="#reply/1" data-no-tooltip translate="no">reply(Replies)</a>
 
       </div>
 
@@ -1128,7 +1128,7 @@ all requests must have been made by the process calling this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reply/2" translate="no">reply(From, Reply)</a>
+        <a href="#reply/2" data-no-tooltip translate="no">reply(From, Reply)</a>
 
       </div>
 
@@ -1138,7 +1138,7 @@ all requests must have been made by the process calling this function.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reqids_add/3" translate="no">reqids_add(ReqId, Label, ReqIdCollection)</a>
+        <a href="#reqids_add/3" data-no-tooltip translate="no">reqids_add(ReqId, Label, ReqIdCollection)</a>
 
       </div>
 
@@ -1150,7 +1150,7 @@ identifier collection.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reqids_new/0" translate="no">reqids_new()</a>
+        <a href="#reqids_new/0" data-no-tooltip translate="no">reqids_new()</a>
 
       </div>
 
@@ -1161,7 +1161,7 @@ collection can be utilized in order the handle multiple outstanding requests.</p
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reqids_size/1" translate="no">reqids_size(ReqIdCollection)</a>
+        <a href="#reqids_size/1" data-no-tooltip translate="no">reqids_size(ReqIdCollection)</a>
 
       </div>
 
@@ -1171,7 +1171,7 @@ collection can be utilized in order the handle multiple outstanding requests.</p
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reqids_to_list/1" translate="no">reqids_to_list(ReqIdCollection)</a>
+        <a href="#reqids_to_list/1" data-no-tooltip translate="no">reqids_to_list(ReqIdCollection)</a>
 
       </div>
 
@@ -1183,7 +1183,7 @@ collection.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#send_request/2" translate="no">send_request(ServerRef, Request)</a>
+        <a href="#send_request/2" data-no-tooltip translate="no">send_request(ServerRef, Request)</a>
 
       </div>
 
@@ -1194,7 +1194,7 @@ identified by <code class="inline">ServerRef</code> and returns a request identi
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#send_request/4" translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</a>
+        <a href="#send_request/4" data-no-tooltip translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</a>
 
       </div>
 
@@ -1210,7 +1210,7 @@ collection as argument to <a href="#receive_response/3"><code class="inline">rec
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start/3" translate="no">start(Module, Args, Opts)</a>
+        <a href="#start/3" data-no-tooltip translate="no">start(Module, Args, Opts)</a>
 
       </div>
 
@@ -1221,7 +1221,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start/4" translate="no">start(ServerName, Module, Args, Opts)</a>
+        <a href="#start/4" data-no-tooltip translate="no">start(ServerName, Module, Args, Opts)</a>
 
       </div>
 
@@ -1233,7 +1233,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start_link/3" translate="no">start_link(Module, Args, Opts)</a>
+        <a href="#start_link/3" data-no-tooltip translate="no">start_link(Module, Args, Opts)</a>
 
       </div>
 
@@ -1244,7 +1244,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start_link/4" translate="no">start_link(ServerName, Module, Args, Opts)</a>
+        <a href="#start_link/4" data-no-tooltip translate="no">start_link(ServerName, Module, Args, Opts)</a>
 
       </div>
 
@@ -1257,7 +1257,7 @@ linked to its supervisor.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start_monitor/3" translate="no">start_monitor(Module, Args, Opts)</a>
+        <a href="#start_monitor/3" data-no-tooltip translate="no">start_monitor(Module, Args, Opts)</a>
 
       </div>
 
@@ -1268,7 +1268,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#start_monitor/4" translate="no">start_monitor(ServerName, Module, Args, Opts)</a>
+        <a href="#start_monitor/4" data-no-tooltip translate="no">start_monitor(ServerName, Module, Args, Opts)</a>
 
       </div>
 
@@ -1281,7 +1281,7 @@ function cannot be used by a supervisor to start a child.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#stop/1" translate="no">stop(ServerRef)</a>
+        <a href="#stop/1" data-no-tooltip translate="no">stop(ServerRef)</a>
 
       </div>
 
@@ -1291,7 +1291,7 @@ function cannot be used by a supervisor to start a child.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#stop/3" translate="no">stop(ServerRef, Reason, Timeout)</a>
+        <a href="#stop/3" data-no-tooltip translate="no">stop(ServerRef, Reason, Timeout)</a>
 
       </div>
 
@@ -1303,7 +1303,7 @@ specified <code class="inline">Reason</code> and waits for it to terminate. The 
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#wait_response/1" translate="no">wait_response(ReqId)</a>
+        <a href="#wait_response/1" data-no-tooltip translate="no">wait_response(ReqId)</a>
 
       </div>
 
@@ -1313,7 +1313,7 @@ specified <code class="inline">Reason</code> and waits for it to terminate. The 
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#wait_response/2" translate="no">wait_response(ReqId, WaitTime)</a>
+        <a href="#wait_response/2" data-no-tooltip translate="no">wait_response(ReqId, WaitTime)</a>
 
       </div>
 
@@ -1326,7 +1326,7 @@ made.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#wait_response/3" translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</a>
+        <a href="#wait_response/3" data-no-tooltip translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</a>
 
       </div>
 
@@ -1353,7 +1353,7 @@ all requests must have been made by the process calling this function.</p></div>
 <section class="detail" id="t:action/0">
 
   <div class="detail-header">
-    <a href="#t:action/0" class="detail-link" title="Link to this type">
+    <a href="#t:action/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1374,13 +1374,13 @@ all requests must have been made by the process calling this function.</p></div>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> action() ::
-    postpone |
-    {postpone, Postpone :: <a href="#t:postpone/0">postpone</a>()} |
-    {next_event, EventType :: <a href="#t:event_type/0">event_type</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
-    {change_callback_module, NewModule :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>()} |
-    {push_callback_module, NewModule :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>()} |
-    pop_callback_module |
-    <a href="#t:enter_action/0">enter_action</a>().</pre>
+          postpone |
+          {postpone, Postpone :: <a href="#t:postpone/0">postpone</a>()} |
+          {next_event, EventType :: <a href="#t:event_type/0">event_type</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
+          {change_callback_module, NewModule :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>()} |
+          {push_callback_module, NewModule :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>()} |
+          pop_callback_module |
+          <a href="#t:enter_action/0">enter_action</a>().</pre>
 
       </div>
 
@@ -1422,7 +1422,7 @@ the stack is empty the server fails. Otherwise like
 <section class="detail" id="t:callback_mode/0">
 
   <div class="detail-header">
-    <a href="#t:callback_mode/0" class="detail-link" title="Link to this type">
+    <a href="#t:callback_mode/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1463,7 +1463,7 @@ The result is cached for subsequent calls to
 <section class="detail" id="t:callback_mode_result/0">
 
   <div class="detail-header">
-    <a href="#t:callback_mode_result/0" class="detail-link" title="Link to this type">
+    <a href="#t:callback_mode_result/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1495,7 +1495,7 @@ selects <a href="#t:callback_mode/0"><em>callback mode</em></a> and whether to d
 <section class="detail" id="t:data/0">
 
   <div class="detail-header">
-    <a href="#t:data/0" class="detail-link" title="Link to this type">
+    <a href="#t:data/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1531,7 +1531,7 @@ item is to be made a part of the state.</p>
 <section class="detail" id="t:enter_action/0">
 
   <div class="detail-header">
-    <a href="#t:enter_action/0" class="detail-link" title="Link to this type">
+    <a href="#t:enter_action/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1552,7 +1552,7 @@ item is to be made a part of the state.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> enter_action() ::
-    hibernate | {hibernate, Hibernate :: <a href="#t:hibernate/0">hibernate</a>()} | <a href="#t:timeout_action/0">timeout_action</a>() | <a href="#t:reply_action/0">reply_action</a>().</pre>
+          hibernate | {hibernate, Hibernate :: <a href="#t:hibernate/0">hibernate</a>()} | <a href="#t:timeout_action/0">timeout_action</a>() | <a href="#t:reply_action/0">reply_action</a>().</pre>
 
       </div>
 
@@ -1569,7 +1569,7 @@ list.</p><ul><li><strong><code class="inline">hibernate</code></strong> - Sets t
 <section class="detail" id="t:enter_loop_opt/0">
 
   <div class="detail-header">
-    <a href="#t:enter_loop_opt/0" class="detail-link" title="Link to this type">
+    <a href="#t:enter_loop_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1590,7 +1590,7 @@ list.</p><ul><li><strong><code class="inline">hibernate</code></strong> - Sets t
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> enter_loop_opt() ::
-    {hibernate_after, HibernateAfterTimeout :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()} | {debug, Dbgs :: [<a href="sys.html#t:debug_option/0">sys:debug_option</a>()]}.</pre>
+          {hibernate_after, HibernateAfterTimeout :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()} | {debug, Dbgs :: [<a href="sys.html#t:debug_option/0">sys:debug_option</a>()]}.</pre>
 
       </div>
 
@@ -1605,7 +1605,7 @@ is called.</p></li></ul>
 <section class="detail" id="t:event_content/0">
 
   <div class="detail-header">
-    <a href="#t:event_content/0" class="detail-link" title="Link to this type">
+    <a href="#t:event_content/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1638,7 +1638,7 @@ event types, which is also where the event content comes from.</p>
 <section class="detail" id="t:event_handler_result/1">
 
   <div class="detail-header">
-    <a href="#t:event_handler_result/1" class="detail-link" title="Link to this type">
+    <a href="#t:event_handler_result/1" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1668,7 +1668,7 @@ event types, which is also where the event content comes from.</p>
 <section class="detail" id="t:event_handler_result/2">
 
   <div class="detail-header">
-    <a href="#t:event_handler_result/2" class="detail-link" title="Link to this type">
+    <a href="#t:event_handler_result/2" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1689,9 +1689,9 @@ event types, which is also where the event content comes from.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> event_handler_result(StateType, DataType) ::
-    {next_state, NextState :: StateType, NewData :: DataType} |
-    {next_state, NextState :: StateType, NewData :: DataType, Actions :: [<a href="#t:action/0">action</a>()] | <a href="#t:action/0">action</a>()} |
-    <a href="#t:state_callback_result/1">state_callback_result</a>(<a href="#t:action/0">action</a>()).</pre>
+          {next_state, NextState :: StateType, NewData :: DataType} |
+          {next_state, NextState :: StateType, NewData :: DataType, Actions :: [<a href="#t:action/0">action</a>()] | <a href="#t:action/0">action</a>()} |
+          <a href="#t:state_callback_result/1">state_callback_result</a>(<a href="#t:action/0">action</a>()).</pre>
 
       </div>
 
@@ -1706,7 +1706,7 @@ change</em>.</li></ul>
 <section class="detail" id="t:event_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:event_timeout/0" class="detail-link" title="Link to this type">
+    <a href="#t:event_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1747,7 +1747,7 @@ cancelled automatically by any other event.</p>
 <section class="detail" id="t:event_type/0">
 
   <div class="detail-header">
-    <a href="#t:event_type/0" class="detail-link" title="Link to this type">
+    <a href="#t:event_type/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1779,7 +1779,7 @@ cancelled automatically by any other event.</p>
 <section class="detail" id="t:external_event_type/0">
 
   <div class="detail-header">
-    <a href="#t:external_event_type/0" class="detail-link" title="Link to this type">
+    <a href="#t:external_event_type/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1815,7 +1815,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 <section class="detail" id="t:format_status/0">
 
   <div class="detail-header">
-    <a href="#t:format_status/0" class="detail-link" title="Link to this type">
+    <a href="#t:format_status/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1836,13 +1836,13 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> format_status() ::
-    #{state => <a href="#t:state/0">state</a>(),
-      data => <a href="#t:data/0">data</a>(),
-      reason => <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-      queue => [{<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>()}],
-      postponed => [{<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>()}],
-      timeouts => [{<a href="#t:timeout_event_type/0">timeout_event_type</a>(), <a href="#t:event_content/0">event_content</a>()}],
-      log => [<a href="sys.html#t:system_event/0">sys:system_event</a>()]}.</pre>
+          #{state => <a href="#t:state/0">state</a>(),
+            data => <a href="#t:data/0">data</a>(),
+            reason => <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+            queue => [{<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>()}],
+            postponed => [{<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>()}],
+            timeouts => [{<a href="#t:timeout_event_type/0">timeout_event_type</a>(), <a href="#t:event_content/0">event_content</a>()}],
+            log => [<a href="sys.html#t:system_event/0">sys:system_event</a>()]}.</pre>
 
       </div>
 
@@ -1854,7 +1854,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 <section class="detail" id="t:from/0">
 
   <div class="detail-header">
-    <a href="#t:from/0" class="detail-link" title="Link to this type">
+    <a href="#t:from/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1886,7 +1886,7 @@ event contains whom to reply to. Type <code class="inline">cast</code> originate
 <section class="detail" id="t:generic_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:generic_timeout/0" class="detail-link" title="Link to this type">
+    <a href="#t:generic_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1926,7 +1926,7 @@ by setting it to <code class="inline">infinity</code>.</p>
 <section class="detail" id="t:handle_event_result/0">
 
   <div class="detail-header">
-    <a href="#t:handle_event_result/0" class="detail-link" title="Link to this type">
+    <a href="#t:handle_event_result/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1956,7 +1956,7 @@ by setting it to <code class="inline">infinity</code>.</p>
 <section class="detail" id="t:hibernate/0">
 
   <div class="detail-header">
-    <a href="#t:hibernate/0" class="detail-link" title="Link to this type">
+    <a href="#t:hibernate/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -1993,7 +1993,7 @@ event.</p></blockquote>
 <section class="detail" id="t:init_result/1">
 
   <div class="detail-header">
-    <a href="#t:init_result/1" class="detail-link" title="Link to this type">
+    <a href="#t:init_result/1" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2023,7 +2023,7 @@ event.</p></blockquote>
 <section class="detail" id="t:init_result/2">
 
   <div class="detail-header">
-    <a href="#t:init_result/2" class="detail-link" title="Link to this type">
+    <a href="#t:init_result/2" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2044,11 +2044,11 @@ event.</p></blockquote>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> init_result(StateType, DataType) ::
-    {ok, State :: StateType, Data :: DataType} |
-    {ok, State :: StateType, Data :: DataType, Actions :: [<a href="#t:action/0">action</a>()] | <a href="#t:action/0">action</a>()} |
-    ignore |
-    {stop, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} |
-    {error, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+          {ok, State :: StateType, Data :: DataType} |
+          {ok, State :: StateType, Data :: DataType, Actions :: [<a href="#t:action/0">action</a>()] | <a href="#t:action/0">action</a>()} |
+          ignore |
+          {stop, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} |
+          {error, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2063,7 +2063,7 @@ should be used; see <a href="#start_link/3"><code class="inline">start_link/3,4<
 <section class="detail" id="t:postpone/0">
 
   <div class="detail-header">
-    <a href="#t:postpone/0" class="detail-link" title="Link to this type">
+    <a href="#t:postpone/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2096,7 +2096,7 @@ should be used; see <a href="#start_link/3"><code class="inline">start_link/3,4<
 <section class="detail" id="t:reply_action/0">
 
   <div class="detail-header">
-    <a href="#t:reply_action/0" class="detail-link" title="Link to this type">
+    <a href="#t:reply_action/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2135,7 +2135,7 @@ since there has been no earlier call to a
 <section class="detail" id="t:reply_tag/0">
 
   <div class="detail-header">
-    <a href="#t:reply_tag/0" class="detail-link" title="Link to this opaque">
+    <a href="#t:reply_tag/0" class="detail-link" data-no-tooltip title="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this opaque</span>
     </a>
@@ -2165,7 +2165,7 @@ since there has been no earlier call to a
 <section class="detail" id="t:request_id/0">
 
   <div class="detail-header">
-    <a href="#t:request_id/0" class="detail-link" title="Link to this opaque">
+    <a href="#t:request_id/0" class="detail-link" data-no-tooltip title="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this opaque</span>
     </a>
@@ -2195,7 +2195,7 @@ since there has been no earlier call to a
 <section class="detail" id="t:request_id_collection/0">
 
   <div class="detail-header">
-    <a href="#t:request_id_collection/0" class="detail-link" title="Link to this opaque">
+    <a href="#t:request_id_collection/0" class="detail-link" data-no-tooltip title="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this opaque</span>
     </a>
@@ -2227,7 +2227,7 @@ information see <a href="#reqids_new/0"><code class="inline">reqids_new/0</code>
 <section class="detail" id="t:response_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:response_timeout/0" class="detail-link" title="Link to this type">
+    <a href="#t:response_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2270,7 +2270,7 @@ relative time until the deadline over and over again.</p></li></ul>
 <section class="detail" id="t:server_name/0">
 
   <div class="detail-header">
-    <a href="#t:server_name/0" class="detail-link" title="Link to this type">
+    <a href="#t:server_name/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2291,7 +2291,7 @@ relative time until the deadline over and over again.</p></li></ul>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> server_name() ::
-    {local, <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>()} | {global, GlobalName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {via, RegMod :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+          {local, <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>()} | {global, GlobalName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {via, RegMod :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2302,7 +2302,7 @@ relative time until the deadline over and over again.</p></li></ul>
 <section class="detail" id="t:server_ref/0">
 
   <div class="detail-header">
-    <a href="#t:server_ref/0" class="detail-link" title="Link to this type">
+    <a href="#t:server_ref/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2323,11 +2323,11 @@ relative time until the deadline over and over again.</p></li></ul>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> server_ref() ::
-    <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:pid/0">pid</a>() |
-    (LocalName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>()) |
-    {Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>(), Node :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>()} |
-    {global, GlobalName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} |
-    {via, RegMod :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), ViaName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+          <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:pid/0">pid</a>() |
+          (LocalName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>()) |
+          {Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>(), Node :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:atom/0">atom</a>()} |
+          {global, GlobalName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} |
+          {via, RegMod :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), ViaName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2342,7 +2342,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
 <section class="detail" id="t:start_mon_ret/0">
 
   <div class="detail-header">
-    <a href="#t:start_mon_ret/0" class="detail-link" title="Link to this type">
+    <a href="#t:start_mon_ret/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2372,7 +2372,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
 <section class="detail" id="t:start_opt/0">
 
   <div class="detail-header">
-    <a href="#t:start_opt/0" class="detail-link" title="Link to this type">
+    <a href="#t:start_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2393,7 +2393,7 @@ are to behave like the corresponding functions in <a href="../../../../lib/kerne
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> start_opt() ::
-    {timeout, Time :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()} | {spawn_opt, [<a href="proc_lib.html#t:spawn_option/0">proc_lib:spawn_option</a>()]} | <a href="#t:enter_loop_opt/0">enter_loop_opt</a>().</pre>
+          {timeout, Time :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()} | {spawn_opt, [<a href="proc_lib.html#t:spawn_option/0">proc_lib:spawn_option</a>()]} | <a href="#t:enter_loop_opt/0">enter_loop_opt</a>().</pre>
 
       </div>
 
@@ -2404,7 +2404,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
 <section class="detail" id="t:start_ret/0">
 
   <div class="detail-header">
-    <a href="#t:start_ret/0" class="detail-link" title="Link to this type">
+    <a href="#t:start_ret/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2435,7 +2435,7 @@ example, <a href="#start_link/3"><code class="inline">start_link/3</code></a>.</
 <section class="detail" id="t:state/0">
 
   <div class="detail-header">
-    <a href="#t:state/0" class="detail-link" title="Link to this type">
+    <a href="#t:state/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2469,7 +2469,7 @@ postponed events are retried.</p>
 <section class="detail" id="t:state_callback_result/1">
 
   <div class="detail-header">
-    <a href="#t:state_callback_result/1" class="detail-link" title="Link to this type">
+    <a href="#t:state_callback_result/1" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2501,7 +2501,7 @@ postponed events are retried.</p>
 <section class="detail" id="t:state_callback_result/2">
 
   <div class="detail-header">
-    <a href="#t:state_callback_result/2" class="detail-link" title="Link to this type">
+    <a href="#t:state_callback_result/2" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2524,22 +2524,22 @@ postponed events are retried.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> state_callback_result(ActionType, DataType) ::
-    {keep_state, NewData :: DataType} |
-    {keep_state, NewData :: DataType, Actions :: [ActionType] | ActionType} |
-    keep_state_and_data |
-    {keep_state_and_data, Actions :: [ActionType] | ActionType} |
-    {repeat_state, NewData :: DataType} |
-    {repeat_state, NewData :: DataType, Actions :: [ActionType] | ActionType} |
-    repeat_state_and_data |
-    {repeat_state_and_data, Actions :: [ActionType] | ActionType} |
-    stop |
-    {stop, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} |
-    {stop, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), NewData :: DataType} |
-    {stop_and_reply, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), Replies :: [<a href="#t:reply_action/0">reply_action</a>()] | <a href="#t:reply_action/0">reply_action</a>()} |
-    {stop_and_reply,
-     Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-     Replies :: [<a href="#t:reply_action/0">reply_action</a>()] | <a href="#t:reply_action/0">reply_action</a>(),
-     NewData :: DataType}.</pre>
+          {keep_state, NewData :: DataType} |
+          {keep_state, NewData :: DataType, Actions :: [ActionType] | ActionType} |
+          keep_state_and_data |
+          {keep_state_and_data, Actions :: [ActionType] | ActionType} |
+          {repeat_state, NewData :: DataType} |
+          {repeat_state, NewData :: DataType, Actions :: [ActionType] | ActionType} |
+          repeat_state_and_data |
+          {repeat_state_and_data, Actions :: [ActionType] | ActionType} |
+          stop |
+          {stop, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} |
+          {stop, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), NewData :: DataType} |
+          {stop_and_reply, Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), Replies :: [<a href="#t:reply_action/0">reply_action</a>()] | <a href="#t:reply_action/0">reply_action</a>()} |
+          {stop_and_reply,
+           Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+           Replies :: [<a href="#t:reply_action/0">reply_action</a>()] | <a href="#t:reply_action/0">reply_action</a>(),
+           NewData :: DataType}.</pre>
 
       </div>
 
@@ -2562,7 +2562,7 @@ version of <code class="inline">gen_statem</code>.</p>
 <section class="detail" id="t:state_enter/0">
 
   <div class="detail-header">
-    <a href="#t:state_enter/0" class="detail-link" title="Link to this type">
+    <a href="#t:state_enter/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2614,7 +2614,7 @@ will happen when repeating the <em>state enter call</em>.</p>
 <section class="detail" id="t:state_enter_result/1">
 
   <div class="detail-header">
-    <a href="#t:state_enter_result/1" class="detail-link" title="Link to this type">
+    <a href="#t:state_enter_result/1" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2644,7 +2644,7 @@ will happen when repeating the <em>state enter call</em>.</p>
 <section class="detail" id="t:state_enter_result/2">
 
   <div class="detail-header">
-    <a href="#t:state_enter_result/2" class="detail-link" title="Link to this type">
+    <a href="#t:state_enter_result/2" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2665,9 +2665,9 @@ will happen when repeating the <em>state enter call</em>.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> state_enter_result(State, DataType) ::
-    {next_state, State, NewData :: DataType} |
-    {next_state, State, NewData :: DataType, Actions :: [<a href="#t:enter_action/0">enter_action</a>()] | <a href="#t:enter_action/0">enter_action</a>()} |
-    <a href="#t:state_callback_result/1">state_callback_result</a>(<a href="#t:enter_action/0">enter_action</a>()).</pre>
+          {next_state, State, NewData :: DataType} |
+          {next_state, State, NewData :: DataType, Actions :: [<a href="#t:enter_action/0">enter_action</a>()] | <a href="#t:enter_action/0">enter_action</a>()} |
+          <a href="#t:state_callback_result/1">state_callback_result</a>(<a href="#t:enter_action/0">enter_action</a>()).</pre>
 
       </div>
 
@@ -2679,7 +2679,7 @@ has to be the current state, sets <code class="inline">NewData</code>, and execu
 <section class="detail" id="t:state_function_result/0">
 
   <div class="detail-header">
-    <a href="#t:state_function_result/0" class="detail-link" title="Link to this type">
+    <a href="#t:state_function_result/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2709,7 +2709,7 @@ has to be the current state, sets <code class="inline">NewData</code>, and execu
 <section class="detail" id="t:state_name/0">
 
   <div class="detail-header">
-    <a href="#t:state_name/0" class="detail-link" title="Link to this type">
+    <a href="#t:state_name/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2745,7 +2745,7 @@ it would collide with the optional callback function
 <section class="detail" id="t:state_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:state_timeout/0" class="detail-link" title="Link to this type">
+    <a href="#t:state_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2785,7 +2785,7 @@ value. Therefore it is possible to cancel this time-out by setting it to
 <section class="detail" id="t:timeout_action/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_action/0" class="detail-link" title="Link to this type">
+    <a href="#t:timeout_action/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2808,24 +2808,24 @@ value. Therefore it is possible to cancel this time-out by setting it to
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> timeout_action() ::
-    (Time :: <a href="#t:event_timeout/0">event_timeout</a>()) |
-    {timeout, Time :: <a href="#t:event_timeout/0">event_timeout</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
-    {timeout,
-     Time :: <a href="#t:event_timeout/0">event_timeout</a>(),
-     EventContent :: <a href="#t:event_content/0">event_content</a>(),
-     Options :: <a href="#t:timeout_option/0">timeout_option</a>() | [<a href="#t:timeout_option/0">timeout_option</a>()]} |
-    {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}, Time :: <a href="#t:generic_timeout/0">generic_timeout</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
-    {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()},
-     Time :: <a href="#t:generic_timeout/0">generic_timeout</a>(),
-     EventContent :: <a href="#t:event_content/0">event_content</a>(),
-     Options :: <a href="#t:timeout_option/0">timeout_option</a>() | [<a href="#t:timeout_option/0">timeout_option</a>()]} |
-    {state_timeout, Time :: <a href="#t:state_timeout/0">state_timeout</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
-    {state_timeout,
-     Time :: <a href="#t:state_timeout/0">state_timeout</a>(),
-     EventContent :: <a href="#t:event_content/0">event_content</a>(),
-     Options :: <a href="#t:timeout_option/0">timeout_option</a>() | [<a href="#t:timeout_option/0">timeout_option</a>()]} |
-    <a href="#t:timeout_cancel_action/0">timeout_cancel_action</a>() |
-    <a href="#t:timeout_update_action/0">timeout_update_action</a>().</pre>
+          (Time :: <a href="#t:event_timeout/0">event_timeout</a>()) |
+          {timeout, Time :: <a href="#t:event_timeout/0">event_timeout</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
+          {timeout,
+           Time :: <a href="#t:event_timeout/0">event_timeout</a>(),
+           EventContent :: <a href="#t:event_content/0">event_content</a>(),
+           Options :: <a href="#t:timeout_option/0">timeout_option</a>() | [<a href="#t:timeout_option/0">timeout_option</a>()]} |
+          {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}, Time :: <a href="#t:generic_timeout/0">generic_timeout</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
+          {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()},
+           Time :: <a href="#t:generic_timeout/0">generic_timeout</a>(),
+           EventContent :: <a href="#t:event_content/0">event_content</a>(),
+           Options :: <a href="#t:timeout_option/0">timeout_option</a>() | [<a href="#t:timeout_option/0">timeout_option</a>()]} |
+          {state_timeout, Time :: <a href="#t:state_timeout/0">state_timeout</a>(), EventContent :: <a href="#t:event_content/0">event_content</a>()} |
+          {state_timeout,
+           Time :: <a href="#t:state_timeout/0">state_timeout</a>(),
+           EventContent :: <a href="#t:event_content/0">event_content</a>(),
+           Options :: <a href="#t:timeout_option/0">timeout_option</a>() | [<a href="#t:timeout_option/0">timeout_option</a>()]} |
+          <a href="#t:timeout_cancel_action/0">timeout_cancel_action</a>() |
+          <a href="#t:timeout_update_action/0">timeout_update_action</a>().</pre>
 
       </div>
 
@@ -2847,7 +2847,7 @@ to <code class="inline">Time</code> for <code class="inline">Name</code> with <c
 <section class="detail" id="t:timeout_cancel_action/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_cancel_action/0" class="detail-link" title="Link to this type">
+    <a href="#t:timeout_cancel_action/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2870,7 +2870,7 @@ to <code class="inline">Time</code> for <code class="inline">Name</code> with <c
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> timeout_cancel_action() ::
-    {timeout, cancel} | {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}, cancel} | {state_timeout, cancel}.</pre>
+          {timeout, cancel} | {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}, cancel} | {state_timeout, cancel}.</pre>
 
       </div>
 
@@ -2882,7 +2882,7 @@ time-out.</p>
 <section class="detail" id="t:timeout_event_type/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_event_type/0" class="detail-link" title="Link to this type">
+    <a href="#t:timeout_event_type/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2915,7 +2915,7 @@ itself with the corresponding <a href="#t:timeout_action/0"><code class="inline"
 <section class="detail" id="t:timeout_option/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_option/0" class="detail-link" title="Link to this type">
+    <a href="#t:timeout_option/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2949,7 +2949,7 @@ relative, which is the default. See
 <section class="detail" id="t:timeout_update_action/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_update_action/0" class="detail-link" title="Link to this type">
+    <a href="#t:timeout_update_action/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -2972,9 +2972,9 @@ relative, which is the default. See
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> timeout_update_action() ::
-    {timeout, update, EventContent :: <a href="#t:event_content/0">event_content</a>()} |
-    {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}, update, EventContent :: <a href="#t:event_content/0">event_content</a>()} |
-    {state_timeout, update, EventContent :: <a href="#t:event_content/0">event_content</a>()}.</pre>
+          {timeout, update, EventContent :: <a href="#t:event_content/0">event_content</a>()} |
+          {{timeout, Name :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}, update, EventContent :: <a href="#t:event_content/0">event_content</a>()} |
+          {state_timeout, update, EventContent :: <a href="#t:event_content/0">event_content</a>()}.</pre>
 
       </div>
 
@@ -2986,7 +2986,7 @@ like when starting a time-out with relative <code class="inline">Time = 0</code>
 <section class="detail" id="t:transition_option/0">
 
   <div class="detail-header">
-    <a href="#t:transition_option/0" class="detail-link" title="Link to this type">
+    <a href="#t:transition_option/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
@@ -3007,7 +3007,7 @@ like when starting a time-out with relative <code class="inline">Time = 0</code>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> transition_option() ::
-    <a href="#t:postpone/0">postpone</a>() | <a href="#t:hibernate/0">hibernate</a>() | <a href="#t:event_timeout/0">event_timeout</a>() | <a href="#t:generic_timeout/0">generic_timeout</a>() | <a href="#t:state_timeout/0">state_timeout</a>().</pre>
+          <a href="#t:postpone/0">postpone</a>() | <a href="#t:hibernate/0">hibernate</a>() | <a href="#t:event_timeout/0">event_timeout</a>() | <a href="#t:generic_timeout/0">generic_timeout</a>() | <a href="#t:state_timeout/0">state_timeout</a>().</pre>
 
       </div>
 
@@ -3066,7 +3066,7 @@ corresponding event, and we start again from the top of this sequence.</li></ol>
 <section class="detail" id="c:callback_mode/0">
 
   <div class="detail-header">
-    <a href="#c:callback_mode/0" class="detail-link" title="Link to this callback">
+    <a href="#c:callback_mode/0" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3108,7 +3108,7 @@ module is doing something strange.</p></blockquote>
 <section class="detail" id="c:code_change/4">
 
   <div class="detail-header">
-    <a href="#c:code_change/4" class="detail-link" title="Link to this callback">
+    <a href="#c:code_change/4" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3131,10 +3131,10 @@ module is doing something strange.</p></blockquote>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-callback</span> code_change(OldVsn :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>() | {down, <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()},
-            OldState :: <a href="#t:state/0">state</a>(),
-            OldData :: <a href="#t:data/0">data</a>(),
-            Extra :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()) ->
-               {ok, NewState :: <a href="#t:state/0">state</a>(), NewData :: <a href="#t:data/0">data</a>()} | (Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()).</pre>
+                      OldState :: <a href="#t:state/0">state</a>(),
+                      OldData :: <a href="#t:data/0">data</a>(),
+                      Extra :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()) ->
+                         {ok, NewState :: <a href="#t:state/0">state</a>(), NewData :: <a href="#t:data/0">data</a>()} | (Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()).</pre>
 
       </div>
 
@@ -3181,7 +3181,7 @@ implemented the process will crash with exit reason <code class="inline">undef</
 <section class="detail" id="c:format_status/1">
 
   <div class="detail-header">
-    <a href="#c:format_status/1" class="detail-link" title="Link to this callback">
+    <a href="#c:format_status/1" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3218,15 +3218,15 @@ describes the current states of the <code class="inline">gen_statem</code>, and 
 <code class="inline">NewStatus</code> containing the same keys as the input map, but it may transform some
 values.</p><p>One use case for this function is to return compact alternative state
 representations to avoid having large state terms printed in log files. Another
-is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="5234377524-1">(</span><span class="n">Status</span><span class="p" data-group-id="5234377524-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="5234377524-2">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="p" data-group-id="5234377524-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="5234377524-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="5234377524-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5234377524-4">)</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="5234377524-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="5234377524-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="5234377524-6">}</span><span class="p" data-group-id="5234377524-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="5234377524-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="5234377524-7">}</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="5234377524-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="5234377524-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="0768023728-1">(</span><span class="n">Status</span><span class="p" data-group-id="0768023728-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="0768023728-2">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="p" data-group-id="0768023728-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="0768023728-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="0768023728-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="0768023728-4">)</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="0768023728-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="0768023728-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="0768023728-6">}</span><span class="p" data-group-id="0768023728-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="0768023728-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="0768023728-7">}</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="0768023728-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="0768023728-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Value</span><span class="w">
-    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="5234377524-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
+    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="0768023728-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need to export it.
 The <code class="inline">gen_statem</code> module provides a default implementation of this function
 that returns <code class="inline">{State,Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data, the
 default function will instead return <code class="inline">{State,Info}</code>, where <code class="inline">Info</code> says nothing
@@ -3236,7 +3236,7 @@ but the fact that <a href="#c:format_status/2"><code class="inline">format_statu
 <section class="detail" id="c:format_status/2">
 
   <div class="detail-header">
-    <a href="#c:format_status/2" class="detail-link" title="Link to this callback">
+    <a href="#c:format_status/2" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3263,8 +3263,8 @@ but the fact that <a href="#c:format_status/2"><code class="inline">format_statu
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-callback</span> format_status(StatusOption, [[{Key :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), Value :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}] | <a href="#t:state/0">state</a>() | <a href="#t:data/0">data</a>()]) ->
-                 Status :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()
-                 when StatusOption :: normal | terminate.</pre>
+                           Status :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()
+                           when StatusOption :: normal | terminate.</pre>
 
       </div>
 
@@ -3296,7 +3296,7 @@ but the fact that <a href="#c:format_status/2"><code class="inline">format_statu
 <section class="detail" id="c:handle_event/4">
 
   <div class="detail-header">
-    <a href="#c:handle_event/4" class="detail-link" title="Link to this callback">
+    <a href="#c:handle_event/4" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3319,8 +3319,8 @@ but the fact that <a href="#c:format_status/2"><code class="inline">format_statu
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-callback</span> handle_event(enter, OldState :: <a href="#t:state/0">state</a>(), CurrentState, <a href="#t:data/0">data</a>()) -> <a href="#t:state_enter_result/1">state_enter_result</a>(CurrentState);
-            (<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>(), CurrentState :: <a href="#t:state/0">state</a>(), <a href="#t:data/0">data</a>()) ->
-                <a href="#t:event_handler_result/1">event_handler_result</a>(<a href="#t:state/0">state</a>()).</pre>
+                      (<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>(), CurrentState :: <a href="#t:state/0">state</a>(), <a href="#t:data/0">data</a>()) ->
+                          <a href="#t:event_handler_result/1">event_handler_result</a>(<a href="#t:state/0">state</a>()).</pre>
 
       </div>
 
@@ -3363,7 +3363,7 @@ in scope.</p>
 <section class="detail" id="c:init/1">
 
   <div class="detail-header">
-    <a href="#c:init/1" class="detail-link" title="Link to this callback">
+    <a href="#c:init/1" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3392,14 +3392,14 @@ in scope.</p>
 function is called by the new process to initialize the implementation state and
 server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><blockquote><h4 class="info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a> and
 <a href="#enter_loop/4"><code class="inline">enter_loop/4-6</code></a>, this callback will never be called. Since
-this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="2304151641-1">(</span><span class="p">_</span><span class="p" data-group-id="2304151641-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="2304151641-2">(</span><span class="p" data-group-id="2304151641-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="2304151641-3">(</span><span class="n">Args</span><span class="p" data-group-id="2304151641-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="2304151641-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2304151641-5">[</span><span class="n">Args</span><span class="p" data-group-id="2304151641-5">]</span><span class="p" data-group-id="2304151641-4">)</span><span class="p">.</span></code></pre></blockquote>
+this callback is not optional it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="6063082094-1">(</span><span class="p">_</span><span class="p" data-group-id="6063082094-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="6063082094-2">(</span><span class="p" data-group-id="6063082094-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="6063082094-3">(</span><span class="n">Args</span><span class="p" data-group-id="6063082094-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="6063082094-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6063082094-5">[</span><span class="n">Args</span><span class="p" data-group-id="6063082094-5">]</span><span class="p" data-group-id="6063082094-4">)</span><span class="p">.</span></code></pre></blockquote>
   </section>
 </section>
 <section class="detail" id="c:StateName/3">
 
   <div class="detail-header">
-    <a href="#c:StateName/3" class="detail-link" title="Link to this callback">
+    <a href="#c:StateName/3" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3422,7 +3422,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-callback</span> 'StateName'(enter, OldStateName :: <a href="#t:state_name/0">state_name</a>(), <a href="#t:data/0">data</a>()) -> <a href="#t:state_enter_result/1">state_enter_result</a>(state_name);
-           (<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>(), <a href="#t:data/0">data</a>()) -> <a href="#t:event_handler_result/1">event_handler_result</a>(<a href="#t:state_name/0">state_name</a>()).</pre>
+                     (<a href="#t:event_type/0">event_type</a>(), <a href="#t:event_content/0">event_content</a>(), <a href="#t:data/0">data</a>()) -> <a href="#t:event_handler_result/1">event_handler_result</a>(<a href="#t:state_name/0">state_name</a>()).</pre>
 
       </div>
 
@@ -3432,7 +3432,7 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
 <section class="detail" id="c:terminate/3">
 
   <div class="detail-header">
-    <a href="#c:terminate/3" class="detail-link" title="Link to this callback">
+    <a href="#c:terminate/3" class="detail-link" data-no-tooltip title="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this callback</span>
     </a>
@@ -3455,9 +3455,9 @@ this callback is not optional it can in that case be implemented as:</p><pre><co
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-callback</span> terminate(Reason :: normal | shutdown | {shutdown, <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-          CurrentState :: <a href="#t:state/0">state</a>(),
-          <a href="#t:data/0">data</a>()) ->
-             <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:any/0">any</a>().</pre>
+                    CurrentState :: <a href="#t:state/0">state</a>(),
+                    <a href="#t:data/0">data</a>()) ->
+                       <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:any/0">any</a>().</pre>
 
       </div>
 
@@ -3494,7 +3494,7 @@ to linked processes and ports.</p>
 <section class="detail" id="call/2">
 
   <div class="detail-header">
-    <a href="#call/2" class="detail-link" title="Link to this function">
+    <a href="#call/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3524,7 +3524,7 @@ to linked processes and ports.</p>
 <section class="detail" id="call/3">
 
   <div class="detail-header">
-    <a href="#call/3" class="detail-link" title="Link to this function">
+    <a href="#call/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3545,9 +3545,9 @@ to linked processes and ports.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> call(ServerRef :: <a href="#t:server_ref/0">server_ref</a>(),
-     Request :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-     Timeout :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>() | {clean_timeout, T :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()} | {dirty_timeout, T :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()}) ->
-        Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>().</pre>
+           Request :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+           Timeout :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>() | {clean_timeout, T :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()} | {dirty_timeout, T :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:timeout/0">timeout</a>()}) ->
+              Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -3573,7 +3573,7 @@ values for the <code class="inline">Reason</code> in the exit term.</p>
 <section class="detail" id="cast/2">
 
   <div class="detail-header">
-    <a href="#cast/2" class="detail-link" title="Link to this function">
+    <a href="#cast/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3607,7 +3607,7 @@ and event content <code class="inline">Msg</code>.</p>
 <section class="detail" id="check_response/2">
 
   <div class="detail-header">
-    <a href="#check_response/2" class="detail-link" title="Link to this function">
+    <a href="#check_response/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3628,12 +3628,12 @@ and event content <code class="inline">Msg</code>.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> check_response(Msg, ReqId) -> Result
-                  when
-                      Msg :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-                      ReqId :: <a href="#t:request_id/0">request_id</a>(),
-                      Response ::
-                          {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                      Result :: Response | no_reply.</pre>
+                        when
+                            Msg :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                            ReqId :: <a href="#t:request_id/0">request_id</a>(),
+                            Response ::
+                                {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                            Result :: Response | no_reply.</pre>
 
       </div>
 
@@ -3650,7 +3650,7 @@ request.</p>
 <section class="detail" id="check_response/3">
 
   <div class="detail-header">
-    <a href="#check_response/3" class="detail-link" title="Link to this function">
+    <a href="#check_response/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3671,17 +3671,17 @@ request.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> check_response(Msg, ReqIdCollection, Delete) -> Result
-                  when
-                      Msg :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-                      ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>(),
-                      Delete :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:boolean/0">boolean</a>(),
-                      Response ::
-                          {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                      Result ::
-                          {Response,
-                           Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-                           NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()} |
-                          no_request | no_reply.</pre>
+                        when
+                            Msg :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                            ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>(),
+                            Delete :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:boolean/0">boolean</a>(),
+                            Response ::
+                                {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                            Result ::
+                                {Response,
+                                 Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                                 NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()} |
+                                no_request | no_reply.</pre>
 
       </div>
 
@@ -3716,7 +3716,7 @@ associations of already handled or abandoned requests to
 <section class="detail" id="enter_loop/4">
 
   <div class="detail-header">
-    <a href="#enter_loop/4" class="detail-link" title="Link to this function">
+    <a href="#enter_loop/4" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3737,7 +3737,7 @@ associations of already handled or abandoned requests to
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> enter_loop(Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), Opts :: [<a href="#t:enter_loop_opt/0">enter_loop_opt</a>()], State :: <a href="#t:state/0">state</a>(), Data :: <a href="#t:data/0">data</a>()) ->
-              <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:no_return/0">no_return</a>().</pre>
+                    <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:no_return/0">no_return</a>().</pre>
 
       </div>
 
@@ -3748,7 +3748,7 @@ must have been registered. This creates an anonymous server.</p>
 <section class="detail" id="enter_loop/5">
 
   <div class="detail-header">
-    <a href="#enter_loop/5" class="detail-link" title="Link to this function">
+    <a href="#enter_loop/5" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3769,11 +3769,11 @@ must have been registered. This creates an anonymous server.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> enter_loop(Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(),
-           Opts :: [<a href="#t:enter_loop_opt/0">enter_loop_opt</a>()],
-           State :: <a href="#t:state/0">state</a>(),
-           Data :: <a href="#t:data/0">data</a>(),
-           Server_or_Actions :: <a href="#t:server_name/0">server_name</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:pid/0">pid</a>() | [<a href="#t:action/0">action</a>()]) ->
-              <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:no_return/0">no_return</a>().</pre>
+                 Opts :: [<a href="#t:enter_loop_opt/0">enter_loop_opt</a>()],
+                 State :: <a href="#t:state/0">state</a>(),
+                 Data :: <a href="#t:data/0">data</a>(),
+                 Server_or_Actions :: <a href="#t:server_name/0">server_name</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:pid/0">pid</a>() | [<a href="#t:action/0">action</a>()]) ->
+                    <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:no_return/0">no_return</a>().</pre>
 
       </div>
 
@@ -3786,7 +3786,7 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
 <section class="detail" id="enter_loop/6">
 
   <div class="detail-header">
-    <a href="#enter_loop/6" class="detail-link" title="Link to this function">
+    <a href="#enter_loop/6" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3807,12 +3807,12 @@ no <a href="#t:server_name/0"><code class="inline">server_name/0</code></a> must
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> enter_loop(Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(),
-           Opts :: [<a href="#t:enter_loop_opt/0">enter_loop_opt</a>()],
-           State :: <a href="#t:state/0">state</a>(),
-           Data :: <a href="#t:data/0">data</a>(),
-           Server :: <a href="#t:server_name/0">server_name</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:pid/0">pid</a>(),
-           Actions :: [<a href="#t:action/0">action</a>()] | <a href="#t:action/0">action</a>()) ->
-              <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:no_return/0">no_return</a>().</pre>
+                 Opts :: [<a href="#t:enter_loop_opt/0">enter_loop_opt</a>()],
+                 State :: <a href="#t:state/0">state</a>(),
+                 Data :: <a href="#t:data/0">data</a>(),
+                 Server :: <a href="#t:server_name/0">server_name</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:pid/0">pid</a>(),
+                 Actions :: [<a href="#t:action/0">action</a>()] | <a href="#t:action/0">action</a>()) ->
+                    <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:no_return/0">no_return</a>().</pre>
 
       </div>
 
@@ -3835,7 +3835,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
 <section class="detail" id="receive_response/1">
 
   <div class="detail-header">
-    <a href="#receive_response/1" class="detail-link" title="Link to this function">
+    <a href="#receive_response/1" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3856,11 +3856,11 @@ start function, or if it is not registered according to <a href="#t:server_name/
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> receive_response(ReqId) -> Result
-                    when
-                        ReqId :: <a href="#t:request_id/0">request_id</a>(),
-                        Response ::
-                            {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                        Result :: Response | timeout.</pre>
+                          when
+                              ReqId :: <a href="#t:request_id/0">request_id</a>(),
+                              Response ::
+                                  {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                              Result :: Response | timeout.</pre>
 
       </div>
 
@@ -3870,7 +3870,7 @@ start function, or if it is not registered according to <a href="#t:server_name/
 <section class="detail" id="receive_response/2">
 
   <div class="detail-header">
-    <a href="#receive_response/2" class="detail-link" title="Link to this function">
+    <a href="#receive_response/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3891,12 +3891,12 @@ start function, or if it is not registered according to <a href="#t:server_name/
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> receive_response(ReqId, Timeout) -> Result
-                    when
-                        ReqId :: <a href="#t:request_id/0">request_id</a>(),
-                        Timeout :: <a href="#t:response_timeout/0">response_timeout</a>(),
-                        Response ::
-                            {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                        Result :: Response | timeout.</pre>
+                          when
+                              ReqId :: <a href="#t:request_id/0">request_id</a>(),
+                              Timeout :: <a href="#t:response_timeout/0">response_timeout</a>(),
+                              Response ::
+                                  {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                              Result :: Response | timeout.</pre>
 
       </div>
 
@@ -3921,7 +3921,7 @@ that a potential future response is ignored, while
 <section class="detail" id="receive_response/3">
 
   <div class="detail-header">
-    <a href="#receive_response/3" class="detail-link" title="Link to this function">
+    <a href="#receive_response/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -3942,17 +3942,17 @@ that a potential future response is ignored, while
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> receive_response(ReqIdCollection, Timeout, Delete) -> Result
-                    when
-                        ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>(),
-                        Timeout :: <a href="#t:response_timeout/0">response_timeout</a>(),
-                        Delete :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:boolean/0">boolean</a>(),
-                        Response ::
-                            {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                        Result ::
-                            {Response,
-                             Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-                             NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()} |
-                            no_request | timeout.</pre>
+                          when
+                              ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>(),
+                              Timeout :: <a href="#t:response_timeout/0">response_timeout</a>(),
+                              Delete :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:boolean/0">boolean</a>(),
+                              Response ::
+                                  {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                              Result ::
+                                  {Response,
+                                   Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                                   NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()} |
+                                  no_request | timeout.</pre>
 
       </div>
 
@@ -3993,7 +3993,7 @@ timeout determined by <code class="inline">Timeout</code> is triggered.</p>
 <section class="detail" id="reply/1">
 
   <div class="detail-header">
-    <a href="#reply/1" class="detail-link" title="Link to this function">
+    <a href="#reply/1" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4026,7 +4026,7 @@ value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.
 <section class="detail" id="reply/2">
 
   <div class="detail-header">
-    <a href="#reply/2" class="detail-link" title="Link to this function">
+    <a href="#reply/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4059,7 +4059,7 @@ value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.
 <section class="detail" id="reqids_add/3">
 
   <div class="detail-header">
-    <a href="#reqids_add/3" class="detail-link" title="Link to this function">
+    <a href="#reqids_add/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4080,7 +4080,7 @@ value of a <a href="gen_statem.html#state-callback"><em>state callback</em></a>.
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> reqids_add(ReqId :: <a href="#t:request_id/0">request_id</a>(), Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()) ->
-              NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>().</pre>
+                    NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>().</pre>
 
       </div>
 
@@ -4092,7 +4092,7 @@ identifier collection.</p>
 <section class="detail" id="reqids_new/0">
 
   <div class="detail-header">
-    <a href="#reqids_new/0" class="detail-link" title="Link to this function">
+    <a href="#reqids_new/0" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4128,7 +4128,7 @@ request identifier collection.</p>
 <section class="detail" id="reqids_size/1">
 
   <div class="detail-header">
-    <a href="#reqids_size/1" class="detail-link" title="Link to this function">
+    <a href="#reqids_size/1" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4158,7 +4158,7 @@ request identifier collection.</p>
 <section class="detail" id="reqids_to_list/1">
 
   <div class="detail-header">
-    <a href="#reqids_to_list/1" class="detail-link" title="Link to this function">
+    <a href="#reqids_to_list/1" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4179,7 +4179,7 @@ request identifier collection.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> reqids_to_list(ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()) ->
-                  [{ReqId :: <a href="#t:request_id/0">request_id</a>(), Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}].</pre>
+                        [{ReqId :: <a href="#t:request_id/0">request_id</a>(), Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()}].</pre>
 
       </div>
 
@@ -4191,7 +4191,7 @@ collection.</p>
 <section class="detail" id="send_request/2">
 
   <div class="detail-header">
-    <a href="#send_request/2" class="detail-link" title="Link to this function">
+    <a href="#send_request/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4238,7 +4238,7 @@ the return value of <a href="#receive_response/2"><code class="inline">receive_r
 <section class="detail" id="send_request/4">
 
   <div class="detail-header">
-    <a href="#send_request/4" class="detail-link" title="Link to this function">
+    <a href="#send_request/4" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4259,10 +4259,10 @@ the return value of <a href="#receive_response/2"><code class="inline">receive_r
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> send_request(ServerRef :: <a href="#t:server_ref/0">server_ref</a>(),
-             Request :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-             Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-             ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()) ->
-                NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>().</pre>
+                   Request :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                   Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                   ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()) ->
+                      NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>().</pre>
 
       </div>
 
@@ -4280,7 +4280,7 @@ but calling <a href="#send_request/4"><code class="inline">send_request/4</code>
 <section class="detail" id="start/3">
 
   <div class="detail-header">
-    <a href="#start/3" class="detail-link" title="Link to this function">
+    <a href="#start/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4311,7 +4311,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
 <section class="detail" id="start/4">
 
   <div class="detail-header">
-    <a href="#start/4" class="detail-link" title="Link to this function">
+    <a href="#start/4" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4332,7 +4332,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> start(ServerName :: <a href="#t:server_name/0">server_name</a>(), Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), Args :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), Opts :: [<a href="#t:start_opt/0">start_opt</a>()]) ->
-         <a href="#t:start_ret/0">start_ret</a>().</pre>
+               <a href="#t:start_ret/0">start_ret</a>().</pre>
 
       </div>
 
@@ -4345,7 +4345,7 @@ process, this start function cannot be used by a supervisor to start a child.</p
 <section class="detail" id="start_link/3">
 
   <div class="detail-header">
-    <a href="#start_link/3" class="detail-link" title="Link to this function">
+    <a href="#start_link/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4376,7 +4376,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
 <section class="detail" id="start_link/4">
 
   <div class="detail-header">
-    <a href="#start_link/4" class="detail-link" title="Link to this function">
+    <a href="#start_link/4" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4397,7 +4397,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> start_link(ServerName :: <a href="#t:server_name/0">server_name</a>(), Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(), Args :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), Opts :: [<a href="#t:start_opt/0">start_opt</a>()]) ->
-              <a href="#t:start_ret/0">start_ret</a>().</pre>
+                    <a href="#t:start_ret/0">start_ret</a>().</pre>
 
       </div>
 
@@ -4458,7 +4458,7 @@ been consumed and the started <code class="inline">gen_statem</code> process had
 <section class="detail" id="start_monitor/3">
 
   <div class="detail-header">
-    <a href="#start_monitor/3" class="detail-link" title="Link to this function">
+    <a href="#start_monitor/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4489,7 +4489,7 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
 <section class="detail" id="start_monitor/4">
 
   <div class="detail-header">
-    <a href="#start_monitor/4" class="detail-link" title="Link to this function">
+    <a href="#start_monitor/4" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4510,10 +4510,10 @@ registered with any <a href="#t:server_name/0">name service</a>.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> start_monitor(ServerName :: <a href="#t:server_name/0">server_name</a>(),
-              Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(),
-              Args :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-              Opts :: [<a href="#t:start_opt/0">start_opt</a>()]) ->
-                 <a href="#t:start_mon_ret/0">start_mon_ret</a>().</pre>
+                    Module :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:module/0">module</a>(),
+                    Args :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                    Opts :: [<a href="#t:start_opt/0">start_opt</a>()]) ->
+                       <a href="#t:start_mon_ret/0">start_mon_ret</a>().</pre>
 
       </div>
 
@@ -4532,7 +4532,7 @@ received and removed from the message queue.</p>
 <section class="detail" id="stop/1">
 
   <div class="detail-header">
-    <a href="#stop/1" class="detail-link" title="Link to this function">
+    <a href="#stop/1" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4562,7 +4562,7 @@ received and removed from the message queue.</p>
 <section class="detail" id="stop/3">
 
   <div class="detail-header">
-    <a href="#stop/3" class="detail-link" title="Link to this function">
+    <a href="#stop/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4602,7 +4602,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
 <section class="detail" id="wait_response/1">
 
   <div class="detail-header">
-    <a href="#wait_response/1" class="detail-link" title="Link to this function">
+    <a href="#wait_response/1" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4623,11 +4623,11 @@ remote <code class="inline">Node</code> where the server runs.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> wait_response(ReqId) -> Result
-                 when
-                     ReqId :: <a href="#t:request_id/0">request_id</a>(),
-                     Response ::
-                         {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                     Result :: Response | timeout.</pre>
+                       when
+                           ReqId :: <a href="#t:request_id/0">request_id</a>(),
+                           Response ::
+                               {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                           Result :: Response | timeout.</pre>
 
       </div>
 
@@ -4637,7 +4637,7 @@ remote <code class="inline">Node</code> where the server runs.</p>
 <section class="detail" id="wait_response/2">
 
   <div class="detail-header">
-    <a href="#wait_response/2" class="detail-link" title="Link to this function">
+    <a href="#wait_response/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4658,12 +4658,12 @@ remote <code class="inline">Node</code> where the server runs.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> wait_response(ReqId, WaitTime) -> Result
-                 when
-                     ReqId :: <a href="#t:request_id/0">request_id</a>(),
-                     WaitTime :: <a href="#t:response_timeout/0">response_timeout</a>(),
-                     Response ::
-                         {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                     Result :: Response | timeout.</pre>
+                       when
+                           ReqId :: <a href="#t:request_id/0">request_id</a>(),
+                           WaitTime :: <a href="#t:response_timeout/0">response_timeout</a>(),
+                           Response ::
+                               {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                           Result :: Response | timeout.</pre>
 
       </div>
 
@@ -4686,7 +4686,7 @@ that a potential future response is ignored, while
 <section class="detail" id="wait_response/3">
 
   <div class="detail-header">
-    <a href="#wait_response/3" class="detail-link" title="Link to this function">
+    <a href="#wait_response/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
@@ -4707,17 +4707,17 @@ that a potential future response is ignored, while
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> wait_response(ReqIdCollection, WaitTime, Delete) -> Result
-                 when
-                     ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>(),
-                     WaitTime :: <a href="#t:response_timeout/0">response_timeout</a>(),
-                     Delete :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:boolean/0">boolean</a>(),
-                     Response ::
-                         {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
-                     Result ::
-                         {Response,
-                          Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
-                          NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()} |
-                         no_request | timeout.</pre>
+                       when
+                           ReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>(),
+                           WaitTime :: <a href="#t:response_timeout/0">response_timeout</a>(),
+                           Delete :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:boolean/0">boolean</a>(),
+                           Response ::
+                               {reply, Reply :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>()} | {error, {Reason :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(), <a href="#t:server_ref/0">server_ref</a>()}},
+                           Result ::
+                               {Response,
+                                Label :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>(),
+                                NewReqIdCollection :: <a href="#t:request_id_collection/0">request_id_collection</a>()} |
+                               no_request | timeout.</pre>
 
       </div>
 
@@ -4777,7 +4777,7 @@ determined by <code class="inline">WaitTime</code> is triggered and then return 
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
@@ -4788,7 +4788,7 @@ determined by <code class="inline">WaitTime</code> is triggered and then return 
 </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     mermaid.initialize({

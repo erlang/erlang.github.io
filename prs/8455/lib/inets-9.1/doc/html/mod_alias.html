@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.32.1">
+    <meta name="generator" content="ExDoc v0.32.2">
     <meta name="project" content="inets v9.1">
 
 
     <title>mod_alias — inets v9.1</title>
-    <link rel="stylesheet" href="dist/html-erlang-X76CAHZ3.css" />
+    <link rel="stylesheet" href="dist/html-erlang-EBZIIHAS.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-IHH6HKET.js"></script>
-    <script src="dist/sidebar_items-E3B71DB0.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-03569826.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-GXQ6W6IF.js"></script>
+    <script async src="dist/html-BHYOTRCH.js"></script>
 
 
   </head>
@@ -149,41 +149,66 @@ exported by module <code class="inline">mod_alias</code>.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#default_index/2" translate="no">default_index(ConfigDB, Path)</a>
+        <a href="#default_index/2" data-no-tooltip translate="no">default_index(ConfigDB, Path)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>default_index(ConfigDB, Path) -&gt; NewPath</p></div>
+        <div class="summary-synopsis"><p>If <code class="inline">Path</code> is a directory, <a href="#default_index/2"><code class="inline">default_index/2</code></a>, it starts
+searching for resources or files that are specified in the config directive
+<code class="inline">DirectoryIndex</code>. If an appropriate resource or file is found, it is appended to
+the end of <code class="inline">Path</code> and then returned. <code class="inline">Path</code> is returned unaltered if no
+appropriate file is found or if <code class="inline">Path</code> is not a directory. <code class="inline">config_db()</code> is the
+server config file in ETS table format as described in
+<a href="http_server.html">Inets User's Guide</a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#path/3" translate="no">path(Data, ConfigDB, RequestURI0)</a>
+        <a href="#path/3" data-no-tooltip translate="no">path(Data, ConfigDB, RequestURI)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>path(PathData, ConfigDB, RequestURI) -&gt; Path</p></div>
+        <div class="summary-synopsis"><p><a href="#path/3"><code class="inline">path/3</code></a> returns the file <code class="inline">Path</code> in the <code class="inline">RequestURI</code> (see
+<a href="https://www.ietf.org/rfc/rfc1945.txt">RFC 1945</a>). If the interaction data
+<code class="inline">{real_name, {Path, AfterPath}}</code> has been exported by <code class="inline">mod_alias</code>, <code class="inline">Path</code> is
+returned. If no interaction data has been exported, <code class="inline">ServerRoot</code> is used to
+generate a file <code class="inline">Path</code>. <code class="inline">config_db()</code> and <code class="inline">interaction_data()</code> are as defined in
+<a href="http_server.html">Inets User's Guide</a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#real_name/3" translate="no">real_name/3</a>
+        <a href="#real_name/3" data-no-tooltip translate="no">real_name(ConfigDB, RequestURI, Aliases)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>real_name(ConfigDB, RequestURI, Aliases) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p><a href="#real_name/3"><code class="inline">real_name/3</code></a> traverses <code class="inline">Aliases</code>, typically extracted from
+<code class="inline">ConfigDB</code>, and matches each <code class="inline">FakeName</code> with <code class="inline">RequestURI</code>. If a match is found,
+<code class="inline">FakeName</code> is replaced with <code class="inline">RealName</code> in the match. The resulting path is split
+into two parts, <code class="inline">ShortPath</code> and <code class="inline">AfterPath</code>, as defined in
+<a href="httpd_util.html#split_path/1"><code class="inline">httpd_util:split_path/1</code></a>. <code class="inline">Path</code> is generated from <code class="inline">ShortPath</code>, that is, the
+result from <a href="#default_index/2"><code class="inline">default_index/2</code></a> with <code class="inline">ShortPath</code> as
+an argument. <code class="inline">config_db()</code> is the server config file in ETS table format as
+described in <a href="http_server.html">Inets User's Guide</a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#real_script_name/3" translate="no">real_script_name/3</a>
+        <a href="#real_script_name/3" data-no-tooltip translate="no">real_script_name(ConfigDB, RequestURI, ScriptAliases)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>real_script_name(ConfigDB, RequestURI, ScriptAliases) -&gt; Ret</p></div>
+        <div class="summary-synopsis"><p><a href="#real_script_name/3"><code class="inline">real_script_name/3</code></a> traverses <code class="inline">ScriptAliases</code>,
+typically extracted from <code class="inline">ConfigDB</code>, and matches each <code class="inline">FakeName</code> with
+<code class="inline">RequestURI</code>. If a match is found, <code class="inline">FakeName</code> is replaced with <code class="inline">RealName</code> in the
+match. If the resulting match is not an executable script, <code class="inline">not_a_script</code> is
+returned. If it is a script, the resulting script path is in two parts,
+<code class="inline">ShortPath</code> and <code class="inline">AfterPath</code>, as defined in <a href="httpd_util.html#split_script_path/1"><code class="inline">httpd_util:split_script_path/1</code></a>.
+<code class="inline">config_db()</code> is the server config file in ETS table format as described in
+<a href="http_server.html">Inets User's Guide</a>.</p></div>
 
     </div>
 
@@ -203,13 +228,13 @@ exported by module <code class="inline">mod_alias</code>.</p>
 <section class="detail" id="default_index/2">
 
   <div class="detail-header">
-    <a href="#default_index/2" class="detail-link" title="Link to this function">
+    <a href="#default_index/2" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">default_index(ConfigDB, Path)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L205" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L222" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -219,7 +244,14 @@ exported by module <code class="inline">mod_alias</code>.</p>
 
   <section class="docstring">
 
-<p>default_index(ConfigDB, Path) -&gt; NewPath</p><p>If <code class="inline">Path</code> is a directory, <a href="#default_index/2"><code class="inline">default_index/2</code></a>, it starts
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> default_index(ConfigDB, Path) -> NewPath
+                       when ConfigDB :: <a href="../../../../lib/stdlib-5.2.3/doc/html/ets.html#t:tid/0">ets:tid</a>(), Path :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(), NewPath :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p>If <code class="inline">Path</code> is a directory, <a href="#default_index/2"><code class="inline">default_index/2</code></a>, it starts
 searching for resources or files that are specified in the config directive
 <code class="inline">DirectoryIndex</code>. If an appropriate resource or file is found, it is appended to
 the end of <code class="inline">Path</code> and then returned. <code class="inline">Path</code> is returned unaltered if no
@@ -231,13 +263,13 @@ server config file in ETS table format as described in
 <section class="detail" id="path/3">
 
   <div class="detail-header">
-    <a href="#path/3" class="detail-link" title="Link to this function">
+    <a href="#path/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">path(Data, ConfigDB, RequestURI0)</h1>
+    <h1 class="signature" translate="no">path(Data, ConfigDB, RequestURI)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L236" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L257" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -247,9 +279,21 @@ server config file in ETS table format as described in
 
   <section class="docstring">
 
-<p>path(PathData, ConfigDB, RequestURI) -&gt; Path</p><p><a href="#path/3"><code class="inline">path/3</code></a> returns the file <code class="inline">Path</code> in the <code class="inline">RequestURI</code> (see
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> path(Data, ConfigDB, RequestURI) -> Path
+              when
+                  Data :: [{real_name, {Path, AfterPath}}],
+                  ConfigDB :: <a href="../../../../lib/stdlib-5.2.3/doc/html/ets.html#t:tid/0">ets:tid</a>(),
+                  RequestURI :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                  AfterPath :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                  Path :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p><a href="#path/3"><code class="inline">path/3</code></a> returns the file <code class="inline">Path</code> in the <code class="inline">RequestURI</code> (see
 <a href="https://www.ietf.org/rfc/rfc1945.txt">RFC 1945</a>). If the interaction data
-<code class="inline">{real_name,{Path,AfterPath}}</code> has been exported by <code class="inline">mod_alias</code>, <code class="inline">Path</code> is
+<code class="inline">{real_name, {Path, AfterPath}}</code> has been exported by <code class="inline">mod_alias</code>, <code class="inline">Path</code> is
 returned. If no interaction data has been exported, <code class="inline">ServerRoot</code> is used to
 generate a file <code class="inline">Path</code>. <code class="inline">config_db()</code> and <code class="inline">interaction_data()</code> are as defined in
 <a href="http_server.html">Inets User's Guide</a>.</p>
@@ -258,13 +302,13 @@ generate a file <code class="inline">Path</code>. <code class="inline">config_db
 <section class="detail" id="real_name/3">
 
   <div class="detail-header">
-    <a href="#real_name/3" class="detail-link" title="Link to this function">
+    <a href="#real_name/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">real_name/3</h1>
+    <h1 class="signature" translate="no">real_name(ConfigDB, RequestURI, Aliases)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L105" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L113" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -274,7 +318,23 @@ generate a file <code class="inline">Path</code>. <code class="inline">config_db
 
   <section class="docstring">
 
-<p>real_name(ConfigDB, RequestURI, Aliases) -&gt; Ret</p><p><a href="#real_name/3"><code class="inline">real_name/3</code></a> traverses <code class="inline">Aliases</code>, typically extracted from
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> real_name(ConfigDB, RequestURI, Aliases) -> ReturnPath
+                   when
+                       ConfigDB :: <a href="../../../../lib/stdlib-5.2.3/doc/html/ets.html#t:tid/0">ets:tid</a>(),
+                       RequestURI :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                       Aliases :: [{FakeName, RealName}],
+                       ReturnPath :: {ShortPath, Path, AfterPath},
+                       FakeName :: <a href="../../../../lib/stdlib-5.2.3/doc/html/re.html#t:mp/0">re:mp</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:iodata/0">iodata</a>() | <a href="../../../../lib/stdlib-5.2.3/doc/html/unicode.html#t:charlist/0">unicode:charlist</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                       RealName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                       ShortPath :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                       Path :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                       AfterPath :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>().</pre>
+
+      </div>
+
+<p><a href="#real_name/3"><code class="inline">real_name/3</code></a> traverses <code class="inline">Aliases</code>, typically extracted from
 <code class="inline">ConfigDB</code>, and matches each <code class="inline">FakeName</code> with <code class="inline">RequestURI</code>. If a match is found,
 <code class="inline">FakeName</code> is replaced with <code class="inline">RealName</code> in the match. The resulting path is split
 into two parts, <code class="inline">ShortPath</code> and <code class="inline">AfterPath</code>, as defined in
@@ -287,13 +347,13 @@ described in <a href="http_server.html">Inets User's Guide</a>.</p>
 <section class="detail" id="real_script_name/3">
 
   <div class="detail-header">
-    <a href="#real_script_name/3" class="detail-link" title="Link to this function">
+    <a href="#real_script_name/3" class="detail-link" data-no-tooltip title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">real_script_name/3</h1>
+    <h1 class="signature" translate="no">real_script_name(ConfigDB, RequestURI, ScriptAliases)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/inets/src/http_server/mod_alias.erl#L186" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -303,7 +363,22 @@ described in <a href="http_server.html">Inets User's Guide</a>.</p>
 
   <section class="docstring">
 
-<p>real_script_name(ConfigDB, RequestURI, ScriptAliases) -&gt; Ret</p><p><a href="#real_script_name/3"><code class="inline">real_script_name/3</code></a> traverses <code class="inline">ScriptAliases</code>,
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> real_script_name(ConfigDB, RequestURI, ScriptAliases) -> ReturnPath | not_a_script
+                          when
+                              ConfigDB :: <a href="../../../../lib/stdlib-5.2.3/doc/html/ets.html#t:tid/0">ets:tid</a>(),
+                              RequestURI :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                              ScriptAliases :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:list/0">list</a>() | [{FakeName, RealName}],
+                              ReturnPath :: {ShortPath, AfterPath},
+                              FakeName :: <a href="../../../../lib/stdlib-5.2.3/doc/html/re.html#t:mp/0">re:mp</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:iodata/0">iodata</a>() | <a href="../../../../lib/stdlib-5.2.3/doc/html/unicode.html#t:charlist/0">unicode:charlist</a>() | <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                              RealName :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                              ShortPath :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:string/0">string</a>(),
+                              AfterPath :: <a href="../../../../erts-14.2.5/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p><a href="#real_script_name/3"><code class="inline">real_script_name/3</code></a> traverses <code class="inline">ScriptAliases</code>,
 typically extracted from <code class="inline">ConfigDB</code>, and matches each <code class="inline">FakeName</code> with
 <code class="inline">RequestURI</code>. If a match is found, <code class="inline">FakeName</code> is replaced with <code class="inline">RealName</code> in the
 match. If the resulting match is not an executable script, <code class="inline">not_a_script</code> is
@@ -334,7 +409,7 @@ returned. If it is a script, the resulting script path is in two parts,
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
@@ -345,7 +420,7 @@ returned. If it is a script, the resulting script path is in two parts,
 </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     mermaid.initialize({
