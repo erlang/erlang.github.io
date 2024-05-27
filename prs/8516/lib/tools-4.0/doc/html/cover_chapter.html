@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.32.2">
+    <meta name="project" content="tools v4.0">
+
+
+    <title>cover - The Coverage Analysis Tool — tools v4.0</title>
+    <link rel="stylesheet" href="dist/html-erlang-EBZIIHAS.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-7275BB77.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-BHYOTRCH.js"></script>
+
+
+  </head>
+  <body data-type="extras" class="page-extra">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="../../../../doc/index.html" class="sidebar-projectImage">
+          <img src="assets/logo.png" alt="tools" />
+        </a>
+
+      <div>
+        <a href="../../../../doc/index.html" class="sidebar-projectName" translate="no">
+tools
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v4.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
+      <li>
+        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
+Pages
+        </button>
+      </li>
+
+        <li>
+          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
+            Modules
+          </button>
+        </li>
+
+
+    </ul>
+  </div>
+
+  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
+    <ul id="extras-full-list" class="full-list"></ul>
+  </div>
+
+    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
+      <ul id="modules-full-list" class="full-list"></ul>
+    </div>
+
+
+</nav>
+
+<main class="content">
+  <output role="status" id="toast"></output>
+
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of tools</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <h1>
+
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/docs_continuation/lib/tools/doc/guides/cover_chapter.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+
+    <span>cover - The Coverage Analysis Tool</span>
+  </h1>
+
+<h2 id="introduction" class="section-heading">
+  <a href="#introduction" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Introduction</span>
+</h2>
+<p>The module <code class="inline">cover</code> provides a set of functions for coverage analysis of Erlang
+programs, counting how many times each <a href="cover_chapter.html#lines">executable line</a>
+is executed.</p><p>Coverage analysis can be used to verify test cases, making sure all relevant
+code is covered, and can be helpful when looking for bottlenecks in the code.</p><h2 id="getting-started-with-cover" class="section-heading">
+  <a href="#getting-started-with-cover" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Getting Started With Cover</span>
+</h2>
+<h3 id="example" class="section-heading">
+  <a href="#example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h3>
+<p>Assume that a test case for the following program should be verified:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="7824460394-1">(</span><span class="ss">channel</span><span class="p" data-group-id="7824460394-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="7824460394-2">(</span><span class="ss">gen_server</span><span class="p" data-group-id="7824460394-2">)</span><span class="p">.</span><span class="w">
+</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="7824460394-3">(</span><span class="p" data-group-id="7824460394-4">[</span><span class="ss">start_link</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="7824460394-4">]</span><span class="p" data-group-id="7824460394-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="7824460394-5">(</span><span class="p" data-group-id="7824460394-6">[</span><span class="ss">alloc</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">free</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="7824460394-6">]</span><span class="p" data-group-id="7824460394-5">)</span><span class="p">.</span><span class="w"> </span><span class="c1">% client interface</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="7824460394-7">(</span><span class="p" data-group-id="7824460394-8">[</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">2</span><span class="p" data-group-id="7824460394-8">]</span><span class="p" data-group-id="7824460394-7">)</span><span class="p">.</span><span class="w"> </span><span class="c1">% callback functions</span><span class="w">
+
+</span><span class="nf">start_link</span><span class="p" data-group-id="7824460394-9">(</span><span class="p" data-group-id="7824460394-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="7824460394-10">(</span><span class="p" data-group-id="7824460394-11">{</span><span class="ss">local</span><span class="p">,</span><span class="ss">channel</span><span class="p" data-group-id="7824460394-11">}</span><span class="p">,</span><span class="w"> </span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7824460394-12">[</span><span class="p" data-group-id="7824460394-12">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7824460394-13">[</span><span class="p" data-group-id="7824460394-13">]</span><span class="p" data-group-id="7824460394-10">)</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">stop</span><span class="p" data-group-id="7824460394-14">(</span><span class="p" data-group-id="7824460394-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="7824460394-15">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="7824460394-15">)</span><span class="p">.</span><span class="w">
+
+</span><span class="c1">%%%-Client interface functions-------------------------------------------</span><span class="w">
+
+</span><span class="nf">alloc</span><span class="p" data-group-id="7824460394-16">(</span><span class="p" data-group-id="7824460394-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="7824460394-17">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">alloc</span><span class="p" data-group-id="7824460394-17">)</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">free</span><span class="p" data-group-id="7824460394-18">(</span><span class="n">Channel</span><span class="p" data-group-id="7824460394-18">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="7824460394-19">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7824460394-20">{</span><span class="ss">free</span><span class="p">,</span><span class="n">Channel</span><span class="p" data-group-id="7824460394-20">}</span><span class="p" data-group-id="7824460394-19">)</span><span class="p">.</span><span class="w">
+
+</span><span class="c1">%%%-gen_server callback functions----------------------------------------</span><span class="w">
+
+</span><span class="nf">init</span><span class="p" data-group-id="7824460394-21">(</span><span class="p">_</span><span class="n">Arg</span><span class="p" data-group-id="7824460394-21">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-22">{</span><span class="ss">ok</span><span class="p">,</span><span class="nf">channels</span><span class="p" data-group-id="7824460394-23">(</span><span class="p" data-group-id="7824460394-23">)</span><span class="p" data-group-id="7824460394-22">}</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">handle_call</span><span class="p" data-group-id="7824460394-24">(</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="7824460394-24">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-25">{</span><span class="ss">stop</span><span class="p">,</span><span class="ss">normal</span><span class="p">,</span><span class="ss">ok</span><span class="p">,</span><span class="n">Channels</span><span class="p" data-group-id="7824460394-25">}</span><span class="p">;</span><span class="w">
+
+</span><span class="nf">handle_call</span><span class="p" data-group-id="7824460394-26">(</span><span class="ss">alloc</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="7824460394-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-27">{</span><span class="n">Ch</span><span class="p">,</span><span class="n">Channels2</span><span class="p" data-group-id="7824460394-27">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">alloc</span><span class="p" data-group-id="7824460394-28">(</span><span class="n">Channels</span><span class="p" data-group-id="7824460394-28">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-29">{</span><span class="ss">reply</span><span class="p">,</span><span class="p" data-group-id="7824460394-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Ch</span><span class="p" data-group-id="7824460394-30">}</span><span class="p">,</span><span class="n">Channels2</span><span class="p" data-group-id="7824460394-29">}</span><span class="p">;</span><span class="w">
+
+</span><span class="nf">handle_call</span><span class="p" data-group-id="7824460394-31">(</span><span class="p" data-group-id="7824460394-32">{</span><span class="ss">free</span><span class="p">,</span><span class="n">Channel</span><span class="p" data-group-id="7824460394-32">}</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="7824460394-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Channels2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">free</span><span class="p" data-group-id="7824460394-33">(</span><span class="n">Channel</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="7824460394-33">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-34">{</span><span class="ss">reply</span><span class="p">,</span><span class="ss">ok</span><span class="p">,</span><span class="n">Channels2</span><span class="p" data-group-id="7824460394-34">}</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">terminate</span><span class="p" data-group-id="7824460394-35">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Channels</span><span class="p" data-group-id="7824460394-35">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">ok</span><span class="p">.</span><span class="w">
+
+</span><span class="c1">%%%-Internal functions---------------------------------------------------</span><span class="w">
+
+</span><span class="nf">channels</span><span class="p" data-group-id="7824460394-36">(</span><span class="p" data-group-id="7824460394-36">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-37">[</span><span class="ss">ch1</span><span class="p">,</span><span class="ss">ch2</span><span class="p">,</span><span class="ss">ch3</span><span class="p" data-group-id="7824460394-37">]</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">alloc</span><span class="p" data-group-id="7824460394-38">(</span><span class="p" data-group-id="7824460394-39">[</span><span class="n">Channel</span><span class="p">|</span><span class="n">Channels</span><span class="p" data-group-id="7824460394-39">]</span><span class="p" data-group-id="7824460394-38">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-40">{</span><span class="n">Channel</span><span class="p">,</span><span class="n">Channels</span><span class="p" data-group-id="7824460394-40">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">alloc</span><span class="p" data-group-id="7824460394-41">(</span><span class="p" data-group-id="7824460394-42">[</span><span class="p" data-group-id="7824460394-42">]</span><span class="p" data-group-id="7824460394-41">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">false</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">free</span><span class="p" data-group-id="7824460394-43">(</span><span class="n">Channel</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="7824460394-43">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7824460394-44">[</span><span class="n">Channel</span><span class="p">|</span><span class="n">Channels</span><span class="p" data-group-id="7824460394-44">]</span><span class="p">.</span></code></pre><p>The test case is implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="8689941442-1">(</span><span class="ss">test</span><span class="p" data-group-id="8689941442-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="8689941442-2">(</span><span class="p" data-group-id="8689941442-3">[</span><span class="ss">s</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="8689941442-3">]</span><span class="p" data-group-id="8689941442-2">)</span><span class="p">.</span><span class="w">
+
+</span><span class="nf">s</span><span class="p" data-group-id="8689941442-4">(</span><span class="p" data-group-id="8689941442-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="8689941442-5">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Pid</span><span class="p" data-group-id="8689941442-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">channel</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="8689941442-6">(</span><span class="p" data-group-id="8689941442-6">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8689941442-7">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Ch1</span><span class="p" data-group-id="8689941442-7">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">channel</span><span class="p">:</span><span class="nf">alloc</span><span class="p" data-group-id="8689941442-8">(</span><span class="p" data-group-id="8689941442-8">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">channel</span><span class="p">:</span><span class="nf">free</span><span class="p" data-group-id="8689941442-9">(</span><span class="n">Ch1</span><span class="p" data-group-id="8689941442-9">)</span><span class="p">,</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">channel</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="8689941442-10">(</span><span class="p" data-group-id="8689941442-10">)</span><span class="p">.</span></code></pre><h3 id="preparation" class="section-heading">
+  <a href="#preparation" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Preparation</span>
+</h3>
+<p>First of all, Cover must be started. This spawns a process which owns the Cover
+database where all coverage data will be stored.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="0222266448-1">(</span><span class="p" data-group-id="0222266448-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="0222266448-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.90</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="0222266448-2">}</span></code></pre><p>To include other nodes in the coverage analysis, use
+<a href="cover.html#start/1"><code class="inline">cover:start/1</code></a>. All cover-compiled modules will then be loaded on all
+nodes, and data from all nodes will be summed up when analysing. For
+simplicity this example only involves the current node.</p><p>Before any analysis can take place, the involved modules must be
+<em>cover-compiled</em>. This means that some extra information is added to
+the module before beging compiled into a binary and
+<a href="cover_chapter.html#loading">loaded</a>.  The source file of the module is
+not affected and no <code class="inline">.beam</code> file is created.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">compile_module</span><span class="p" data-group-id="7586641914-1">(</span><span class="ss">channel</span><span class="p" data-group-id="7586641914-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7586641914-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="ss">channel</span><span class="p" data-group-id="7586641914-2">}</span></code></pre><p>Each time a function in the cover-compiled module <code class="inline">channel</code> is called,
+information about the call will be added to the Cover database. Run the test
+case:</p><pre><code class="text">3&gt; test:s().
+ok</code></pre><p>Cover analysis is performed by examining the contents of the Cover database. The
+output is determined by two parameters, <code class="inline">Level</code> and <code class="inline">Analysis</code>. <code class="inline">Analysis</code> is
+either <code class="inline">coverage</code> or <code class="inline">calls</code> and determines the type of the analysis. <code class="inline">Level</code> is
+either <code class="inline">module</code>, <code class="inline">function</code>, <code class="inline">clause</code>, or <code class="inline">line</code> and determines the level of the
+analysis.</p><h3 id="coverage-analysis" class="section-heading">
+  <a href="#coverage-analysis" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Coverage Analysis</span>
+</h3>
+<p>Analysis of type <code class="inline">coverage</code> is used to find out how much of the code has been
+executed and how much has not been executed. Coverage is represented by a tuple
+<code class="inline">{Cov,NotCov}</code>, where <code class="inline">Cov</code> is the number of executable lines that have been
+executed at least once and <code class="inline">NotCov</code> is the number of executable lines that have
+not been executed.</p><p>If the analysis is made on module level, the result is given for the entire
+module as a tuple <code class="inline">{Module,{Cov,NotCov}}</code>:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">4&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="7498114817-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">coverage</span><span class="p">,</span><span class="w"> </span><span class="ss">module</span><span class="p" data-group-id="7498114817-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7498114817-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="7498114817-3">{</span><span class="ss">channel</span><span class="p">,</span><span class="p" data-group-id="7498114817-4">{</span><span class="mi">14</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7498114817-4">}</span><span class="p" data-group-id="7498114817-3">}</span><span class="p" data-group-id="7498114817-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that 14 lines in the module are covered but one
+line is not covered.</p><p>If the analysis is made on function level, the result is given as a list of
+tuples <code class="inline">{Function,{Cov,NotCov}}</code>, one for each function in the module. A
+function is specified by its module name, function name and arity:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">5&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="1325283906-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">coverage</span><span class="p">,</span><span class="w"> </span><span class="ss">function</span><span class="p" data-group-id="1325283906-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1325283906-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="1325283906-3">[</span><span class="p" data-group-id="1325283906-4">{</span><span class="p" data-group-id="1325283906-5">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">start_link</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-5">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-6">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-6">}</span><span class="p" data-group-id="1325283906-4">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-7">{</span><span class="p" data-group-id="1325283906-8">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">stop</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-8">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-9">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-9">}</span><span class="p" data-group-id="1325283906-7">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-10">{</span><span class="p" data-group-id="1325283906-11">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-11">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-12">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-12">}</span><span class="p" data-group-id="1325283906-10">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-13">{</span><span class="p" data-group-id="1325283906-14">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1325283906-14">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-15">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-15">}</span><span class="p" data-group-id="1325283906-13">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-16">{</span><span class="p" data-group-id="1325283906-17">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">init</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1325283906-17">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-18">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-18">}</span><span class="p" data-group-id="1325283906-16">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-19">{</span><span class="p" data-group-id="1325283906-20">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="1325283906-20">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-21">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-21">}</span><span class="p" data-group-id="1325283906-19">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-22">{</span><span class="p" data-group-id="1325283906-23">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">terminate</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="1325283906-23">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-24">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-24">}</span><span class="p" data-group-id="1325283906-22">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-25">{</span><span class="p" data-group-id="1325283906-26">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">channels</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-26">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-27">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-27">}</span><span class="p" data-group-id="1325283906-25">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-28">{</span><span class="p" data-group-id="1325283906-29">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1325283906-29">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-30">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1325283906-30">}</span><span class="p" data-group-id="1325283906-28">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1325283906-31">{</span><span class="p" data-group-id="1325283906-32">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="1325283906-32">}</span><span class="p">,</span><span class="p" data-group-id="1325283906-33">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1325283906-33">}</span><span class="p" data-group-id="1325283906-31">}</span><span class="p" data-group-id="1325283906-3">]</span><span class="p" data-group-id="1325283906-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that the uncovered line is in the function
+<code class="inline">channel:alloc/1</code>.</p><p>If the analysis is made on clause level, the result is given as a list of tuples
+<code class="inline">{Clause,{Cov,NotCov}}</code>, one for each function clause in the module. A clause is
+specified by its module name, function name, arity and position within the
+function definition:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">6&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="9060010092-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">coverage</span><span class="p">,</span><span class="w"> </span><span class="ss">clause</span><span class="p" data-group-id="9060010092-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9060010092-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="9060010092-3">[</span><span class="p" data-group-id="9060010092-4">{</span><span class="p" data-group-id="9060010092-5">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">start_link</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-5">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-6">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-6">}</span><span class="p" data-group-id="9060010092-4">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-7">{</span><span class="p" data-group-id="9060010092-8">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">stop</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-8">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-9">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-9">}</span><span class="p" data-group-id="9060010092-7">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-10">{</span><span class="p" data-group-id="9060010092-11">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-11">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-12">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-12">}</span><span class="p" data-group-id="9060010092-10">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-13">{</span><span class="p" data-group-id="9060010092-14">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-14">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-15">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-15">}</span><span class="p" data-group-id="9060010092-13">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-16">{</span><span class="p" data-group-id="9060010092-17">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">init</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-17">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-18">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-18">}</span><span class="p" data-group-id="9060010092-16">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-19">{</span><span class="p" data-group-id="9060010092-20">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-20">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-21">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-21">}</span><span class="p" data-group-id="9060010092-19">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-22">{</span><span class="p" data-group-id="9060010092-23">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="9060010092-23">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-24">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-24">}</span><span class="p" data-group-id="9060010092-22">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-25">{</span><span class="p" data-group-id="9060010092-26">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="9060010092-26">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-27">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-27">}</span><span class="p" data-group-id="9060010092-25">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-28">{</span><span class="p" data-group-id="9060010092-29">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">terminate</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-29">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-30">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-30">}</span><span class="p" data-group-id="9060010092-28">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-31">{</span><span class="p" data-group-id="9060010092-32">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">channels</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-32">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-33">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-33">}</span><span class="p" data-group-id="9060010092-31">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-34">{</span><span class="p" data-group-id="9060010092-35">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-35">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-36">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-36">}</span><span class="p" data-group-id="9060010092-34">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-37">{</span><span class="p" data-group-id="9060010092-38">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="9060010092-38">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-39">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-39">}</span><span class="p" data-group-id="9060010092-37">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="9060010092-40">{</span><span class="p" data-group-id="9060010092-41">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9060010092-41">}</span><span class="p">,</span><span class="p" data-group-id="9060010092-42">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="9060010092-42">}</span><span class="p" data-group-id="9060010092-40">}</span><span class="p" data-group-id="9060010092-3">]</span><span class="p" data-group-id="9060010092-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that the uncovered line is in the second clause
+of <code class="inline">channel:alloc/1</code>.</p><p>Finally, if the analysis is made on line level, the result is given as a list of
+tuples <code class="inline">{Line,{Cov,NotCov}}</code>, one for each executable line in the source code. A
+line is specified by its module name and line number.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">7&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="6716811792-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">coverage</span><span class="p">,</span><span class="w"> </span><span class="ss">line</span><span class="p" data-group-id="6716811792-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6716811792-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="6716811792-3">[</span><span class="p" data-group-id="6716811792-4">{</span><span class="p" data-group-id="6716811792-5">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">9</span><span class="p" data-group-id="6716811792-5">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-6">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-6">}</span><span class="p" data-group-id="6716811792-4">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-7">{</span><span class="p" data-group-id="6716811792-8">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">12</span><span class="p" data-group-id="6716811792-8">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-9">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-9">}</span><span class="p" data-group-id="6716811792-7">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-10">{</span><span class="p" data-group-id="6716811792-11">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">17</span><span class="p" data-group-id="6716811792-11">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-12">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-12">}</span><span class="p" data-group-id="6716811792-10">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-13">{</span><span class="p" data-group-id="6716811792-14">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">20</span><span class="p" data-group-id="6716811792-14">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-15">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-15">}</span><span class="p" data-group-id="6716811792-13">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-16">{</span><span class="p" data-group-id="6716811792-17">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">25</span><span class="p" data-group-id="6716811792-17">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-18">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-18">}</span><span class="p" data-group-id="6716811792-16">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-19">{</span><span class="p" data-group-id="6716811792-20">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">28</span><span class="p" data-group-id="6716811792-20">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-21">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-21">}</span><span class="p" data-group-id="6716811792-19">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-22">{</span><span class="p" data-group-id="6716811792-23">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">31</span><span class="p" data-group-id="6716811792-23">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-24">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-24">}</span><span class="p" data-group-id="6716811792-22">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-25">{</span><span class="p" data-group-id="6716811792-26">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">32</span><span class="p" data-group-id="6716811792-26">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-27">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-27">}</span><span class="p" data-group-id="6716811792-25">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-28">{</span><span class="p" data-group-id="6716811792-29">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">35</span><span class="p" data-group-id="6716811792-29">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-30">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-30">}</span><span class="p" data-group-id="6716811792-28">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-31">{</span><span class="p" data-group-id="6716811792-32">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">36</span><span class="p" data-group-id="6716811792-32">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-33">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-33">}</span><span class="p" data-group-id="6716811792-31">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-34">{</span><span class="p" data-group-id="6716811792-35">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">39</span><span class="p" data-group-id="6716811792-35">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-36">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-36">}</span><span class="p" data-group-id="6716811792-34">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-37">{</span><span class="p" data-group-id="6716811792-38">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">44</span><span class="p" data-group-id="6716811792-38">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-39">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-39">}</span><span class="p" data-group-id="6716811792-37">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-40">{</span><span class="p" data-group-id="6716811792-41">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">47</span><span class="p" data-group-id="6716811792-41">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-42">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-42">}</span><span class="p" data-group-id="6716811792-40">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-43">{</span><span class="p" data-group-id="6716811792-44">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">49</span><span class="p" data-group-id="6716811792-44">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-45">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="6716811792-45">}</span><span class="p" data-group-id="6716811792-43">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="6716811792-46">{</span><span class="p" data-group-id="6716811792-47">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">52</span><span class="p" data-group-id="6716811792-47">}</span><span class="p">,</span><span class="p" data-group-id="6716811792-48">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6716811792-48">}</span><span class="p" data-group-id="6716811792-46">}</span><span class="p" data-group-id="6716811792-3">]</span><span class="p" data-group-id="6716811792-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that the uncovered line is line number 49.</p><h3 id="call-statistics" class="section-heading">
+  <a href="#call-statistics" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Call Statistics</span>
+</h3>
+<p>Analysis of type <code class="inline">calls</code> is used to find out how many times something has been
+called and is represented by an integer <code class="inline">Calls</code>.</p><p>If the analysis is made on module level, the result is given as a tuple
+<code class="inline">{Module,Calls}</code>. Here <code class="inline">Calls</code> is the total number of calls to functions in the
+module:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">8&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="6448020516-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">calls</span><span class="p">,</span><span class="w"> </span><span class="ss">module</span><span class="p" data-group-id="6448020516-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6448020516-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="6448020516-3">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">12</span><span class="p" data-group-id="6448020516-3">}</span><span class="p" data-group-id="6448020516-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that a total of twelve calls have been made to
+functions in the module.</p><p>If the analysis is made on function level, the result is given as a list of
+tuples <code class="inline">{Function,Calls}</code>. Here <code class="inline">Calls</code> is the number of calls to each function:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">9&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="7989976305-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">calls</span><span class="p">,</span><span class="w"> </span><span class="ss">function</span><span class="p" data-group-id="7989976305-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7989976305-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="7989976305-3">[</span><span class="p" data-group-id="7989976305-4">{</span><span class="p" data-group-id="7989976305-5">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">start_link</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="7989976305-5">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-4">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-6">{</span><span class="p" data-group-id="7989976305-7">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">stop</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="7989976305-7">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-6">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-8">{</span><span class="p" data-group-id="7989976305-9">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="7989976305-9">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-8">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-10">{</span><span class="p" data-group-id="7989976305-11">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-11">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-10">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-12">{</span><span class="p" data-group-id="7989976305-13">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">init</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-13">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-12">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-14">{</span><span class="p" data-group-id="7989976305-15">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="7989976305-15">}</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="7989976305-14">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-16">{</span><span class="p" data-group-id="7989976305-17">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">terminate</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="7989976305-17">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-16">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-18">{</span><span class="p" data-group-id="7989976305-19">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">channels</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="7989976305-19">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-18">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-20">{</span><span class="p" data-group-id="7989976305-21">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-21">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-20">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="7989976305-22">{</span><span class="p" data-group-id="7989976305-23">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="7989976305-23">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="7989976305-22">}</span><span class="p" data-group-id="7989976305-3">]</span><span class="p" data-group-id="7989976305-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that <code class="inline">handle_call/3</code> is the most called function
+in the module (three calls). All other functions have been called once.</p><p>If the analysis is made on clause level, the result is given as a list of tuples
+<code class="inline">{Clause,Calls}</code>. Here <code class="inline">Calls</code> is the number of calls to each function clause:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">10&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="3159899943-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">calls</span><span class="p">,</span><span class="w"> </span><span class="ss">clause</span><span class="p" data-group-id="3159899943-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="3159899943-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="3159899943-3">[</span><span class="p" data-group-id="3159899943-4">{</span><span class="p" data-group-id="3159899943-5">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">start_link</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-5">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-4">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-6">{</span><span class="p" data-group-id="3159899943-7">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">stop</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-7">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-6">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-8">{</span><span class="p" data-group-id="3159899943-9">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-9">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-8">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-10">{</span><span class="p" data-group-id="3159899943-11">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-11">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-10">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-12">{</span><span class="p" data-group-id="3159899943-13">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">init</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-13">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-12">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-14">{</span><span class="p" data-group-id="3159899943-15">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-15">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-14">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-16">{</span><span class="p" data-group-id="3159899943-17">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="3159899943-17">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-16">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-18">{</span><span class="p" data-group-id="3159899943-19">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p" data-group-id="3159899943-19">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-18">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-20">{</span><span class="p" data-group-id="3159899943-21">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">terminate</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-21">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-20">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-22">{</span><span class="p" data-group-id="3159899943-23">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">channels</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-23">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-22">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-24">{</span><span class="p" data-group-id="3159899943-25">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-25">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-24">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-26">{</span><span class="p" data-group-id="3159899943-27">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">alloc</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p" data-group-id="3159899943-27">}</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="3159899943-26">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="3159899943-28">{</span><span class="p" data-group-id="3159899943-29">{</span><span class="ss">channel</span><span class="p">,</span><span class="ss">free</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-29">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="3159899943-28">}</span><span class="p" data-group-id="3159899943-3">]</span><span class="p" data-group-id="3159899943-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that all clauses have been called once, except
+the second clause of <code class="inline">channel:alloc/1</code> which has not been called at all.</p><p>Finally, if the analysis is made on line level, the result is given as a list of
+tuples <code class="inline">{Line,Calls}</code>. Here <code class="inline">Calls</code> is the number of times each line has been
+executed:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">11&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse</span><span class="p" data-group-id="1182446097-1">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">calls</span><span class="p">,</span><span class="w"> </span><span class="ss">line</span><span class="p" data-group-id="1182446097-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1182446097-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="1182446097-3">[</span><span class="p" data-group-id="1182446097-4">{</span><span class="p" data-group-id="1182446097-5">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">9</span><span class="p" data-group-id="1182446097-5">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-4">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-6">{</span><span class="p" data-group-id="1182446097-7">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">12</span><span class="p" data-group-id="1182446097-7">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-6">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-8">{</span><span class="p" data-group-id="1182446097-9">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">17</span><span class="p" data-group-id="1182446097-9">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-8">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-10">{</span><span class="p" data-group-id="1182446097-11">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">20</span><span class="p" data-group-id="1182446097-11">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-10">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-12">{</span><span class="p" data-group-id="1182446097-13">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">25</span><span class="p" data-group-id="1182446097-13">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-12">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-14">{</span><span class="p" data-group-id="1182446097-15">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">28</span><span class="p" data-group-id="1182446097-15">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-14">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-16">{</span><span class="p" data-group-id="1182446097-17">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">31</span><span class="p" data-group-id="1182446097-17">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-16">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-18">{</span><span class="p" data-group-id="1182446097-19">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">32</span><span class="p" data-group-id="1182446097-19">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-18">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-20">{</span><span class="p" data-group-id="1182446097-21">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">35</span><span class="p" data-group-id="1182446097-21">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-20">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-22">{</span><span class="p" data-group-id="1182446097-23">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">36</span><span class="p" data-group-id="1182446097-23">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-22">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-24">{</span><span class="p" data-group-id="1182446097-25">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">39</span><span class="p" data-group-id="1182446097-25">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-24">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-26">{</span><span class="p" data-group-id="1182446097-27">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">44</span><span class="p" data-group-id="1182446097-27">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-26">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-28">{</span><span class="p" data-group-id="1182446097-29">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">47</span><span class="p" data-group-id="1182446097-29">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-28">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-30">{</span><span class="p" data-group-id="1182446097-31">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">49</span><span class="p" data-group-id="1182446097-31">}</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="1182446097-30">}</span><span class="p">,</span><span class="w">
+     </span><span class="p" data-group-id="1182446097-32">{</span><span class="p" data-group-id="1182446097-33">{</span><span class="ss">channel</span><span class="p">,</span><span class="mi">52</span><span class="p" data-group-id="1182446097-33">}</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="1182446097-32">}</span><span class="p" data-group-id="1182446097-3">]</span><span class="p" data-group-id="1182446097-2">}</span></code></pre><p>For <code class="inline">channel</code>, the result shows that all lines have been executed once, except
+line number 49 which has not been executed at all.</p><h3 id="analysis-to-file" class="section-heading">
+  <a href="#analysis-to-file" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Analysis to File</span>
+</h3>
+<p>A line level calls analysis of <code class="inline">channel</code> can be written to a file using
+<a href="cover.html#analyse_to_file/1"><code class="inline">cover:analyse_to_file/1</code></a>:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">12&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">analyse_to_file</span><span class="p" data-group-id="6890671609-1">(</span><span class="ss">channel</span><span class="p" data-group-id="6890671609-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6890671609-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="s">&quot;channel.COVER.out&quot;</span><span class="p" data-group-id="6890671609-2">}</span></code></pre><p>The function creates a copy of <code class="inline">channel.erl</code> where it for each executable line
+is specified how many times that line has been executed. The output file is
+called <code class="inline">channel.COVER.out</code>.</p><pre><code class="makeup erlang" translate="no"><span class="n">File</span><span class="w"> </span><span class="ss">generated</span><span class="w"> </span><span class="ss">from</span><span class="w"> </span><span class="o">/</span><span class="n">Users</span><span class="o">/</span><span class="ss">bjorng</span><span class="o">/</span><span class="ss">git</span><span class="o">/</span><span class="ss">otp</span><span class="o">/</span><span class="ss">channel</span><span class="p">.</span><span class="ss">erl</span><span class="w"> </span><span class="ss">by</span><span class="w"> </span><span class="n">COVER</span><span class="w"> </span><span class="mi">2024</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">20</span><span class="w"> </span><span class="ss">at</span><span class="w"> </span><span class="mi">13</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">04</span><span class="w">
+
+</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="o">*</span><span class="w">
+
+        </span><span class="p">|</span><span class="w">  </span><span class="o">-</span><span class="nf">module</span><span class="p" data-group-id="8406931082-1">(</span><span class="ss">channel</span><span class="p" data-group-id="8406931082-1">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="o">-</span><span class="nf">behaviour</span><span class="p" data-group-id="8406931082-2">(</span><span class="ss">gen_server</span><span class="p" data-group-id="8406931082-2">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="o">-</span><span class="nf">export</span><span class="p" data-group-id="8406931082-3">(</span><span class="p" data-group-id="8406931082-4">[</span><span class="ss">start_link</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="8406931082-4">]</span><span class="p" data-group-id="8406931082-3">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="o">-</span><span class="nf">export</span><span class="p" data-group-id="8406931082-5">(</span><span class="p" data-group-id="8406931082-6">[</span><span class="ss">alloc</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">free</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="8406931082-6">]</span><span class="p" data-group-id="8406931082-5">)</span><span class="p">.</span><span class="w"> </span><span class="c1">% client interface</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="o">-</span><span class="nf">export</span><span class="p" data-group-id="8406931082-7">(</span><span class="p" data-group-id="8406931082-8">[</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">handle_call</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">2</span><span class="p" data-group-id="8406931082-8">]</span><span class="p" data-group-id="8406931082-7">)</span><span class="p">.</span><span class="w"> </span><span class="c1">% callback functions</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">start_link</span><span class="p" data-group-id="8406931082-9">(</span><span class="p" data-group-id="8406931082-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="8406931082-10">(</span><span class="p" data-group-id="8406931082-11">{</span><span class="ss">local</span><span class="p">,</span><span class="ss">channel</span><span class="p" data-group-id="8406931082-11">}</span><span class="p">,</span><span class="w"> </span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8406931082-12">[</span><span class="p" data-group-id="8406931082-12">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8406931082-13">[</span><span class="p" data-group-id="8406931082-13">]</span><span class="p" data-group-id="8406931082-10">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">stop</span><span class="p" data-group-id="8406931082-14">(</span><span class="p" data-group-id="8406931082-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="8406931082-15">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="8406931082-15">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="c1">%%%-Client interface functions-------------------------------------------</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">alloc</span><span class="p" data-group-id="8406931082-16">(</span><span class="p" data-group-id="8406931082-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="8406931082-17">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="ss">alloc</span><span class="p" data-group-id="8406931082-17">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">free</span><span class="p" data-group-id="8406931082-18">(</span><span class="n">Channel</span><span class="p" data-group-id="8406931082-18">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="nc">gen_server</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="8406931082-19">(</span><span class="ss">channel</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8406931082-20">{</span><span class="ss">free</span><span class="p">,</span><span class="n">Channel</span><span class="p" data-group-id="8406931082-20">}</span><span class="p" data-group-id="8406931082-19">)</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="c1">%%%-gen_server callback functions----------------------------------------</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">init</span><span class="p" data-group-id="8406931082-21">(</span><span class="p">_</span><span class="n">Arg</span><span class="p" data-group-id="8406931082-21">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-22">{</span><span class="ss">ok</span><span class="p">,</span><span class="nf">channels</span><span class="p" data-group-id="8406931082-23">(</span><span class="p" data-group-id="8406931082-23">)</span><span class="p" data-group-id="8406931082-22">}</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">handle_call</span><span class="p" data-group-id="8406931082-24">(</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="8406931082-24">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-25">{</span><span class="ss">stop</span><span class="p">,</span><span class="ss">normal</span><span class="p">,</span><span class="ss">ok</span><span class="p">,</span><span class="n">Channels</span><span class="p" data-group-id="8406931082-25">}</span><span class="p">;</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">handle_call</span><span class="p" data-group-id="8406931082-26">(</span><span class="ss">alloc</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="8406931082-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-27">{</span><span class="n">Ch</span><span class="p">,</span><span class="n">Channels2</span><span class="p" data-group-id="8406931082-27">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">alloc</span><span class="p" data-group-id="8406931082-28">(</span><span class="n">Channels</span><span class="p" data-group-id="8406931082-28">)</span><span class="p">,</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-29">{</span><span class="ss">reply</span><span class="p">,</span><span class="p" data-group-id="8406931082-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">Ch</span><span class="p" data-group-id="8406931082-30">}</span><span class="p">,</span><span class="n">Channels2</span><span class="p" data-group-id="8406931082-29">}</span><span class="p">;</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">handle_call</span><span class="p" data-group-id="8406931082-31">(</span><span class="p" data-group-id="8406931082-32">{</span><span class="ss">free</span><span class="p">,</span><span class="n">Channel</span><span class="p" data-group-id="8406931082-32">}</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="8406931082-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="n">Channels2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">free</span><span class="p" data-group-id="8406931082-33">(</span><span class="n">Channel</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="8406931082-33">)</span><span class="p">,</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-34">{</span><span class="ss">reply</span><span class="p">,</span><span class="ss">ok</span><span class="p">,</span><span class="n">Channels2</span><span class="p" data-group-id="8406931082-34">}</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">terminate</span><span class="p" data-group-id="8406931082-35">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Channels</span><span class="p" data-group-id="8406931082-35">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="ss">ok</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="c1">%%%-Internal functions---------------------------------------------------</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">channels</span><span class="p" data-group-id="8406931082-36">(</span><span class="p" data-group-id="8406931082-36">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-37">[</span><span class="ss">ch1</span><span class="p">,</span><span class="ss">ch2</span><span class="p">,</span><span class="ss">ch3</span><span class="p" data-group-id="8406931082-37">]</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">alloc</span><span class="p" data-group-id="8406931082-38">(</span><span class="p" data-group-id="8406931082-39">[</span><span class="n">Channel</span><span class="p">|</span><span class="n">Channels</span><span class="p" data-group-id="8406931082-39">]</span><span class="p" data-group-id="8406931082-38">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-40">{</span><span class="n">Channel</span><span class="p">,</span><span class="n">Channels</span><span class="p" data-group-id="8406931082-40">}</span><span class="p">;</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">alloc</span><span class="p" data-group-id="8406931082-41">(</span><span class="p" data-group-id="8406931082-42">[</span><span class="p" data-group-id="8406931082-42">]</span><span class="p" data-group-id="8406931082-41">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">0</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="ss">false</span><span class="p">.</span><span class="w">
+        </span><span class="p">|</span><span class="w">
+        </span><span class="p">|</span><span class="w">  </span><span class="nf">free</span><span class="p" data-group-id="8406931082-43">(</span><span class="n">Channel</span><span class="p">,</span><span class="w"> </span><span class="n">Channels</span><span class="p" data-group-id="8406931082-43">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="mi">1</span><span class="p">.</span><span class="p">.</span><span class="p">|</span><span class="w">      </span><span class="p" data-group-id="8406931082-44">[</span><span class="n">Channel</span><span class="p">|</span><span class="n">Channels</span><span class="p" data-group-id="8406931082-44">]</span><span class="p">.</span></code></pre><h3 id="conclusion" class="section-heading">
+  <a href="#conclusion" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Conclusion</span>
+</h3>
+<p>By looking at the results from the analyses, it can be deduced that
+the test case does not cover the case when all channels are allocated
+and <code class="inline">test.erl</code> should be extended accordingly. Incidentally, when the
+test case is corrected a bug in <code class="inline">channel</code> will be discovered.</p><p>When the Cover analysis is ready, Cover is stopped and all cover-compiled
+modules are <a href="cover_chapter.html#loading">unloaded</a>. The code for <code class="inline">channel</code> is now
+loaded as usual from a <code class="inline">.beam</code> file in the current path.</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">13&gt; </span><span class="nc">code</span><span class="p">:</span><span class="nf">which</span><span class="p" data-group-id="1525494343-1">(</span><span class="ss">channel</span><span class="p" data-group-id="1525494343-1">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">cover_compiled</span><span class="gp unselectable">
+14&gt; </span><span class="nc">cover</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="1525494343-2">(</span><span class="p" data-group-id="1525494343-2">)</span><span class="p">.</span><span class="w">
+</span><span class="ss">ok</span><span class="gp unselectable">
+15&gt; </span><span class="nc">code</span><span class="p">:</span><span class="nf">which</span><span class="p" data-group-id="1525494343-3">(</span><span class="ss">channel</span><span class="p" data-group-id="1525494343-3">)</span><span class="p">.</span><span class="w">
+</span><span class="s">&quot;./channel.beam&quot;</span></code></pre><h2 id="miscellaneous" class="section-heading">
+  <a href="#miscellaneous" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Miscellaneous</span>
+</h2>
+<h3 id="performance" class="section-heading">
+  <a href="#performance" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Performance</span>
+</h3>
+<p>Execution of code in cover-compiled modules is slower and more memory consuming
+than for regularly compiled modules. As the Cover database contains information
+about each executable line in each cover-compiled module, performance decreases
+proportionally to the size and number of the cover-compiled modules.</p><p>To improve performance when analysing cover results it is possible to do
+multiple calls to <a href="cover.html#analyse/1">analyse</a> and
+<a href="cover.html#analyse_to_file/1">analyse_to_file</a> at once. You can also use the
+<a href="cover.html#async_analyse_to_file/1">async_analyse_to_file</a> convenience function.</p><p><a href="" id="lines"></a></p><h3 id="executable-lines" class="section-heading">
+  <a href="#executable-lines" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Executable Lines</span>
+</h3>
+<p>Cover uses the concept of <em>executable lines</em>, which is code lines containing
+an executable expression such as a matching or a function call. A blank line or
+a line containing a comment, function head or pattern in a <code class="inline">case</code> or <code class="inline">receive</code>
+statement is not executable.</p><p>In the example below, lines number 2, 4, 6, 8, and 11 are executable lines:</p><pre><code class="makeup erlang" translate="no"><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="nf">is_loaded</span><span class="p" data-group-id="1936269969-1">(</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Compiled</span><span class="p" data-group-id="1936269969-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="mi">2</span><span class="p">:</span><span class="w">   </span><span class="k">case</span><span class="w"> </span><span class="nf">get_file</span><span class="p" data-group-id="1936269969-2">(</span><span class="n">Module</span><span class="p">,</span><span class="w"> </span><span class="n">Compiled</span><span class="p" data-group-id="1936269969-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+</span><span class="mi">3</span><span class="p">:</span><span class="w">     </span><span class="p" data-group-id="1936269969-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">File</span><span class="p" data-group-id="1936269969-3">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="mi">4</span><span class="p">:</span><span class="w">       </span><span class="k">case</span><span class="w"> </span><span class="nc">code</span><span class="p">:</span><span class="nf">which</span><span class="p" data-group-id="1936269969-4">(</span><span class="n">Module</span><span class="p" data-group-id="1936269969-4">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+</span><span class="mi">5</span><span class="p">:</span><span class="w">         </span><span class="o">?</span><span class="n">TAG</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="mi">6</span><span class="p">:</span><span class="w">           </span><span class="p" data-group-id="1936269969-5">{</span><span class="ss">loaded</span><span class="p">,</span><span class="n">File</span><span class="p" data-group-id="1936269969-5">}</span><span class="p">;</span><span class="w">
+</span><span class="mi">7</span><span class="p">:</span><span class="w">         </span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="mi">8</span><span class="p">:</span><span class="w">           </span><span class="ss">unloaded</span><span class="w">
+</span><span class="mi">9</span><span class="p">:</span><span class="w">       </span><span class="k">end</span><span class="p">;</span><span class="w">
+</span><span class="mi">10</span><span class="p">:</span><span class="w">    </span><span class="ss">false</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="mi">11</span><span class="p">:</span><span class="w">      </span><span class="ss">false</span><span class="w">
+</span><span class="mi">12</span><span class="p">:</span><span class="w">  </span><span class="k">end</span><span class="p">.</span></code></pre><p><a href="" id="loading"></a></p><h3 id="code-loading-mechanism" class="section-heading">
+  <a href="#code-loading-mechanism" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Code Loading Mechanism</span>
+</h3>
+<p>When a module is cover-compiled, it is also loaded using the normal code loading
+mechanism of Erlang. This means that if a cover-compiled module is re-loaded
+during a Cover session, for example using <code class="inline">c(Module)</code>, it will no longer be
+cover-compiled.</p><p>Use <a href="cover.html#is_compiled/1"><code class="inline">cover:is_compiled/1</code></a> or <a href="../../../../lib/kernel-10.0/doc/html/code.html#which/1"><code class="inline">code:which/1</code></a> to see whether or not a
+module is cover-compiled (and still loaded).</p><p>When Cover is stopped, all cover-compiled modules are unloaded.</p>
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="notes.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+Tools Release Notes
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="cprof_chapter.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+cprof - The Call Count Profiler
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="tools.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.2) for the
+
+          <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+      </p>
+<p>Copyright © 1996-2023 <a href="https://www.ericsson.com">Ericsson AB</a></p>
+    </footer>
+  </div>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
+
+  </body>
+</html>
