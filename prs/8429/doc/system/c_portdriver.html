@@ -4,21 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.32.1">
-    <meta name="project" content="Erlang System Documentation v27.0-rc3">
+    <meta name="generator" content="ExDoc v0.32.2">
+    <meta name="project" content="Erlang System Documentation v28.0-rc0">
 
 
-    <title>Port Drivers — Erlang System Documentation v27.0-rc3</title>
-    <link rel="stylesheet" href="dist/html-erlang-X76CAHZ3.css" />
+    <title>Port Drivers — Erlang System Documentation v28.0-rc0</title>
+    <link rel="stylesheet" href="dist/html-erlang-EBZIIHAS.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-IHH6HKET.js"></script>
-    <script src="dist/sidebar_items-5D6931E3.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-4A143270.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-GXQ6W6IF.js"></script>
+    <script async src="dist/html-BHYOTRCH.js"></script>
 
-<style>.dark img { background-color: white; }</style>
+
   </head>
   <body data-type="extras" class="page-extra">
     <script>
@@ -55,7 +55,7 @@
 Erlang System Documentation
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v27.0-rc3
+          v28.0-rc0
         </div>
       </div>
     </div>
@@ -124,7 +124,26 @@ started and when data is sent to the port. The port driver can also send data to
 Erlang.</p><p>As a port driver is dynamically linked into the emulator process, this is the
 fastest way of calling C-code from Erlang. Calling functions in the port driver
 requires no context switches. But it is also the least safe way, because a crash
-in the port driver brings the emulator down too.</p><p>The scenario is illustrated in the following figure:</p><p><img src="assets/port_driver.gif" alt="Port Driver Communication" title="Port Driver Communication"/></p><h2 id="erlang-program" class="section-heading">
+in the port driver brings the emulator down too.</p><p>The scenario is illustrated in the following figure:</p><pre><code class="mermaid">---
+title: Port Driver Communication
+---
+flowchart
+    subgraph Legend
+        direction LR
+
+        os[OS Process]
+        erl([Erlang Process])
+    end
+
+    subgraph emulator
+        direction LR
+
+        port{Port} --&gt; erlProc
+        erlProc([Connected process]) --&gt; port
+
+        port --&gt; proc[Port Driver Shared Library]
+        proc --&gt; port
+    end</code></pre><h2 id="erlang-program" class="section-heading">
   <a href="#erlang-program" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -133,108 +152,108 @@ in the port driver brings the emulator down too.</p><p>The scenario is illustrat
 <p>Like a port program, the port communicates with an Erlang process. All
 communication goes through one Erlang process that is the <em>connected process</em> of
 the port driver. Terminating this process closes the port driver.</p><p>Before the port is created, the driver must be loaded. This is done with the
-function <a href="../../lib/kernel-9.2.3/doc/html/erl_ddll.html#load_driver/2"><code class="inline">erl_ddll:load_driver/2</code></a>, with the name of the shared library as
-argument.</p><p>The port is then created using the BIF <a href="../../erts-14.2.4/doc/html/erlang.html#open_port/2"><code class="inline">open_port/2</code></a>, with the
+function <a href="../../lib/kernel-10.0/doc/html/erl_ddll.html#load_driver/2"><code class="inline">erl_ddll:load_driver/2</code></a>, with the name of the shared library as
+argument.</p><p>The port is then created using the BIF <a href="../../erts-15.0/doc/html/erlang.html#open_port/2"><code class="inline">open_port/2</code></a>, with the
 tuple <code class="inline">{spawn, DriverName}</code> as the first argument. The string <code class="inline">SharedLib</code> is the
 name of the port driver. The second argument is a list of options, none in this
-case:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="0789642482-1">(</span><span class="ss">complex5</span><span class="p" data-group-id="0789642482-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="0789642482-2">(</span><span class="p" data-group-id="0789642482-3">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="0789642482-3">]</span><span class="p" data-group-id="0789642482-2">)</span><span class="p">.</span><span class="w">
+case:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="9747344980-1">(</span><span class="ss">complex5</span><span class="p" data-group-id="9747344980-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="9747344980-2">(</span><span class="p" data-group-id="9747344980-3">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="9747344980-3">]</span><span class="p" data-group-id="9747344980-2">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">start</span><span class="p" data-group-id="0789642482-4">(</span><span class="n">SharedLib</span><span class="p" data-group-id="0789642482-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">erl_ddll</span><span class="p">:</span><span class="nf">load_driver</span><span class="p" data-group-id="0789642482-5">(</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="0789642482-5">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="9747344980-4">(</span><span class="n">SharedLib</span><span class="p" data-group-id="9747344980-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">erl_ddll</span><span class="p">:</span><span class="nf">load_driver</span><span class="p" data-group-id="9747344980-5">(</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="9747344980-5">)</span><span class="w"> </span><span class="k">of</span><span class="w">
         </span><span class="ss">ok</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="0789642482-6">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">already_loaded</span><span class="p" data-group-id="0789642482-6">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-        </span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">exit</span><span class="p" data-group-id="0789642482-7">(</span><span class="p" data-group-id="0789642482-8">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">could_not_load_driver</span><span class="p" data-group-id="0789642482-8">}</span><span class="p" data-group-id="0789642482-7">)</span><span class="w">
+        </span><span class="p" data-group-id="9747344980-6">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">already_loaded</span><span class="p" data-group-id="9747344980-6">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="p">;</span><span class="w">
+        </span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">exit</span><span class="p" data-group-id="9747344980-7">(</span><span class="p" data-group-id="9747344980-8">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">could_not_load_driver</span><span class="p" data-group-id="9747344980-8">}</span><span class="p" data-group-id="9747344980-7">)</span><span class="w">
     </span><span class="k">end</span><span class="p">,</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="0789642482-9">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0789642482-10">[</span><span class="n">SharedLib</span><span class="p" data-group-id="0789642482-10">]</span><span class="p" data-group-id="0789642482-9">)</span><span class="p">.</span><span class="w">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="9747344980-9">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9747344980-10">[</span><span class="n">SharedLib</span><span class="p" data-group-id="9747344980-10">]</span><span class="p" data-group-id="9747344980-9">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">init</span><span class="p" data-group-id="0789642482-11">(</span><span class="n">SharedLib</span><span class="p" data-group-id="0789642482-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nf">register</span><span class="p" data-group-id="0789642482-12">(</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="0789642482-13">(</span><span class="p" data-group-id="0789642482-13">)</span><span class="p" data-group-id="0789642482-12">)</span><span class="p">,</span><span class="w">
-  </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">open_port</span><span class="p" data-group-id="0789642482-14">(</span><span class="p" data-group-id="0789642482-15">{</span><span class="nb">spawn</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="0789642482-15">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0789642482-16">[</span><span class="p" data-group-id="0789642482-16">]</span><span class="p" data-group-id="0789642482-14">)</span><span class="p">,</span><span class="w">
-  </span><span class="nf">loop</span><span class="p" data-group-id="0789642482-17">(</span><span class="n">Port</span><span class="p" data-group-id="0789642482-17">)</span><span class="p">.</span></code></pre><p>Now <code class="inline">complex5:foo/1</code> and <code class="inline">complex5:bar/1</code> can be implemented. Both send a
-message to the <code class="inline">complex</code> process and receive the following reply:</p><pre><code class="makeup erlang" translate="no"><span class="nf">foo</span><span class="p" data-group-id="6206947113-1">(</span><span class="n">X</span><span class="p" data-group-id="6206947113-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">call_port</span><span class="p" data-group-id="6206947113-2">(</span><span class="p" data-group-id="6206947113-3">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="6206947113-3">}</span><span class="p" data-group-id="6206947113-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">bar</span><span class="p" data-group-id="6206947113-4">(</span><span class="n">Y</span><span class="p" data-group-id="6206947113-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">call_port</span><span class="p" data-group-id="6206947113-5">(</span><span class="p" data-group-id="6206947113-6">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="6206947113-6">}</span><span class="p" data-group-id="6206947113-5">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="9747344980-11">(</span><span class="n">SharedLib</span><span class="p" data-group-id="9747344980-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nf">register</span><span class="p" data-group-id="9747344980-12">(</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="9747344980-13">(</span><span class="p" data-group-id="9747344980-13">)</span><span class="p" data-group-id="9747344980-12">)</span><span class="p">,</span><span class="w">
+  </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">open_port</span><span class="p" data-group-id="9747344980-14">(</span><span class="p" data-group-id="9747344980-15">{</span><span class="nb">spawn</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="9747344980-15">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9747344980-16">[</span><span class="p" data-group-id="9747344980-16">]</span><span class="p" data-group-id="9747344980-14">)</span><span class="p">,</span><span class="w">
+  </span><span class="nf">loop</span><span class="p" data-group-id="9747344980-17">(</span><span class="n">Port</span><span class="p" data-group-id="9747344980-17">)</span><span class="p">.</span></code></pre><p>Now <code class="inline">complex5:foo/1</code> and <code class="inline">complex5:bar/1</code> can be implemented. Both send a
+message to the <code class="inline">complex</code> process and receive the following reply:</p><pre><code class="makeup erlang" translate="no"><span class="nf">foo</span><span class="p" data-group-id="5460671666-1">(</span><span class="n">X</span><span class="p" data-group-id="5460671666-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">call_port</span><span class="p" data-group-id="5460671666-2">(</span><span class="p" data-group-id="5460671666-3">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="5460671666-3">}</span><span class="p" data-group-id="5460671666-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">bar</span><span class="p" data-group-id="5460671666-4">(</span><span class="n">Y</span><span class="p" data-group-id="5460671666-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">call_port</span><span class="p" data-group-id="5460671666-5">(</span><span class="p" data-group-id="5460671666-6">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="5460671666-6">}</span><span class="p" data-group-id="5460671666-5">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">call_port</span><span class="p" data-group-id="6206947113-7">(</span><span class="n">Msg</span><span class="p" data-group-id="6206947113-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="ss">complex</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="6206947113-8">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="6206947113-9">(</span><span class="p" data-group-id="6206947113-9">)</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="6206947113-8">}</span><span class="p">,</span><span class="w">
+</span><span class="nf">call_port</span><span class="p" data-group-id="5460671666-7">(</span><span class="n">Msg</span><span class="p" data-group-id="5460671666-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">complex</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="5460671666-8">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="5460671666-9">(</span><span class="p" data-group-id="5460671666-9">)</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5460671666-8">}</span><span class="p">,</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-        </span><span class="p" data-group-id="6206947113-10">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="p" data-group-id="6206947113-10">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="5460671666-10">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="p" data-group-id="5460671666-10">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Result</span><span class="w">
-    </span><span class="k">end</span><span class="p">.</span></code></pre><p>The <code class="inline">complex</code> process performs the following:</p><ul><li>Encodes the message into a sequence of bytes.</li><li>Sends it to the port.</li><li>Waits for a reply.</li><li>Decodes the reply.</li><li>Sends it back to the caller:</li></ul><pre><code class="makeup erlang" translate="no"><span class="nf">loop</span><span class="p" data-group-id="8784231323-1">(</span><span class="n">Port</span><span class="p" data-group-id="8784231323-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">end</span><span class="p">.</span></code></pre><p>The <code class="inline">complex</code> process performs the following:</p><ul><li>Encodes the message into a sequence of bytes.</li><li>Sends it to the port.</li><li>Waits for a reply.</li><li>Decodes the reply.</li><li>Sends it back to the caller:</li></ul><pre><code class="makeup erlang" translate="no"><span class="nf">loop</span><span class="p" data-group-id="3375828287-1">(</span><span class="n">Port</span><span class="p" data-group-id="3375828287-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-        </span><span class="p" data-group-id="8784231323-2">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">Caller</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="8784231323-2">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="n">Port</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="8784231323-3">{</span><span class="nf">self</span><span class="p" data-group-id="8784231323-4">(</span><span class="p" data-group-id="8784231323-4">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8784231323-5">{</span><span class="ss">command</span><span class="p">,</span><span class="w"> </span><span class="nf">encode</span><span class="p" data-group-id="8784231323-6">(</span><span class="n">Msg</span><span class="p" data-group-id="8784231323-6">)</span><span class="p" data-group-id="8784231323-5">}</span><span class="p" data-group-id="8784231323-3">}</span><span class="p">,</span><span class="w">
+        </span><span class="p" data-group-id="3375828287-2">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">Caller</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="3375828287-2">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="n">Port</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="3375828287-3">{</span><span class="nf">self</span><span class="p" data-group-id="3375828287-4">(</span><span class="p" data-group-id="3375828287-4">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3375828287-5">{</span><span class="ss">command</span><span class="p">,</span><span class="w"> </span><span class="nf">encode</span><span class="p" data-group-id="3375828287-6">(</span><span class="n">Msg</span><span class="p" data-group-id="3375828287-6">)</span><span class="p" data-group-id="3375828287-5">}</span><span class="p" data-group-id="3375828287-3">}</span><span class="p">,</span><span class="w">
             </span><span class="k">receive</span><span class="w">
-                </span><span class="p" data-group-id="8784231323-7">{</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8784231323-8">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="8784231323-8">}</span><span class="p" data-group-id="8784231323-7">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                    </span><span class="n">Caller</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="8784231323-9">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">decode</span><span class="p" data-group-id="8784231323-10">(</span><span class="n">Data</span><span class="p" data-group-id="8784231323-10">)</span><span class="p" data-group-id="8784231323-9">}</span><span class="w">
+                </span><span class="p" data-group-id="3375828287-7">{</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3375828287-8">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3375828287-8">}</span><span class="p" data-group-id="3375828287-7">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                    </span><span class="n">Caller</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="3375828287-9">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">decode</span><span class="p" data-group-id="3375828287-10">(</span><span class="n">Data</span><span class="p" data-group-id="3375828287-10">)</span><span class="p" data-group-id="3375828287-9">}</span><span class="w">
             </span><span class="k">end</span><span class="p">,</span><span class="w">
-            </span><span class="nf">loop</span><span class="p" data-group-id="8784231323-11">(</span><span class="n">Port</span><span class="p" data-group-id="8784231323-11">)</span><span class="w">
+            </span><span class="nf">loop</span><span class="p" data-group-id="3375828287-11">(</span><span class="n">Port</span><span class="p" data-group-id="3375828287-11">)</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span></code></pre><p>Assuming that both the arguments and the results from the C functions are less
 than 256, a simple encoding/decoding scheme is employed. In this scheme, <code class="inline">foo</code>
 is represented by byte 1, <code class="inline">bar</code> is represented by 2, and the argument/result is
-represented by a single byte as well:</p><pre><code class="makeup erlang" translate="no"><span class="nf">encode</span><span class="p" data-group-id="2515911784-1">(</span><span class="p" data-group-id="2515911784-2">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="2515911784-2">}</span><span class="p" data-group-id="2515911784-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="2515911784-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="2515911784-3">]</span><span class="p">;</span><span class="w">
-</span><span class="nf">encode</span><span class="p" data-group-id="2515911784-4">(</span><span class="p" data-group-id="2515911784-5">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="2515911784-5">}</span><span class="p" data-group-id="2515911784-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="2515911784-6">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="2515911784-6">]</span><span class="p">.</span><span class="w">
+represented by a single byte as well:</p><pre><code class="makeup erlang" translate="no"><span class="nf">encode</span><span class="p" data-group-id="9727973476-1">(</span><span class="p" data-group-id="9727973476-2">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="9727973476-2">}</span><span class="p" data-group-id="9727973476-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9727973476-3">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="9727973476-3">]</span><span class="p">;</span><span class="w">
+</span><span class="nf">encode</span><span class="p" data-group-id="9727973476-4">(</span><span class="p" data-group-id="9727973476-5">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="9727973476-5">}</span><span class="p" data-group-id="9727973476-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9727973476-6">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="9727973476-6">]</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">decode</span><span class="p" data-group-id="2515911784-7">(</span><span class="p" data-group-id="2515911784-8">[</span><span class="n">Int</span><span class="p" data-group-id="2515911784-8">]</span><span class="p" data-group-id="2515911784-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Int</span><span class="p">.</span></code></pre><p>The resulting Erlang program, including functions for stopping the port and
+</span><span class="nf">decode</span><span class="p" data-group-id="9727973476-7">(</span><span class="p" data-group-id="9727973476-8">[</span><span class="n">Int</span><span class="p" data-group-id="9727973476-8">]</span><span class="p" data-group-id="9727973476-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Int</span><span class="p">.</span></code></pre><p>The resulting Erlang program, including functions for stopping the port and
 detecting port failures, is as follows:</p><pre><code class="makeup erlang" translate="no"><span class="w">
-</span><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="9975499151-1">(</span><span class="ss">complex5</span><span class="p" data-group-id="9975499151-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="9975499151-2">(</span><span class="p" data-group-id="9975499151-3">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="9975499151-3">]</span><span class="p" data-group-id="9975499151-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="9975499151-4">(</span><span class="p" data-group-id="9975499151-5">[</span><span class="ss">foo</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="9975499151-5">]</span><span class="p" data-group-id="9975499151-4">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="4260241324-1">(</span><span class="ss">complex5</span><span class="p" data-group-id="4260241324-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4260241324-2">(</span><span class="p" data-group-id="4260241324-3">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="4260241324-3">]</span><span class="p" data-group-id="4260241324-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="4260241324-4">(</span><span class="p" data-group-id="4260241324-5">[</span><span class="ss">foo</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">/</span><span class="mi">1</span><span class="p" data-group-id="4260241324-5">]</span><span class="p" data-group-id="4260241324-4">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">start</span><span class="p" data-group-id="9975499151-6">(</span><span class="n">SharedLib</span><span class="p" data-group-id="9975499151-6">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">erl_ddll</span><span class="p">:</span><span class="nf">load_driver</span><span class="p" data-group-id="9975499151-7">(</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="9975499151-7">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="4260241324-6">(</span><span class="n">SharedLib</span><span class="p" data-group-id="4260241324-6">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">erl_ddll</span><span class="p">:</span><span class="nf">load_driver</span><span class="p" data-group-id="4260241324-7">(</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="4260241324-7">)</span><span class="w"> </span><span class="k">of</span><span class="w">
 </span><span class="err">	</span><span class="ss">ok</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="9975499151-8">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">already_loaded</span><span class="p" data-group-id="9975499151-8">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-</span><span class="err">	</span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">exit</span><span class="p" data-group-id="9975499151-9">(</span><span class="p" data-group-id="9975499151-10">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">could_not_load_driver</span><span class="p" data-group-id="9975499151-10">}</span><span class="p" data-group-id="9975499151-9">)</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="4260241324-8">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">already_loaded</span><span class="p" data-group-id="4260241324-8">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">ok</span><span class="p">;</span><span class="w">
+</span><span class="err">	</span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">exit</span><span class="p" data-group-id="4260241324-9">(</span><span class="p" data-group-id="4260241324-10">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">could_not_load_driver</span><span class="p" data-group-id="4260241324-10">}</span><span class="p" data-group-id="4260241324-9">)</span><span class="w">
     </span><span class="k">end</span><span class="p">,</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="9975499151-11">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9975499151-12">[</span><span class="n">SharedLib</span><span class="p" data-group-id="9975499151-12">]</span><span class="p" data-group-id="9975499151-11">)</span><span class="p">.</span><span class="w">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="4260241324-11">(</span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="ss">init</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4260241324-12">[</span><span class="n">SharedLib</span><span class="p" data-group-id="4260241324-12">]</span><span class="p" data-group-id="4260241324-11">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">init</span><span class="p" data-group-id="9975499151-13">(</span><span class="n">SharedLib</span><span class="p" data-group-id="9975499151-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">register</span><span class="p" data-group-id="9975499151-14">(</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="9975499151-15">(</span><span class="p" data-group-id="9975499151-15">)</span><span class="p" data-group-id="9975499151-14">)</span><span class="p">,</span><span class="w">
-    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">open_port</span><span class="p" data-group-id="9975499151-16">(</span><span class="p" data-group-id="9975499151-17">{</span><span class="nb">spawn</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="9975499151-17">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9975499151-18">[</span><span class="p" data-group-id="9975499151-18">]</span><span class="p" data-group-id="9975499151-16">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">loop</span><span class="p" data-group-id="9975499151-19">(</span><span class="n">Port</span><span class="p" data-group-id="9975499151-19">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="4260241324-13">(</span><span class="n">SharedLib</span><span class="p" data-group-id="4260241324-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">register</span><span class="p" data-group-id="4260241324-14">(</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="4260241324-15">(</span><span class="p" data-group-id="4260241324-15">)</span><span class="p" data-group-id="4260241324-14">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">open_port</span><span class="p" data-group-id="4260241324-16">(</span><span class="p" data-group-id="4260241324-17">{</span><span class="nb">spawn</span><span class="p">,</span><span class="w"> </span><span class="n">SharedLib</span><span class="p" data-group-id="4260241324-17">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4260241324-18">[</span><span class="p" data-group-id="4260241324-18">]</span><span class="p" data-group-id="4260241324-16">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">loop</span><span class="p" data-group-id="4260241324-19">(</span><span class="n">Port</span><span class="p" data-group-id="4260241324-19">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">stop</span><span class="p" data-group-id="9975499151-20">(</span><span class="p" data-group-id="9975499151-20">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="4260241324-20">(</span><span class="p" data-group-id="4260241324-20">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">complex</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="ss">stop</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">foo</span><span class="p" data-group-id="9975499151-21">(</span><span class="n">X</span><span class="p" data-group-id="9975499151-21">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">call_port</span><span class="p" data-group-id="9975499151-22">(</span><span class="p" data-group-id="9975499151-23">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="9975499151-23">}</span><span class="p" data-group-id="9975499151-22">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">bar</span><span class="p" data-group-id="9975499151-24">(</span><span class="n">Y</span><span class="p" data-group-id="9975499151-24">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">call_port</span><span class="p" data-group-id="9975499151-25">(</span><span class="p" data-group-id="9975499151-26">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="9975499151-26">}</span><span class="p" data-group-id="9975499151-25">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">foo</span><span class="p" data-group-id="4260241324-21">(</span><span class="n">X</span><span class="p" data-group-id="4260241324-21">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">call_port</span><span class="p" data-group-id="4260241324-22">(</span><span class="p" data-group-id="4260241324-23">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="4260241324-23">}</span><span class="p" data-group-id="4260241324-22">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">bar</span><span class="p" data-group-id="4260241324-24">(</span><span class="n">Y</span><span class="p" data-group-id="4260241324-24">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">call_port</span><span class="p" data-group-id="4260241324-25">(</span><span class="p" data-group-id="4260241324-26">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="4260241324-26">}</span><span class="p" data-group-id="4260241324-25">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">call_port</span><span class="p" data-group-id="9975499151-27">(</span><span class="n">Msg</span><span class="p" data-group-id="9975499151-27">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="ss">complex</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="9975499151-28">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="9975499151-29">(</span><span class="p" data-group-id="9975499151-29">)</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9975499151-28">}</span><span class="p">,</span><span class="w">
+</span><span class="nf">call_port</span><span class="p" data-group-id="4260241324-27">(</span><span class="n">Msg</span><span class="p" data-group-id="4260241324-27">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">complex</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="4260241324-28">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="nf">self</span><span class="p" data-group-id="4260241324-29">(</span><span class="p" data-group-id="4260241324-29">)</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4260241324-28">}</span><span class="p">,</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="9975499151-30">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="p" data-group-id="9975499151-30">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="4260241324-30">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="p" data-group-id="4260241324-30">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
 </span><span class="err">	</span><span class="w">    </span><span class="n">Result</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">loop</span><span class="p" data-group-id="9975499151-31">(</span><span class="n">Port</span><span class="p" data-group-id="9975499151-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">loop</span><span class="p" data-group-id="4260241324-31">(</span><span class="n">Port</span><span class="p" data-group-id="4260241324-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="k">receive</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="9975499151-32">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">Caller</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9975499151-32">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-</span><span class="err">	</span><span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="9975499151-33">{</span><span class="nf">self</span><span class="p" data-group-id="9975499151-34">(</span><span class="p" data-group-id="9975499151-34">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9975499151-35">{</span><span class="ss">command</span><span class="p">,</span><span class="w"> </span><span class="nf">encode</span><span class="p" data-group-id="9975499151-36">(</span><span class="n">Msg</span><span class="p" data-group-id="9975499151-36">)</span><span class="p" data-group-id="9975499151-35">}</span><span class="p" data-group-id="9975499151-33">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="4260241324-32">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">Caller</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4260241324-32">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="err">	</span><span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="4260241324-33">{</span><span class="nf">self</span><span class="p" data-group-id="4260241324-34">(</span><span class="p" data-group-id="4260241324-34">)</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4260241324-35">{</span><span class="ss">command</span><span class="p">,</span><span class="w"> </span><span class="nf">encode</span><span class="p" data-group-id="4260241324-36">(</span><span class="n">Msg</span><span class="p" data-group-id="4260241324-36">)</span><span class="p" data-group-id="4260241324-35">}</span><span class="p" data-group-id="4260241324-33">}</span><span class="p">,</span><span class="w">
 </span><span class="err">	</span><span class="w">    </span><span class="k">receive</span><span class="w">
-</span><span class="err">	</span><span class="err">	</span><span class="p" data-group-id="9975499151-37">{</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9975499151-38">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9975499151-38">}</span><span class="p" data-group-id="9975499151-37">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-</span><span class="err">	</span><span class="err">	</span><span class="w">    </span><span class="n">Caller</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="9975499151-39">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">decode</span><span class="p" data-group-id="9975499151-40">(</span><span class="n">Data</span><span class="p" data-group-id="9975499151-40">)</span><span class="p" data-group-id="9975499151-39">}</span><span class="w">
+</span><span class="err">	</span><span class="err">	</span><span class="p" data-group-id="4260241324-37">{</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4260241324-38">{</span><span class="ss">data</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="4260241324-38">}</span><span class="p" data-group-id="4260241324-37">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="err">	</span><span class="err">	</span><span class="w">    </span><span class="n">Caller</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="4260241324-39">{</span><span class="ss">complex</span><span class="p">,</span><span class="w"> </span><span class="nf">decode</span><span class="p" data-group-id="4260241324-40">(</span><span class="n">Data</span><span class="p" data-group-id="4260241324-40">)</span><span class="p" data-group-id="4260241324-39">}</span><span class="w">
 </span><span class="err">	</span><span class="w">    </span><span class="k">end</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">    </span><span class="nf">loop</span><span class="p" data-group-id="9975499151-41">(</span><span class="n">Port</span><span class="p" data-group-id="9975499151-41">)</span><span class="p">;</span><span class="w">
+</span><span class="err">	</span><span class="w">    </span><span class="nf">loop</span><span class="p" data-group-id="4260241324-41">(</span><span class="n">Port</span><span class="p" data-group-id="4260241324-41">)</span><span class="p">;</span><span class="w">
 </span><span class="err">	</span><span class="ss">stop</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-</span><span class="err">	</span><span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="9975499151-42">{</span><span class="nf">self</span><span class="p" data-group-id="9975499151-43">(</span><span class="p" data-group-id="9975499151-43">)</span><span class="p">,</span><span class="w"> </span><span class="ss">close</span><span class="p" data-group-id="9975499151-42">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="p" data-group-id="4260241324-42">{</span><span class="nf">self</span><span class="p" data-group-id="4260241324-43">(</span><span class="p" data-group-id="4260241324-43">)</span><span class="p">,</span><span class="w"> </span><span class="ss">close</span><span class="p" data-group-id="4260241324-42">}</span><span class="p">,</span><span class="w">
 </span><span class="err">	</span><span class="w">    </span><span class="k">receive</span><span class="w">
-</span><span class="err">	</span><span class="err">	</span><span class="p" data-group-id="9975499151-44">{</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="ss">closed</span><span class="p" data-group-id="9975499151-44">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-</span><span class="err">	</span><span class="err">	</span><span class="w">    </span><span class="nf">exit</span><span class="p" data-group-id="9975499151-45">(</span><span class="ss">normal</span><span class="p" data-group-id="9975499151-45">)</span><span class="w">
+</span><span class="err">	</span><span class="err">	</span><span class="p" data-group-id="4260241324-44">{</span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="ss">closed</span><span class="p" data-group-id="4260241324-44">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="err">	</span><span class="err">	</span><span class="w">    </span><span class="nf">exit</span><span class="p" data-group-id="4260241324-45">(</span><span class="ss">normal</span><span class="p" data-group-id="4260241324-45">)</span><span class="w">
 </span><span class="err">	</span><span class="w">    </span><span class="k">end</span><span class="p">;</span><span class="w">
-</span><span class="err">	</span><span class="p" data-group-id="9975499151-46">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Reason</span><span class="p" data-group-id="9975499151-46">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-</span><span class="err">	</span><span class="w">    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9975499151-47">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s"> </span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9975499151-48">[</span><span class="n">Reason</span><span class="p" data-group-id="9975499151-48">]</span><span class="p" data-group-id="9975499151-47">)</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">    </span><span class="nf">exit</span><span class="p" data-group-id="9975499151-49">(</span><span class="ss">port_terminated</span><span class="p" data-group-id="9975499151-49">)</span><span class="w">
+</span><span class="err">	</span><span class="p" data-group-id="4260241324-46">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Reason</span><span class="p" data-group-id="4260241324-46">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="err">	</span><span class="w">    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="4260241324-47">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s"> </span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4260241324-48">[</span><span class="n">Reason</span><span class="p" data-group-id="4260241324-48">]</span><span class="p" data-group-id="4260241324-47">)</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">    </span><span class="nf">exit</span><span class="p" data-group-id="4260241324-49">(</span><span class="ss">port_terminated</span><span class="p" data-group-id="4260241324-49">)</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">encode</span><span class="p" data-group-id="9975499151-50">(</span><span class="p" data-group-id="9975499151-51">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="9975499151-51">}</span><span class="p" data-group-id="9975499151-50">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9975499151-52">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="9975499151-52">]</span><span class="p">;</span><span class="w">
-</span><span class="nf">encode</span><span class="p" data-group-id="9975499151-53">(</span><span class="p" data-group-id="9975499151-54">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="9975499151-54">}</span><span class="p" data-group-id="9975499151-53">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="9975499151-55">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="9975499151-55">]</span><span class="p">.</span><span class="w">
+</span><span class="nf">encode</span><span class="p" data-group-id="4260241324-50">(</span><span class="p" data-group-id="4260241324-51">{</span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="4260241324-51">}</span><span class="p" data-group-id="4260241324-50">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="4260241324-52">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">X</span><span class="p" data-group-id="4260241324-52">]</span><span class="p">;</span><span class="w">
+</span><span class="nf">encode</span><span class="p" data-group-id="4260241324-53">(</span><span class="p" data-group-id="4260241324-54">{</span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="4260241324-54">}</span><span class="p" data-group-id="4260241324-53">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="4260241324-55">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="4260241324-55">]</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">decode</span><span class="p" data-group-id="9975499151-56">(</span><span class="p" data-group-id="9975499151-57">[</span><span class="n">Int</span><span class="p" data-group-id="9975499151-57">]</span><span class="p" data-group-id="9975499151-56">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Int</span><span class="p">.</span></code></pre><h2 id="c-driver" class="section-heading">
+</span><span class="nf">decode</span><span class="p" data-group-id="4260241324-56">(</span><span class="p" data-group-id="4260241324-57">[</span><span class="n">Int</span><span class="p" data-group-id="4260241324-57">]</span><span class="p" data-group-id="4260241324-56">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Int</span><span class="p">.</span></code></pre><h2 id="c-driver" class="section-heading">
   <a href="#c-driver" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -254,97 +273,96 @@ the port instance, so this must be saved. It is customary to use an allocated
 driver-defined structure for this one, and to pass a pointer back as a
 reference.</p><p>It is not a good idea to use a global variable as the port driver can be spawned
 by multiple Erlang processes. This driver-structure is to be instantiated
-multiple times:</p><pre><code class="text">
-/* port_driver.c */
+multiple times:</p><pre><code class="makeup c" translate="no"><span class="cm">/* port_driver.c */</span><span class="w">
 
-#include &lt;stdio.h&gt;
-#include &quot;erl_driver.h&quot;
+</span><span class="kp">#include</span><span class="w"> </span><span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span><span class="w">
+</span><span class="kp">#include</span><span class="w"> </span><span class="s">&quot;erl_driver.h&quot;</span><span class="w">
 
-typedef struct {
-    ErlDrvPort port;
-} example_data;
+</span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p" data-group-id="1329846560-1">{</span><span class="w">
+    </span><span class="no">ErlDrvPort</span><span class="w"> </span><span class="n">port</span><span class="p">;</span><span class="w">
+</span><span class="p" data-group-id="1329846560-1">}</span><span class="w"> </span><span class="n">example_data</span><span class="p">;</span><span class="w">
 
-static ErlDrvData example_drv_start(ErlDrvPort port, char *buff)
-{
-    example_data* d = (example_data*)driver_alloc(sizeof(example_data));
-    d-&gt;port = port;
-    return (ErlDrvData)d;
-}
+</span><span class="k">static</span><span class="w"> </span><span class="no">ErlDrvData</span><span class="w"> </span><span class="nf">example_drv_start</span><span class="p" data-group-id="1329846560-2">(</span><span class="no">ErlDrvPort</span><span class="w"> </span><span class="n">port</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buff</span><span class="p" data-group-id="1329846560-2">)</span><span class="w">
+</span><span class="p" data-group-id="1329846560-3">{</span><span class="w">
+    </span><span class="n">example_data</span><span class="o">*</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1329846560-4">(</span><span class="n">example_data</span><span class="o">*</span><span class="p" data-group-id="1329846560-4">)</span><span class="nf">driver_alloc</span><span class="p" data-group-id="1329846560-5">(</span><span class="nf">sizeof</span><span class="p" data-group-id="1329846560-6">(</span><span class="n">example_data</span><span class="p" data-group-id="1329846560-6">)</span><span class="p" data-group-id="1329846560-5">)</span><span class="p">;</span><span class="w">
+    </span><span class="n">d</span><span class="o">-&gt;</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">port</span><span class="p">;</span><span class="w">
+    </span><span class="k">return</span><span class="w"> </span><span class="p" data-group-id="1329846560-7">(</span><span class="no">ErlDrvData</span><span class="p" data-group-id="1329846560-7">)</span><span class="n">d</span><span class="p">;</span><span class="w">
+</span><span class="p" data-group-id="1329846560-3">}</span><span class="w">
 
-static void example_drv_stop(ErlDrvData handle)
-{
-    driver_free((char*)handle);
-}
+</span><span class="k">static</span><span class="w"> </span><span class="kc">void</span><span class="w"> </span><span class="nf">example_drv_stop</span><span class="p" data-group-id="1329846560-8">(</span><span class="no">ErlDrvData</span><span class="w"> </span><span class="n">handle</span><span class="p" data-group-id="1329846560-8">)</span><span class="w">
+</span><span class="p" data-group-id="1329846560-9">{</span><span class="w">
+    </span><span class="nf">driver_free</span><span class="p" data-group-id="1329846560-10">(</span><span class="p" data-group-id="1329846560-11">(</span><span class="kt">char</span><span class="o">*</span><span class="p" data-group-id="1329846560-11">)</span><span class="n">handle</span><span class="p" data-group-id="1329846560-10">)</span><span class="p">;</span><span class="w">
+</span><span class="p" data-group-id="1329846560-9">}</span><span class="w">
 
-static void example_drv_output(ErlDrvData handle, char *buff,
-			       ErlDrvSizeT bufflen)
-{
-    example_data* d = (example_data*)handle;
-    char fn = buff[0], arg = buff[1], res;
-    if (fn == 1) {
-      res = foo(arg);
-    } else if (fn == 2) {
-      res = bar(arg);
-    }
-    driver_output(d-&gt;port, &amp;res, 1);
-}
+</span><span class="k">static</span><span class="w"> </span><span class="kc">void</span><span class="w"> </span><span class="nf">example_drv_output</span><span class="p" data-group-id="1329846560-12">(</span><span class="no">ErlDrvData</span><span class="w"> </span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buff</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="w">       </span><span class="no">ErlDrvSizeT</span><span class="w"> </span><span class="n">bufflen</span><span class="p" data-group-id="1329846560-12">)</span><span class="w">
+</span><span class="p" data-group-id="1329846560-13">{</span><span class="w">
+    </span><span class="n">example_data</span><span class="o">*</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1329846560-14">(</span><span class="n">example_data</span><span class="o">*</span><span class="p" data-group-id="1329846560-14">)</span><span class="n">handle</span><span class="p">;</span><span class="w">
+    </span><span class="kt">char</span><span class="w"> </span><span class="n">fn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buff</span><span class="p" data-group-id="1329846560-15">[</span><span class="mi">0</span><span class="p" data-group-id="1329846560-15">]</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buff</span><span class="p" data-group-id="1329846560-16">[</span><span class="mi">1</span><span class="p" data-group-id="1329846560-16">]</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">;</span><span class="w">
+    </span><span class="k">if</span><span class="w"> </span><span class="p" data-group-id="1329846560-17">(</span><span class="n">fn</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1329846560-17">)</span><span class="w"> </span><span class="p" data-group-id="1329846560-18">{</span><span class="w">
+      </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">foo</span><span class="p" data-group-id="1329846560-19">(</span><span class="n">arg</span><span class="p" data-group-id="1329846560-19">)</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="1329846560-18">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p" data-group-id="1329846560-20">(</span><span class="n">fn</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="1329846560-20">)</span><span class="w"> </span><span class="p" data-group-id="1329846560-21">{</span><span class="w">
+      </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">bar</span><span class="p" data-group-id="1329846560-22">(</span><span class="n">arg</span><span class="p" data-group-id="1329846560-22">)</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="1329846560-21">}</span><span class="w">
+    </span><span class="nf">driver_output</span><span class="p" data-group-id="1329846560-23">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">port</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">res</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="1329846560-23">)</span><span class="p">;</span><span class="w">
+</span><span class="p" data-group-id="1329846560-13">}</span><span class="w">
 
-ErlDrvEntry example_driver_entry = {
-    NULL,			/* F_PTR init, called when driver is loaded */
-    example_drv_start,		/* L_PTR start, called when port is opened */
-    example_drv_stop,		/* F_PTR stop, called when port is closed */
-    example_drv_output,		/* F_PTR output, called when erlang has sent */
-    NULL,			/* F_PTR ready_input, called when input descriptor ready */
-    NULL,			/* F_PTR ready_output, called when output descriptor ready */
-    &quot;example_drv&quot;,		/* char *driver_name, the argument to open_port */
-    NULL,			/* F_PTR finish, called when unloaded */
-    NULL,                       /* void *handle, Reserved by VM */
-    NULL,			/* F_PTR control, port_command callback */
-    NULL,			/* F_PTR timeout, reserved */
-    NULL,			/* F_PTR outputv, reserved */
-    NULL,                       /* F_PTR ready_async, only for async drivers */
-    NULL,                       /* F_PTR flush, called when port is about
+</span><span class="no">ErlDrvEntry</span><span class="w"> </span><span class="n">example_driver_entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1329846560-24">{</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR init, called when driver is loaded */</span><span class="w">
+    </span><span class="n">example_drv_start</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="cm">/* L_PTR start, called when port is opened */</span><span class="w">
+    </span><span class="n">example_drv_stop</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR stop, called when port is closed */</span><span class="w">
+    </span><span class="n">example_drv_output</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR output, called when erlang has sent */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR ready_input, called when input descriptor ready */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR ready_output, called when output descriptor ready */</span><span class="w">
+    </span><span class="s">&quot;example_drv&quot;</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="cm">/* char *driver_name, the argument to open_port */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR finish, called when unloaded */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* void *handle, Reserved by VM */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR control, port_command callback */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR timeout, reserved */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="err">	</span><span class="err">	</span><span class="err">	</span><span class="cm">/* F_PTR outputv, reserved */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* F_PTR ready_async, only for async drivers */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* F_PTR flush, called when port is about
 				   to be closed, but there is data in driver
-				   queue */
-    NULL,                       /* F_PTR call, much like control, sync call
-				   to driver */
-    NULL,                       /* unused */
-    ERL_DRV_EXTENDED_MARKER,    /* int extended marker, Should always be
-				   set to indicate driver versioning */
-    ERL_DRV_EXTENDED_MAJOR_VERSION, /* int major_version, should always be
-				       set to this value */
-    ERL_DRV_EXTENDED_MINOR_VERSION, /* int minor_version, should always be
-				       set to this value */
-    0,                          /* int driver_flags, see documentation */
-    NULL,                       /* void *handle2, reserved for VM use */
-    NULL,                       /* F_PTR process_exit, called when a
-				   monitored process dies */
-    NULL                        /* F_PTR stop_select, called to close an
-				   event object */
-};
+				   queue */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* F_PTR call, much like control, sync call
+				   to driver */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* unused */</span><span class="w">
+    </span><span class="no">ERL_DRV_EXTENDED_MARKER</span><span class="p">,</span><span class="w">    </span><span class="cm">/* int extended marker, Should always be
+				   set to indicate driver versioning */</span><span class="w">
+    </span><span class="no">ERL_DRV_EXTENDED_MAJOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="cm">/* int major_version, should always be
+				       set to this value */</span><span class="w">
+    </span><span class="no">ERL_DRV_EXTENDED_MINOR_VERSION</span><span class="p">,</span><span class="w"> </span><span class="cm">/* int minor_version, should always be
+				       set to this value */</span><span class="w">
+    </span><span class="mi">0</span><span class="p">,</span><span class="w">                          </span><span class="cm">/* int driver_flags, see documentation */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* void *handle2, reserved for VM use */</span><span class="w">
+    </span><span class="no">NULL</span><span class="p">,</span><span class="w">                       </span><span class="cm">/* F_PTR process_exit, called when a
+				   monitored process dies */</span><span class="w">
+    </span><span class="no">NULL</span><span class="w">                        </span><span class="cm">/* F_PTR stop_select, called to close an
+				   event object */</span><span class="w">
+</span><span class="p" data-group-id="1329846560-24">}</span><span class="p">;</span><span class="w">
 
-DRIVER_INIT(example_drv) /* must match name in driver_entry */
-{
-    return &amp;example_driver_entry;
-}</code></pre><h2 id="running-the-example" class="section-heading">
+</span><span class="no">DRIVER_INIT</span><span class="p" data-group-id="1329846560-25">(</span><span class="n">example_drv</span><span class="p" data-group-id="1329846560-25">)</span><span class="w"> </span><span class="cm">/* must match name in driver_entry */</span><span class="w">
+</span><span class="p" data-group-id="1329846560-26">{</span><span class="w">
+    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="n">example_driver_entry</span><span class="p">;</span><span class="w">
+</span><span class="p" data-group-id="1329846560-26">}</span></code></pre><h2 id="running-the-example" class="section-heading">
   <a href="#running-the-example" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Running the Example</span>
 </h2>
 <p><em>Step 1.</em> Compile the C code:</p><pre><code class="text">unix&gt; gcc -o example_drv.so -fpic -shared complex.c port_driver.c
-windows&gt; cl -LD -MD -Fe example_drv.dll complex.c port_driver.c</code></pre><p><em>Step 2.</em> Start Erlang and compile the Erlang code:</p><pre><code class="text">&gt; erl
-Erlang (BEAM) emulator version 5.1
+windows&gt; cl -LD -MD -Fe example_drv.dll complex.c port_driver.c</code></pre><p><em>Step 2.</em> Start Erlang and compile the Erlang code:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="ss">erl</span><span class="w">
+</span><span class="n">Erlang</span><span class="o">/</span><span class="n">OTP</span><span class="w"> </span><span class="mi">26</span><span class="w"> </span><span class="p" data-group-id="1128062233-1">[</span><span class="ss">erts</span><span class="o">-</span><span class="mf">14.2</span><span class="p" data-group-id="1128062233-1">]</span><span class="w"> </span><span class="p" data-group-id="1128062233-2">[</span><span class="ss">source</span><span class="p" data-group-id="1128062233-2">]</span><span class="w"> </span><span class="p" data-group-id="1128062233-3">[</span><span class="mi">64</span><span class="o">-</span><span class="ss">bit</span><span class="p" data-group-id="1128062233-3">]</span><span class="w"> </span><span class="p" data-group-id="1128062233-4">[</span><span class="nc">smp</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">8</span><span class="p" data-group-id="1128062233-4">]</span><span class="w"> </span><span class="p" data-group-id="1128062233-5">[</span><span class="nc">ds</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">10</span><span class="p" data-group-id="1128062233-5">]</span><span class="w"> </span><span class="p" data-group-id="1128062233-6">[</span><span class="ss">async</span><span class="o">-</span><span class="nc">threads</span><span class="p">:</span><span class="mi">1</span><span class="p" data-group-id="1128062233-6">]</span><span class="w"> </span><span class="p" data-group-id="1128062233-7">[</span><span class="nc">jit</span><span class="p">:</span><span class="ss">ns</span><span class="p" data-group-id="1128062233-7">]</span><span class="w">
 
-Eshell V5.1 (abort with ^G)
-1&gt; c(complex5).
-{ok,complex5}</code></pre><p><em>Step 3.</em> Run the example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="4702448766-1">(</span><span class="s">&quot;example_drv&quot;</span><span class="p" data-group-id="4702448766-1">)</span><span class="p">.</span><span class="w">
+</span><span class="n">Eshell</span><span class="w"> </span><span class="n">V14</span><span class="p">.</span><span class="mi">2</span><span class="w"> </span><span class="p" data-group-id="1128062233-8">(</span><span class="ss">press</span><span class="w"> </span><span class="n">Ctrl</span><span class="o">+</span><span class="n">G</span><span class="w"> </span><span class="ss">to</span><span class="w"> </span><span class="ss">abort</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="w"> </span><span class="nf">help</span><span class="p" data-group-id="1128062233-9">(</span><span class="p" data-group-id="1128062233-9">)</span><span class="p">.</span><span class="w"> </span><span class="ss">for</span><span class="w"> </span><span class="ss">help</span><span class="p" data-group-id="1128062233-8">)</span><span class="gp unselectable">
+1&gt; </span><span class="nf">c</span><span class="p" data-group-id="1128062233-10">(</span><span class="ss">complex5</span><span class="p" data-group-id="1128062233-10">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1128062233-11">{</span><span class="ss">ok</span><span class="p">,</span><span class="ss">complex5</span><span class="p" data-group-id="1128062233-11">}</span></code></pre><p><em>Step 3.</em> Run the example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">2&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="3725301631-1">(</span><span class="s">&quot;example_drv&quot;</span><span class="p" data-group-id="3725301631-1">)</span><span class="p">.</span><span class="w">
 </span><span class="o">&lt;</span><span class="mf">0.34</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="gp unselectable">
-3&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">foo</span><span class="p" data-group-id="4702448766-2">(</span><span class="mi">3</span><span class="p" data-group-id="4702448766-2">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">foo</span><span class="p" data-group-id="3725301631-2">(</span><span class="mi">3</span><span class="p" data-group-id="3725301631-2">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">4</span><span class="gp unselectable">
-4&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">bar</span><span class="p" data-group-id="4702448766-3">(</span><span class="mi">5</span><span class="p" data-group-id="4702448766-3">)</span><span class="p">.</span><span class="w">
+4&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">bar</span><span class="p" data-group-id="3725301631-3">(</span><span class="mi">5</span><span class="p" data-group-id="3725301631-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">10</span><span class="gp unselectable">
-5&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="4702448766-4">(</span><span class="p" data-group-id="4702448766-4">)</span><span class="p">.</span><span class="w">
+5&gt; </span><span class="nc">complex5</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="3725301631-4">(</span><span class="p" data-group-id="3725301631-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">stop</span></code></pre>
 </div>
 
@@ -391,7 +409,7 @@ C Nodes
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.32.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
@@ -402,6 +420,28 @@ C Nodes
 </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
 
   </body>
 </html>
