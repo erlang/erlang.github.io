@@ -135,14 +135,15 @@ Pages
   </a>
   <span class="text">Overwiew</span>
 </h2>
-<p>This is a complete implementation of the following IETF standards:</p><pre><code class="makeup erlang" translate="no"><span class="n">RFC</span><span class="w"> </span><span class="mi">1350</span><span class="p">,</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Protocol</span><span class="w"> </span><span class="p" data-group-id="5611673977-1">(</span><span class="ss">revision</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5611673977-1">)</span><span class="p">.</span><span class="w">
+<p>This is a complete implementation of the following IETF standards:</p><pre><code class="makeup erlang" translate="no"><span class="n">RFC</span><span class="w"> </span><span class="mi">1350</span><span class="p">,</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Protocol</span><span class="w"> </span><span class="p" data-group-id="8969229252-1">(</span><span class="ss">revision</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8969229252-1">)</span><span class="p">.</span><span class="w">
 </span><span class="n">RFC</span><span class="w"> </span><span class="mi">2347</span><span class="p">,</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Option</span><span class="w"> </span><span class="n">Extension</span><span class="p">.</span><span class="w">
 </span><span class="n">RFC</span><span class="w"> </span><span class="mi">2348</span><span class="p">,</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Blocksize</span><span class="w"> </span><span class="n">Option</span><span class="p">.</span><span class="w">
 </span><span class="n">RFC</span><span class="w"> </span><span class="mi">2349</span><span class="p">,</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Timeout</span><span class="w"> </span><span class="n">Interval</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">Transfer</span><span class="w"> </span><span class="n">Size</span><span class="w"> </span><span class="n">Options</span><span class="p">.</span></code></pre><p>The only feature that not is implemented in this release is
-the &quot;netascii&quot; transfer mode.</p><p>The start/1 function starts a daemon process which, listens for UDP
-packets on a port. When it receives a request for read or write it
-spawns a temporary server process which handles the actual transfer
-of the file. On the client side the read_file/3 and write_file/3
+the &quot;netascii&quot; transfer mode.</p><p>The start/function starts a daemon process which, listens
+for UDP packets on a port. When it receives a request for read or
+write it spawns a temporary server process which handles the actual
+transfer of the file. On the client side the
+<a href="#read_file/3">read_file/3</a> and <a href="#write_file/3">write_file/3</a>
 functions spawns a temporary client process which establishes contact
 with a TFTP daemon and performs the actual transfer of the file.</p><p>Most of the options are common for both the client and the server
 side, but some of them differs a little.</p><h2 id="module-callbacks" class="section-heading">
@@ -154,12 +155,12 @@ side, but some of them differs a little.</p><h2 id="module-callbacks" class="sec
 <p>A <code class="inline">tftp</code> callback module is to be implemented as a <code class="inline">tftp</code> behavior and export
 the functions listed in the following.</p><p>On the server side, the callback interaction starts with a call to <code class="inline">open/5</code> with
 the registered initial callback state. <code class="inline">open/5</code> is expected to open the
-(virtual) file. Then either function <a href="#c:read/1"><code class="inline">read/1</code></a> or
-<a href="#c:write/2"><code class="inline">write/2</code></a> is invoked repeatedly, once per transferred block. At
+(virtual) file. Then either function <a href="#c:read/1"><code class="inline">Module:read/1</code></a> or
+<a href="#c:write/2"><code class="inline">Module:write/2</code></a> is invoked repeatedly, once per transferred block. At
 each function call, the state returned from the previous call is obtained. When
-the last block is encountered, function <a href="#c:read/1"><code class="inline">read/1</code></a> or
-<a href="#c:write/2"><code class="inline">write/2</code></a> is expected to close the (virtual) file and return its
-last state. Function <a href="#c:abort/3"><code class="inline">abort/3</code></a> is only used in error situations.
+the last block is encountered, function <a href="#c:read/1"><code class="inline">Module:read/1</code></a> or
+<a href="#c:write/2"><code class="inline">Module:write/2</code></a> is expected to close the (virtual) file and return its
+last state. Function <a href="#c:abort/3"><code class="inline">Module:abort/3</code></a> is only used in error situations.
 Function <code class="inline">prepare/5</code> is not used on the server side.</p><p>On the client side, the callback interaction is the same, but it starts and ends
 a bit differently. It starts with a call to <code class="inline">prepare/5</code> with the same arguments
 as <code class="inline">open/5</code> takes. <code class="inline">prepare/5</code> is expected to validate the TFTP options
@@ -169,12 +170,11 @@ procedure. The options that are accepted by the server are forwarded to function
 <code class="inline">open/5</code> on the client side. On the client side, function <code class="inline">open/5</code> must accept
 all option as-is or reject the transfer. Then the callback interaction follows
 the same pattern as described for the server side. When the last block is
-encountered in <a href="#c:read/1"><code class="inline">read/1</code></a> or <a href="#c:write/2"><code class="inline">write/2</code></a>, the returned
+encountered in <a href="#c:read/1"><code class="inline">Module:read/1</code></a> or <a href="#c:write/2"><code class="inline">Module:write/2</code></a>, the returned
 state is forwarded to the user and returned from <code class="inline">read_file</code>/3 or
 <a href="#write_file/3"><code class="inline">write_file/3</code></a>.</p><p>If a callback (performing the file access in the TFTP server) takes too long
 time (more than the double TFTP time-out), the server aborts the connection and
-sends an error reply to the client. This implies that the server releases
-resources attached to the connection faster than before. The server simply
+sends an error reply to the client. The server simply
 assumes that the client has given up.</p><p>If the TFTP server receives yet another request from the same client (same host
 and port) while it already has an active connection to the client, it ignores
 the new request if the request is equal to the first one (same filename and
@@ -203,7 +203,7 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       </div>
 
-        <div class="summary-synopsis"><p>Acess mode.</p></div>
+        <div class="summary-synopsis"><p>Access mode.</p></div>
 
     </div>
 
@@ -405,7 +405,7 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       </div>
 
-<p>Acess mode.</p>
+<p>Access mode.</p>
   </section>
 </section>
 <section class="detail" id="t:connection_option/0">
@@ -456,14 +456,14 @@ to the server as the standardized <code class="inline">tsize</code> option. A
 <a href="#read_file/3"><code class="inline">read_file/3</code></a> client acquires only a filesize from the server
 by sending a zero <code class="inline">tsize</code>.</p></li><li><p><strong><code class="inline">{max_tsize, MaxTsize::pos_integer() | infinity}</code></strong></p><p>Threshold for the maximal filesize in bytes. The transfer is aborted if the
 limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong><code class="inline">{max_conn, MaxConn::pos_integer() | infinity}</code></strong></p><p>Threshold for the maximal number of active connections. The daemon rejects the
-setup of new connections if the limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong>TftpOption::option()</strong></p><p>Name and value of a TFTP option.</p></li><li><p><strong><code class="inline">{reject, Feature:: acess() | TftpKey::string()}</code></strong></p><p>Controls which features to reject. This is mostly useful for the server as it
-can restrict the use of certain TFTP options or read/write access.</p></li><li><p><strong><code class="inline">{callback, {RegExp ::string(), Module::atom(), State :: term()}}</code></strong></p><p>Registration of a callback module. When a file is to be transferred, its local
+setup of new connections if the limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong>TftpOption::option()</strong></p><p>Name and value of a TFTP option.</p></li><li><p><strong><code class="inline">{reject, Feature:: access() | TftpKey::string()}</code></strong></p><p>Controls which features to reject. This is mostly useful for the server as it
+can restrict the use of certain TFTP options or read/write access.</p></li><li><p><strong><code class="inline">{callback, {RegExp ::string(), Module::module(), State :: term()}}</code></strong></p><p>Registration of a callback module. When a file is to be transferred, its local
 filename is matched to the regular expressions of the registered callbacks.
 The first matching callback is used during the transfer. See <a href="#read_file/3"><code class="inline">read_file/3</code></a> and
 <a href="#write_file/3"><code class="inline">write_file/3</code></a>.</p><p>The callback module must implement the <code class="inline">tftp</code> behavior, see
 <a href="tftp.html#callbacks">callbacks</a>.</p></li><li><p><strong><code class="inline">{logger, module()}</code></strong></p><p>Callback module for customized logging of errors, warnings, and info messages.
 The callback module must implement the <a href="tftp_logger.html"><code class="inline">tftp_logger</code></a> behavior. The default
-module is <code class="inline">tftp_logger</code>.</p></li><li><p><strong><code class="inline">{max_retries, MaxRetries::pos_integer()}</code></strong></p><p>Threshold for the maximal number of retries. By default the server/client
+module is <code class="inline">tftp_logger</code>.</p></li><li><p><strong><code class="inline">{max_retries, MaxRetries::non_neg_integer()}</code></strong></p><p>Threshold for the maximal number of retries. By default the server/client
 tries to resend a message up to five times when the time-out expires.</p></li></ul>
   </section>
 </section>
@@ -577,7 +577,7 @@ tries to resend a message up to five times when the time-out expires.</p></li></
     </a>
     <h1 class="signature" translate="no">read_file(RemoteFilename, LocalFilename, Options)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L382" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L358" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -619,7 +619,7 @@ matching regexp is found.</p>
     </a>
     <h1 class="signature" translate="no">write_file(RemoteFilename, LocalFilename, Options)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L435" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L389" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -673,7 +673,7 @@ matching regexp is found.</p>
     </a>
     <h1 class="signature" translate="no">change_config(Pid, Options)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L497" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L421" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -695,7 +695,7 @@ matching regexp is found.</p>
     </a>
     <h1 class="signature" translate="no">info(Pid)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L480" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L413" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -717,7 +717,7 @@ matching regexp is found.</p>
     </a>
     <h1 class="signature" translate="no">start(Options)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L464" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/tftp-polish/OTP-19114/lib/tftp/src/tftp.erl#L405" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
