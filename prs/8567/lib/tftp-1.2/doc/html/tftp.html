@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-A7F4F075.js"></script>
+    <script src="dist/sidebar_items-17F21446.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-BHYOTRCH.js"></script>
 
@@ -117,7 +117,7 @@ Pages
 <div id="top-content">
   <h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L203" title="View Source" class="icon-action" rel="help">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L28" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -129,60 +129,38 @@ Pages
 
 
     <section id="moduledoc">
-<p>Trivial FTP.</p><p>Interface module for the <code class="inline">tftp</code> application.</p><p><a href="" id="options"></a></p><h2 id="module-data-types" class="section-heading">
-  <a href="#module-data-types" class="hover-link">
+<p>Trivial FTP.</p><p>Interface module for the <code class="inline">tftp</code> application.</p><h2 id="module-overwiew" class="section-heading">
+  <a href="#module-overwiew" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  <span class="text">DATA TYPES</span>
+  <span class="text">Overwiew</span>
 </h2>
-<p><code class="inline">ServiceConfig = Options</code></p><p><code class="inline">Options = [option()]</code></p><p>Most of the options are common for both the client and the server side, but some
-of them differs a little. The available <code class="inline">option()</code>s are as follows:</p><ul><li><p><strong><code class="inline">{debug, Level}</code></strong> -
-<code class="inline">Level = none | error | warning | brief | normal | verbose | all</code></p><p>Controls the level of debug printouts. Default is <code class="inline">none</code>.</p></li><li><p><strong><code class="inline">{host, Host}</code></strong> - <code class="inline">Host = hostname()</code>, see <a href="../../../../lib/kernel-10.0/doc/html/inet.html"><code class="inline">inet</code></a>.</p><p>The name or IP address of the host where the TFTP daemon resides. This option
-is only used by the client.</p></li><li><p><strong><code class="inline">{port, Port}</code></strong> - <code class="inline">Port = int()</code></p><p>The TFTP port where the daemon listens. Defaults is the standardized
-number 69. On the server side, it can sometimes make sense to set it to 0,
-meaning that the daemon just picks a free port (which one is returned by
-function <a href="#info/1"><code class="inline">info/1</code></a>).</p><p>If a socket is connected already, option <code class="inline">{udp, [{fd, integer()}]}</code> can be
-used to pass the open file descriptor to <code class="inline">gen_udp</code>. This can be automated by
-using a command-line argument stating the prebound file descriptor number. For
-example, if the port is 69 and file descriptor 22 is opened by
-<code class="inline">setuid_socket_wrap</code>, the command-line argument &quot;-tftpd_69 22&quot; triggers the
-prebound file descriptor 22 to be used instead of opening port 69. The UDP
-option <code class="inline">{udp, [{fd, 22}]}</code> is automatically added. See <code class="inline">init:get_argument/</code>
-about command-line arguments and <a href="../../../../lib/kernel-10.0/doc/html/gen_udp.html#open/2"><code class="inline">gen_udp:open/2</code></a> about UDP options.</p></li><li><p><strong><code class="inline">{port_policy, Policy}</code></strong> -
-<code class="inline">Policy = random | Port | {range, MinPort, MaxPort}</code></p><p><code class="inline">Port = MinPort = MaxPort = int()</code></p><p>Policy for the selection of the temporary port that is used by the
-server/client during the file transfer. Default is <code class="inline">random</code>, which is the
-standardized policy. With this policy a randomized free port is used. A single
-port or a range of ports can be useful if the protocol passes through a
-firewall.</p></li><li><p><strong><code class="inline">{udp, Options}</code></strong> - <code class="inline">Options = [Opt]</code>, see
-<a href="../../../../lib/kernel-10.0/doc/html/gen_udp.html#open/1">gen_udp:open/2</a>.</p></li><li><p><strong><code class="inline">{use_tsize, Bool}</code></strong> - <code class="inline">Bool = bool()</code></p><p>Flag for automated use of option <code class="inline">tsize</code>. With this set to <code class="inline">true</code>, the
-<a href="#write_file/3"><code class="inline">write_file/3</code></a> client determines the filesize and sends it
-to the server as the standardized <code class="inline">tsize</code> option. A
-<a href="#read_file/3"><code class="inline">read_file/3</code></a> client acquires only a filesize from the server
-by sending a zero <code class="inline">tsize</code>.</p></li><li><p><strong><code class="inline">{max_tsize, MaxTsize}</code></strong> - <code class="inline">MaxTsize = int() | infinity</code></p><p>Threshold for the maximal filesize in bytes. The transfer is aborted if the
-limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong><code class="inline">{max_conn, MaxConn}</code></strong> - <code class="inline">MaxConn = int() | infinity</code></p><p>Threshold for the maximal number of active connections. The daemon rejects the
-setup of new connections if the limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong><code class="inline">{TftpKey, TftpVal}</code></strong> - <code class="inline">TftpKey = string()</code><br/><code class="inline">TftpVal = string()</code></p><p>Name and value of a TFTP option.</p></li><li><table><tbody><tr><td style="text-align: left;"><strong><code class="inline">{reject, Feature}</code></strong> - `Feature = Mode</td><td style="text-align: left;">TftpKey`</td></tr><tr><td style="text-align: left;">` Mode = read</td><td style="text-align: left;">write`</td></tr></tbody></table><p><code class="inline">TftpKey = string()</code></p><p>Controls which features to reject. This is mostly useful for the server as it
-can restrict the use of certain TFTP options or read/write access.</p></li><li><p><strong><code class="inline">{callback, {RegExp, Module, State}}</code></strong> - <code class="inline">RegExp = string()</code><br/><code class="inline">Module = atom()</code><br/><code class="inline">State = term()</code></p><p>Registration of a callback module. When a file is to be transferred, its local
-filename is matched to the regular expressions of the registered callbacks.
-The first matching callback is used during the transfer. See <a href="#read_file/3"><code class="inline">read_file/3</code></a> and
-<a href="#write_file/3"><code class="inline">write_file/3</code></a>.</p><p>The callback module must implement the <code class="inline">tftp</code> behavior, see
-<a href="tftp.html#tftp_callback">CALLBACK FUNCTIONS</a>.</p></li><li><p><strong><code class="inline">{logger, Module}</code></strong> - <code class="inline">Module = module()</code></p><p>Callback module for customized logging of errors, warnings, and info messages.
-The callback module must implement the <a href="tftp_logger.html"><code class="inline">tftp_logger</code></a> behavior. The default
-module is <code class="inline">tftp_logger</code>.</p></li><li><p><strong><code class="inline">{max_retries, MaxRetries}</code></strong> - <code class="inline">MaxRetries = int()</code></p><p>Threshold for the maximal number of retries. By default the server/client
-tries to resend a message up to five times when the time-out expires.</p></li></ul><p><a href="" id="tftp_callback"></a></p><h2 id="module-callback-functions" class="section-heading">
-  <a href="#module-callback-functions" class="hover-link">
+<p>This is a complete implementation of the following IETF standards:</p><pre><code class="makeup erlang" translate="no"><span class="n">RFC</span><span class="w"> </span><span class="mi">1350</span><span class="p">,</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Protocol</span><span class="w"> </span><span class="p" data-group-id="7900426878-1">(</span><span class="ss">revision</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7900426878-1">)</span><span class="p">.</span><span class="w">
+</span><span class="n">RFC</span><span class="w"> </span><span class="mi">2347</span><span class="p">,</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Option</span><span class="w"> </span><span class="n">Extension</span><span class="p">.</span><span class="w">
+</span><span class="n">RFC</span><span class="w"> </span><span class="mi">2348</span><span class="p">,</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Blocksize</span><span class="w"> </span><span class="n">Option</span><span class="p">.</span><span class="w">
+</span><span class="n">RFC</span><span class="w"> </span><span class="mi">2349</span><span class="p">,</span><span class="w"> </span><span class="n">TFTP</span><span class="w"> </span><span class="n">Timeout</span><span class="w"> </span><span class="n">Interval</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">Transfer</span><span class="w"> </span><span class="n">Size</span><span class="w"> </span><span class="n">Options</span><span class="p">.</span></code></pre><p>The only feature that not is implemented in this release is
+the &quot;netascii&quot; transfer mode.</p><p>The start/function starts a daemon process which, listens
+for UDP packets on a port. When it receives a request for read or
+write it spawns a temporary server process which handles the actual
+transfer of the file. On the client side the
+<a href="#read_file/3">read_file/3</a> and <a href="#write_file/3">write_file/3</a>
+functions spawns a temporary client process which establishes contact
+with a TFTP daemon and performs the actual transfer of the file.</p><p>Most of the options are common for both the client and the server
+side, but some of them differs a little.</p><h2 id="module-callbacks" class="section-heading">
+  <a href="#module-callbacks" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
-  <span class="text">CALLBACK FUNCTIONS</span>
+  <span class="text">Callbacks</span>
 </h2>
 <p>A <code class="inline">tftp</code> callback module is to be implemented as a <code class="inline">tftp</code> behavior and export
 the functions listed in the following.</p><p>On the server side, the callback interaction starts with a call to <code class="inline">open/5</code> with
 the registered initial callback state. <code class="inline">open/5</code> is expected to open the
-(virtual) file. Then either function <a href="#c:read/1"><code class="inline">read/1</code></a> or
-<a href="#c:write/2"><code class="inline">write/2</code></a> is invoked repeatedly, once per transferred block. At
+(virtual) file. Then either function <a href="#c:read/1"><code class="inline">Module:read/1</code></a> or
+<a href="#c:write/2"><code class="inline">Module:write/2</code></a> is invoked repeatedly, once per transferred block. At
 each function call, the state returned from the previous call is obtained. When
-the last block is encountered, function <a href="#c:read/1"><code class="inline">read/1</code></a> or
-<a href="#c:write/2"><code class="inline">write/2</code></a> is expected to close the (virtual) file and return its
-last state. Function <a href="#c:abort/3"><code class="inline">abort/3</code></a> is only used in error situations.
+the last block is encountered, function <a href="#c:read/1"><code class="inline">Module:read/1</code></a> or
+<a href="#c:write/2"><code class="inline">Module:write/2</code></a> is expected to close the (virtual) file and return its
+last state. Function <a href="#c:abort/3"><code class="inline">Module:abort/3</code></a> is only used in error situations.
 Function <code class="inline">prepare/5</code> is not used on the server side.</p><p>On the client side, the callback interaction is the same, but it starts and ends
 a bit differently. It starts with a call to <code class="inline">prepare/5</code> with the same arguments
 as <code class="inline">open/5</code> takes. <code class="inline">prepare/5</code> is expected to validate the TFTP options
@@ -192,12 +170,11 @@ procedure. The options that are accepted by the server are forwarded to function
 <code class="inline">open/5</code> on the client side. On the client side, function <code class="inline">open/5</code> must accept
 all option as-is or reject the transfer. Then the callback interaction follows
 the same pattern as described for the server side. When the last block is
-encountered in <a href="#c:read/1"><code class="inline">read/1</code></a> or <a href="#c:write/2"><code class="inline">write/2</code></a>, the returned
+encountered in <a href="#c:read/1"><code class="inline">Module:read/1</code></a> or <a href="#c:write/2"><code class="inline">Module:write/2</code></a>, the returned
 state is forwarded to the user and returned from <code class="inline">read_file</code>/3 or
 <a href="#write_file/3"><code class="inline">write_file/3</code></a>.</p><p>If a callback (performing the file access in the TFTP server) takes too long
 time (more than the double TFTP time-out), the server aborts the connection and
-sends an error reply to the client. This implies that the server releases
-resources attached to the connection faster than before. The server simply
+sends an error reply to the client. The server simply
 assumes that the client has given up.</p><p>If the TFTP server receives yet another request from the same client (same host
 and port) while it already has an active connection to the client, it ignores
 the new request if the request is equal to the first one (same filename and
@@ -226,6 +203,18 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       </div>
 
+        <div class="summary-synopsis"><p>Access mode.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:connection_option/0" data-no-tooltip translate="no">connection_option()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>All options most of them common to the client and server.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -233,6 +222,8 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
         <a href="#t:error_code/0" data-no-tooltip translate="no">error_code()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Error reason codes.</p></div>
 
     </div>
 
@@ -242,6 +233,8 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       </div>
 
+        <div class="summary-synopsis"><p>Specific TFTP protocol options</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -249,6 +242,70 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
         <a href="#t:peer/0" data-no-tooltip translate="no">peer()</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Information about the peer provided for callback.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-client-api summary">
+  <h2>
+    <a href="#client-api">Client API</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_file/3" data-no-tooltip translate="no">read_file(RemoteFilename, LocalFilename, Options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reads a (virtual) file <code class="inline">RemoteFilename</code> from a TFTP server.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_file/3" data-no-tooltip translate="no">write_file(RemoteFilename, LocalFilename, Options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes a (virtual) file <code class="inline">RemoteFilename</code> to a TFTP server.</p></div>
+
+    </div>
+
+</div>
+<div class="summary-server-api summary">
+  <h2>
+    <a href="#server-api">Server API</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#change_config/2" data-no-tooltip translate="no">change_config(Pid, Options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Changes configuration a TFTP Server</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#info/1" data-no-tooltip translate="no">info(Pid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns information about all TFTP server.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start/1" data-no-tooltip translate="no">start(Options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Starts a daemon process listening for UDP packets on a port.</p></div>
 
     </div>
 
@@ -309,64 +366,6 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
     </div>
 
 </div>
-<div class="summary-functions summary">
-  <h2>
-    <a href="#functions">Functions</a>
-  </h2>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#change_config/2" data-no-tooltip translate="no">change_config(Pid, Options)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>change_config(Pid, Options) -&gt; Result</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#info/1" data-no-tooltip translate="no">info(Pid)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>info(Pid) -&gt; {ok, Options} | {error, Reason}</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#read_file/3" data-no-tooltip translate="no">read_file(RemoteFilename, LocalFilename, Options)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>read_file(RemoteFilename, LocalFilename, Options) -&gt; {ok, LastCallbackState} |
-{error, Reason}</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#start/1" data-no-tooltip translate="no">start(Options)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>start(Options) -&gt; {ok, Pid} | {error, Reason}</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#write_file/3" data-no-tooltip translate="no">write_file(RemoteFilename, LocalFilename, Options)</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>write_file(RemoteFilename, LocalFilename, Options) -&gt; {ok, LastCallbackState} |
-{error, Reason}</p></div>
-
-    </div>
-
-</div>
 
   </section>
 
@@ -388,7 +387,7 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
     </a>
     <h1 class="signature" translate="no">access()</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L389" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L134" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -406,19 +405,19 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       </div>
 
-
+<p>Access mode.</p>
   </section>
 </section>
-<section class="detail" id="t:error_code/0">
+<section class="detail" id="t:connection_option/0">
 
   <div class="detail-header">
-    <a href="#t:error_code/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:connection_option/0" class="detail-link" data-no-tooltip title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this type</span>
     </a>
-    <h1 class="signature" translate="no">error_code()</h1>
+    <h1 class="signature" translate="no">connection_option()</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L222" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -432,11 +431,71 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> error_code() :: undef | enoent | eacces | enospc | badop | eexist | baduser | badopt | <a href="../../../../erts-15.0/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> connection_option() :: {<a href="../../../../erts-15.0/doc/html/erlang.html#t:atom/0">atom</a>(), <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>()} | <a href="#t:option/0">option</a>().</pre>
 
       </div>
 
+<p>All options most of them common to the client and server.</p><ul><li><p><strong><code class="inline">{debug, Level::none | error | warning | brief | normal | verbose | all}</code></strong></p><p>Controls the level of debug printouts. Default is <code class="inline">none</code>.</p></li><li><p><strong><code class="inline">{host, Host::inet:hostname()}</code></strong> -</p><p>The name or IP address of the host where the TFTP daemon resides. This option
+is only used by the client.</p></li><li><p><strong><code class="inline">{port, Port::inet:port_number()}</code></strong></p><p>The TFTP port where the daemon listens. Defaults is the standardized
+number 69. On the server side, it can sometimes make sense to set it to 0,
+meaning that the daemon just picks a free port (which one is returned by
+function <a href="#info/1"><code class="inline">info/1</code></a>).</p><p>If a socket is connected already, option <code class="inline">{udp, [{fd, integer()}]}</code> can be
+used to pass the open file descriptor to <code class="inline">gen_udp</code>. This can be automated by
+using a command-line argument stating the prebound file descriptor number. For
+example, if the port is 69 and file descriptor 22 is opened by
+<code class="inline">setuid_socket_wrap</code>, the command-line argument &quot;-tftpd_69 22&quot; triggers the
+prebound file descriptor 22 to be used instead of opening port 69. The UDP
+option <code class="inline">{udp, [{fd, 22}]}</code> is automatically added. See <code class="inline">init:get_argument/</code>
+about command-line arguments and <a href="../../../../lib/kernel-10.0/doc/html/gen_udp.html#open/2"><code class="inline">gen_udp:open/2</code></a> about UDP options.</p></li><li><p><strong><code class="inline">{port_policy, random | inet:port_number() | {range, Min::inet:port_number(), Max::inet:port_nuber()}</code></strong></p><p>Policy for the selection of the temporary port that is used by the
+server/client during the file transfer. Default is <code class="inline">random</code>, which is the
+standardized policy. With this policy a randomized free port is used. A single
+port or a range of ports can be useful if the protocol passes through a
+firewall.</p></li><li><p><strong><code class="inline">{udp, Options::gen_udp:option}</code></strong></p></li><li><p><strong><code class="inline">{use_tsize, boolean()}</code></strong></p><p>Flag for automated use of option <code class="inline">tsize</code>. With this set to <code class="inline">true</code>, the
+<a href="#write_file/3"><code class="inline">write_file/3</code></a> client determines the filesize and sends it
+to the server as the standardized <code class="inline">tsize</code> option. A
+<a href="#read_file/3"><code class="inline">read_file/3</code></a> client acquires only a filesize from the server
+by sending a zero <code class="inline">tsize</code>.</p></li><li><p><strong><code class="inline">{max_tsize, MaxTsize::pos_integer() | infinity}</code></strong></p><p>Threshold for the maximal filesize in bytes. The transfer is aborted if the
+limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong><code class="inline">{max_conn, MaxConn::pos_integer() | infinity}</code></strong></p><p>Threshold for the maximal number of active connections. The daemon rejects the
+setup of new connections if the limit is exceeded. Default is <code class="inline">infinity</code>.</p></li><li><p><strong>TftpOption::option()</strong></p><p>Name and value of a TFTP option.</p></li><li><p><strong><code class="inline">{reject, Feature:: access() | TftpKey::string()}</code></strong></p><p>Controls which features to reject. This is mostly useful for the server as it
+can restrict the use of certain TFTP options or read/write access.</p></li><li><p><strong><code class="inline">{callback, {RegExp ::string(), Module::module(), State :: term()}}</code></strong></p><p>Registration of a callback module. When a file is to be transferred, its local
+filename is matched to the regular expressions of the registered callbacks.
+The first matching callback is used during the transfer. See <a href="#read_file/3"><code class="inline">read_file/3</code></a> and
+<a href="#write_file/3"><code class="inline">write_file/3</code></a>.</p><p>The callback module must implement the <code class="inline">tftp</code> behavior, see
+<a href="tftp.html#callbacks">callbacks</a>.</p></li><li><p><strong><code class="inline">{logger, module()}</code></strong></p><p>Callback module for customized logging of errors, warnings, and info messages.
+The callback module must implement the <a href="tftp_logger.html"><code class="inline">tftp_logger</code></a> behavior. The default
+module is <code class="inline">tftp_logger</code>.</p></li><li><p><strong><code class="inline">{max_retries, MaxRetries::non_neg_integer()}</code></strong></p><p>Threshold for the maximal number of retries. By default the server/client
+tries to resend a message up to five times when the time-out expires.</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="t:error_code/0">
 
+  <div class="detail-header">
+    <a href="#t:error_code/0" class="detail-link" data-no-tooltip title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">error_code()</h1>
+
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L227" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+      <span class="note">(not exported)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-type</span> error_code() ::
+          undef | enoent | eacces | enospc | badop | eexist | baduser | badopt | <a href="../../../../erts-15.0/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>().</pre>
+
+      </div>
+
+<p>Error reason codes.</p>
   </section>
 </section>
 <section class="detail" id="t:option/0">
@@ -448,7 +507,7 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
     </a>
     <h1 class="signature" translate="no">option()</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L391" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L235" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -460,11 +519,11 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> option() :: {Key :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:string/0">string</a>(), Value :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:string/0">string</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-type</span> option() :: {<a href="../../../../erts-15.0/doc/html/erlang.html#t:string/0">string</a>(), Value :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:string/0">string</a>()}.</pre>
 
       </div>
 
-
+<p>Specific TFTP protocol options</p>
   </section>
 </section>
 <section class="detail" id="t:peer/0">
@@ -476,7 +535,7 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
     </a>
     <h1 class="signature" translate="no">peer()</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L385" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L128" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -494,7 +553,189 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
 
       </div>
 
+<p>Information about the peer provided for callback.</p>
+  </section>
+</section>
 
+    </div>
+  </section>
+
+  <section id="client-api" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#client-api">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Client API</span>
+    </h1>
+    <div class="client-api-list">
+<section class="detail" id="read_file/3">
+
+  <div class="detail-header">
+    <a href="#read_file/3" class="detail-link" data-no-tooltip title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">read_file(RemoteFilename, LocalFilename, Options)</h1>
+
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L358" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> read_file(RemoteFilename, LocalFilename, Options) -> {ok, LastCallbackState} | {error, Reason}
+                   when
+                       RemoteFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename/0">file:filename</a>(),
+                       LocalFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename_all/0">file:filename_all</a>(),
+                       Options :: [<a href="#t:connection_option/0">connection_option</a>()],
+                       LastCallbackState :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>(),
+                       Reason :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Reads a (virtual) file <code class="inline">RemoteFilename</code> from a TFTP server.</p><p>If <code class="inline">LocalFilename</code> is the atom <code class="inline">binary</code>, <code class="inline">tftp_binary</code> is used as callback
+module. It concatenates all transferred blocks and returns them as one single
+binary in <code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are no registered callback modules,
+<code class="inline">tftp_file</code> is used as callback module. It writes each transferred block to the
+file named <code class="inline">LocalFilename</code> and returns the number of transferred bytes in
+<code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are registered callback modules,
+<code class="inline">LocalFilename</code> is tested against the regexps of these and the callback module
+corresponding to the first match is used, or an error tuple is returned if no
+matching regexp is found.</p>
+  </section>
+</section>
+<section class="detail" id="write_file/3">
+
+  <div class="detail-header">
+    <a href="#write_file/3" class="detail-link" data-no-tooltip title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">write_file(RemoteFilename, LocalFilename, Options)</h1>
+
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L389" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> write_file(RemoteFilename, LocalFilename, Options) -> {ok, LastCallbackState} | {error, Reason}
+                    when
+                        RemoteFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename/0">file:filename</a>(),
+                        LocalFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename_all/0">file:filename_all</a>() | binary,
+                        Options :: [<a href="#t:option/0">option</a>()],
+                        LastCallbackState :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>(),
+                        Reason :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Writes a (virtual) file <code class="inline">RemoteFilename</code> to a TFTP server.</p><p>If <code class="inline">LocalFilename</code> is a binary, <code class="inline">tftp_binary</code> is used as callback module. The
+binary is transferred block by block and the number of transferred bytes is
+returned in <code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are no registered callback modules,
+<code class="inline">tftp_file</code> is used as callback module. It reads the file named <code class="inline">LocalFilename</code>
+block by block and returns the number of transferred bytes in
+<code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are registered callback modules,
+<code class="inline">LocalFilename</code> is tested against the regexps of these and the callback module
+corresponding to the first match is used, or an error tuple is returned if no
+matching regexp is found.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="server-api" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#server-api">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Server API</span>
+    </h1>
+    <div class="server-api-list">
+<section class="detail" id="change_config/2">
+
+  <div class="detail-header">
+    <a href="#change_config/2" class="detail-link" data-no-tooltip title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change_config(Pid, Options)</h1>
+
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L421" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Changes configuration a TFTP Server</p>
+  </section>
+</section>
+<section class="detail" id="info/1">
+
+  <div class="detail-header">
+    <a href="#info/1" class="detail-link" data-no-tooltip title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">info(Pid)</h1>
+
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L413" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns information about all TFTP server.</p>
+  </section>
+</section>
+<section class="detail" id="start/1">
+
+  <div class="detail-header">
+    <a href="#start/1" class="detail-link" data-no-tooltip title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">start(Options)</h1>
+
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L405" class="icon-action" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> start(Options) -> {ok, Pid} | {error, Reason}
+               when Options :: [<a href="#t:connection_option/0">connection_option</a>()], Pid :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:pid/0">pid</a>(), Reason :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>().</pre>
+
+      </div>
+
+<p>Starts a daemon process listening for UDP packets on a port.</p><p>When it receives a request for read or write, it spawns a temporary
+server process handling the actual transfer of the (virtual) file.</p>
   </section>
 </section>
 
@@ -518,7 +759,7 @@ in parallel with the ongoing one, the server consumes less resources.</p><p><a h
     </a>
     <h1 class="signature" translate="no">abort/3</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L488" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L329" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -552,7 +793,7 @@ However, it is invoked if the functions fail (crash).</p>
     </a>
     <h1 class="signature" translate="no">open(Peer, Access, Filename, Mode, SuggestedOptions, State)</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L436" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L277" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -592,7 +833,7 @@ with new values in <code class="inline">AcceptedOptions</code>.</p><p><a href=""
     </a>
     <h1 class="signature" translate="no">prepare(Peer, Access, Filename, Mode, SuggestedOptions, InitialState)</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L414" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L253" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -633,7 +874,7 @@ options that it accepts. These are then forwarded to <code class="inline">open/4
     </a>
     <h1 class="signature" translate="no">read(State)</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L457" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L298" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -670,7 +911,7 @@ functions.</p><p><a href="" id="write"></a></p>
     </a>
     <h1 class="signature" translate="no">write/2</h1>
 
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L473" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L314" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -696,179 +937,6 @@ encountered. When an error is encountered, the callback function is expected to
 clean up after the aborted file transfer, such as closing open file descriptors,
 and so on. In both cases there will be no more calls to any of the callback
 functions.</p><p><a href="" id="abort"></a></p>
-  </section>
-</section>
-
-    </div>
-  </section>
-
-  <section id="functions" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#functions">
-        <i class="ri-link-m" aria-hidden="true"></i>
-      </a>
-      <span class="text">Functions</span>
-    </h1>
-    <div class="functions-list">
-<section class="detail" id="change_config/2">
-
-  <div class="detail-header">
-    <a href="#change_config/2" class="detail-link" data-no-tooltip title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">change_config(Pid, Options)</h1>
-
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L670" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>change_config(Pid, Options) -&gt; Result</p><p>Changes configuration for all TFTP daemon processes.</p><p>Changes configuration for all TFTP server processes.</p><p>Changes configuration for a TFTP daemon, server, or client process.</p>
-  </section>
-</section>
-<section class="detail" id="info/1">
-
-  <div class="detail-header">
-    <a href="#info/1" class="detail-link" data-no-tooltip title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">info(Pid)</h1>
-
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L648" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-<p>info(Pid) -&gt; {ok, Options} | {error, Reason}</p><p>Returns information about all TFTP daemon processes.</p><p>Returns information about all TFTP server processes.</p><p>Returns information about a TFTP daemon, server, or client process.</p>
-  </section>
-</section>
-<section class="detail" id="read_file/3">
-
-  <div class="detail-header">
-    <a href="#read_file/3" class="detail-link" data-no-tooltip title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">read_file(RemoteFilename, LocalFilename, Options)</h1>
-
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L543" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> read_file(RemoteFilename, LocalFilename, Options) -> {ok, LastCallbackState} | {error, Reason}
-                   when
-                       RemoteFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename/0">file:filename</a>(),
-                       LocalFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename_all/0">file:filename_all</a>(),
-                       Options :: [<a href="#t:option/0">option</a>()],
-                       LastCallbackState :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>(),
-                       Reason :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>().</pre>
-
-      </div>
-
-<p>read_file(RemoteFilename, LocalFilename, Options) -&gt; {ok, LastCallbackState} |
-{error, Reason}</p><p>Reads a (virtual) file <code class="inline">RemoteFilename</code> from a TFTP server.</p><p>If <code class="inline">LocalFilename</code> is the atom <code class="inline">binary</code>, <code class="inline">tftp_binary</code> is used as callback
-module. It concatenates all transferred blocks and returns them as one single
-binary in <code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are no registered callback modules,
-<code class="inline">tftp_file</code> is used as callback module. It writes each transferred block to the
-file named <code class="inline">LocalFilename</code> and returns the number of transferred bytes in
-<code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are registered callback modules,
-<code class="inline">LocalFilename</code> is tested against the regexps of these and the callback module
-corresponding to the first match is used, or an error tuple is returned if no
-matching regexp is found.</p>
-  </section>
-</section>
-<section class="detail" id="start/1">
-
-  <div class="detail-header">
-    <a href="#start/1" class="detail-link" data-no-tooltip title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">start(Options)</h1>
-
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L627" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> start(Options) -> {ok, Pid} | {error, Reason}
-               when Options :: [<a href="#t:option/0">option</a>()], Pid :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:pid/0">pid</a>(), Reason :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>().</pre>
-
-      </div>
-
-<p>start(Options) -&gt; {ok, Pid} | {error, Reason}</p><p>Starts a daemon process listening for UDP packets on a port. When it receives a
-request for read or write, it spawns a temporary server process handling the
-actual transfer of the (virtual) file.</p>
-  </section>
-</section>
-<section class="detail" id="write_file/3">
-
-  <div class="detail-header">
-    <a href="#write_file/3" class="detail-link" data-no-tooltip title="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature" translate="no">write_file(RemoteFilename, LocalFilename, Options)</h1>
-
-      <a href="https://github.com/frej/otp/blob/frej/limit-ss-depth/lib/tftp/src/tftp.erl#L598" class="icon-action" rel="help" title="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> write_file(RemoteFilename, LocalFilename, Options) -> {ok, LastCallbackState} | {error, Reason}
-                    when
-                        RemoteFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename/0">file:filename</a>(),
-                        LocalFilename :: <a href="../../../../lib/kernel-10.0/doc/html/file.html#t:filename_all/0">file:filename_all</a>(),
-                        Options :: [<a href="#t:option/0">option</a>()],
-                        LastCallbackState :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>(),
-                        Reason :: <a href="../../../../erts-15.0/doc/html/erlang.html#t:term/0">term</a>().</pre>
-
-      </div>
-
-<p>write_file(RemoteFilename, LocalFilename, Options) -&gt; {ok, LastCallbackState} |
-{error, Reason}</p><p>Writes a (virtual) file <code class="inline">RemoteFilename</code> to a TFTP server.</p><p>If <code class="inline">LocalFilename</code> is a binary, <code class="inline">tftp_binary</code> is used as callback module. The
-binary is transferred block by block and the number of transferred bytes is
-returned in <code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are no registered callback modules,
-<code class="inline">tftp_file</code> is used as callback module. It reads the file named <code class="inline">LocalFilename</code>
-block by block and returns the number of transferred bytes in
-<code class="inline">LastCallbackState</code>.</p><p>If <code class="inline">LocalFilename</code> is a string and there are registered callback modules,
-<code class="inline">LocalFilename</code> is tested against the regexps of these and the callback module
-corresponding to the first match is used, or an error tuple is returned if no
-matching regexp is found.</p>
   </section>
 </section>
 
