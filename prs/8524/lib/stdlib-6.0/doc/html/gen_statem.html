@@ -177,7 +177,7 @@ and the callback functions is as follows:</p><pre><code class="makeup erlang" tr
                    </span><span class="ss">depending</span><span class="w"> </span><span class="ss">on</span><span class="w"> </span><span class="ss">callback</span><span class="w"> </span><span class="ss">mode</span><span class="w">
 
 </span><span class="n">Release</span><span class="w"> </span><span class="ss">upgrade</span><span class="o">/</span><span class="nf">downgrade</span><span class="w">
-</span><span class="p" data-group-id="6444047818-1">(</span><span class="ss">code</span><span class="w"> </span><span class="ss">change</span><span class="p" data-group-id="6444047818-1">)</span><span class="w">
+</span><span class="p" data-group-id="4496291874-1">(</span><span class="ss">code</span><span class="w"> </span><span class="ss">change</span><span class="p" data-group-id="4496291874-1">)</span><span class="w">
                       </span><span class="o">--</span><span class="o">--</span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Module</span><span class="p">:</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span></code></pre><h4 id="state-callback">State callback</h4><p>The <em>state callback</em> for a specific <a href="#t:state/0">state</a> in a <code class="inline">gen_statem</code>
 is the callback function that is called for all events in this state.
 It is selected depending on which <a href="#t:callback_mode/0"><em>callback mode</em></a>
@@ -282,97 +282,118 @@ for a toggling pushbutton implemented with
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">state_functions</code>.
 You can push the button and it replies if it went on or off,
 and you can ask for a count of how many times it has been pushed
-to switch on.</p><p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="9366674274-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="9366674274-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="9366674274-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="9366674274-2">)</span><span class="p">.</span><span class="w">
+to switch on.</p><h3 id="module-pushbutton-state-diagram" class="section-heading">
+  <a href="#module-pushbutton-state-diagram" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pushbutton State Diagram</span>
+</h3>
+<pre><code class="mermaid">---
+title: Pushbutton State Diagram
+---
+stateDiagram-v2
+    [*]  --&gt; off
+    off  --&gt; on  : push\n* Increment count\n* Reply 'on'
+    on   --&gt; off : push\n* Reply 'off'</code></pre><p>Not shown in the state diagram:</p><ul><li>The API function <code class="inline">push()</code> generates an event <code class="inline">push</code> of type <code class="inline">call</code>.</li><li>The API function <code class="inline">get_count()</code> generates an event <code class="inline">get_count</code>
+of type <code class="inline">call</code> that is handled in all states by replying with
+the current count value.</li><li>Unknown events are ignored and discarded.</li><li>There is boilerplate code for start, stop, terminate, code change,
+init, to set the callback mode to <code class="inline">state_functions</code>, etc...</li></ul><h3 id="module-pushbutton-code" class="section-heading">
+  <a href="#module-pushbutton-code" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Pushbutton Code</span>
+</h3>
+<p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="5221563892-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="5221563892-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="5221563892-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="5221563892-2">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="9366674274-3">(</span><span class="p" data-group-id="9366674274-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="9366674274-4">]</span><span class="p" data-group-id="9366674274-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="9366674274-5">(</span><span class="p" data-group-id="9366674274-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="9366674274-6">]</span><span class="p" data-group-id="9366674274-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="9366674274-7">(</span><span class="p" data-group-id="9366674274-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="9366674274-8">]</span><span class="p" data-group-id="9366674274-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5221563892-3">(</span><span class="p" data-group-id="5221563892-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="5221563892-4">]</span><span class="p" data-group-id="5221563892-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5221563892-5">(</span><span class="p" data-group-id="5221563892-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="5221563892-6">]</span><span class="p" data-group-id="5221563892-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5221563892-7">(</span><span class="p" data-group-id="5221563892-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="5221563892-8">]</span><span class="p" data-group-id="5221563892-7">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">name</span><span class="p" data-group-id="9366674274-9">(</span><span class="p" data-group-id="9366674274-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
+</span><span class="nf">name</span><span class="p" data-group-id="5221563892-9">(</span><span class="p" data-group-id="5221563892-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
 
 </span><span class="c1">%% API.  This example uses a registered name name()</span><span class="w">
 </span><span class="c1">%% and does not link to the caller.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="9366674274-10">(</span><span class="p" data-group-id="9366674274-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="9366674274-11">(</span><span class="p" data-group-id="9366674274-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="9366674274-13">(</span><span class="p" data-group-id="9366674274-13">)</span><span class="p" data-group-id="9366674274-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9366674274-14">[</span><span class="p" data-group-id="9366674274-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9366674274-15">[</span><span class="p" data-group-id="9366674274-15">]</span><span class="p" data-group-id="9366674274-11">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">push</span><span class="p" data-group-id="9366674274-16">(</span><span class="p" data-group-id="9366674274-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="9366674274-17">(</span><span class="nf">name</span><span class="p" data-group-id="9366674274-18">(</span><span class="p" data-group-id="9366674274-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="9366674274-17">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">get_count</span><span class="p" data-group-id="9366674274-19">(</span><span class="p" data-group-id="9366674274-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="9366674274-20">(</span><span class="nf">name</span><span class="p" data-group-id="9366674274-21">(</span><span class="p" data-group-id="9366674274-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="9366674274-20">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="9366674274-22">(</span><span class="p" data-group-id="9366674274-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="9366674274-23">(</span><span class="nf">name</span><span class="p" data-group-id="9366674274-24">(</span><span class="p" data-group-id="9366674274-24">)</span><span class="p" data-group-id="9366674274-23">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="5221563892-10">(</span><span class="p" data-group-id="5221563892-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="5221563892-11">(</span><span class="p" data-group-id="5221563892-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="5221563892-13">(</span><span class="p" data-group-id="5221563892-13">)</span><span class="p" data-group-id="5221563892-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5221563892-14">[</span><span class="p" data-group-id="5221563892-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5221563892-15">[</span><span class="p" data-group-id="5221563892-15">]</span><span class="p" data-group-id="5221563892-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">push</span><span class="p" data-group-id="5221563892-16">(</span><span class="p" data-group-id="5221563892-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="5221563892-17">(</span><span class="nf">name</span><span class="p" data-group-id="5221563892-18">(</span><span class="p" data-group-id="5221563892-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="5221563892-17">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">get_count</span><span class="p" data-group-id="5221563892-19">(</span><span class="p" data-group-id="5221563892-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="5221563892-20">(</span><span class="nf">name</span><span class="p" data-group-id="5221563892-21">(</span><span class="p" data-group-id="5221563892-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="5221563892-20">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="5221563892-22">(</span><span class="p" data-group-id="5221563892-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="5221563892-23">(</span><span class="nf">name</span><span class="p" data-group-id="5221563892-24">(</span><span class="p" data-group-id="5221563892-24">)</span><span class="p" data-group-id="5221563892-23">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Mandatory callback functions</span><span class="w">
-</span><span class="nf">terminate</span><span class="p" data-group-id="9366674274-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="9366674274-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="5221563892-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="5221563892-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">void</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="9366674274-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="9366674274-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="9366674274-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="9366674274-27">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="9366674274-28">(</span><span class="p" data-group-id="9366674274-29">[</span><span class="p" data-group-id="9366674274-29">]</span><span class="p" data-group-id="9366674274-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="5221563892-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="5221563892-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5221563892-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="5221563892-27">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="5221563892-28">(</span><span class="p" data-group-id="5221563892-29">[</span><span class="p" data-group-id="5221563892-29">]</span><span class="p" data-group-id="5221563892-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Set the initial state + data.  Data is used only as a counter.</span><span class="w">
     </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="9366674274-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="9366674274-30">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="9366674274-31">(</span><span class="p" data-group-id="9366674274-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="5221563892-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="5221563892-30">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="5221563892-31">(</span><span class="p" data-group-id="5221563892-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">off</span><span class="p" data-group-id="9366674274-32">(</span><span class="p" data-group-id="9366674274-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="9366674274-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="5221563892-32">(</span><span class="p" data-group-id="5221563892-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="5221563892-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="9366674274-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="9366674274-35">[</span><span class="p" data-group-id="9366674274-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="9366674274-36">}</span><span class="p" data-group-id="9366674274-35">]</span><span class="p" data-group-id="9366674274-34">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">off</span><span class="p" data-group-id="9366674274-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="9366674274-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-38">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="5221563892-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="5221563892-35">[</span><span class="p" data-group-id="5221563892-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="5221563892-36">}</span><span class="p" data-group-id="5221563892-35">]</span><span class="p" data-group-id="5221563892-34">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="5221563892-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="5221563892-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-38">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">on</span><span class="p" data-group-id="9366674274-39">(</span><span class="p" data-group-id="9366674274-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="9366674274-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="5221563892-39">(</span><span class="p" data-group-id="5221563892-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="5221563892-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="9366674274-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="9366674274-42">[</span><span class="p" data-group-id="9366674274-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="9366674274-43">}</span><span class="p" data-group-id="9366674274-42">]</span><span class="p" data-group-id="9366674274-41">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">on</span><span class="p" data-group-id="9366674274-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="9366674274-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-45">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="5221563892-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="5221563892-42">[</span><span class="p" data-group-id="5221563892-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="5221563892-43">}</span><span class="p" data-group-id="5221563892-42">]</span><span class="p" data-group-id="5221563892-41">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="5221563892-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="5221563892-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-45">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Handle events common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="9366674274-46">(</span><span class="p" data-group-id="9366674274-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="9366674274-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="5221563892-46">(</span><span class="p" data-group-id="5221563892-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="5221563892-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="9366674274-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="9366674274-49">[</span><span class="p" data-group-id="9366674274-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="9366674274-50">}</span><span class="p" data-group-id="9366674274-49">]</span><span class="p" data-group-id="9366674274-48">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="9366674274-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9366674274-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5221563892-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="5221563892-49">[</span><span class="p" data-group-id="5221563892-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="5221563892-50">}</span><span class="p" data-group-id="5221563892-49">]</span><span class="p" data-group-id="5221563892-48">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="5221563892-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5221563892-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="9366674274-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="9366674274-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="2533139924-1">(</span><span class="p" data-group-id="2533139924-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="2533139924-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="2533139924-2">}</span><span class="gp unselectable">
-2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="2533139924-3">(</span><span class="p" data-group-id="2533139924-3">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="5221563892-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="5221563892-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="4409567559-1">(</span><span class="p" data-group-id="4409567559-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="4409567559-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="4409567559-2">}</span><span class="gp unselectable">
+2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="4409567559-3">(</span><span class="p" data-group-id="4409567559-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">0</span><span class="gp unselectable">
-3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="2533139924-4">(</span><span class="p" data-group-id="2533139924-4">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="4409567559-4">(</span><span class="p" data-group-id="4409567559-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">on</span><span class="gp unselectable">
-4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="2533139924-5">(</span><span class="p" data-group-id="2533139924-5">)</span><span class="p">.</span><span class="w">
+4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="4409567559-5">(</span><span class="p" data-group-id="4409567559-5">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="2533139924-6">(</span><span class="p" data-group-id="2533139924-6">)</span><span class="p">.</span><span class="w">
+5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="4409567559-6">(</span><span class="p" data-group-id="4409567559-6">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">off</span><span class="gp unselectable">
-6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="2533139924-7">(</span><span class="p" data-group-id="2533139924-7">)</span><span class="p">.</span><span class="w">
+6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="4409567559-7">(</span><span class="p" data-group-id="4409567559-7">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="2533139924-8">(</span><span class="p" data-group-id="2533139924-8">)</span><span class="p">.</span><span class="w">
+7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="4409567559-8">(</span><span class="p" data-group-id="4409567559-8">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="2533139924-9">(</span><span class="p" data-group-id="2533139924-9">)</span><span class="p">.</span><span class="w">
+8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="4409567559-9">(</span><span class="p" data-group-id="4409567559-9">)</span><span class="p">.</span><span class="w">
 </span><span class="gt">** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}}
      in function  gen:do_for_proc/2 (gen.erl, line 261)
      in call from gen_statem:call/3 (gen_statem.erl, line 386)</span></code></pre><p>To compare styles, here follows the same example using
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">handle_event_function</code>,
 or rather, the code to replace after function <a href="#c:init/1"><code class="inline">init/1</code></a>
-of the <code class="inline">pushbutton.erl</code> example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="0580811232-1">(</span><span class="p" data-group-id="0580811232-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
+of the <code class="inline">pushbutton.erl</code> example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="0974253963-1">(</span><span class="p" data-group-id="0974253963-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0580811232-2">(</span><span class="p" data-group-id="0580811232-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0580811232-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0580811232-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0974253963-2">(</span><span class="p" data-group-id="0974253963-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0974253963-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0974253963-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="0580811232-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="0580811232-5">[</span><span class="p" data-group-id="0580811232-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="0580811232-6">}</span><span class="p" data-group-id="0580811232-5">]</span><span class="p" data-group-id="0580811232-4">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0580811232-7">(</span><span class="p" data-group-id="0580811232-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0580811232-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0580811232-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="0974253963-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="0974253963-5">[</span><span class="p" data-group-id="0974253963-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="0974253963-6">}</span><span class="p" data-group-id="0974253963-5">]</span><span class="p" data-group-id="0974253963-4">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0974253963-7">(</span><span class="p" data-group-id="0974253963-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0974253963-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0974253963-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="0580811232-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0580811232-10">[</span><span class="p" data-group-id="0580811232-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="0580811232-11">}</span><span class="p" data-group-id="0580811232-10">]</span><span class="p" data-group-id="0580811232-9">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="0974253963-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0974253963-10">[</span><span class="p" data-group-id="0974253963-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="0974253963-11">}</span><span class="p" data-group-id="0974253963-10">]</span><span class="p" data-group-id="0974253963-9">}</span><span class="p">;</span><span class="w">
 </span><span class="c1">%%</span><span class="w">
 </span><span class="c1">%% Event handling common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0580811232-12">(</span><span class="p" data-group-id="0580811232-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0580811232-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0580811232-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0974253963-12">(</span><span class="p" data-group-id="0974253963-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="0974253963-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0974253963-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="0580811232-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0580811232-15">[</span><span class="p" data-group-id="0580811232-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0580811232-16">}</span><span class="p" data-group-id="0580811232-15">]</span><span class="p" data-group-id="0580811232-14">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="0580811232-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0580811232-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="0974253963-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="0974253963-15">[</span><span class="p" data-group-id="0974253963-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0974253963-16">}</span><span class="p" data-group-id="0974253963-15">]</span><span class="p" data-group-id="0974253963-14">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="0974253963-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0974253963-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="0580811232-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0580811232-18">}</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><h2 id="module-api-changes" class="section-heading">
+    </span><span class="p" data-group-id="0974253963-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="0974253963-18">}</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><h2 id="module-api-changes" class="section-heading">
   <a href="#module-api-changes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -1272,7 +1293,7 @@ to a request identifier collection.</p></div>
     </a>
     <h1 class="signature" translate="no">action()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1073" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1096" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1348,7 +1369,7 @@ Otherwise like <code class="inline">{change_callback_module, NewModule}</code> 
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L702" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L725" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1392,7 +1413,7 @@ The result is cached for subsequent calls to
     </a>
     <h1 class="signature" translate="no">callback_mode_result()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L674" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L697" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1426,7 +1447,7 @@ or not.</p>
     </a>
     <h1 class="signature" translate="no">data()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L600" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L623" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1463,7 +1484,7 @@ should be part of the <a href="#t:state/0"><code class="inline">state/0</code></
     </a>
     <h1 class="signature" translate="no">enter_action()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1148" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1503,7 +1524,7 @@ the last <a href="#t:event_timeout/0"><code class="inline">event_timeout/0</code
     </a>
     <h1 class="signature" translate="no">enter_loop_opt()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2150" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2173" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1537,7 +1558,7 @@ and <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>
     </a>
     <h1 class="signature" translate="no">event_content()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L661" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L684" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1572,7 +1593,7 @@ comes from.</p>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1314" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1337" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1602,7 +1623,7 @@ comes from.</p>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1334" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1357" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1644,7 +1665,7 @@ is a <em>state change</em>.</li></ul>
     </a>
     <h1 class="signature" translate="no">event_timeout()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L901" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L924" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1691,7 +1712,7 @@ action without affecting the time of expiry.</p>
     </a>
     <h1 class="signature" translate="no">event_type()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L610" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L633" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1723,7 +1744,7 @@ through the <em>transition action</em> <a href="#t:action/0"><code class="inline
     </a>
     <h1 class="signature" translate="no">external_event_type()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L628" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L651" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1760,7 +1781,7 @@ sent to the <code class="inline">gen_statem</code> process.</p>
     </a>
     <h1 class="signature" translate="no">format_status()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1881" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1904" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1797,7 +1818,7 @@ sent to the <code class="inline">gen_statem</code> process.</p>
     </a>
     <h1 class="signature" translate="no">from()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L537" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L560" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1830,7 +1851,7 @@ using <a href="#call/3"><code class="inline">call/2,3</code></a>.</p>
     </a>
     <h1 class="signature" translate="no">generic_timeout()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L936" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L959" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1875,7 +1896,7 @@ action without affecting the time of expiry.</p>
     </a>
     <h1 class="signature" translate="no">hibernate()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L864" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L887" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1914,7 +1935,7 @@ and immediately got awakened by an enqueued event.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">init_result(StateType)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1250" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1273" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1944,7 +1965,7 @@ and immediately got awakened by an enqueued event.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">init_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1273" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1296" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1986,7 +2007,7 @@ before that they were not <code class="inline">ok</code> tagged.  This was befor
     </a>
     <h1 class="signature" translate="no">postpone()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L840" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L863" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2019,7 +2040,7 @@ After a <em>state change</em> (<code class="inline">NextState =/= State</code>
     </a>
     <h1 class="signature" translate="no">reply_action()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1246" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1269" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2058,7 +2079,7 @@ on the border of witchcraft since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">reply_tag()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L542" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L565" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2088,7 +2109,7 @@ on the border of witchcraft since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">request_id()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1418" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1441" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2118,7 +2139,7 @@ on the border of witchcraft since there has been no earlier call to a
     </a>
     <h1 class="signature" translate="no">request_id_collection()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1427" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1450" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2149,7 +2170,7 @@ a label chosen by the user.  For more information see <a href="#reqids_new/0"><c
     </a>
     <h1 class="signature" translate="no">response_timeout()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1456" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1479" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2194,7 +2215,7 @@ recalculate the relative time until the deadline over and over again.</p></li></
     </a>
     <h1 class="signature" translate="no">server_name()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2093" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2116" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2226,7 +2247,7 @@ See <a href="#start_link/3"><code class="inline">start_link/3</code></a> and <a 
     </a>
     <h1 class="signature" translate="no">server_ref()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2121" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2144" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2268,7 +2289,7 @@ Thus, <code class="inline">{via, global, GlobalName}</code> is the same as <co
     </a>
     <h1 class="signature" translate="no">start_mon_ret()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2175" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2198" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2301,7 +2322,7 @@ tuple.</p>
     </a>
     <h1 class="signature" translate="no">start_opt()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2136" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2159" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2334,7 +2355,7 @@ and <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>
     </a>
     <h1 class="signature" translate="no">start_ret()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2161" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2184" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2365,7 +2386,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
     </a>
     <h1 class="signature" translate="no">state()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L573" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L596" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2409,7 +2430,7 @@ the safe choice.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">state_callback_result(ActionType, DataType)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1382" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1405" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2472,7 +2493,7 @@ in all future versions of <code class="inline">gen_statem</code>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L746" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L769" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2529,7 +2550,7 @@ but will happen when repeating the <em>state enter call</em>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1289" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1312" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2559,7 +2580,7 @@ but will happen when repeating the <em>state enter call</em>.</p>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State, DataType)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1304" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1327" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2597,7 +2618,7 @@ equal to the current state, sets <code class="inline">NewData</code>, and execut
     </a>
     <h1 class="signature" translate="no">state_name()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L587" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L610" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2633,7 +2654,7 @@ callback function <a href="#c:terminate/3"><code class="inline">Module:terminate
     </a>
     <h1 class="signature" translate="no">state_timeout()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L986" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1009" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2688,7 +2709,7 @@ action without affecting the time of expiry.</p>
     </a>
     <h1 class="signature" translate="no">timeout_action()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1165" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1188" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2754,7 +2775,7 @@ with <code class="inline">EventContent</code>, and time-out options
     </a>
     <h1 class="signature" translate="no">timeout_cancel_action()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1202" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1225" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2792,7 +2813,7 @@ will expire).  Using this action shows the intention more clearly.</p>
     </a>
     <h1 class="signature" translate="no">timeout_event_type()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L649" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L672" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2828,7 +2849,7 @@ for itself with the corresponding <a href="#t:timeout_action/0"><code class="inl
     </a>
     <h1 class="signature" translate="no">timeout_option()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L999" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1022" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2862,7 +2883,7 @@ See <a href="../../../../erts-15.0/doc/html/erlang.html#start_timer/4"><code cla
     </a>
     <h1 class="signature" translate="no">timeout_update_action()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1221" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1244" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2902,7 +2923,7 @@ if a generic time-out name was misspelled.</p>
     </a>
     <h1 class="signature" translate="no">transition_option()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L829" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L852" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2991,7 +3012,7 @@ receive any external event.</p><p><a href="gen_server.html"><code class="inline"
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1528" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1551" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3038,7 +3059,7 @@ the callback module is doing something strange.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">code_change(OldVsn, OldState, OldData, Extra)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1786" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1809" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3124,7 +3145,7 @@ the process will crash with exit reason <code class="inline">undef</code>.</p></
     </a>
     <h1 class="signature" translate="no">format_status(Status)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1946" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1969" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3157,15 +3178,15 @@ of the <code class="inline">gen_statem</code>, and shall return a map <code clas
 containing the same keys as the input map,
 but it may transform some values.</p><p>One use case for this function is to return compact alternative state
 representations to avoid having large state terms printed in log files.
-Another is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="8886799191-1">(</span><span class="n">Status</span><span class="p" data-group-id="8886799191-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="8886799191-2">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="p" data-group-id="8886799191-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="8886799191-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="8886799191-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="8886799191-4">)</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="8886799191-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="8886799191-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="8886799191-6">}</span><span class="p" data-group-id="8886799191-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="8886799191-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="8886799191-7">}</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="8886799191-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="8886799191-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+Another is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="5445972008-1">(</span><span class="n">Status</span><span class="p" data-group-id="5445972008-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="5445972008-2">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="p" data-group-id="5445972008-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="5445972008-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="5445972008-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5445972008-4">)</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="5445972008-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="5445972008-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="5445972008-6">}</span><span class="p" data-group-id="5445972008-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="5445972008-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="5445972008-7">}</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="5445972008-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="5445972008-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Value</span><span class="w">
-    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="8886799191-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need
+    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="5445972008-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need
 to export it.  The <code class="inline">gen_statem</code> module provides
 a default implementation of this function that returns <code class="inline">{State, Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data,
 the default function will instead return <code class="inline">{State, Info}</code>,
@@ -3182,7 +3203,7 @@ where <code class="inline">Info</code> says nothing but the fact that
     </a>
     <h1 class="signature" translate="no">format_status/2</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1858" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1881" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3246,7 +3267,7 @@ where <code class="inline">Info</code> says nothing but the fact that
     </a>
     <h1 class="signature" translate="no">handle_event/4</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1627" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1650" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3314,7 +3335,7 @@ is no longer in scope.</p>
     </a>
     <h1 class="signature" translate="no">init(Args)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1488" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1511" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3339,8 +3360,8 @@ is no longer in scope.</p>
 to initialize the implementation state and server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><blockquote><h4 class="info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a>
 and <a href="#enter_loop/6"><code class="inline">enter_loop/4,5,6</code></a>, this callback
 will never be called.  Since this callback is not optional
-it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="5926453205-1">(</span><span class="p">_</span><span class="p" data-group-id="5926453205-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="5926453205-2">(</span><span class="p" data-group-id="5926453205-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="5926453205-3">(</span><span class="n">Args</span><span class="p" data-group-id="5926453205-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="5926453205-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5926453205-5">[</span><span class="n">Args</span><span class="p" data-group-id="5926453205-5">]</span><span class="p" data-group-id="5926453205-4">)</span><span class="p">.</span></code></pre></blockquote>
+it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="2491936958-1">(</span><span class="p">_</span><span class="p" data-group-id="2491936958-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="2491936958-2">(</span><span class="p" data-group-id="2491936958-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="2491936958-3">(</span><span class="n">Args</span><span class="p" data-group-id="2491936958-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="2491936958-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2491936958-5">[</span><span class="n">Args</span><span class="p" data-group-id="2491936958-5">]</span><span class="p" data-group-id="2491936958-4">)</span><span class="p">.</span></code></pre></blockquote>
   </section>
 </section>
 <section class="detail" id="c:StateName/3">
@@ -3352,7 +3373,7 @@ it can in that case be implemented as:</p><pre><code class="makeup erlang" trans
     </a>
     <h1 class="signature" translate="no">'StateName'/3</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1559" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1582" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3395,7 +3416,7 @@ which is the <a href="#state-callback"><em>state callback</em></a> in
     </a>
     <h1 class="signature" translate="no">terminate/3</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1699" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L1722" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3460,7 +3481,7 @@ just as for any process.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2494" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2517" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3490,7 +3511,7 @@ just as for any process.</p>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request, Timeout)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2546" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2569" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3545,7 +3566,7 @@ of relevant values for the <code class="inline">Reason</code> in the exit term.<
     </a>
     <h1 class="signature" translate="no">cast(ServerRef, Msg)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2469" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2492" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3579,7 +3600,7 @@ with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a> <cod
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqId)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2926" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2949" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3623,7 +3644,7 @@ this function returns an <code class="inline">error</code> return with the exit 
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqIdCollection, Delete)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2992" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3015" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3691,7 +3712,7 @@ this function, it will always return <code class="inline">no_reply</code>.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3127" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3150" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3721,7 +3742,7 @@ this function, it will always return <code class="inline">no_reply</code>.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3151" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3174" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3758,7 +3779,7 @@ this function, it will always return <code class="inline">no_reply</code>.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3199" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3222" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3811,7 +3832,7 @@ according to <a href="#t:server_name/0"><code class="inline">server_name/0</code
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2773" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2796" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3846,7 +3867,7 @@ according to <a href="#t:server_name/0"><code class="inline">server_name/0</code
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId, Timeout)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2813" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2836" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3897,7 +3918,7 @@ while <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>
     </a>
     <h1 class="signature" translate="no">receive_response(ReqIdCollection, Timeout, Delete)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2890" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2913" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3974,7 +3995,7 @@ and then return <code class="inline">timeout</code>.</p>
     </a>
     <h1 class="signature" translate="no">reply(Replies)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3093" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3116" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4007,7 +4028,7 @@ from a <a href="#state-callback"><em>state callback</em></a>.</p><blockquote><h4
     </a>
     <h1 class="signature" translate="no">reply(From, Reply)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3114" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3137" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4040,7 +4061,7 @@ from a <a href="#state-callback"><em>state callback</em></a>.</p><blockquote><h4
     </a>
     <h1 class="signature" translate="no">reqids_add(ReqId, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3051" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3074" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4073,7 +4094,7 @@ the resulting request identifier collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_new()</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3022" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3045" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4111,7 +4132,7 @@ request identifiers in a collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_size(ReqIdCollection)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3031" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3054" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4141,7 +4162,7 @@ request identifiers in a collection.</p>
     </a>
     <h1 class="signature" translate="no">reqids_to_list(ReqIdCollection)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3070" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L3093" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4174,7 +4195,7 @@ in <a href="#t:request_id_collection/0"><code class="inline">ReqIdCollection</co
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2593" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2616" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4222,7 +4243,7 @@ or <a href="#check_response/2"><code class="inline">check_response/2</code></a> 
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2626" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2649" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4265,7 +4286,7 @@ but slightly more efficient.</p>
     </a>
     <h1 class="signature" translate="no">start(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2195" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2218" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4296,7 +4317,7 @@ is not registered with any <a href="#t:server_name/0">name service</a>.</p>
     </a>
     <h1 class="signature" translate="no">start(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2218" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2241" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4331,7 +4352,7 @@ see <a href="#start_link/4"><code class="inline">start_link/4</code></a>.</p>
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2236" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2259" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4362,7 +4383,7 @@ is not registered with any <a href="#t:server_name/0">name service</a>.</p>
     </a>
     <h1 class="signature" translate="no">start_link(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2359" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2382" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4451,7 +4472,7 @@ was cleaned up in OTP 26.0.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">start_monitor(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2377" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2400" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4482,7 +4503,7 @@ process is not registered with any <a href="#t:server_name/0">name service</a>.<
     </a>
     <h1 class="signature" translate="no">start_monitor(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2408" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2431" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4526,7 +4547,7 @@ and removed from the caller's message queue.</p>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2419" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2442" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4556,7 +4577,7 @@ and removed from the caller's message queue.</p>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef, Reason, Timeout)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2451" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2474" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4598,7 +4619,7 @@ if the connection fails to the remote <code class="inline">Node</code> where the
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2644" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2667" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4633,7 +4654,7 @@ if the connection fails to the remote <code class="inline">Node</code> where the
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId, WaitTime)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2681" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2704" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4681,7 +4702,7 @@ while <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</h1>
 
-      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2756" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/doc-md/lib/stdlib/src/gen_statem.erl#L2779" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
