@@ -172,8 +172,8 @@ the <a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code
 <a href="#t:completion_info/0"><code class="inline">completion_info/0</code></a> and the received <code class="inline">completion</code> message.</p><p>The compiler may then optimize a following <code class="inline">receive</code> statement
 to only scan the messages that arrive after the <a href="../../../../erts-15.0/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a>
 is created.  If the message queue is large this is a big optimization.</p><p>The <a href="../../../../erts-15.0/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> has to be unique for the call.</p><h4>Repeating an Operation on a <code class="inline">select</code> Systems</h4><p>On<code class="inline">select</code> systems, if a call would be repeated <em>before</em> the <code class="inline">select</code>
-message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="3669594143-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3669594143-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="3669594143-2">}</span><span class="p" data-group-id="3669594143-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3669594143-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="3669594143-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="3669594143-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="3669594143-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3669594143-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="3669594143-5">)</span><span class="p">,</span><span class="w">
+message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="4993235855-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4993235855-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="4993235855-2">}</span><span class="p" data-group-id="4993235855-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4993235855-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="4993235855-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="4993235855-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="4993235855-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4993235855-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="4993235855-5">)</span><span class="p">,</span><span class="w">
     </span><span class="p">:</span></code></pre><p>Above, <code class="inline">Handle</code> is <em>no longer</em> valid once the second <a href="#accept/2"><code class="inline">accept/2</code></a>, call
 has been made (the first call is automatically canceled).
 After the second <a href="#accept/2"><code class="inline">accept/2</code></a> call returns <code class="inline">{error, timeout}</code>,
@@ -206,28 +206,28 @@ API features could be considered no longer experimental.</li></ul><h2 id="module
   </a>
   <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="8483400124-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="8483400124-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="8483400124-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="8483400124-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="8483400124-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="8483400124-3">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="8483400124-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8483400124-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="9172460012-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="9172460012-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="9172460012-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="9172460012-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="9172460012-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="9172460012-3">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="9172460012-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9172460012-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                                </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SAddr</span><span class="p">,</span><span class="w">
-                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="8483400124-5">}</span><span class="p" data-group-id="8483400124-4">)</span><span class="p">,</span><span class="w">
+                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="9172460012-5">}</span><span class="p" data-group-id="9172460012-4">)</span><span class="p">,</span><span class="w">
    </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="8483400124-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="8483400124-6">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="8483400124-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="8483400124-7">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="8483400124-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="8483400124-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="8483400124-9">(</span><span class="n">Sock</span><span class="p" data-group-id="8483400124-9">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="8483400124-10">(</span><span class="n">Sock</span><span class="p" data-group-id="8483400124-10">)</span><span class="p">.</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="9172460012-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9172460012-6">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="9172460012-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="9172460012-7">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="9172460012-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9172460012-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="9172460012-9">(</span><span class="n">Sock</span><span class="p" data-group-id="9172460012-9">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9172460012-10">(</span><span class="n">Sock</span><span class="p" data-group-id="9172460012-10">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="8483400124-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="8483400124-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="8483400124-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="8483400124-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="8483400124-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="8483400124-13">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="8483400124-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8483400124-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="9172460012-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="9172460012-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="9172460012-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="9172460012-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="9172460012-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="9172460012-13">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="9172460012-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9172460012-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                              </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="8483400124-15">}</span><span class="p" data-group-id="8483400124-14">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="8483400124-16">(</span><span class="n">LSock</span><span class="p" data-group-id="8483400124-16">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="8483400124-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="8483400124-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="8483400124-18">(</span><span class="n">LSock</span><span class="p" data-group-id="8483400124-18">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="8483400124-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="8483400124-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="8483400124-20">(</span><span class="n">Sock</span><span class="p" data-group-id="8483400124-20">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="8483400124-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="8483400124-21">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="8483400124-22">(</span><span class="n">Sock</span><span class="p" data-group-id="8483400124-22">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="8483400124-23">(</span><span class="n">LSock</span><span class="p" data-group-id="8483400124-23">)</span><span class="p">.</span></code></pre>
+                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="9172460012-15">}</span><span class="p" data-group-id="9172460012-14">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="9172460012-16">(</span><span class="n">LSock</span><span class="p" data-group-id="9172460012-16">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="9172460012-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="9172460012-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="9172460012-18">(</span><span class="n">LSock</span><span class="p" data-group-id="9172460012-18">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="9172460012-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9172460012-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="9172460012-20">(</span><span class="n">Sock</span><span class="p" data-group-id="9172460012-20">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="9172460012-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9172460012-21">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9172460012-22">(</span><span class="n">Sock</span><span class="p" data-group-id="9172460012-22">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9172460012-23">(</span><span class="n">LSock</span><span class="p" data-group-id="9172460012-23">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -4018,7 +4018,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
     </a>
     <h1 class="signature" translate="no">accept(ListenSocket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3170" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3178" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4048,7 +4048,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
     </a>
     <h1 class="signature" translate="no">accept/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3242" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3250" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4126,7 +4126,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">bind(Socket, Addr)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2855" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2863" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4164,7 +4164,7 @@ which port that was chosen, you can find out using something like:
     </a>
     <h1 class="signature" translate="no">cancel/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6546" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6554" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4210,7 +4210,7 @@ an operation in progress for the calling process, this function returns
     </a>
     <h1 class="signature" translate="no">cancel_monitor(MRef)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2428" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2436" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4247,7 +4247,7 @@ a <code class="inline">'DOWN'</code> message from this monitor in the caller mes
     </a>
     <h1 class="signature" translate="no">close(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5722" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5730" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4290,7 +4290,7 @@ scenario that is often not relevant.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">connect(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2941" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2949" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4328,7 +4328,7 @@ cannot return a <code class="inline">select</code> return value.</p>
     </a>
     <h1 class="signature" translate="no">connect(Socket, SockAddr)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2955" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2963" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4359,7 +4359,7 @@ cannot return a <code class="inline">select</code> return value.</p>
     </a>
     <h1 class="signature" translate="no">connect/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3059" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3067" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4445,7 +4445,7 @@ about <a href="#connect-timeout">connection time-out</a>.</p>
     </a>
     <h1 class="signature" translate="no">getopt/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5943" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5951" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4489,7 +4489,7 @@ that the underlying OS does.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">getopt(Socket, Level, Opt)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5963" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5971" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4525,7 +4525,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">getopt_native/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6032" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6040" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4696,7 +4696,7 @@ all sockets of that specific <a href="#t:type/0"><code class="inline">type/0</co
     </a>
     <h1 class="signature" translate="no">info()</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2319" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2327" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4727,7 +4727,7 @@ So, don't call this function often.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">info(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2348" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2356" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4759,7 +4759,7 @@ So, don't call this function often.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">ioctl/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6165" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6173" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4794,7 +4794,7 @@ with its name and address.</p></li><li><p><strong><code class="inline">nread</co
 <em>(since OTP 26.1)</em>.</p><p>Result; the number of bytes, <a href="../../../../erts-15.0/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a>.</p></li><li><p><strong><code class="inline">atmark</code></strong> - Test if there is OOB (out-of-bound) data waiting to be read
 <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.0/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a>.</p></li><li><p><strong><code class="inline">tcp_info</code></strong> - Get miscellaneous TCP related information for a
 <em>connected</em> socket <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.0/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a> with information items as key-value pairs.</p></li></ul><blockquote><h4 class="info">Note</h4><p>To see if a ioctl request is supported on the current platform:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="n">Request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">nread</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="0922630622-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="0922630622-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="0922630622-2">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="0922630622-2">)</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="8798599988-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="8798599988-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="8798599988-2">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="8798599988-2">)</span><span class="p">,</span><span class="w">
       </span><span class="p">:</span></code></pre></blockquote>
   </section>
 </section>
@@ -4807,7 +4807,7 @@ with its name and address.</p></li><li><p><strong><code class="inline">nread</co
     </a>
     <h1 class="signature" translate="no">ioctl/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6382" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6390" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4887,7 +4887,7 @@ and <a href="#t:protocol/0">protocol <code class="inline">udp</code></a>.</p><p>
     </a>
     <h1 class="signature" translate="no">ioctl(Socket, SetRequest, Name, Value)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6481" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6489" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4936,7 +4936,7 @@ of the interface with the specified name.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">is_supported(Key1)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2556" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2564" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4956,7 +4956,7 @@ of the interface with the specified name.</p></li></ul>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/0"><code class="inline">supports/0</code></a> has a <code class="inline">{Key1, true}</code> tuple
 or a <code class="inline">{Key1, list()}</code> tuple in its returned list,
-otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="0054068680-1">(</span><span class="ss">local</span><span class="p" data-group-id="0054068680-1">)</span><span class="p">,</span></code></pre>
+otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3296467754-1">(</span><span class="ss">local</span><span class="p" data-group-id="3296467754-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="is_supported/2">
@@ -4968,7 +4968,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
     </a>
     <h1 class="signature" translate="no">is_supported(Key1, Key2)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2573" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2581" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4987,7 +4987,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
       </div>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/1"><code class="inline">supports(Key1)</code></a> has a <code class="inline">{Key2, true}</code> tuple
-in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="4705424042-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="4705424042-1">)</span><span class="p">,</span></code></pre>
+in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3654467307-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="3654467307-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="listen/1">
@@ -4999,7 +4999,7 @@ in its returned list, otherwise <code class="inline">false</code> (also for unkn
     </a>
     <h1 class="signature" translate="no">listen(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3132" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3140" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5030,7 +5030,7 @@ value for <code class="inline">Backlog</code> (currently <code class="inline">5<
     </a>
     <h1 class="signature" translate="no">listen(Socket, Backlog)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3154" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3162" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5065,7 +5065,7 @@ will most probably be perceived as at least that long.</p><blockquote><h4 class=
     </a>
     <h1 class="signature" translate="no">monitor(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2384" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2392" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5085,7 +5085,7 @@ will most probably be perceived as at least that long.</p><blockquote><h4 class=
 
 <p>Start a socket monitor.</p><p>If the <code class="inline">Socket</code> doesn't exist or when later the monitor is triggered,
 a <code class="inline">'DOWN'</code> message is sent to the process that called <a href="#monitor/1"><code class="inline">monitor/1</code></a>
-with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">    </span><span class="p" data-group-id="8388945369-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="8388945369-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
+with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">    </span><span class="p" data-group-id="9271654718-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="9271654718-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
 <code class="inline">Socket</code> did not exist when the monitor was started.</p><p>Making several calls to <a href="#monitor/1"><code class="inline">socket:monitor/1</code></a> for the same <code class="inline">Socket</code> is not an
 error; each call creates an independent monitor instance.</p>
   </section>
@@ -5129,7 +5129,7 @@ error; each call creates an independent monitor instance.</p>
     </a>
     <h1 class="signature" translate="no">open(FD)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2646" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2654" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5159,7 +5159,7 @@ error; each call creates an independent monitor instance.</p>
     </a>
     <h1 class="signature" translate="no">open/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2726" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2734" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5213,7 +5213,7 @@ to use in this function.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2757" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2765" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5244,7 +5244,7 @@ to use in this function.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open(Domain, Type, Protocol, Opts)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2816" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2824" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5294,7 +5294,7 @@ for this socket. This overrides the global value.</p><p>Defaults to the global v
     </a>
     <h1 class="signature" translate="no">peername(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6081" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6089" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5326,7 +5326,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4792" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4800" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5356,7 +5356,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4808" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4816" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5389,7 +5389,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4839" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4847" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5427,7 +5427,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4943" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4951" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5515,7 +5515,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5204" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5212" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5545,7 +5545,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5221" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5229" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5578,7 +5578,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5256" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5264" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5613,7 +5613,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5351" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5359" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5695,7 +5695,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5439" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5447" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5725,7 +5725,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/2</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5461" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5469" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5758,7 +5758,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5486" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5494" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5791,7 +5791,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket, BufSz, CtrlSz, TimeoutOrHandle)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5504" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5512" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5822,7 +5822,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/5</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5598" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5606" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5901,7 +5901,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send(Socket, Data)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3327" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3335" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5931,7 +5931,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3348" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3356" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5966,7 +5966,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3487" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3495" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6068,7 +6068,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4472" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4480" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6099,7 +6099,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation, Timeout_or_Handle)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4485" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4493" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6130,7 +6130,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation, Offset, Count)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4498" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4506" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6165,7 +6165,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile/5</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4618" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4626" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6258,7 +6258,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg(Socket, Msg)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3925" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3933" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6288,7 +6288,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3950" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3958" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6323,7 +6323,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4114" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4122" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6450,7 +6450,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3687" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3695" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6483,7 +6483,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3722" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3730" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6524,7 +6524,7 @@ an explanation of <code class="inline">TimeoutOrHandle</code>.</p>
     </a>
     <h1 class="signature" translate="no">sendto/5</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3842" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L3850" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6605,7 +6605,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv(Socket, IOV)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4207" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4215" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6640,7 +6640,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4321" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4329" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6729,7 +6729,7 @@ at the start of this module reference manual page.</p><p><a href="" id="sendv-co
     </a>
     <h1 class="signature" translate="no">sendv/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4402" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L4410" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6793,7 +6793,7 @@ unfinished calls.</p><p>See <a href="#sendv/3"><code class="inline">sendv/3</cod
     </a>
     <h1 class="signature" translate="no">setopt/3</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5818" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5826" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6840,7 +6840,7 @@ that the underlying OS does.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">setopt/4</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5841" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5849" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6875,7 +6875,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">setopt_native(Socket, Option, Value)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5884" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5892" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6923,7 +6923,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">shutdown(Socket, How)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5754" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L5762" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6954,7 +6954,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">sockname(Socket)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6056" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L6064" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6988,7 +6988,7 @@ selected by the OS.</p>
     </a>
     <h1 class="signature" translate="no">supports()</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2479" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2487" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7024,7 +7024,7 @@ and <code class="inline">{Key, boolean()}</code> tuples for each of the followin
     </a>
     <h1 class="signature" translate="no">supports(Key1)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2513" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2521" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7063,7 +7063,7 @@ there might be more supported keys.</p>
     </a>
     <h1 class="signature" translate="no">supports(Key1, Key2)</h1>
 
-      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2537" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/lucioleKi/otp/blob/atom_to_binary/lib/kernel/src/socket.erl#L2545" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
