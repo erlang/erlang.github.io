@@ -435,7 +435,7 @@ Pages
     </a>
     <h1 class="signature" translate="no">address_info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L173" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L180" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -451,7 +451,7 @@ Pages
 
           <pre translate="no"><span class="attribute">-type</span> address_info() ::
           #{family := <a href="socket.html#t:domain/0">socket:domain</a>(),
-            socktype := <a href="socket.html#t:type/0">socket:type</a>(),
+            socktype := any | <a href="socket.html#t:type/0">socket:type</a>() | <a href="../../../../erts-15.0.1/doc/html/erlang.html#t:integer/0">integer</a>(),
             protocol := <a href="socket.html#t:protocol/0">socket:protocol</a>(),
             address := <a href="socket.html#t:sockaddr/0">socket:sockaddr</a>()}.</pre>
 
@@ -507,7 +507,7 @@ the <code class="inline">broadcast</code> flag is present in flags.</p></blockqu
     </a>
     <h1 class="signature" translate="no">ifaddrs_filter()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L119" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L120" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -524,12 +524,14 @@ the <code class="inline">broadcast</code> flag is present in flags.</p></blockqu
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> ifaddrs_filter() ::
-          all | default | inet | inet6 | packet | <a href="#t:ifaddrs_filter_map/0">ifaddrs_filter_map</a>() | <a href="#t:ifaddrs_filter_fun/0">ifaddrs_filter_fun</a>().</pre>
+          all | default | inet | inet6 | packet | link | hwaddr |
+          <a href="#t:ifaddrs_filter_map/0">ifaddrs_filter_map</a>() |
+          <a href="#t:ifaddrs_filter_fun/0">ifaddrs_filter_fun</a>().</pre>
 
       </div>
 
-<p>Interface address filtering selector.</p><ul><li><p><strong>all</strong> - All interfaces</p></li><li><p><strong>default</strong> - Interfaces with address family <code class="inline">inet</code> <em>or</em> <code class="inline">inet6</code></p></li><li><p><strong>inet | inet6 | packet</strong> - Interfaces with <em>only</em> the specified address
-family</p></li></ul>
+<p>Interface address filtering selector.</p><ul><li><p><strong>all</strong> - All interfaces</p></li><li><p><strong>default</strong> - Interfaces with address family <code class="inline">inet</code> <em>or</em> <code class="inline">inet6</code></p></li><li><p><strong>inet | inet6 | packet | link</strong> - Interfaces with <em>only</em> the specified
+address family</p></li><li><p><strong>hwaddr</strong> - Interfaces with address family <code class="inline">packet</code> <em>or</em> <code class="inline">link</code></p></li></ul>
   </section>
 </section>
 <section class="detail" id="t:ifaddrs_filter_fun/0">
@@ -541,7 +543,7 @@ family</p></li></ul>
     </a>
     <h1 class="signature" translate="no">ifaddrs_filter_fun()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L166" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -563,13 +565,13 @@ family</p></li></ul>
 
 <p>Interface address filtering selector <a href="../../../../erts-15.0.1/doc/html/erlang.html#t:function/0"><code class="inline">function/0</code></a>.</p><p>For each <code class="inline">ifaddrs</code> entry, return either <code class="inline">true</code> to keep the entry
 or <code class="inline">false</code> to discard the entry.</p><p>For example, to get an interface list which only contains
-non-<code class="inline">loopback</code> <code class="inline">inet</code> interfaces:</p><pre><code class="makeup erlang" translate="no"><span class="nc">net</span><span class="p">:</span><span class="nf">getifaddrs</span><span class="p" data-group-id="6255140900-1">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="w"> </span><span class="p" data-group-id="6255140900-2">(</span><span class="p" data-group-id="6255140900-3">#{</span><span class="w"> </span><span class="ss">addr</span><span class="w">  </span><span class="p">:=</span><span class="w"> </span><span class="p" data-group-id="6255140900-4">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="ss">inet</span><span class="p" data-group-id="6255140900-4">}</span><span class="p">,</span><span class="w">
-            </span><span class="ss">flags</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Flags</span><span class="p" data-group-id="6255140900-3">}</span><span class="p" data-group-id="6255140900-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-          </span><span class="ow">not</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">member</span><span class="p" data-group-id="6255140900-5">(</span><span class="ss">loopback</span><span class="p">,</span><span class="w"> </span><span class="n">Flags</span><span class="p" data-group-id="6255140900-5">)</span><span class="p">;</span><span class="w">
-        </span><span class="p" data-group-id="6255140900-6">(</span><span class="p">_</span><span class="p" data-group-id="6255140900-6">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+non-<code class="inline">loopback</code> <code class="inline">inet</code> interfaces:</p><pre><code class="makeup erlang" translate="no"><span class="nc">net</span><span class="p">:</span><span class="nf">getifaddrs</span><span class="p" data-group-id="2200534514-1">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="w"> </span><span class="p" data-group-id="2200534514-2">(</span><span class="p" data-group-id="2200534514-3">#{</span><span class="w"> </span><span class="ss">addr</span><span class="w">  </span><span class="p">:=</span><span class="w"> </span><span class="p" data-group-id="2200534514-4">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="ss">inet</span><span class="p" data-group-id="2200534514-4">}</span><span class="p">,</span><span class="w">
+            </span><span class="ss">flags</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Flags</span><span class="p" data-group-id="2200534514-3">}</span><span class="p" data-group-id="2200534514-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+          </span><span class="ow">not</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">member</span><span class="p" data-group-id="2200534514-5">(</span><span class="ss">loopback</span><span class="p">,</span><span class="w"> </span><span class="n">Flags</span><span class="p" data-group-id="2200534514-5">)</span><span class="p">;</span><span class="w">
+        </span><span class="p" data-group-id="2200534514-6">(</span><span class="p">_</span><span class="p" data-group-id="2200534514-6">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
           </span><span class="ss">false</span><span class="w">
-    </span><span class="k">end</span><span class="p" data-group-id="6255140900-1">)</span><span class="p">.</span></code></pre>
+    </span><span class="k">end</span><span class="p" data-group-id="2200534514-1">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="t:ifaddrs_filter_map/0">
@@ -581,7 +583,7 @@ non-<code class="inline">loopback</code> <code class="inline">inet</code> interf
     </a>
     <h1 class="signature" translate="no">ifaddrs_filter_map()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L136" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L142" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -598,12 +600,19 @@ non-<code class="inline">loopback</code> <code class="inline">inet</code> interf
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> ifaddrs_filter_map() ::
-          #{family := default | local | inet | inet6 | packet | all, flags := any | [<a href="#t:ifaddrs_flag/0">ifaddrs_flag</a>()]}.</pre>
+          #{family :=
+                all | default | local | inet | inet6 | packet | link |
+                [local | inet | inet6 | packet | link],
+            flags := any | [<a href="#t:ifaddrs_flag/0">ifaddrs_flag</a>()]}.</pre>
 
       </div>
 
 <p>Interface address filtering selector map.</p><p>The <code class="inline">family</code> field can only have the (above) specified values
-(and not all the values of socket:domain()).</p><p>The use of the <code class="inline">flags</code> field is that any flag provided must exist for the
+(and not all the values of socket:domain()).
+It can also be a list of values, to cover the situation when
+any of the specified families are accepted.
+For example, family can be set to <code class="inline">[inet,inet6]</code> if either <code class="inline">inet</code> or <code class="inline">inet6</code>
+is accepted.</p><p>The use of the <code class="inline">flags</code> field is that any flag provided must exist for the
 interface.</p><p>For example, if <code class="inline">family</code> is set to <code class="inline">inet</code> and <code class="inline">flags</code> to
 <code class="inline">[broadcast, multicast]</code> only interfaces with address family <code class="inline">inet</code>
 and the flags <code class="inline">broadcast</code> and <code class="inline">multicast</code> will be listed.</p>
@@ -680,7 +689,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">name_info()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L171" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L178" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -710,7 +719,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">name_info_flag()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L162" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L169" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -740,7 +749,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">name_info_flag_ext()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L170" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L177" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -770,7 +779,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">name_info_flags()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L161" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L168" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -800,7 +809,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">network_interface_index()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L178" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L185" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -830,7 +839,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">network_interface_name()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L177" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L184" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -872,7 +881,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">getaddrinfo(Host)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L294" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L306" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -903,7 +912,7 @@ and the flags <code class="inline">broadcast</code> and <code class="inline">mul
     </a>
     <h1 class="signature" translate="no">getaddrinfo(Host, Service)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L319" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L331" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -943,7 +952,7 @@ host and service to a corresponding socket address.</p><p>One of the <code class
     </a>
     <h1 class="signature" translate="no">gethostname()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L247" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L259" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -973,7 +982,7 @@ host and service to a corresponding socket address.</p><p>One of the <code class
     </a>
     <h1 class="signature" translate="no">getifaddrs()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L336" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L348" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1003,7 +1012,7 @@ host and service to a corresponding socket address.</p><p>One of the <code class
     </a>
     <h1 class="signature" translate="no">getifaddrs/1</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L357" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L369" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1038,7 +1047,7 @@ filtered according to <code class="inline">Filter</code>.</p><p>With argument <c
     </a>
     <h1 class="signature" translate="no">getifaddrs(Filter, Namespace)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L377" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L389" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1074,7 +1083,7 @@ in the specified <code class="inline">Namespace</code>.</p>
     </a>
     <h1 class="signature" translate="no">getnameinfo(SockAddr)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L262" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L274" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1105,7 +1114,7 @@ in the specified <code class="inline">Namespace</code>.</p>
     </a>
     <h1 class="signature" translate="no">getnameinfo(SockAddr, Flags)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L277" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L289" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1141,7 +1150,7 @@ socket address to a corresponding host and service.</p>
     </a>
     <h1 class="signature" translate="no">getservbyname(Name)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L914" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L949" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1175,7 +1184,7 @@ socket address to a corresponding host and service.</p>
     </a>
     <h1 class="signature" translate="no">getservbyname(Name, Protocol)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L930" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L965" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1211,7 +1220,7 @@ for the named service.</p>
     </a>
     <h1 class="signature" translate="no">getservbyport(PortNumber)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L952" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L987" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1245,7 +1254,7 @@ for the named service.</p>
     </a>
     <h1 class="signature" translate="no">getservbyport(PortNumber, Protocol)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L968" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L1003" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1281,7 +1290,7 @@ for the given port number.</p>
     </a>
     <h1 class="signature" translate="no">if_index2name(Idx)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L1015" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L1050" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1315,7 +1324,7 @@ for the given port number.</p>
     </a>
     <h1 class="signature" translate="no">if_name2index(Name)</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L986" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L1021" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1349,7 +1358,7 @@ for the given port number.</p>
     </a>
     <h1 class="signature" translate="no">if_names()</h1>
 
-      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L1043" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/erlang/otp/blob/github/actions-update/lib/kernel/src/net.erl#L1078" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
