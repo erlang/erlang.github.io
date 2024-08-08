@@ -4,23 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.31.1">
-    <meta name="project" content="Erlang System Documentation v27.0-rc0">
+    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="project" content="Erlang System Documentation v28.0-rc0">
 
 
-    <title>Debugging NIFs and Port Drivers — Erlang System Documentation v27.0-rc0</title>
-    <link rel="stylesheet" href="dist/html-erlang-YUARVD4J.css" />
+    <title>Debugging NIFs and Port Drivers — Erlang System Documentation v28.0-rc0</title>
+    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-1105547A.js"></script>
+    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
+    <script src="dist/sidebar_items-4A143270.js"></script>
+    <script src="docs_config.js"></script>
+    <script async src="dist/html-7XSQ4GTY.js"></script>
 
-      <script src="docs_config.js"></script>
-
-    <script async src="dist/html-L4O5OK2K.js"></script>
-
-<style>.dark img { background-color: white; }</style>
   </head>
   <body data-type="extras" class="page-extra">
     <script>
@@ -37,13 +34,11 @@
       } catch (error) { }
     </script>
 
-<div class="main">
+<div class="body-wrapper">
 
 <button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
   <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
 </button>
-
-<div class="background-layer"></div>
 
 <nav id="sidebar" class="sidebar">
 
@@ -59,7 +54,7 @@
 Erlang System Documentation
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v27.0-rc0
+          v28.0-rc0
         </div>
       </div>
     </div>
@@ -83,42 +78,42 @@ Pages
 
 <main class="content">
   <output role="status" id="toast"></output>
-  <div class="content-outer">
-    <div id="content" class="content-inner">
-      <div class="top-search">
-        <div class="search-settings">
-          <form class="search-bar" action="search.html">
-            <label class="search-label">
-              <span class="sr-only">Search documentation of Erlang System Documentation</span>
-              <input name="q" type="text" class="search-input" placeholder="Search Documentation (press /)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-            </label>
-            <button type="submit" class="search-button" aria-label="Submit Search">
-              <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
-            </button>
-            <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-              <i class="ri-close-line ri-lg" title="Cancel search"></i>
-            </button>
-          </form>
-          <div class="autocomplete">
-          </div>
-          <button class="icon-settings display-settings">
-            <i class="ri-settings-3-line"></i>
-            <span class="sr-only">Settings</span>
+
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of Erlang System Documentation</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
           </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
         </div>
-
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
       </div>
+    </div>
 
-<h1>
+<div id="top-content">
+  <h1>
 
-    <a href="https://github.com/the-mikedavis/otp/blob/code-server-where-is-file/system/doc/tutorial/debugging.md#L1" title="View Source" class="icon-action" rel="help">
-      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-      <span class="sr-only">View Source</span>
-    </a>
+      <a href="https://github.com/the-mikedavis/otp/blob/code-server-where-is-file/system/doc/tutorial/debugging.md#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
 
 
-  <span>Debugging NIFs and Port Drivers</span>
-</h1>
+    <span>Debugging NIFs and Port Drivers</span>
+  </h1>
 
 <h2 id="with-great-power-comes-great-responsibilty" class="section-heading">
   <a href="#with-great-power-comes-great-responsibilty" class="hover-link">
@@ -152,8 +147,8 @@ runtime checks to ensure correct use of internal interfaces and data
 structures.</li><li><em>Generate a core dump that is easier to analyze</em>. Compiler optimizations are
 turned off, which stops the compiler from &quot;optimizing away&quot; variables, thus
 making it easier/possible to inspect their state.</li><li><em>Detect lock order violations</em>. A runtime lock checker will verify that the
-locks in the <a href="../../erts-14.2.2/doc/html/erl_nif.html"><code class="inline">erl_nif</code></a> and
-<a href="../../erts-14.2.2/doc/html/erl_driver.html"><code class="inline">erl_driver</code></a> APIs are seized in a consistent order
+locks in the <a href="../../erts-15.0.1/doc/html/erl_nif.html"><code class="inline">erl_nif</code></a> and
+<a href="../../erts-15.0.1/doc/html/erl_driver.html"><code class="inline">erl_driver</code></a> APIs are seized in a consistent order
 that cannot result in deadlock bugs.</li></ul><p>In fact, we recommend to use the debug emulator as default during development of
 NIFs and drivers, regardless if you are troubleshooting bugs or not. Some subtle
 bugs may not be detected by the normal emulator and just happen to work anyway
@@ -163,7 +158,7 @@ kinds of problems.</p><p>The main disadvantage of the <code class="inline">debug
 extra runtime checks and lack of compiler optimizations may result in a slowdown
 with a factor of two or more depending on load. The memory footprint should be
 about the same.</p><p>If the <code class="inline">debug</code> emulator is part of the Erlang/OTP installation, it can be
-started with the <a href="../../erts-14.2.2/doc/html/erl_cmd.html#emu_type"><code class="inline">-emu_type</code></a> option.</p><pre><code class="text">&gt; erl -emu_type debug
+started with the <a href="../../erts-15.0.1/doc/html/erl_cmd.html#emu_type"><code class="inline">-emu_type</code></a> option.</p><pre><code class="text">&gt; erl -emu_type debug
 Erlang/OTP 25 [erts-13.0.2] ... [type-assertions] [debug-compiled] [lock-checking]
 
 Eshell V13.0.2  (abort with ^G)
@@ -290,7 +285,9 @@ New value = 0</code></pre><p>And here we are at the position when someone wrote 
 heap. Note that &quot;Old value&quot; and &quot;New value&quot; are reversed when we execute
 backwards. In this case the value 42 was written on the heap. Let's see who the
 guilty one is:</p><pre><code class="text">(rr) backtrace</code></pre>
-<div class="bottom-actions">
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
   <div class="bottom-actions-item">
 
       <a href="nif.html" class="bottom-actions-button" rel="prev">
@@ -305,7 +302,7 @@ NIFs
   </div>
   <div class="bottom-actions-item">
 
-      <a href="oam.html" class="bottom-actions-button" rel="next">
+      <a href="embedded.html" class="bottom-actions-button" rel="next">
         <span class="subheader">
           Next Page →
         </span>
@@ -316,30 +313,55 @@ Introduction
 
   </div>
 </div>
-      <footer class="footer">
-        <p>
+    <footer class="footer">
+      <p>
 
-          <span class="line">
-            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-              Search HexDocs
-            </button>
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
 
-          </span>
-        </p>
+            <a href="Erlang System Documentation.epub" title="ePub version">
+              Download ePub version
+            </a>
 
-        <p class="built-using">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.31.1) for the
+        </span>
+      </p>
 
-            <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
 
-        </p>
-      </footer>
-    </div>
+          <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
+
+      </p>
+<p>Copyright © 1996-2024 <a href="https://www.ericsson.com">Ericsson AB</a></p>
+    </footer>
   </div>
 </main>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+      const preEl = codeEl.parentElement;
+      const graphDefinition = codeEl.textContent;
+      const graphEl = document.createElement("div");
+      const graphId = "mermaid-graph-" + id++;
+      mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
+      });
+    }
+  });
+</script>
 
   </body>
 </html>
