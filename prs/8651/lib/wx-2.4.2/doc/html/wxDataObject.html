@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-B612F7DF.js"></script>
+    <script src="dist/sidebar_items-F4763ED4.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -128,60 +128,45 @@ Pages
 
 
     <section id="moduledoc">
-<p>Functions for wxDataObject class</p><p>A <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> represents data that can be copied to or from the clipboard,
-or dragged and dropped. The important thing about <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> is that this
-is a 'smart' piece of data unlike 'dumb' data containers such as memory buffers
-or files. Being 'smart' here means that the data object itself should know what
-data formats it supports and how to render itself in each of its supported
-formats.</p><p>A supported format, incidentally, is exactly the format in which the data can be
-requested from a data object or from which the data object may be set. In the
-general case, an object may support different formats on 'input' and 'output',
-i.e. it may be able to render itself in a given format but not be created from
-data on this format or vice versa. <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> defines the
-<code class="inline">wxDataObject::Direction</code> (not implemented in wx) enumeration type which
-distinguishes between them.</p><p>See <code class="inline">wxDataFormat</code> (not implemented in wx) documentation for more about formats.</p><p>Not surprisingly, being 'smart' comes at a price of added complexity. This is
-reasonable for the situations when you really need to support multiple formats,
-but may be annoying if you only want to do something simple like cut and paste
-text.</p><p>To provide a solution for both cases, wxWidgets has two predefined classes which
-derive from <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a>: <code class="inline">wxDataObjectSimple</code> (not implemented in wx) and
-<code class="inline">wxDataObjectComposite</code> (not implemented in wx). <code class="inline">wxDataObjectSimple</code> (not
-implemented in wx) is the simplest <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> possible and only holds data
-in a single format (such as HTML or text) and <code class="inline">wxDataObjectComposite</code> (not
-implemented in wx) is the simplest way to implement a <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> that does
-support multiple formats because it achieves this by simply holding several
-<code class="inline">wxDataObjectSimple</code> (not implemented in wx) objects.</p><p>So, you have several solutions when you need a <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> class (and you
-need one as soon as you want to transfer data via the clipboard or drag and
-drop):</p><p>Please note that the easiest way to use drag and drop and the clipboard with
-multiple formats is by using <code class="inline">wxDataObjectComposite</code> (not implemented in wx),
-but it is not the most efficient one as each <code class="inline">wxDataObjectSimple</code> (not
-implemented in wx) would contain the whole data in its respective formats. Now
-imagine that you want to paste 200 pages of text in your proprietary format, as
-well as Word, RTF, HTML, Unicode and plain text to the clipboard and even
-today's computers are in trouble. For this case, you will have to derive from
-<a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> directly and make it enumerate its formats and provide the data
-in the requested format on demand.</p><p>Note that neither the GTK+ data transfer mechanisms for clipboard and drag and
-drop, nor OLE data transfer, <code class="inline">copies</code> any data until another application
-actually requests the data. This is in contrast to the 'feel' offered to the
-user of a program who would normally think that the data resides in the
-clipboard after having pressed 'Copy' - in reality it is only declared to be
-<code class="inline">available</code>.</p><p>You may also derive your own data object classes from <code class="inline">wxCustomDataObject</code> (not
-implemented in wx) for user-defined types. The format of user-defined data is
-given as a mime-type string literal, such as &quot;application/word&quot; or &quot;image/png&quot;.
-These strings are used as they are under Unix (so far only GTK+) to identify a
-format and are translated into their Windows equivalent under Win32 (using the
-OLE IDataObject for data exchange to and from the clipboard and for drag and
-drop). Note that the format string translation under Windows is not yet
-finished.</p><p>Each class derived directly from <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> must override and implement
-all of its functions which are pure virtual in the base class. The data objects
-which only render their data or only set it (i.e. work in only one direction),
-should return 0 from <code class="inline">GetFormatCount()</code> (not implemented in wx).</p><p>See:
-<a href="https://docs.wxwidgets.org/3.1/overview_dnd.html#overview_dnd">Overview dnd</a>,
-<a href="https://docs.wxwidgets.org/3.1/page_samples.html#page_samples_dnd">Examples</a>,
-<a href="wxFileDataObject.html"><code class="inline">wxFileDataObject</code></a>, <a href="wxTextDataObject.html"><code class="inline">wxTextDataObject</code></a>, <a href="wxBitmapDataObject.html"><code class="inline">wxBitmapDataObject</code></a>,
-<code class="inline">wxCustomDataObject</code> (not implemented in wx), <code class="inline">wxDropTarget</code> (not implemented in
-wx), <code class="inline">wxDropSource</code> (not implemented in wx), <code class="inline">wxTextDropTarget</code> (not implemented
-in wx), <code class="inline">wxFileDropTarget</code> (not implemented in wx)</p><p>wxWidgets docs:
-<a href="https://docs.wxwidgets.org/3.1/classwx_data_object.html">wxDataObject</a></p>
+<p>A <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> represents data that can be copied to or from the clipboard, or
+dragged and dropped.</p><p>The important thing about <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> is that this is a 'smart' piece of data unlike
+'dumb' data containers such as memory buffers or files. Being 'smart' here means that the
+data object itself should know what data formats it supports and how to render itself in
+each of its supported formats.</p><p>A supported format, incidentally, is exactly the format in which the data can be
+requested from a data object or from which the data object may be set. In the general
+case, an object may support different formats on 'input' and 'output', i.e. it may be able
+to render itself in a given format but not be created from data on this format or vice
+versa. <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> defines the <code class="inline">wxDataObject::Direction</code> (not implemented in wx)
+enumeration type which distinguishes between them.</p><p>See <code class="inline">wxDataFormat</code> (not implemented in wx) documentation for more about formats.</p><p>Not surprisingly, being 'smart' comes at a price of added complexity. This is reasonable
+for the situations when you really need to support multiple formats, but may be annoying
+if you only want to do something simple like cut and paste text.</p><p>To provide a solution for both cases, wxWidgets has two predefined classes which derive
+from <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a>: <code class="inline">wxDataObjectSimple</code> (not implemented in wx) and <code class="inline">wxDataObjectComposite</code>
+(not implemented in wx). <code class="inline">wxDataObjectSimple</code> (not implemented in wx) is the simplest <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a>
+possible and only holds data in a single format (such as HTML or text) and <code class="inline">wxDataObjectComposite</code>
+(not implemented in wx) is the simplest way to implement a <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> that does
+support multiple formats because it achieves this by simply holding several <code class="inline">wxDataObjectSimple</code>
+(not implemented in wx) objects.</p><p>So, you have several solutions when you need a <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> class (and you need one
+as soon as you want to transfer data via the clipboard or drag and drop):</p><p>Please note that the easiest way to use drag and drop and the clipboard with multiple
+formats is by using <code class="inline">wxDataObjectComposite</code> (not implemented in wx), but it is not the
+most efficient one as each <code class="inline">wxDataObjectSimple</code> (not implemented in wx) would contain the
+whole data in its respective formats. Now imagine that you want to paste 200 pages of text
+in your proprietary format, as well as Word, RTF, HTML, Unicode and plain text to the
+clipboard and even today's computers are in trouble. For this case, you will have to
+derive from <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> directly and make it enumerate its formats and provide the
+data in the requested format on demand.</p><p>Note that neither the GTK+ data transfer mechanisms for clipboard and drag and drop, nor
+OLE data transfer, <code class="inline">copies</code> any data until another application actually requests the data.
+This is in contrast to the 'feel' offered to the user of a program who would normally
+think that the data resides in the clipboard after having pressed 'Copy' - in reality it
+is only declared to be <code class="inline">available</code>.</p><p>You may also derive your own data object classes from <code class="inline">wxCustomDataObject</code> (not
+implemented in wx) for user-defined types. The format of user-defined data is given as a
+mime-type string literal, such as &quot;application/word&quot; or &quot;image/png&quot;. These strings are
+used as they are under Unix (so far only GTK+) to identify a format and are translated
+into their Windows equivalent under Win32 (using the OLE IDataObject for data exchange to
+and from the clipboard and for drag and drop). Note that the format string translation
+under Windows is not yet finished.</p><p>Each class derived directly from <a href="wxDataObject.html"><code class="inline">wxDataObject</code></a> must override and implement all of its
+functions which are pure virtual in the base class. The data objects which only render
+their data or only set it (i.e. work in only one direction), should return 0 from <code class="inline">GetFormatCount()</code>
+(not implemented in wx).</p><p>See:</p><ul><li><p><a href="https://docs.wxwidgets.org/3.2/overview_dnd.html#overview_dnd">Overview dnd</a></p></li><li><p><a href="https://docs.wxwidgets.org/3.2/page_samples.html#page_samples_dnd">Examples</a></p></li><li><p><a href="wxFileDataObject.html"><code class="inline">wxFileDataObject</code></a></p></li><li><p><a href="wxTextDataObject.html"><code class="inline">wxTextDataObject</code></a></p></li><li><p><a href="wxBitmapDataObject.html"><code class="inline">wxBitmapDataObject</code></a></p></li></ul><p>wxWidgets docs: <a href="https://docs.wxwidgets.org/3.2/classwx_data_object.html">wxDataObject</a></p>
     </section>
 
 </div>
@@ -228,7 +213,7 @@ in wx), <code class="inline">wxFileDropTarget</code> (not implemented in wx)</p>
     </a>
     <h1 class="signature" translate="no">wxDataObject()</h1>
 
-      <a href="https://github.com/dmitrivereshchagin/otp/blob/stdlib/shell-docs-columns/lib/wx/src/gen/wxDataObject.erl#L108" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/dmitrivereshchagin/otp/blob/stdlib/shell-docs-columns/lib/wx/src/gen/wxDataObject.erl#L102" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -278,9 +263,8 @@ in wx), <code class="inline">wxFileDropTarget</code> (not implemented in wx)</p>
   </div>
 </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  function mermaidLoaded() {
     mermaid.initialize({
       startOnLoad: false,
       theme: document.body.className.includes("dark") ? "dark" : "default"
@@ -298,8 +282,9 @@ in wx), <code class="inline">wxFileDropTarget</code> (not implemented in wx)</p>
         preEl.remove();
       });
     }
-  });
+  }
 </script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js" onload="mermaidLoaded();"></script>
 
   </body>
 </html>
