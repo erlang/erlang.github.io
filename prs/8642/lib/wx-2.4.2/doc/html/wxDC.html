@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-B612F7DF.js"></script>
+    <script src="dist/sidebar_items-F4763ED4.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -128,50 +128,37 @@ Pages
 
 
     <section id="moduledoc">
-<p>Functions for wxDC class</p><p>A <a href="wxDC.html"><code class="inline">wxDC</code></a> is a <code class="inline">&quot;device context&quot;</code> onto which graphics and text can be drawn. It
-is intended to represent different output devices and offers a common abstract
-API for drawing on any of them.</p><p>wxWidgets offers an alternative drawing API based on the modern drawing backends
-GDI+, CoreGraphics, Cairo and Direct2D. See <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a>,
-<a href="wxGraphicsRenderer.html"><code class="inline">wxGraphicsRenderer</code></a> and related classes. There is also a <a href="wxGCDC.html"><code class="inline">wxGCDC</code></a> linking
-the APIs by offering the <a href="wxDC.html"><code class="inline">wxDC</code></a> API on top of a <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a>.</p><p><a href="wxDC.html"><code class="inline">wxDC</code></a> is an abstract base class and cannot be created directly. Use
-<a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a>, <a href="wxClientDC.html"><code class="inline">wxClientDC</code></a>, <a href="wxWindowDC.html"><code class="inline">wxWindowDC</code></a>, <a href="wxScreenDC.html"><code class="inline">wxScreenDC</code></a>, <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a> or
-<code class="inline">wxPrinterDC</code> (not implemented in wx). Notice that device contexts which are
-associated with windows (i.e. <a href="wxClientDC.html"><code class="inline">wxClientDC</code></a>, <a href="wxWindowDC.html"><code class="inline">wxWindowDC</code></a> and <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a>)
-use the window font and colours by default (starting with wxWidgets 2.9.0) but
-the other device context classes use system-default values so you always must
-set the appropriate fonts and colours before using them.</p><p>In addition to the versions of the methods documented below, there are also
-versions which accept single {X,Y} parameter instead of the two wxCoord ones
-or {X,Y} and {Width,Height} instead of the four wxCoord parameters.</p><p>Beginning with wxWidgets 2.9.0 the entire <a href="wxDC.html"><code class="inline">wxDC</code></a> code has been reorganized.
-All platform dependent code (actually all drawing code) has been moved into
-backend classes which derive from a common wxDCImpl class. The user-visible
-classes such as <a href="wxClientDC.html"><code class="inline">wxClientDC</code></a> and <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a> merely forward all calls to the
-backend implementation.</p><p>Device and logical units</p><p>In the <a href="wxDC.html"><code class="inline">wxDC</code></a> context there is a distinction between <code class="inline">logical</code> units and
-<code class="inline">device</code> units.</p><p><code class="inline">Device</code> units are the units native to the particular device; e.g. for a screen,
-a device unit is a <code class="inline">pixel</code>. For a printer, the device unit is defined by the
-resolution of the printer (usually given in <code class="inline">DPI:</code> dot-per-inch).</p><p>All <a href="wxDC.html"><code class="inline">wxDC</code></a> functions use instead <code class="inline">logical</code> units, unless where explicitly
-stated. Logical units are arbitrary units mapped to device units using the
-current mapping mode (see <a href="#setMapMode/2"><code class="inline">setMapMode/2</code></a>).</p><p>This mechanism allows reusing the same code which prints on e.g. a window on the
-screen to print on e.g. a paper.</p><p>Support for Transparency / Alpha Channel</p><p>In general <a href="wxDC.html"><code class="inline">wxDC</code></a> methods don't support alpha transparency and the alpha
-component of <a href="wx.html#t:wx_colour/0"><code class="inline">wx_color()</code></a> is simply ignored and you need
-to use <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a> for full transparency support. There are, however,
-a few exceptions: first, under macOS and GTK+ 3 colours with alpha channel are
-supported in all the normal wxDC-derived classes as they use
-<a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a> internally. Second, under all platforms <code class="inline">wxSVGFileDC</code> (not
-implemented in wx) also fully supports alpha channel. In both of these cases the
-instances of <a href="wxPen.html"><code class="inline">wxPen</code></a> or <a href="wxBrush.html"><code class="inline">wxBrush</code></a> that are built from
-<a href="wx.html#t:wx_colour/0"><code class="inline">wx_color()</code></a> use the colour's alpha values when stroking
-or filling.</p><p>Support for Transformation Matrix</p><p>On some platforms (currently under MSW, GTK+ 3, macOS) <a href="wxDC.html"><code class="inline">wxDC</code></a> has support for
-applying an arbitrary affine transformation matrix to its coordinate system
-(since 3.1.1 this feature is also supported by <a href="wxGCDC.html"><code class="inline">wxGCDC</code></a> in all ports). Call
-<code class="inline">CanUseTransformMatrix()</code> (not implemented in wx) to check if this support is
-available and then call <code class="inline">SetTransformMatrix()</code> (not implemented in wx) if it is.
-If the transformation matrix is not supported, <code class="inline">SetTransformMatrix()</code> (not
-implemented in wx) always simply returns <code class="inline">false</code> and doesn't do anything.</p><p>This feature is only available when <code class="inline">wxUSE_DC_TRANSFORM_MATRIX</code> build option is
-enabled.</p><p>See: <a href="https://docs.wxwidgets.org/3.1/overview_dc.html#overview_dc">Overview dc</a>,
-<a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a>, <code class="inline">wxDCFontChanger</code> (not implemented in wx),
-<code class="inline">wxDCTextColourChanger</code> (not implemented in wx), <code class="inline">wxDCPenChanger</code> (not
-implemented in wx), <code class="inline">wxDCBrushChanger</code> (not implemented in wx), <code class="inline">wxDCClipper</code>
-(not implemented in wx)</p><p>wxWidgets docs: <a href="https://docs.wxwidgets.org/3.1/classwx_d_c.html">wxDC</a></p>
+<p>A <a href="wxDC.html"><code class="inline">wxDC</code></a> is a <code class="inline">&quot;device context&quot;</code> onto which graphics and text can be drawn.</p><p>It is intended to represent different output devices and offers a common abstract API for
+drawing on any of them.</p><p>wxWidgets offers an alternative drawing API based on the modern drawing backends GDI+,
+CoreGraphics, Cairo and Direct2D. See <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a>, <a href="wxGraphicsRenderer.html"><code class="inline">wxGraphicsRenderer</code></a> and
+related classes. There is also a <a href="wxGCDC.html"><code class="inline">wxGCDC</code></a> linking the APIs by offering the <a href="wxDC.html"><code class="inline">wxDC</code></a> API
+on top of a <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a>.</p><p><a href="wxDC.html"><code class="inline">wxDC</code></a> is an abstract base class and cannot be created directly. Use <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a>, <a href="wxClientDC.html"><code class="inline">wxClientDC</code></a>, <a href="wxWindowDC.html"><code class="inline">wxWindowDC</code></a>, <a href="wxScreenDC.html"><code class="inline">wxScreenDC</code></a>, <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a>
+or <code class="inline">wxPrinterDC</code> (not implemented in wx). Notice that device contexts which are
+associated with windows (i.e. <a href="wxClientDC.html"><code class="inline">wxClientDC</code></a>, <a href="wxWindowDC.html"><code class="inline">wxWindowDC</code></a> and <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a>) use the
+window font and colours by default (starting with wxWidgets 2.9.0) but the other device
+context classes use system-default values so you always must set the appropriate fonts and
+colours before using them.</p><p>In addition to the versions of the methods documented below, there are also versions
+which accept single {X,Y} parameter instead of the two wxCoord ones or {X,Y} and
+{Width,Height} instead of the four wxCoord parameters.</p><p>Beginning with wxWidgets 2.9.0 the entire <a href="wxDC.html"><code class="inline">wxDC</code></a> code has been reorganized. All
+platform dependent code (actually all drawing code) has been moved into backend classes
+which derive from a common wxDCImpl class. The user-visible classes such as <a href="wxClientDC.html"><code class="inline">wxClientDC</code></a>
+and <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a> merely forward all calls to the backend implementation.</p><p>Device and logical units</p><p>In the <a href="wxDC.html"><code class="inline">wxDC</code></a> context there is a distinction between <code class="inline">logical</code> units and <code class="inline">device</code> units.</p><p><code class="inline">Device</code> units are the units native to the particular device; e.g. for a screen, a device
+unit is a <code class="inline">pixel</code>. For a printer, the device unit is defined by the resolution of the
+printer (usually given in <code class="inline">DPI:</code> dot-per-inch).</p><p>All <a href="wxDC.html"><code class="inline">wxDC</code></a> functions use instead <code class="inline">logical</code> units, unless where explicitly stated.
+Logical units are arbitrary units mapped to device units using the current mapping mode
+(see <a href="#setMapMode/2"><code class="inline">setMapMode/2</code></a>).</p><p>This mechanism allows reusing the same code which prints on e.g. a window on the screen
+to print on e.g. a paper.</p><p>Support for Transparency / Alpha Channel</p><p>In general <a href="wxDC.html"><code class="inline">wxDC</code></a> methods don't support alpha transparency and the alpha component of <code class="inline">wx_color()</code>
+is simply ignored and you need to use <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a> for full transparency support.
+There are, however, a few exceptions: first, under macOS and GTK+ 3 colours with alpha
+channel are supported in all the normal wxDC-derived classes as they use <a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a>
+internally. Second, under all platforms <code class="inline">wxSVGFileDC</code> (not implemented in wx) also fully
+supports alpha channel. In both of these cases the instances of <a href="wxPen.html"><code class="inline">wxPen</code></a> or <a href="wxBrush.html"><code class="inline">wxBrush</code></a>
+that are built from <code class="inline">wx_color()</code> use the colour's alpha values when stroking or filling.</p><p>Support for Transformation Matrix</p><p>On some platforms (currently under MSW, GTK+ 3, macOS) <a href="wxDC.html"><code class="inline">wxDC</code></a> has support for applying
+an arbitrary affine transformation matrix to its coordinate system (since 3.1.1 this
+feature is also supported by <a href="wxGCDC.html"><code class="inline">wxGCDC</code></a> in all ports). Call <code class="inline">CanUseTransformMatrix()</code> (not
+implemented in wx) to check if this support is available and then call <code class="inline">SetTransformMatrix()</code>
+(not implemented in wx) if it is. If the transformation matrix is not supported, <code class="inline">SetTransformMatrix()</code>
+(not implemented in wx) always simply returns <code class="inline">false</code> and doesn't do anything.</p><p>This feature is only available when <code class="inline">wxUSE_DC_TRANSFORM_MATRIX</code> build option is enabled.</p><p>See:</p><ul><li><p><a href="https://docs.wxwidgets.org/3.2/overview_dc.html#overview_dc">Overview dc</a></p></li><li><p><a href="wxGraphicsContext.html"><code class="inline">wxGraphicsContext</code></a></p></li></ul><p>wxWidgets docs: <a href="https://docs.wxwidgets.org/3.2/classwx_d_c.html">wxDC</a></p>
     </section>
 
 </div>
@@ -208,6 +195,8 @@ implemented in wx), <code class="inline">wxDCBrushChanger</code> (not implemente
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#blit/6"><code class="inline">blit(This, Dest, Size, Source, Src, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -226,8 +215,8 @@ implemented in wx), <code class="inline">wxDCBrushChanger</code> (not implemente
 
       </div>
 
-        <div class="summary-synopsis"><p>Adds the specified point to the bounding box which can be retrieved with
-<a href="#minX/1"><code class="inline">minX/1</code></a>, <a href="#maxX/1"><code class="inline">maxX/1</code></a> and <a href="#minY/1"><code class="inline">minY/1</code></a>, <a href="#maxY/1"><code class="inline">maxY/1</code></a> functions.</p></div>
+        <div class="summary-synopsis"><p>Adds the specified point to the bounding box which can be retrieved with <a href="#minX/1"><code class="inline">minX/1</code></a>, <a href="#maxX/1"><code class="inline">maxX/1</code></a>
+and <a href="#minY/1"><code class="inline">minY/1</code></a>, <a href="#maxY/1"><code class="inline">maxY/1</code></a> functions.</p></div>
 
     </div>
 
@@ -247,8 +236,8 @@ implemented in wx), <code class="inline">wxDCBrushChanger</code> (not implemente
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -268,8 +257,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Convert <code class="inline">device</code> X coordinate to logical coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Convert <code class="inline">device</code> X coordinate to logical coordinate, using the current mapping mode, user
+scale factor, device origin and axis orientation.</p></div>
 
     </div>
 
@@ -279,8 +268,8 @@ mode, user scale factor, device origin and axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Convert <code class="inline">device</code> X coordinate to relative logical coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Convert <code class="inline">device</code> X coordinate to relative logical coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p></div>
 
     </div>
 
@@ -290,8 +279,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Converts <code class="inline">device</code> Y coordinate to logical coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Converts <code class="inline">device</code> Y coordinate to logical coordinate, using the current mapping mode,
+user scale factor, device origin and axis orientation.</p></div>
 
     </div>
 
@@ -301,8 +290,8 @@ mode, user scale factor, device origin and axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Convert <code class="inline">device</code> Y coordinate to relative logical coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Convert <code class="inline">device</code> Y coordinate to relative logical coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p></div>
 
     </div>
 
@@ -312,8 +301,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -323,6 +312,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#drawBitmap/4"><code class="inline">drawBitmap(This, Bmp, Pt, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -331,8 +322,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -342,8 +333,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -353,8 +344,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -364,8 +355,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -375,8 +366,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -386,8 +377,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -397,8 +388,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -408,6 +399,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#drawLabel/4"><code class="inline">drawLabel(This, Text, Rect, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -416,8 +409,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -427,8 +420,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -438,6 +431,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#drawLines/3"><code class="inline">drawLines(This, Points, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -446,8 +441,7 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Draws lines using an array of points of size <code class="inline">n</code> adding the optional offset
-coordinate.</p></div>
+        <div class="summary-synopsis"><p>Draws lines using an array of points of size <code class="inline">n</code> adding the optional offset coordinate.</p></div>
 
     </div>
 
@@ -457,8 +451,8 @@ coordinate.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -468,6 +462,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#drawPolygon/3"><code class="inline">drawPolygon(This, Points, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -476,8 +472,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Draws a filled polygon using an array of points of size <code class="inline">n</code>, adding the optional
-offset coordinate.</p></div>
+        <div class="summary-synopsis"><p>Draws a filled polygon using an array of points of size <code class="inline">n</code>, adding the optional offset
+coordinate.</p></div>
 
     </div>
 
@@ -487,8 +483,8 @@ offset coordinate.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -498,8 +494,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -509,8 +505,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -520,8 +516,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -531,8 +527,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -542,8 +538,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -573,6 +569,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#floodFill/4"><code class="inline">floodFill(This, Pt, Col, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -581,8 +579,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -602,8 +600,7 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Returns the current background mode: <code class="inline">wxPENSTYLE_SOLID</code> or
-<code class="inline">wxPENSTYLE_TRANSPARENT</code>.</p></div>
+        <div class="summary-synopsis"><p>Returns the current background mode: <code class="inline">wxPENSTYLE\_SOLID</code> or <code class="inline">wxPENSTYLE\_TRANSPARENT</code>.</p></div>
 
     </div>
 
@@ -754,8 +751,8 @@ corresponding character of <code class="inline">text</code>.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -765,8 +762,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -786,8 +783,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -827,9 +824,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Fill the area specified by rect with a radial gradient, starting from
-<code class="inline">initialColour</code> at the centre of the circle and fading to <code class="inline">destColour</code> on the
-circle outside.</p></div>
+        <div class="summary-synopsis"><p>Fill the area specified by rect with a radial gradient, starting from <code class="inline">initialColour</code> at
+the centre of the circle and fading to <code class="inline">destColour</code> on the circle outside.</p></div>
 
     </div>
 
@@ -839,9 +835,8 @@ circle outside.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Fill the area specified by rect with a radial gradient, starting from
-<code class="inline">initialColour</code> at the centre of the circle and fading to <code class="inline">destColour</code> on the
-circle outside.</p></div>
+        <div class="summary-synopsis"><p>Fill the area specified by rect with a radial gradient, starting from <code class="inline">initialColour</code> at
+the centre of the circle and fading to <code class="inline">destColour</code> on the circle outside.</p></div>
 
     </div>
 
@@ -851,6 +846,8 @@ circle outside.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Equivalent to <a href="#gradientFillLinear/5"><code class="inline">gradientFillLinear(This, Rect, InitialColour, DestColour, [])</code></a>.</p></div>
+
     </div>
 
     <div class="summary-row">
@@ -859,8 +856,8 @@ circle outside.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Fill the area specified by <code class="inline">rect</code> with a linear gradient, starting from
-<code class="inline">initialColour</code> and eventually fading to <code class="inline">destColour</code>.</p></div>
+        <div class="summary-synopsis"><p>Fill the area specified by <code class="inline">rect</code> with a linear gradient, starting from <code class="inline">initialColour</code>
+and eventually fading to <code class="inline">destColour</code>.</p></div>
 
     </div>
 
@@ -880,8 +877,8 @@ circle outside.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Converts logical X coordinate to device coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Converts logical X coordinate to device coordinate, using the current mapping mode, user
+scale factor, device origin and axis orientation.</p></div>
 
     </div>
 
@@ -891,8 +888,8 @@ mode, user scale factor, device origin and axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Converts logical X coordinate to relative device coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Converts logical X coordinate to relative device coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p></div>
 
     </div>
 
@@ -902,8 +899,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Converts logical Y coordinate to device coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Converts logical Y coordinate to device coordinate, using the current mapping mode, user
+scale factor, device origin and axis orientation.</p></div>
 
     </div>
 
@@ -913,8 +910,8 @@ mode, user scale factor, device origin and axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Converts logical Y coordinate to relative device coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p></div>
+        <div class="summary-synopsis"><p>Converts logical Y coordinate to relative device coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p></div>
 
     </div>
 
@@ -964,8 +961,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Resets the bounding box: after a call to this function, the bounding box doesn't
-contain anything.</p></div>
+        <div class="summary-synopsis"><p>Resets the bounding box: after a call to this function, the bounding box doesn't contain
+anything.</p></div>
 
     </div>
 
@@ -975,8 +972,8 @@ contain anything.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Sets the x and y axis orientation (i.e. the direction from lowest to highest
-values on the axis).</p></div>
+        <div class="summary-synopsis"><p>Sets the x and y axis orientation (i.e. the direction from lowest to highest values on
+the axis).</p></div>
 
     </div>
 
@@ -996,7 +993,7 @@ values on the axis).</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p><code class="inline">mode</code> may be one of <code class="inline">wxPENSTYLE_SOLID</code> and <code class="inline">wxPENSTYLE_TRANSPARENT</code>.</p></div>
+        <div class="summary-synopsis"><p><code class="inline">mode</code> may be one of <code class="inline">wxPENSTYLE\_SOLID</code> and <code class="inline">wxPENSTYLE\_TRANSPARENT</code>.</p></div>
 
     </div>
 
@@ -1016,8 +1013,8 @@ values on the axis).</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -1027,8 +1024,8 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p></div>
+        <div class="summary-synopsis"><p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p></div>
 
     </div>
 
@@ -1038,8 +1035,7 @@ the above function only in what argument(s) it accepts.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Sets the device origin (i.e. the origin in pixels after scaling has been
-applied).</p></div>
+        <div class="summary-synopsis"><p>Sets the device origin (i.e. the origin in pixels after scaling has been applied).</p></div>
 
     </div>
 
@@ -1079,8 +1075,8 @@ applied).</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The mapping mode of the device context defines the unit of measurement used to
-convert <code class="inline">logical</code> units to <code class="inline">device</code> units.</p></div>
+        <div class="summary-synopsis"><p>The mapping mode of the device context defines the unit of measurement used to convert <code class="inline">logical</code>
+units to <code class="inline">device</code> units.</p></div>
 
     </div>
 
@@ -1090,8 +1086,8 @@ convert <code class="inline">logical</code> units to <code class="inline">device
 
       </div>
 
-        <div class="summary-synopsis"><p>If this is a window DC or memory DC, assigns the given palette to the window or
-bitmap associated with the DC.</p></div>
+        <div class="summary-synopsis"><p>If this is a window DC or memory DC, assigns the given palette to the window or bitmap
+associated with the DC.</p></div>
 
     </div>
 
@@ -1177,7 +1173,7 @@ bitmap associated with the DC.</p></div>
     </a>
     <h1 class="signature" translate="no">wxDC()</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L127" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L117" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1217,7 +1213,7 @@ bitmap associated with the DC.</p></div>
     </a>
     <h1 class="signature" translate="no">blit(This, Dest, Size, Source, Src)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L137" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L126" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1239,7 +1235,7 @@ bitmap associated with the DC.</p></div>
 
       </div>
 
-
+<p>Equivalent to <a href="#blit/6"><code class="inline">blit(This, Dest, Size, Source, Src, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="blit/6">
@@ -1251,7 +1247,7 @@ bitmap associated with the DC.</p></div>
     </a>
     <h1 class="signature" translate="no">blit/6</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L156" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1277,14 +1273,11 @@ bitmap associated with the DC.</p></div>
 
       </div>
 
-<p>Copy from a source DC to this DC.</p><p>With this method you can specify the destination coordinates and the size of
-area to copy which will be the same for both the source and target DCs. If you
-need to apply scaling while copying, use <code class="inline">StretchBlit()</code> (not implemented in
-wx).</p><p>Notice that source DC coordinates <code class="inline">xsrc</code> and <code class="inline">ysrc</code> are interpreted using the
-current source DC coordinate system, i.e. the scale, origin position and axis
-directions are taken into account when transforming them to physical (pixel)
-coordinates.</p><p>Remark: There is partial support for <a href="#blit/6"><code class="inline">blit/6</code></a> in <a href="wxPostScriptDC.html"><code class="inline">wxPostScriptDC</code></a>, under X.</p><p>See: <code class="inline">StretchBlit()</code> (not implemented in wx), <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a>, <a href="wxBitmap.html"><code class="inline">wxBitmap</code></a>,
-<a href="wxMask.html"><code class="inline">wxMask</code></a></p>
+<p>Copy from a source DC to this DC.</p><p>With this method you can specify the destination coordinates and the size of area to copy
+which will be the same for both the source and target DCs. If you need to apply scaling
+while copying, use <code class="inline">StretchBlit()</code> (not implemented in wx).</p><p>Notice that source DC coordinates <code class="inline">xsrc</code> and <code class="inline">ysrc</code> are interpreted using the current
+source DC coordinate system, i.e. the scale, origin position and axis directions are taken
+into account when transforming them to physical (pixel) coordinates.</p><p>Remark: There is partial support for <a href="#blit/6"><code class="inline">blit/6</code></a> in <a href="wxPostScriptDC.html"><code class="inline">wxPostScriptDC</code></a>, under X.</p><p>See:</p><ul><li><p><a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a></p></li><li><p><a href="wxBitmap.html"><code class="inline">wxBitmap</code></a></p></li><li><p><a href="wxMask.html"><code class="inline">wxMask</code></a></p></li></ul>
   </section>
 </section>
 <section class="detail" id="calcBoundingBox/3">
@@ -1296,7 +1289,7 @@ coordinates.</p><p>Remark: There is partial support for <a href="#blit/6"><code 
     </a>
     <h1 class="signature" translate="no">calcBoundingBox(This, X, Y)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L187" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L176" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1312,8 +1305,8 @@ coordinates.</p><p>Remark: There is partial support for <a href="#blit/6"><code 
 
       </div>
 
-<p>Adds the specified point to the bounding box which can be retrieved with
-<a href="#minX/1"><code class="inline">minX/1</code></a>, <a href="#maxX/1"><code class="inline">maxX/1</code></a> and <a href="#minY/1"><code class="inline">minY/1</code></a>, <a href="#maxY/1"><code class="inline">maxY/1</code></a> functions.</p><p>See: <a href="#resetBoundingBox/1"><code class="inline">resetBoundingBox/1</code></a></p>
+<p>Adds the specified point to the bounding box which can be retrieved with <a href="#minX/1"><code class="inline">minX/1</code></a>, <a href="#maxX/1"><code class="inline">maxX/1</code></a>
+and <a href="#minY/1"><code class="inline">minY/1</code></a>, <a href="#maxY/1"><code class="inline">maxY/1</code></a> functions.</p><p>See: <a href="#resetBoundingBox/1"><code class="inline">resetBoundingBox/1</code></a></p>
   </section>
 </section>
 <section class="detail" id="clear/1">
@@ -1325,7 +1318,7 @@ coordinates.</p><p>Remark: There is partial support for <a href="#blit/6"><code 
     </a>
     <h1 class="signature" translate="no">clear(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L205" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L191" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1341,10 +1334,8 @@ coordinates.</p><p>Remark: There is partial support for <a href="#blit/6"><code 
 
       </div>
 
-<p>Clears the device context using the current background brush.</p><p>Note that <a href="#setBackground/2"><code class="inline">setBackground/2</code></a> method must be used to set the brush used by
-<a href="#clear/1"><code class="inline">clear/1</code></a>, the brush used for filling the shapes set by <a href="#setBrush/2"><code class="inline">setBrush/2</code></a> is ignored
-by it.</p><p>If no background brush was set, solid white brush is used to clear the device
-context.</p>
+<p>Clears the device context using the current background brush.</p><p>Note that <a href="#setBackground/2"><code class="inline">setBackground/2</code></a> method must be used to set the brush used by <a href="#clear/1"><code class="inline">clear/1</code></a>, the brush used for filling the
+shapes set by <a href="#setBrush/2"><code class="inline">setBrush/2</code></a> is ignored by it.</p><p>If no background brush was set, solid white brush is used to clear the device context.</p>
   </section>
 </section>
 <section class="detail" id="crossHair/2">
@@ -1356,7 +1347,7 @@ context.</p>
     </a>
     <h1 class="signature" translate="no">crossHair(This, Pt)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L216" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L201" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1372,8 +1363,8 @@ context.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="destroyClippingRegion/1">
@@ -1385,7 +1376,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">destroyClippingRegion(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L229" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L213" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1413,7 +1404,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">deviceToLogicalX(This, X)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L240" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L223" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1429,8 +1420,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>Convert <code class="inline">device</code> X coordinate to logical coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p>
+<p>Convert <code class="inline">device</code> X coordinate to logical coordinate, using the current mapping mode, user
+scale factor, device origin and axis orientation.</p>
   </section>
 </section>
 <section class="detail" id="deviceToLogicalXRel/2">
@@ -1442,7 +1433,7 @@ mode, user scale factor, device origin and axis orientation.</p>
     </a>
     <h1 class="signature" translate="no">deviceToLogicalXRel(This, X)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L255" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L237" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1458,8 +1449,8 @@ mode, user scale factor, device origin and axis orientation.</p>
 
       </div>
 
-<p>Convert <code class="inline">device</code> X coordinate to relative logical coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a width, for example.</p>
+<p>Convert <code class="inline">device</code> X coordinate to relative logical coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a width, for example.</p>
   </section>
 </section>
 <section class="detail" id="deviceToLogicalY/2">
@@ -1471,7 +1462,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">deviceToLogicalY(This, Y)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L268" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L249" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1487,8 +1478,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
 
       </div>
 
-<p>Converts <code class="inline">device</code> Y coordinate to logical coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p>
+<p>Converts <code class="inline">device</code> Y coordinate to logical coordinate, using the current mapping mode,
+user scale factor, device origin and axis orientation.</p>
   </section>
 </section>
 <section class="detail" id="deviceToLogicalYRel/2">
@@ -1500,7 +1491,7 @@ mode, user scale factor, device origin and axis orientation.</p>
     </a>
     <h1 class="signature" translate="no">deviceToLogicalYRel(This, Y)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L283" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L263" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1516,8 +1507,8 @@ mode, user scale factor, device origin and axis orientation.</p>
 
       </div>
 
-<p>Convert <code class="inline">device</code> Y coordinate to relative logical coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a height, for example.</p>
+<p>Convert <code class="inline">device</code> Y coordinate to relative logical coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a height, for example.</p>
   </section>
 </section>
 <section class="detail" id="drawArc/4">
@@ -1529,7 +1520,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">drawArc(This, PtStart, PtEnd, Centre)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L296" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L275" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1550,8 +1541,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawBitmap/3">
@@ -1563,7 +1554,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawBitmap(This, Bmp, Pt)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L305" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L284" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1583,7 +1574,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-
+<p>Equivalent to <a href="#drawBitmap/4"><code class="inline">drawBitmap(This, Bmp, Pt, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="drawBitmap/4">
@@ -1595,7 +1586,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawBitmap/4</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L317" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L295" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1616,8 +1607,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawCheckMark/2">
@@ -1629,7 +1620,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawCheckMark(This, Rect)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L333" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L310" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1648,8 +1639,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawCircle/3">
@@ -1661,7 +1652,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawCircle(This, Pt, Radius)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L345" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L321" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1678,8 +1669,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawEllipse/2">
@@ -1691,7 +1682,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawEllipse(This, Rect)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L357" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L332" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1710,8 +1701,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawEllipse/3">
@@ -1723,7 +1714,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawEllipse(This, Pt, Size)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L369" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L343" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1743,8 +1734,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawEllipticArc/5">
@@ -1756,7 +1747,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawEllipticArc(This, Pt, Sz, Sa, Ea)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L381" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L354" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1778,8 +1769,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawIcon/3">
@@ -1791,7 +1782,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawIcon(This, Icon, Pt)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L365" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1808,8 +1799,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawLabel/3">
@@ -1821,7 +1812,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawLabel(This, Text, Rect)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L403" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L375" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1841,7 +1832,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-
+<p>Equivalent to <a href="#drawLabel/4"><code class="inline">drawLabel(This, Text, Rect, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="drawLabel/4">
@@ -1853,7 +1844,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawLabel/4</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L416" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L387" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1874,8 +1865,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawLine/3">
@@ -1887,7 +1878,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawLine(This, Pt1, Pt2)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L433" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L403" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1907,8 +1898,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawLines/2">
@@ -1920,7 +1911,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawLines(This, Points)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L442" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L412" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1936,7 +1927,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-
+<p>Equivalent to <a href="#drawLines/3"><code class="inline">drawLines(This, Points, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="drawLines/3">
@@ -1948,7 +1939,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawLines/3</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L457" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L425" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1968,8 +1959,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>Draws lines using an array of points of size <code class="inline">n</code> adding the optional offset
-coordinate.</p><p>The current pen is used for drawing the lines.</p>
+<p>Draws lines using an array of points of size <code class="inline">n</code> adding the optional offset coordinate.</p><p>The current pen is used for drawing the lines.</p>
   </section>
 </section>
 <section class="detail" id="drawPoint/2">
@@ -1981,7 +1971,7 @@ coordinate.</p><p>The current pen is used for drawing the lines.</p>
     </a>
     <h1 class="signature" translate="no">drawPoint(This, Pt)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L510" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L475" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1997,8 +1987,8 @@ coordinate.</p><p>The current pen is used for drawing the lines.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawPolygon/2">
@@ -2010,7 +2000,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawPolygon(This, Points)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L470" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L438" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2026,7 +2016,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-
+<p>Equivalent to <a href="#drawPolygon/3"><code class="inline">drawPolygon(This, Points, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="drawPolygon/3">
@@ -2038,7 +2028,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawPolygon/3</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L493" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L459" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2059,10 +2049,9 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>Draws a filled polygon using an array of points of size <code class="inline">n</code>, adding the optional
-offset coordinate.</p><p>The first and last points are automatically closed.</p><p>The last argument specifies the fill rule: <code class="inline">wxODDEVEN_RULE</code> (the default) or
-<code class="inline">wxWINDING_RULE</code>.</p><p>The current pen is used for drawing the outline, and the current brush for
-filling the shape. Using a transparent brush suppresses filling.</p>
+<p>Draws a filled polygon using an array of points of size <code class="inline">n</code>, adding the optional offset
+coordinate.</p><p>The first and last points are automatically closed.</p><p>The last argument specifies the fill rule: <code class="inline">wxODDEVEN_RULE</code> (the default) or <code class="inline">wxWINDING_RULE</code>.</p><p>The current pen is used for drawing the outline, and the current brush for filling the
+shape. Using a transparent brush suppresses filling.</p>
   </section>
 </section>
 <section class="detail" id="drawRectangle/2">
@@ -2074,7 +2063,7 @@ filling the shape. Using a transparent brush suppresses filling.</p>
     </a>
     <h1 class="signature" translate="no">drawRectangle(This, Rect)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L522" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L486" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2093,8 +2082,8 @@ filling the shape. Using a transparent brush suppresses filling.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawRectangle/3">
@@ -2106,7 +2095,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawRectangle(This, Pt, Sz)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L534" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L497" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2126,8 +2115,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawRotatedText/4">
@@ -2139,7 +2128,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawRotatedText(This, Text, Point, Angle)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L546" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L508" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2160,8 +2149,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawRoundedRectangle/3">
@@ -2173,7 +2162,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawRoundedRectangle(This, Rect, Radius)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L559" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L520" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2194,8 +2183,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawRoundedRectangle/4">
@@ -2207,7 +2196,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawRoundedRectangle(This, Pt, Sz, Radius)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L571" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L531" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2228,8 +2217,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="drawText/3">
@@ -2241,7 +2230,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">drawText(This, Text, Pt)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L583" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L542" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2259,8 +2248,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="endDoc/1">
@@ -2272,7 +2261,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">endDoc(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L593" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L551" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2300,7 +2289,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">endPage(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L601" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L558" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2328,7 +2317,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">floodFill(This, Pt, Col)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L609" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L566" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2345,7 +2334,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-
+<p>Equivalent to <a href="#floodFill/4"><code class="inline">floodFill(This, Pt, Col, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="floodFill/4">
@@ -2357,7 +2346,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">floodFill/4</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L622" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L578" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2378,8 +2367,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="getBackground/1">
@@ -2391,7 +2380,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getBackground(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L639" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L594" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2419,7 +2408,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getBackgroundMode(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L653" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L606" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2435,8 +2424,7 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>Returns the current background mode: <code class="inline">wxPENSTYLE_SOLID</code> or
-<code class="inline">wxPENSTYLE_TRANSPARENT</code>.</p><p>See: <a href="#setBackgroundMode/2"><code class="inline">setBackgroundMode/2</code></a></p>
+<p>Returns the current background mode: <code class="inline">wxPENSTYLE\_SOLID</code> or <code class="inline">wxPENSTYLE\_TRANSPARENT</code>.</p><p>See: <a href="#setBackgroundMode/2"><code class="inline">setBackgroundMode/2</code></a></p>
   </section>
 </section>
 <section class="detail" id="getBrush/1">
@@ -2448,7 +2436,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getBrush(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L666" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L618" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2476,7 +2464,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getCharHeight(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L675" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L626" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2504,7 +2492,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getCharWidth(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L684" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L634" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2532,7 +2520,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getClippingBox(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L700" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L659" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2555,9 +2543,9 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p><code class="inline">Gets the rectangle surrounding the current clipping region. If no clipping region is set this function returns the extent of the device context. @remarks Clipping region is given in logical coordinates. @param x If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the logical horizontal coordinate of the top left corner of the clipping region if the function returns true or 0 otherwise. @param y If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the logical vertical coordinate of the top left corner of the clipping region if the function returns true or 0 otherwise. @param width If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the width of the clipping region if the function returns true or the device context width otherwise. @param height If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the height of the clipping region if the function returns true or the device context height otherwise.</code></p><p>Return: true if there is a clipping region or false if there is no active
-clipping region (note that this return value is available only since wxWidgets
-3.1.2, this function didn't return anything in the previous versions).</p>
+<p><code class="inline">Gets the rectangle surrounding the current clipping region. If no clipping region is set this function returns the extent of the device context. @remarks Clipping region is given in logical coordinates. @param x If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the logical horizontal coordinate of the top left corner of the clipping region if the function returns true or 0 otherwise. @param y If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the logical vertical coordinate of the top left corner of the clipping region if the function returns true or 0 otherwise. @param width If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the width of the clipping region if the function returns true or the device context width otherwise. @param height If non-&lt;span class='literal'&gt;NULL&lt;/span&gt;, filled in with the height of the clipping region if the function returns true or the device context height otherwise.</code></p><p>Return: true if there is a clipping region or false if there is no active clipping region
+(note that this return value is available only since wxWidgets 3.1.2, this function didn't
+return anything in the previous versions).</p>
   </section>
 </section>
 <section class="detail" id="getFont/1">
@@ -2569,7 +2557,7 @@ clipping region (note that this return value is available only since wxWidgets
     </a>
     <h1 class="signature" translate="no">getFont(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L715" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L673" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2586,8 +2574,8 @@ clipping region (note that this return value is available only since wxWidgets
       </div>
 
 <p>Gets the current font.</p><p>Notice that even although each device context object has some default font after
-creation, this method would return a ?wxNullFont initially and only after
-calling <a href="#setFont/2"><code class="inline">setFont/2</code></a> a valid font is returned.</p>
+creation, this method would return a ?wxNullFont initially and only after calling <a href="#setFont/2"><code class="inline">setFont/2</code></a> a valid
+font is returned.</p>
   </section>
 </section>
 <section class="detail" id="getLayoutDirection/1">
@@ -2599,7 +2587,7 @@ calling <a href="#setFont/2"><code class="inline">setFont/2</code></a> a valid f
     </a>
     <h1 class="signature" translate="no">getLayoutDirection(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L733" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L689" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2615,9 +2603,8 @@ calling <a href="#setFont/2"><code class="inline">setFont/2</code></a> a valid f
 
       </div>
 
-<p>Gets the current layout direction of the device context.</p><p>On platforms where RTL layout is supported, the return value will either be
-<code class="inline">wxLayout_LeftToRight</code> or <code class="inline">wxLayout_RightToLeft</code>. If RTL layout is not
-supported, the return value will be <code class="inline">wxLayout_Default</code>.</p><p>See: <a href="#setLayoutDirection/2"><code class="inline">setLayoutDirection/2</code></a></p>
+<p>Gets the current layout direction of the device context.</p><p>On platforms where RTL layout is supported, the return value will either be <code class="inline">wxLayout_LeftToRight</code>
+or <code class="inline">wxLayout_RightToLeft</code>. If RTL layout is not supported, the return value will be <code class="inline">wxLayout_Default</code>.</p><p>See: <a href="#setLayoutDirection/2"><code class="inline">setLayoutDirection/2</code></a></p>
   </section>
 </section>
 <section class="detail" id="getLogicalFunction/1">
@@ -2629,7 +2616,7 @@ supported, the return value will be <code class="inline">wxLayout_Default</code>
     </a>
     <h1 class="signature" translate="no">getLogicalFunction(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L747" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L702" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2657,7 +2644,7 @@ supported, the return value will be <code class="inline">wxLayout_Default</code>
     </a>
     <h1 class="signature" translate="no">getMapMode(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L761" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L715" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2685,7 +2672,7 @@ supported, the return value will be <code class="inline">wxLayout_Default</code>
     </a>
     <h1 class="signature" translate="no">getMultiLineTextExtent(This, String)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L780" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L740" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2702,7 +2689,7 @@ supported, the return value will be <code class="inline">wxLayout_Default</code>
 
       </div>
 
-<p>Gets the dimensions of the string using the currently selected font.</p><p><code class="inline">string</code> is the text string to measure.</p><p>Return: The text extent as a {Width,Height} object.</p><p>Note: This function works with both single-line and multi-line strings.</p><p>See: <a href="wxFont.html"><code class="inline">wxFont</code></a>, <a href="#setFont/2"><code class="inline">setFont/2</code></a>, <a href="#getPartialTextExtents/2"><code class="inline">getPartialTextExtents/2</code></a>, <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a></p>
+<p>Gets the dimensions of the string using the currently selected font.</p><p><code class="inline">string</code> is the text string to measure.</p><p>Return: The text extent as a {Width,Height} object.</p><p>Note: This function works with both single-line and multi-line strings.</p><p>See:</p><ul><li><p><a href="wxFont.html"><code class="inline">wxFont</code></a></p></li><li><p><a href="#setFont/2"><code class="inline">setFont/2</code></a></p></li><li><p><a href="#getPartialTextExtents/2"><code class="inline">getPartialTextExtents/2</code></a></p></li><li><p><a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a></p></li></ul>
   </section>
 </section>
 <section class="detail" id="getMultiLineTextExtent/3">
@@ -2714,7 +2701,7 @@ supported, the return value will be <code class="inline">wxLayout_Default</code>
     </a>
     <h1 class="signature" translate="no">getMultiLineTextExtent/3</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L811" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L777" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2735,12 +2722,12 @@ supported, the return value will be <code class="inline">wxLayout_Default</code>
 
       </div>
 
-<p>Gets the dimensions of the string using the currently selected font.</p><p><code class="inline">string</code> is the text string to measure, <code class="inline">heightLine</code>, if non NULL, is where to
-store the height of a single line.</p><p>The text extent is set in the given <code class="inline">w</code> and <code class="inline">h</code> pointers.</p><p>If the optional parameter <code class="inline">font</code> is specified and valid, then it is used for the
-text extent calculation, otherwise the currently selected font is used.</p><p>If <code class="inline">string</code> is empty, its horizontal extent is 0 but, for convenience when using
-this function for allocating enough space for a possibly multi-line string, its
-vertical extent is the same as the height of an empty line of text. Please note
-that this behaviour differs from that of <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a>.</p><p>Note: This function works with both single-line and multi-line strings.</p><p>See: <a href="wxFont.html"><code class="inline">wxFont</code></a>, <a href="#setFont/2"><code class="inline">setFont/2</code></a>, <a href="#getPartialTextExtents/2"><code class="inline">getPartialTextExtents/2</code></a>, <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a></p>
+<p>Gets the dimensions of the string using the currently selected font.</p><p><code class="inline">string</code> is the text string to measure, <code class="inline">heightLine</code>, if non NULL, is where to store the
+height of a single line.</p><p>The text extent is set in the given <code class="inline">w</code> and <code class="inline">h</code> pointers.</p><p>If the optional parameter <code class="inline">font</code> is specified and valid, then it is used for the text
+extent calculation, otherwise the currently selected font is used.</p><p>If <code class="inline">string</code> is empty, its horizontal extent is 0 but, for convenience when using this
+function for allocating enough space for a possibly multi-line string, its vertical extent
+is the same as the height of an empty line of text. Please note that this behaviour
+differs from that of <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a>.</p><p>Note: This function works with both single-line and multi-line strings.</p><p>See:</p><ul><li><p><a href="wxFont.html"><code class="inline">wxFont</code></a></p></li><li><p><a href="#setFont/2"><code class="inline">setFont/2</code></a></p></li><li><p><a href="#getPartialTextExtents/2"><code class="inline">getPartialTextExtents/2</code></a></p></li><li><p><a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a></p></li></ul>
   </section>
 </section>
 <section class="detail" id="getPartialTextExtents/2">
@@ -2752,7 +2739,7 @@ that this behaviour differs from that of <a href="#getTextExtent/3"><code class=
     </a>
     <h1 class="signature" translate="no">getPartialTextExtents(This, Text)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L836" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L803" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2773,10 +2760,9 @@ that this behaviour differs from that of <a href="#getTextExtent/3"><code class=
       </div>
 
 <p>Fills the <code class="inline">widths</code> array with the widths from the beginning of <code class="inline">text</code> to the
-corresponding character of <code class="inline">text</code>.</p><p>The generic version simply builds a running total of the widths of each
-character using <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a>, however if the various platforms have a
-native API function that is faster or more accurate than the generic
-implementation then it should be used instead.</p><p>See: <a href="#getMultiLineTextExtent/3"><code class="inline">getMultiLineTextExtent/3</code></a>, <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a></p>
+corresponding character of <code class="inline">text</code>.</p><p>The generic version simply builds a running total of the widths of each character using <a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a>,
+however if the various platforms have a native API function that is faster or more
+accurate than the generic implementation then it should be used instead.</p><p>See:</p><ul><li><p><a href="#getMultiLineTextExtent/3"><code class="inline">getMultiLineTextExtent/3</code></a></p></li><li><p><a href="#getTextExtent/3"><code class="inline">getTextExtent/3</code></a></p></li></ul>
   </section>
 </section>
 <section class="detail" id="getPen/1">
@@ -2788,7 +2774,7 @@ implementation then it should be used instead.</p><p>See: <a href="#getMultiLine
     </a>
     <h1 class="signature" translate="no">getPen(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L851" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L817" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2816,7 +2802,7 @@ implementation then it should be used instead.</p><p>See: <a href="#getMultiLine
     </a>
     <h1 class="signature" translate="no">getPixel(This, Pos)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L871" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L836" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2836,9 +2822,9 @@ implementation then it should be used instead.</p><p>See: <a href="#getMultiLine
 
       </div>
 
-<p>Gets in <code class="inline">colour</code> the colour at the specified location.</p><p>This method isn't available for <a href="wxPostScriptDC.html"><code class="inline">wxPostScriptDC</code></a> or <code class="inline">wxMetafileDC</code> (not
-implemented in wx) nor for any DC in wxOSX port and simply returns false there.</p><p>Note: Setting a pixel can be done using <a href="#drawPoint/2"><code class="inline">drawPoint/2</code></a>.</p><p>Note: This method shouldn't be used with <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a> as accessing the DC while
-drawing can result in unexpected results, notably in wxGTK.</p>
+<p>Gets in <code class="inline">colour</code> the colour at the specified location.</p><p>This method isn't available for <a href="wxPostScriptDC.html"><code class="inline">wxPostScriptDC</code></a> or <code class="inline">wxMetafileDC</code> (not implemented in
+wx) nor for any DC in wxOSX port and simply returns false there.</p><p>Note: Setting a pixel can be done using <a href="#drawPoint/2"><code class="inline">drawPoint/2</code></a>.</p><p>Note: This method shouldn't be used with <a href="wxPaintDC.html"><code class="inline">wxPaintDC</code></a> as accessing the DC while drawing
+can result in unexpected results, notably in wxGTK.</p>
   </section>
 </section>
 <section class="detail" id="getPPI/1">
@@ -2850,7 +2836,7 @@ drawing can result in unexpected results, notably in wxGTK.</p>
     </a>
     <h1 class="signature" translate="no">getPPI(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L881" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L845" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2878,7 +2864,7 @@ drawing can result in unexpected results, notably in wxGTK.</p>
     </a>
     <h1 class="signature" translate="no">getSize(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L893" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L856" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2894,8 +2880,8 @@ drawing can result in unexpected results, notably in wxGTK.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="getSizeMM/1">
@@ -2907,7 +2893,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getSizeMM(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L905" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L867" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2923,8 +2909,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="getTextBackground/1">
@@ -2936,7 +2922,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getTextBackground(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L918" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L879" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2964,7 +2950,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getTextExtent(This, String)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L930" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L890" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2981,8 +2967,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="getTextExtent/3">
@@ -2994,7 +2980,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">getTextExtent/3</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L963" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L927" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3019,13 +3005,11 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>Gets the dimensions of the string using the currently selected font.</p><p><code class="inline">string</code> is the text string to measure, <code class="inline">descent</code> is the dimension from the
-baseline of the font to the bottom of the descender, and <code class="inline">externalLeading</code> is
-any extra vertical space added to the font by the font designer (usually is
-zero).</p><p>The text extent is returned in <code class="inline">w</code> and <code class="inline">h</code> pointers or as a {Width,Height}
-object depending on which version of this function is used.</p><p>If the optional parameter <code class="inline">font</code> is specified and valid, then it is used for the
-text extent calculation. Otherwise the currently selected font is.</p><p>If <code class="inline">string</code> is empty, its extent is 0 in both directions, as expected.</p><p>Note: This function only works with single-line strings.</p><p>See: <a href="wxFont.html"><code class="inline">wxFont</code></a>, <a href="#setFont/2"><code class="inline">setFont/2</code></a>, <a href="#getPartialTextExtents/2"><code class="inline">getPartialTextExtents/2</code></a>,
-<a href="#getMultiLineTextExtent/3"><code class="inline">getMultiLineTextExtent/3</code></a></p>
+<p>Gets the dimensions of the string using the currently selected font.</p><p><code class="inline">string</code> is the text string to measure, <code class="inline">descent</code> is the dimension from the baseline of
+the font to the bottom of the descender, and <code class="inline">externalLeading</code> is any extra vertical space
+added to the font by the font designer (usually is zero).</p><p>The text extent is returned in <code class="inline">w</code> and <code class="inline">h</code> pointers or as a {Width,Height} object
+depending on which version of this function is used.</p><p>If the optional parameter <code class="inline">font</code> is specified and valid, then it is used for the text
+extent calculation. Otherwise the currently selected font is.</p><p>If <code class="inline">string</code> is empty, its extent is 0 in both directions, as expected.</p><p>Note: This function only works with single-line strings.</p><p>See:</p><ul><li><p><a href="wxFont.html"><code class="inline">wxFont</code></a></p></li><li><p><a href="#setFont/2"><code class="inline">setFont/2</code></a></p></li><li><p><a href="#getPartialTextExtents/2"><code class="inline">getPartialTextExtents/2</code></a></p></li><li><p><a href="#getMultiLineTextExtent/3"><code class="inline">getMultiLineTextExtent/3</code></a></p></li></ul>
   </section>
 </section>
 <section class="detail" id="getTextForeground/1">
@@ -3037,7 +3021,7 @@ text extent calculation. Otherwise the currently selected font is.</p><p>If <cod
     </a>
     <h1 class="signature" translate="no">getTextForeground(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L981" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L944" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3065,7 +3049,7 @@ text extent calculation. Otherwise the currently selected font is.</p><p>If <cod
     </a>
     <h1 class="signature" translate="no">getUserScale(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L994" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L956" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3093,7 +3077,7 @@ text extent calculation. Otherwise the currently selected font is.</p><p>If <cod
     </a>
     <h1 class="signature" translate="no">gradientFillConcentric(This, Rect, InitialColour, DestColour)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1011" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L971" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3115,9 +3099,8 @@ text extent calculation. Otherwise the currently selected font is.</p><p>If <cod
 
       </div>
 
-<p>Fill the area specified by rect with a radial gradient, starting from
-<code class="inline">initialColour</code> at the centre of the circle and fading to <code class="inline">destColour</code> on the
-circle outside.</p><p>The circle is placed at the centre of <code class="inline">rect</code>.</p><p>Note: Currently this function is very slow, don't use it for real-time drawing.</p>
+<p>Fill the area specified by rect with a radial gradient, starting from <code class="inline">initialColour</code> at
+the centre of the circle and fading to <code class="inline">destColour</code> on the circle outside.</p><p>The circle is placed at the centre of <code class="inline">rect</code>.</p><p>Note: Currently this function is very slow, don't use it for real-time drawing.</p>
   </section>
 </section>
 <section class="detail" id="gradientFillConcentric/5">
@@ -3129,7 +3112,7 @@ circle outside.</p><p>The circle is placed at the centre of <code class="inline"
     </a>
     <h1 class="signature" translate="no">gradientFillConcentric(This, Rect, InitialColour, DestColour, CircleCenter)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1029" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L986" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3152,10 +3135,8 @@ circle outside.</p><p>The circle is placed at the centre of <code class="inline"
 
       </div>
 
-<p>Fill the area specified by rect with a radial gradient, starting from
-<code class="inline">initialColour</code> at the centre of the circle and fading to <code class="inline">destColour</code> on the
-circle outside.</p><p><code class="inline">circleCenter</code> are the relative coordinates of centre of the circle in the
-specified <code class="inline">rect</code>.</p><p>Note: Currently this function is very slow, don't use it for real-time drawing.</p>
+<p>Fill the area specified by rect with a radial gradient, starting from <code class="inline">initialColour</code> at
+the centre of the circle and fading to <code class="inline">destColour</code> on the circle outside.</p><p><code class="inline">circleCenter</code> are the relative coordinates of centre of the circle in the specified <code class="inline">rect</code>.</p><p>Note: Currently this function is very slow, don't use it for real-time drawing.</p>
   </section>
 </section>
 <section class="detail" id="gradientFillLinear/4">
@@ -3167,7 +3148,7 @@ specified <code class="inline">rect</code>.</p><p>Note: Currently this function 
     </a>
     <h1 class="signature" translate="no">gradientFillLinear(This, Rect, InitialColour, DestColour)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1038" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L995" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3188,7 +3169,7 @@ specified <code class="inline">rect</code>.</p><p>Note: Currently this function 
 
       </div>
 
-
+<p>Equivalent to <a href="#gradientFillLinear/5"><code class="inline">gradientFillLinear(This, Rect, InitialColour, DestColour, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="gradientFillLinear/5">
@@ -3200,7 +3181,7 @@ specified <code class="inline">rect</code>.</p><p>Note: Currently this function 
     </a>
     <h1 class="signature" translate="no">gradientFillLinear/5</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1055" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1010" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3222,10 +3203,9 @@ specified <code class="inline">rect</code>.</p><p>Note: Currently this function 
 
       </div>
 
-<p>Fill the area specified by <code class="inline">rect</code> with a linear gradient, starting from
-<code class="inline">initialColour</code> and eventually fading to <code class="inline">destColour</code>.</p><p>The <code class="inline">nDirection</code> specifies the direction of the colour change, default is to use
-<code class="inline">initialColour</code> on the left part of the rectangle and <code class="inline">destColour</code> on the right
-one.</p>
+<p>Fill the area specified by <code class="inline">rect</code> with a linear gradient, starting from <code class="inline">initialColour</code>
+and eventually fading to <code class="inline">destColour</code>.</p><p>The <code class="inline">nDirection</code> specifies the direction of the colour change, default is to use <code class="inline">initialColour</code>
+on the left part of the rectangle and <code class="inline">destColour</code> on the right one.</p>
   </section>
 </section>
 <section class="detail" id="isOk/1">
@@ -3237,7 +3217,7 @@ one.</p>
     </a>
     <h1 class="signature" translate="no">isOk(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1105" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3265,7 +3245,7 @@ one.</p>
     </a>
     <h1 class="signature" translate="no">logicalToDeviceX(This, X)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1070" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1024" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3281,8 +3261,8 @@ one.</p>
 
       </div>
 
-<p>Converts logical X coordinate to device coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p>
+<p>Converts logical X coordinate to device coordinate, using the current mapping mode, user
+scale factor, device origin and axis orientation.</p>
   </section>
 </section>
 <section class="detail" id="logicalToDeviceXRel/2">
@@ -3294,7 +3274,7 @@ mode, user scale factor, device origin and axis orientation.</p>
     </a>
     <h1 class="signature" translate="no">logicalToDeviceXRel(This, X)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1085" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1038" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3310,8 +3290,8 @@ mode, user scale factor, device origin and axis orientation.</p>
 
       </div>
 
-<p>Converts logical X coordinate to relative device coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a width, for example.</p>
+<p>Converts logical X coordinate to relative device coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a width, for example.</p>
   </section>
 </section>
 <section class="detail" id="logicalToDeviceY/2">
@@ -3323,7 +3303,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">logicalToDeviceY(This, Y)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1098" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1050" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3339,8 +3319,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
 
       </div>
 
-<p>Converts logical Y coordinate to device coordinate, using the current mapping
-mode, user scale factor, device origin and axis orientation.</p>
+<p>Converts logical Y coordinate to device coordinate, using the current mapping mode, user
+scale factor, device origin and axis orientation.</p>
   </section>
 </section>
 <section class="detail" id="logicalToDeviceYRel/2">
@@ -3352,7 +3332,7 @@ mode, user scale factor, device origin and axis orientation.</p>
     </a>
     <h1 class="signature" translate="no">logicalToDeviceYRel(This, Y)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1113" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1064" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3368,8 +3348,8 @@ mode, user scale factor, device origin and axis orientation.</p>
 
       </div>
 
-<p>Converts logical Y coordinate to relative device coordinate, using the current
-mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a height, for example.</p>
+<p>Converts logical Y coordinate to relative device coordinate, using the current mapping
+mode and user scale factor but ignoring the axis orientation.</p><p>Use this for converting a height, for example.</p>
   </section>
 </section>
 <section class="detail" id="maxX/1">
@@ -3381,7 +3361,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">maxX(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1123" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1073" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3409,7 +3389,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">maxY(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1132" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1081" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3437,7 +3417,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">minX(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1141" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1089" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3465,7 +3445,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">minY(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1150" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1097" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3493,7 +3473,7 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
     </a>
     <h1 class="signature" translate="no">resetBoundingBox(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1173" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1118" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3509,8 +3489,8 @@ mapping mode and user scale factor but ignoring the axis orientation.</p><p>Use 
 
       </div>
 
-<p>Resets the bounding box: after a call to this function, the bounding box doesn't
-contain anything.</p><p>See: <a href="#calcBoundingBox/3"><code class="inline">calcBoundingBox/3</code></a></p>
+<p>Resets the bounding box: after a call to this function, the bounding box doesn't contain
+anything.</p><p>See: <a href="#calcBoundingBox/3"><code class="inline">calcBoundingBox/3</code></a></p>
   </section>
 </section>
 <section class="detail" id="setAxisOrientation/3">
@@ -3522,7 +3502,7 @@ contain anything.</p><p>See: <a href="#calcBoundingBox/3"><code class="inline">c
     </a>
     <h1 class="signature" translate="no">setAxisOrientation(This, XLeftRight, YBottomUp)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1186" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1130" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3539,8 +3519,8 @@ contain anything.</p><p>See: <a href="#calcBoundingBox/3"><code class="inline">c
 
       </div>
 
-<p>Sets the x and y axis orientation (i.e. the direction from lowest to highest
-values on the axis).</p><p>The default orientation is x axis from left to right and y axis from top down.</p>
+<p>Sets the x and y axis orientation (i.e. the direction from lowest to highest values on
+the axis).</p><p>The default orientation is x axis from left to right and y axis from top down.</p>
   </section>
 </section>
 <section class="detail" id="setBackground/2">
@@ -3552,7 +3532,7 @@ values on the axis).</p><p>The default orientation is x axis from left to right 
     </a>
     <h1 class="signature" translate="no">setBackground(This, Brush)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1195" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1138" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3580,7 +3560,7 @@ values on the axis).</p><p>The default orientation is x axis from left to right 
     </a>
     <h1 class="signature" translate="no">setBackgroundMode(This, Mode)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1209" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1150" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3596,8 +3576,7 @@ values on the axis).</p><p>The default orientation is x axis from left to right 
 
       </div>
 
-<p><code class="inline">mode</code> may be one of <code class="inline">wxPENSTYLE_SOLID</code> and <code class="inline">wxPENSTYLE_TRANSPARENT</code>.</p><p>This setting determines whether text will be drawn with a background colour or
-not.</p>
+<p><code class="inline">mode</code> may be one of <code class="inline">wxPENSTYLE\_SOLID</code> and <code class="inline">wxPENSTYLE\_TRANSPARENT</code>.</p><p>This setting determines whether text will be drawn with a background colour or not.</p>
   </section>
 </section>
 <section class="detail" id="setBrush/2">
@@ -3609,7 +3588,7 @@ not.</p>
     </a>
     <h1 class="signature" translate="no">setBrush(This, Brush)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1228" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1169" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3625,11 +3604,9 @@ not.</p>
 
       </div>
 
-<p>Sets the current brush for the DC.</p><p>If the argument is ?wxNullBrush (or another invalid brush; see
-<a href="wxBrush.html#isOk/1"><code class="inline">wxBrush:isOk/1</code></a>), the current brush is selected out of the device context
-(leaving <a href="wxDC.html"><code class="inline">wxDC</code></a> without any valid brush), allowing the current brush to be
-destroyed safely.</p><p>See: <a href="wxBrush.html"><code class="inline">wxBrush</code></a>, <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a>, (for the interpretation of colours when
-drawing into a monochrome bitmap)</p>
+<p>Sets the current brush for the DC.</p><p>If the argument is ?wxNullBrush (or another invalid brush; see <a href="wxBrush.html#isOk/1"><code class="inline">wxBrush:isOk/1</code></a>), the current brush is
+selected out of the device context (leaving <a href="wxDC.html"><code class="inline">wxDC</code></a> without any valid brush), allowing
+the current brush to be destroyed safely.</p><p>See:</p><ul><li><p><a href="wxBrush.html"><code class="inline">wxBrush</code></a></p></li><li><p><a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a></p></li></ul>
   </section>
 </section>
 <section class="detail" id="setClippingRegion/2">
@@ -3641,7 +3618,7 @@ drawing into a monochrome bitmap)</p>
     </a>
     <h1 class="signature" translate="no">setClippingRegion(This, Rect)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1240" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1180" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3660,8 +3637,8 @@ drawing into a monochrome bitmap)</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="setClippingRegion/3">
@@ -3673,7 +3650,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">setClippingRegion(This, Pt, Sz)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1252" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1191" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3693,8 +3670,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>This is an overloaded member function, provided for convenience. It differs from
-the above function only in what argument(s) it accepts.</p>
+<p>This is an overloaded member function, provided for convenience. It differs from the
+above function only in what argument(s) it accepts.</p>
   </section>
 </section>
 <section class="detail" id="setDeviceOrigin/3">
@@ -3706,7 +3683,7 @@ the above function only in what argument(s) it accepts.</p>
     </a>
     <h1 class="signature" translate="no">setDeviceOrigin(This, X, Y)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1267" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1204" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3722,9 +3699,8 @@ the above function only in what argument(s) it accepts.</p>
 
       </div>
 
-<p>Sets the device origin (i.e. the origin in pixels after scaling has been
-applied).</p><p>This function may be useful in Windows printing operations for placing a graphic
-on a page.</p>
+<p>Sets the device origin (i.e. the origin in pixels after scaling has been applied).</p><p>This function may be useful in Windows printing operations for placing a graphic on a
+page.</p>
   </section>
 </section>
 <section class="detail" id="setFont/2">
@@ -3736,7 +3712,7 @@ on a page.</p>
     </a>
     <h1 class="signature" translate="no">setFont(This, Font)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1284" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1220" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3752,9 +3728,9 @@ on a page.</p>
 
       </div>
 
-<p>Sets the current font for the DC.</p><p>If the argument is ?wxNullFont (or another invalid font; see <a href="wxFont.html#isOk/1"><code class="inline">wxFont:isOk/1</code></a>),
-the current font is selected out of the device context (leaving <a href="wxDC.html"><code class="inline">wxDC</code></a> without
-any valid font), allowing the current font to be destroyed safely.</p><p>See: <a href="wxFont.html"><code class="inline">wxFont</code></a></p>
+<p>Sets the current font for the DC.</p><p>If the argument is ?wxNullFont (or another invalid font; see <a href="wxFont.html#isOk/1"><code class="inline">wxFont:isOk/1</code></a>), the current font is
+selected out of the device context (leaving <a href="wxDC.html"><code class="inline">wxDC</code></a> without any valid font), allowing the
+current font to be destroyed safely.</p><p>See: <a href="wxFont.html"><code class="inline">wxFont</code></a></p>
   </section>
 </section>
 <section class="detail" id="setLayoutDirection/2">
@@ -3766,7 +3742,7 @@ any valid font), allowing the current font to be destroyed safely.</p><p>See: <a
     </a>
     <h1 class="signature" translate="no">setLayoutDirection(This, Dir)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1298" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1233" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3794,7 +3770,7 @@ any valid font), allowing the current font to be destroyed safely.</p><p>See: <a
     </a>
     <h1 class="signature" translate="no">setLogicalFunction(This, Function)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1326" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1259" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3810,15 +3786,14 @@ any valid font), allowing the current font to be destroyed safely.</p><p>See: <a
 
       </div>
 
-<p>Sets the current logical function for the device context.</p><p>Note: This function is not fully supported in all ports, due to the limitations
-of the underlying drawing model. Notably, <code class="inline">wxINVERT</code> which was commonly used for
-drawing rubber bands or other moving outlines in the past, is not, and will not,
-be supported by wxGTK3 and wxMac. The suggested alternative is to draw
-temporarily objects normally and refresh the (affected part of the) window to
-remove them later.</p><p>It determines how a <code class="inline">source</code> pixel (from a pen or brush colour, or source device
-context if using <a href="#blit/6"><code class="inline">blit/6</code></a>) combines with a <code class="inline">destination</code> pixel in the current
-device context. Text drawing is not affected by this function.</p><p>See ?wxRasterOperationMode enumeration values for more info.</p><p>The default is <code class="inline">wxCOPY</code>, which simply draws with the current colour. The others
-combine the current colour and the background using a logical operation.</p>
+<p>Sets the current logical function for the device context.</p><p>Note: This function is not fully supported in all ports, due to the limitations of the
+underlying drawing model. Notably, <code class="inline">wxINVERT</code> which was commonly used for drawing rubber
+bands or other moving outlines in the past, is not, and will not, be supported by wxGTK3
+and wxMac. The suggested alternative is to draw temporarily objects normally and refresh
+the (affected part of the) window to remove them later.</p><p>It determines how a <code class="inline">source</code> pixel (from a pen or brush colour, or source device context
+if using <a href="#blit/6"><code class="inline">blit/6</code></a>) combines with a <code class="inline">destination</code> pixel in the current device context. Text drawing
+is not affected by this function.</p><p>See ?wxRasterOperationMode enumeration values for more info.</p><p>The default is <code class="inline">wxCOPY</code>, which simply draws with the current colour. The others combine
+the current colour and the background using a logical operation.</p>
   </section>
 </section>
 <section class="detail" id="setMapMode/2">
@@ -3830,7 +3805,7 @@ combine the current colour and the background using a logical operation.</p>
     </a>
     <h1 class="signature" translate="no">setMapMode(This, Mode)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1350" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1281" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3846,13 +3821,12 @@ combine the current colour and the background using a logical operation.</p>
 
       </div>
 
-<p>The mapping mode of the device context defines the unit of measurement used to
-convert <code class="inline">logical</code> units to <code class="inline">device</code> units.</p><p>Note that in X, text drawing isn't handled consistently with the mapping mode; a
-font is always specified in point size. However, setting the user scale (see
-<a href="#setUserScale/3"><code class="inline">setUserScale/3</code></a>) scales the text appropriately. In Windows, scalable TrueType
-fonts are always used; in X, results depend on availability of fonts, but
-usually a reasonable match is found.</p><p>The coordinate origin is always at the top left of the screen/printer.</p><p>Drawing to a Windows printer device context uses the current mapping mode, but
-mapping mode is currently ignored for PostScript output.</p>
+<p>The mapping mode of the device context defines the unit of measurement used to convert <code class="inline">logical</code>
+units to <code class="inline">device</code> units.</p><p>Note that in X, text drawing isn't handled consistently with the mapping mode; a font is
+always specified in point size. However, setting the user scale (see <a href="#setUserScale/3"><code class="inline">setUserScale/3</code></a>) scales the text
+appropriately. In Windows, scalable TrueType fonts are always used; in X, results depend
+on availability of fonts, but usually a reasonable match is found.</p><p>The coordinate origin is always at the top left of the screen/printer.</p><p>Drawing to a Windows printer device context uses the current mapping mode, but mapping
+mode is currently ignored for PostScript output.</p>
   </section>
 </section>
 <section class="detail" id="setPalette/2">
@@ -3864,7 +3838,7 @@ mapping mode is currently ignored for PostScript output.</p>
     </a>
     <h1 class="signature" translate="no">setPalette(This, Palette)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1367" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1297" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3880,9 +3854,9 @@ mapping mode is currently ignored for PostScript output.</p>
 
       </div>
 
-<p>If this is a window DC or memory DC, assigns the given palette to the window or
-bitmap associated with the DC.</p><p>If the argument is ?wxNullPalette, the current palette is selected out of the
-device context, and the original palette restored.</p><p>See: <a href="wxPalette.html"><code class="inline">wxPalette</code></a></p>
+<p>If this is a window DC or memory DC, assigns the given palette to the window or bitmap
+associated with the DC.</p><p>If the argument is ?wxNullPalette, the current palette is selected out of the device
+context, and the original palette restored.</p><p>See: <a href="wxPalette.html"><code class="inline">wxPalette</code></a></p>
   </section>
 </section>
 <section class="detail" id="setPen/2">
@@ -3894,7 +3868,7 @@ device context, and the original palette restored.</p><p>See: <a href="wxPalette
     </a>
     <h1 class="signature" translate="no">setPen(This, Pen)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1385" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1313" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3910,10 +3884,9 @@ device context, and the original palette restored.</p><p>See: <a href="wxPalette
 
       </div>
 
-<p>Sets the current pen for the DC.</p><p>If the argument is ?wxNullPen (or another invalid pen; see <a href="wxPen.html#isOk/1"><code class="inline">wxPen:isOk/1</code></a>), the
-current pen is selected out of the device context (leaving <a href="wxDC.html"><code class="inline">wxDC</code></a> without any
-valid pen), allowing the current pen to be destroyed safely.</p><p>See: <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a>, for the interpretation of colours when drawing into a
-monochrome bitmap</p>
+<p>Sets the current pen for the DC.</p><p>If the argument is ?wxNullPen (or another invalid pen; see <a href="wxPen.html#isOk/1"><code class="inline">wxPen:isOk/1</code></a>), the current pen is selected
+out of the device context (leaving <a href="wxDC.html"><code class="inline">wxDC</code></a> without any valid pen), allowing the current
+pen to be destroyed safely.</p><p>See: <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a></p>
   </section>
 </section>
 <section class="detail" id="setTextBackground/2">
@@ -3925,7 +3898,7 @@ monochrome bitmap</p>
     </a>
     <h1 class="signature" translate="no">setTextBackground(This, Colour)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1394" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1321" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3953,7 +3926,7 @@ monochrome bitmap</p>
     </a>
     <h1 class="signature" translate="no">setTextForeground(This, Colour)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1408" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1333" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3969,8 +3942,7 @@ monochrome bitmap</p>
 
       </div>
 
-<p>Sets the current text foreground colour for the DC.</p><p>See: <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a>, for the interpretation of colours when drawing into a
-monochrome bitmap</p>
+<p>Sets the current text foreground colour for the DC.</p><p>See: <a href="wxMemoryDC.html"><code class="inline">wxMemoryDC</code></a></p>
   </section>
 </section>
 <section class="detail" id="setUserScale/3">
@@ -3982,7 +3954,7 @@ monochrome bitmap</p>
     </a>
     <h1 class="signature" translate="no">setUserScale(This, XScale, YScale)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1417" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1341" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4011,7 +3983,7 @@ monochrome bitmap</p>
     </a>
     <h1 class="signature" translate="no">startDoc(This, Message)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1430" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1353" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4039,7 +4011,7 @@ monochrome bitmap</p>
     </a>
     <h1 class="signature" translate="no">startPage(This)</h1>
 
-      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1441" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/juhlig/otp/blob/fix_erpc_call_local/lib/wx/src/gen/wxDC.erl#L1363" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4089,9 +4061,8 @@ monochrome bitmap</p>
   </div>
 </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  function mermaidLoaded() {
     mermaid.initialize({
       startOnLoad: false,
       theme: document.body.className.includes("dark") ? "dark" : "default"
@@ -4109,8 +4080,9 @@ monochrome bitmap</p>
         preEl.remove();
       });
     }
-  });
+  }
 </script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js" onload="mermaidLoaded();"></script>
 
   </body>
 </html>
