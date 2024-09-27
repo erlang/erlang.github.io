@@ -187,7 +187,19 @@ always automatically connected, for example, when a message is to be sent to
 that node. <code class="inline">Value</code> is one of:</p><ul><li><p><strong><code class="inline">never</code></strong> - Connections are never automatically established, they must be
 explicitly connected. See <a href="net_kernel.html"><code class="inline">net_kernel</code></a>.</p></li><li><p><strong><code class="inline">once</code></strong> - Connections are established automatically, but only once per
 node. If a node goes down, it must thereafter be explicitly connected. See
-<a href="net_kernel.html"><code class="inline">net_kernel</code></a>.</p></li></ul></li><li><p><strong><code class="inline" id="permissions">permissions = [Perm]</code></strong> - Specifies the default permission
+<a href="net_kernel.html"><code class="inline">net_kernel</code></a>.</p></li></ul></li><li><p><strong><code class="inline" id="epmd_module">epmd_module = module()</code></strong> - Configures the module
+responsible for communication with <a href="../../../../erts-15.1/doc/html/epmd_cmd.html">epmd</a>. If this parameter
+is undefined, it defaults to <code class="inline">erl_epmd</code>.</p><p>The now deprecated command line argument
+<a href="../../../../erts-15.1/doc/html/erl_cmd.html#epmd_module"><code class="inline">-epmd_module &lt;module&gt;</code></a> has the same
+effect as the <code class="inline">epmd_module</code> configuration parameter. If this configuration
+parameter is defined, it will override the command line argument.</p></li><li><p><strong><code class="inline" id="erl_epmd_node_listen_port">erl_epmd_node_listen_port = integer()</code></strong> - Configures the port used by <a href="erl_epmd.html"><code class="inline">erl_epmd</code></a>
+to listen for connection and connect to other nodes. If this flag is set, the
+Erlang VM will boot in distributed mode even if EPMD is not available. If not
+set, a port is chosen automatically (equivalent to port <code class="inline">0</code>). See <a href="erl_epmd.html"><code class="inline">erl_epmd</code></a>
+for more details.</p><p>The now deprecated command line argument
+<a href="../../../../erts-15.1/doc/html/erl_cmd.html#erl_epmd_port"><code class="inline">erl_epmd_port &lt;module&gt;</code></a> has the same
+effect as the <code class="inline">erl_epmd_node_listen_port</code> configuration parameter. If this
+configuration parameter is defined, it will override the command line argument.</p></li><li><p><strong><code class="inline" id="permissions">permissions = [Perm]</code></strong> - Specifies the default permission
 for applications when they are started. In this parameter:</p><ul><li><code class="inline">Perm = {ApplName,Bool}</code></li><li><code class="inline">ApplName = atom()</code></li><li><code class="inline">Bool = boolean()</code></li></ul><p>Permissions are described in <a href="application.html#permit/2"><code class="inline">application:permit/2</code></a>.</p></li><li><p><strong><code class="inline" id="logger">logger = [Config]</code></strong> - Specifies the configuration for
 <a href="logger.html">Logger</a>, except the primary log level, which is specified with
 <a href="kernel_app.html#logger_level"><code class="inline">logger_level</code></a>, and the compatibility with
@@ -323,8 +335,7 @@ parameter is to be set to <code class="inline">true</code> in an embedded system
 default <code class="inline">pg</code> scope server (see <a href="pg.html"><code class="inline">pg</code></a>) if the parameter is <code class="inline">true</code>. This
 parameter is to be set to <code class="inline">true</code> in an embedded system that uses this service.</p><p>Defaults to <code class="inline">false</code>.</p></li><li><p><strong><code class="inline" id="start_timer">start_timer = true | false</code></strong> - Starts the <code class="inline">timer_server</code>
 if the parameter is <code class="inline">true</code> (see <a href="../../../../lib/stdlib-6.1/doc/html/timer.html"><code class="inline">timer</code></a>). This parameter is to be set to
-<code class="inline">true</code> in an embedded system using this service.</p><p>Defaults to <code class="inline">false</code>.</p></li><li><p><strong><code class="inline" id="shell_docs_ansi">shell_docs_ansi = boolean()</code></strong> - Specifies whether
-the documentation rendered in the shell should use ANSI escape codes.</p><p>See also <a href="../../../../lib/stdlib-6.1/doc/html/shell_docs.html#t:config/0"><code class="inline">shell_docs:config/0</code></a>.</p></li><li><p><strong><code class="inline" id="shell_history">shell_history = enabled | disabled | module()</code></strong> -
+<code class="inline">true</code> in an embedded system using this service.</p><p>Defaults to <code class="inline">false</code>.</p></li><li><p><strong><code class="inline" id="shell_history">shell_history = enabled | disabled | module()</code></strong> -
 Specifies whether shell history should be logged to disk between usages of
 <code class="inline">erl</code> (<code class="inline">enabled</code>), not logged at all (<code class="inline">disabled</code>), or a user-specified module
 will be used to log shell history. This module should export
