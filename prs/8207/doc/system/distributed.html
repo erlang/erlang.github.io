@@ -128,12 +128,12 @@ monitors, are transparent when pids are used. Registered names, however, are
 local to each node. This means that the node must be specified as well when
 sending messages, and so on, using registered names.</p><p>The distribution mechanism is implemented using TCP/IP sockets. How to implement
 an alternative carrier is described in the
-<a href="../../erts-15.1/doc/html/alt_dist.html">ERTS User's Guide</a>.</p><blockquote><h4 class="warning">Warning</h4><p>Starting a distributed node without also specifying
-<a href="../../erts-15.1/doc/html/erl_cmd.html#proto_dist"><code class="inline">-proto_dist inet_tls</code></a> will expose the node
+<a href="../../erts-15.1.1/doc/html/alt_dist.html">ERTS User's Guide</a>.</p><blockquote><h4 class="warning">Warning</h4><p>Starting a distributed node without also specifying
+<a href="../../erts-15.1.1/doc/html/erl_cmd.html#proto_dist"><code class="inline">-proto_dist inet_tls</code></a> will expose the node
 to attacks that may give the attacker complete access to the node and in
 extension the cluster. When using un-secure distributed nodes, make sure that
 the network is configured to keep potential attackers out. See the
-<a href="../../lib/ssl-11.2.2/doc/html/ssl_distribution.html">Using SSL for Erlang Distribution</a> User's Guide
+<a href="../../lib/ssl-11.2.3/doc/html/ssl_distribution.html">Using SSL for Erlang Distribution</a> User's Guide
 for details on how to setup a secure distributed node.</p></blockquote><h2 id="nodes" class="section-heading">
   <a href="#nodes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -141,22 +141,22 @@ for details on how to setup a secure distributed node.</p></blockquote><h2 id="n
   <span class="text">Nodes</span>
 </h2>
 <p>A <em>node</em> is an executing Erlang runtime system that has been given a name, using
-the command-line flag <a href="../../erts-15.1/doc/html/erl_cmd.html#name"><code class="inline">-name</code></a> (long names) or
-<a href="../../erts-15.1/doc/html/erl_cmd.html#sname"><code class="inline">-sname</code></a> (short names).</p><p>The format of the node name is an atom <code class="inline">name@host</code>. <code class="inline">name</code> is the name given by
+the command-line flag <a href="../../erts-15.1.1/doc/html/erl_cmd.html#name"><code class="inline">-name</code></a> (long names) or
+<a href="../../erts-15.1.1/doc/html/erl_cmd.html#sname"><code class="inline">-sname</code></a> (short names).</p><p>The format of the node name is an atom <code class="inline">name@host</code>. <code class="inline">name</code> is the name given by
 the user. <code class="inline">host</code> is the full host name if long names are used, or the first part
-of the host name if short names are used. Function <a href="../../erts-15.1/doc/html/erlang.html#node/0"><code class="inline">node()</code></a>
+of the host name if short names are used. Function <a href="../../erts-15.1.1/doc/html/erlang.html#node/0"><code class="inline">node()</code></a>
 returns the name of the node.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="c1">% erl -name dilbert</span><span class="w">
-</span><span class="p" data-group-id="5358608143-1">(</span><span class="ss">dilbert@uab</span><span class="p">.</span><span class="ss">ericsson</span><span class="p">.</span><span class="ss">se</span><span class="p" data-group-id="5358608143-1">)</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">node</span><span class="p" data-group-id="5358608143-2">(</span><span class="p" data-group-id="5358608143-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1292063556-1">(</span><span class="ss">dilbert@uab</span><span class="p">.</span><span class="ss">ericsson</span><span class="p">.</span><span class="ss">se</span><span class="p" data-group-id="1292063556-1">)</span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">node</span><span class="p" data-group-id="1292063556-2">(</span><span class="p" data-group-id="1292063556-2">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">&#39;dilbert@uab.ericsson.se&#39;</span><span class="w">
 
 </span><span class="c1">% erl -sname dilbert</span><span class="gp unselectable">
-(dilbert@uab)1&gt; </span><span class="nf">node</span><span class="p" data-group-id="5358608143-3">(</span><span class="p" data-group-id="5358608143-3">)</span><span class="p">.</span><span class="w">
+(dilbert@uab)1&gt; </span><span class="nf">node</span><span class="p" data-group-id="1292063556-3">(</span><span class="p" data-group-id="1292063556-3">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">dilbert@uab</span></code></pre><p>The node name can also be given in runtime by calling <a href="../../lib/kernel-10.1/doc/html/net_kernel.html#start/1"><code class="inline">net_kernel:start/1</code></a>.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="c1">% erl</span><span class="gp unselectable">
-1&gt; </span><span class="nf">node</span><span class="p" data-group-id="5861028382-1">(</span><span class="p" data-group-id="5861028382-1">)</span><span class="p">.</span><span class="w">
+1&gt; </span><span class="nf">node</span><span class="p" data-group-id="9452005530-1">(</span><span class="p" data-group-id="9452005530-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">nonode@nohost</span><span class="gp unselectable">
-2&gt; </span><span class="nc">net_kernel</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="5861028382-2">(</span><span class="p" data-group-id="5861028382-3">[</span><span class="ss">dilbert</span><span class="p">,</span><span class="ss">shortnames</span><span class="p" data-group-id="5861028382-3">]</span><span class="p" data-group-id="5861028382-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="5861028382-4">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.102</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="5861028382-4">}</span><span class="gp unselectable">
-(dilbert@uab)3&gt; </span><span class="nf">node</span><span class="p" data-group-id="5861028382-5">(</span><span class="p" data-group-id="5861028382-5">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">net_kernel</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="9452005530-2">(</span><span class="p" data-group-id="9452005530-3">[</span><span class="ss">dilbert</span><span class="p">,</span><span class="ss">shortnames</span><span class="p" data-group-id="9452005530-3">]</span><span class="p" data-group-id="9452005530-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9452005530-4">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.102</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="9452005530-4">}</span><span class="gp unselectable">
+(dilbert@uab)3&gt; </span><span class="nf">node</span><span class="p" data-group-id="9452005530-5">(</span><span class="p" data-group-id="9452005530-5">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">dilbert@uab</span></code></pre><blockquote><h4 class="info">Note</h4><p>A node with a long node name cannot communicate with a node with a short node
 name.</p></blockquote><h2 id="node-connections" class="section-heading">
   <a href="#node-connections" class="hover-link">
@@ -166,13 +166,13 @@ name.</p></blockquote><h2 id="node-connections" class="section-heading">
 </h2>
 <p>The nodes in a distributed Erlang system are loosely connected. The first time
 the name of another node is used, for example, if
-<a href="../../erts-15.1/doc/html/erlang.html#spawn/4"><code class="inline">spawn(Node, M, F, A)</code></a> or <code class="inline">net_adm:ping(Node)</code> is called, a connection
+<a href="../../erts-15.1.1/doc/html/erlang.html#spawn/4"><code class="inline">spawn(Node, M, F, A)</code></a> or <code class="inline">net_adm:ping(Node)</code> is called, a connection
 attempt to that node is made.</p><p>Connections are by default transitive. If a node A connects to node B, and node
 B has a connection to node C, then node A also tries to connect to node C. This
 feature can be turned off by using the command-line flag <code class="inline">-connect_all false</code>,
-see <a href="../../erts-15.1/doc/html/erl_cmd.html">erl</a> in ERTS.</p><p>If a node goes down, all connections to that node are removed. Calling
-<a href="../../erts-15.1/doc/html/erlang.html#disconnect_node/1"><code class="inline">erlang:disconnect_node(Node)</code></a> forces
-disconnection of a node.</p><p>The list of (visible) nodes currently connected to is returned by <a href="../../erts-15.1/doc/html/erlang.html#nodes/0"><code class="inline">nodes/0</code></a>.</p><h2 id="epmd" class="section-heading">
+see <a href="../../erts-15.1.1/doc/html/erl_cmd.html">erl</a> in ERTS.</p><p>If a node goes down, all connections to that node are removed. Calling
+<a href="../../erts-15.1.1/doc/html/erlang.html#disconnect_node/1"><code class="inline">erlang:disconnect_node(Node)</code></a> forces
+disconnection of a node.</p><p>The list of (visible) nodes currently connected to is returned by <a href="../../erts-15.1.1/doc/html/erlang.html#nodes/0"><code class="inline">nodes/0</code></a>.</p><h2 id="epmd" class="section-heading">
   <a href="#epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -180,7 +180,7 @@ disconnection of a node.</p><p>The list of (visible) nodes currently connected t
 </h2>
 <p>The Erlang Port Mapper Daemon <em>epmd</em> is automatically started at every host
 where an Erlang node is started. It is responsible for mapping the symbolic node
-names to machine addresses. See the <a href="../../erts-15.1/doc/html/epmd_cmd.html">epmd</a> in ERTS.</p><h2 id="hidden-nodes" class="section-heading">
+names to machine addresses. See the <a href="../../erts-15.1.1/doc/html/epmd_cmd.html">epmd</a> in ERTS.</p><h2 id="hidden-nodes" class="section-heading">
   <a href="#hidden-nodes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -193,8 +193,8 @@ status of a system, without disturbing it. For this purpose, a <em>hidden
 node</em> can be used.</p><p>A hidden node is a node started with the command-line flag <code class="inline">-hidden</code>.
 Connections between hidden nodes and other nodes are not transitive, they must
 be set up explicitly. Also, hidden nodes does not show up in the list of nodes
-returned by <a href="../../erts-15.1/doc/html/erlang.html#nodes/0"><code class="inline">nodes/0</code></a>. Instead, <a href="../../erts-15.1/doc/html/erlang.html#nodes/1"><code class="inline">nodes(hidden)</code></a> or
-<a href="../../erts-15.1/doc/html/erlang.html#nodes/1"><code class="inline">nodes(connected)</code></a> must be used. This means, for example, that the
+returned by <a href="../../erts-15.1.1/doc/html/erlang.html#nodes/0"><code class="inline">nodes/0</code></a>. Instead, <a href="../../erts-15.1.1/doc/html/erlang.html#nodes/1"><code class="inline">nodes(hidden)</code></a> or
+<a href="../../erts-15.1.1/doc/html/erlang.html#nodes/1"><code class="inline">nodes(connected)</code></a> must be used. This means, for example, that the
 hidden node is not added to the set of nodes that <a href="../../lib/kernel-10.1/doc/html/global.html"><code class="inline">global</code></a> is keeping track of.</p><p><a href="" id="dyn_node_name"></a></p><h2 id="dynamic-node-name" class="section-heading">
   <a href="#dynamic-node-name" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -231,7 +231,7 @@ For more information about C nodes, see the
 against accidental misuse, such as preventing a node from connecting to a
 cluster with which it is not intended to communicate.</p><p>Furthermore, the communication between nodes is per default in clear text. If
 you need strong security, please see
-<a href="../../lib/ssl-11.2.2/doc/html/ssl_distribution.html">Using TLS for Erlang Distribution </a>in the SSL
+<a href="../../lib/ssl-11.2.3/doc/html/ssl_distribution.html">Using TLS for Erlang Distribution </a>in the SSL
 application's User's Guide.</p><p>Also, the default random cookie mentioned in the following text is not very
 unpredictable. A better one can be generated using primitives in the <code class="inline">crypto</code>
 module, though this still does not make the initial handshake
@@ -245,8 +245,8 @@ they are compared using hashed challenges, although not in a cryptographically
 secure manner.</p><p>At start-up, a node has a random atom assigned as its default magic cookie and
 the cookie of other nodes is assumed to be <code class="inline">nocookie</code>. The first action of the
 Erlang network authentication server (<code class="inline">auth</code>) is then to search for a file named
-<code class="inline">.erlang.cookie</code> in the <a href="../../erts-15.1/doc/html/init.html#home">user's home directory</a> and then in
-<a href="../../lib/stdlib-6.1/doc/html/filename.html#user_config"><code class="inline">filename:basedir(user_config, &quot;erlang&quot;)</code></a>. If none
+<code class="inline">.erlang.cookie</code> in the <a href="../../erts-15.1.1/doc/html/init.html#home">user's home directory</a> and then in
+<a href="../../lib/stdlib-6.1.1/doc/html/filename.html#user_config"><code class="inline">filename:basedir(user_config, &quot;erlang&quot;)</code></a>. If none
 of the files exist, a <code class="inline">.erlang.cookie</code> file is created in the user's home
 directory. The UNIX permissions mode of the file is set to octal 400 (read-only
 by user) and its content is a random string. An atom <code class="inline">Cookie</code> is created from
@@ -272,30 +272,30 @@ immediately connect all other visible nodes as well. This way, there is always a
 fully connected network. If there are nodes with different cookies, this method
 can be inappropriate (since it may not be feasible to configure different
 cookies for all possible nodes) and the command-line flag <code class="inline">-connect_all false</code>
-must be set, see the <a href="../../erts-15.1/doc/html/erl_cmd.html">erl</a> executable in ERTS.</p><p>The magic cookie of the local node can be retrieved by calling
+must be set, see the <a href="../../erts-15.1.1/doc/html/erl_cmd.html">erl</a> executable in ERTS.</p><p>The magic cookie of the local node can be retrieved by calling
 <code class="inline">erlang:get_cookie()</code>.</p><h2 id="distribution-bifs" class="section-heading">
   <a href="#distribution-bifs" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Distribution BIFs</span>
 </h2>
-<p>Here are some BIFs that are useful for distributed programming:</p><ul><li><p><a href="../../erts-15.1/doc/html/erlang.html#disconnect_node/1"><code class="inline">disconnect_node(Node)</code></a> - Forces the
-disconnection of a node.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#get_cookie/0"><code class="inline">erlang:get_cookie/0</code></a> - Returns the magic cookie of the current
-node.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#get_cookie/1"><code class="inline">erlang:get_cookie(Node)</code></a> - Returns the
-magic cookie for node <code class="inline">Node</code>.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#is_alive/0"><code class="inline">is_alive/0</code></a> - Returns <code class="inline">true</code> if the runtime system is a node and
-can connect to other nodes, <code class="inline">false</code> otherwise.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#monitor_node/2"><code class="inline">monitor_node(Node, Bool)</code></a> - Monitors the
+<p>Here are some BIFs that are useful for distributed programming:</p><ul><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#disconnect_node/1"><code class="inline">disconnect_node(Node)</code></a> - Forces the
+disconnection of a node.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#get_cookie/0"><code class="inline">erlang:get_cookie/0</code></a> - Returns the magic cookie of the current
+node.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#get_cookie/1"><code class="inline">erlang:get_cookie(Node)</code></a> - Returns the
+magic cookie for node <code class="inline">Node</code>.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#is_alive/0"><code class="inline">is_alive/0</code></a> - Returns <code class="inline">true</code> if the runtime system is a node and
+can connect to other nodes, <code class="inline">false</code> otherwise.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#monitor_node/2"><code class="inline">monitor_node(Node, Bool)</code></a> - Monitors the
 status of <code class="inline">Node</code>. A message<code class="inline">{nodedown, Node}</code> is received if the
-connection to it is lost.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#node/0"><code class="inline">node/0</code></a> - Returns the name of the current node. Allowed in guards.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#node/1"><code class="inline">node(Arg)</code></a> - Returns the node where <code class="inline">Arg</code>, a pid,
-reference, or port, is located.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#nodes/0"><code class="inline">nodes/0</code></a> - Returns a list of all visible nodes this node is connected to.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#nodes/1"><code class="inline">nodes(Arg)</code></a> - Depending on <code class="inline">Arg</code>, this function can
+connection to it is lost.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#node/0"><code class="inline">node/0</code></a> - Returns the name of the current node. Allowed in guards.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#node/1"><code class="inline">node(Arg)</code></a> - Returns the node where <code class="inline">Arg</code>, a pid,
+reference, or port, is located.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#nodes/0"><code class="inline">nodes/0</code></a> - Returns a list of all visible nodes this node is connected to.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#nodes/1"><code class="inline">nodes(Arg)</code></a> - Depending on <code class="inline">Arg</code>, this function can
 return a list not only of visible nodes, but also hidden nodes and
-previously known nodes, and so on.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#set_cookie/1"><code class="inline">erlang:set_cookie(Cookie)</code></a> - Sets the
+previously known nodes, and so on.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#set_cookie/1"><code class="inline">erlang:set_cookie(Cookie)</code></a> - Sets the
 magic cookie, <code class="inline">Cookie</code> to use when connecting all nodes that have no
-explicit cookie set with <a href="../../erts-15.1/doc/html/erlang.html#set_cookie/2"><code class="inline">erlang:set_cookie/2</code></a>.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#set_cookie/2"><code class="inline">erlang:set_cookie(Node, Cookie)</code></a> - Sets
+explicit cookie set with <a href="../../erts-15.1.1/doc/html/erlang.html#set_cookie/2"><code class="inline">erlang:set_cookie/2</code></a>.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#set_cookie/2"><code class="inline">erlang:set_cookie(Node, Cookie)</code></a> - Sets
 the magic cookie used when connecting <code class="inline">Node</code>. If <code class="inline">Node</code> is the
 current node, <code class="inline">Cookie</code> is used when connecting all nodes that have
-no explicit cookie set with this function.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#spawn_link/2"><code class="inline">spawn_link(Node, Fun)</code></a> - Creates a process at a remote node.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#spawn_opt/3"><code class="inline">spawn_opt(Node, Fun, Opts)</code></a> - Creates a process at
-a remote node.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#spawn_link/4"><code class="inline">spawn_link(Node, Module, Name, Args)</code></a> -
-Creates a process at a remote node.</p></li><li><p><a href="../../erts-15.1/doc/html/erlang.html#spawn_opt/5"><code class="inline">spawn_opt(Node, Module, Name, Args, Opts)</code></a> - Creates
+no explicit cookie set with this function.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#spawn_link/2"><code class="inline">spawn_link(Node, Fun)</code></a> - Creates a process at a remote node.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#spawn_opt/3"><code class="inline">spawn_opt(Node, Fun, Opts)</code></a> - Creates a process at
+a remote node.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#spawn_link/4"><code class="inline">spawn_link(Node, Module, Name, Args)</code></a> -
+Creates a process at a remote node.</p></li><li><p><a href="../../erts-15.1.1/doc/html/erlang.html#spawn_opt/5"><code class="inline">spawn_opt(Node, Module, Name, Args, Opts)</code></a> - Creates
 a process at a remote node.</p></li></ul><p><em>Table: Distribution BIFs</em></p><h2 id="distribution-command-line-flags" class="section-heading">
   <a href="#distribution-command-line-flags" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -303,13 +303,13 @@ a process at a remote node.</p></li></ul><p><em>Table: Distribution BIFs</em></p
   <span class="text">Distribution Command-Line Flags</span>
 </h2>
 <p>Examples of command-line flags used for distributed programming (for more
-information, see the <a href="../../erts-15.1/doc/html/erl_cmd.html">erl</a> executable in ERTS):</p><table><thead><tr><th style="text-align: left;"><em>Command-Line Flag</em></th><th style="text-align: left;"><em>Description</em></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">-connect_all false</code></td><td style="text-align: left;">Only explicit connection setups are used.</td></tr><tr><td style="text-align: left;"><code class="inline">-hidden</code></td><td style="text-align: left;">Makes a node into a hidden node.</td></tr><tr><td style="text-align: left;"><code class="inline">-name Name</code></td><td style="text-align: left;">Makes a runtime system into a node, using long node names.</td></tr><tr><td style="text-align: left;"><code class="inline">-setcookie Cookie</code></td><td style="text-align: left;">Same as calling <code class="inline">erlang:set_cookie(Cookie)</code>.</td></tr><tr><td style="text-align: left;"><code class="inline">-setcookie Node Cookie</code></td><td style="text-align: left;">Same as calling <code class="inline">erlang:set_cookie(Node, Cookie)</code>.</td></tr><tr><td style="text-align: left;"><code class="inline">-sname Name</code></td><td style="text-align: left;">Makes a runtime system into a node, using short node names.</td></tr></tbody></table><p><em>Table: Distribution Command-Line Flags</em></p><h2 id="distribution-modules" class="section-heading">
+information, see the <a href="../../erts-15.1.1/doc/html/erl_cmd.html">erl</a> executable in ERTS):</p><table><thead><tr><th style="text-align: left;"><em>Command-Line Flag</em></th><th style="text-align: left;"><em>Description</em></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">-connect_all false</code></td><td style="text-align: left;">Only explicit connection setups are used.</td></tr><tr><td style="text-align: left;"><code class="inline">-hidden</code></td><td style="text-align: left;">Makes a node into a hidden node.</td></tr><tr><td style="text-align: left;"><code class="inline">-name Name</code></td><td style="text-align: left;">Makes a runtime system into a node, using long node names.</td></tr><tr><td style="text-align: left;"><code class="inline">-setcookie Cookie</code></td><td style="text-align: left;">Same as calling <code class="inline">erlang:set_cookie(Cookie)</code>.</td></tr><tr><td style="text-align: left;"><code class="inline">-setcookie Node Cookie</code></td><td style="text-align: left;">Same as calling <code class="inline">erlang:set_cookie(Node, Cookie)</code>.</td></tr><tr><td style="text-align: left;"><code class="inline">-sname Name</code></td><td style="text-align: left;">Makes a runtime system into a node, using short node names.</td></tr></tbody></table><p><em>Table: Distribution Command-Line Flags</em></p><h2 id="distribution-modules" class="section-heading">
   <a href="#distribution-modules" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Distribution Modules</span>
 </h2>
-<p>Examples of modules useful for distributed programming in the Kernel application:</p><table><thead><tr><th style="text-align: left;"><em>Module</em></th><th style="text-align: left;"><em>Description</em></th></tr></thead><tbody><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/global.html"><code class="inline">global</code></a></td><td style="text-align: left;">A global name registration facility.</td></tr><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/global_group.html"><code class="inline">global_group</code></a></td><td style="text-align: left;">Grouping nodes to global name registration groups.</td></tr><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/net_adm.html"><code class="inline">net_adm</code></a></td><td style="text-align: left;">Various Erlang net administration routines.</td></tr><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/net_kernel.html"><code class="inline">net_kernel</code></a></td><td style="text-align: left;">Erlang networking kernel.</td></tr></tbody></table><p><em>Table: Kernel Modules Useful For Distribution.</em></p><p>In the STDLIB application:</p><table><thead><tr><th style="text-align: left;"><em>Module</em></th><th style="text-align: left;"><em>Description</em></th></tr></thead><tbody><tr><td style="text-align: left;"><a href="../../lib/stdlib-6.1/doc/html/peer.html"><code class="inline">peer</code></a></td><td style="text-align: left;">Start and control of peer nodes.</td></tr></tbody></table><p><em>Table: STDLIB Modules Useful For Distribution.</em></p>
+<p>Examples of modules useful for distributed programming in the Kernel application:</p><table><thead><tr><th style="text-align: left;"><em>Module</em></th><th style="text-align: left;"><em>Description</em></th></tr></thead><tbody><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/global.html"><code class="inline">global</code></a></td><td style="text-align: left;">A global name registration facility.</td></tr><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/global_group.html"><code class="inline">global_group</code></a></td><td style="text-align: left;">Grouping nodes to global name registration groups.</td></tr><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/net_adm.html"><code class="inline">net_adm</code></a></td><td style="text-align: left;">Various Erlang net administration routines.</td></tr><tr><td style="text-align: left;"><a href="../../lib/kernel-10.1/doc/html/net_kernel.html"><code class="inline">net_kernel</code></a></td><td style="text-align: left;">Erlang networking kernel.</td></tr></tbody></table><p><em>Table: Kernel Modules Useful For Distribution.</em></p><p>In the STDLIB application:</p><table><thead><tr><th style="text-align: left;"><em>Module</em></th><th style="text-align: left;"><em>Description</em></th></tr></thead><tbody><tr><td style="text-align: left;"><a href="../../lib/stdlib-6.1.1/doc/html/peer.html"><code class="inline">peer</code></a></td><td style="text-align: left;">Start and control of peer nodes.</td></tr></tbody></table><p><em>Table: STDLIB Modules Useful For Distribution.</em></p>
 </div>
 
 <div class="bottom-actions" id="bottom-actions">
