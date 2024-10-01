@@ -141,7 +141,7 @@ UTF-8, but UTF-16 on Windows).</p><p>The default mode depends on the operating s
 enforce consistent filename encoding and therefore the VM uses <code class="inline">utf8</code> mode.</p><p>On operating systems with transparent naming (for example, all Unix systems
 except MacOS X), default is <code class="inline">utf8</code> if the terminal supports UTF-8, otherwise
 <code class="inline">latin1</code>. The default can be overridden using <code class="inline">+fnl</code> (to force <code class="inline">latin1</code> mode) or
-<code class="inline">+fnu</code> (to force <code class="inline">utf8</code> mode) when starting <a href="../../../../erts-15.1/doc/html/erl_cmd.html"><code class="inline">erl</code></a>.</p><p>On operating systems with transparent naming, files can be inconsistently named,
+<code class="inline">+fnu</code> (to force <code class="inline">utf8</code> mode) when starting <a href="../../../../erts-15.1.1/doc/html/erl_cmd.html"><code class="inline">erl</code></a>.</p><p>On operating systems with transparent naming, files can be inconsistently named,
 for example, some files are encoded in UTF-8 while others are encoded in ISO
 Latin-1. The concept of <em>raw filenames</em> is introduced to handle file systems
 with inconsistent naming when running in <code class="inline">utf8</code> mode.</p><p>A <em>raw filename</em> is a filename specified as a binary. The Erlang VM does not
@@ -149,7 +149,7 @@ translate a filename specified as a binary on systems with transparent naming.</
 return raw filenames. To return all filenames including raw filenames, use
 functions <a href="file.html#list_dir_all"><code class="inline">list_dir_all/1</code></a> and
 <a href="file.html#read_link_all"><code class="inline">read_link_all/1</code></a>.</p><p>See also section
-<a href="../../../../lib/stdlib-6.1/doc/html/unicode_usage.html#notes-about-raw-filenames">Notes About Raw Filenames</a>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/unicode_usage.html#notes-about-raw-filenames">Notes About Raw Filenames</a>
 in the STDLIB User's Guide.</p><blockquote><h4 class="info">Note</h4><p>File operations used to accept filenames containing null characters (integer
 value zero). This caused the name to be truncated and in some cases arguments
 to primitive operations to be mixed up. Filenames containing null characters
@@ -167,7 +167,7 @@ operations fail.</p></blockquote><h2 id="module-posix-error-codes" class="sectio
   <span class="text">Performance</span>
 </h2>
 <p>For increased performance, raw files are recommended.</p><p>A normal file is really a process so it can be used as an I/O device (see
-<a href="../../../../lib/stdlib-6.1/doc/html/io.html"><code class="inline">io</code></a>). Therefore, when data is written to a normal file, the sending of the
+<a href="../../../../lib/stdlib-6.1.1/doc/html/io.html"><code class="inline">io</code></a>). Therefore, when data is written to a normal file, the sending of the
 data to the file process, copies all data that are not binaries. Opening the
 file in binary mode and writing binaries is therefore recommended. If the file
 is opened on another node, or if the file server runs as slave to the file
@@ -180,37 +180,37 @@ caching, which will reduce the number of operating system calls and greatly
 improve performance for small reads and writes. However, the overhead won't
 disappear completely and it's best to keep the number of file operations to a
 minimum. As a contrived example, the following function writes 4MB in 2.5
-seconds when tested:</p><pre><code class="makeup erlang" translate="no"><span class="nf">create_file_slow</span><span class="p" data-group-id="3384872568-1">(</span><span class="n">Name</span><span class="p" data-group-id="3384872568-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="3384872568-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="3384872568-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="3384872568-3">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3384872568-4">[</span><span class="ss">raw</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p">,</span><span class="w"> </span><span class="ss">delayed_write</span><span class="p">,</span><span class="w"> </span><span class="ss">binary</span><span class="p" data-group-id="3384872568-4">]</span><span class="p" data-group-id="3384872568-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3384872568-5">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ow">bsl</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3384872568-5">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">file</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3384872568-6">(</span><span class="n">Fd</span><span class="p" data-group-id="3384872568-6">)</span><span class="p">.</span><span class="w">
+seconds when tested:</p><pre><code class="makeup erlang" translate="no"><span class="nf">create_file_slow</span><span class="p" data-group-id="3381199547-1">(</span><span class="n">Name</span><span class="p" data-group-id="3381199547-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="3381199547-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="3381199547-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="3381199547-3">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3381199547-4">[</span><span class="ss">raw</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p">,</span><span class="w"> </span><span class="ss">delayed_write</span><span class="p">,</span><span class="w"> </span><span class="ss">binary</span><span class="p" data-group-id="3381199547-4">]</span><span class="p" data-group-id="3381199547-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3381199547-5">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ow">bsl</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3381199547-5">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">file</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3381199547-6">(</span><span class="n">Fd</span><span class="p" data-group-id="3381199547-6">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3384872568-7">(</span><span class="p">_</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3384872568-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3381199547-7">(</span><span class="p">_</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3381199547-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-</span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3384872568-8">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p" data-group-id="3384872568-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">write</span><span class="p" data-group-id="3384872568-9">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">0</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="3384872568-9">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3384872568-10">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3384872568-10">)</span><span class="p">.</span></code></pre><p>The following functionally equivalent code writes 128 bytes per call to
+</span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3381199547-8">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p" data-group-id="3381199547-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">write</span><span class="p" data-group-id="3381199547-9">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">0</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="3381199547-9">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">create_file_slow_1</span><span class="p" data-group-id="3381199547-10">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3381199547-10">)</span><span class="p">.</span></code></pre><p>The following functionally equivalent code writes 128 bytes per call to
 <a href="#write/2"><code class="inline">write/2</code></a> and so does the same work in 0.08 seconds, which is roughly 30 times
-faster:</p><pre><code class="makeup erlang" translate="no"><span class="nf">create_file</span><span class="p" data-group-id="0421662021-1">(</span><span class="n">Name</span><span class="p" data-group-id="0421662021-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="0421662021-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="0421662021-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="0421662021-3">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0421662021-4">[</span><span class="ss">raw</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p">,</span><span class="w"> </span><span class="ss">delayed_write</span><span class="p">,</span><span class="w"> </span><span class="ss">binary</span><span class="p" data-group-id="0421662021-4">]</span><span class="p" data-group-id="0421662021-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">create_file_1</span><span class="p" data-group-id="0421662021-5">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ow">bsl</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="0421662021-5">)</span><span class="p">,</span><span class="w">
-    </span><span class="nc">file</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="0421662021-6">(</span><span class="n">Fd</span><span class="p" data-group-id="0421662021-6">)</span><span class="p">,</span><span class="w">
+faster:</p><pre><code class="makeup erlang" translate="no"><span class="nf">create_file</span><span class="p" data-group-id="7556721370-1">(</span><span class="n">Name</span><span class="p" data-group-id="7556721370-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="7556721370-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="7556721370-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="7556721370-3">(</span><span class="n">Name</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7556721370-4">[</span><span class="ss">raw</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p">,</span><span class="w"> </span><span class="ss">delayed_write</span><span class="p">,</span><span class="w"> </span><span class="ss">binary</span><span class="p" data-group-id="7556721370-4">]</span><span class="p" data-group-id="7556721370-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">create_file_1</span><span class="p" data-group-id="7556721370-5">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="ow">bsl</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7556721370-5">)</span><span class="p">,</span><span class="w">
+    </span><span class="nc">file</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="7556721370-6">(</span><span class="n">Fd</span><span class="p" data-group-id="7556721370-6">)</span><span class="p">,</span><span class="w">
     </span><span class="ss">ok</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">create_file_1</span><span class="p" data-group-id="0421662021-7">(</span><span class="p">_</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="0421662021-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">create_file_1</span><span class="p" data-group-id="7556721370-7">(</span><span class="p">_</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7556721370-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">ok</span><span class="p">;</span><span class="w">
-</span><span class="nf">create_file_1</span><span class="p" data-group-id="0421662021-8">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p" data-group-id="0421662021-8">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">128</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">write</span><span class="p" data-group-id="0421662021-9">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">0</span><span class="p">:</span><span class="p" data-group-id="0421662021-10">(</span><span class="mi">128</span><span class="p" data-group-id="0421662021-10">)</span><span class="o">/</span><span class="nc">unit</span><span class="p">:</span><span class="mi">8</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="0421662021-9">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">create_file_1</span><span class="p" data-group-id="0421662021-11">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">128</span><span class="p" data-group-id="0421662021-11">)</span><span class="p">;</span><span class="w">
-</span><span class="nf">create_file_1</span><span class="p" data-group-id="0421662021-12">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p" data-group-id="0421662021-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">write</span><span class="p" data-group-id="0421662021-13">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">0</span><span class="p">:</span><span class="p" data-group-id="0421662021-14">(</span><span class="n">M</span><span class="p" data-group-id="0421662021-14">)</span><span class="o">/</span><span class="nc">unit</span><span class="p">:</span><span class="mi">8</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="0421662021-13">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">create_file_1</span><span class="p" data-group-id="0421662021-15">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="0421662021-15">)</span><span class="p">.</span></code></pre><p>When writing data it's generally more efficient to write a list of binaries
+</span><span class="nf">create_file_1</span><span class="p" data-group-id="7556721370-8">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p" data-group-id="7556721370-8">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">128</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">write</span><span class="p" data-group-id="7556721370-9">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">0</span><span class="p">:</span><span class="p" data-group-id="7556721370-10">(</span><span class="mi">128</span><span class="p" data-group-id="7556721370-10">)</span><span class="o">/</span><span class="nc">unit</span><span class="p">:</span><span class="mi">8</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="7556721370-9">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">create_file_1</span><span class="p" data-group-id="7556721370-11">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">128</span><span class="p" data-group-id="7556721370-11">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">create_file_1</span><span class="p" data-group-id="7556721370-12">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p" data-group-id="7556721370-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">write</span><span class="p" data-group-id="7556721370-13">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">0</span><span class="p">:</span><span class="p" data-group-id="7556721370-14">(</span><span class="n">M</span><span class="p" data-group-id="7556721370-14">)</span><span class="o">/</span><span class="nc">unit</span><span class="p">:</span><span class="mi">8</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="7556721370-13">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">create_file_1</span><span class="p" data-group-id="7556721370-15">(</span><span class="n">Fd</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7556721370-15">)</span><span class="p">.</span></code></pre><p>When writing data it's generally more efficient to write a list of binaries
 rather than a list of integers. It is not needed to flatten a deep list before
 writing. On Unix hosts, scatter output, which writes a set of buffers in one
 operation, is used when possible. In this way
 <a href="#write/2"><code class="inline">write(FD, [Bin1, Bin2 | Bin3])</code></a> writes the contents of the
 binaries without copying the data at all, except for perhaps deep down in the
-operating system kernel.</p><blockquote><h4 class="warning">Warning</h4><p>If an error occurs when accessing an open file with module <a href="../../../../lib/stdlib-6.1/doc/html/io.html"><code class="inline">io</code></a>, the process
+operating system kernel.</p><blockquote><h4 class="warning">Warning</h4><p>If an error occurs when accessing an open file with module <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html"><code class="inline">io</code></a>, the process
 handling the file exits. The dead file process can hang if a process tries to
 access it later. This will be fixed in a future release.</p></blockquote><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
@@ -218,7 +218,7 @@ access it later. This will be fixed in a future release.</p></blockquote><h2 id=
   </a>
   <span class="text">See Also</span>
 </h2>
-<p><a href="../../../../lib/stdlib-6.1/doc/html/filename.html"><code class="inline">filename</code></a></p>
+<p><a href="../../../../lib/stdlib-6.1.1/doc/html/filename.html"><code class="inline">filename</code></a></p>
     </section>
 
 </div>
@@ -313,7 +313,7 @@ access it later. This will be fixed in a future release.</p></blockquote><h2 id=
 
       </div>
 
-        <div class="summary-synopsis"><p>As returned by <a href="#open/2"><code class="inline">open/2</code></a>; <a href="../../../../erts-15.1/doc/html/erlang.html#t:pid/0"><code class="inline">pid/0</code></a> is a process handling I/O-protocols.</p></div>
+        <div class="summary-synopsis"><p>As returned by <a href="#open/2"><code class="inline">open/2</code></a>; <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:pid/0"><code class="inline">pid/0</code></a> is a process handling I/O-protocols.</p></div>
 
     </div>
 
@@ -597,7 +597,7 @@ effect.</p></div>
 
         <div class="summary-synopsis"><p>The same as <a href="#eval/1"><code class="inline">eval/1</code></a>, but the variable bindings <code class="inline">Bindings</code> are used
 in the evaluation. For information about the variable bindings, see
-<a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a>.</p></div>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a>.</p></div>
 
     </div>
 
@@ -780,7 +780,7 @@ expressions is also an expression), from the file.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>The same as <a href="#path_script/2"><code class="inline">path_script/2</code></a> but the variable bindings
-<code class="inline">Bindings</code> are used in the evaluation. See <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p></div>
+<code class="inline">Bindings</code> are used in the evaluation. See <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p></div>
 
     </div>
 
@@ -987,7 +987,7 @@ expressions is also an expression), from the file.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>The same as <a href="#script/1"><code class="inline">script/1</code></a> but the variable bindings <code class="inline">Bindings</code> are
-used in the evaluation. See <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p></div>
+used in the evaluation. See <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p></div>
 
     </div>
 
@@ -1139,7 +1139,7 @@ implicit, so they are not to be used.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> date_time() :: <a href="../../../../lib/stdlib-6.1/doc/html/calendar.html#t:datetime/0">calendar:datetime</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> date_time() :: <a href="../../../../lib/stdlib-6.1.1/doc/html/calendar.html#t:datetime/0">calendar:datetime</a>().</pre>
 
       </div>
 
@@ -1169,7 +1169,7 @@ implicit, so they are not to be used.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> deep_list() :: [<a href="../../../../erts-15.1/doc/html/erlang.html#t:char/0">char</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="#t:deep_list/0">deep_list</a>()].</pre>
+          <pre translate="no"><span class="attribute">-type</span> deep_list() :: [<a href="../../../../erts-15.1.1/doc/html/erlang.html#t:char/0">char</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="#t:deep_list/0">deep_list</a>()].</pre>
 
       </div>
 
@@ -1256,19 +1256,19 @@ implicit, so they are not to be used.</p></div>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> file_info() ::
-          #file_info{size :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+          #file_info{size :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
                      type :: device | directory | other | regular | symlink | undefined,
                      access :: read | write | read_write | none | undefined,
-                     atime :: <a href="file.html#t:date_time/0">file:date_time</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     mtime :: <a href="file.html#t:date_time/0">file:date_time</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     ctime :: <a href="file.html#t:date_time/0">file:date_time</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     mode :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     links :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     major_device :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     minor_device :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     inode :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     uid :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
-                     gid :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined}.</pre>
+                     atime :: <a href="file.html#t:date_time/0">file:date_time</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     mtime :: <a href="file.html#t:date_time/0">file:date_time</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     ctime :: <a href="file.html#t:date_time/0">file:date_time</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     mode :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     links :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     major_device :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     minor_device :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     inode :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     uid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined,
+                     gid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | undefined}.</pre>
 
       </div>
 
@@ -1326,7 +1326,7 @@ implicit, so they are not to be used.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> filename() :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> filename() :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>().</pre>
 
       </div>
 
@@ -1354,7 +1354,7 @@ implicit, so they are not to be used.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> filename_all() :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | (RawFilename :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>()).</pre>
+          <pre translate="no"><span class="attribute">-type</span> filename_all() :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | (RawFilename :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>()).</pre>
 
       </div>
 
@@ -1382,11 +1382,11 @@ implicit, so they are not to be used.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> io_device() :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:pid/0">pid</a>() | <a href="#t:fd/0">fd</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> io_device() :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:pid/0">pid</a>() | <a href="#t:fd/0">fd</a>().</pre>
 
       </div>
 
-<p>As returned by <a href="#open/2"><code class="inline">open/2</code></a>; <a href="../../../../erts-15.1/doc/html/erlang.html#t:pid/0"><code class="inline">pid/0</code></a> is a process handling I/O-protocols.</p>
+<p>As returned by <a href="#open/2"><code class="inline">open/2</code></a>; <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:pid/0"><code class="inline">pid/0</code></a> is a process handling I/O-protocols.</p>
   </section>
 </section>
 <section class="detail" id="t:location/0">
@@ -1411,10 +1411,10 @@ implicit, so they are not to be used.</p></div>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-type</span> location() ::
-          <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>() |
-          {bof, Offset :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>()} |
-          {cur, Offset :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>()} |
-          {eof, Offset :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>()} |
+          <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>() |
+          {bof, Offset :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>()} |
+          {cur, Offset :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>()} |
+          {eof, Offset :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>()} |
           bof | cur | eof.</pre>
 
       </div>
@@ -1445,11 +1445,11 @@ implicit, so they are not to be used.</p></div>
 
           <pre translate="no"><span class="attribute">-type</span> mode() ::
           read | write | append | exclusive | raw | binary |
-          {delayed_write, Size :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Delay :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} |
+          {delayed_write, Size :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Delay :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} |
           delayed_write |
-          {read_ahead, Size :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>()} |
+          {read_ahead, Size :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:pos_integer/0">pos_integer</a>()} |
           read_ahead | compressed | compressed_one |
-          {encoding, <a href="../../../../lib/stdlib-6.1/doc/html/unicode.html#t:encoding/0">unicode:encoding</a>()} |
+          {encoding, <a href="../../../../lib/stdlib-6.1.1/doc/html/unicode.html#t:encoding/0">unicode:encoding</a>()} |
           sync.</pre>
 
       </div>
@@ -1478,11 +1478,11 @@ implicit, so they are not to be used.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> name() :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="#t:deep_list/0">deep_list</a>().</pre>
+          <pre translate="no"><span class="attribute">-type</span> name() :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="#t:deep_list/0">deep_list</a>().</pre>
 
       </div>
 
-<p>A restricted file name used as input into <a href="file.html"><code class="inline">file</code></a> API functions.</p><p>If VM is in Unicode filename mode, <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0"><code class="inline">string/0</code></a> and <a href="../../../../erts-15.1/doc/html/erlang.html#t:char/0"><code class="inline">char/0</code></a> are allowed to
+<p>A restricted file name used as input into <a href="file.html"><code class="inline">file</code></a> API functions.</p><p>If VM is in Unicode filename mode, <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0"><code class="inline">string/0</code></a> and <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:char/0"><code class="inline">char/0</code></a> are allowed to
 be &gt; 255. See also the documentation of the <a href="#t:name_all/0"><code class="inline">name_all/0</code></a> type.</p>
   </section>
 </section>
@@ -1507,7 +1507,7 @@ be &gt; 255. See also the documentation of the <a href="#t:name_all/0"><code cla
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> name_all() :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="#t:deep_list/0">deep_list</a>() | (RawFilename :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>()).</pre>
+          <pre translate="no"><span class="attribute">-type</span> name_all() :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:atom/0">atom</a>() | <a href="#t:deep_list/0">deep_list</a>() | (RawFilename :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>()).</pre>
 
       </div>
 
@@ -1636,7 +1636,7 @@ runtime libraries of most C compilers.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-type</span> sendfile_option() :: {chunk_size, <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} | {use_threads, <a href="../../../../erts-15.1/doc/html/erlang.html#t:boolean/0">boolean</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-type</span> sendfile_option() :: {chunk_size, <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} | {use_threads, <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:boolean/0">boolean</a>()}.</pre>
 
       </div>
 
@@ -1681,8 +1681,8 @@ runtime libraries of most C compilers.</p>
           <pre translate="no"><span class="attribute">-spec</span> advise(IoDevice, Offset, Length, Advise) -> ok | {error, Reason}
                 when
                     IoDevice :: <a href="#t:io_device/0">io_device</a>(),
-                    Offset :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(),
-                    Length :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(),
+                    Offset :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
+                    Length :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
                     Advise :: <a href="#t:posix_file_advise/0">posix_file_advise</a>(),
                     Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
 
@@ -1717,7 +1717,7 @@ perform appropriate optimizations.</p><p>On some platforms, this function might 
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> allocate(File, Offset, Length) -> ok | {error, <a href="#t:posix/0">posix</a>()}
-                  when File :: <a href="#t:io_device/0">io_device</a>(), Offset :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Length :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
+                  when File :: <a href="#t:io_device/0">io_device</a>(), Offset :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Length :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
 
       </div>
 
@@ -1746,7 +1746,7 @@ perform appropriate optimizations.</p><p>On some platforms, this function might 
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> change_group(Filename, Gid) -> ok | {error, Reason}
-                      when Filename :: <a href="#t:name_all/0">name_all</a>(), Gid :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
+                      when Filename :: <a href="#t:name_all/0">name_all</a>(), Gid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
 
       </div>
 
@@ -1777,7 +1777,7 @@ perform appropriate optimizations.</p><p>On some platforms, this function might 
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> change_mode(Filename, Mode) -> ok | {error, Reason}
-                     when Filename :: <a href="#t:name_all/0">name_all</a>(), Mode :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
+                     when Filename :: <a href="#t:name_all/0">name_all</a>(), Mode :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
 
       </div>
 
@@ -1806,7 +1806,7 @@ perform appropriate optimizations.</p><p>On some platforms, this function might 
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> change_owner(Filename, Uid) -> ok | {error, Reason}
-                      when Filename :: <a href="#t:name_all/0">name_all</a>(), Uid :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
+                      when Filename :: <a href="#t:name_all/0">name_all</a>(), Uid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
 
       </div>
 
@@ -1837,8 +1837,8 @@ perform appropriate optimizations.</p><p>On some platforms, this function might 
           <pre translate="no"><span class="attribute">-spec</span> change_owner(Filename, Uid, Gid) -> ok | {error, Reason}
                       when
                           Filename :: <a href="#t:name_all/0">name_all</a>(),
-                          Uid :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(),
-                          Gid :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(),
+                          Uid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
+                          Gid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
                           Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
 
       </div>
@@ -1965,11 +1965,11 @@ the file. See <a href="#open/2"><code class="inline">open/2</code></a>.</p>
           <pre translate="no"><span class="attribute">-spec</span> consult(Filename) -> {ok, Terms} | {error, Reason}
                  when
                      Filename :: <a href="#t:name_all/0">name_all</a>(),
-                     Terms :: [<a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()],
+                     Terms :: [<a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()],
                      Reason ::
                          <a href="#t:posix/0">posix</a>() |
                          badarg | terminated | system_limit |
-                         {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                         {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -1978,9 +1978,9 @@ following:</p><ul><li><p><strong><code class="inline">{ok, Terms}</code></strong
 For a list of typical error codes, see <a href="#open/2"><code class="inline">open/2</code></a>.</p></li><li><p><strong><code class="inline">{error, {Line, Mod, Term}}</code></strong> - An error occurred when interpreting the
 Erlang terms in the file. To convert the three-element tuple to an English
 description of the error, use <a href="#format_error/1"><code class="inline">format_error/1</code></a>.</p></li></ul><p><em>Example:</em></p><pre><code class="text">f.txt:  {person, &quot;kalle&quot;, 25}.
-        {person, &quot;pelle&quot;, 30}.</code></pre><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">file</span><span class="p">:</span><span class="nf">consult</span><span class="p" data-group-id="3876818012-1">(</span><span class="s">&quot;f.txt&quot;</span><span class="p" data-group-id="3876818012-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="3876818012-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="3876818012-3">[</span><span class="p" data-group-id="3876818012-4">{</span><span class="ss">person</span><span class="p">,</span><span class="s">&quot;kalle&quot;</span><span class="p">,</span><span class="mi">25</span><span class="p" data-group-id="3876818012-4">}</span><span class="p">,</span><span class="p" data-group-id="3876818012-5">{</span><span class="ss">person</span><span class="p">,</span><span class="s">&quot;pelle&quot;</span><span class="p">,</span><span class="mi">30</span><span class="p" data-group-id="3876818012-5">}</span><span class="p" data-group-id="3876818012-3">]</span><span class="p" data-group-id="3876818012-2">}</span></code></pre><p>The encoding of <code class="inline">Filename</code> can be set by a comment, as described in
-<a href="../../../../lib/stdlib-6.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
+        {person, &quot;pelle&quot;, 30}.</code></pre><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">file</span><span class="p">:</span><span class="nf">consult</span><span class="p" data-group-id="5917161997-1">(</span><span class="s">&quot;f.txt&quot;</span><span class="p" data-group-id="5917161997-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5917161997-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="5917161997-3">[</span><span class="p" data-group-id="5917161997-4">{</span><span class="ss">person</span><span class="p">,</span><span class="s">&quot;kalle&quot;</span><span class="p">,</span><span class="mi">25</span><span class="p" data-group-id="5917161997-4">}</span><span class="p">,</span><span class="p" data-group-id="5917161997-5">{</span><span class="ss">person</span><span class="p">,</span><span class="s">&quot;pelle&quot;</span><span class="p">,</span><span class="mi">30</span><span class="p" data-group-id="5917161997-5">}</span><span class="p" data-group-id="5917161997-3">]</span><span class="p" data-group-id="5917161997-2">}</span></code></pre><p>The encoding of <code class="inline">Filename</code> can be set by a comment, as described in
+<a href="../../../../lib/stdlib-6.1.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="copy/2">
@@ -2010,7 +2010,7 @@ description of the error, use <a href="#format_error/1"><code class="inline">for
                   Destination :: <a href="#t:io_device/0">io_device</a>() | Filename | {Filename, Modes},
                   Filename :: <a href="#t:name_all/0">name_all</a>(),
                   Modes :: [<a href="#t:mode/0">mode</a>()],
-                  BytesCopied :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                  BytesCopied :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
                   Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -2045,8 +2045,8 @@ description of the error, use <a href="#format_error/1"><code class="inline">for
                   Destination :: <a href="#t:io_device/0">io_device</a>() | Filename | {Filename, Modes},
                   Filename :: <a href="#t:name_all/0">name_all</a>(),
                   Modes :: [<a href="#t:mode/0">mode</a>()],
-                  ByteCount :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | infinity,
-                  BytesCopied :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                  ByteCount :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>() | infinity,
+                  BytesCopied :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
                   Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -2260,7 +2260,7 @@ an exception.</p></blockquote>
                   Reason ::
                       <a href="#t:posix/0">posix</a>() |
                       badarg | terminated | system_limit |
-                      {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                      {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2271,7 +2271,7 @@ effect.</p><p>Returns one of the following:</p><ul><li><p><strong><code class="i
 For a list of typical error codes, see <a href="#open/2"><code class="inline">open/2</code></a>.</p></li><li><p><strong><code class="inline">{error, {Line, Mod, Term}}</code></strong> - An error occurred when interpreting the
 Erlang expressions in the file. To convert the three-element tuple to an
 English description of the error, use <a href="#format_error/1"><code class="inline">format_error/1</code></a>.</p></li></ul><p>The encoding of <code class="inline">Filename</code> can be set by a comment, as described in
-<a href="../../../../lib/stdlib-6.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="eval/2">
@@ -2298,17 +2298,17 @@ English description of the error, use <a href="#format_error/1"><code class="inl
           <pre translate="no"><span class="attribute">-spec</span> eval(Filename, Bindings) -> ok | {error, Reason}
               when
                   Filename :: <a href="#t:name_all/0">name_all</a>(),
-                  Bindings :: <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html#t:binding_struct/0">erl_eval:binding_struct</a>(),
+                  Bindings :: <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html#t:binding_struct/0">erl_eval:binding_struct</a>(),
                   Reason ::
                       <a href="#t:posix/0">posix</a>() |
                       badarg | terminated | system_limit |
-                      {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                      {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
 <p>The same as <a href="#eval/1"><code class="inline">eval/1</code></a>, but the variable bindings <code class="inline">Bindings</code> are used
 in the evaluation. For information about the variable bindings, see
-<a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a>.</p>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="format_error/1">
@@ -2337,8 +2337,8 @@ in the evaluation. For information about the variable bindings, see
                           Reason ::
                               <a href="#t:posix/0">posix</a>() |
                               badarg | terminated | system_limit |
-                              {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()},
-                          Chars :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>().</pre>
+                              {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()},
+                          Chars :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>().</pre>
 
       </div>
 
@@ -2399,7 +2399,7 @@ directory.</li></ul>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> get_cwd(Drive) -> {ok, Dir} | {error, Reason}
-                 when Drive :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>(), Dir :: <a href="#t:filename/0">filename</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
+                 when Drive :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>(), Dir :: <a href="#t:filename/0">filename</a>(), Reason :: <a href="#t:posix/0">posix</a>() | badarg.</pre>
 
       </div>
 
@@ -2433,14 +2433,14 @@ directory of the specified drive.</p><p><code class="inline">Drive</code> is to 
                   when
                       Dir :: <a href="#t:name_all/0">name_all</a>(),
                       Filenames :: [<a href="#t:filename/0">filename</a>()],
-                      Reason :: <a href="#t:posix/0">posix</a>() | badarg | {no_translation, Filename :: <a href="../../../../lib/stdlib-6.1/doc/html/unicode.html#t:latin1_binary/0">unicode:latin1_binary</a>()}.</pre>
+                      Reason :: <a href="#t:posix/0">posix</a>() | badarg | {no_translation, Filename :: <a href="../../../../lib/stdlib-6.1.1/doc/html/unicode.html#t:latin1_binary/0">unicode:latin1_binary</a>()}.</pre>
 
       </div>
 
 <p>Lists all files in a directory, <em>except</em> files with raw filenames. Returns
 <code class="inline">{ok, Filenames}</code> if successful, otherwise <code class="inline">{error, Reason}</code>. <code class="inline">Filenames</code> is a
 list of the names of all the files in the directory. The names are not sorted.</p><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">eacces</code></strong> - Missing search or write permissions for <code class="inline">Dir</code> or one of its
-parent directories.</p></li><li><p><strong><code class="inline">enoent</code></strong> - The directory does not exist.</p></li><li><p><strong><code class="inline">{no_translation, Filename}</code></strong> - <code class="inline">Filename</code> is a <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> with
+parent directories.</p></li><li><p><strong><code class="inline">enoent</code></strong> - The directory does not exist.</p></li><li><p><strong><code class="inline">{no_translation, Filename}</code></strong> - <code class="inline">Filename</code> is a <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> with
 characters coded in ISO Latin-1 and the VM was started with parameter <code class="inline">+fnue</code>.</p></li></ul>
   </section>
 </section>
@@ -2634,7 +2634,7 @@ UTF-16 on Windows).</p>
 
           <pre translate="no"><span class="attribute">-spec</span> open(File, Modes) -> {ok, IoDevice} | {error, Reason}
               when
-                  File :: Filename | <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
+                  File :: Filename | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
                   Filename :: <a href="#t:name_all/0">name_all</a>(),
                   Modes :: [<a href="#t:mode/0">mode</a>() | ram | directory],
                   IoDevice :: <a href="#t:io_device/0">io_device</a>(),
@@ -2693,29 +2693,29 @@ supplied to <a href="#write/2"><code class="inline">write/2</code></a> or return
 option denotes only how data is stored in the disk file.</p><p>Depending on the encoding, different methods of reading and writing data is
 preferred. The default encoding of <code class="inline">latin1</code> implies using this module (<code class="inline">file</code>)
 for reading and writing data as the interfaces provided here work with
-byte-oriented data. Using other (Unicode) encodings makes the <a href="../../../../lib/stdlib-6.1/doc/html/io.html"><code class="inline">io</code></a> functions
+byte-oriented data. Using other (Unicode) encodings makes the <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html"><code class="inline">io</code></a> functions
 <code class="inline">get_chars</code>, <code class="inline">get_line</code>, and <code class="inline">put_chars</code> more suitable, as they can work with
 the full Unicode range.</p><p>If data is sent to an <a href="#t:io_device/0"><code class="inline">io_device/0</code></a> in a format that cannot be converted to
 the specified encoding, or if data is read by a function that returns data in
 a format that cannot cope with the character range of the data, an error
 occurs and the file is closed.</p><p>Allowed values for <code class="inline">Encoding</code>:</p><ul><li><p><strong><code class="inline">latin1</code></strong> - The default encoding. Bytes supplied to the file, that is,
 <a href="#write/2"><code class="inline">write/2</code></a> are written &quot;as is&quot; on the file. Likewise, bytes read from the
-file, that is, <a href="#read/2"><code class="inline">read/2</code></a> are returned &quot;as is&quot;. If module <a href="../../../../lib/stdlib-6.1/doc/html/io.html"><code class="inline">io</code></a> is used for
+file, that is, <a href="#read/2"><code class="inline">read/2</code></a> are returned &quot;as is&quot;. If module <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html"><code class="inline">io</code></a> is used for
 writing, the file can only cope with Unicode characters up to code point 255
 (the ISO Latin-1 range).</p></li><li><p><strong><code class="inline">unicode or utf8</code></strong> - Characters are translated to and from UTF-8 encoding
 before they are written to or read from the file. A file opened in this way
 can be readable using function <a href="#read/2"><code class="inline">read/2</code></a>, as long as no data stored on the
 file lies beyond the ISO Latin-1 range (0..255), but failure occurs if the
 data contains Unicode code points beyond that range. The file is best read
-with the functions in the Unicode aware module <a href="../../../../lib/stdlib-6.1/doc/html/io.html"><code class="inline">io</code></a>.</p><p>Bytes written to the file by any means are translated to UTF-8 encoding
+with the functions in the Unicode aware module <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html"><code class="inline">io</code></a>.</p><p>Bytes written to the file by any means are translated to UTF-8 encoding
 before being stored on the disk file.</p></li><li><p><strong><code class="inline">utf16 or {utf16,big}</code></strong> - Works like <code class="inline">unicode</code>, but translation is done
 to and from big endian UTF-16 instead of UTF-8.</p></li><li><p><strong><code class="inline">{utf16,little}</code></strong> - Works like <code class="inline">unicode</code>, but translation is done to and
 from little endian UTF-16 instead of UTF-8.</p></li><li><p><strong><code class="inline">utf32 or {utf32,big}</code></strong> - Works like <code class="inline">unicode</code>, but translation is done
 to and from big endian UTF-32 instead of UTF-8.</p></li><li><p><strong><code class="inline">{utf32,little}</code></strong> - Works like <code class="inline">unicode</code>, but translation is done to and
 from little endian UTF-32 instead of UTF-8.</p></li></ul><p>The Encoding can be changed for a file &quot;on the fly&quot; by using function
-<a href="../../../../lib/stdlib-6.1/doc/html/io.html#setopts/2"><code class="inline">io:setopts/2</code></a>. So a file can be analyzed in latin1 encoding for, for example,
+<a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#setopts/2"><code class="inline">io:setopts/2</code></a>. So a file can be analyzed in latin1 encoding for, for example,
 a BOM, positioned beyond the BOM and then be set for the right encoding before
-further reading. For functions identifying BOMs, see module <a href="../../../../lib/stdlib-6.1/doc/html/unicode.html"><code class="inline">unicode</code></a>.</p><p>This option is not allowed on <code class="inline">raw</code> files.</p></li><li><p><strong><code class="inline">ram</code></strong> - <code class="inline">File</code> must be <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0"><code class="inline">iodata/0</code></a>. Returns an <a href="#t:fd/0"><code class="inline">fd/0</code></a>, which lets
+further reading. For functions identifying BOMs, see module <a href="../../../../lib/stdlib-6.1.1/doc/html/unicode.html"><code class="inline">unicode</code></a>.</p><p>This option is not allowed on <code class="inline">raw</code> files.</p></li><li><p><strong><code class="inline">ram</code></strong> - <code class="inline">File</code> must be <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0"><code class="inline">iodata/0</code></a>. Returns an <a href="#t:fd/0"><code class="inline">fd/0</code></a>, which lets
 module <code class="inline">file</code> operate on the data in-memory as if it is a file.</p></li><li><p><strong><code class="inline">sync</code></strong> - On platforms supporting it, enables the POSIX <code class="inline">O_SYNC</code>
 synchronous I/O flag or its platform-dependent equivalent (for example,
 <code class="inline">FILE_FLAG_WRITE_THROUGH</code> on Windows) so that writes to the file block until
@@ -2729,7 +2729,7 @@ a reference to the file.</p></li><li><p><strong><code class="inline">{error, Rea
 monitors the process that originally opened the file (the owner process). If the
 owner process terminates, the file is closed and the process itself terminates
 too. An <code class="inline">IoDevice</code> returned from this call can be used as an argument to the I/O
-functions (see <a href="../../../../lib/stdlib-6.1/doc/html/io.html"><code class="inline">io</code></a>).</p><blockquote><h4 class="warning">Warning</h4><p>While this function can be used to open any file, we recommend against using
+functions (see <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html"><code class="inline">io</code></a>).</p><blockquote><h4 class="warning">Warning</h4><p>While this function can be used to open any file, we recommend against using
 it for NFS-mounted files, FIFOs, devices, or similar since they can cause IO
 threads to hang forever.</p><p>If your application needs to interact with these kinds of files we recommend
 breaking out those parts to a port program instead.</p></blockquote><blockquote><h4 class="info">Note</h4><p>In previous versions of <code class="inline">file</code>, modes were specified as one of the atoms
@@ -2768,12 +2768,12 @@ specified).</p></li></ul>
                           Path :: [Dir],
                           Dir :: <a href="#t:name_all/0">name_all</a>(),
                           Filename :: <a href="#t:name_all/0">name_all</a>(),
-                          Terms :: [<a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()],
+                          Terms :: [<a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()],
                           FullName :: <a href="#t:filename_all/0">filename_all</a>(),
                           Reason ::
                               <a href="#t:posix/0">posix</a>() |
                               badarg | terminated | system_limit |
-                              {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                              {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2785,7 +2785,7 @@ full name of the file.</p></li><li><p><strong><code class="inline">{error, enoen
 For a list of typical error codes, see <a href="#open/2"><code class="inline">open/2</code></a>.</p></li><li><p><strong><code class="inline">{error, {Line, Mod, Term}}</code></strong> - An error occurred when interpreting the
 Erlang terms in the file. Use <a href="#format_error/1"><code class="inline">format_error/1</code></a> to convert the three-element
 tuple to an English description of the error.</p></li></ul><p>The encoding of <code class="inline">Filename</code> can be set by a comment as described in
-<a href="../../../../lib/stdlib-6.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="path_eval/2">
@@ -2817,7 +2817,7 @@ tuple to an English description of the error.</p></li></ul><p>The encoding of <c
                        Reason ::
                            <a href="#t:posix/0">posix</a>() |
                            badarg | terminated | system_limit |
-                           {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                           {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2832,7 +2832,7 @@ name of the file.</p></li><li><p><strong><code class="inline">{error, enoent}</c
 For a list of typical error codes, see <a href="#open/2"><code class="inline">open/2</code></a>.</p></li><li><p><strong><code class="inline">{error, {Line, Mod, Term}}</code></strong> - An error occurred when interpreting the
 Erlang expressions in the file. Use <a href="#format_error/1"><code class="inline">format_error/1</code></a> to convert the
 three-element tuple to an English description of the error.</p></li></ul><p>The encoding of <code class="inline">Filename</code> can be set by a comment as described in
-<a href="../../../../lib/stdlib-6.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="path_open/3">
@@ -2900,12 +2900,12 @@ file.</p></li><li><p><strong><code class="inline">{error, enoent}</code></strong
                      when
                          Path :: [Dir :: <a href="#t:name_all/0">name_all</a>()],
                          Filename :: <a href="#t:name_all/0">name_all</a>(),
-                         Value :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>(),
+                         Value :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>(),
                          FullName :: <a href="#t:filename_all/0">filename_all</a>(),
                          Reason ::
                              <a href="#t:posix/0">posix</a>() |
                              badarg | terminated | system_limit |
-                             {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                             {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -2918,7 +2918,7 @@ the full name of the file and <code class="inline">Value</code> the value of the
 For a list of typical error codes, see <a href="#open/2"><code class="inline">open/2</code></a>.</p></li><li><p><strong><code class="inline">{error, {Line, Mod, Term}}</code></strong> - An error occurred when interpreting the
 Erlang expressions in the file. Use <a href="#format_error/1"><code class="inline">format_error/1</code></a> to convert the
 three-element tuple to an English description of the error.</p></li></ul><p>The encoding of <code class="inline">Filename</code> can be set by a comment as described in
-<a href="../../../../lib/stdlib-6.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="path_script/3">
@@ -2946,18 +2946,18 @@ three-element tuple to an English description of the error.</p></li></ul><p>The 
                      when
                          Path :: [Dir :: <a href="#t:name_all/0">name_all</a>()],
                          Filename :: <a href="#t:name_all/0">name_all</a>(),
-                         Bindings :: <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html#t:binding_struct/0">erl_eval:binding_struct</a>(),
-                         Value :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>(),
+                         Bindings :: <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html#t:binding_struct/0">erl_eval:binding_struct</a>(),
+                         Value :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>(),
                          FullName :: <a href="#t:filename_all/0">filename_all</a>(),
                          Reason ::
                              <a href="#t:posix/0">posix</a>() |
                              badarg | terminated | system_limit |
-                             {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                             {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
 <p>The same as <a href="#path_script/2"><code class="inline">path_script/2</code></a> but the variable bindings
-<code class="inline">Bindings</code> are used in the evaluation. See <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p>
+<code class="inline">Bindings</code> are used in the evaluation. See <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p>
   </section>
 </section>
 <section class="detail" id="position/2">
@@ -2985,7 +2985,7 @@ three-element tuple to an English description of the error.</p></li></ul><p>The 
                   when
                       IoDevice :: <a href="#t:io_device/0">io_device</a>(),
                       Location :: <a href="#t:location/0">location</a>(),
-                      NewPosition :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(),
+                      NewPosition :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
                       Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -3027,9 +3027,9 @@ the result is an error, and after the call the file position is undefined.</li><
           <pre translate="no"><span class="attribute">-spec</span> pread(IoDevice, LocNums) -> {ok, DataL} | eof | {error, Reason}
                when
                    IoDevice :: <a href="#t:io_device/0">io_device</a>(),
-                   LocNums :: [{Location :: <a href="#t:location/0">location</a>(), Number :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()}],
+                   LocNums :: [{Location :: <a href="#t:location/0">location</a>(), Number :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()}],
                    DataL :: [Data],
-                   Data :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>() | eof,
+                   Data :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>() | eof,
                    Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -3068,8 +3068,8 @@ byte position is a valid character boundary on such a file.</p>
                when
                    IoDevice :: <a href="#t:io_device/0">io_device</a>(),
                    Location :: <a href="#t:location/0">location</a>(),
-                   Number :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-                   Data :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>(),
+                   Number :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                   Data :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>(),
                    Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -3105,8 +3105,8 @@ byte position is a valid character boundary on such a file.</p>
           <pre translate="no"><span class="attribute">-spec</span> pwrite(IoDevice, LocBytes) -> ok | {error, {N, Reason}}
                 when
                     IoDevice :: <a href="#t:io_device/0">io_device</a>(),
-                    LocBytes :: [{Location :: <a href="#t:location/0">location</a>(), Bytes :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0">iodata</a>()}],
-                    N :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                    LocBytes :: [{Location :: <a href="#t:location/0">location</a>(), Bytes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0">iodata</a>()}],
+                    N :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
                     Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -3144,7 +3144,7 @@ taken to set the position on a correct character boundary. For details, see
                 when
                     IoDevice :: <a href="#t:io_device/0">io_device</a>(),
                     Location :: <a href="#t:location/0">location</a>(),
-                    Bytes :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
+                    Bytes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
                     Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -3179,9 +3179,9 @@ taken to set the position on a correct character boundary. For details, see
 
           <pre translate="no"><span class="attribute">-spec</span> read(IoDevice, Number) -> {ok, Data} | eof | {error, Reason}
               when
-                  IoDevice :: <a href="#t:io_device/0">io_device</a>() | <a href="../../../../lib/stdlib-6.1/doc/html/io.html#t:device/0">io:device</a>(),
-                  Number :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-                  Data :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>(),
+                  IoDevice :: <a href="#t:io_device/0">io_device</a>() | <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#t:device/0">io:device</a>(),
+                  Number :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                  Data :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>(),
                   Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated | {no_translation, unicode, latin1}.</pre>
 
       </div>
@@ -3192,7 +3192,7 @@ can be represented by more than one byte on the file. The parameter <code class=
 always denotes the number of <em>characters</em> read from the file, while the position
 in the file can be moved much more than this number when reading a Unicode file.</p><p>Also, if <code class="inline">encoding</code> is set to something else than <code class="inline">latin1</code>, the
 <a href="#read/2"><code class="inline">read/2</code></a> call fails if the data contains characters larger than 255,
-which is why <a href="../../../../lib/stdlib-6.1/doc/html/io.html#get_chars/3"><code class="inline">io:get_chars/3</code></a> is to be preferred when reading such a file.</p><p>The function returns:</p><ul><li><p><strong><code class="inline">{ok, Data}</code></strong> - If the file was opened in binary mode, the read bytes are
+which is why <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#get_chars/3"><code class="inline">io:get_chars/3</code></a> is to be preferred when reading such a file.</p><p>The function returns:</p><ul><li><p><strong><code class="inline">{ok, Data}</code></strong> - If the file was opened in binary mode, the read bytes are
 returned in a binary, otherwise in a list. The list or binary is shorter than
 the number of bytes requested if end of file was reached.</p></li><li><p><strong><code class="inline">eof</code></strong> - Returned if <code class="inline">Number&gt;0</code> and end of file was reached before anything
 at all could be read.</p></li><li><p><strong><code class="inline">{error, Reason}</code></strong> - An error occurred.</p></li></ul><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">ebadf</code></strong> - The file is not opened for reading.</p></li><li><p><strong><code class="inline">{no_translation, unicode, latin1}</code></strong> - The file is opened with another
@@ -3224,7 +3224,7 @@ byte-oriented data that this function returns.</p></li></ul>
           <pre translate="no"><span class="attribute">-spec</span> read_file(Filename) -> {ok, Binary} | {error, Reason}
                    when
                        Filename :: <a href="#t:name_all/0">name_all</a>(),
-                       Binary :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>(),
+                       Binary :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>(),
                        Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated | system_limit.</pre>
 
       </div>
@@ -3259,7 +3259,7 @@ byte-oriented data that this function returns.</p></li></ul>
                    when
                        Filename :: <a href="#t:name_all/0">name_all</a>(),
                        Opts :: [<a href="#t:read_file_option/0">read_file_option</a>()],
-                       Binary :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>(),
+                       Binary :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>(),
                        Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated | system_limit.</pre>
 
       </div>
@@ -3336,28 +3336,28 @@ platforms, <code class="inline">enoent</code> is returned instead.</p></li><li><
 
 <p>Retrieves information about a file. Returns <code class="inline">{ok, FileInfo}</code> if successful,
 otherwise <code class="inline">{error, Reason}</code>.</p><p><code class="inline">FileInfo</code> is a record <code class="inline">file_info</code>, defined in the Kernel include file <code class="inline">file.hrl</code>.
-Include the following directive in the module from which the function is called:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="2795057776-1">(</span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="2795057776-1">)</span><span class="p">.</span></code></pre><p>The time type returned in <code class="inline">atime</code>, <code class="inline">mtime</code>, and <code class="inline">ctime</code> is dependent on the time
+Include the following directive in the module from which the function is called:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="2978185395-1">(</span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="2978185395-1">)</span><span class="p">.</span></code></pre><p>The time type returned in <code class="inline">atime</code>, <code class="inline">mtime</code>, and <code class="inline">ctime</code> is dependent on the time
 type set in <code class="inline">Opts :: {time, Type}</code> as follows:</p><ul><li><p><strong><code class="inline">local</code></strong> - Returns local time.</p></li><li><p><strong><code class="inline">universal</code></strong> - Returns universal time.</p></li><li><p><strong><code class="inline">posix</code></strong> - Returns seconds since or before Unix time epoch, which is
 1970-01-01 00:00 UTC.</p></li></ul><p>Default is <code class="inline">{time, local}</code>.</p><p>If the option <code class="inline">raw</code> is set, the file server is not called and only information
 about local files is returned. Note that this will break this module's atomicity
 guarantees as it can race with a concurrent call to
 <a href="#write_file_info/2"><code class="inline">write_file_info/1,2</code> </a>.</p><p>This option has no effect when the function is given an I/O device instead of a
 file name. Use <a href="#open/2"><code class="inline">open/2</code></a> with the <code class="inline">raw</code> mode to obtain a file descriptor first.</p><blockquote><h4 class="info">Note</h4><p>As file times are stored in POSIX time on most OS, it is faster to query file
-information with option <code class="inline">posix</code>.</p></blockquote><p>The record <code class="inline">file_info</code> contains the following fields:</p><ul><li><p><strong><code class="inline">size =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Size of file in bytes.</p></li><li><p><strong><code class="inline">type = device | directory | other | regular</code></strong> - The type of the file. Can
+information with option <code class="inline">posix</code>.</p></blockquote><p>The record <code class="inline">file_info</code> contains the following fields:</p><ul><li><p><strong><code class="inline">size =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Size of file in bytes.</p></li><li><p><strong><code class="inline">type = device | directory | other | regular</code></strong> - The type of the file. Can
 also contain <code class="inline">symlink</code> when returned from
 <a href="#read_link_info/1">read_link_info/1,2</a>.</p></li><li><p><strong><code class="inline">access = read | write | read_write | none</code></strong> - The current system access to
-the file.</p></li><li><p><strong><code class="inline">atime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
-read.</p></li><li><p><strong><code class="inline">mtime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
-written.</p></li><li><p><strong><code class="inline">ctime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The interpretation of this
+the file.</p></li><li><p><strong><code class="inline">atime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
+read.</p></li><li><p><strong><code class="inline">mtime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
+written.</p></li><li><p><strong><code class="inline">ctime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The interpretation of this
 time field depends on the operating system. On Unix, it is the last time the
-file or the <code class="inline">inode</code> was changed. In Windows, it is the create time.</p></li><li><p><strong><code class="inline">mode =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The file permissions as the sum of the following
-bit values:</p><ul><li><p><strong><code class="inline">8#00400</code></strong> - read permission: owner</p></li><li><p><strong><code class="inline">8#00200</code></strong> - write permission: owner</p></li><li><p><strong><code class="inline">8#00100</code></strong> - execute permission: owner</p></li><li><p><strong><code class="inline">8#00040</code></strong> - read permission: group</p></li><li><p><strong><code class="inline">8#00020</code></strong> - write permission: group</p></li><li><p><strong><code class="inline">8#00010</code></strong> - execute permission: group</p></li><li><p><strong><code class="inline">8#00004</code></strong> - read permission: other</p></li><li><p><strong><code class="inline">8#00002</code></strong> - write permission: other</p></li><li><p><strong><code class="inline">8#00001</code></strong> - execute permission: other</p></li><li><p><strong><code class="inline">16#800</code></strong> - set user id on execution</p></li><li><p><strong><code class="inline">16#400</code></strong> - set group id on execution</p></li></ul><p>On Unix platforms, other bits than those listed above may be set.</p></li><li><p><strong><code class="inline">links =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Number of links to the file (this is always 1
-for file systems that have no concept of links).</p></li><li><p><strong><code class="inline">major_device =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Identifies the file system where the
+file or the <code class="inline">inode</code> was changed. In Windows, it is the create time.</p></li><li><p><strong><code class="inline">mode =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The file permissions as the sum of the following
+bit values:</p><ul><li><p><strong><code class="inline">8#00400</code></strong> - read permission: owner</p></li><li><p><strong><code class="inline">8#00200</code></strong> - write permission: owner</p></li><li><p><strong><code class="inline">8#00100</code></strong> - execute permission: owner</p></li><li><p><strong><code class="inline">8#00040</code></strong> - read permission: group</p></li><li><p><strong><code class="inline">8#00020</code></strong> - write permission: group</p></li><li><p><strong><code class="inline">8#00010</code></strong> - execute permission: group</p></li><li><p><strong><code class="inline">8#00004</code></strong> - read permission: other</p></li><li><p><strong><code class="inline">8#00002</code></strong> - write permission: other</p></li><li><p><strong><code class="inline">8#00001</code></strong> - execute permission: other</p></li><li><p><strong><code class="inline">16#800</code></strong> - set user id on execution</p></li><li><p><strong><code class="inline">16#400</code></strong> - set group id on execution</p></li></ul><p>On Unix platforms, other bits than those listed above may be set.</p></li><li><p><strong><code class="inline">links =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Number of links to the file (this is always 1
+for file systems that have no concept of links).</p></li><li><p><strong><code class="inline">major_device =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Identifies the file system where the
 file is located. In Windows, the number indicates a drive as follows: 0 means
-A:, 1 means B:, and so on.</p></li><li><p><strong><code class="inline">minor_device =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Only valid for character devices on
-Unix. In all other cases, this field is zero.</p></li><li><p><strong><code class="inline">inode =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Gives the <code class="inline">inode</code> number. On non-Unix file
-systems, this field is zero.</p></li><li><p><strong><code class="inline">uid =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Indicates the owner of the file. On non-Unix file
-systems, this field is zero.</p></li><li><p><strong><code class="inline">gid =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Gives the group that the owner of the file
+A:, 1 means B:, and so on.</p></li><li><p><strong><code class="inline">minor_device =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Only valid for character devices on
+Unix. In all other cases, this field is zero.</p></li><li><p><strong><code class="inline">inode =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Gives the <code class="inline">inode</code> number. On non-Unix file
+systems, this field is zero.</p></li><li><p><strong><code class="inline">uid =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Indicates the owner of the file. On non-Unix file
+systems, this field is zero.</p></li><li><p><strong><code class="inline">gid =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Gives the group that the owner of the file
 belongs to. On non-Unix file systems, this field is zero.</p></li></ul><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">eacces</code></strong> - Missing search permission for one of the parent directories of
 the file.</p></li><li><p><strong><code class="inline">enoent</code></strong> - The file does not exist.</p></li><li><p><strong><code class="inline">enotdir</code></strong> - A component of the filename is not a directory. On some
 platforms, <code class="inline">enoent</code> is returned instead.</p></li></ul>
@@ -3386,8 +3386,8 @@ platforms, <code class="inline">enoent</code> is returned instead.</p></li></ul>
 
           <pre translate="no"><span class="attribute">-spec</span> read_line(IoDevice) -> {ok, Data} | eof | {error, Reason}
                    when
-                       IoDevice :: <a href="#t:io_device/0">io_device</a>() | <a href="../../../../lib/stdlib-6.1/doc/html/io.html#t:device/0">io:device</a>(),
-                       Data :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>(),
+                       IoDevice :: <a href="#t:io_device/0">io_device</a>() | <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#t:device/0">io:device</a>(),
+                       Data :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>(),
                        Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated | {no_translation, unicode, latin1}.</pre>
 
       </div>
@@ -3396,14 +3396,14 @@ platforms, <code class="inline">enoent</code> is returned instead.</p></li></ul>
 carriage return (CR, <code class="inline">\r</code>) followed by a newline is also treated as a single LF
 character (the carriage return is silently ignored). The line is returned
 <em>including</em> the LF, but excluding any CR immediately followed by an LF. This
-behaviour is consistent with the behaviour of <a href="../../../../lib/stdlib-6.1/doc/html/io.html#get_line/2"><code class="inline">io:get_line/2</code></a>. If end of file is
+behaviour is consistent with the behaviour of <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#get_line/2"><code class="inline">io:get_line/2</code></a>. If end of file is
 reached without any LF ending the last line, a line with no trailing LF is
 returned.</p><p>The function can be used on files opened in <code class="inline">raw</code> mode. However, it is
 inefficient to use it on <code class="inline">raw</code> files if the file is not opened with option
 <code class="inline">{read_ahead, Size}</code> specified. Thus, combining <code class="inline">raw</code> and <code class="inline">{read_ahead, Size}</code>
 is highly recommended when opening a text file for raw line-oriented reading.</p><p>If <code class="inline">encoding</code> is set to something else than <code class="inline">latin1</code>, the
 <a href="#read_line/1"><code class="inline">read_line/1</code></a> call fails if the data contains characters larger
-than 255, why <a href="../../../../lib/stdlib-6.1/doc/html/io.html#get_line/2"><code class="inline">io:get_line/2</code></a> is to be preferred when reading such a file.</p><p>The function returns:</p><ul><li><p><strong><code class="inline">{ok, Data}</code></strong> - One line from the file is returned, including the trailing
+than 255, why <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#get_line/2"><code class="inline">io:get_line/2</code></a> is to be preferred when reading such a file.</p><p>The function returns:</p><ul><li><p><strong><code class="inline">{ok, Data}</code></strong> - One line from the file is returned, including the trailing
 LF, but with CRLF sequences replaced by a single LF (see above).</p><p>If the file is opened in binary mode, the read bytes are returned in a binary,
 otherwise in a list.</p></li><li><p><strong><code class="inline">eof</code></strong> - Returned if end of file was reached before anything at all could
 be read.</p></li><li><p><strong><code class="inline">{error, Reason}</code></strong> - An error occurred.</p></li></ul><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">ebadf</code></strong> - The file is not opened for reading.</p></li><li><p><strong><code class="inline">{no_translation, unicode, latin1}</code></strong> - The file is opened with another
@@ -3611,11 +3611,11 @@ subdirectory of <code class="inline">Source</code>.</p></li><li><p><strong><code
           <pre translate="no"><span class="attribute">-spec</span> script(Filename) -> {ok, Value} | {error, Reason}
                 when
                     Filename :: <a href="#t:name_all/0">name_all</a>(),
-                    Value :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>(),
+                    Value :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>(),
                     Reason ::
                         <a href="#t:posix/0">posix</a>() |
                         badarg | terminated | system_limit |
-                        {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                        {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
@@ -3625,7 +3625,7 @@ the last expression.</p></li><li><p><strong><code class="inline">{error, atom()}
 For a list of typical error codes, see <a href="#open/2"><code class="inline">open/2</code></a>.</p></li><li><p><strong><code class="inline">{error, {Line, Mod, Term}}</code></strong> - An error occurred when interpreting the
 Erlang expressions in the file. Use <a href="#format_error/1"><code class="inline">format_error/1</code></a> to convert the
 three-element tuple to an English description of the error.</p></li></ul><p>The encoding of <code class="inline">Filename</code> can be set by a comment as described in
-<a href="../../../../lib/stdlib-6.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/epp.html#encoding"><code class="inline">epp</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="script/2">
@@ -3652,17 +3652,17 @@ three-element tuple to an English description of the error.</p></li></ul><p>The 
           <pre translate="no"><span class="attribute">-spec</span> script(Filename, Bindings) -> {ok, Value} | {error, Reason}
                 when
                     Filename :: <a href="#t:name_all/0">name_all</a>(),
-                    Bindings :: <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html#t:binding_struct/0">erl_eval:binding_struct</a>(),
-                    Value :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>(),
+                    Bindings :: <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html#t:binding_struct/0">erl_eval:binding_struct</a>(),
+                    Value :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>(),
                     Reason ::
                         <a href="#t:posix/0">posix</a>() |
                         badarg | terminated | system_limit |
-                        {Line :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
+                        {Line :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(), Mod :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:module/0">module</a>(), Term :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()}.</pre>
 
       </div>
 
 <p>The same as <a href="#script/1"><code class="inline">script/1</code></a> but the variable bindings <code class="inline">Bindings</code> are
-used in the evaluation. See <a href="../../../../lib/stdlib-6.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p>
+used in the evaluation. See <a href="../../../../lib/stdlib-6.1.1/doc/html/erl_eval.html"><code class="inline">erl_eval</code></a> about variable bindings.</p>
   </section>
 </section>
 <section class="detail" id="sendfile/2">
@@ -3689,13 +3689,13 @@ used in the evaluation. See <a href="../../../../lib/stdlib-6.1/doc/html/erl_eva
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> sendfile(Filename, Socket) ->
-                  {ok, <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed | badarg | not_owner}
+                  {ok, <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed | badarg | not_owner}
                   when
                       Filename :: <a href="#t:name_all/0">name_all</a>(),
                       Socket ::
                           <a href="inet.html#t:socket/0">inet:socket</a>() |
                           <a href="socket.html#t:socket/0">socket:socket</a>() |
-                          fun((<a href="../../../../erts-15.1/doc/html/erlang.html#t:iolist/0">iolist</a>()) -> ok | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed}).</pre>
+                          fun((<a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iolist/0">iolist</a>()) -> ok | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed}).</pre>
 
       </div>
 
@@ -3727,15 +3727,15 @@ otherwise <code class="inline">{error, Reason}</code>.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> sendfile(RawFile, Socket, Offset, Bytes, Opts) ->
-                  {ok, <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed | badarg | not_owner}
+                  {ok, <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()} | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed | badarg | not_owner}
                   when
                       RawFile :: <a href="#t:fd/0">fd</a>(),
                       Socket ::
                           <a href="inet.html#t:socket/0">inet:socket</a>() |
                           <a href="socket.html#t:socket/0">socket:socket</a>() |
-                          fun((<a href="../../../../erts-15.1/doc/html/erlang.html#t:iolist/0">iolist</a>()) -> ok | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed}),
-                      Offset :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
-                      Bytes :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                          fun((<a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iolist/0">iolist</a>()) -> ok | {error, <a href="inet.html#t:posix/0">inet:posix</a>() | closed}),
+                      Offset :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                      Bytes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
                       Opts :: [<a href="#t:sendfile_option/0">sendfile_option</a>()].</pre>
 
       </div>
@@ -3775,7 +3775,7 @@ memory. Default is 20 MB.</li></ul>
           <pre translate="no"><span class="attribute">-spec</span> set_cwd(Dir) -> ok | {error, Reason}
                  when
                      Dir :: <a href="#t:name/0">name</a>() | EncodedBinary,
-                     EncodedBinary :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0">binary</a>(),
+                     EncodedBinary :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0">binary</a>(),
                      Reason :: <a href="#t:posix/0">posix</a>() | badarg | no_translation.</pre>
 
       </div>
@@ -3786,7 +3786,7 @@ is, they are passed &quot;as is&quot; even when the encoding of the binary does 
 with <a href="#native_name_encoding/0"><code class="inline">native_name_encoding()</code></a>. However, this
 function expects binaries to be encoded according to the value returned by
 <a href="#native_name_encoding/0"><code class="inline">native_name_encoding/0</code></a>.</p><p>Typical error reasons are:</p><ul><li><p><strong><code class="inline">enoent</code></strong> - The directory does not exist.</p></li><li><p><strong><code class="inline">enotdir</code></strong> - A component of <code class="inline">Dir</code> is not a directory. On some platforms,
-<code class="inline">enoent</code> is returned.</p></li><li><p><strong><code class="inline">eacces</code></strong> - Missing permission for the directory or one of its parents.</p></li><li><p><strong><code class="inline">badarg</code></strong> - <code class="inline">Dir</code> has an improper type, such as tuple.</p></li><li><p><strong><code class="inline">no_translation</code></strong> - <code class="inline">Dir</code> is a <a href="../../../../erts-15.1/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> with characters coded in
+<code class="inline">enoent</code> is returned.</p></li><li><p><strong><code class="inline">eacces</code></strong> - Missing permission for the directory or one of its parents.</p></li><li><p><strong><code class="inline">badarg</code></strong> - <code class="inline">Dir</code> has an improper type, such as tuple.</p></li><li><p><strong><code class="inline">no_translation</code></strong> - <code class="inline">Dir</code> is a <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:binary/0"><code class="inline">binary/0</code></a> with characters coded in
 ISO-latin-1 and the VM is operating with unicode filename encoding.</p></li></ul><blockquote><h4 class="warning">Warning</h4><p>In a future release, a bad type for argument <code class="inline">Dir</code> will probably generate an
 exception.</p></blockquote>
   </section>
@@ -3875,8 +3875,8 @@ effect.</p><p>A typical error reason is:</p><ul><li><strong><code class="inline"
 
           <pre translate="no"><span class="attribute">-spec</span> write(IoDevice, Bytes) -> ok | {error, Reason}
                when
-                   IoDevice :: <a href="#t:io_device/0">io_device</a>() | <a href="../../../../lib/stdlib-6.1/doc/html/io.html#t:device/0">io:device</a>(),
-                   Bytes :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
+                   IoDevice :: <a href="#t:io_device/0">io_device</a>() | <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#t:device/0">io:device</a>(),
+                   Bytes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
                    Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated.</pre>
 
       </div>
@@ -3886,8 +3886,8 @@ way to write to a file opened in <code class="inline">raw</code> mode (although 
 opened files too). Returns <code class="inline">ok</code> if successful, and <code class="inline">{error, Reason}</code> otherwise.</p><p>If the file is opened with <code class="inline">encoding</code> set to something else than <code class="inline">latin1</code>, each
 byte written can result in many bytes being written to the file, as the byte
 range 0..255 can represent anything between one and four bytes depending on
-value and UTF encoding type. If you want to write <a href="../../../../lib/stdlib-6.1/doc/html/unicode.html#t:chardata/0"><code class="inline">unicode:chardata/0</code></a> to the
-<code class="inline">IoDevice</code> you should use <a href="../../../../lib/stdlib-6.1/doc/html/io.html#put_chars/2"><code class="inline">io:put_chars/2</code></a> instead.</p><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">ebadf</code></strong> - The file is not opened for writing.</p></li><li><p><strong><code class="inline">enospc</code></strong> - No space is left on the device.</p></li></ul>
+value and UTF encoding type. If you want to write <a href="../../../../lib/stdlib-6.1.1/doc/html/unicode.html#t:chardata/0"><code class="inline">unicode:chardata/0</code></a> to the
+<code class="inline">IoDevice</code> you should use <a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#put_chars/2"><code class="inline">io:put_chars/2</code></a> instead.</p><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">ebadf</code></strong> - The file is not opened for writing.</p></li><li><p><strong><code class="inline">enospc</code></strong> - No space is left on the device.</p></li></ul>
   </section>
 </section>
 <section class="detail" id="write_file/2">
@@ -3914,7 +3914,7 @@ value and UTF encoding type. If you want to write <a href="../../../../lib/stdli
           <pre translate="no"><span class="attribute">-spec</span> write_file(Filename, Bytes) -> ok | {error, Reason}
                     when
                         Filename :: <a href="#t:name_all/0">name_all</a>(),
-                        Bytes :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
+                        Bytes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
                         Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated | system_limit.</pre>
 
       </div>
@@ -3950,7 +3950,7 @@ parent directories.</p></li><li><p><strong><code class="inline">eisdir</code></s
           <pre translate="no"><span class="attribute">-spec</span> write_file(Filename, Bytes, Modes) -> ok | {error, Reason}
                     when
                         Filename :: <a href="#t:name_all/0">name_all</a>(),
-                        Bytes :: <a href="../../../../erts-15.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
+                        Bytes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:iodata/0">iodata</a>(),
                         Modes :: [<a href="#t:mode/0">mode</a>()],
                         Reason :: <a href="#t:posix/0">posix</a>() | badarg | terminated | system_limit.</pre>
 
@@ -4026,17 +4026,17 @@ implicit, so they are not to be used.</p>
 <p>Changes file information. Returns <code class="inline">ok</code> if successful, otherwise
 <code class="inline">{error, Reason}</code>.</p><p><code class="inline">FileInfo</code> is a record <code class="inline">file_info</code>, defined in the Kernel
 include file <code class="inline">file.hrl</code>. Include the following directive in the module from
-which the function is called:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="5474433798-1">(</span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="5474433798-1">)</span><span class="p">.</span></code></pre><p>The time type set in <code class="inline">atime</code>, <code class="inline">mtime</code>, and <code class="inline">ctime</code> depends on the time type set
+which the function is called:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="9025029887-1">(</span><span class="s">&quot;kernel/include/file.hrl&quot;</span><span class="p" data-group-id="9025029887-1">)</span><span class="p">.</span></code></pre><p>The time type set in <code class="inline">atime</code>, <code class="inline">mtime</code>, and <code class="inline">ctime</code> depends on the time type set
 in <code class="inline">Opts :: {time, Type}</code> as follows:</p><ul><li><p><strong><code class="inline">local</code></strong> - Interprets the time set as local.</p></li><li><p><strong><code class="inline">universal</code></strong> - Interprets it as universal time.</p></li><li><p><strong><code class="inline">posix</code></strong> - Must be seconds since or before Unix time epoch, which is
 1970-01-01 00:00 UTC.</p></li></ul><p>Default is <code class="inline">{time, local}</code>.</p><p>If the option <code class="inline">raw</code> is set, the file server is not called and only information
-about local files is returned.</p><p>The following fields are used from the record, if they are specified:</p><ul><li><p><strong><code class="inline">atime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
-read.</p></li><li><p><strong><code class="inline">mtime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
-written.</p></li><li><p><strong><code class="inline">ctime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - On Unix, any value
+about local files is returned.</p><p>The following fields are used from the record, if they are specified:</p><ul><li><p><strong><code class="inline">atime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
+read.</p></li><li><p><strong><code class="inline">mtime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The last time the file was
+written.</p></li><li><p><strong><code class="inline">ctime =</code> <a href="#t:date_time/0"><code class="inline">date_time/0</code></a> <code class="inline">|</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - On Unix, any value
 specified for this field is ignored (the &quot;ctime&quot; for the file is set to the
 current time). On Windows, this field is the new creation time to set for the
-file.</p></li><li><p><strong><code class="inline">mode =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The file permissions as the sum of the following
-bit values:</p><ul><li><p><strong><code class="inline">8#00400</code></strong> - Read permission: owner</p></li><li><p><strong><code class="inline">8#00200</code></strong> - Write permission: owner</p></li><li><p><strong><code class="inline">8#00100</code></strong> - Execute permission: owner</p></li><li><p><strong><code class="inline">8#00040</code></strong> - Read permission: group</p></li><li><p><strong><code class="inline">8#00020</code></strong> - Write permission: group</p></li><li><p><strong><code class="inline">8#00010</code></strong> - Execute permission: group</p></li><li><p><strong><code class="inline">8#00004</code></strong> - Read permission: other</p></li><li><p><strong><code class="inline">8#00002</code></strong> - Write permission: other</p></li><li><p><strong><code class="inline">8#00001</code></strong> - Execute permission: other</p></li><li><p><strong><code class="inline">16#800</code></strong> - Set user id on execution</p></li><li><p><strong><code class="inline">16#400</code></strong> - Set group id on execution</p></li></ul><p>On Unix platforms, other bits than those listed above may be set.</p></li><li><p><strong><code class="inline">uid =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Indicates the file owner. Ignored for non-Unix
-file systems.</p></li><li><p><strong><code class="inline">gid =</code> <a href="../../../../erts-15.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Gives the group that the file owner belongs to.
+file.</p></li><li><p><strong><code class="inline">mode =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - The file permissions as the sum of the following
+bit values:</p><ul><li><p><strong><code class="inline">8#00400</code></strong> - Read permission: owner</p></li><li><p><strong><code class="inline">8#00200</code></strong> - Write permission: owner</p></li><li><p><strong><code class="inline">8#00100</code></strong> - Execute permission: owner</p></li><li><p><strong><code class="inline">8#00040</code></strong> - Read permission: group</p></li><li><p><strong><code class="inline">8#00020</code></strong> - Write permission: group</p></li><li><p><strong><code class="inline">8#00010</code></strong> - Execute permission: group</p></li><li><p><strong><code class="inline">8#00004</code></strong> - Read permission: other</p></li><li><p><strong><code class="inline">8#00002</code></strong> - Write permission: other</p></li><li><p><strong><code class="inline">8#00001</code></strong> - Execute permission: other</p></li><li><p><strong><code class="inline">16#800</code></strong> - Set user id on execution</p></li><li><p><strong><code class="inline">16#400</code></strong> - Set group id on execution</p></li></ul><p>On Unix platforms, other bits than those listed above may be set.</p></li><li><p><strong><code class="inline">uid =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Indicates the file owner. Ignored for non-Unix
+file systems.</p></li><li><p><strong><code class="inline">gid =</code> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0"><code class="inline">non_neg_integer/0</code></a></strong> - Gives the group that the file owner belongs to.
 Ignored for non-Unix file systems.</p></li></ul><p>Typical error reasons:</p><ul><li><p><strong><code class="inline">eacces</code></strong> - Missing search permission for one of the parent directories of
 the file.</p></li><li><p><strong><code class="inline">enoent</code></strong> - The file does not exist.</p></li><li><p><strong><code class="inline">enotdir</code></strong> - A component of the filename is not a directory. On some
 platforms, <code class="inline">enoent</code> is returned instead.</p></li></ul>
