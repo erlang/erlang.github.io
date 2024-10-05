@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-0BE3B989.js"></script>
+    <script src="dist/sidebar_items-8E279F67.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -150,7 +150,7 @@ described in the <a href="logger_chapter.html">Kernel User's Guide</a>, and in t
 </h2>
 <p>Asynchronous OS signals may be subscribed to via the Kernel applications event
 manager (see <a href="../../../../doc/system/design_principles.html">OTP Design Principles</a> and
-<a href="../../../../lib/stdlib-6.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>) registered as <code class="inline">erl_signal_server</code>. A default signal handler is
+<a href="../../../../lib/stdlib-6.1.1/doc/html/gen_event.html"><code class="inline">gen_event</code></a>) registered as <code class="inline">erl_signal_server</code>. A default signal handler is
 installed which handles the following signals:</p><ul><li><p><strong><code class="inline">sigusr1</code></strong> - The default handler will halt Erlang and produce a crashdump
 with slogan &quot;Received SIGUSR1&quot;. This is equivalent to calling
 <code class="inline">erlang:halt(&quot;Received SIGUSR1&quot;)</code>.</p></li><li><p><strong><code class="inline">sigquit</code></strong> - The default handler will halt Erlang immediately. This is
@@ -162,7 +162,9 @@ equivalent to calling <code class="inline">init:stop()</code>.</p></li></ul><h3 
   <span class="text">Events</span>
 </h3>
 <p>Any event handler added to <code class="inline">erl_signal_server</code> must handle the following events.</p><ul><li><p><strong><code class="inline">sighup</code></strong> - Hangup detected on controlling terminal or death of controlling
-process</p></li><li><p><strong><code class="inline">sigquit</code></strong> - Quit from keyboard</p></li><li><p><strong><code class="inline">sigabrt</code></strong> - Abort signal from abort</p></li><li><p><strong><code class="inline">sigalrm</code></strong> - Timer signal from alarm</p></li><li><p><strong><code class="inline">sigterm</code></strong> - Termination signal</p></li><li><p><strong><code class="inline">sigusr1</code></strong> - User-defined signal 1</p></li><li><p><strong><code class="inline">sigusr2</code></strong> - User-defined signal 2</p></li><li><p><strong><code class="inline">sigchld</code></strong> - Child process stopped or terminated</p></li><li><p><strong><code class="inline">sigstop</code></strong> - Stop process</p></li><li><p><strong><code class="inline">sigtstp</code></strong> - Stop typed at terminal</p></li></ul><p>Setting OS signals are described in <a href="os.html#set_signal/2"><code class="inline">os:set_signal/2</code></a>.</p><h2 id="configuration" class="section-heading">
+process</p></li><li><p><strong><code class="inline">sigquit</code></strong> - Quit from keyboard</p></li><li><p><strong><code class="inline">sigabrt</code></strong> - Abort signal from abort</p></li><li><p><strong><code class="inline">sigalrm</code></strong> - Timer signal from alarm</p></li><li><p><strong><code class="inline">sigterm</code></strong> - Termination signal</p></li><li><p><strong><code class="inline">sigusr1</code></strong> - User-defined signal 1</p></li><li><p><strong><code class="inline">sigusr2</code></strong> - User-defined signal 2</p></li><li><p><strong><code class="inline">sigchld</code></strong> - Child process stopped or terminated</p></li><li><p><strong><code class="inline">sigstop</code></strong> - Stop process</p></li><li><p><strong><code class="inline">sigtstp</code></strong> - Stop typed at terminal</p></li><li><p><strong><code class="inline">sigwinch</code></strong> - Window size change</p></li><li><p><strong><code class="inline">siginfo</code></strong> - Status request from keyboard. Note several operating systems
+(Linux in particular) do not support this signal. <a href="os.html#set_signal/2"><code class="inline">os:set_signal/2</code></a> will thow
+a <code class="inline">badarg</code> exception if support is missing.</p></li></ul><p>Setting OS signals are described in <a href="os.html#set_signal/2"><code class="inline">os:set_signal/2</code></a>.</p><h2 id="configuration" class="section-heading">
   <a href="#configuration" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -177,7 +179,7 @@ becomes known to it. Note that you also want to enable
 in order for <code class="inline">global</code> to ensure that a fully connected network is maintained.
 <code class="inline">prevent_overlapping_partitions</code> will also prevent inconsistencies in
 <code class="inline">global</code>'s name registration and locking.</p><p>The now deprecated command line argument
-<a href="../../../../erts-15.1/doc/html/erl_cmd.html#connect_all"><code class="inline">-connect_all &lt;boolean&gt;</code></a> has the same
+<a href="../../../../erts-15.1.1/doc/html/erl_cmd.html#connect_all"><code class="inline">-connect_all &lt;boolean&gt;</code></a> has the same
 effect as the <code class="inline">connect_all</code> configuration parameter. If this configuration
 parameter is defined, it will override the command line argument.</p></li><li><p><strong><code class="inline" id="distributed">distributed = [Distrib]</code></strong> - Specifies which applications
 that are distributed and on which nodes they are allowed to execute. In this
@@ -188,16 +190,16 @@ that node. <code class="inline">Value</code> is one of:</p><ul><li><p><strong><c
 explicitly connected. See <a href="net_kernel.html"><code class="inline">net_kernel</code></a>.</p></li><li><p><strong><code class="inline">once</code></strong> - Connections are established automatically, but only once per
 node. If a node goes down, it must thereafter be explicitly connected. See
 <a href="net_kernel.html"><code class="inline">net_kernel</code></a>.</p></li></ul></li><li><p><strong><code class="inline" id="epmd_module">epmd_module = module()</code></strong> - Configures the module
-responsible for communication with <a href="../../../../erts-15.1/doc/html/epmd_cmd.html">epmd</a>. If this parameter
+responsible for communication with <a href="../../../../erts-15.1.1/doc/html/epmd_cmd.html">epmd</a>. If this parameter
 is undefined, it defaults to <code class="inline">erl_epmd</code>.</p><p>The now deprecated command line argument
-<a href="../../../../erts-15.1/doc/html/erl_cmd.html#epmd_module"><code class="inline">-epmd_module &lt;module&gt;</code></a> has the same
+<a href="../../../../erts-15.1.1/doc/html/erl_cmd.html#epmd_module"><code class="inline">-epmd_module &lt;module&gt;</code></a> has the same
 effect as the <code class="inline">epmd_module</code> configuration parameter. If this configuration
 parameter is defined, it will override the command line argument.</p></li><li><p><strong><code class="inline" id="erl_epmd_node_listen_port">erl_epmd_node_listen_port = integer()</code></strong> - Configures the port used by <a href="erl_epmd.html"><code class="inline">erl_epmd</code></a>
 to listen for connection and connect to other nodes. If this flag is set, the
 Erlang VM will boot in distributed mode even if EPMD is not available. If not
 set, a port is chosen automatically (equivalent to port <code class="inline">0</code>). See <a href="erl_epmd.html"><code class="inline">erl_epmd</code></a>
 for more details.</p><p>The now deprecated command line argument
-<a href="../../../../erts-15.1/doc/html/erl_cmd.html#erl_epmd_port"><code class="inline">erl_epmd_port &lt;module&gt;</code></a> has the same
+<a href="../../../../erts-15.1.1/doc/html/erl_cmd.html#erl_epmd_port"><code class="inline">erl_epmd_port &lt;module&gt;</code></a> has the same
 effect as the <code class="inline">erl_epmd_node_listen_port</code> configuration parameter. If this
 configuration parameter is defined, it will override the command line argument.</p></li><li><p><strong><code class="inline" id="permissions">permissions = [Perm]</code></strong> - Specifies the default permission
 for applications when they are started. In this parameter:</p><ul><li><code class="inline">Perm = {ApplName,Bool}</code></li><li><code class="inline">ApplName = atom()</code></li><li><code class="inline">Bool = boolean()</code></li></ul><p>Permissions are described in <a href="application.html#permit/2"><code class="inline">application:permit/2</code></a>.</p></li><li><p><strong><code class="inline" id="logger">logger = [Config]</code></strong> - Specifies the configuration for
@@ -243,7 +245,7 @@ distributed Erlang nodes. See <a href="gen_tcp.html#connect/4"><code class="inli
 events are issued when erroneous lines are found and skipped in the various
 Inet configuration files.</p></li><li><p><strong><code class="inline" id="inetrc">inetrc = Filename</code></strong> - The name (string) of an Inet user
 configuration file. For details, see section
-<a href="../../../../erts-15.1/doc/html/inet_cfg.html"><code class="inline">Inet Configuration</code></a> in the ERTS User's Guide.</p></li><li><p><strong><code class="inline" id="net_setuptime">net_setuptime = SetupTime</code></strong> -
+<a href="../../../../erts-15.1.1/doc/html/inet_cfg.html"><code class="inline">Inet Configuration</code></a> in the ERTS User's Guide.</p></li><li><p><strong><code class="inline" id="net_setuptime">net_setuptime = SetupTime</code></strong> -
 <code class="inline">SetupTime</code> must be a positive integer or floating point number, and is
 interpreted as the maximum allowed time for each network operation during
 connection setup to another Erlang node. The maximum allowed value is <code class="inline">120</code>.
@@ -260,11 +262,11 @@ connections. When there is a large number of distribution connections, setting
 up garbage collection options can be helpful to reduce memory usage. Default
 is <code class="inline">[link, {priority, max}]</code>, and these two options cannot be changed. The
 <code class="inline">monitor</code> and <code class="inline">{monitor, MonitorOpts}</code> options are not allowed and will be
-dropped if present. See the documentation of the <a href="../../../../erts-15.1/doc/html/erlang.html#spawn_opt/4"><code class="inline">erlang:spawn_opt/4</code></a> BIF for
+dropped if present. See the documentation of the <a href="../../../../erts-15.1.1/doc/html/erlang.html#spawn_opt/4"><code class="inline">erlang:spawn_opt/4</code></a> BIF for
 information about valid options. If the <code class="inline">Opts</code> list is not a proper list, or
 containing invalid options the setup of connections will fail.</p><p>Note that the behavior described above is only true if the distribution
 carrier protocol used is implemented as described in
-<a href="../../../../erts-15.1/doc/html/alt_dist.html#distribution-module">ERTS User's Guide ➜ How to implement an Alternative Carrier for the Erlang Distribution ➜ Distribution Module</a>
+<a href="../../../../erts-15.1.1/doc/html/alt_dist.html#distribution-module">ERTS User's Guide ➜ How to implement an Alternative Carrier for the Erlang Distribution ➜ Distribution Module</a>
 without further alterations. The implementer of the distribution carrier
 protocol used, may have chosen to ignore the <code class="inline">net_ticker_spawn_options</code>
 parameter or altered its behavior. Currently all distribution modules shipped
@@ -334,9 +336,9 @@ used to initialize <code class="inline">boot_server</code> with a list of slave 
 parameter is to be set to <code class="inline">true</code> in an embedded system using this service.</p><p>Defaults to <code class="inline">false</code>.</p></li><li><p><strong><code class="inline" id="start_pg">start_pg = true | false</code></strong> - Starts the
 default <code class="inline">pg</code> scope server (see <a href="pg.html"><code class="inline">pg</code></a>) if the parameter is <code class="inline">true</code>. This
 parameter is to be set to <code class="inline">true</code> in an embedded system that uses this service.</p><p>Defaults to <code class="inline">false</code>.</p></li><li><p><strong><code class="inline" id="start_timer">start_timer = true | false</code></strong> - Starts the <code class="inline">timer_server</code>
-if the parameter is <code class="inline">true</code> (see <a href="../../../../lib/stdlib-6.1/doc/html/timer.html"><code class="inline">timer</code></a>). This parameter is to be set to
+if the parameter is <code class="inline">true</code> (see <a href="../../../../lib/stdlib-6.1.1/doc/html/timer.html"><code class="inline">timer</code></a>). This parameter is to be set to
 <code class="inline">true</code> in an embedded system using this service.</p><p>Defaults to <code class="inline">false</code>.</p></li><li><p><strong><code class="inline" id="shell_docs_ansi">shell_docs_ansi = boolean()</code></strong> - Specifies whether
-the documentation rendered in the shell should use ANSI escape codes.</p><p>See also <a href="../../../../lib/stdlib-6.1/doc/html/shell_docs.html#t:config/0"><code class="inline">shell_docs:config/0</code></a>.</p></li><li><p><strong><code class="inline" id="shell_history">shell_history = enabled | disabled | module()</code></strong> -
+the documentation rendered in the shell should use ANSI escape codes.</p><p>See also <a href="../../../../lib/stdlib-6.1.1/doc/html/shell_docs.html#t:config/0"><code class="inline">shell_docs:config/0</code></a>.</p></li><li><p><strong><code class="inline" id="shell_history">shell_history = enabled | disabled | module()</code></strong> -
 Specifies whether shell history should be logged to disk between usages of
 <code class="inline">erl</code> (<code class="inline">enabled</code>), not logged at all (<code class="inline">disabled</code>), or a user-specified module
 will be used to log shell history. This module should export
@@ -352,26 +354,26 @@ as returned by <code class="inline">filename:basedir(user_cache, &quot;erlang-hi
 Sets a function that <code class="inline">application_controller</code> calls when it starts to
 terminate. The function is called as <code class="inline">Mod:Func(Reason)</code>, where <code class="inline">Reason</code> is the
 terminate reason for <code class="inline">application_controller</code>, and it must return as soon as
-possible for <code class="inline">application_controller</code> to terminate properly.</p></li><li><p><strong><code class="inline" id="source_search_rules">source_search_rules = [DirRule] | [SuffixRule]</code></strong></p><p>Where:</p><ul><li><code class="inline">DirRule = {ObjDirSuffix,SrcDirSuffix}</code></li><li><code class="inline">SuffixRule = {ObjSuffix,SrcSuffix,[DirRule]}</code></li><li><code class="inline">ObjDirSuffix = string()</code></li><li><code class="inline">SrcDirSuffix = string()</code></li><li><code class="inline">ObjSuffix = string()</code></li><li><code class="inline">SrcSuffix = string()</code></li></ul><p>Specifies a list of rules for use by <a href="../../../../lib/stdlib-6.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>
-<a href="../../../../lib/stdlib-6.1/doc/html/filelib.html#find_source/2"><code class="inline">filelib:find_source/2</code></a> If this is set to some other value than the empty
+possible for <code class="inline">application_controller</code> to terminate properly.</p></li><li><p><strong><code class="inline" id="source_search_rules">source_search_rules = [DirRule] | [SuffixRule]</code></strong></p><p>Where:</p><ul><li><code class="inline">DirRule = {ObjDirSuffix,SrcDirSuffix}</code></li><li><code class="inline">SuffixRule = {ObjSuffix,SrcSuffix,[DirRule]}</code></li><li><code class="inline">ObjDirSuffix = string()</code></li><li><code class="inline">SrcDirSuffix = string()</code></li><li><code class="inline">ObjSuffix = string()</code></li><li><code class="inline">SrcSuffix = string()</code></li></ul><p>Specifies a list of rules for use by <a href="../../../../lib/stdlib-6.1.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/filelib.html#find_source/2"><code class="inline">filelib:find_source/2</code></a> If this is set to some other value than the empty
 list, it replaces the default rules. Rules can be simple pairs of directory
-suffixes, such as <code class="inline">{&quot;ebin&quot;, &quot;src&quot;}</code>, which are used by <a href="../../../../lib/stdlib-6.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>,
+suffixes, such as <code class="inline">{&quot;ebin&quot;, &quot;src&quot;}</code>, which are used by <a href="../../../../lib/stdlib-6.1.1/doc/html/filelib.html#find_file/2"><code class="inline">filelib:find_file/2</code></a>,
 or triples specifying separate directory suffix rules depending on file name
 extensions, for example <code class="inline">[{&quot;.beam&quot;, &quot;.erl&quot;, [{&quot;ebin&quot;, &quot;src&quot;}]}</code>, which are
-used by <a href="../../../../lib/stdlib-6.1/doc/html/filelib.html#find_source/2"><code class="inline">filelib:find_source/2</code></a>. Both kinds of rules can be mixed in the list.</p><p>The interpretation of <code class="inline">ObjDirSuffix</code> and <code class="inline">SrcDirSuffix</code> is as follows: if the
+used by <a href="../../../../lib/stdlib-6.1.1/doc/html/filelib.html#find_source/2"><code class="inline">filelib:find_source/2</code></a>. Both kinds of rules can be mixed in the list.</p><p>The interpretation of <code class="inline">ObjDirSuffix</code> and <code class="inline">SrcDirSuffix</code> is as follows: if the
 end of the directory name where an object is located matches <code class="inline">ObjDirSuffix</code>,
 then the name created by replacing <code class="inline">ObjDirSuffix</code> with <code class="inline">SrcDirSuffix</code> is
-expanded by calling <a href="../../../../lib/stdlib-6.1/doc/html/filelib.html#wildcard/1"><code class="inline">filelib:wildcard/1</code></a>, and the first regular file found
+expanded by calling <a href="../../../../lib/stdlib-6.1.1/doc/html/filelib.html#wildcard/1"><code class="inline">filelib:wildcard/1</code></a>, and the first regular file found
 among the matches is the source file.</p></li><li><p><strong><code class="inline" id="standard_io_encoding">standard_io_encoding = Encoding</code></strong> - Set whether
 bytes sent or received via standard_io should be interpreted as unicode or
 latin1. By default input and output is interpreted as Unicode if it is
 supported on the host. With this flag you may configure the encoding on
 startup.</p><p>This works similarly to
-<a href="../../../../lib/stdlib-6.1/doc/html/io.html#setopts/2"><code class="inline">io:setopts(standard_io, {encoding, Encoding})</code></a> but is
+<a href="../../../../lib/stdlib-6.1.1/doc/html/io.html#setopts/2"><code class="inline">io:setopts(standard_io, {encoding, Encoding})</code></a> but is
 applied before any bytes on standard_io may have been read.</p><p>Encoding is one of:</p><ul><li><p><strong><code class="inline">unicode</code></strong> - Configure standard_io to use unicode mode.</p></li><li><p><strong><code class="inline">latin1</code></strong> - Configure standard_io to use latin1 mode.</p></li><li><p><strong><code class="inline">_</code></strong> - Anything other than unicode or latin1 will be ignored and the
 system will configure the encoding by itself, typically unicode on modern
 systems.</p></li></ul><p>See
-<a href="../../../../lib/stdlib-6.1/doc/html/unicode_usage.html#escripts-and-non-interactive-i-o">Escripts and non-interactive I/O in Unicode Usage in Erlang</a>
+<a href="../../../../lib/stdlib-6.1.1/doc/html/unicode_usage.html#escripts-and-non-interactive-i-o">Escripts and non-interactive I/O in Unicode Usage in Erlang</a>
 for more details.</p></li></ul><h2 id="deprecated-configuration-parameters" class="section-heading">
   <a href="#deprecated-configuration-parameters" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
