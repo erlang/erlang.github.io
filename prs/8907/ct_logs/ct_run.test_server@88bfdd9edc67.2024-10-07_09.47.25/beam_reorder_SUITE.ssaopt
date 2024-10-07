@@ -1,0 +1,465 @@
+module beam_reorder_SUITE.
+exports [{all,0},
+         {alloc,1},
+         {confused_beam_validator,1},
+         {end_per_group,2},
+         {end_per_suite,1},
+         {groups,0},
+         {init_per_group,2},
+         {init_per_suite,1},
+         {module_info,0},
+         {module_info,1},
+         {suite,0}].
+attributes [].
+
+%% beam_reorder_SUITE.erl:26
+%% Counter = 4
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`suite`() {
+0:
+  %% Result type:
+  %%    nonempty_list({'ct_hooks', nonempty_list('ts_install_cth')})
+  ret `[{ct_hooks,[ts_install_cth]}]`
+}
+
+%% beam_reorder_SUITE.erl:28
+%% Counter = 4
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`all`() {
+0:
+  %% Result type:
+  %%    nonempty_list({'group', 'p'})
+  ret `[{group,p}]`
+}
+
+%% beam_reorder_SUITE.erl:31
+%% Counter = 4
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`groups`() {
+0:
+  %% Result type:
+  %%    nonempty_list({'p', nonempty_list('parallel'), nonempty_list('alloc' | 'confused_beam_validator')})
+  ret `[{p,[parallel],[alloc,confused_beam_validator]}]`
+}
+
+%% beam_reorder_SUITE.erl:37
+%% Counter = 6
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`init_per_suite`(_0) {
+0:
+  %% beam_reorder_SUITE.erl:38
+  _2 = call (`test_lib`:`recompile`/1), `beam_reorder_SUITE`
+
+  %% Aliased:
+  %%    _2
+  _5 = succeeded:body _2
+  br _5, ^5, ^1
+
+5:
+  %% Aliased:
+  %%    _0
+  ret _0
+
+1:
+  _3 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _3
+}
+
+%% beam_reorder_SUITE.erl:41
+%% Counter = 4
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`end_per_suite`(_0) {
+0:
+  %% Result type:
+  %%    'ok'
+  ret `ok`
+}
+
+%% beam_reorder_SUITE.erl:44
+%% Counter = 4
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`init_per_group`(_0, _1) {
+0:
+  %% Aliased:
+  %%    _1
+  ret _1
+}
+
+%% beam_reorder_SUITE.erl:47
+%% Counter = 4
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`end_per_group`(_0, _1) {
+0:
+  %% Aliased:
+  %%    _1
+  ret _1
+}
+
+%% beam_reorder_SUITE.erl:52
+%% Counter = 19
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`alloc`(_0) {
+0:
+  %% beam_reorder_SUITE.erl:53
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  _3 = call (`alloc_a`/3), `1`, `2`, `{alloc,42}`
+
+  %% Unique:
+  %%    _3
+  _9 = succeeded:body _3
+  br _9, ^9, ^1
+
+9:
+  %% Argument types:
+  %%    _3 => 0 | {'ok', 42} | {'a', 'b', 'c'}
+  %% Unique:
+  %%    _3
+  _17 = bif:'=:=' _3, `{ok,42}`
+  br _17, ^17, ^11
+
+17:
+  %% beam_reorder_SUITE.erl:54
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  _4 = call (`alloc_b`/3), `1`, `2`, `{alloc,{a,b,c}}`
+
+  %% Unique:
+  %%    _4
+  _12 = succeeded:body _4
+  br _12, ^12, ^1
+
+12:
+  %% Argument types:
+  %%    _4 => 0 | {'ok', 42} | {'a', 'b', 'c'}
+  %% Unique:
+  %%    _4
+  _15 = bif:'=:=' _4, `{a,b,c}`
+  br _15, ^15, ^14
+
+15:
+  %% Result type:
+  %%    'ok'
+  ret `ok`
+
+14:
+  %% beam_reorder_SUITE.erl:54
+  %% Unique:
+  %%    _4
+  _5 = match_fail `badmatch`, _4
+
+  %% Unique:
+  %%    _5
+  _16 = succeeded:body _5
+  br ^1
+
+11:
+  %% beam_reorder_SUITE.erl:53
+  %% Unique:
+  %%    _3
+  _6 = match_fail `badmatch`, _3
+
+  %% Unique:
+  %%    _6
+  _18 = succeeded:body _6
+  br ^1
+
+1:
+  _7 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _7
+}
+
+%% beam_reorder_SUITE.erl:57
+%% Counter = 25
+%% bs_ensure_opt: true
+%% Parameters
+%%    _0 =>
+%%     1
+%%    _1 =>
+%%     2
+%%    _2 =>
+%%     {'alloc', 42}
+function `beam_reorder_SUITE`:`alloc_a`(_0, _1, _2) {
+0:
+  %% beam_reorder_SUITE.erl:59
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  Res = call (`id`/1), `{ok,42}`
+
+  %% Unique:
+  %%    Res
+  _22 = succeeded:body Res
+  br _22, ^22, ^1
+
+22:
+  %% beam_reorder_SUITE.erl:60
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  _10 = call (`id`/1), `0`
+
+  %% Unique:
+  %%    _10
+  _23 = succeeded:body _10
+  br _23, ^23, ^1
+
+23:
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  %% Unique:
+  %%    Res
+  ret Res
+
+1:
+  _11 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _11
+}
+
+%% beam_reorder_SUITE.erl:63
+%% Counter = 24
+%% bs_ensure_opt: true
+%% Parameters
+%%    _0 =>
+%%     1
+%%    _1 =>
+%%     2
+%%    _2 =>
+%%     {'alloc', {'a', 'b', 'c'}}
+function `beam_reorder_SUITE`:`alloc_b`(_0, _1, _2) {
+0:
+  %% beam_reorder_SUITE.erl:65
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  Res = call (`id`/1), `{a,b,c}`
+
+  %% Unique:
+  %%    Res
+  _21 = succeeded:body Res
+  br _21, ^21, ^1
+
+21:
+  %% beam_reorder_SUITE.erl:66
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  _9 = call (`id`/1), `0`
+
+  %% Unique:
+  %%    _9
+  _22 = succeeded:body _9
+  br _22, ^22, ^1
+
+22:
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  %% Unique:
+  %%    Res
+  ret Res
+
+1:
+  _10 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _10
+}
+
+%% beam_reorder_SUITE.erl:69
+%% Counter = 55
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`confused_beam_validator`(_0) {
+0:
+  br ^54
+
+54:
+  _17 = new_try_tag `'catch'`
+  br _17, ^15, ^16
+
+15:
+  %% beam_reorder_SUITE.erl:70
+  %% Result type:
+  %%    none()
+  _10 = call (`efficient`/1), `{any}`
+
+  %% Aliased:
+  %%    _10
+  _19 = succeeded:body _10
+  br ^16
+
+16:
+  %% Unique:
+  %%    _17
+  _22 = landingpad `'catch'`, _17
+
+  %% Aliased:
+  %%    _22
+  _20 = extract _22, `0`
+  br ^14
+
+14:
+  %% Aliased:
+  %%    _20
+  %% Unique:
+  %%    _17
+  _1 = catch_end _17, _20
+
+  %% Argument types:
+  %%    
+  %% Aliased:
+  %%    _1
+  _34 = is_tagged_tuple _1, `2`, `'EXIT'`
+  br _34, ^31, ^25
+
+31:
+  %% Argument types:
+  %%    _1 => {''EXIT'', any()}
+  %% Aliased:
+  %%    _1
+  _5 = get_tuple_element _1, `1`
+
+  %% Argument types:
+  %%    
+  %% Aliased:
+  %%    _5
+  _28 = bif:is_tuple _5
+  br _28, ^28, ^25
+
+28:
+  %% Argument types:
+  %%    _5 => {...}
+  %% Aliased:
+  %%    _5
+  _29 = bif:tuple_size _5
+
+  %% Argument types:
+  %%    _29 => 0..16777215
+  %% Unique:
+  %%    _29
+  _30 = bif:'=:=' _29, `2`
+  br _30, ^27, ^25
+
+27:
+  %% Argument types:
+  %%    _5 => {any(), any()}
+  %% Aliased:
+  %%    _5
+  _8 = get_tuple_element _5, `0`
+
+  %% Argument types:
+  %%    
+  %% Aliased:
+  %%    _8
+  _26 = bif:'=:=' _8, `{badmap,{any}}`
+  br _26, ^26, ^25
+
+26:
+  %% Result type:
+  %%    'ok'
+  ret `ok`
+
+25:
+  %% beam_reorder_SUITE.erl:70
+  %% Aliased:
+  %%    _1
+  _11 = match_fail `badmatch`, _1
+
+  %% Unique:
+  %%    _11
+  _37 = succeeded:body _11
+  br ^1
+
+1:
+  _12 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _12
+}
+
+%% beam_reorder_SUITE.erl:73
+%% Counter = 51
+%% bs_ensure_opt: true
+%% Parameters
+%%    _0 =>
+%%     {'any'}
+function `beam_reorder_SUITE`:`efficient`(_0) {
+0:
+  %% beam_reorder_SUITE.erl:74
+  _9 = match_fail `badmap`, `{any}`
+
+  %% Unique:
+  %%    _9
+  _24 = succeeded:body _9
+  br ^1
+
+1:
+  _18 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _18
+}
+
+%% beam_reorder_SUITE.erl:80
+%% Counter = 4
+%% bs_ensure_opt: true
+%% Parameters
+%%    _0 =>
+%%     0 | {'ok', 42} | {'a', 'b', 'c'}
+function `beam_reorder_SUITE`:`id`(_0) {
+0:
+  %% Result type:
+  %%    0 | {'ok', 42} | {'a', 'b', 'c'}
+  %% Unique:
+  %%    _0
+  ret _0
+}
+
+%% Counter = 6
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`module_info`() {
+0:
+  _2 = call (`erlang`:`get_module_info`/1), `beam_reorder_SUITE`
+
+  %% Aliased:
+  %%    _2
+  _5 = succeeded:body _2
+  br _5, ^5, ^1
+
+5:
+  %% Aliased:
+  %%    _2
+  ret _2
+
+1:
+  _3 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _3
+}
+
+%% Counter = 6
+%% bs_ensure_opt: true
+function `beam_reorder_SUITE`:`module_info`(_0) {
+0:
+  %% Aliased:
+  %%    _0
+  _2 = call (`erlang`:`get_module_info`/2), `beam_reorder_SUITE`, _0
+
+  %% Aliased:
+  %%    _2
+  _5 = succeeded:body _2
+  br _5, ^5, ^1
+
+5:
+  %% Aliased:
+  %%    _2
+  ret _2
+
+1:
+  _3 = call (`erlang`:`error`/1), `badarg`
+  %% Result type:
+  %%    none()
+  ret _3
+}
