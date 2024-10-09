@@ -1,0 +1,81 @@
+{node,t_1,t_1@f0b084c70b57}.
+{node,t_2,t_2@f0b084c70b57}.
+{node,t_3,t_3@f0b084c70b57}.
+{node,t_4,t_4@f0b084c70b57}.
+{node,t_5,t_5@f0b084c70b57}.
+{include,"/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/include"}.
+{event_handler,master,
+               [ct_test_support_eh],
+               [{cbm,ct_test_support},{trace_level,50}]}.
+{config,t_1,
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/config.txt"}.
+{config,t_2,
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/config.txt"}.
+{config,t_3,
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/config.txt"}.
+{config,t_4,
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/config.txt"}.
+{config,t_5,
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/config.txt"}.
+{config,master,
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master/config.txt"}.
+{suites,[t_1,t_2,t_3,t_4,t_5],
+        "/buildroot/otp/lib/common_test/make_test_dir/common_test_test/ct_master_SUITE_data/master",
+        [master_SUITE]}.
+{logdir,t_1,
+        "/buildroot/otp/lib/common_test/make_test_dir/ct_logs/ct_run.test_server@f0b084c70b57.2024-10-09_19.22.32/make_test_dir.common_test_test.logs/run.2024-10-09_19.22.35/log_private/slave.t_1"}.
+{logdir,t_2,
+        "/buildroot/otp/lib/common_test/make_test_dir/ct_logs/ct_run.test_server@f0b084c70b57.2024-10-09_19.22.32/make_test_dir.common_test_test.logs/run.2024-10-09_19.22.35/log_private/slave.t_2"}.
+{logdir,t_3,
+        "/buildroot/otp/lib/common_test/make_test_dir/ct_logs/ct_run.test_server@f0b084c70b57.2024-10-09_19.22.32/make_test_dir.common_test_test.logs/run.2024-10-09_19.22.35/log_private/slave.t_3"}.
+{logdir,t_4,
+        "/buildroot/otp/lib/common_test/make_test_dir/ct_logs/ct_run.test_server@f0b084c70b57.2024-10-09_19.22.32/make_test_dir.common_test_test.logs/run.2024-10-09_19.22.35/log_private/slave.t_4"}.
+{logdir,t_5,
+        "/buildroot/otp/lib/common_test/make_test_dir/ct_logs/ct_run.test_server@f0b084c70b57.2024-10-09_19.22.32/make_test_dir.common_test_test.logs/run.2024-10-09_19.22.35/log_private/slave.t_5"}.
+{logdir,master,
+        "/buildroot/otp/lib/common_test/make_test_dir/ct_logs/ct_run.test_server@f0b084c70b57.2024-10-09_19.22.32/make_test_dir.common_test_test.logs/run.2024-10-09_19.22.35/log_private/"}.
+{init,t_1,
+      [{node_start,[{startup_functions,[]},
+                    {monitor_master,true},
+                    {boot_timeout,10},
+                    {init_timeout,10},
+                    {startup_timeout,10},
+                    {env,[{"THIS_MUST_BE_SET","yes"},
+                          {"SO_MUST_THIS","value"}]}]},
+       {eval,{erlang,nodes,[]}}]}.
+{init,t_2,
+      [{node_start,[{startup_functions,[]},
+                    {monitor_master,true},
+                    {boot_timeout,10},
+                    {init_timeout,10},
+                    {startup_timeout,10},
+                    {env,[{"THIS_MUST_BE_SET","yes"},
+                          {"SO_MUST_THIS","value"}]}]},
+       {eval,{erlang,nodes,[]}}]}.
+{init,t_3,
+      [{node_start,[{startup_functions,[]},
+                    {monitor_master,true},
+                    {boot_timeout,10},
+                    {init_timeout,10},
+                    {startup_timeout,10},
+                    {env,[{"THIS_MUST_BE_SET","yes"},
+                          {"SO_MUST_THIS","value"}]}]},
+       {eval,{erlang,nodes,[]}}]}.
+{init,t_4,
+      [{node_start,[{startup_functions,[]},
+                    {monitor_master,true},
+                    {boot_timeout,10},
+                    {init_timeout,10},
+                    {startup_timeout,10},
+                    {env,[{"THIS_MUST_BE_SET","yes"},
+                          {"SO_MUST_THIS","value"}]}]},
+       {eval,{erlang,nodes,[]}}]}.
+{init,t_5,
+      [{node_start,[{startup_functions,[]},
+                    {monitor_master,true},
+                    {boot_timeout,10},
+                    {init_timeout,10},
+                    {startup_timeout,10},
+                    {env,[{"THIS_MUST_BE_SET","yes"},
+                          {"SO_MUST_THIS","value"}]}]},
+       {eval,{erlang,nodes,[]}}]}.
