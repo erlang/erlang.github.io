@@ -132,7 +132,9 @@ Pages
 individual processes. It is part of the OS_Mon application, see
 <a href="os_mon_app.html">os_mon</a>. Available for Unix and Windows.</p><p>Periodically performs a memory check:</p><ul><li>If more than a certain amount of available system memory is allocated, as
 reported by the underlying operating system, the alarm
-<code class="inline">{system_memory_high_watermark, []}</code> is set.</li><li>If any Erlang process <code class="inline">Pid</code> in the system has allocated more than a certain
+<code class="inline">{system_memory_high_watermark, []}</code> is set. How the amount of available
+memory is determined depends on the underlying OS and may change as better
+values become available.</li><li>If any Erlang process <code class="inline">Pid</code> in the system has allocated more than a certain
 amount of total system memory, the alarm
 <code class="inline">{process_memory_high_watermark, Pid}</code> is set.</li></ul><p>Alarms are reported to the SASL alarm handler, see <a href="../../../../lib/sasl-4.2.2/doc/html/alarm_handler.html"><code class="inline">alarm_handler</code></a>. To set an
 alarm, <code class="inline">alarm_handler:set_alarm(Alarm)</code> is called where <code class="inline">Alarm</code> is either of the
@@ -170,7 +172,7 @@ should only check system memory usage (<code class="inline">true</code>) or not.
 meaning that information regarding both system memory usage and Erlang process
 memory usage is collected.</p><p>It is recommended to set this parameter to <code class="inline">false</code> on systems with many
 concurrent processes, as each process memory check makes a traversal of the
-entire list of processes.</p></li></ul><p>See <a href="../../../../lib/kernel-10.1/doc/html/config.html">config</a> for information about how to change the
+entire list of processes.</p></li></ul><p>See <a href="../../../../lib/kernel-10.1.1/doc/html/config.html">config</a> for information about how to change the
 value of configuration parameters.</p><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -328,7 +330,7 @@ list of tagged tuples, where <code class="inline">Tag</code> currently can be on
     </a>
     <h1 class="signature" translate="no">get_check_interval()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L248" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L250" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -340,7 +342,7 @@ list of tagged tuples, where <code class="inline">Tag</code> currently can be on
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_check_interval() -> Milliseconds :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_check_interval() -> Milliseconds :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -356,7 +358,7 @@ list of tagged tuples, where <code class="inline">Tag</code> currently can be on
     </a>
     <h1 class="signature" translate="no">get_helper_timeout()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L318" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L320" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -368,7 +370,7 @@ list of tagged tuples, where <code class="inline">Tag</code> currently can be on
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_helper_timeout() -> Seconds :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_helper_timeout() -> Seconds :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -384,7 +386,7 @@ list of tagged tuples, where <code class="inline">Tag</code> currently can be on
     </a>
     <h1 class="signature" translate="no">get_memory_data()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L185" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L187" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -398,11 +400,11 @@ list of tagged tuples, where <code class="inline">Tag</code> currently can be on
 
           <pre translate="no"><span class="attribute">-spec</span> get_memory_data() -> {Total, Allocated, Worst}
                          when
-                             Total :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
-                             Allocated :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>(),
+                             Total :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                             Allocated :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
                              Worst :: {Pid, PidAllocated} | undefined,
-                             Pid :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:pid/0">pid</a>(),
-                             PidAllocated :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+                             Pid :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pid/0">pid</a>(),
+                             PidAllocated :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -426,7 +428,7 @@ if all memory checks so far have timed out.</p>
     </a>
     <h1 class="signature" translate="no">get_os_wordsize()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L161" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -454,7 +456,7 @@ if all memory checks so far have timed out.</p>
     </a>
     <h1 class="signature" translate="no">get_procmem_high_watermark()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L271" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L273" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -466,7 +468,7 @@ if all memory checks so far have timed out.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_procmem_high_watermark() -> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_procmem_high_watermark() -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -482,7 +484,7 @@ if all memory checks so far have timed out.</p>
     </a>
     <h1 class="signature" translate="no">get_sysmem_high_watermark()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L294" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L296" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -494,7 +496,7 @@ if all memory checks so far have timed out.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_sysmem_high_watermark() -> <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_sysmem_high_watermark() -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -510,7 +512,7 @@ if all memory checks so far have timed out.</p>
     </a>
     <h1 class="signature" translate="no">get_system_memory_data()</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L241" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L243" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -523,7 +525,7 @@ if all memory checks so far have timed out.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> get_system_memory_data() -> MemDataList
-                                when MemDataList :: [{Tag, Size}], Tag :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:atom/0">atom</a>(), Size :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
+                                when MemDataList :: [{Tag, Size}], Tag :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:atom/0">atom</a>(), Size :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>().</pre>
 
       </div>
 
@@ -559,7 +561,7 @@ times out.</p>
     </a>
     <h1 class="signature" translate="no">set_check_interval(Minutes)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L258" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L260" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -571,7 +573,7 @@ times out.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> set_check_interval(Minutes :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> set_check_interval(Minutes :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> ok.</pre>
 
       </div>
 
@@ -589,7 +591,7 @@ value will be used. See <a href="memsup.html#module-configuration">Configuration
     </a>
     <h1 class="signature" translate="no">set_helper_timeout(Seconds)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L328" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L330" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -601,7 +603,7 @@ value will be used. See <a href="memsup.html#module-configuration">Configuration
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> set_helper_timeout(Seconds :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> set_helper_timeout(Seconds :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> ok.</pre>
 
       </div>
 
@@ -619,7 +621,7 @@ default value will be used. See <a href="memsup.html#module-configuration">Confi
     </a>
     <h1 class="signature" translate="no">set_procmem_high_watermark(Float)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L281" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L283" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -631,7 +633,7 @@ default value will be used. See <a href="memsup.html#module-configuration">Confi
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> set_procmem_high_watermark(Float :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> set_procmem_high_watermark(Float :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> ok.</pre>
 
       </div>
 
@@ -649,7 +651,7 @@ and the default value will be used. See <a href="memsup.html#module-configuratio
     </a>
     <h1 class="signature" translate="no">set_sysmem_high_watermark(Float)</h1>
 
-      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L305" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/IngelaAndin/otp/blob/ingela/eldap/correct-spec/OTP-19281/lib/os_mon/src/memsup.erl#L307" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -661,7 +663,7 @@ and the default value will be used. See <a href="memsup.html#module-configuratio
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> set_sysmem_high_watermark(Float :: <a href="../../../../erts-15.1.1/doc/html/erlang.html#t:term/0">term</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> set_sysmem_high_watermark(Float :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> ok.</pre>
 
       </div>
 
