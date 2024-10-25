@@ -172,8 +172,8 @@ the <a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code
 <a href="#t:completion_info/0"><code class="inline">completion_info/0</code></a> and the received <code class="inline">completion</code> message.</p><p>The compiler may then optimize a following <code class="inline">receive</code> statement
 to only scan the messages that arrive after the <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a>
 is created.  If the message queue is large this is a big optimization.</p><p>The <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> has to be unique for the call.</p><h4>Repeating an Operation on a <code class="inline">select</code> Systems</h4><p>On<code class="inline">select</code> systems, if a call would be repeated <em>before</em> the <code class="inline">select</code>
-message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="0884968328-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0884968328-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="0884968328-2">}</span><span class="p" data-group-id="0884968328-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="0884968328-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="0884968328-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="0884968328-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="0884968328-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="0884968328-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="0884968328-5">)</span><span class="p">,</span><span class="w">
+message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="9229280538-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9229280538-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="9229280538-2">}</span><span class="p" data-group-id="9229280538-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="9229280538-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="9229280538-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9229280538-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="9229280538-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="9229280538-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="9229280538-5">)</span><span class="p">,</span><span class="w">
     </span><span class="p">:</span></code></pre><p>Above, <code class="inline">Handle</code> is <em>no longer</em> valid once the second <a href="#accept/2"><code class="inline">accept/2</code></a>, call
 has been made (the first call is automatically canceled).
 After the second <a href="#accept/2"><code class="inline">accept/2</code></a> call returns <code class="inline">{error, timeout}</code>,
@@ -206,28 +206,28 @@ API features could be considered no longer experimental.</li></ul><h2 id="module
   </a>
   <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="2612294129-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="2612294129-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="2612294129-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="2612294129-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="2612294129-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="2612294129-3">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="2612294129-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2612294129-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="1488390808-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="1488390808-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="1488390808-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="1488390808-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="1488390808-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="1488390808-3">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="1488390808-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1488390808-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                                </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SAddr</span><span class="p">,</span><span class="w">
-                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="2612294129-5">}</span><span class="p" data-group-id="2612294129-4">)</span><span class="p">,</span><span class="w">
+                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="1488390808-5">}</span><span class="p" data-group-id="1488390808-4">)</span><span class="p">,</span><span class="w">
    </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="2612294129-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2612294129-6">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="2612294129-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="2612294129-7">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="2612294129-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2612294129-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="2612294129-9">(</span><span class="n">Sock</span><span class="p" data-group-id="2612294129-9">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2612294129-10">(</span><span class="n">Sock</span><span class="p" data-group-id="2612294129-10">)</span><span class="p">.</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="1488390808-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="1488390808-6">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="1488390808-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="1488390808-7">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="1488390808-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="1488390808-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="1488390808-9">(</span><span class="n">Sock</span><span class="p" data-group-id="1488390808-9">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="1488390808-10">(</span><span class="n">Sock</span><span class="p" data-group-id="1488390808-10">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="2612294129-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="2612294129-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="2612294129-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="2612294129-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="2612294129-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="2612294129-13">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="2612294129-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2612294129-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="1488390808-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="1488390808-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="1488390808-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="1488390808-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="1488390808-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="1488390808-13">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="1488390808-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1488390808-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                              </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="2612294129-15">}</span><span class="p" data-group-id="2612294129-14">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="2612294129-16">(</span><span class="n">LSock</span><span class="p" data-group-id="2612294129-16">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="2612294129-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="2612294129-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="2612294129-18">(</span><span class="n">LSock</span><span class="p" data-group-id="2612294129-18">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="2612294129-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2612294129-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="2612294129-20">(</span><span class="n">Sock</span><span class="p" data-group-id="2612294129-20">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="2612294129-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2612294129-21">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2612294129-22">(</span><span class="n">Sock</span><span class="p" data-group-id="2612294129-22">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2612294129-23">(</span><span class="n">LSock</span><span class="p" data-group-id="2612294129-23">)</span><span class="p">.</span></code></pre>
+                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="1488390808-15">}</span><span class="p" data-group-id="1488390808-14">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="1488390808-16">(</span><span class="n">LSock</span><span class="p" data-group-id="1488390808-16">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="1488390808-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="1488390808-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="1488390808-18">(</span><span class="n">LSock</span><span class="p" data-group-id="1488390808-18">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="1488390808-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="1488390808-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="1488390808-20">(</span><span class="n">Sock</span><span class="p" data-group-id="1488390808-20">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="1488390808-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="1488390808-21">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="1488390808-22">(</span><span class="n">Sock</span><span class="p" data-group-id="1488390808-22">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="1488390808-23">(</span><span class="n">LSock</span><span class="p" data-group-id="1488390808-23">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -4063,7 +4063,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
     </a>
     <h1 class="signature" translate="no">accept(ListenSocket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3203" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3198" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4093,7 +4093,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
     </a>
     <h1 class="signature" translate="no">accept/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3275" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3270" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4171,7 +4171,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">bind(Socket, Addr)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2888" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2883" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4209,7 +4209,7 @@ which port that was chosen, you can find out using something like:
     </a>
     <h1 class="signature" translate="no">cancel/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6608" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6612" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4292,7 +4292,7 @@ a <code class="inline">'DOWN'</code> message from this monitor in the caller mes
     </a>
     <h1 class="signature" translate="no">close(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5767" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5771" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4335,7 +4335,7 @@ scenario that is often not relevant.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">connect(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2974" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2969" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4373,7 +4373,7 @@ cannot return a <code class="inline">select</code> return value.</p>
     </a>
     <h1 class="signature" translate="no">connect(Socket, SockAddr)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2988" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2983" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4404,7 +4404,7 @@ cannot return a <code class="inline">select</code> return value.</p>
     </a>
     <h1 class="signature" translate="no">connect/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3092" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3087" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4490,7 +4490,7 @@ about <a href="#connect-timeout">connection time-out</a>.</p>
     </a>
     <h1 class="signature" translate="no">getopt/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5988" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5992" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4534,7 +4534,7 @@ that the underlying OS does.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">getopt(Socket, Level, Opt)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6008" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6012" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4570,7 +4570,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">getopt_native/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6077" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6081" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4804,7 +4804,7 @@ So, don't call this function often.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">ioctl/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6211" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6215" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4840,7 +4840,7 @@ with its name and address.</p></li><li><p><strong><code class="inline">nread</co
 <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a>.</p></li><li><p><strong><code class="inline">tcp_info</code></strong> - Get miscellaneous TCP related information for a
 <em>connected</em> socket <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a> with information items as key-value pairs.</p></li></ul><blockquote><h4 class="info">Note</h4><p>Not all requests are supported by all platforms.
 To see if a ioctl request is supported on the current platform:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="n">Request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">nread</span><span class="p">,</span><span class="w">
-      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="9910998125-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="9910998125-1">)</span><span class="p">,</span><span class="w">
+      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3871825729-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="3871825729-1">)</span><span class="p">,</span><span class="w">
       </span><span class="p">:</span></code></pre></blockquote>
   </section>
 </section>
@@ -4853,7 +4853,7 @@ To see if a ioctl request is supported on the current platform:</p><pre><code cl
     </a>
     <h1 class="signature" translate="no">ioctl/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6435" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6439" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4934,7 +4934,7 @@ and <a href="#t:protocol/0">protocol <code class="inline">udp</code></a>.</p><p>
     </a>
     <h1 class="signature" translate="no">ioctl(Socket, SetRequest, Name, Value)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6540" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6544" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5004,7 +5004,7 @@ of the interface with the specified name.</p></li></ul>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/0"><code class="inline">supports/0</code></a> has a <code class="inline">{Key1, true}</code> tuple
 or a <code class="inline">{Key1, list()}</code> tuple in its returned list,
-otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="6033985445-1">(</span><span class="ss">local</span><span class="p" data-group-id="6033985445-1">)</span><span class="p">,</span></code></pre>
+otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="8882952988-1">(</span><span class="ss">local</span><span class="p" data-group-id="8882952988-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="is_supported/2">
@@ -5035,7 +5035,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
       </div>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/1"><code class="inline">supports(Key1)</code></a> has a <code class="inline">{Key2, true}</code> tuple
-in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="2455682420-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="2455682420-1">)</span><span class="p">,</span></code></pre>
+in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="0987862278-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="0987862278-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="listen/1">
@@ -5047,7 +5047,7 @@ in its returned list, otherwise <code class="inline">false</code> (also for unkn
     </a>
     <h1 class="signature" translate="no">listen(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3165" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3160" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5078,7 +5078,7 @@ value for <code class="inline">Backlog</code> (currently <code class="inline">5<
     </a>
     <h1 class="signature" translate="no">listen(Socket, Backlog)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3187" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3182" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5133,7 +5133,7 @@ will most probably be perceived as at least that long.</p><blockquote><h4 class=
 
 <p>Start a socket monitor.</p><p>If the <code class="inline">Socket</code> doesn't exist or when later the monitor is triggered,
 a <code class="inline">'DOWN'</code> message is sent to the process that called <a href="#monitor/1"><code class="inline">monitor/1</code></a>
-with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">    </span><span class="p" data-group-id="9542225224-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="9542225224-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
+with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">    </span><span class="p" data-group-id="2094510153-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="2094510153-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
 <code class="inline">Socket</code> did not exist when the monitor was started.</p><p>Making several calls to <a href="#monitor/1"><code class="inline">socket:monitor/1</code></a> for the same <code class="inline">Socket</code> is not an
 error; each call creates an independent monitor instance.</p>
   </section>
@@ -5268,7 +5268,7 @@ to use in this function.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2790" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2785" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5282,17 +5282,11 @@ to use in this function.</p></blockquote>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> open(Domain, Type, Opts) -> {ok, Socket} | {error, Reason}
+          <pre translate="no"><span class="attribute">-spec</span> open(Domain, Type, Opts | Protocol) -> {ok, Socket} | {error, Reason}
               when
                   Domain :: <a href="#t:domain/0">domain</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
                   Type :: <a href="#t:type/0">type</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
                   Opts :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:map/0">map</a>(),
-                  Socket :: <a href="#t:socket/0">socket</a>(),
-                  Reason :: <a href="#t:posix/0">posix</a>() | protocol;
-          (Domain, Type, Protocol) -> {ok, Socket} | {error, Reason}
-              when
-                  Domain :: <a href="#t:domain/0">domain</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
-                  Type :: <a href="#t:type/0">type</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
                   Protocol :: default | <a href="#t:protocol/0">protocol</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
                   Socket :: <a href="#t:socket/0">socket</a>(),
                   Reason :: <a href="#t:posix/0">posix</a>() | protocol.</pre>
@@ -5311,7 +5305,7 @@ to use in this function.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open(Domain, Type, Protocol, Opts)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2849" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L2844" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5361,7 +5355,7 @@ for this socket. This overrides the global value.</p><p>Defaults to the global v
     </a>
     <h1 class="signature" translate="no">peername(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6126" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6130" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5393,7 +5387,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4835" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4839" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5423,7 +5417,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4851" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4855" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5456,7 +5450,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4884" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4888" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5501,7 +5495,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4988" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4992" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5589,7 +5583,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5249" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5253" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5619,7 +5613,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5266" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5270" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5652,7 +5646,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5301" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5305" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5690,7 +5684,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5396" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5400" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5772,7 +5766,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5484" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5488" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5802,7 +5796,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/2</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5506" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5510" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5836,7 +5830,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5531" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5535" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5869,7 +5863,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket, BufSz, CtrlSz, TimeoutOrHandle)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5549" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5553" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5900,7 +5894,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/5</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5643" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5647" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5979,7 +5973,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send(Socket, Data)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3360" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3355" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6009,7 +6003,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3381" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3376" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6044,7 +6038,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3520" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3515" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6146,7 +6140,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4515" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4519" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6177,7 +6171,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation, Timeout_or_Handle)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4528" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4532" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6208,7 +6202,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation, Offset, Count)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4541" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4545" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6243,7 +6237,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile/5</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4661" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4665" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6336,7 +6330,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg(Socket, Msg)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3968" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3972" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6366,7 +6360,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3993" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3997" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6380,9 +6374,10 @@ need to be updated between continuation calls.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendmsg(Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-             (Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="#t:msg_send/0">msg_send</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>(), Cont :: <a href="#t:select_info/0">select_info</a>()) -> _;
-             (Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>(), Timeout :: infinity) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendmsg(Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+             (Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="#t:msg_send/0">msg_send</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>(), Cont :: <a href="#t:select_info/0">select_info</a>()) ->
+                 <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+             (Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>(), Timeout :: infinity) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -6401,7 +6396,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4157" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4161" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6528,7 +6523,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3720" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3722" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6542,8 +6537,13 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Cont :: <a href="#t:select_info/0">select_info</a>()) -> _;
-            (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Dest :: <a href="#t:sockaddr/0">sockaddr</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Cont | Dest) -> Result
+                when
+                    Cont :: <a href="#t:select_info/0">select_info</a>(),
+                    Dest :: <a href="#t:sockaddr/0">sockaddr</a>(),
+                    Result :: ok | {ok, RestData} | {error, Reason} | {error, {Reason, RestData}},
+                    RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>(),
+                    Reason :: <a href="#t:posix/0">posix</a>() | closed | <a href="#t:invalid/0">invalid</a>().</pre>
 
       </div>
 
@@ -6561,7 +6561,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3765" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3769" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6575,14 +6575,14 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket, Data, Dest | Cont, Flags | TimeoutOrHandle) -> Result
+          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Dest :: <a href="#t:sockaddr/0">sockaddr</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> Result
                 when
-                    Socket :: <a href="#t:socket/0">socket</a>(),
-                    Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(),
-                    Dest :: <a href="#t:sockaddr/0">sockaddr</a>(),
-                    Cont :: <a href="#t:select_info/0">select_info</a>(),
-                    Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>(),
-                    TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(),
+                    Result :: ok | {ok, RestData} | {error, Reason} | {error, {Reason, RestData}},
+                    RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>(),
+                    Reason :: <a href="#t:posix/0">posix</a>() | closed | <a href="#t:invalid/0">invalid</a>();
+            (Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Cont :: <a href="#t:select_info/0">select_info</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) ->
+                Result
+                when
                     Result :: ok | {ok, RestData} | {error, Reason} | {error, {Reason, RestData}},
                     RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>(),
                     Reason :: <a href="#t:posix/0">posix</a>() | closed | <a href="#t:invalid/0">invalid</a>().</pre>
@@ -6610,7 +6610,7 @@ an explanation of <code class="inline">TimeoutOrHandle</code>.</p>
     </a>
     <h1 class="signature" translate="no">sendto/5</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3885" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L3889" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6691,7 +6691,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv(Socket, IOV)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4250" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4254" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6726,7 +6726,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4364" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4368" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6815,7 +6815,7 @@ at the start of this module reference manual page.</p><p><a href="" id="sendv-co
     </a>
     <h1 class="signature" translate="no">sendv/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4445" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L4449" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6879,7 +6879,7 @@ unfinished calls.</p><p>See <a href="#sendv/3"><code class="inline">sendv/3</cod
     </a>
     <h1 class="signature" translate="no">setopt/3</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5863" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5867" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6926,7 +6926,7 @@ that the underlying OS does.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">setopt/4</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5886" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5890" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6961,7 +6961,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">setopt_native(Socket, Option, Value)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5929" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5933" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7009,7 +7009,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">shutdown(Socket, How)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5799" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L5803" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7040,7 +7040,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">sockname(Socket)</h1>
 
-      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6101" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/kikofernandez/otp/blob/kiko/dialyzer-overlapping-domains/OTP-19310/GH-8810/lib/kernel/src/socket.erl#L6105" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
