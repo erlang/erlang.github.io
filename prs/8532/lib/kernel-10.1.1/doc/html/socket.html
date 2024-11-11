@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-40188BEC.js"></script>
+    <script src="dist/sidebar_items-76E1E652.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -172,8 +172,8 @@ the <a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code
 <a href="#t:completion_info/0"><code class="inline">completion_info/0</code></a> and the received <code class="inline">completion</code> message.</p><p>The compiler may then optimize a following <code class="inline">receive</code> statement
 to only scan the messages that arrive after the <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a>
 is created.  If the message queue is large this is a big optimization.</p><p>The <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> has to be unique for the call.</p><h4>Repeating an Operation on a <code class="inline">select</code> Systems</h4><p>On<code class="inline">select</code> systems, if a call would be repeated <em>before</em> the <code class="inline">select</code>
-message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="8442428680-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8442428680-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="8442428680-2">}</span><span class="p" data-group-id="8442428680-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="8442428680-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="8442428680-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="8442428680-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="8442428680-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="8442428680-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="8442428680-5">)</span><span class="p">,</span><span class="w">
+message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="3872251675-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3872251675-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="3872251675-2">}</span><span class="p" data-group-id="3872251675-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3872251675-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="3872251675-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3872251675-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="3872251675-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3872251675-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="3872251675-5">)</span><span class="p">,</span><span class="w">
     </span><span class="p">:</span></code></pre><p>Above, <code class="inline">Handle</code> is <em>no longer</em> valid once the second <a href="#accept/2"><code class="inline">accept/2</code></a>, call
 has been made (the first call is automatically canceled).
 After the second <a href="#accept/2"><code class="inline">accept/2</code></a> call returns <code class="inline">{error, timeout}</code>,
@@ -206,28 +206,28 @@ API features could be considered no longer experimental.</li></ul><h2 id="module
   </a>
   <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="2203886468-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="2203886468-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="2203886468-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="2203886468-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="2203886468-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="2203886468-3">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="2203886468-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2203886468-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="6112374470-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="6112374470-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="6112374470-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="6112374470-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="6112374470-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="6112374470-3">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="6112374470-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6112374470-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                                </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SAddr</span><span class="p">,</span><span class="w">
-                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="2203886468-5">}</span><span class="p" data-group-id="2203886468-4">)</span><span class="p">,</span><span class="w">
+                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="6112374470-5">}</span><span class="p" data-group-id="6112374470-4">)</span><span class="p">,</span><span class="w">
    </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="2203886468-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2203886468-6">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="2203886468-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="2203886468-7">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="2203886468-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2203886468-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="2203886468-9">(</span><span class="n">Sock</span><span class="p" data-group-id="2203886468-9">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2203886468-10">(</span><span class="n">Sock</span><span class="p" data-group-id="2203886468-10">)</span><span class="p">.</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="6112374470-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="6112374470-6">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="6112374470-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="6112374470-7">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="6112374470-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="6112374470-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="6112374470-9">(</span><span class="n">Sock</span><span class="p" data-group-id="6112374470-9">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="6112374470-10">(</span><span class="n">Sock</span><span class="p" data-group-id="6112374470-10">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="2203886468-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="2203886468-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="2203886468-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="2203886468-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="2203886468-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="2203886468-13">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="2203886468-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2203886468-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="6112374470-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="6112374470-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="6112374470-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="6112374470-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="6112374470-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="6112374470-13">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="6112374470-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6112374470-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                              </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="2203886468-15">}</span><span class="p" data-group-id="2203886468-14">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="2203886468-16">(</span><span class="n">LSock</span><span class="p" data-group-id="2203886468-16">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="2203886468-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="2203886468-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="2203886468-18">(</span><span class="n">LSock</span><span class="p" data-group-id="2203886468-18">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="2203886468-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2203886468-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="2203886468-20">(</span><span class="n">Sock</span><span class="p" data-group-id="2203886468-20">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="2203886468-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="2203886468-21">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2203886468-22">(</span><span class="n">Sock</span><span class="p" data-group-id="2203886468-22">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="2203886468-23">(</span><span class="n">LSock</span><span class="p" data-group-id="2203886468-23">)</span><span class="p">.</span></code></pre>
+                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="6112374470-15">}</span><span class="p" data-group-id="6112374470-14">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="6112374470-16">(</span><span class="n">LSock</span><span class="p" data-group-id="6112374470-16">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="6112374470-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="6112374470-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="6112374470-18">(</span><span class="n">LSock</span><span class="p" data-group-id="6112374470-18">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="6112374470-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="6112374470-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="6112374470-20">(</span><span class="n">Sock</span><span class="p" data-group-id="6112374470-20">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="6112374470-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="6112374470-21">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="6112374470-22">(</span><span class="n">Sock</span><span class="p" data-group-id="6112374470-22">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="6112374470-23">(</span><span class="n">LSock</span><span class="p" data-group-id="6112374470-23">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -1374,7 +1374,7 @@ for a selection of sockets.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#sendfile/2" data-no-tooltip translate="no">sendfile(Socket, FileHandle_or_Continuation)</a>
+        <a href="#sendfile/2" data-no-tooltip translate="no">sendfile(Socket, FileHandle_Cont)</a>
 
       </div>
 
@@ -1384,7 +1384,7 @@ for a selection of sockets.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#sendfile/3" data-no-tooltip translate="no">sendfile(Socket, FileHandle_or_Continuation, Timeout_or_Handle)</a>
+        <a href="#sendfile/3" data-no-tooltip translate="no">sendfile(Socket, FileHandle_Cont, Timeout_Handle)</a>
 
       </div>
 
@@ -1394,7 +1394,7 @@ for a selection of sockets.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#sendfile/4" data-no-tooltip translate="no">sendfile(Socket, FileHandle_or_Continuation, Offset, Count)</a>
+        <a href="#sendfile/4" data-no-tooltip translate="no">sendfile(Socket, FileHandle_Cont, Offset, Count)</a>
 
       </div>
 
@@ -4063,7 +4063,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
     </a>
     <h1 class="signature" translate="no">accept(ListenSocket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3188" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3203" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4077,7 +4077,18 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> accept(ListenSocket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> accept(ListenSocket) -> Result
+                when
+                    Result ::
+                        {ok, Socket} |
+                        {select, SelectInfo} |
+                        {completion, CompletionInfo} |
+                        {error, Reason},
+                    ListenSocket :: <a href="#t:socket/0">socket</a>(),
+                    Socket :: <a href="#t:socket/0">socket</a>(),
+                    SelectInfo :: <a href="#t:select_info/0">select_info</a>(),
+                    CompletionInfo :: <a href="#t:completion_info/0">completion_info</a>(),
+                    Reason :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -4093,7 +4104,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
     </a>
     <h1 class="signature" translate="no">accept/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3260" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3275" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4171,7 +4182,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">bind(Socket, Addr)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2873" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2881" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4209,7 +4220,7 @@ which port that was chosen, you can find out using something like:
     </a>
     <h1 class="signature" translate="no">cancel/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6598" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6658" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4292,7 +4303,7 @@ a <code class="inline">'DOWN'</code> message from this monitor in the caller mes
     </a>
     <h1 class="signature" translate="no">close(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5757" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5817" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4335,7 +4346,7 @@ scenario that is often not relevant.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">connect(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2959" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2967" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4373,7 +4384,7 @@ cannot return a <code class="inline">select</code> return value.</p>
     </a>
     <h1 class="signature" translate="no">connect(Socket, SockAddr)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2973" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2981" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4387,7 +4398,7 @@ cannot return a <code class="inline">select</code> return value.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> connect(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), SockAddr :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> connect(Socket :: <a href="#t:socket/0">socket</a>(), SockAddr :: <a href="#t:sockaddr/0">sockaddr</a>()) -> ok | {error, Reason :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()}.</pre>
 
       </div>
 
@@ -4404,7 +4415,7 @@ cannot return a <code class="inline">select</code> return value.</p>
     </a>
     <h1 class="signature" translate="no">connect/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3077" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3085" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4490,7 +4501,7 @@ about <a href="#connect-timeout">connection time-out</a>.</p>
     </a>
     <h1 class="signature" translate="no">getopt/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5978" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6038" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4534,7 +4545,7 @@ that the underlying OS does.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">getopt(Socket, Level, Opt)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5998" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6058" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4570,7 +4581,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">getopt_native/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6067" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6127" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4804,7 +4815,7 @@ So, don't call this function often.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">ioctl/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6201" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6261" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4840,7 +4851,7 @@ with its name and address.</p></li><li><p><strong><code class="inline">nread</co
 <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a>.</p></li><li><p><strong><code class="inline">tcp_info</code></strong> - Get miscellaneous TCP related information for a
 <em>connected</em> socket <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a> with information items as key-value pairs.</p></li></ul><blockquote><h4 class="info">Note</h4><p>Not all requests are supported by all platforms.
 To see if a ioctl request is supported on the current platform:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="n">Request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">nread</span><span class="p">,</span><span class="w">
-      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="7517987538-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="7517987538-1">)</span><span class="p">,</span><span class="w">
+      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="0021766597-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="0021766597-1">)</span><span class="p">,</span><span class="w">
       </span><span class="p">:</span></code></pre></blockquote>
   </section>
 </section>
@@ -4853,7 +4864,7 @@ To see if a ioctl request is supported on the current platform:</p><pre><code cl
     </a>
     <h1 class="signature" translate="no">ioctl/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6425" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6485" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4874,7 +4885,7 @@ To see if a ioctl request is supported on the current platform:</p><pre><code cl
                        gifname | gifindex | gifaddr | gifdstaddr | gifbrdaddr | gifnetmask | gifhwaddr |
                        genaddr | gifmtu | giftxqlen | gifflags | tcp_info,
                    NameOrIndex :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:string/0">string</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
-                   Result :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(),
+                   Result :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>(),
                    Reason :: <a href="#t:posix/0">posix</a>() | closed;
            (Socket, SetRequest, Value) -> ok | {error, Reason}
                when
@@ -4934,7 +4945,7 @@ and <a href="#t:protocol/0">protocol <code class="inline">udp</code></a>.</p><p>
     </a>
     <h1 class="signature" translate="no">ioctl(Socket, SetRequest, Name, Value)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6530" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6590" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4955,7 +4966,7 @@ and <a href="#t:protocol/0">protocol <code class="inline">udp</code></a>.</p><p>
                        sifflags | sifaddr | sifdstaddr | sifbrdaddr | sifnetmask | sifhwaddr | sifmtu |
                        siftxqlen,
                    Name :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:string/0">string</a>(),
-                   Value :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(),
+                   Value :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>(),
                    Reason :: <a href="#t:posix/0">posix</a>() | closed.</pre>
 
       </div>
@@ -5004,7 +5015,7 @@ of the interface with the specified name.</p></li></ul>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/0"><code class="inline">supports/0</code></a> has a <code class="inline">{Key1, true}</code> tuple
 or a <code class="inline">{Key1, list()}</code> tuple in its returned list,
-otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3855076376-1">(</span><span class="ss">local</span><span class="p" data-group-id="3855076376-1">)</span><span class="p">,</span></code></pre>
+otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="7484056608-1">(</span><span class="ss">local</span><span class="p" data-group-id="7484056608-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="is_supported/2">
@@ -5035,7 +5046,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
       </div>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/1"><code class="inline">supports(Key1)</code></a> has a <code class="inline">{Key2, true}</code> tuple
-in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="8850345495-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="8850345495-1">)</span><span class="p">,</span></code></pre>
+in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3970198702-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="3970198702-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="listen/1">
@@ -5047,7 +5058,7 @@ in its returned list, otherwise <code class="inline">false</code> (also for unkn
     </a>
     <h1 class="signature" translate="no">listen(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3150" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3158" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5061,7 +5072,7 @@ in its returned list, otherwise <code class="inline">false</code> (also for unkn
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> listen(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> listen(Socket :: <a href="#t:socket/0">socket</a>()) -> ok | {error, Reason :: <a href="#t:posix/0">posix</a>() | closed}.</pre>
 
       </div>
 
@@ -5078,7 +5089,7 @@ value for <code class="inline">Backlog</code> (currently <code class="inline">5<
     </a>
     <h1 class="signature" translate="no">listen(Socket, Backlog)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3172" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3177" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5092,8 +5103,7 @@ value for <code class="inline">Backlog</code> (currently <code class="inline">5<
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> listen(Socket, Backlog) -> ok | {error, Reason}
-                when Socket :: <a href="#t:socket/0">socket</a>(), Backlog :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(), Reason :: <a href="#t:posix/0">posix</a>() | closed.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> listen(Socket :: <a href="#t:socket/0">socket</a>(), Backlog :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> ok | {error, Reason :: <a href="#t:posix/0">posix</a>() | closed}.</pre>
 
       </div>
 
@@ -5133,7 +5143,7 @@ will most probably be perceived as at least that long.</p><blockquote><h4 class=
 
 <p>Start a socket monitor.</p><p>If the <code class="inline">Socket</code> doesn't exist or when later the monitor is triggered,
 a <code class="inline">'DOWN'</code> message is sent to the process that called <a href="#monitor/1"><code class="inline">monitor/1</code></a>
-with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">    </span><span class="p" data-group-id="2059175964-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="2059175964-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
+with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">    </span><span class="p" data-group-id="3374378039-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="3374378039-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
 <code class="inline">Socket</code> did not exist when the monitor was started.</p><p>Making several calls to <a href="#monitor/1"><code class="inline">socket:monitor/1</code></a> for the same <code class="inline">Socket</code> is not an
 error; each call creates an independent monitor instance.</p>
   </section>
@@ -5191,7 +5201,7 @@ error; each call creates an independent monitor instance.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> open(FD :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> open(FD :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5207,7 +5217,7 @@ error; each call creates an independent monitor instance.</p>
     </a>
     <h1 class="signature" translate="no">open/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2744" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2748" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5233,7 +5243,12 @@ error; each call creates an independent monitor instance.</p>
                         use_registry => <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>()},
                   Socket :: <a href="#t:socket/0">socket</a>(),
                   Reason :: <a href="#t:posix/0">posix</a>() | domain | type | protocol;
-          (Domain :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Type :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          (Domain, Type) -> {ok, Socket} | {error, Reason}
+              when
+                  Domain :: <a href="#t:domain/0">domain</a>(),
+                  Type :: <a href="#t:type/0">type</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                  Socket :: <a href="#t:socket/0">socket</a>(),
+                  Reason :: <a href="#t:posix/0">posix</a>() | protocol.</pre>
 
       </div>
 
@@ -5261,7 +5276,7 @@ to use in this function.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2775" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2783" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5275,8 +5290,14 @@ to use in this function.</p></blockquote>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> open(Domain :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Type :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Opts :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:map/0">map</a>()) -> _;
-          (Domain :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Type :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Protocol :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> open(Domain, Type, Opts | Protocol) -> {ok, Socket} | {error, Reason}
+              when
+                  Domain :: <a href="#t:domain/0">domain</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                  Type :: <a href="#t:type/0">type</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                  Opts :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:map/0">map</a>(),
+                  Protocol :: default | <a href="#t:protocol/0">protocol</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                  Socket :: <a href="#t:socket/0">socket</a>(),
+                  Reason :: <a href="#t:posix/0">posix</a>() | protocol.</pre>
 
       </div>
 
@@ -5292,7 +5313,7 @@ to use in this function.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">open(Domain, Type, Protocol, Opts)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2834" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L2842" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5342,7 +5363,7 @@ for this socket. This overrides the global value.</p><p>Defaults to the global v
     </a>
     <h1 class="signature" translate="no">peername(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6116" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6176" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5374,7 +5395,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4810" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4868" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5388,7 +5409,7 @@ the remote end of the socket.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recv(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recv(Socket :: <a href="#t:socket/0">socket</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5404,7 +5425,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4826" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4884" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5418,8 +5439,8 @@ the remote end of the socket.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recv(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-          (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Length :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recv(Socket :: <a href="#t:socket/0">socket</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+          (Socket :: <a href="#t:socket/0">socket</a>(), Length :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5437,7 +5458,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4857" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4917" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5451,9 +5472,16 @@ the remote end of the socket.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recv(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _;
-          (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Length :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-          (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Length :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recv(Socket, Flags, TimeoutOrHandle) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()
+              when
+                  Socket :: <a href="#t:socket/0">socket</a>(),
+                  Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>(),
+                  TimeoutOrHandle :: nowait | <a href="#t:select_handle/0">select_handle</a>() | <a href="#t:completion_handle/0">completion_handle</a>();
+          (Socket :: <a href="#t:socket/0">socket</a>(), Length :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+          (Socket :: <a href="#t:socket/0">socket</a>(),
+           Length :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+           TimeoutOrHandle :: <a href="#t:select_handle/0">select_handle</a>() | <a href="#t:completion_handle/0">completion_handle</a>()) ->
+              <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5475,7 +5503,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4961" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5021" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5563,7 +5591,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5239" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5299" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5577,7 +5605,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvfrom(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvfrom(Socket :: <a href="#t:socket/0">socket</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5593,7 +5621,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5256" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5316" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5607,8 +5635,8 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvfrom(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-              (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvfrom(Socket :: <a href="#t:socket/0">socket</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+              (Socket :: <a href="#t:socket/0">socket</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5626,7 +5654,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5291" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5351" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5640,9 +5668,14 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvfrom(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _;
-              (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-              (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvfrom(Socket :: <a href="#t:socket/0">socket</a>(), Flags :: [<a href="#t:msg_flag/0">msg_flag</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()], TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()) ->
+                  <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+              (Socket :: <a href="#t:socket/0">socket</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(), Flags :: [<a href="#t:msg_flag/0">msg_flag</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()]) ->
+                  <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+              (Socket :: <a href="#t:socket/0">socket</a>(),
+               BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+               TimeoutOrHandle :: nowait | <a href="#t:select_handle/0">select_handle</a>() | <a href="#t:completion_handle/0">completion_handle</a>()) ->
+                  <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5661,7 +5694,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5386" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5446" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5743,7 +5776,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5474" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5534" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5757,7 +5790,7 @@ at the start of this module reference manual page.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="#t:socket/0">socket</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5773,7 +5806,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/2</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5496" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5556" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5787,8 +5820,10 @@ at the start of this module reference manual page.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-             (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="#t:socket/0">socket</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+             (Socket :: <a href="#t:socket/0">socket</a>(),
+              TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:reference/0">reference</a>() | infinity | nowait | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>()) ->
+                 <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5806,7 +5841,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5521" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5581" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5820,8 +5855,8 @@ at the start of this module reference manual page.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _;
-             (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(), CtrlSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+             (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(), CtrlSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5839,7 +5874,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket, BufSz, CtrlSz, TimeoutOrHandle)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5539" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5599" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5853,7 +5888,11 @@ at the start of this module reference manual page.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), CtrlSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> recvmsg(Socket :: <a href="#t:socket/0">socket</a>(),
+              BufSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+              CtrlSz :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+              TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()) ->
+                 <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -5870,7 +5909,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/5</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5633" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5693" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5949,7 +5988,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send(Socket, Data)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3345" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3368" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5963,7 +6002,16 @@ at the start of this module reference manual page.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> send(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> send(Socket, Data) -> Result
+              when
+                  Socket :: <a href="#t:socket/0">socket</a>(),
+                  Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(),
+                  Result ::
+                      ok |
+                      {ok, RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>()} |
+                      {select, SelectInfo :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()} |
+                      {completion, CompletionInfo :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()} |
+                      {error, Reason :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()}.</pre>
 
       </div>
 
@@ -5979,7 +6027,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3366" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3389" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6014,7 +6062,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">send/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3505" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3528" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6114,9 +6162,9 @@ and encode message flags in every call but the first.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation)</h1>
+    <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4490" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4537" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6130,7 +6178,8 @@ and encode message flags in every call but the first.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendfile(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), FileHandle_or_Continuation :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendfile(Socket, FileHandle | Continuation) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()
+                  when Socket :: <a href="#t:socket/0">socket</a>(), FileHandle :: <a href="file.html#t:fd/0">file:fd</a>(), Continuation :: <a href="#t:select_info/0">select_info</a>().</pre>
 
       </div>
 
@@ -6145,9 +6194,9 @@ and encode message flags in every call but the first.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation, Timeout_or_Handle)</h1>
+    <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont, Timeout_Handle)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4503" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4555" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6161,7 +6210,13 @@ and encode message flags in every call but the first.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendfile(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), FileHandle_or_Continuation :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Timeout_or_Handle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendfile(Socket, FileHandle | Continuation, Timeout | Handle) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()
+                  when
+                      Socket :: <a href="#t:socket/0">socket</a>(),
+                      FileHandle :: <a href="file.html#t:fd/0">file:fd</a>(),
+                      Continuation :: <a href="#t:select_info/0">select_info</a>(),
+                      Timeout :: infinity | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                      Handle :: nowait | <a href="#t:select_handle/0">select_handle</a>().</pre>
 
       </div>
 
@@ -6176,9 +6231,9 @@ and encode message flags in every call but the first.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">sendfile(Socket, FileHandle_or_Continuation, Offset, Count)</h1>
+    <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont, Offset, Count)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4516" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4574" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6192,11 +6247,13 @@ and encode message flags in every call but the first.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendfile(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(),
-               FileHandle_or_Continuation :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(),
-               Offset :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(),
-               Count :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) ->
-                  _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendfile(Socket, FileHandle | Continuation, Offset, Count) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()
+                  when
+                      Socket :: <a href="#t:socket/0">socket</a>(),
+                      FileHandle :: <a href="file.html#t:fd/0">file:fd</a>(),
+                      Continuation :: <a href="#t:select_info/0">select_info</a>(),
+                      Offset :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>(),
+                      Count :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
 
       </div>
 
@@ -6213,7 +6270,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile/5</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4636" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4694" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6306,7 +6363,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg(Socket, Msg)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3943" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3987" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6320,7 +6377,8 @@ need to be updated between continuation calls.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Msg :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendmsg(Socket, Msg) -> Result
+                 when Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>(), Result :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -6336,7 +6394,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3968" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4012" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6350,9 +6408,10 @@ need to be updated between continuation calls.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendmsg(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Msg :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-             (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Cont :: <a href="#t:select_info/0">select_info</a>()) -> _;
-             (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Msg :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Timeout :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendmsg(Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+             (Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="#t:msg_send/0">msg_send</a>() | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>(), Cont :: <a href="#t:select_info/0">select_info</a>()) ->
+                 <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
+             (Socket :: <a href="#t:socket/0">socket</a>(), Msg :: <a href="#t:msg_send/0">msg_send</a>(), Timeout :: infinity) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -6371,7 +6430,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4132" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4176" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6498,7 +6557,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3705" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3735" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6512,8 +6571,13 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Cont :: <a href="#t:select_info/0">select_info</a>()) -> _;
-            (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Dest :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Cont | Dest) -> Result
+                when
+                    Cont :: <a href="#t:select_info/0">select_info</a>(),
+                    Dest :: <a href="#t:sockaddr/0">sockaddr</a>(),
+                    Result :: ok | {ok, RestData} | {error, Reason} | {error, {Reason, RestData}},
+                    RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>(),
+                    Reason :: <a href="#t:posix/0">posix</a>() | closed | <a href="#t:invalid/0">invalid</a>().</pre>
 
       </div>
 
@@ -6531,7 +6595,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3740" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3780" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6545,9 +6609,23 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Dest :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> _;
-            (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Cont :: <a href="#t:select_info/0">select_info</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _;
-            (Socket :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), Dest :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>()) -> _.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Dest :: <a href="#t:sockaddr/0">sockaddr</a>(), Flags :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:list/0">list</a>()) -> Result
+                when
+                    Result ::
+                        ok |
+                        {ok, RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>()} |
+                        {error, Reason} |
+                        {error, {Reason, RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>()}},
+                    Reason :: <a href="#t:posix/0">posix</a>() | closed | <a href="#t:invalid/0">invalid</a>();
+            (Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Cont :: <a href="#t:select_info/0">select_info</a>(), TimeoutOrHandle :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>()) ->
+                Result
+                when
+                    Result ::
+                        ok |
+                        {ok, RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>()} |
+                        {error, Reason} |
+                        {error, {Reason, RestData :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>()}},
+                    Reason :: <a href="#t:posix/0">posix</a>() | closed | <a href="#t:invalid/0">invalid</a>().</pre>
 
       </div>
 
@@ -6572,7 +6650,7 @@ an explanation of <code class="inline">TimeoutOrHandle</code>.</p>
     </a>
     <h1 class="signature" translate="no">sendto/5</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3860" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L3900" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6653,7 +6731,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv(Socket, IOV)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4225" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4269" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6688,7 +6766,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4339" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4383" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6777,7 +6855,7 @@ at the start of this module reference manual page.</p><p><a href="" id="sendv-co
     </a>
     <h1 class="signature" translate="no">sendv/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4420" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L4464" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6841,7 +6919,7 @@ unfinished calls.</p><p>See <a href="#sendv/3"><code class="inline">sendv/3</cod
     </a>
     <h1 class="signature" translate="no">setopt/3</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5853" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5913" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6859,9 +6937,9 @@ unfinished calls.</p><p>See <a href="#sendv/3"><code class="inline">sendv/3</cod
                 when
                     Socket :: <a href="#t:socket/0">socket</a>(),
                     SocketOption :: {Level :: otp, Opt :: <a href="#t:otp_socket_option/0">otp_socket_option</a>()},
-                    Value :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>();
+                    Value :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>();
             (Socket, SocketOption, Value) -> ok | {error, <a href="#t:posix/0">posix</a>() | <a href="#t:invalid/0">invalid</a>() | closed}
-                when Socket :: <a href="#t:socket/0">socket</a>(), SocketOption :: <a href="#t:socket_option/0">socket_option</a>(), Value :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+                when Socket :: <a href="#t:socket/0">socket</a>(), SocketOption :: <a href="#t:socket_option/0">socket_option</a>(), Value :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>().</pre>
 
       </div>
 
@@ -6888,7 +6966,7 @@ that the underlying OS does.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">setopt/4</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5876" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5936" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6923,7 +7001,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">setopt_native(Socket, Option, Value)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5919" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5979" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6971,7 +7049,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">shutdown(Socket, How)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5789" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L5849" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -7002,7 +7080,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">sockname(Socket)</h1>
 
-      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6091" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/gomoripeti/otp/blob/crashdump_viewer_allocators/lib/kernel/src/socket.erl#L6151" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
