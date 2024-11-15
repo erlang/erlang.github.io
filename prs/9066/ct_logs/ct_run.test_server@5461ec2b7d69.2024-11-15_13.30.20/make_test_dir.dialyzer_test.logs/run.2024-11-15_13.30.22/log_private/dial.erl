@@ -1,0 +1,2 @@
+-module(dial).
+               -dialyzer({no_return, [{undef,1,2}]}).
