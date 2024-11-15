@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-E753B0BD.js"></script>
+    <script src="dist/sidebar_items-B2A8227A.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 <style type="text/css">
@@ -1316,7 +1316,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
 
       </div>
 
-        <div class="summary-synopsis"><p>connect(Host, Port, Options, NegotiationTimeout) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Connects to an SSH server at the <code class="inline">Host</code> on <code class="inline">Port</code>.</p></div>
 
     </div>
 
@@ -1362,11 +1362,13 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#daemon/3" data-no-tooltip translate="no">daemon/3</a>
+        <a href="#daemon/3" data-no-tooltip translate="no">daemon(HostAddress, Port, Options)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>daemon(HostAddress, Port, Options) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Starts a server listening for SSH connections on the given port. If the <code class="inline">Port</code>
+is 0, a random free port is selected. See <a href="#daemon_info/1"><code class="inline">daemon_info/1</code></a> about how to find the
+selected port number.</p></div>
 
     </div>
 
@@ -1480,7 +1482,8 @@ and the values are the algorithms themselves.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>shell(Host, Port, Options) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Connects to an SSH server at <code class="inline">Host</code> and <code class="inline">Port</code> (defaults to 22) and starts an
+interactive shell on that remote host.</p></div>
 
     </div>
 
@@ -3661,14 +3664,14 @@ further explained below.</p>
 
 <p>List of algorithms to use in the algorithm negotiation. The default
 <a href="#t:algs_list/0"><code class="inline">algs_list/0</code></a> can be obtained from <a href="#default_algorithms/0"><code class="inline">default_algorithms/0</code></a>.</p><p>If an alg_entry() is missing in the algs_list(), the default value is used for
-that entry.</p><p>Here is an example of this option:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-1">{</span><span class="ss">preferred_algorithms</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-2">[</span><span class="p" data-group-id="2441777694-3">{</span><span class="ss">public_key</span><span class="p">,</span><span class="p" data-group-id="2441777694-4">[</span><span class="ss">&#39;ssh-rsa&#39;</span><span class="p">,</span><span class="ss">&#39;ssh-dss&#39;</span><span class="p" data-group-id="2441777694-4">]</span><span class="p" data-group-id="2441777694-3">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-5">{</span><span class="ss">cipher</span><span class="p">,</span><span class="p" data-group-id="2441777694-6">[</span><span class="p" data-group-id="2441777694-7">{</span><span class="ss">client2server</span><span class="p">,</span><span class="p" data-group-id="2441777694-8">[</span><span class="ss">&#39;aes128-ctr&#39;</span><span class="p" data-group-id="2441777694-8">]</span><span class="p" data-group-id="2441777694-7">}</span><span class="p">,</span><span class="w">
-          </span><span class="p" data-group-id="2441777694-9">{</span><span class="ss">server2client</span><span class="p">,</span><span class="p" data-group-id="2441777694-10">[</span><span class="ss">&#39;aes128-cbc&#39;</span><span class="p">,</span><span class="ss">&#39;3des-cbc&#39;</span><span class="p" data-group-id="2441777694-10">]</span><span class="p" data-group-id="2441777694-9">}</span><span class="p" data-group-id="2441777694-6">]</span><span class="p" data-group-id="2441777694-5">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-11">{</span><span class="ss">mac</span><span class="p">,</span><span class="p" data-group-id="2441777694-12">[</span><span class="ss">&#39;hmac-sha2-256&#39;</span><span class="p">,</span><span class="ss">&#39;hmac-sha1&#39;</span><span class="p" data-group-id="2441777694-12">]</span><span class="p" data-group-id="2441777694-11">}</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-13">{</span><span class="ss">compression</span><span class="p">,</span><span class="p" data-group-id="2441777694-14">[</span><span class="ss">none</span><span class="p">,</span><span class="ss">zlib</span><span class="p" data-group-id="2441777694-14">]</span><span class="p" data-group-id="2441777694-13">}</span><span class="w">
-</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-2">]</span><span class="w">
-</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="2441777694-1">}</span></code></pre><p>The example specifies different algorithms in the two directions (client2server
+that entry.</p><p>Here is an example of this option:</p><pre><code class="makeup erlang" translate="no"><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-1">{</span><span class="ss">preferred_algorithms</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-2">[</span><span class="p" data-group-id="4391061432-3">{</span><span class="ss">public_key</span><span class="p">,</span><span class="p" data-group-id="4391061432-4">[</span><span class="ss">&#39;ssh-rsa&#39;</span><span class="p">,</span><span class="ss">&#39;ssh-dss&#39;</span><span class="p" data-group-id="4391061432-4">]</span><span class="p" data-group-id="4391061432-3">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-5">{</span><span class="ss">cipher</span><span class="p">,</span><span class="p" data-group-id="4391061432-6">[</span><span class="p" data-group-id="4391061432-7">{</span><span class="ss">client2server</span><span class="p">,</span><span class="p" data-group-id="4391061432-8">[</span><span class="ss">&#39;aes128-ctr&#39;</span><span class="p" data-group-id="4391061432-8">]</span><span class="p" data-group-id="4391061432-7">}</span><span class="p">,</span><span class="w">
+          </span><span class="p" data-group-id="4391061432-9">{</span><span class="ss">server2client</span><span class="p">,</span><span class="p" data-group-id="4391061432-10">[</span><span class="ss">&#39;aes128-cbc&#39;</span><span class="p">,</span><span class="ss">&#39;3des-cbc&#39;</span><span class="p" data-group-id="4391061432-10">]</span><span class="p" data-group-id="4391061432-9">}</span><span class="p" data-group-id="4391061432-6">]</span><span class="p" data-group-id="4391061432-5">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-11">{</span><span class="ss">mac</span><span class="p">,</span><span class="p" data-group-id="4391061432-12">[</span><span class="ss">&#39;hmac-sha2-256&#39;</span><span class="p">,</span><span class="ss">&#39;hmac-sha1&#39;</span><span class="p" data-group-id="4391061432-12">]</span><span class="p" data-group-id="4391061432-11">}</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-13">{</span><span class="ss">compression</span><span class="p">,</span><span class="p" data-group-id="4391061432-14">[</span><span class="ss">none</span><span class="p">,</span><span class="ss">zlib</span><span class="p" data-group-id="4391061432-14">]</span><span class="p" data-group-id="4391061432-13">}</span><span class="w">
+</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-2">]</span><span class="w">
+</span><span class="err">	</span><span class="w">  </span><span class="p" data-group-id="4391061432-1">}</span></code></pre><p>The example specifies different algorithms in the two directions (client2server
 and server2client), for cipher but specifies the same algorithms for mac and
 compression in both directions. The kex (key exchange) is implicit but
 public_key is set explicitly.</p><p>For background and more examples see the
@@ -4366,7 +4369,7 @@ if <code class="inline">skip</code> is returned no report is generated.</p>
     </a>
     <h1 class="signature" translate="no">conn_info_algs()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L440" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L438" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4406,7 +4409,7 @@ if <code class="inline">skip</code> is returned no report is generated.</p>
     </a>
     <h1 class="signature" translate="no">conn_info_channels()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L458" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L456" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4437,7 +4440,7 @@ default values.</p>
     </a>
     <h1 class="signature" translate="no">connection_info_tuple()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L461" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L459" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4505,7 +4508,7 @@ default values.</p>
     </a>
     <h1 class="signature" translate="no">daemon_info_tuple()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L681" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L679" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4816,7 +4819,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
     </a>
     <h1 class="signature" translate="no">protocol_version()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L436" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L434" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4846,7 +4849,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
     </a>
     <h1 class="signature" translate="no">software_version()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L438" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L436" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4876,7 +4879,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
     </a>
     <h1 class="signature" translate="no">version()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L434" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L432" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5042,7 +5045,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
     </a>
     <h1 class="signature" translate="no">close(ConnectionRef)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L427" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L425" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5130,7 +5133,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
     </a>
     <h1 class="signature" translate="no">connect(Host, Port, Options, NegotiationTimeout)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L350" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L348" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5151,7 +5154,7 @@ or a <a href="../../../../lib/kernel-10.1.1/doc/html/gen_tcp.html#accept/1">gen_
 
       </div>
 
-<p>connect(Host, Port, Options, NegotiationTimeout) -&gt; Result</p><p>Connects to an SSH server at the <code class="inline">Host</code> on <code class="inline">Port</code>.</p><p>As an alternative, an already open TCP socket could be passed to the function in
+<p>Connects to an SSH server at the <code class="inline">Host</code> on <code class="inline">Port</code>.</p><p>As an alternative, an already open TCP socket could be passed to the function in
 <code class="inline">TcpSocket</code>. The SSH initiation and negotiation will be initiated on that one
 with the SSH that should be at the other end.</p><p>No channel is started. This is done by calling
 <a href="ssh_connection.html#session_channel/2">ssh_connection:session_channel/2,4</a>.</p><p>The <code class="inline">NegotiationTimeout</code> is in milli-seconds. The default value is <code class="inline">infinity</code> or
@@ -5169,7 +5172,7 @@ option, if present. For connection timeout, use the option
     </a>
     <h1 class="signature" translate="no">connection_info(ConnectionRef)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L478" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L476" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5203,7 +5206,7 @@ option, if present. For connection timeout, use the option
     </a>
     <h1 class="signature" translate="no">connection_info(ConnectionRef, Key)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L493" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L491" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5239,7 +5242,7 @@ option, if present. For connection timeout, use the option
     </a>
     <h1 class="signature" translate="no">daemon(Port)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L512" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L510" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5267,7 +5270,7 @@ option, if present. For connection timeout, use the option
     </a>
     <h1 class="signature" translate="no">daemon/2</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L519" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L517" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5294,9 +5297,9 @@ option, if present. For connection timeout, use the option
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">daemon/3</h1>
+    <h1 class="signature" translate="no">daemon(HostAddress, Port, Options)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L592" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L590" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5314,7 +5317,7 @@ option, if present. For connection timeout, use the option
 
       </div>
 
-<p>daemon(HostAddress, Port, Options) -&gt; Result</p><p>Starts a server listening for SSH connections on the given port. If the <code class="inline">Port</code>
+<p>Starts a server listening for SSH connections on the given port. If the <code class="inline">Port</code>
 is 0, a random free port is selected. See <a href="#daemon_info/1"><code class="inline">daemon_info/1</code></a> about how to find the
 selected port number.</p><p>As an alternative, an already open TCP socket could be passed to the function in
 <code class="inline">TcpSocket</code>. The SSH initiation and negotiation will be initiated on that one
@@ -5337,7 +5340,7 @@ is set to the value of the 'ip'-option</li></ul>
     </a>
     <h1 class="signature" translate="no">daemon_info(DaemonRef)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L694" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L692" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5371,7 +5374,7 @@ is set to the value of the 'ip'-option</li></ul>
     </a>
     <h1 class="signature" translate="no">daemon_info/2</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L742" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L740" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5409,7 +5412,7 @@ reasons.</p>
     </a>
     <h1 class="signature" translate="no">daemon_replace_options(DaemonRef, NewUserOptions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L668" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L666" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5445,7 +5448,7 @@ chapters <a href="configurations.html">Configuration in SSH</a> and
     </a>
     <h1 class="signature" translate="no">default_algorithms()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L921" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L917" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5477,7 +5480,7 @@ example.</p>
     </a>
     <h1 class="signature" translate="no">get_sock_opts(ConnectionRef, SocketGetOptions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L993" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L989" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5510,7 +5513,7 @@ example.</p>
     </a>
     <h1 class="signature" translate="no">hostkey_fingerprint(Key)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1145" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1141" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5540,7 +5543,7 @@ example.</p>
     </a>
     <h1 class="signature" translate="no">hostkey_fingerprint(TypeOrTypes, Key)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1185" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1181" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5565,21 +5568,21 @@ example.</p>
 <p>hostkey_fingerprint([DigestType], HostKey) -&gt;
 [string()]hostkey_fingerprint(DigestType, HostKey) -&gt; string()</p><p>Calculates a ssh fingerprint from a public host key as openssh does.</p><p>The algorithm in <a href="#hostkey_fingerprint/1"><code class="inline">hostkey_fingerprint/1</code></a> is md5 to be
 compatible with older ssh-keygen commands. The string from the second variant is
-prepended by the algorithm name in uppercase as in newer ssh-keygen commands.</p><p>Examples:</p><pre><code class="makeup erlang" translate="no"><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="3735971985-1">(</span><span class="n">Key</span><span class="p" data-group-id="3735971985-1">)</span><span class="p">.</span><span class="w">
+prepended by the algorithm name in uppercase as in newer ssh-keygen commands.</p><p>Examples:</p><pre><code class="makeup erlang" translate="no"><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="6000839475-1">(</span><span class="n">Key</span><span class="p" data-group-id="6000839475-1">)</span><span class="p">.</span><span class="w">
  </span><span class="s">&quot;f5:64:a6:c1:5a:cb:9f:0a:10:46:a2:5c:3e:2f:57:84&quot;</span><span class="w">
 
- </span><span class="mi">3</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="3735971985-2">(</span><span class="nb">md5</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="3735971985-2">)</span><span class="p">.</span><span class="w">
+ </span><span class="mi">3</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="6000839475-2">(</span><span class="nb">md5</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="6000839475-2">)</span><span class="p">.</span><span class="w">
  </span><span class="s">&quot;MD5:f5:64:a6:c1:5a:cb:9f:0a:10:46:a2:5c:3e:2f:57:84&quot;</span><span class="w">
 
- </span><span class="mi">4</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="3735971985-3">(</span><span class="ss">sha</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="3735971985-3">)</span><span class="p">.</span><span class="w">
+ </span><span class="mi">4</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="6000839475-3">(</span><span class="ss">sha</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="6000839475-3">)</span><span class="p">.</span><span class="w">
  </span><span class="s">&quot;SHA1:bSLY/C4QXLDL/Iwmhyg0PGW9UbY&quot;</span><span class="w">
 
- </span><span class="mi">5</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="3735971985-4">(</span><span class="ss">sha256</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="3735971985-4">)</span><span class="p">.</span><span class="w">
+ </span><span class="mi">5</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="6000839475-4">(</span><span class="ss">sha256</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="6000839475-4">)</span><span class="p">.</span><span class="w">
  </span><span class="s">&quot;SHA256:aZGXhabfbf4oxglxltItWeHU7ub3Dc31NcNw2cMJePQ&quot;</span><span class="w">
 
- </span><span class="mi">6</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="3735971985-5">(</span><span class="p" data-group-id="3735971985-6">[</span><span class="ss">sha</span><span class="p">,</span><span class="ss">sha256</span><span class="p" data-group-id="3735971985-6">]</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="3735971985-5">)</span><span class="p">.</span><span class="w">
- </span><span class="p" data-group-id="3735971985-7">[</span><span class="s">&quot;SHA1:bSLY/C4QXLDL/Iwmhyg0PGW9UbY&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="s">&quot;SHA256:aZGXhabfbf4oxglxltItWeHU7ub3Dc31NcNw2cMJePQ&quot;</span><span class="p" data-group-id="3735971985-7">]</span></code></pre>
+ </span><span class="mi">6</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">ssh</span><span class="p">:</span><span class="nf">hostkey_fingerprint</span><span class="p" data-group-id="6000839475-5">(</span><span class="p" data-group-id="6000839475-6">[</span><span class="ss">sha</span><span class="p">,</span><span class="ss">sha256</span><span class="p" data-group-id="6000839475-6">]</span><span class="p">,</span><span class="n">Key</span><span class="p" data-group-id="6000839475-5">)</span><span class="p">.</span><span class="w">
+ </span><span class="p" data-group-id="6000839475-7">[</span><span class="s">&quot;SHA1:bSLY/C4QXLDL/Iwmhyg0PGW9UbY&quot;</span><span class="p">,</span><span class="w">
+  </span><span class="s">&quot;SHA256:aZGXhabfbf4oxglxltItWeHU7ub3Dc31NcNw2cMJePQ&quot;</span><span class="p" data-group-id="6000839475-7">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="set_sock_opts/2">
@@ -5591,7 +5594,7 @@ prepended by the algorithm name in uppercase as in newer ssh-keygen commands.</p
     </a>
     <h1 class="signature" translate="no">set_sock_opts(ConnectionRef, SocketOptions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L978" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L974" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5624,7 +5627,7 @@ what effect your option values will have on an TCP stream.</p><p>Some values may
     </a>
     <h1 class="signature" translate="no">shell/1</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L824" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L822" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5652,7 +5655,7 @@ what effect your option values will have on an TCP stream.</p><p>Some values may
     </a>
     <h1 class="signature" translate="no">shell(Dest, Options)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L860" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L858" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5680,7 +5683,7 @@ what effect your option values will have on an TCP stream.</p><p>Some values may
     </a>
     <h1 class="signature" translate="no">shell(Host, Port, Options)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L901" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L897" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5697,7 +5700,7 @@ what effect your option values will have on an TCP stream.</p><p>Some values may
 
       </div>
 
-<p>shell(Host, Port, Options) -&gt; Result</p><p>Connects to an SSH server at <code class="inline">Host</code> and <code class="inline">Port</code> (defaults to 22) and starts an
+<p>Connects to an SSH server at <code class="inline">Host</code> and <code class="inline">Port</code> (defaults to 22) and starts an
 interactive shell on that remote host.</p><p>As an alternative, an already open TCP socket could be passed to the function in
 <code class="inline">TcpSocket</code>. The SSH initiation and negotiation will be initiated on that one
 and finally a shell will be started on the host at the other end of the TCP
@@ -5801,7 +5804,7 @@ manual page in Kernel.</p>
     </a>
     <h1 class="signature" translate="no">stop_daemon(DaemonRef)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L792" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L790" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5829,7 +5832,7 @@ manual page in Kernel.</p>
     </a>
     <h1 class="signature" translate="no">stop_daemon(Address, Port)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L799" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L797" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5857,7 +5860,7 @@ manual page in Kernel.</p>
     </a>
     <h1 class="signature" translate="no">stop_daemon(Address, Port, Profile)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L807" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L805" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5887,7 +5890,7 @@ manual page in Kernel.</p>
     </a>
     <h1 class="signature" translate="no">stop_listener(SysSup)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L763" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L761" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5915,7 +5918,7 @@ manual page in Kernel.</p>
     </a>
     <h1 class="signature" translate="no">stop_listener(Address, Port)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L770" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L768" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5943,7 +5946,7 @@ manual page in Kernel.</p>
     </a>
     <h1 class="signature" translate="no">stop_listener(Address, Port, Profile)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L781" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L779" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -5974,7 +5977,7 @@ operational.</p>
     </a>
     <h1 class="signature" translate="no">tcpip_tunnel_from_server(ConnectionRef, ListenHost, ListenPort, ConnectToHost, ConnectToPort)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1085" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1081" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6012,7 +6015,7 @@ operational.</p>
     </a>
     <h1 class="signature" translate="no">tcpip_tunnel_from_server(ConnectionRef, ListenHost, ListenPort, ConnectToHost, ConnectToPort, Timeout)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1117" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1113" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6060,7 +6063,7 @@ connection.</p>
     </a>
     <h1 class="signature" translate="no">tcpip_tunnel_to_server(ConnectionRef, ListenHost, ListenPort, ConnectToHost, ConnectToPort)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1015" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1011" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -6098,7 +6101,7 @@ connection.</p>
     </a>
     <h1 class="signature" translate="no">tcpip_tunnel_to_server(ConnectionRef, ListenHost, ListenPort, ConnectToHost, ConnectToPort, Timeout)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1047" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/ssh/src/ssh.erl#L1043" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>

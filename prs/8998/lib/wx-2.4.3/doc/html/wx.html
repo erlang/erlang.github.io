@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-39FE618D.js"></script>
+    <script src="dist/sidebar_items-A20B6997.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 <style type="text/css">
@@ -134,7 +134,7 @@ Pages
 
 
     <section id="moduledoc">
-<p>A port of wxWidgets.</p><p>A port of <a href="http://www.wxwidgets.org/">wxWidgets</a>.</p><p>This is the base api of <a href="http://www.wxwidgets.org/">wxWidgets</a>. This module
+<p>A port of <a href="http://www.wxwidgets.org/">wxWidgets</a>.</p><p>This is the base api of <a href="http://www.wxwidgets.org/">wxWidgets</a>. This module
 contains functions for starting and stopping the wx-server, as well as other
 utility functions.</p><p>wxWidgets is object oriented, and not functional. Thus, in Wx a module
 represents a class, and the object created by this class has an own type,
@@ -267,27 +267,34 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>batch(Fun::function()) -&gt; term()</p></div>
+        <div class="summary-synopsis"><p>Batches all <code class="inline">wx</code> commands used in the fun. Improves performance of the command
+processing by grabbing the wxWidgets thread so that no event processing will be
+done before the complete batch of commands is invoked.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#create_memory/1" data-no-tooltip translate="no">create_memory/1</a>
+        <a href="#create_memory/1" data-no-tooltip translate="no">create_memory(Size)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>create_memory(Size::integer()) -&gt; wx_memory()</p></div>
+        <div class="summary-synopsis"><p>Creates a memory area (of Size in bytes) which can be used by an external
+library (i.e. opengl). It is up to the client to keep a reference to this object
+so it does not get garbage collected by erlang while still in use by the
+external library.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#debug/1" data-no-tooltip translate="no">debug(Debug)</a>
+        <a href="#debug/1" data-no-tooltip translate="no">debug(Level)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>debug(Debug::Level | [Level]) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Sets debug level. If debug level is 'verbose' or 'trace' each call is printed on
+console. If Level is 'driver' each allocated object and deletion is printed on
+the console.</p></div>
 
     </div>
 
@@ -297,7 +304,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>demo() -&gt; ok | {error, atom()}</p></div>
+        <div class="summary-synopsis"><p>Starts a Wx demo if examples directory exists and is compiled</p></div>
 
     </div>
 
@@ -307,17 +314,17 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>destroy() -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Stops a wx server.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#equal/2" data-no-tooltip translate="no">equal/2</a>
+        <a href="#equal/2" data-no-tooltip translate="no">equal(Ref1, Ref2)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>equal(Wx_ref::wx_object(), X2::wx_object()) -&gt; boolean()</p></div>
+        <div class="summary-synopsis"><p>Returns true if both arguments references the same object, false otherwise</p></div>
 
     </div>
 
@@ -327,7 +334,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>foldl(Fun::function(), Acc::term(), List::list()) -&gt; term()</p></div>
+        <div class="summary-synopsis"><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foldl/3"><code class="inline">lists:foldl/3</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p></div>
 
     </div>
 
@@ -337,7 +344,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>foldr(Fun::function(), Acc::term(), List::list()) -&gt; term()</p></div>
+        <div class="summary-synopsis"><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foldr/3"><code class="inline">lists:foldr/3</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p></div>
 
     </div>
 
@@ -347,7 +354,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>foreach(Fun::function(), List::list()) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foreach/2"><code class="inline">lists:foreach/2</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p></div>
 
     </div>
 
@@ -357,37 +364,38 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>get_env() -&gt; wx_env()</p></div>
+        <div class="summary-synopsis"><p>Gets this process's current wx environment. Can be sent to other processes to
+allow them use this process wx environment.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_memory_bin/1" data-no-tooltip translate="no">get_memory_bin/1</a>
+        <a href="#get_memory_bin/1" data-no-tooltip translate="no">get_memory_bin(Wx_mem)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>get_memory_bin(Wx_mem::wx_memory()) -&gt; binary()</p></div>
+        <div class="summary-synopsis"><p>Returns the memory area as a binary.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#getObjectType/1" data-no-tooltip translate="no">getObjectType/1</a>
+        <a href="#getObjectType/1" data-no-tooltip translate="no">getObjectType(Wx_ref)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>getObjectType(Wx_ref::wx_object()) -&gt; atom()</p></div>
+        <div class="summary-synopsis"><p>Returns the object type</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#is_null/1" data-no-tooltip translate="no">is_null/1</a>
+        <a href="#is_null/1" data-no-tooltip translate="no">is_null(Wx_ref)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>is_null(Wx_ref::wx_object()) -&gt; boolean()</p></div>
+        <div class="summary-synopsis"><p>Returns true if object is null, false otherwise</p></div>
 
     </div>
 
@@ -397,7 +405,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>map(Fun::function(), List::list()) -&gt; list()</p></div>
+        <div class="summary-synopsis"><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#map/2"><code class="inline">lists:map/2</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p></div>
 
     </div>
 
@@ -407,7 +415,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>new() -&gt; wx_object()</p></div>
+        <div class="summary-synopsis"><p>Starts a wx server.</p></div>
 
     </div>
 
@@ -417,7 +425,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>new(Options::[Option]) -&gt; wx_object()</p></div>
+        <div class="summary-synopsis"><p>Starts a wx server.</p></div>
 
     </div>
 
@@ -427,47 +435,49 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>null() -&gt; wx_object()</p></div>
+        <div class="summary-synopsis"><p>Returns the null object</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#parent_class/1" data-no-tooltip translate="no">parent_class/1</a>
+        <a href="#parent_class/1" data-no-tooltip translate="no">parent_class(Wx_ref)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>parent_class(X1) -&gt; term()</p></div>
+        <div class="summary-synopsis"></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#release_memory/1" data-no-tooltip translate="no">release_memory/1</a>
+        <a href="#release_memory/1" data-no-tooltip translate="no">release_memory(Wx_mem)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>release_memory(Wx_mem::wx_memory()) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Releases the memory retained by <a href="#retain_memory/1"><code class="inline">retain_memory/1</code></a></p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#retain_memory/1" data-no-tooltip translate="no">retain_memory/1</a>
+        <a href="#retain_memory/1" data-no-tooltip translate="no">retain_memory(Wx_mem)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>retain_memory(Wx_mem::wx_memory()) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Saves the memory from deletion until <a href="#release_memory/1"><code class="inline">release_memory/1</code></a> is called. If
+<a href="#release_memory/1"><code class="inline">release_memory/1</code></a> is not called the memory will not be garbage collected.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#set_env/1" data-no-tooltip translate="no">set_env/1</a>
+        <a href="#set_env/1" data-no-tooltip translate="no">set_env(Wx_env)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>set_env(Wx_env::wx_env()) -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Sets the process wx environment, allows this process to use another process wx
+environment.</p></div>
 
     </div>
 
@@ -477,7 +487,8 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>subscribe_events() -&gt; ok</p></div>
+        <div class="summary-synopsis"><p>Adds the calling process to the list of of processes that are listening to wx
+application events.</p></div>
 
     </div>
 
@@ -487,7 +498,8 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-        <div class="summary-synopsis"><p>typeCast(Old::wx_object(), NewType::atom()) -&gt; wx_object()</p></div>
+        <div class="summary-synopsis"><p>Casts the object to class NewType. It is needed when using functions like
+wxWindow:findWindow/2, which returns a generic wxObject type.</p></div>
 
     </div>
 
@@ -513,7 +525,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_colour4()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L167" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L165" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -541,7 +553,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_colour()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L168" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L166" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -569,7 +581,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_datetime()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L170" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L168" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -599,7 +611,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_enum()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L174" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L172" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -627,7 +639,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_env()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L164" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L162" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -655,7 +667,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_memory()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L165" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L163" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -683,7 +695,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_object()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L163" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L161" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -711,7 +723,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_wxHtmlLinkInfo()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L175" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L173" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -739,7 +751,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">wx_wxMouseState()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L173" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L171" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -791,7 +803,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
     </a>
     <h1 class="signature" translate="no">batch(Fun)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L367" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L343" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -807,7 +819,7 @@ cmdDown=boolean()}</strong></p><p>See #wxMouseState{} defined in wx.hrl</p></li>
 
       </div>
 
-<p>batch(Fun::function()) -&gt; term()</p><p>Batches all <code class="inline">wx</code> commands used in the fun. Improves performance of the command
+<p>Batches all <code class="inline">wx</code> commands used in the fun. Improves performance of the command
 processing by grabbing the wxWidgets thread so that no event processing will be
 done before the complete batch of commands is invoked.</p><p><em>See also:</em> <a href="#foldl/3"><code class="inline">foldl/3</code></a>, <a href="#foldr/3"><code class="inline">foldr/3</code></a>, <a href="#foreach/2"><code class="inline">foreach/2</code></a>, <a href="#map/2"><code class="inline">map/2</code></a>.</p>
   </section>
@@ -819,9 +831,9 @@ done before the complete batch of commands is invoked.</p><p><em>See also:</em> 
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">create_memory/1</h1>
+    <h1 class="signature" translate="no">create_memory(Size)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L472" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L438" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -833,11 +845,11 @@ done before the complete batch of commands is invoked.</p><p><em>See also:</em> 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> create_memory(<a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> <a href="#t:wx_memory/0">wx_memory</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> create_memory(Size :: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:integer/0">integer</a>()) -> <a href="#t:wx_memory/0">wx_memory</a>().</pre>
 
       </div>
 
-<p>create_memory(Size::integer()) -&gt; wx_memory()</p><p>Creates a memory area (of Size in bytes) which can be used by an external
+<p>Creates a memory area (of Size in bytes) which can be used by an external
 library (i.e. opengl). It is up to the client to keep a reference to this object
 so it does not get garbage collected by erlang while still in use by the
 external library.</p><p>This is far from erlang's intentional usage and can crash the erlang emulator.
@@ -851,9 +863,9 @@ Use it carefully.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">debug(Debug)</h1>
+    <h1 class="signature" translate="no">debug(Level)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L536" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L498" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -869,7 +881,7 @@ Use it carefully.</p>
 
       </div>
 
-<p>debug(Debug::Level | [Level]) -&gt; ok</p><p>Sets debug level. If debug level is 'verbose' or 'trace' each call is printed on
+<p>Sets debug level. If debug level is 'verbose' or 'trace' each call is printed on
 console. If Level is 'driver' each allocated object and deletion is printed on
 the console.</p>
   </section>
@@ -883,7 +895,7 @@ the console.</p>
     </a>
     <h1 class="signature" translate="no">demo()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L579" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L539" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -899,7 +911,7 @@ the console.</p>
 
       </div>
 
-<p>demo() -&gt; ok | {error, atom()}</p><p>Starts a Wx demo if examples directory exists and is compiled</p>
+<p>Starts a Wx demo if examples directory exists and is compiled</p>
   </section>
 </section>
 <section class="detail" id="destroy/0">
@@ -911,7 +923,7 @@ the console.</p>
     </a>
     <h1 class="signature" translate="no">destroy()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L222" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L216" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -927,7 +939,7 @@ the console.</p>
 
       </div>
 
-<p>destroy() -&gt; ok</p><p>Stops a wx server.</p>
+<p>Stops a wx server.</p>
   </section>
 </section>
 <section class="detail" id="equal/2">
@@ -937,9 +949,9 @@ the console.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">equal/2</h1>
+    <h1 class="signature" translate="no">equal(Ref1, Ref2)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L323" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L305" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -951,11 +963,11 @@ the console.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> equal(<a href="#t:wx_object/0">wx_object</a>(), <a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> equal(Ref1 :: <a href="#t:wx_object/0">wx_object</a>(), Ref2 :: <a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
 
       </div>
 
-<p>equal(Wx_ref::wx_object(), X2::wx_object()) -&gt; boolean()</p><p>Returns true if both arguments references the same object, false otherwise</p>
+<p>Returns true if both arguments references the same object, false otherwise</p>
   </section>
 </section>
 <section class="detail" id="foldl/3">
@@ -967,7 +979,7 @@ the console.</p>
     </a>
     <h1 class="signature" translate="no">foldl(Fun, Acc, List)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L421" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L391" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -983,7 +995,7 @@ the console.</p>
 
       </div>
 
-<p>foldl(Fun::function(), Acc::term(), List::list()) -&gt; term()</p><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foldl/3"><code class="inline">lists:foldl/3</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
+<p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foldl/3"><code class="inline">lists:foldl/3</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="foldr/3">
@@ -995,7 +1007,7 @@ the console.</p>
     </a>
     <h1 class="signature" translate="no">foldr(Fun, Acc, List)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L439" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L407" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1011,7 +1023,7 @@ the console.</p>
 
       </div>
 
-<p>foldr(Fun::function(), Acc::term(), List::list()) -&gt; term()</p><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foldr/3"><code class="inline">lists:foldr/3</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
+<p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foldr/3"><code class="inline">lists:foldr/3</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="foreach/2">
@@ -1023,7 +1035,7 @@ the console.</p>
     </a>
     <h1 class="signature" translate="no">foreach(Fun, List)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L385" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L359" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1039,7 +1051,7 @@ the console.</p>
 
       </div>
 
-<p>foreach(Fun::function(), List::list()) -&gt; ok</p><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foreach/2"><code class="inline">lists:foreach/2</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
+<p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#foreach/2"><code class="inline">lists:foreach/2</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="get_env/0">
@@ -1051,7 +1063,7 @@ the console.</p>
     </a>
     <h1 class="signature" translate="no">get_env()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L239" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L231" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1067,7 +1079,7 @@ the console.</p>
 
       </div>
 
-<p>get_env() -&gt; wx_env()</p><p>Gets this process's current wx environment. Can be sent to other processes to
+<p>Gets this process's current wx environment. Can be sent to other processes to
 allow them use this process wx environment.</p><p><em>See also:</em> <a href="#set_env/1"><code class="inline">set_env/1</code></a>.</p>
   </section>
 </section>
@@ -1078,9 +1090,9 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">get_memory_bin/1</h1>
+    <h1 class="signature" translate="no">get_memory_bin(Wx_mem)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L484" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L448" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1092,11 +1104,11 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_memory_bin(<a href="#t:wx_memory/0">wx_memory</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_memory_bin(Wx_mem :: <a href="#t:wx_memory/0">wx_memory</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:binary/0">binary</a>().</pre>
 
       </div>
 
-<p>get_memory_bin(Wx_mem::wx_memory()) -&gt; binary()</p><p>Returns the memory area as a binary.</p>
+<p>Returns the memory area as a binary.</p>
   </section>
 </section>
 <section class="detail" id="getObjectType/1">
@@ -1106,9 +1118,9 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">getObjectType/1</h1>
+    <h1 class="signature" translate="no">getObjectType(Wx_ref)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L332" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L312" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1120,11 +1132,11 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> getObjectType(<a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:atom/0">atom</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> getObjectType(Wx_ref :: <a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:atom/0">atom</a>().</pre>
 
       </div>
 
-<p>getObjectType(Wx_ref::wx_object()) -&gt; atom()</p><p>Returns the object type</p>
+<p>Returns the object type</p>
   </section>
 </section>
 <section class="detail" id="is_null/1">
@@ -1134,9 +1146,9 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">is_null/1</h1>
+    <h1 class="signature" translate="no">is_null(Wx_ref)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L314" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L298" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1148,11 +1160,11 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> is_null(<a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> is_null(Wx_ref :: <a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
 
       </div>
 
-<p>is_null(Wx_ref::wx_object()) -&gt; boolean()</p><p>Returns true if object is null, false otherwise</p>
+<p>Returns true if object is null, false otherwise</p>
   </section>
 </section>
 <section class="detail" id="map/2">
@@ -1164,7 +1176,7 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
     </a>
     <h1 class="signature" translate="no">map(Fun, List)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L403" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L375" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1180,7 +1192,7 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
 
       </div>
 
-<p>map(Fun::function(), List::list()) -&gt; list()</p><p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#map/2"><code class="inline">lists:map/2</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
+<p>Behaves like <a href="../../../../lib/stdlib-6.1.2/doc/html/lists.html#map/2"><code class="inline">lists:map/2</code></a> but batches wx commands. See <a href="#batch/1"><code class="inline">batch/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="new/0">
@@ -1192,7 +1204,7 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
     </a>
     <h1 class="signature" translate="no">new()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L188" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L184" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1208,7 +1220,7 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
 
       </div>
 
-<p>new() -&gt; wx_object()</p><p>Starts a wx server.</p>
+<p>Starts a wx server.</p>
   </section>
 </section>
 <section class="detail" id="new/1">
@@ -1220,7 +1232,7 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
     </a>
     <h1 class="signature" translate="no">new(Options)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L206" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L202" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1236,8 +1248,8 @@ allow them use this process wx environment.</p><p><em>See also:</em> <a href="#s
 
       </div>
 
-<p>new(Options::[Option]) -&gt; wx_object()</p><p>Starts a wx server. Option may be {debug, Level}, see debug/1. Or
-{silent_start, Bool}, which causes error messages at startup to be suppressed.
+<p>Starts a wx server.</p><p>Option may be <code class="inline">{debug, Level}</code>, see <a href="#debug/1"><code class="inline">debug/1</code></a>. Or <code class="inline">{silent_start, Bool}</code>,
+which causes error messages at startup to be suppressed.
 The latter can be used as a silent test of whether wx is properly installed or
 not.</p>
   </section>
@@ -1251,7 +1263,7 @@ not.</p>
     </a>
     <h1 class="signature" translate="no">null()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L304" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L290" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1267,7 +1279,7 @@ not.</p>
 
       </div>
 
-<p>null() -&gt; wx_object()</p><p>Returns the null object</p>
+<p>Returns the null object</p>
   </section>
 </section>
 <section class="detail" id="parent_class/1">
@@ -1277,9 +1289,9 @@ not.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">parent_class/1</h1>
+    <h1 class="signature" translate="no">parent_class(Wx_ref)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L179" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L177" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1291,11 +1303,11 @@ not.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> parent_class(<a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> parent_class(Wx_ref :: <a href="#t:wx_object/0">wx_object</a>()) -> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean</a>().</pre>
 
       </div>
 
-<p>parent_class(X1) -&gt; term()</p>
+
   </section>
 </section>
 <section class="detail" id="release_memory/1">
@@ -1305,9 +1317,9 @@ not.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">release_memory/1</h1>
+    <h1 class="signature" translate="no">release_memory(Wx_mem)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L514" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L476" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1319,11 +1331,11 @@ not.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> release_memory(<a href="#t:wx_memory/0">wx_memory</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> release_memory(Wx_mem :: <a href="#t:wx_memory/0">wx_memory</a>()) -> ok.</pre>
 
       </div>
 
-<p>release_memory(Wx_mem::wx_memory()) -&gt; ok</p>
+<p>Releases the memory retained by <a href="#retain_memory/1"><code class="inline">retain_memory/1</code></a></p>
   </section>
 </section>
 <section class="detail" id="retain_memory/1">
@@ -1333,9 +1345,9 @@ not.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">retain_memory/1</h1>
+    <h1 class="signature" translate="no">retain_memory(Wx_mem)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L499" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L461" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1347,12 +1359,12 @@ not.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> retain_memory(<a href="#t:wx_memory/0">wx_memory</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> retain_memory(Wx_mem :: <a href="#t:wx_memory/0">wx_memory</a>()) -> ok.</pre>
 
       </div>
 
-<p>retain_memory(Wx_mem::wx_memory()) -&gt; ok</p><p>Saves the memory from deletion until release_memory/1 is called. If
-release_memory/1 is not called the memory will not be garbage collected.</p>
+<p>Saves the memory from deletion until <a href="#release_memory/1"><code class="inline">release_memory/1</code></a> is called. If
+<a href="#release_memory/1"><code class="inline">release_memory/1</code></a> is not called the memory will not be garbage collected.</p>
   </section>
 </section>
 <section class="detail" id="set_env/1">
@@ -1362,9 +1374,9 @@ release_memory/1 is not called the memory will not be garbage collected.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">set_env/1</h1>
+    <h1 class="signature" translate="no">set_env(Wx_env)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L254" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L244" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1376,11 +1388,11 @@ release_memory/1 is not called the memory will not be garbage collected.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> set_env(<a href="#t:wx_env/0">wx_env</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> set_env(Wx_env :: <a href="#t:wx_env/0">wx_env</a>()) -> ok.</pre>
 
       </div>
 
-<p>set_env(Wx_env::wx_env()) -&gt; ok</p><p>Sets the process wx environment, allows this process to use another process wx
+<p>Sets the process wx environment, allows this process to use another process wx
 environment.</p>
   </section>
 </section>
@@ -1393,7 +1405,7 @@ environment.</p>
     </a>
     <h1 class="signature" translate="no">subscribe_events()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L294" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L282" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1409,7 +1421,7 @@ environment.</p>
 
       </div>
 
-<p>subscribe_events() -&gt; ok</p><p>Adds the calling process to the list of of processes that are listening to wx
+<p>Adds the calling process to the list of of processes that are listening to wx
 application events.</p><p>At the moment these are all MacOSX specific events corresponding to
 <code class="inline">MacNewFile()</code> and friends from wxWidgets
 <a href="https://docs.wxwidgets.org/trunk/classwx_app.html">wxApp</a>:</p><ul><li><code class="inline">{new_file, &quot;&quot;}</code></li><li><code class="inline">{open_file, Filename}</code></li><li><code class="inline">{print_file, Filename}</code></li><li><code class="inline">{open_url, Url}</code></li><li><code class="inline">{reopen_app, &quot;&quot;}</code></li></ul><p>The call always returns ok but will have sent any already received events to the
@@ -1425,7 +1437,7 @@ calling process.</p>
     </a>
     <h1 class="signature" translate="no">typeCast/2</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L345" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/gh/enable-openssf-compiler-options/lib/wx/src/wx.erl#L323" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1441,7 +1453,7 @@ calling process.</p>
 
       </div>
 
-<p>typeCast(Old::wx_object(), NewType::atom()) -&gt; wx_object()</p><p>Casts the object to class NewType. It is needed when using functions like
+<p>Casts the object to class NewType. It is needed when using functions like
 wxWindow:findWindow/2, which returns a generic wxObject type.</p>
   </section>
 </section>

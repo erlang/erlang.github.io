@@ -294,7 +294,24 @@ timers, regardless of it is a <code class="inline">receive ... after</code> time
 in the <a href="../../../lib/stdlib-6.1.2/doc/html/timer.html"><code class="inline">timer</code></a> module, are triggered relative Erlang monotonic time. Even
 <a href="time_correction.html#erlang-system-time">Erlang system time</a> is based on Erlang
 monotonic time. By adding current Erlang monotonic time with current time
-offset, you get current Erlang system time.</p><p>To retrieve the current time offset, call <a href="erlang.html#time_offset/0"><code class="inline">erlang:time_offset/0</code></a>.</p><h2 id="introduction" class="section-heading">
+offset, you get current Erlang system time.</p><p>To retrieve the current time offset, call <a href="erlang.html#time_offset/0"><code class="inline">erlang:time_offset/0</code></a>.</p><h3 id="timers" class="section-heading">
+  <a href="#timers" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Timers</span>
+</h3>
+<p>All timers are triggered relative Erlang monotonic time. All timers currently
+have millisecond resolution both in the API and internally in the runtime
+system. That is, resolution (as well as precision and accuracy) will not be
+higher than millisecond. If <a href="#erlang-monotonic-time">Erlang monotonic time</a> has
+a lower resolution than millisecond, the timer resolution will be lower than
+millisecond as well.</p><p>Timers can only be triggered on whole milliseconds since <a href="erlang.html#system_info_start_time">the runtime
+system start</a>. A timer is not allowed to
+trigger before the timeout time given by the user. That is, assuming that the
+system is <em>not</em> heavily loaded, a timer will typically be triggered in the range
+[<code class="inline">T</code>, <code class="inline">T+1</code>) milliseconds when the user has given the timeout time <code class="inline">T</code>. If the
+system is heavily loaded, it may take an even longer time until a timer is
+triggered.</p><h2 id="introduction" class="section-heading">
   <a href="#introduction" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -553,9 +570,9 @@ runtime system instance corresponding to creation time.</p></blockquote><h4>Dete
 the event occurs.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Determine the order of events by saving a tuple containing
 <a href="erlang.html#monotonic_time/0">monotonic time</a> and a
 <a href="erlang.html#unique_integer/1">strictly monotonically increasing integer</a> as
-follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">monotonic_time</span><span class="p" data-group-id="5622949061-1">(</span><span class="p" data-group-id="5622949061-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">UMI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">unique_integer</span><span class="p" data-group-id="5622949061-2">(</span><span class="p" data-group-id="5622949061-3">[</span><span class="ss">monotonic</span><span class="p" data-group-id="5622949061-3">]</span><span class="p" data-group-id="5622949061-2">)</span><span class="p">,</span><span class="w">
-</span><span class="n">EventTag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5622949061-4">{</span><span class="n">Time</span><span class="p">,</span><span class="w"> </span><span class="n">UMI</span><span class="p" data-group-id="5622949061-4">}</span></code></pre><p>These tuples are strictly monotonically ordered on the current runtime system
+follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">monotonic_time</span><span class="p" data-group-id="4514538475-1">(</span><span class="p" data-group-id="4514538475-1">)</span><span class="p">,</span><span class="w">
+</span><span class="n">UMI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">unique_integer</span><span class="p" data-group-id="4514538475-2">(</span><span class="p" data-group-id="4514538475-3">[</span><span class="ss">monotonic</span><span class="p" data-group-id="4514538475-3">]</span><span class="p" data-group-id="4514538475-2">)</span><span class="p">,</span><span class="w">
+</span><span class="n">EventTag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="4514538475-4">{</span><span class="n">Time</span><span class="p">,</span><span class="w"> </span><span class="n">UMI</span><span class="p" data-group-id="4514538475-4">}</span></code></pre><p>These tuples are strictly monotonically ordered on the current runtime system
 instance according to creation time. It is important that the monotonic time
 is in the first element (the most significant element when comparing
 two-tuples). Using the monotonic time in the tuples, you can calculate time
