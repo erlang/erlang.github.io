@@ -1,5 +1,0 @@
-
-      -module(baz).
-
-      f() -> ok.
-      
