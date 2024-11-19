@@ -14,15 +14,9 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-3EFE45AC.js"></script>
+    <script src="dist/sidebar_items-956E4324.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
-<style type="text/css">
-  .monospace-font > code {
-    font-family: monospace;
-  }
-</style>
-
 
   </head>
   <body data-type="modules" class="page-module">
@@ -141,12 +135,14 @@ existing Erlang terms. See note on
 knowledge of the format is running on thin ice.</p><p>This module provides the same interface as the <a href="ordsets.html"><code class="inline">ordsets</code></a> module but with an
 undefined representation. One difference is that while this module considers two
 elements as different if they do not match (<code class="inline">=:=</code>), <code class="inline">ordsets</code> considers two
-elements as different if and only if they do not compare equal (<code class="inline">==</code>).</p><p>Erlang/OTP 24.0 introduced a new more performant representation for sets which
-has become the default in Erlang/OTP 28. Developers can use the old representation
-by passing the <code class="inline">{version, 1}</code> flag to <a href="#new/1"><code class="inline">new/1</code></a> and <a href="#from_list/2"><code class="inline">from_list/2</code></a>. Functions that
-work on two sets, such as <a href="#union/2"><code class="inline">union/2</code></a>, will work with sets of different
-versions. In such cases, there is no guarantee about the version of the returned set.
-Explicit conversion from the old version to the new one can be done with
+elements as different if and only if they do not compare equal (<code class="inline">==</code>).</p><p>Erlang/OTP 24.0 introduced a new internal representation for sets which is more
+performant. Developers can use this new representation by passing the
+<code class="inline">{version, 2}</code> flag to <a href="#new/1"><code class="inline">new/1</code></a> and <a href="#from_list/2"><code class="inline">from_list/2</code></a>, such as
+<code class="inline">sets:new([{version, 2}])</code>. This new representation will become the default in
+future Erlang/OTP versions. Functions that work on two sets, such as <a href="#union/2"><code class="inline">union/2</code></a>
+and similar, will work with sets of different versions. In such cases, there is
+no guarantee about the version of the returned set. Explicit conversion from the
+old version to the new one can be done with
 <code class="inline">sets:from_list(sets:to_list(Old), [{version,2}])</code>.</p><h2 id="module-compatibility" class="section-heading">
   <a href="#module-compatibility" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -160,11 +156,11 @@ representations.</p><ul><li><a href="#add_element/2"><code class="inline">add_el
 respect to the aforementioned functions, their overall <em>behavior</em> may differ.
 As mentioned, this module considers elements as different if and only if they
 do not match (<code class="inline">=:=</code>), while both <a href="ordsets.html"><code class="inline">ordsets</code></a> and <a href="gb_sets.html"><code class="inline">gb_sets</code></a> consider elements
-as different if and only if they do not compare equal (<code class="inline">==</code>).</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">sets</span><span class="p">:</span><span class="nf">is_element</span><span class="p" data-group-id="5711345841-1">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nc">sets</span><span class="p">:</span><span class="nf">from_list</span><span class="p" data-group-id="5711345841-2">(</span><span class="p" data-group-id="5711345841-3">[</span><span class="mi">1</span><span class="p" data-group-id="5711345841-3">]</span><span class="p" data-group-id="5711345841-2">)</span><span class="p" data-group-id="5711345841-1">)</span><span class="p">.</span><span class="w">
+as different if and only if they do not compare equal (<code class="inline">==</code>).</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">sets</span><span class="p">:</span><span class="nf">is_element</span><span class="p" data-group-id="0676335714-1">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nc">sets</span><span class="p">:</span><span class="nf">from_list</span><span class="p" data-group-id="0676335714-2">(</span><span class="p" data-group-id="0676335714-3">[</span><span class="mi">1</span><span class="p" data-group-id="0676335714-3">]</span><span class="p" data-group-id="0676335714-2">)</span><span class="p" data-group-id="0676335714-1">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">false</span><span class="gp unselectable">
-2&gt; </span><span class="nc">ordsets</span><span class="p">:</span><span class="nf">is_element</span><span class="p" data-group-id="5711345841-4">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nc">ordsets</span><span class="p">:</span><span class="nf">from_list</span><span class="p" data-group-id="5711345841-5">(</span><span class="p" data-group-id="5711345841-6">[</span><span class="mi">1</span><span class="p" data-group-id="5711345841-6">]</span><span class="p" data-group-id="5711345841-5">)</span><span class="p" data-group-id="5711345841-4">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">ordsets</span><span class="p">:</span><span class="nf">is_element</span><span class="p" data-group-id="0676335714-4">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nc">ordsets</span><span class="p">:</span><span class="nf">from_list</span><span class="p" data-group-id="0676335714-5">(</span><span class="p" data-group-id="0676335714-6">[</span><span class="mi">1</span><span class="p" data-group-id="0676335714-6">]</span><span class="p" data-group-id="0676335714-5">)</span><span class="p" data-group-id="0676335714-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">true</span><span class="gp unselectable">
-2&gt; </span><span class="nc">gb_sets</span><span class="p">:</span><span class="nf">is_element</span><span class="p" data-group-id="5711345841-7">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nc">gb_sets</span><span class="p">:</span><span class="nf">from_list</span><span class="p" data-group-id="5711345841-8">(</span><span class="p" data-group-id="5711345841-9">[</span><span class="mi">1</span><span class="p" data-group-id="5711345841-9">]</span><span class="p" data-group-id="5711345841-8">)</span><span class="p" data-group-id="5711345841-7">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">gb_sets</span><span class="p">:</span><span class="nf">is_element</span><span class="p" data-group-id="0676335714-7">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="nc">gb_sets</span><span class="p">:</span><span class="nf">from_list</span><span class="p" data-group-id="0676335714-8">(</span><span class="p" data-group-id="0676335714-9">[</span><span class="mi">1</span><span class="p" data-group-id="0676335714-9">]</span><span class="p" data-group-id="0676335714-8">)</span><span class="p" data-group-id="0676335714-7">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">true</span></code></pre></blockquote><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -469,7 +465,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">set()</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L158" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L160" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -497,7 +493,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">set(Element)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L161" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L163" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -537,7 +533,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">add_element(Element, Set1)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L297" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L299" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -565,7 +561,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">del_element(Element, Set1)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L316" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L318" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -593,7 +589,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">filter(Pred, Set1)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L606" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L608" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -622,7 +618,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">filtermap(Fun, Set1)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L638" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L640" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -656,7 +652,7 @@ undefined.</p></div>
     </a>
     <h1 class="signature" translate="no">fold(Function, Acc0, Set)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L586" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L588" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -692,7 +688,7 @@ accumulator. The evaluation order is undefined.</p>
     </a>
     <h1 class="signature" translate="no">from_list(List)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L189" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L191" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -720,7 +716,7 @@ accumulator. The evaluation order is undefined.</p>
     </a>
     <h1 class="signature" translate="no">from_list/2</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L197" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L199" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -750,7 +746,7 @@ accumulator. The evaluation order is undefined.</p>
     </a>
     <h1 class="signature" translate="no">intersection(SetList)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L433" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L435" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -778,7 +774,7 @@ accumulator. The evaluation order is undefined.</p>
     </a>
     <h1 class="signature" translate="no">intersection(Set1, Set2)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L383" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L385" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -807,7 +803,7 @@ accumulator. The evaluation order is undefined.</p>
     </a>
     <h1 class="signature" translate="no">is_disjoint(Set1, Set2)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L451" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L453" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -836,7 +832,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">is_element(Element, Set)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L281" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L283" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -864,7 +860,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">is_empty(Set)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L235" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L237" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -894,7 +890,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">is_equal(Set1, Set2)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L249" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L251" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -925,7 +921,7 @@ set is also a member of the respective other set, otherwise <code class="inline"
     </a>
     <h1 class="signature" translate="no">is_set(Set)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L217" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L219" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -954,7 +950,7 @@ the possible representations of a set. See also note on <a href="../../../../doc
     </a>
     <h1 class="signature" translate="no">is_subset(Set1, Set2)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L552" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L554" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -983,7 +979,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">map(Fun, Set1)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L621" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L623" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1014,7 +1010,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">new()</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L168" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L170" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1042,7 +1038,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">new/1</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L173" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L177" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1072,7 +1068,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">size(Set)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L226" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L228" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1100,7 +1096,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">subtract(Set1, Set2)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L490" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L492" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1128,7 +1124,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">to_list(Set)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L271" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L273" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1157,7 +1153,7 @@ undefined.</p>
     </a>
     <h1 class="signature" translate="no">union(SetList)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L366" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L368" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1185,7 +1181,7 @@ undefined.</p>
     </a>
     <h1 class="signature" translate="no">union(Set1, Set2)</h1>
 
-      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L350" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/essen/otp/blob/ssl-document-tls-alerts-in-messages/lib/stdlib/src/sets.erl#L352" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
