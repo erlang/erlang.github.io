@@ -14,9 +14,15 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-BC894517.js"></script>
+    <script src="dist/sidebar_items-3BEC7028.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
+<style type="text/css">
+  .monospace-font > code {
+    font-family: monospace;
+  }
+</style>
+
 
   </head>
   <body data-type="modules" class="page-module">
@@ -130,18 +136,18 @@ Pages
     <section id="moduledoc">
 <p>API module for Logger, the standard logging facility in Erlang/OTP.</p><p>This module implements the main API for logging in Erlang/OTP. To create a log
 event, use the <a href="#logging-api-functions">API functions</a> or the log
-<a href="#module-macros">macros</a>, for example:</p><pre><code class="makeup erlang" translate="no"><span class="o">?</span><span class="n">LOG_ERROR</span><span class="p" data-group-id="8229838412-1">(</span><span class="s">&quot;error happened because: </span><span class="si">~p</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8229838412-2">[</span><span class="n">Reason</span><span class="p" data-group-id="8229838412-2">]</span><span class="p" data-group-id="8229838412-1">)</span><span class="p">.</span><span class="w">   </span><span class="c1">% With macro</span><span class="w">
-</span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="8229838412-3">(</span><span class="s">&quot;error happened because: </span><span class="si">~p</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8229838412-4">[</span><span class="n">Reason</span><span class="p" data-group-id="8229838412-4">]</span><span class="p" data-group-id="8229838412-3">)</span><span class="p">.</span><span class="w"> </span><span class="c1">% Without macro</span></code></pre><p>To configure the Logger backend, use
+<a href="#module-macros">macros</a>, for example:</p><pre><code class="makeup erlang" translate="no"><span class="o">?</span><span class="n">LOG_ERROR</span><span class="p" data-group-id="6747081821-1">(</span><span class="s">&quot;error happened because: </span><span class="si">~p</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6747081821-2">[</span><span class="n">Reason</span><span class="p" data-group-id="6747081821-2">]</span><span class="p" data-group-id="6747081821-1">)</span><span class="p">.</span><span class="w">   </span><span class="c1">% With macro</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="6747081821-3">(</span><span class="s">&quot;error happened because: </span><span class="si">~p</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6747081821-4">[</span><span class="n">Reason</span><span class="p" data-group-id="6747081821-4">]</span><span class="p" data-group-id="6747081821-3">)</span><span class="p">.</span><span class="w"> </span><span class="c1">% Without macro</span></code></pre><p>To configure the Logger backend, use
 <a href="kernel_app.html#logger">Kernel configuration parameters</a> or
 <a href="#configuration-api-functions">configuration functions</a> in the Logger API.</p><p>By default, the Kernel application installs one log handler at system start.
 This handler is named <code class="inline">default</code>. It receives and processes standard log events
 produced by the Erlang runtime system, standard behaviours and different
 Erlang/OTP applications. The log events are by default printed to the terminal.</p><p>If you want your systems logs to be printed to a file instead, you must
 configure the default handler to do so. The simplest way is to include the
-following in your <a href="config.html"><code class="inline">sys.config</code></a>:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="8156073588-1">[</span><span class="p" data-group-id="8156073588-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="8156073588-3">[</span><span class="p" data-group-id="8156073588-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="8156073588-5">[</span><span class="p" data-group-id="8156073588-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
-      </span><span class="p" data-group-id="8156073588-7">#{</span><span class="ss">config</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="8156073588-8">#{</span><span class="ss">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;path/to/file.log&quot;</span><span class="p" data-group-id="8156073588-8">}</span><span class="p" data-group-id="8156073588-7">}</span><span class="p" data-group-id="8156073588-6">}</span><span class="p" data-group-id="8156073588-5">]</span><span class="p" data-group-id="8156073588-4">}</span><span class="p" data-group-id="8156073588-3">]</span><span class="p" data-group-id="8156073588-2">}</span><span class="p" data-group-id="8156073588-1">]</span><span class="p">.</span></code></pre><p>For more information about:</p><ul><li>the Logger facility in general, see the <a href="logger_chapter.html">User's Guide</a>.</li><li>how to configure Logger, see the
+following in your <a href="config.html"><code class="inline">sys.config</code></a>:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="7619143164-1">[</span><span class="p" data-group-id="7619143164-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7619143164-3">[</span><span class="p" data-group-id="7619143164-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="7619143164-5">[</span><span class="p" data-group-id="7619143164-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">logger_std_h</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="7619143164-7">#{</span><span class="ss">config</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p" data-group-id="7619143164-8">#{</span><span class="ss">file</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="s">&quot;path/to/file.log&quot;</span><span class="p" data-group-id="7619143164-8">}</span><span class="p" data-group-id="7619143164-7">}</span><span class="p" data-group-id="7619143164-6">}</span><span class="p" data-group-id="7619143164-5">]</span><span class="p" data-group-id="7619143164-4">}</span><span class="p" data-group-id="7619143164-3">]</span><span class="p" data-group-id="7619143164-2">}</span><span class="p" data-group-id="7619143164-1">]</span><span class="p">.</span></code></pre><p>For more information about:</p><ul><li>the Logger facility in general, see the <a href="logger_chapter.html">User's Guide</a>.</li><li>how to configure Logger, see the
 <a href="logger_chapter.html#configuration">Configuration</a> section in the User's Guide.</li><li>the built-in handlers, see <a href="logger_std_h.html"><code class="inline">logger_std_h</code></a> and <a href="logger_disk_log_h.html"><code class="inline">logger_disk_log_h</code></a>.</li><li>the built-in formatter, see <a href="logger_formatter.html"><code class="inline">logger_formatter</code></a>.</li><li>built-in filters, see <a href="logger_filters.html"><code class="inline">logger_filters</code></a>.</li></ul><h2 id="module-macros" class="section-heading">
   <a href="#module-macros" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -149,7 +155,7 @@ following in your <a href="config.html"><code class="inline">sys.config</code></
   <span class="text">Macros</span>
 </h2>
 <p>The following macros are defined in <code class="inline">logger.hrl</code>, which is included in a module
-with the directive</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="0409115172-1">(</span><span class="s">&quot;kernel/include/logger.hrl&quot;</span><span class="p" data-group-id="0409115172-1">)</span><span class="p">.</span></code></pre><ul><li><code class="inline">?LOG_EMERGENCY(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_EMERGENCY(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_ALERT(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_ALERT(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_CRITICAL(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_CRITICAL(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_ERROR(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_ERROR(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_WARNING(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_WARNING(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_NOTICE(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_NOTICE(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_INFO(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_INFO(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_DEBUG(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_DEBUG(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG(Level,StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG(Level,FunOrFormat,Args[,Metadata])</code></li></ul><p>All macros expand to a call to Logger, where <code class="inline">Level</code> is taken from the macro
+with the directive</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p">-</span><span class="na">include_lib</span><span class="p" data-group-id="1001359080-1">(</span><span class="s">&quot;kernel/include/logger.hrl&quot;</span><span class="p" data-group-id="1001359080-1">)</span><span class="p">.</span></code></pre><ul><li><code class="inline">?LOG_EMERGENCY(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_EMERGENCY(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_ALERT(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_ALERT(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_CRITICAL(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_CRITICAL(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_ERROR(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_ERROR(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_WARNING(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_WARNING(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_NOTICE(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_NOTICE(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_INFO(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_INFO(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG_DEBUG(StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG_DEBUG(FunOrFormat,Args[,Metadata])</code></li><li><code class="inline">?LOG(Level,StringOrReport[,Metadata])</code></li><li><code class="inline">?LOG(Level,FunOrFormat,Args[,Metadata])</code></li></ul><p>All macros expand to a call to Logger, where <code class="inline">Level</code> is taken from the macro
 name, or from the first argument in the case of the <code class="inline">?LOG</code> macro. Location data
 is added to the metadata as described under the <a href="#t:metadata/0"><code class="inline">metadata/0</code></a> type definition.</p><p>The call is wrapped in a case statement and will be evaluated only if <code class="inline">Level</code> is
 equal to or below the configured log level.</p><h2 id="module-see-also" class="section-heading">
@@ -382,7 +388,7 @@ arguments, or directly to a string.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#alert/2"><code class="inline">alert(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -412,7 +418,7 @@ arguments, or directly to a string.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#critical/2"><code class="inline">critical(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -442,7 +448,7 @@ arguments, or directly to a string.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#debug/2"><code class="inline">debug(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -502,7 +508,7 @@ arguments, or directly to a string.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#error/2"><code class="inline">error(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -532,7 +538,7 @@ arguments, or directly to a string.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#info/2"><code class="inline">info(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -596,7 +602,7 @@ the given <a href="logger_chapter.html#log-message">message</a> to be logged and
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#notice/2"><code class="inline">notice(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -626,7 +632,7 @@ the given <a href="logger_chapter.html#log-message">message</a> to be logged and
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#warning/2"><code class="inline">warning(StringOrReport, #{})</code></a>.</p></div>
 
     </div>
 
@@ -1768,7 +1774,7 @@ for more information.</p>
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#alert/2"><code class="inline">alert(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="alert/2">
@@ -1865,7 +1871,7 @@ as <a href="#alert/2"><code class="inline">alert(StringOrReport, Metadata)</code
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#critical/2"><code class="inline">critical(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="critical/2">
@@ -1962,7 +1968,7 @@ as <a href="#critical/2"><code class="inline">critical(StringOrReport, Metadata)
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#debug/2"><code class="inline">debug(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="debug/2">
@@ -2156,7 +2162,7 @@ as <a href="#emergency/2"><code class="inline">emergency(StringOrReport, Metadat
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#error/2"><code class="inline">error(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="error/2">
@@ -2253,7 +2259,7 @@ as <a href="#error/2"><code class="inline">error(StringOrReport, Metadata)</code
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#info/2"><code class="inline">info(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="info/2">
@@ -2386,13 +2392,13 @@ as <a href="#info/2"><code class="inline">info(StringOrReport, Metadata)</code><
 <p>Create a log event at the given <a href="logger_chapter.html#log-level">log level</a>, with
 the given <a href="logger_chapter.html#log-message">message</a> to be logged and
 <a href="logger_chapter.html#metadata"><em>metadata</em></a>.</p><p><em>Example</em>:</p><pre><code class="makeup erlang" translate="no"><span class="c1">%% A plain string</span><span class="gp unselectable">
-1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="4178356026-1">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p" data-group-id="4178356026-1">)</span><span class="p">.</span><span class="w">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="8372614573-1">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p" data-group-id="8372614573-1">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% A plain string with metadata</span><span class="gp unselectable">
-2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="4178356026-2">(</span><span class="ss">debug</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4178356026-3">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">data</span><span class="w"> </span><span class="p" data-group-id="4178356026-3">}</span><span class="p" data-group-id="4178356026-2">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="8372614573-2">(</span><span class="ss">debug</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8372614573-3">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">data</span><span class="w"> </span><span class="p" data-group-id="8372614573-3">}</span><span class="p" data-group-id="8372614573-2">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% A format string with arguments</span><span class="gp unselectable">
-3&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="4178356026-4">(</span><span class="ss">warning</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The roof is on ~ts&quot;</span><span class="p">,</span><span class="p" data-group-id="4178356026-5">[</span><span class="n">Cause</span><span class="p" data-group-id="4178356026-5">]</span><span class="p" data-group-id="4178356026-4">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="8372614573-4">(</span><span class="ss">warning</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;The roof is on ~ts&quot;</span><span class="p">,</span><span class="p" data-group-id="8372614573-5">[</span><span class="n">Cause</span><span class="p" data-group-id="8372614573-5">]</span><span class="p" data-group-id="8372614573-4">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% A report</span><span class="gp unselectable">
-4&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="4178356026-6">(</span><span class="ss">warning</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4178356026-7">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">roof</span><span class="p">,</span><span class="w"> </span><span class="ss">cause</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Cause</span><span class="w"> </span><span class="p" data-group-id="4178356026-7">}</span><span class="p" data-group-id="4178356026-6">)</span><span class="p">.</span></code></pre><p>Equivalent to <a href="#log/4"><code class="inline">log(Level, FormatOrFun, Args, #{})</code></a> if called as
+4&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="8372614573-6">(</span><span class="ss">warning</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8372614573-7">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">roof</span><span class="p">,</span><span class="w"> </span><span class="ss">cause</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Cause</span><span class="w"> </span><span class="p" data-group-id="8372614573-7">}</span><span class="p" data-group-id="8372614573-6">)</span><span class="p">.</span></code></pre><p>Equivalent to <a href="#log/4"><code class="inline">log(Level, FormatOrFun, Args, #{})</code></a> if called as
 <code class="inline">log(Level, FormatOrFun, Args)</code>.</p>
   </section>
 </section>
@@ -2431,12 +2437,12 @@ returned from a fun. Passing a fun instead of the message/metadata directly is
 useful in scenarios when the message/metadata is very expensive to compute. This
 is because the fun is only evaluated when the message/metadata is actually
 needed, which may be not at all if the log event is not to be logged. Examples:</p><pre><code class="makeup erlang" translate="no"><span class="c1">%% A plain string with expensive metadata</span><span class="gp unselectable">
-1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">info</span><span class="p" data-group-id="3203951627-1">(</span><span class="nf">fun</span><span class="p" data-group-id="3203951627-2">(</span><span class="p" data-group-id="3203951627-3">[</span><span class="p" data-group-id="3203951627-3">]</span><span class="p" data-group-id="3203951627-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="3203951627-4">{</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3203951627-5">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nf">expensive</span><span class="p" data-group-id="3203951627-6">(</span><span class="p" data-group-id="3203951627-6">)</span><span class="w"> </span><span class="p" data-group-id="3203951627-5">}</span><span class="p" data-group-id="3203951627-4">}</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="p" data-group-id="3203951627-7">[</span><span class="p" data-group-id="3203951627-7">]</span><span class="p" data-group-id="3203951627-1">)</span><span class="p">.</span><span class="w">
+1&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">info</span><span class="p" data-group-id="6974672528-1">(</span><span class="nf">fun</span><span class="p" data-group-id="6974672528-2">(</span><span class="p" data-group-id="6974672528-3">[</span><span class="p" data-group-id="6974672528-3">]</span><span class="p" data-group-id="6974672528-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6974672528-4">{</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6974672528-5">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nf">expensive</span><span class="p" data-group-id="6974672528-6">(</span><span class="p" data-group-id="6974672528-6">)</span><span class="w"> </span><span class="p" data-group-id="6974672528-5">}</span><span class="p" data-group-id="6974672528-4">}</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="p" data-group-id="6974672528-7">[</span><span class="p" data-group-id="6974672528-7">]</span><span class="p" data-group-id="6974672528-1">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% An expensive report</span><span class="gp unselectable">
-2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="3203951627-8">(</span><span class="nf">fun</span><span class="p" data-group-id="3203951627-9">(</span><span class="n">What</span><span class="p" data-group-id="3203951627-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="3203951627-10">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">What</span><span class="p">,</span><span class="w"> </span><span class="ss">cause</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nf">expensive</span><span class="p" data-group-id="3203951627-11">(</span><span class="p" data-group-id="3203951627-11">)</span><span class="w"> </span><span class="p" data-group-id="3203951627-10">}</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="ss">roof</span><span class="p" data-group-id="3203951627-8">)</span><span class="p">.</span><span class="w">
+2&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="6974672528-8">(</span><span class="nf">fun</span><span class="p" data-group-id="6974672528-9">(</span><span class="n">What</span><span class="p" data-group-id="6974672528-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6974672528-10">#{</span><span class="w"> </span><span class="ss">what</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">What</span><span class="p">,</span><span class="w"> </span><span class="ss">cause</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nf">expensive</span><span class="p" data-group-id="6974672528-11">(</span><span class="p" data-group-id="6974672528-11">)</span><span class="w"> </span><span class="p" data-group-id="6974672528-10">}</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="ss">roof</span><span class="p" data-group-id="6974672528-8">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% A plain string with expensive metadata and normal metadata</span><span class="gp unselectable">
-3&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="3203951627-12">(</span><span class="nf">fun</span><span class="p" data-group-id="3203951627-13">(</span><span class="p" data-group-id="3203951627-14">[</span><span class="p" data-group-id="3203951627-14">]</span><span class="p" data-group-id="3203951627-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="3203951627-15">{</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3203951627-16">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nf">expensive</span><span class="p" data-group-id="3203951627-17">(</span><span class="p" data-group-id="3203951627-17">)</span><span class="w"> </span><span class="p" data-group-id="3203951627-16">}</span><span class="p" data-group-id="3203951627-15">}</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="p" data-group-id="3203951627-18">[</span><span class="p" data-group-id="3203951627-18">]</span><span class="p">,</span><span class="w">
-               </span><span class="p" data-group-id="3203951627-19">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">data</span><span class="w"> </span><span class="p" data-group-id="3203951627-19">}</span><span class="p" data-group-id="3203951627-12">)</span><span class="p">.</span></code></pre><p>When metadata is given both as an argument and returned from the fun they are
+3&gt; </span><span class="nc">logger</span><span class="p">:</span><span class="nf">debug</span><span class="p" data-group-id="6974672528-12">(</span><span class="nf">fun</span><span class="p" data-group-id="6974672528-13">(</span><span class="p" data-group-id="6974672528-14">[</span><span class="p" data-group-id="6974672528-14">]</span><span class="p" data-group-id="6974672528-13">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="6974672528-15">{</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6974672528-16">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nf">expensive</span><span class="p" data-group-id="6974672528-17">(</span><span class="p" data-group-id="6974672528-17">)</span><span class="w"> </span><span class="p" data-group-id="6974672528-16">}</span><span class="p" data-group-id="6974672528-15">}</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="p" data-group-id="6974672528-18">[</span><span class="p" data-group-id="6974672528-18">]</span><span class="p">,</span><span class="w">
+               </span><span class="p" data-group-id="6974672528-19">#{</span><span class="w"> </span><span class="ss">meta</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">data</span><span class="w"> </span><span class="p" data-group-id="6974672528-19">}</span><span class="p" data-group-id="6974672528-12">)</span><span class="p">.</span></code></pre><p>When metadata is given both as an argument and returned from the fun they are
 merged. If equal keys exists the values are taken from the metadata returned by
 the fun.</p>
   </section>
@@ -2469,7 +2475,7 @@ the fun.</p>
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#notice/2"><code class="inline">notice(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="notice/2">
@@ -2566,7 +2572,7 @@ as <a href="#notice/2"><code class="inline">notice(StringOrReport, Metadata)</co
 
       </div>
 
-<p>Equivalent to <a href="#emergency/2"><code class="inline">emergency(StringOrReport, #{})</code></a>.</p>
+<p>Equivalent to <a href="#warning/2"><code class="inline">warning(StringOrReport, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="warning/2">
@@ -2759,26 +2765,26 @@ information about filters.</p><p>Some built-in filters exist. These are defined 
 consistent no matter which handler the system uses. Normal usage is to add a
 call to <a href="#add_handlers/1"><code class="inline">logger:add_handlers/1</code></a> just after the processes that the handler needs
 are started, and pass the application's <code class="inline">logger</code> configuration as the argument.
-For example:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="9788608045-1">(</span><span class="ss">application</span><span class="p" data-group-id="9788608045-1">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="9788608045-2">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9788608045-3">[</span><span class="p" data-group-id="9788608045-3">]</span><span class="p" data-group-id="9788608045-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">supervisor</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="9788608045-4">(</span><span class="p" data-group-id="9788608045-5">{</span><span class="ss">local</span><span class="p">,</span><span class="w"> </span><span class="ss">my_sup</span><span class="p" data-group-id="9788608045-5">}</span><span class="p">,</span><span class="w"> </span><span class="ss">my_sup</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9788608045-6">[</span><span class="p" data-group-id="9788608045-6">]</span><span class="p" data-group-id="9788608045-4">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-        </span><span class="p" data-group-id="9788608045-7">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="9788608045-7">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">add_handlers</span><span class="p" data-group-id="9788608045-8">(</span><span class="ss">my_app</span><span class="p" data-group-id="9788608045-8">)</span><span class="p">,</span><span class="w">
-            </span><span class="p" data-group-id="9788608045-9">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9788608045-10">[</span><span class="p" data-group-id="9788608045-10">]</span><span class="p" data-group-id="9788608045-9">}</span><span class="p">;</span><span class="w">
+For example:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="0634318634-1">(</span><span class="ss">application</span><span class="p" data-group-id="0634318634-1">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="0634318634-2">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0634318634-3">[</span><span class="p" data-group-id="0634318634-3">]</span><span class="p" data-group-id="0634318634-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">supervisor</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="0634318634-4">(</span><span class="p" data-group-id="0634318634-5">{</span><span class="ss">local</span><span class="p">,</span><span class="w"> </span><span class="ss">my_sup</span><span class="p" data-group-id="0634318634-5">}</span><span class="p">,</span><span class="w"> </span><span class="ss">my_sup</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0634318634-6">[</span><span class="p" data-group-id="0634318634-6">]</span><span class="p" data-group-id="0634318634-4">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+        </span><span class="p" data-group-id="0634318634-7">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p" data-group-id="0634318634-7">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">add_handlers</span><span class="p" data-group-id="0634318634-8">(</span><span class="ss">my_app</span><span class="p" data-group-id="0634318634-8">)</span><span class="p">,</span><span class="w">
+            </span><span class="p" data-group-id="0634318634-9">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Pid</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0634318634-10">[</span><span class="p" data-group-id="0634318634-10">]</span><span class="p" data-group-id="0634318634-9">}</span><span class="p">;</span><span class="w">
         </span><span class="n">Error</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w">
      </span><span class="k">end</span><span class="p">.</span></code></pre><p>This reads the <code class="inline">logger</code> configuration parameter from the <code class="inline">my_app</code> application
 and starts the configured handlers. The contents of the configuration use the
 same rules as the
 <a href="logger_chapter.html#handler-configuration">logger handler configuration</a>.</p><p>If the handler is meant to replace the default handler, the Kernel's default
 handler have to be disabled before the new handler is added. A <code class="inline">sys.config</code> file
-that disables the Kernel handler and adds a custom handler could look like this:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="0709313302-1">[</span><span class="p" data-group-id="0709313302-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="0709313302-3">[</span><span class="p" data-group-id="0709313302-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+that disables the Kernel handler and adds a custom handler could look like this:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="8816696915-1">[</span><span class="p" data-group-id="8816696915-2">{</span><span class="ss">kernel</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8816696915-3">[</span><span class="p" data-group-id="8816696915-4">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
     </span><span class="c1">%% Disable the default Kernel handler</span><span class="w">
-    </span><span class="p" data-group-id="0709313302-5">[</span><span class="p" data-group-id="0709313302-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">undefined</span><span class="p" data-group-id="0709313302-6">}</span><span class="p" data-group-id="0709313302-5">]</span><span class="p" data-group-id="0709313302-4">}</span><span class="p" data-group-id="0709313302-3">]</span><span class="p" data-group-id="0709313302-2">}</span><span class="p">,</span><span class="w">
- </span><span class="p" data-group-id="0709313302-7">{</span><span class="ss">my_app</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="0709313302-8">[</span><span class="p" data-group-id="0709313302-9">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="8816696915-5">[</span><span class="p" data-group-id="8816696915-6">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">undefined</span><span class="p" data-group-id="8816696915-6">}</span><span class="p" data-group-id="8816696915-5">]</span><span class="p" data-group-id="8816696915-4">}</span><span class="p" data-group-id="8816696915-3">]</span><span class="p" data-group-id="8816696915-2">}</span><span class="p">,</span><span class="w">
+ </span><span class="p" data-group-id="8816696915-7">{</span><span class="ss">my_app</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="8816696915-8">[</span><span class="p" data-group-id="8816696915-9">{</span><span class="ss">logger</span><span class="p">,</span><span class="w">
     </span><span class="c1">%% Enable this handler as the default</span><span class="w">
-    </span><span class="p" data-group-id="0709313302-10">[</span><span class="p" data-group-id="0709313302-11">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">my_handler</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0709313302-12">#{</span><span class="p" data-group-id="0709313302-12">}</span><span class="p" data-group-id="0709313302-11">}</span><span class="p" data-group-id="0709313302-10">]</span><span class="p" data-group-id="0709313302-9">}</span><span class="p" data-group-id="0709313302-8">]</span><span class="p" data-group-id="0709313302-7">}</span><span class="p" data-group-id="0709313302-1">]</span><span class="p">.</span></code></pre>
+    </span><span class="p" data-group-id="8816696915-10">[</span><span class="p" data-group-id="8816696915-11">{</span><span class="ss">handler</span><span class="p">,</span><span class="w"> </span><span class="ss">default</span><span class="p">,</span><span class="w"> </span><span class="ss">my_handler</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8816696915-12">#{</span><span class="p" data-group-id="8816696915-12">}</span><span class="p" data-group-id="8816696915-11">}</span><span class="p" data-group-id="8816696915-10">]</span><span class="p" data-group-id="8816696915-9">}</span><span class="p" data-group-id="8816696915-8">]</span><span class="p" data-group-id="8816696915-7">}</span><span class="p" data-group-id="8816696915-1">]</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="add_primary_filter/2">
@@ -3733,8 +3739,8 @@ for the specified modules.</p>
 
       </div>
 
-<p>Update the formatter configuration for the specified handler.</p><p>The new configuration is merged with the existing formatter configuration.</p><p>To overwrite the existing configuration without any merge, use</p><pre><code class="makeup erlang" translate="no"><span class="nf">set_handler_config</span><span class="p" data-group-id="9981857761-1">(</span><span class="n">HandlerId</span><span class="p">,</span><span class="w"> </span><span class="ss">formatter</span><span class="p">,</span><span class="w">
-</span><span class="err">	</span><span class="w">      </span><span class="p" data-group-id="9981857761-2">{</span><span class="n">FormatterModule</span><span class="p">,</span><span class="w"> </span><span class="n">FormatterConfig</span><span class="p" data-group-id="9981857761-2">}</span><span class="p" data-group-id="9981857761-1">)</span><span class="p">.</span></code></pre>
+<p>Update the formatter configuration for the specified handler.</p><p>The new configuration is merged with the existing formatter configuration.</p><p>To overwrite the existing configuration without any merge, use</p><pre><code class="makeup erlang" translate="no"><span class="nf">set_handler_config</span><span class="p" data-group-id="7383261130-1">(</span><span class="n">HandlerId</span><span class="p">,</span><span class="w"> </span><span class="ss">formatter</span><span class="p">,</span><span class="w">
+</span><span class="err">	</span><span class="w">      </span><span class="p" data-group-id="7383261130-2">{</span><span class="n">FormatterModule</span><span class="p">,</span><span class="w"> </span><span class="n">FormatterConfig</span><span class="p" data-group-id="7383261130-2">}</span><span class="p" data-group-id="7383261130-1">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_formatter_config/3">
@@ -3797,8 +3803,8 @@ for the specified modules.</p>
       </div>
 
 <p>Update configuration data for the specified handler. This function behaves as if
-it was implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="6542038975-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6542038975-2">{</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Old</span><span class="p" data-group-id="6542038975-2">}</span><span class="p" data-group-id="6542038975-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_handler_config</span><span class="p" data-group-id="6542038975-3">(</span><span class="n">HandlerId</span><span class="p" data-group-id="6542038975-3">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_handler_config</span><span class="p" data-group-id="6542038975-4">(</span><span class="n">HandlerId</span><span class="p">,</span><span class="w"> </span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="6542038975-5">(</span><span class="n">Old</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p" data-group-id="6542038975-5">)</span><span class="p" data-group-id="6542038975-4">)</span><span class="p">.</span></code></pre><p>To overwrite the existing configuration without any merge, use
+it was implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="8374536851-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8374536851-2">{</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Old</span><span class="p" data-group-id="8374536851-2">}</span><span class="p" data-group-id="8374536851-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_handler_config</span><span class="p" data-group-id="8374536851-3">(</span><span class="n">HandlerId</span><span class="p" data-group-id="8374536851-3">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_handler_config</span><span class="p" data-group-id="8374536851-4">(</span><span class="n">HandlerId</span><span class="p">,</span><span class="w"> </span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="8374536851-5">(</span><span class="n">Old</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p" data-group-id="8374536851-5">)</span><span class="p" data-group-id="8374536851-4">)</span><span class="p">.</span></code></pre><p>To overwrite the existing configuration without any merge, use
 <a href="#set_handler_config/2"><code class="inline">set_handler_config/2</code> </a>.</p>
   </section>
 </section>
@@ -3891,8 +3897,8 @@ about the different parameters.</p>
       </div>
 
 <p>Update primary configuration data for Logger. This function behaves as if it was
-implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_primary_config</span><span class="p" data-group-id="8619408625-1">(</span><span class="p" data-group-id="8619408625-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_primary_config</span><span class="p" data-group-id="8619408625-2">(</span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="8619408625-3">(</span><span class="n">Old</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p" data-group-id="8619408625-3">)</span><span class="p" data-group-id="8619408625-2">)</span><span class="p">.</span></code></pre><p>To overwrite the existing configuration without any merge, use
+implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_primary_config</span><span class="p" data-group-id="2653689169-1">(</span><span class="p" data-group-id="2653689169-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_primary_config</span><span class="p" data-group-id="2653689169-2">(</span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="2653689169-3">(</span><span class="n">Old</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p" data-group-id="2653689169-3">)</span><span class="p" data-group-id="2653689169-2">)</span><span class="p">.</span></code></pre><p>To overwrite the existing configuration without any merge, use
 <a href="#set_primary_config/1"><code class="inline">set_primary_config/1</code> </a>.</p>
   </section>
 </section>
@@ -3924,7 +3930,7 @@ implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span
       </div>
 
 <p>Set or update metadata to use when logging from current process</p><p>If process metadata exists for the current process, this function behaves as if
-it was implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="nc">logger</span><span class="p">:</span><span class="nf">set_process_metadata</span><span class="p" data-group-id="6019076233-1">(</span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="6019076233-2">(</span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_process_metadata</span><span class="p" data-group-id="6019076233-3">(</span><span class="p" data-group-id="6019076233-3">)</span><span class="p">,</span><span class="w"> </span><span class="n">Meta</span><span class="p" data-group-id="6019076233-2">)</span><span class="p" data-group-id="6019076233-1">)</span><span class="p">.</span></code></pre><p>If no process metadata exists, the function behaves as
+it was implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="nc">logger</span><span class="p">:</span><span class="nf">set_process_metadata</span><span class="p" data-group-id="3531190963-1">(</span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="3531190963-2">(</span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_process_metadata</span><span class="p" data-group-id="3531190963-3">(</span><span class="p" data-group-id="3531190963-3">)</span><span class="p">,</span><span class="w"> </span><span class="n">Meta</span><span class="p" data-group-id="3531190963-2">)</span><span class="p" data-group-id="3531190963-1">)</span><span class="p">.</span></code></pre><p>If no process metadata exists, the function behaves as
 <a href="#set_process_metadata/1"><code class="inline">set_process_metadata/1</code> </a>.</p>
   </section>
 </section>
@@ -3956,8 +3962,8 @@ it was implemented as follows:</p><pre><code class="makeup erlang" translate="no
       </div>
 
 <p>Update configuration data for the Logger proxy. This function behaves as if it
-was implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_proxy_config</span><span class="p" data-group-id="9695067064-1">(</span><span class="p" data-group-id="9695067064-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_proxy_config</span><span class="p" data-group-id="9695067064-2">(</span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="9695067064-3">(</span><span class="n">Old</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p" data-group-id="9695067064-3">)</span><span class="p" data-group-id="9695067064-2">)</span><span class="p">.</span></code></pre><p>To overwrite the existing configuration without any merge, use
+was implemented as follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">logger</span><span class="p">:</span><span class="nf">get_proxy_config</span><span class="p" data-group-id="6717903021-1">(</span><span class="p" data-group-id="6717903021-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">logger</span><span class="p">:</span><span class="nf">set_proxy_config</span><span class="p" data-group-id="6717903021-2">(</span><span class="nc">maps</span><span class="p">:</span><span class="nf">merge</span><span class="p" data-group-id="6717903021-3">(</span><span class="n">Old</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p" data-group-id="6717903021-3">)</span><span class="p" data-group-id="6717903021-2">)</span><span class="p">.</span></code></pre><p>To overwrite the existing configuration without any merge, use
 <a href="#set_proxy_config/1"><code class="inline">set_proxy_config/1</code> </a>.</p><p>For more information about the proxy, see section
 <a href="logger_chapter.html#logger-proxy">Logger Proxy</a> in the Kernel User's Guide.</p>
   </section>

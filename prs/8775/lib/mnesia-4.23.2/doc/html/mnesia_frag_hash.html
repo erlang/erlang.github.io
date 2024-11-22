@@ -17,6 +17,12 @@
     <script src="dist/sidebar_items-54EFED7F.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
+<style type="text/css">
+  .monospace-font > code {
+    font-family: monospace;
+  }
+</style>
+
 
   </head>
   <body data-type="modules" class="page-module">
@@ -162,7 +168,8 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
 
       </div>
 
-        <div class="summary-synopsis"><p>add_frag(State) -&gt; {NewState, IterFrags, AdditionalLockFrags} | abort(Reason)</p></div>
+        <div class="summary-synopsis"><p>To scale well, it is a good idea to ensure that the records are evenly
+distributed over all fragments, including the new one.</p></div>
 
     </div>
 
@@ -172,7 +179,7 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
 
       </div>
 
-        <div class="summary-synopsis"><p>del_frag(State) -&gt; {NewState, IterFrags, AdditionalLockFrags} | abort(Reason)</p></div>
+        <div class="summary-synopsis"><p><code class="inline">NewState</code> is stored as <code class="inline">hash_state</code> among the other <code class="inline">frag_properties</code>.</p></div>
 
     </div>
 
@@ -182,7 +189,9 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
 
       </div>
 
-        <div class="summary-synopsis"><p>init_state(Tab, State) -&gt; NewState | abort(Reason)</p></div>
+        <div class="summary-synopsis"><p>Starts when a fragmented table is created with the function
+<a href="mnesia.html#create_table/2"><code class="inline">mnesia:create_table/2</code></a> or when a normal (unfragmented) table is converted to be
+a fragmented table with <a href="mnesia.html#change_table_frag/2"><code class="inline">mnesia:change_table_frag/2</code></a>.</p></div>
 
     </div>
 
@@ -192,7 +201,8 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
 
       </div>
 
-        <div class="summary-synopsis"><p>key_to_frag_number(State, Key) -&gt; FragNum | abort(Reason)</p></div>
+        <div class="summary-synopsis"><p>Starts whenever Mnesia needs to determine which fragment a certain record
+belongs to. It is typically started at <code class="inline">read</code>, <code class="inline">write</code>, and <code class="inline">delete</code>.</p></div>
 
     </div>
 
@@ -202,7 +212,9 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
 
       </div>
 
-        <div class="summary-synopsis"><p>match_spec_to_frag_numbers(State, MatchSpec) -&gt; FragNums | abort(Reason)</p></div>
+        <div class="summary-synopsis"><p>This function is called whenever Mnesia needs to determine which fragments that
+need to be searched for a <code class="inline">MatchSpec</code>. It is typically called by <code class="inline">select</code> and
+<code class="inline">match_object</code>.</p></div>
 
     </div>
 
@@ -228,7 +240,7 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
     </a>
     <h1 class="signature" translate="no">add_frag(State)</h1>
 
-      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L121" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L117" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -245,7 +257,7 @@ nicely when new fragments are added. It is well suited for scalable hash tables.
 
       </div>
 
-<p>add_frag(State) -&gt; {NewState, IterFrags, AdditionalLockFrags} | abort(Reason)</p><p>To scale well, it is a good idea to ensure that the records are evenly
+<p>To scale well, it is a good idea to ensure that the records are evenly
 distributed over all fragments, including the new one.</p><p><code class="inline">NewState</code> is stored as <code class="inline">hash_state</code> among the other <code class="inline">frag_properties</code>.</p><p>As a part of the <code class="inline">add_frag</code> procedure, Mnesia iterates over all fragments
 corresponding to the <code class="inline">IterFrags</code> numbers and starts
 <a href="#key_to_frag_number/2"><code class="inline">key_to_frag_number(NewState,RecordKey)</code></a> for each
@@ -264,7 +276,7 @@ write locks on the affected tables. That is, both the fragments corresponding to
     </a>
     <h1 class="signature" translate="no">del_frag(State)</h1>
 
-      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L162" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L156" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -281,7 +293,7 @@ write locks on the affected tables. That is, both the fragments corresponding to
 
       </div>
 
-<p>del_frag(State) -&gt; {NewState, IterFrags, AdditionalLockFrags} | abort(Reason)</p><p><code class="inline">NewState</code> is stored as <code class="inline">hash_state</code> among the other <code class="inline">frag_properties</code>.</p><p>As a part of the <code class="inline">del_frag</code> procedure, Mnesia iterates over all fragments
+<p><code class="inline">NewState</code> is stored as <code class="inline">hash_state</code> among the other <code class="inline">frag_properties</code>.</p><p>As a part of the <code class="inline">del_frag</code> procedure, Mnesia iterates over all fragments
 corresponding to the <code class="inline">IterFrags</code> numbers and starts
 <a href="#key_to_frag_number/2"><code class="inline">key_to_frag_number(NewState,RecordKey)</code></a> for each
 record. If the new fragment differs from the old fragment, the record is moved
@@ -300,7 +312,7 @@ write locks on the affected tables. That is, both the fragments corresponding to
     </a>
     <h1 class="signature" translate="no">init_state(Tab, State)</h1>
 
-      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L85" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L83" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -316,7 +328,7 @@ write locks on the affected tables. That is, both the fragments corresponding to
 
       </div>
 
-<p>init_state(Tab, State) -&gt; NewState | abort(Reason)</p><p>Starts when a fragmented table is created with the function
+<p>Starts when a fragmented table is created with the function
 <a href="mnesia.html#create_table/2"><code class="inline">mnesia:create_table/2</code></a> or when a normal (unfragmented) table is converted to be
 a fragmented table with <a href="mnesia.html#change_table_frag/2"><code class="inline">mnesia:change_table_frag/2</code></a>.</p><p>Notice that the function <code class="inline">add_frag/2</code> is started one time for each of the other
 fragments (except number 1) as a part of the table creation procedure.</p><p><code class="inline">State</code> is the initial value of the <code class="inline">hash_state</code> <code class="inline">frag_property</code>. <code class="inline">NewState</code> is
@@ -332,7 +344,7 @@ stored as <code class="inline">hash_state</code> among the other <code class="in
     </a>
     <h1 class="signature" translate="no">key_to_frag_number(State, Key)</h1>
 
-      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L193" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L185" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -349,7 +361,7 @@ stored as <code class="inline">hash_state</code> among the other <code class="in
 
       </div>
 
-<p>key_to_frag_number(State, Key) -&gt; FragNum | abort(Reason)</p><p>Starts whenever Mnesia needs to determine which fragment a certain record
+<p>Starts whenever Mnesia needs to determine which fragment a certain record
 belongs to. It is typically started at <code class="inline">read</code>, <code class="inline">write</code>, and <code class="inline">delete</code>.</p>
   </section>
 </section>
@@ -362,7 +374,7 @@ belongs to. It is typically started at <code class="inline">read</code>, <code c
     </a>
     <h1 class="signature" translate="no">match_spec_to_frag_numbers(State, MatchSpec)</h1>
 
-      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L225" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/yarisx/otp/blob/ymaslenn/ssh_controlled_adjust/lib/mnesia/src/mnesia_frag_hash.erl#L215" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -382,7 +394,7 @@ belongs to. It is typically started at <code class="inline">read</code>, <code c
 
       </div>
 
-<p>match_spec_to_frag_numbers(State, MatchSpec) -&gt; FragNums | abort(Reason)</p><p>This function is called whenever Mnesia needs to determine which fragments that
+<p>This function is called whenever Mnesia needs to determine which fragments that
 need to be searched for a <code class="inline">MatchSpec</code>. It is typically called by <code class="inline">select</code> and
 <code class="inline">match_object</code>.</p>
   </section>
