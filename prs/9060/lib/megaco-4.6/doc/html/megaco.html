@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-CD59922C.js"></script>
+    <script src="dist/sidebar_items-0A1C3251.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -1167,12 +1167,12 @@ message.</p><p>When the timer reaches an intermediate expire, the timer restarte
 its final leg&quot;, the timer will be restarted, and, if
 <code class="inline">long_request_resend = true</code>, the request will be re-sent.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">60 seconds</code>.</p><p><a href="" id="ci_request_keep_alive_timeout"></a></p></li><li><p><strong><code class="inline">request_keep_alive_timeout</code></strong> - Specifies the timeout time for the
 request-keep-alive timer.</p><p>This timer is started when the <em>first</em> reply to an asynchronous request
-(issued using the <a href="megaco.html#cast">megaco:cast/3</a> function) arrives. As long
+(issued using the <a href="#cast/3"><code class="inline">megaco:cast/3</code></a> function) arrives. As long
 as this timer is running, replies will be delivered via the
-<a href="megaco_user.html#trans_reply">handle_trans_reply/4,5</a> callback function, with
+<a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply/4,5</a> callback function, with
 their &quot;arrival number&quot; (see <code class="inline">UserReply</code> of the
-<a href="megaco_user.html#trans_reply">handle_trans_reply/4,5</a> callback function).</p><p>Replies arriving after the timer has expired, will be delivered using the
-<a href="megaco_user.html#unexpected_trans">handle_unexpected_trans/3,4</a> callback
+<a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply/4,5</a> callback function).</p><p>Replies arriving after the timer has expired, will be delivered using the
+<a href="megaco_user.html#c:handle_unexpected_trans/4">handle_unexpected_trans/3,4</a> callback
 function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ci_long_request_resend"></a></p></li><li><p><strong><code class="inline">long_request_resend</code></strong> - This option indicates weather the request should
 be resent until the reply is received, <em>even</em> though a pending message has
 been received.</p><p>Normally, after a pending message has been received, the request is not resent
@@ -1186,11 +1186,11 @@ received or this timer expires. For instance, if the same request is received
 again (e.g. a request with the same transaction id), the (stored) reply will
 be (re-) sent automatically by megaco.</p><p>If the timer is of type <code class="inline">#megaco_incr_timer{}</code>, then for each intermediate
 timout, the reply will be resent (this is valid until the ack is received or
-the timer expires).</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">30000</code>.</p><p><a href="" id="ci_call_proxy_gc_timeout"></a></p></li><li><p><strong><code class="inline">call_proxy_gc_timeout</code></strong> - Timeout time for the call proxy.</p><p>When a request is sent using the <a href="megaco.html#call">call/3</a> function, a proxy
+the timer expires).</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">30000</code>.</p><p><a href="" id="ci_call_proxy_gc_timeout"></a></p></li><li><p><strong><code class="inline">call_proxy_gc_timeout</code></strong> - Timeout time for the call proxy.</p><p>When a request is sent using the <a href="#call/3"><code class="inline">call/3</code></a> function, a proxy
 process is started to handle all replies. When the reply has been received and
 delivered to the user, the proxy process continue to exist for as long as this
 option specifies. Any received messages, is passed on to the user via the
-<a href="megaco_user.html#handle_unexpected_trans">handle_unexpected_trans</a> callback
+<a href="megaco_user.html#c:handle_unexpected_trans/4">handle_unexpected_trans</a> callback
 function.</p><p>The timeout time is in milliseconds. A value of 0 (zero) means that the proxy
 process will exit directly after the reply has been delivered.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">5000</code> (= 5 seconds).</p></li><li><p><strong><code class="inline">auto_ack</code></strong> - Automatic send transaction ack when the transaction reply has
 been received (see <code class="inline">trans_ack</code> below).</p><p>This is used for <em>three-way-handshake</em>.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_trans_ack"></a></p></li><li><p><strong><code class="inline">trans_ack</code></strong> - Shall ack's be accumulated or not.</p><p>This property is only valid if <code class="inline">auto_ack</code> is true.</p><p>If <code class="inline">auto_ack</code> is true, then if <code class="inline">trans_ack</code> is <code class="inline">false</code>, ack's will be sent
@@ -1220,7 +1220,7 @@ MGOriginatedPendingLimit and the MGCOriginatedPendingLimit of the megaco root
 package). This parameter specifies how many pending messages that can be sent
 (for a given received transaction request). When the limit is exceeded, the
 transaction is aborted (see
-<a href="megaco_user.html#request_abort">handle_trans_request_abort</a>) and an error
+<a href="megaco_user.html#c:handle_trans_request_abort/5">handle_trans_request_abort</a>) and an error
 message is sent to the other side.</p><p>Note that this has no effect on the actual sending of pending transactions.
 This is either implicit (e.g. when receiving a re-sent transaction request for
 a request which is being processed) or controlled by the pending_timer, see
@@ -1247,14 +1247,14 @@ should be told if a message send is a resend or not.</p><p>If <em>false</em>, me
 message send is still done using the
 <a href="megaco_transport.html#c:send_message/2">send_message</a> function.</p><p>The special value <em>flag</em> instead indicates that the function
 <a href="megaco_transport.html#c:send_message/3">send_message/3</a> shall be used.</p><p>Value type: <code class="inline">flag</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_segment_reply_ind"></a></p></li><li><p><strong><code class="inline">segment_reply_ind</code></strong> - This option specifies if the user shall be notified
-of received segment replies or not.</p><p>See <a href="megaco_user.html#segment_reply">handle_segment_reply</a> callback function
+of received segment replies or not.</p><p>See <a href="megaco_user.html#c:handle_segment_reply/6">handle_segment_reply</a> callback function
 for more information.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ci_segment_recv_timer"></a></p></li><li><p><strong><code class="inline">segment_recv_timer</code></strong> - This timer is started when the segment indicated by
 the <code class="inline">segmentation complete token</code> (e.g. the last of the segment which makes up
 the reply) is received, but all segments has not yet been received.</p><p>When the timer finally expires, a &quot;megaco segments not received&quot; (459) error
 message is sent to the other side and the user is notified with a
 <code class="inline">segment timeout</code> <code class="inline">UserReply</code> in either the
-<a href="megaco_user.html#trans_reply">handle_trans_reply</a> callback function or the
-return value of the <a href="megaco.html#call">call</a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code> (= 10 seconds).</p><p><a href="" id="ci_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
+<a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply</a> callback function or the
+return value of the <code class="inline">call/2</code> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code> (= 10 seconds).</p><p><a href="" id="ci_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
 either it is known that messages are never to large or that the transport
 protocol can handle such things on its own (e.g. TCP or SCTP).</p></li><li><p><strong><a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0"><code class="inline">pos_integer/0</code></a></strong> - Outgoing reply messages will be segmented as needed
 (see <code class="inline">max_pdu_size</code> below). This value, K, indicate the outstanding window,
@@ -1916,7 +1916,7 @@ term.</p>
     </a>
     <h1 class="signature" translate="no">system_info_item()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1225" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1224" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1944,7 +1944,7 @@ from this Erlang node and still are active (and therefore consumes system
 resources).</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_active_connections"></a></p></li><li><p><strong><code class="inline">n_active_connections</code></strong> - Returns the number of active connections.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p><a href="" id="si_reply_counters"></a></p></li><li><p><strong><code class="inline">reply_counters</code></strong> - Returns a list of the reply counters.</p><p>Value type: [{<a href="#t:conn_handle/0"><code class="inline">conn_handle/0</code></a>, <a href="#t:transaction_id/0"><code class="inline">transaction_id/0</code></a>,
 <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]</p><p><a href="" id="si_pending_counters"></a></p></li><li><p><strong><code class="inline">pending_counters</code></strong> - Returns a list of the receive and sent pending
 counters.</p><p>Value type: [{recv | sent, [{<a href="#t:transaction_id/0"><code class="inline">transaction_id/0</code></a>,
-<a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]}]</p></li></ul><p><a href="" id="start"></a></p>
+<a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a>}]}]</p></li></ul>
   </section>
 </section>
 <section class="detail" id="t:trace_data/0">
@@ -2187,17 +2187,17 @@ be (re-) sent automatically by megaco.</p><p>If the timer is of type <code class
 timout, the reply will be resent (this is valid until the ack is received or
 the timer expires).</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">30 seconds</code>.</p><p><a href="" id="ui_request_keep_alive_timeout"></a></p></li><li><p><strong><code class="inline">request_keep_alive_timeout</code></strong> - Specifies the timeout time for the
 request-keep-alive timer.</p><p>This timer is started when the <em>first</em> reply to an asynchronous request
-(issued using the <a href="megaco.html#cast">megaco:cast/3</a> function) arrives. As long
+(issued using the <a href="#cast/3"><code class="inline">megaco:cast/3</code></a> function) arrives. As long
 as this timer is running, replies will be delivered via the
-<a href="megaco_user.html#trans_reply">handle_trans_reply/4,5</a> callback function, with
+<a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply/4,5</a> callback function, with
 their &quot;arrival number&quot; (see <code class="inline">UserReply</code> of the
-<a href="megaco_user.html#trans_reply">handle_trans_reply/4,5</a> callback function).</p><p>Replies arriving after the timer has expired, will be delivered using the
-<a href="megaco_user.html#unexpected_trans">handle_unexpected_trans/3,4</a> callback
-function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ui_call_proxy_gc_timeout"></a></p></li><li><p><strong><code class="inline">call_proxy_gc_timeout</code></strong> - Timeout time for the call proxy.</p><p>When a request is sent using the <a href="megaco.html#call">call/3</a> function, a proxy
+<a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply/4,5</a> callback function).</p><p>Replies arriving after the timer has expired, will be delivered using the
+<a href="megaco_user.html#c:handle_unexpected_trans/4">handle_unexpected_trans/3,4</a> callback
+function.</p><p>Value type: <code class="inline">plain</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer()</a></p><p>Defaults to <code class="inline">plain</code>.</p><p><a href="" id="ui_call_proxy_gc_timeout"></a></p></li><li><p><strong><code class="inline">call_proxy_gc_timeout</code></strong> - Timeout time for the call proxy.</p><p>When a request is sent using the <a href="#call/3"><code class="inline">call/3</code></a> function, a proxy
 process is started to handle all replies. When the reply has been received and
 delivered to the user, the proxy process continue to exist for as long as this
 option specifies. Any received messages, is passed on to the user via the
-<a href="megaco_user.html#handle_unexpected_trans">handle_unexpected_trans</a> callback
+<a href="megaco_user.html#c:handle_unexpected_trans/4">handle_unexpected_trans</a> callback
 function.</p><p>The timeout time is in milliseconds. A value of 0 (zero) means that the proxy
 process will exit directly after the reply has been delivered.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a></p><p>Defaults to <code class="inline">5000</code> (= 5 seconds).</p><p><a href="" id="ui_auto_ack"></a></p></li><li><p><strong><code class="inline">auto_ack</code></strong> - Automatic send transaction ack when the transaction reply has
 been received (see <code class="inline">trans_ack</code> below).</p><p>This is used for <em>three-way-handshake</em>.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_trans_ack"></a></p></li><li><p><strong><code class="inline">trans_ack</code></strong> - Shall ack's be accumulated or not.</p><p>This property is only valid if <code class="inline">auto_ack</code> is true.</p><p>If <code class="inline">auto_ack</code> is true, then if <code class="inline">trans_ack</code> is <code class="inline">false</code>, ack's will be sent
@@ -2227,7 +2227,7 @@ MGOriginatedPendingLimit and the MGCOriginatedPendingLimit of the megaco root
 package). This parameter specifies how many pending messages that can be sent
 (for a given received transaction request). When the limit is exceeded, the
 transaction is aborted (see
-<a href="megaco_user.html#request_abort">handle_trans_request_abort</a>) and an error
+<a href="megaco_user.html#c:handle_trans_request_abort/5">handle_trans_request_abort</a>) and an error
 message is sent to the other side.</p><p>Note that this has no effect on the actual sending of pending transactions.
 This is either implicit (e.g. when receiving a re-sent transaction request for
 a request which is being processed) or controlled by the pending_timer, see
@@ -2256,14 +2256,14 @@ should be told if a message send is a resend or not.</p><p>If <em>false</em>, me
 message send is still done using the
 <a href="megaco_transport.html#c:send_message/2">send_message</a> function.</p><p>The special value <em>flag</em> instead indicates that the function
 <a href="megaco_transport.html#c:send_message/3">send_message/3</a> shall be used.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_segment_reply_ind"></a></p></li><li><p><strong><code class="inline">segment_reply_ind</code></strong> - This option specifies if the user shall be notified
-of received segment replies or not.</p><p>See <a href="megaco_user.html#segment_reply">handle_segment_reply</a> callback function
+of received segment replies or not.</p><p>See <a href="megaco_user.html#c:handle_segment_reply/6">handle_segment_reply</a> callback function
 for more information.</p><p>Value type: <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:boolean/0">boolean()</a></p><p>Defaults to <code class="inline">false</code>.</p><p><a href="" id="ui_segment_recv_timer"></a></p></li><li><p><strong><code class="inline">segment_recv_timer</code></strong> - This timer is started when the segment indicated by
 the <code class="inline">segmentation complete token</code> is received, but all segments has not yet
 been received.</p><p>When the timer finally expires, a &quot;megaco segments not received&quot; (459) error
 message is sent to the other side and the user is notified with a
 <code class="inline">segment timeout</code> <code class="inline">UserReply</code> in either the
-<a href="megaco_user.html#trans_reply">handle_trans_reply</a> callback function or the
-return value of the <a href="megaco.html#call">call</a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code>.</p><p><a href="" id="ui_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
+<a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply</a> callback function or the
+return value of the <a href="#call/3"><code class="inline">call/3</code></a> function.</p><p>Value type: <a href="#t:megaco_timer/0"><code class="inline">megaco_timer/0</code></a></p><p>Defaults to <code class="inline">10000</code>.</p><p><a href="" id="ui_segment_send"></a></p></li><li><p><strong><code class="inline">segment_send</code></strong> - Shall outgoing messages be segmented or not.</p><p>Value type: <code class="inline">none</code> | <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0">pos_integer()</a> | <code class="inline">infinity</code></p><ul><li><p><strong><code class="inline">none</code></strong> - Do not segment outgoing reply messages. This is useful when
 either it is known that messages are never to large or that the transport
 protocol can handle such things on its own (e.g. TCP or SCTP).</p></li><li><p><strong><a href="../../../../erts-15.1.2/doc/html/erlang.html#t:pos_integer/0"><code class="inline">pos_integer/0</code></a></strong> - Outgoing reply messages will be segmented as needed
 (see <code class="inline">max_pdu_size</code> below). This value, K, indicate the outstanding window,
@@ -2323,7 +2323,7 @@ this size, the message should be segmented, and then encoded.</p><p>Value type: 
     </a>
     <h1 class="signature" translate="no">call(ConnHandle, ActionRequests, SendOptions)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1833" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1783" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2387,14 +2387,14 @@ message.</p><p>At <code class="inline">Success</code>, the <code class="inline">
 containing error indications.</p><p>A <code class="inline">Failure</code>, indicates that the remote user has replied with an explicit
 transactionError.</p><p>A <code class="inline">UserCancelReason</code>, indicates that the request has been canceled by the user.
 <code class="inline">ReasonForUserCancel</code> is the reason given in the call to the
-<a href="megaco.html#cancel">cancel</a> function.</p><p>A send error (<code class="inline">SendReason</code>), indicates that the send function of the megaco
+<a href="#cancel/2"><code class="inline">cancel/2</code></a> function.</p><p>A send error (<code class="inline">SendReason</code>), indicates that the send function of the megaco
 transport callback module failed to send the request. There are two separate
 cases: <code class="inline">SendCancelledReason</code> and <code class="inline">SendFailedReason</code>. The first is the result of
 the send function returning <code class="inline">{cancel, Reason}</code> and the second is some other kind
 of erroneous return value. See the
 <a href="megaco_transport.html#c:send_message/3">send_message</a> function for more info.</p><p>An <code class="inline">OtherReason</code>, indicates some other error such as timeout.</p><p>For more info about the 'extra' part of the result (<code class="inline">SuccessExtra</code> and
 <code class="inline">ErrorExtra</code>), see the <a href="megaco_user.html#extra_argument">note</a> in the user
-callback module documentation.</p><p><a href="" id="cast"></a></p>
+callback module documentation.</p>
   </section>
 </section>
 <section class="detail" id="cancel/2">
@@ -2406,7 +2406,7 @@ callback module documentation.</p><p><a href="" id="cast"></a></p>
     </a>
     <h1 class="signature" translate="no">cancel(ConnHandle, CancelReason)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2073" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2015" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2425,7 +2425,7 @@ callback module documentation.</p><p><a href="" id="cast"></a></p>
 
 <p>Cancel all outstanding messages for this connection</p><p>This causes outstanding megaco:call/3 requests to return. The callback functions
 UserMod:handle_reply/4 and UserMod:handle_trans_ack/4 are also invoked where it
-applies. See the megaco_user module for more info about the callback arguments.</p><p><a href="" id="process_received_message"></a></p>
+applies. See the megaco_user module for more info about the callback arguments.</p>
   </section>
 </section>
 <section class="detail" id="cast/3">
@@ -2437,7 +2437,7 @@ applies. See the megaco_user module for more info about the callback arguments.<
     </a>
     <h1 class="signature" translate="no">cast(ConnHandle, ActionRequests, SendOptions)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1884" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1833" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2478,7 +2478,7 @@ be overridden.</p><p>The ProtocolVersion version is the version actually encoded
 message.</p><p>The callback function UserMod:handle_trans_reply/4 is invoked when the reply
 arrives, when the request timer eventually times out or when the outstanding
 requests are explicitly cancelled. See the megaco_user module for more info
-about the callback arguments.</p><p>Given as <code class="inline">ReplyData</code> argument to UserMod:handle_trans_reply/4.</p><p><a href="" id="encode_actions"></a></p>
+about the callback arguments.</p><p>Given as <code class="inline">ReplyData</code> argument to UserMod:handle_trans_reply/4.</p>
   </section>
 </section>
 <section class="detail" id="conn_info/1">
@@ -2490,7 +2490,7 @@ about the callback arguments.</p><p>Given as <code class="inline">ReplyData</cod
     </a>
     <h1 class="signature" translate="no">conn_info(ConnHandle)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1407" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1400" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2522,7 +2522,7 @@ about the callback arguments.</p><p>Given as <code class="inline">ReplyData</cod
     </a>
     <h1 class="signature" translate="no">conn_info(ConnHandle, ConnInfo)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1459" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1417" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2543,18 +2543,7 @@ about the callback arguments.</p><p>Given as <code class="inline">ReplyData</cod
       </div>
 
 <p>Lookup information about an active connection</p><p>Requires that the connection is active.</p><p>Failure: <code class="inline">exit</code> if, for instance, <code class="inline">ConnHandle</code> refers to a connection that no
-longer exists.</p><p><a href="" id="conn_info_21"></a></p><p>If <code class="inline">ConnInfo :: all</code>,
-lookup all connection information about an <em>active</em> connection, where
-<code class="inline">Value :: [{conn_info_item(), V :: term()}]</code>.</p><p>See <a href="megaco.html#conn_info_24">conn_info</a> for more info.</p><p>Failure: <code class="inline">exit</code> if, for instance, <code class="inline">ConnHandle</code> refers to a connection that no
-longer exists.</p><p><a href="" id="conn_info_22"></a></p><p>If <code class="inline">ConnInfo :: requests</code>,
-lookup information about currently active requests for an <em>active</em> connection, where
-<code class="inline">Value :: [transaction_id()]</code>.</p><p>Failure: <code class="inline">exit</code> if, for instance, <code class="inline">ConnHandle</code> refers to a connection that no
-longer exists.</p><p><a href="" id="conn_info_23"></a></p><p>If <code class="inline">ConnInfo :: replies</code>,
-lookup information about currently active replies for an <em>active</em> connection, where
-<code class="inline">Value :: [{TransId, ReplyState, Handler}]</code>, <code class="inline">TransId :: transaction_id()</code>,
-<code class="inline">ReplyState :: prepare | eval_request | waiting_for_ack | aborted</code>, and
-<code class="inline">Handler :: undefined | pid()</code>.</p><p>Failure: <code class="inline">exit</code> if, for instance, <code class="inline">ConnHandle</code> refers to a connection that no
-longer exists.</p><p>If <code class="inline">ConnInfo :: conn_info_item()</code>, then <code class="inline">Value :: term()</code>.</p><p><a href="" id="update_conn_info"></a></p>
+longer exists.</p>
   </section>
 </section>
 <section class="detail" id="connect/4">
@@ -2566,7 +2555,7 @@ longer exists.</p><p>If <code class="inline">ConnInfo :: conn_info_item()</code>
     </a>
     <h1 class="signature" translate="no">connect(ReceiveHandle, RemoteMid, SendHandle, ControlPid)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1618" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1571" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2607,7 +2596,7 @@ longer exists.</p><p>If <code class="inline">ConnInfo :: conn_info_item()</code>
     </a>
     <h1 class="signature" translate="no">connect(ReceiveHandle, RemoteMid, SendHandle, ControlPid, Extra)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1714" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1666" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2675,14 +2664,14 @@ real Megaco MID and not a <code class="inline">preliminary_mid</code>.</p></li><
 <code class="inline">megaco:user_info(UserMid, receive_handle)</code></p><p>The send handle is provided by the preferred transport module, e.g. megaco_tcp,
 megaco_udp. Read the documentation about each transport module about the
 details.</p><p>The connect is done in two steps: first an internal <code class="inline">connection setup</code> and then
-by calling the user <a href="megaco_user.html#connect">handle_connect</a> callback function.
+by calling the user <a href="megaco_user.html#c:handle_connect/3">handle_connect</a> callback function.
 The first step could result in an error with <code class="inline">Reason = ConnectReason</code> and the
 second an error with <code class="inline">Reason = HandleConnectReason</code>:</p><ul><li><p><strong><code class="inline">ConnectReason</code></strong> - An error with this reason is generated by the megaco
 application itself.</p></li><li><p><strong><code class="inline">HandleConnectReason</code></strong> - An error with this reason is caused by the user
-<a href="megaco_user.html#connect">handle_connect</a> callback function either returning
+<a href="megaco_user.html#c:handle_connect/3">handle_connect</a> callback function either returning
 an error or an invalid value.</p></li></ul><p><code class="inline">Extra</code> can be any <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:term/0"><code class="inline">term/0</code></a> except the atom <code class="inline">ignore_extra</code>. It is passed
 (back) to the user via the callback function
-<a href="megaco_user.html#connect">handle_connect/3</a>.</p><p><a href="" id="disconnect"></a></p>
+<a href="megaco_user.html#c:handle_connect/3">handle_connect/3</a>.</p>
   </section>
 </section>
 <section class="detail" id="decode_sdp/1">
@@ -2694,7 +2683,7 @@ an error or an invalid value.</p></li></ul><p><code class="inline">Extra</code> 
     </a>
     <h1 class="signature" translate="no">decode_sdp(PP)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2532" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2460" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2723,7 +2712,7 @@ parameter constructs that cannot be decoded (either because of decode error or
 because they are unknown), will be returned as a two-tuple. The first element of
 which will be the (undecoded) property parameter and the other the actual
 reason. This means that the caller of this function has to expect not only
-sdp-records, but also this two-tuple construct.</p><p>This function performs the following transformation:</p><ul><li>property_parm() -&gt; sdp()</li><li>property_group() -&gt; sdp_property_group()</li><li>property_groups() -&gt; sdp_property_groups()</li></ul><p><a href="" id="versions"></a> <a href="" id="versions1"></a> <a href="" id="versions2"></a></p>
+sdp-records, but also this two-tuple construct.</p><p>This function performs the following transformation:</p><ul><li>property_parm() -&gt; sdp()</li><li>property_group() -&gt; sdp_property_group()</li><li>property_groups() -&gt; sdp_property_groups()</li></ul>
   </section>
 </section>
 <section class="detail" id="disable_trace/0">
@@ -2735,7 +2724,7 @@ sdp-records, but also this two-tuple construct.</p><p>This function performs the
     </a>
     <h1 class="signature" translate="no">disable_trace()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L3002" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2926" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2751,7 +2740,7 @@ sdp-records, but also this two-tuple construct.</p><p>This function performs the
 
       </div>
 
-<p>This function is used to stop megaco tracing.</p><p><a href="" id="set_trace"></a></p>
+<p>This function is used to stop megaco tracing.</p>
   </section>
 </section>
 <section class="detail" id="disconnect/2">
@@ -2763,7 +2752,7 @@ sdp-records, but also this two-tuple construct.</p><p>This function performs the
     </a>
     <h1 class="signature" translate="no">disconnect(ConnHandle, DiscoReason)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1737" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1688" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2781,7 +2770,7 @@ sdp-records, but also this two-tuple construct.</p><p>This function performs the
       </div>
 
 <p>Tear down a &quot;virtual&quot; connection</p><p>Causes the <code class="inline">UserMod:handle_disconnect/2</code> callback function to be invoked. See
-the megaco_user module for more info about the callback arguments.</p><p><a href="" id="call"></a></p>
+the megaco_user module for more info about the callback arguments.</p>
   </section>
 </section>
 <section class="detail" id="enable_trace/2">
@@ -2793,7 +2782,7 @@ the megaco_user module for more info about the callback arguments.</p><p><a href
     </a>
     <h1 class="signature" translate="no">enable_trace(Level, Destination)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2967" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2892" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2821,7 +2810,7 @@ the megaco_user module for more info about the callback arguments.</p><p><a href
 result to the given <code class="inline">Destination</code>.</p><p>It starts a tracer server and then sets the proper match spec (according to
 <code class="inline">Level</code>).</p><p>In the case when <code class="inline">Destination</code> is <code class="inline">File</code>, the printable megaco trace events will
 be printed to the file <code class="inline">File</code> using plain <a href="../../../../lib/stdlib-6.1.2/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>In the case when <code class="inline">Destination</code> is <code class="inline">io</code>, the printable megaco trace events will
-be printed on stdout using plain <a href="../../../../lib/stdlib-6.1.2/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>See <code class="inline">dbg</code> for further information.</p><p><a href="" id="disable_trace"></a></p>
+be printed on stdout using plain <a href="../../../../lib/stdlib-6.1.2/doc/html/io.html#format/2"><code class="inline">io:format/2</code></a>.</p><p>See <code class="inline">dbg</code> for further information.</p>
   </section>
 </section>
 <section class="detail" id="encode_actions/3">
@@ -2833,7 +2822,7 @@ be printed on stdout using plain <a href="../../../../lib/stdlib-6.1.2/doc/html/
     </a>
     <h1 class="signature" translate="no">encode_actions(ConnHandle, ActionRequests, Options)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2240" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2175" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2863,7 +2852,7 @@ be printed on stdout using plain <a href="../../../../lib/stdlib-6.1.2/doc/html/
 <p>Encodes lists of action requests for one or more transaction request(s).</p><p>When encoding action requests for one transaction, <code class="inline">Actions</code> should be
 <a href="#t:action_reqs/0"><code class="inline">action_reqs/0</code></a>. When encoding action requests for several transactions,
 <code class="inline">Actions</code> should be <code class="inline">[action_reqs()]</code>. Each element of the list is part of one
-transaction.</p><p><a href="" id="token_tag2string"></a></p>
+transaction.</p>
   </section>
 </section>
 <section class="detail" id="encode_sdp/1">
@@ -2875,7 +2864,7 @@ transaction.</p><p><a href="" id="token_tag2string"></a></p>
     </a>
     <h1 class="signature" translate="no">encode_sdp(SDP)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2487" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2416" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2900,7 +2889,7 @@ transaction.</p><p><a href="" id="token_tag2string"></a></p>
       </div>
 
 <p>Encode (generate) an SDP construct.</p><p>If a <a href="#t:property_parm/0"><code class="inline">property_parm/0</code></a> is found as part of the input (<code class="inline">SDP</code>) then it is left
-unchanged.</p><p>This function performs the following transformation:</p><ul><li>sdp() -&gt; property_parm()</li><li>sdp_property_group() -&gt; property_group()</li><li>sdp_property_groups() -&gt; property_groups()</li></ul><p><a href="" id="decode_sdp"></a></p>
+unchanged.</p><p>This function performs the following transformation:</p><ul><li>sdp() -&gt; property_parm()</li><li>sdp_property_group() -&gt; property_group()</li><li>sdp_property_groups() -&gt; property_groups()</li></ul>
   </section>
 </section>
 <section class="detail" id="eval_digit_map/1">
@@ -2912,7 +2901,7 @@ unchanged.</p><p>This function performs the following transformation:</p><ul><li
     </a>
     <h1 class="signature" translate="no">eval_digit_map(DigitMap)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2334" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2267" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2948,7 +2937,7 @@ unchanged.</p><p>This function performs the following transformation:</p><ul><li
     </a>
     <h1 class="signature" translate="no">eval_digit_map(DigitMap, Timers)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2370" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2302" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -2981,7 +2970,7 @@ defined in the digit_map_value() record.</p><p>When a complete sequence of valid
 returned as a list of letters.</p><p>There are two options for handling syntax errors (that is when an unexpected
 event is received when the digit map evaluator is expecting some other event).
 The unexpected events may either be ignored or rejected. The latter means that
-the evaluation is aborted and an error is returned.</p><p><a href="" id="report_digit_event"></a></p>
+the evaluation is aborted and an error is returned.</p>
   </section>
 </section>
 <section class="detail" id="get_stats/0">
@@ -2993,7 +2982,7 @@ the evaluation is aborted and an error is returned.</p><p><a href="" id="report_
     </a>
     <h1 class="signature" translate="no">get_stats()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1977" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1924" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3015,7 +3004,7 @@ the evaluation is aborted and an error is returned.</p><p><a href="" id="report_
 
 <p>Retreive all (SNMP) statistic counters maintained by the megaco application.</p><p>The global counters handle events that cannot be attributed to a single
 connection (e.g. protocol errors that occur before the connection has been
-properly setup).</p><p><a href="" id="get_stats_1_1"></a></p>
+properly setup).</p>
   </section>
 </section>
 <section class="detail" id="get_stats/1">
@@ -3027,7 +3016,7 @@ properly setup).</p><p><a href="" id="get_stats_1_1"></a></p>
     </a>
     <h1 class="signature" translate="no">get_stats(ConnHandleOrGCounter)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2004" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1950" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3053,7 +3042,7 @@ properly setup).</p><p><a href="" id="get_stats_1_1"></a></p>
 application.</p><p>The global counters handle events that cannot be attributed to a single
 connection (e.g. protocol errors that occur before the connection has been
 properly setup).</p><p><a href="" id="get_stats_1_2"></a></p><p>Retreive all (SNMP) statistic counters maintained by the megaco application, for
-a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
+a specific connection.</p>
   </section>
 </section>
 <section class="detail" id="get_stats/2">
@@ -3065,7 +3054,7 @@ a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
     </a>
     <h1 class="signature" translate="no">get_stats(ConnHandle, Counter)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2018" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1963" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3086,7 +3075,7 @@ a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
 
       </div>
 
-<p>Retreive a (SNMP) statistic counter maintained by the megaco application.</p><p><a href="" id="reset_stats"></a> <a href="" id="reset_stats_0"></a></p>
+<p>Retreive a (SNMP) statistic counter maintained by the megaco application.</p>
   </section>
 </section>
 <section class="detail" id="info/0">
@@ -3098,7 +3087,7 @@ a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
     </a>
     <h1 class="signature" translate="no">info()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1514" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1468" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3116,9 +3105,8 @@ a specific connection.</p><p><a href="" id="get_stats_2"></a></p>
 
 <p>This function produces a list of information about the megaco application. Such
 as users and their config, connections and their config, statistics and so on.</p><p>This information can be produced by the functions
-<a href="megaco.html#user_info">user_info</a>, <a href="megaco.html#conn_info">conn_info</a>,
-<a href="megaco.html#system_info">system_info</a> and <a href="megaco.html#get_stats">get_stats</a> but
-this is a simple way to get it all at once.</p><p><a href="" id="connect"></a></p>
+<a href="#user_info/2"><code class="inline">user_info/2</code></a>, <a href="#conn_info/2"><code class="inline">conn_info/2</code></a>, <a href="#system_info/1"><code class="inline">system_info/1</code></a> and <a href="#get_stats/2"><code class="inline">get_stats/2</code></a> but
+this is a simple way to get it all at once.</p>
   </section>
 </section>
 <section class="detail" id="parse_digit_map/1">
@@ -3130,7 +3118,7 @@ this is a simple way to get it all at once.</p><p><a href="" id="connect"></a></
     </a>
     <h1 class="signature" translate="no">parse_digit_map(DigitMapBody)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2316" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2249" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3148,7 +3136,7 @@ this is a simple way to get it all at once.</p><p><a href="" id="connect"></a></
       </div>
 
 <p>Parses a digit map body</p><p>Parses a digit map body, represented as a list of characters, into a list of
-state transitions suited to be evaluated by megaco:eval_digit_map/1,2.</p><p><a href="" id="eval_digit_map"></a></p>
+state transitions suited to be evaluated by megaco:eval_digit_map/1,2.</p>
   </section>
 </section>
 <section class="detail" id="print_version_info/0">
@@ -3160,7 +3148,7 @@ state transitions suited to be evaluated by megaco:eval_digit_map/1,2.</p><p><a 
     </a>
     <h1 class="signature" translate="no">print_version_info()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2554" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2482" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3188,7 +3176,7 @@ state transitions suited to be evaluated by megaco:eval_digit_map/1,2.</p><p><a 
     </a>
     <h1 class="signature" translate="no">print_version_info(Versions)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2577" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2504" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3206,7 +3194,7 @@ state transitions suited to be evaluated by megaco:eval_digit_map/1,2.</p><p><a 
 
 <p>Utility function to produce a formated printout of the versions info generated
 by the <code class="inline">versions1</code> and <code class="inline">versions2</code> functions.</p><p>The function print_version_info/0 uses the result of function version1/0 as
-<code class="inline">VersionInfo</code>.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="w">           </span><span class="p" data-group-id="0220228655-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="p" data-group-id="0220228655-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">versions1</span><span class="p" data-group-id="0220228655-2">(</span><span class="p" data-group-id="0220228655-2">)</span><span class="p">,</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">format_versions</span><span class="p" data-group-id="0220228655-3">(</span><span class="n">V</span><span class="p" data-group-id="0220228655-3">)</span><span class="p">.</span></code></pre><p><a href="" id="enable_trace"></a></p>
+<code class="inline">VersionInfo</code>.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="w">           </span><span class="p" data-group-id="6134332341-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="p" data-group-id="6134332341-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">versions1</span><span class="p" data-group-id="6134332341-2">(</span><span class="p" data-group-id="6134332341-2">)</span><span class="p">,</span><span class="w"> </span><span class="nc">megaco</span><span class="p">:</span><span class="nf">format_versions</span><span class="p" data-group-id="6134332341-3">(</span><span class="n">V</span><span class="p" data-group-id="6134332341-3">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="process_received_message/4">
@@ -3218,7 +3206,7 @@ by the <code class="inline">versions1</code> and <code class="inline">versions2<
     </a>
     <h1 class="signature" translate="no">process_received_message(ReceiveHandle, ControlPid, SendHandle, BinMsg)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2089" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2031" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3251,7 +3239,7 @@ by the <code class="inline">versions1</code> and <code class="inline">versions2<
     </a>
     <h1 class="signature" translate="no">process_received_message(ReceiveHandle, ControlPid, SendHandle, BinMsg, Extra)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2107" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3298,7 +3286,7 @@ originating function was megaco:case/3 the following callback function will be
 invoked:</p><ul><li>UserMod:handle_trans_reply/4</li></ul><p>When a transaction acknowledgement is received it is possible that user has
 decided not to bother about the acknowledgement. But in case the return value
 from UserMod:handle_trans_request/3 indicates that the acknowledgement is
-important the following callback function will be invoked:</p><ul><li>UserMod:handle_trans_ack/4</li></ul><p>See the megaco_user module for more info about the callback arguments.</p><p><a href="" id="receive_message"></a></p>
+important the following callback function will be invoked:</p><ul><li>UserMod:handle_trans_ack/4</li></ul><p>See the megaco_user module for more info about the callback arguments.</p>
   </section>
 </section>
 <section class="detail" id="receive_message/4">
@@ -3310,7 +3298,7 @@ important the following callback function will be invoked:</p><ul><li>UserMod:ha
     </a>
     <h1 class="signature" translate="no">receive_message(ReceiveHandle, ControlPid, SendHandle, BinMsg)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2181" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2122" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3343,7 +3331,7 @@ important the following callback function will be invoked:</p><ul><li>UserMod:ha
     </a>
     <h1 class="signature" translate="no">receive_message(ReceiveHandle, ControlPid, SendHandle, BinMsg, Extra)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2208" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2144" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3367,9 +3355,8 @@ important the following callback function will be invoked:</p><ul><li>UserMod:ha
 
 <p>Process a received message</p><p>This is a callback function intended to be invoked by some transport modules
 when get an incoming message. Which transport that actually is used is up to the
-user to choose.</p><p>In principle, this function calls the <code class="inline">process_received_message/4,5</code> function
-via a <code class="inline">spawn</code> to perform the actual processing.</p><p>For further information see the
-<a href="megaco.html#process_received_message">process_received_message/4,5</a> function.</p><p><a href="" id="parse_digit_map"></a></p>
+user to choose.</p><p>In principle, this function calls the <a href="#process_received_message/5">process_received_message/4,5</a>
+function via a <code class="inline">spawn</code> to perform the actual processing.</p>
   </section>
 </section>
 <section class="detail" id="report_digit_event/2">
@@ -3381,7 +3368,7 @@ via a <code class="inline">spawn</code> to perform the actual processing.</p><p>
     </a>
     <h1 class="signature" translate="no">report_digit_event(DigitMapEvalPid, Events)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2394" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2325" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3403,7 +3390,7 @@ via a <code class="inline">spawn</code> to perform the actual processing.</p><p>
 
 <p>Send one or more events to the event collector process.</p><p>Send one or more events to a process that is evaluating a digit map, that is a
 process that is executing megaco:eval_digit_map/1,2.</p><p>Note that the events <code class="inline">$s | $S</code>, <code class="inline">l | $L</code> and <code class="inline">$z | $Z</code> has nothing to do with
-the timers using the same characters.</p><p><a href="" id="test_digit_event"></a></p>
+the timers using the same characters.</p>
   </section>
 </section>
 <section class="detail" id="reset_stats/0">
@@ -3415,7 +3402,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
     </a>
     <h1 class="signature" translate="no">reset_stats()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2034" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1978" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3431,7 +3418,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
 
       </div>
 
-<p>Reset all (SNMP) statistics counters.</p><p><a href="" id="reset_stats_1_1"></a></p>
+<p>Reset all (SNMP) statistics counters.</p>
   </section>
 </section>
 <section class="detail" id="reset_stats/1">
@@ -3443,7 +3430,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
     </a>
     <h1 class="signature" translate="no">reset_stats(ConnHandleOrGCounter)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2051" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1994" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3460,7 +3447,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
 
       </div>
 
-<p>Reset the specified (SNMP) statistics counter.</p><p><a href="" id="reset_stats_1_2"></a></p><p>Reset all (SNMP) statistics counters for a connection.</p><p><a href="" id="test_request"></a></p>
+<p>Reset the specified (SNMP) statistics counter.</p><p><a href="" id="reset_stats_1_2"></a></p><p>Reset all (SNMP) statistics counters for a connection.</p>
   </section>
 </section>
 <section class="detail" id="set_trace/1">
@@ -3472,7 +3459,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
     </a>
     <h1 class="signature" translate="no">set_trace(Level)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L3030" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2953" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3488,7 +3475,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
 
       </div>
 
-<p>This function is used to change the megaco trace level.</p><p>It is assumed that tracing has already been enabled (see <code class="inline">enable_trace</code> above).</p><p><a href="" id="stats"></a> <a href="" id="get_stats"></a> <a href="" id="get_stats_0"></a></p>
+<p>This function is used to change the megaco trace level.</p><p>It is assumed that tracing has already been enabled (see <code class="inline">enable_trace</code> above).</p>
   </section>
 </section>
 <section class="detail" id="start/0">
@@ -3500,7 +3487,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
     </a>
     <h1 class="signature" translate="no">start()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1255" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1253" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3519,7 +3506,7 @@ the timers using the same characters.</p><p><a href="" id="test_digit_event"></a
 <p>Starts the Megaco application</p><p>Users may either explicitly be registered with megaco:start_user/2 and/or be
 statically configured by setting the application environment variable 'users' to
 a list of {UserMid, Config} tuples. See the function megaco:start_user/2 for
-details.</p><p><a href="" id="stop"></a></p>
+details.</p>
   </section>
 </section>
 <section class="detail" id="start_user/2">
@@ -3531,7 +3518,7 @@ details.</p><p><a href="" id="stop"></a></p>
     </a>
     <h1 class="signature" translate="no">start_user(UserMid, Config)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1299" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1295" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3555,7 +3542,7 @@ details.</p><p><a href="" id="stop"></a></p>
 
 <p>Initial configuration of a user</p><p>Requires the megaco application to be started. A user is either a Media Gateway
 (MG) or a Media Gateway Controller (MGC). One Erlang node may host many users.</p><p>A user is identified by its UserMid, which must be a legal Megaco MID.</p><p>Config is a list of {Item, Value} tuples. See megaco:user_info/2 about which
-items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
+items and values that are valid.</p>
   </section>
 </section>
 <section class="detail" id="stop/0">
@@ -3567,7 +3554,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
     </a>
     <h1 class="signature" translate="no">stop()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1271" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1268" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3583,7 +3570,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       </div>
 
-<p>Stops the Megaco application</p><p><a href="" id="start_user"></a></p>
+<p>Stops the Megaco application</p>
   </section>
 </section>
 <section class="detail" id="stop_user/1">
@@ -3595,7 +3582,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
     </a>
     <h1 class="signature" translate="no">stop_user(UserMid)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1318" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1313" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3611,7 +3598,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       </div>
 
-<p>Delete the configuration of a user</p><p>Requires that the user does not have any active connection.</p><p><a href="" id="user_info"></a> <a href="" id="user_info_11"></a> <a href="" id="user_info_23"></a></p>
+<p>Delete the configuration of a user</p><p>Requires that the user does not have any active connection.</p>
   </section>
 </section>
 <section class="detail" id="system_info/0">
@@ -3623,7 +3610,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
     </a>
     <h1 class="signature" translate="no">system_info()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1582" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1536" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3651,7 +3638,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
     </a>
     <h1 class="signature" translate="no">system_info(Item)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1594" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1547" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3667,7 +3654,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
       </div>
 
-<p>Lookup system information.</p><p><a href="" id="info"></a></p>
+<p>Lookup system information.</p>
   </section>
 </section>
 <section class="detail" id="test_digit_event/2">
@@ -3679,7 +3666,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
     </a>
     <h1 class="signature" translate="no">test_digit_event(DigitMap, Events)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2420" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2350" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3704,7 +3691,7 @@ items and values that are valid.</p><p><a href="" id="stop_user"></a></p>
 
 <p>Feed digit map collector with events and return the result</p><p>This function starts the evaluation of a digit map with megaco:eval_digit_map/1
 and sends a sequence of events to it with megaco:report_digit_event/2 in order
-to simplify testing of digit maps.</p><p><a href="" id="encode_sdp"></a></p>
+to simplify testing of digit maps.</p>
   </section>
 </section>
 <section class="detail" id="test_reply/5">
@@ -3716,7 +3703,7 @@ to simplify testing of digit maps.</p><p><a href="" id="encode_sdp"></a></p>
     </a>
     <h1 class="signature" translate="no">test_reply(ConnHandle, Version, EncodingMod, EncodingConfig, Reply)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1951" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1899" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3744,8 +3731,8 @@ to simplify testing of digit maps.</p><p><a href="" id="encode_sdp"></a></p>
 
 <p>Tests if the Reply argument is correctly composed.</p><p>This function is only intended for testing purposes. It's supposed to test the
 <code class="inline">actual_reply()</code> return value of the callback functions
-<a href="megaco_user.html#trans_request">handle_trans_request</a> and
-<a href="megaco_user.html#trans_long_request">handle_trans_long_request</a> functions (with
+<a href="megaco_user.html#c:handle_trans_request/4">handle_trans_request</a> and
+<a href="megaco_user.html#c:handle_trans_long_request/4">handle_trans_long_request</a> functions (with
 the additions of the <code class="inline">EncodingMod</code> and <code class="inline">EncodingConfig</code> arguments). It composes
 a complete megaco message end attempts to encode it. The return value, will be a
 tuple of the composed megaco message and the encode result.</p>
@@ -3760,7 +3747,7 @@ tuple of the composed megaco message and the encode result.</p>
     </a>
     <h1 class="signature" translate="no">test_request(ConnHandle, Version, EncodingMod, EncodingConfig, ActionRequests)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1917" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1865" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3788,11 +3775,11 @@ tuple of the composed megaco message and the encode result.</p>
       </div>
 
 <p>Tests if the Actions argument is correctly composed.</p><p>This function is only intended for testing purposes. It's supposed to have a
-same kind of interface as the <a href="megaco.html#call">call</a> or <a href="megaco.html#cast">cast</a>
+same kind of interface as the <a href="#call/3"><code class="inline">call/3</code></a> or <a href="#cast/3"><code class="inline">cast/3</code></a>
 functions (with the additions of the <code class="inline">EncodingMod</code> and <code class="inline">EncodingConfig</code>
 arguments). It composes a complete megaco message end attempts to encode it. The
 return value, will be a tuple of the composed megaco message and the encode
-result.</p><p><a href="" id="test_reply"></a></p>
+result.</p>
   </section>
 </section>
 <section class="detail" id="token_tag2string/1">
@@ -3804,7 +3791,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
     </a>
     <h1 class="signature" translate="no">token_tag2string(Tag)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2255" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2190" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3833,7 +3820,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
     </a>
     <h1 class="signature" translate="no">token_tag2string(Tag, EncodingMod)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2265" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2200" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3866,7 +3853,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
     </a>
     <h1 class="signature" translate="no">token_tag2string(Tag, EncodingMod, Version)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2290" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2224" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3888,7 +3875,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
 
       </div>
 
-<p>Convert a token tag to a string</p><p>If no encoder module is given, the default is used (which is pretty).</p><p>If no or an unknown version is given, the <em>best</em> version is used (which is v3).</p><p>If no match is found for <code class="inline">Tag</code>, <code class="inline">Result</code> will be the empty string (<code class="inline">[]</code>).</p><p><a href="" id="cancel"></a></p>
+<p>Convert a token tag to a string</p><p>If no encoder module is given, the default is used (which is pretty).</p><p>If no or an unknown version is given, the <em>best</em> version is used (which is v3).</p><p>If no match is found for <code class="inline">Tag</code>, <code class="inline">Result</code> will be the empty string (<code class="inline">[]</code>).</p>
   </section>
 </section>
 <section class="detail" id="update_conn_info/3">
@@ -3900,7 +3887,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
     </a>
     <h1 class="signature" translate="no">update_conn_info(ConnHandle, Item, Value)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1490" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1447" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3922,7 +3909,7 @@ result.</p><p><a href="" id="test_reply"></a></p>
       </div>
 
 <p>Update information about an active connection</p><p>Requires that the connection is activated. See <a href="#t:conn_info_item/0"><code class="inline">conn_info_item/0</code></a> about which
-items and values that are valid.</p><p><a href="" id="system_info"></a></p>
+items and values that are valid.</p>
   </section>
 </section>
 <section class="detail" id="update_user_info/3">
@@ -3934,7 +3921,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
     </a>
     <h1 class="signature" translate="no">update_user_info(UserMid, Item, Value)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1393" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1386" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3955,7 +3942,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
 
       </div>
 
-<p>Update information about a user</p><p>Requires that the user is started.</p><p><a href="" id="conn_info"></a> <a href="" id="conn_info_11"></a> <a href="" id="conn_info_24"></a></p>
+<p>Update information about a user</p><p>Requires that the user is started.</p>
   </section>
 </section>
 <section class="detail" id="user_info/1">
@@ -3967,7 +3954,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
     </a>
     <h1 class="signature" translate="no">user_info(UserMid)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1332" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1327" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -3996,7 +3983,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
     </a>
     <h1 class="signature" translate="no">user_info(UserMid, Input)</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1368" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L1362" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4030,7 +4017,7 @@ items and values that are valid.</p><p><a href="" id="system_info"></a></p>
 Expected input type <code class="inline">Input :: Requests</code> with expected
 output type <code class="inline">Result :: RequestsResult</code>.</p><p><a href="" id="user_info_22"></a></p><p>Lookup user information about currently active replies.
 Expected input type <code class="inline">Input :: Replies</code> with expected
-output type <code class="inline">Result :: RepliesResult</code>.</p><p><a href="" id="update_user_info"></a></p>
+output type <code class="inline">Result :: RepliesResult</code>.</p>
   </section>
 </section>
 <section class="detail" id="versions1/0">
@@ -4042,7 +4029,7 @@ output type <code class="inline">Result :: RepliesResult</code>.</p><p><a href="
     </a>
     <h1 class="signature" translate="no">versions1()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2731" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2658" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4070,7 +4057,7 @@ output type <code class="inline">Result :: RepliesResult</code>.</p><p><a href="
     </a>
     <h1 class="signature" translate="no">versions2()</h1>
 
-      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2753" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/u3s/otp/blob/kuba/common_test/fix_interactive_prompt/OTP-19358/lib/megaco/src/app/megaco.erl#L2679" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -4088,7 +4075,7 @@ output type <code class="inline">Result :: RepliesResult</code>.</p><p><a href="
 
 <p>Utility functions used to retrieve some system and application info.</p><p>The difference between the two functions is in how they get the modules to
 check. <code class="inline">versions1</code> uses the app-file and <code class="inline">versions2</code> uses the function
-<code class="inline">application:get_key</code>.</p><p><a href="" id="print_version_info"></a></p>
+<code class="inline">application:get_key</code>.</p>
   </section>
 </section>
 
