@@ -4,19 +4,25 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.35.1">
     <meta name="project" content="observer v2.16">
 
 
     <title>ttb — observer v2.16</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
+    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-20B80D35.js"></script>
+    <script src="dist/sidebar_items-42583957.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script async src="dist/html-PVRIOB7F.js"></script>
+<style type="text/css">
+  .monospace-font > code {
+    font-family: monospace;
+  }
+</style>
+
 
   </head>
   <body data-type="modules" class="page-module">
@@ -405,11 +411,11 @@ parallel.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#format/1" data-no-tooltip translate="no">format(File)</a>
+        <a href="#format/1" data-no-tooltip translate="no">format(Files)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#format/2"><code class="inline">format(File,[])</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#format/2"><code class="inline">format(Files, [])</code></a>.</p></div>
 
     </div>
 
@@ -419,7 +425,8 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>format(File,Options) -&gt; ok | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Reads the specified binary trace log(s). The logs are processed in the order of
+their time stamps as long as option <code class="inline">disable_sort</code> is not specified.</p></div>
 
     </div>
 
@@ -440,7 +447,7 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>list_config(ConfigFile) -&gt; Config | {error,Reason}</p></div>
+        <div class="summary-synopsis"><p>Lists all entries in the specified configuration file.</p></div>
 
     </div>
 
@@ -450,7 +457,10 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>list_history() -&gt; History</p></div>
+        <div class="summary-synopsis"><p>All calls to <code class="inline">ttb</code> is stored in the history. This function returns the current
+content of the history. Any entry can be reexecuted with
+<a href="#run_history/1"><code class="inline">run_history/1</code></a> or stored in a configuration file with
+<code class="inline">write_config/2,3</code>.</p></div>
 
     </div>
 
@@ -460,7 +470,8 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>p(Item,Flags) -&gt; Return</p></div>
+        <div class="summary-synopsis"><p>Sets the specified trace flags on the specified processes or ports. Flag
+<code class="inline">timestamp</code> is always turned on.</p></div>
 
     </div>
 
@@ -470,7 +481,8 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>run_config(ConfigFile) -&gt; ok | {error,Reason}</p></div>
+        <div class="summary-synopsis"><p>Executes all entries in the specified configuration file. Notice that the
+history of the last trace is always available in file <code class="inline">ttb_last_config</code>.</p></div>
 
     </div>
 
@@ -480,7 +492,8 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>run_config(ConfigFile,NumList) -&gt; ok | {error,Reason}</p></div>
+        <div class="summary-synopsis"><p>Executes selected entries from the specified configuration file. <code class="inline">NumList</code> is a
+list of integers pointing out the entries to be executed.</p></div>
 
     </div>
 
@@ -490,7 +503,8 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>run_history(N) -&gt; ok | {error, Reason}</p></div>
+        <div class="summary-synopsis"><p>Executes the specified entry or entries from the history list. To list history,
+use <a href="#list_history/0"><code class="inline">list_history/0</code></a>.</p></div>
 
     </div>
 
@@ -500,7 +514,7 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>seq_trigger_ms() -&gt; MatchSpec</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#seq_trigger_ms/1"><code class="inline">seq_trigger_ms(all)</code></a>.</p></div>
 
     </div>
 
@@ -510,7 +524,9 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>seq_trigger_ms(Flags) -&gt; MatchSpec</p></div>
+        <div class="summary-synopsis"><p>A match specification can turn on or off sequential tracing. This function
+returns a match specification, which turns on sequential tracing with the
+specified <code class="inline">Flags</code>.</p></div>
 
     </div>
 
@@ -520,7 +536,9 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>start_trace(Nodes, Patterns, FlagSpec, Opts) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>This function is a shortcut allowing to start a trace with one command. Each
+tuple in <code class="inline">Patterns</code> is converted to a list, which in turn is passed to
+<code class="inline">ttb:tpl/2,3,4</code>.</p></div>
 
     </div>
 
@@ -540,7 +558,14 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>stop(Opts) -&gt; stopped | {stopped, Dir}</p></div>
+        <div class="summary-synopsis"><p>Stops tracing on all nodes. Logs and trace information files are sent to the
+trace control node and stored in a directory named
+<code class="inline">ttb_upload_FileName-Timestamp</code>, where <code class="inline">Filename</code> is the one provided with
+<code class="inline">{file, File}</code> during trace setup and <code class="inline">Timestamp</code> is of the form
+<code class="inline">yyyymmdd-hhmmss</code>. Even logs from nodes on the same machine as the trace control
+node are moved to this directory. The history list is saved to a file named
+<code class="inline">ttb_last_config</code> for further reference (as it is no longer accessible through
+history and configuration management functions, like <a href="#list_history/0"><code class="inline">ttb:list_history/0</code></a>).</p></div>
 
     </div>
 
@@ -606,11 +631,12 @@ parallel.</p>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#tpl/4" data-no-tooltip translate="no">tpl(A, B, C, D)</a>
+        <a href="#tpl/4" data-no-tooltip translate="no">tpl(Module, Function, Arity, MatchSpec)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>tpl(Module [, Function [, Arity]], MatchSpec)</p></div>
+        <div class="summary-synopsis"><p>These functions are to be used with trace flag <code class="inline">call</code>, <code class="inline">send</code>, and <code class="inline">'receive'</code>
+for setting and clearing trace patterns.</p></div>
 
     </div>
 
@@ -620,17 +646,17 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>tracer() -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#tracer/1"><code class="inline">tracer(node())</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#tracer/1" data-no-tooltip translate="no">tracer/1</a>
+        <a href="#tracer/1" data-no-tooltip translate="no">tracer(Nodes)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>tracer(Nodes) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Handy shortcuts for common tracing settings.</p></div>
 
     </div>
 
@@ -640,17 +666,18 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>tracer(Nodes,Opts) -&gt; Result</p></div>
+        <div class="summary-synopsis"><p>Starts a file trace port on all specified nodes and points the system tracer for
+sequential tracing to the same port.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#write_config/2" data-no-tooltip translate="no">write_config(ConfigFile,Config)</a>
+        <a href="#write_config/2" data-no-tooltip translate="no">write_config(ConfigFile, Config)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#write_config/3"><code class="inline">write_config(ConfigFile,Config,[])</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#write_config/3"><code class="inline">write_config(ConfigFile, Config, [])</code></a>.</p></div>
 
     </div>
 
@@ -660,7 +687,8 @@ parallel.</p>
 
       </div>
 
-        <div class="summary-synopsis"><p>write_config(ConfigFile,Config,Opts) -&gt; ok | {error,Reason}</p></div>
+        <div class="summary-synopsis"><p>Creates or extends a configuration file, which can be used for restoring a
+specific configuration later.</p></div>
 
     </div>
 
@@ -692,15 +720,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:format_fun/0">
 
   <div class="detail-header">
-    <a href="#t:format_fun/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:format_fun/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">format_fun()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L75" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L75" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -727,15 +753,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:format_handler/0">
 
   <div class="detail-header">
-    <a href="#t:format_handler/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:format_handler/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">format_handler()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L82" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L82" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -757,15 +781,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:format_opt/0">
 
   <div class="detail-header">
-    <a href="#t:format_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:format_opt/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">format_opt()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L85" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L85" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -787,15 +809,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:format_opts/0">
 
   <div class="detail-header">
-    <a href="#t:format_opts/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:format_opts/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">format_opts()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L84" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L84" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -817,15 +837,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:item/0">
 
   <div class="detail-header">
-    <a href="#t:item/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:item/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">item()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L63" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L63" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -853,15 +871,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:match_desc/0">
 
   <div class="detail-header">
-    <a href="#t:match_desc/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:match_desc/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">match_desc()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L67" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L67" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -883,15 +899,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:match_spec/0">
 
   <div class="detail-header">
-    <a href="#t:match_spec/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:match_spec/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">match_spec()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L68" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L68" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -913,15 +927,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:mfas/0">
 
   <div class="detail-header">
-    <a href="#t:mfas/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:mfas/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">mfas()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L92" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L92" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -943,15 +955,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:nodes/0">
 
   <div class="detail-header">
-    <a href="#t:nodes/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:nodes/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">nodes()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L62" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L62" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -973,15 +983,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:stop_opt/0">
 
   <div class="detail-header">
-    <a href="#t:stop_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:stop_opt/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">stop_opt()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L89" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L89" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1004,15 +1012,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:stop_opts/0">
 
   <div class="detail-header">
-    <a href="#t:stop_opts/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:stop_opts/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">stop_opts()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L88" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L88" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1034,15 +1040,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:tp_arity/0">
 
   <div class="detail-header">
-    <a href="#t:tp_arity/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:tp_arity/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">tp_arity()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L72" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L72" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1064,15 +1068,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:tp_function/0">
 
   <div class="detail-header">
-    <a href="#t:tp_function/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:tp_function/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">tp_function()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L71" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L71" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1094,15 +1096,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:tp_module/0">
 
   <div class="detail-header">
-    <a href="#t:tp_module/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:tp_module/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">tp_module()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L70" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L70" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1124,15 +1124,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="t:trace_flag/0">
 
   <div class="detail-header">
-    <a href="#t:trace_flag/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:trace_flag/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">trace_flag()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L93" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L93" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1173,15 +1171,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctp/0">
 
   <div class="detail-header">
-    <a href="#ctp/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctp/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctp()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L890" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L864" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1201,15 +1197,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctp/1">
 
   <div class="detail-header">
-    <a href="#ctp/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctp/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctp(A)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L900" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L874" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1230,15 +1224,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctp/2">
 
   <div class="detail-header">
-    <a href="#ctp/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctp/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctp(Module, Function)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L907" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L881" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1259,15 +1251,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctp/3">
 
   <div class="detail-header">
-    <a href="#ctp/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctp/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctp(Module, Function, Arity)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L914" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L888" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1288,15 +1278,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpe/1">
 
   <div class="detail-header">
-    <a href="#ctpe/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpe/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpe(Event)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L983" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L957" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1322,15 +1310,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpg/0">
 
   <div class="detail-header">
-    <a href="#ctpg/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpg/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpg()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L949" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L923" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1350,15 +1336,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpg/1">
 
   <div class="detail-header">
-    <a href="#ctpg/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpg/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpg(A)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L957" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L931" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1380,15 +1364,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpg/2">
 
   <div class="detail-header">
-    <a href="#ctpg/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpg/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpg(Module, Function)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L964" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L938" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1409,15 +1391,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpg/3">
 
   <div class="detail-header">
-    <a href="#ctpg/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpg/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpg(Module, Function, Arity)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L971" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L945" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1438,15 +1418,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpl/0">
 
   <div class="detail-header">
-    <a href="#ctpl/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpl/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpl()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L921" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L895" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1466,15 +1444,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpl/1">
 
   <div class="detail-header">
-    <a href="#ctpl/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpl/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpl(A)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L929" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L903" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1496,15 +1472,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpl/2">
 
   <div class="detail-header">
-    <a href="#ctpl/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpl/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpl(Module, Function)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L936" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L910" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1525,15 +1499,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="ctpl/3">
 
   <div class="detail-header">
-    <a href="#ctpl/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#ctpl/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">ctpl(Module, Function, Arity)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L943" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L917" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1554,15 +1526,13 @@ included in the call to the format handler.</p></div>
 <section class="detail" id="format/1">
 
   <div class="detail-header">
-    <a href="#format/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#format/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">format(File)</h1>
+    <h1 class="signature" translate="no">format(Files)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1587" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1545" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1576,21 +1546,19 @@ included in the call to the format handler.</p></div>
 
       </div>
 
-<p>Equivalent to <a href="#format/2"><code class="inline">format(File,[])</code></a>.</p>
+<p>Equivalent to <a href="#format/2"><code class="inline">format(Files, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="format/2">
 
   <div class="detail-header">
-    <a href="#format/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#format/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">format(Files, Options)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1621" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1577" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1605,7 +1573,7 @@ included in the call to the format handler.</p></div>
 
       </div>
 
-<p>format(File,Options) -&gt; ok | {error, Reason}</p><p>Reads the specified binary trace log(s). The logs are processed in the order of
+<p>Reads the specified binary trace log(s). The logs are processed in the order of
 their time stamps as long as option <code class="inline">disable_sort</code> is not specified.</p><p>If <code class="inline">FormatHandler = {Function,InitialState}</code>, <code class="inline">Function</code> is called for each
 trace message.</p><p>If <code class="inline">FormatHandler = get_et_handler()</code>, <code class="inline">et_viewer</code> in application ET is used for
 presenting the trace log graphically. <code class="inline">ttb</code> provides a few different filters
@@ -1621,15 +1589,13 @@ logs, specify the name with <code class="inline">*</code> instead of the wrap co
 <section class="detail" id="get_et_handler/0">
 
   <div class="detail-header">
-    <a href="#get_et_handler/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#get_et_handler/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_et_handler()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1577" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1539" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1652,15 +1618,13 @@ logs, specify the name with <code class="inline">*</code> instead of the wrap co
 <section class="detail" id="list_config/1">
 
   <div class="detail-header">
-    <a href="#list_config/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#list_config/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_config(ConfigFile)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L625" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L605" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1678,21 +1642,19 @@ logs, specify the name with <code class="inline">*</code> instead of the wrap co
 
       </div>
 
-<p>list_config(ConfigFile) -&gt; Config | {error,Reason}</p><p>Lists all entries in the specified configuration file.</p>
+<p>Lists all entries in the specified configuration file.</p>
   </section>
 </section>
 <section class="detail" id="list_history/0">
 
   <div class="detail-header">
-    <a href="#list_history/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#list_history/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">list_history()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L496" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L486" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1707,7 +1669,7 @@ logs, specify the name with <code class="inline">*</code> instead of the wrap co
 
       </div>
 
-<p>list_history() -&gt; History</p><p>All calls to <code class="inline">ttb</code> is stored in the history. This function returns the current
+<p>All calls to <code class="inline">ttb</code> is stored in the history. This function returns the current
 content of the history. Any entry can be reexecuted with
 <a href="#run_history/1"><code class="inline">run_history/1</code></a> or stored in a configuration file with
 <code class="inline">write_config/2,3</code>.</p>
@@ -1716,15 +1678,13 @@ content of the history. Any entry can be reexecuted with
 <section class="detail" id="p/2">
 
   <div class="detail-header">
-    <a href="#p/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#p/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">p(Item, Flags)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L724" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L698" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1742,7 +1702,7 @@ content of the history. Any entry can be reexecuted with
 
       </div>
 
-<p>p(Item,Flags) -&gt; Return</p><p>Sets the specified trace flags on the specified processes or ports. Flag
+<p>Sets the specified trace flags on the specified processes or ports. Flag
 <code class="inline">timestamp</code> is always turned on.</p><p>See the Reference Manual for module <a href="../../../../lib/runtime_tools-2.1.1/doc/html/dbg.html"><code class="inline">dbg</code></a> for the possible trace flags.
 Parameter <code class="inline">MatchDesc</code> is the same as returned from <a href="../../../../lib/runtime_tools-2.1.1/doc/html/dbg.html#p/2"><code class="inline">dbg:p/2</code></a>.</p><p>Processes can be specified as registered names, globally registered names, or
 process identifiers. Ports can be specified as registered names or port
@@ -1754,15 +1714,13 @@ specified with <a href="#tracer/2"><code class="inline">tracer/2</code></a>.</p>
 <section class="detail" id="run_config/1">
 
   <div class="detail-header">
-    <a href="#run_config/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#run_config/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">run_config(ConfigFile)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L646" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L624" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1777,22 +1735,20 @@ specified with <a href="#tracer/2"><code class="inline">tracer/2</code></a>.</p>
 
       </div>
 
-<p>run_config(ConfigFile) -&gt; ok | {error,Reason}</p><p>Executes all entries in the specified configuration file. Notice that the
+<p>Executes all entries in the specified configuration file. Notice that the
 history of the last trace is always available in file <code class="inline">ttb_last_config</code>.</p>
   </section>
 </section>
 <section class="detail" id="run_config/2">
 
   <div class="detail-header">
-    <a href="#run_config/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#run_config/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">run_config(ConfigFile, NumList)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L673" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L649" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1810,7 +1766,7 @@ history of the last trace is always available in file <code class="inline">ttb_l
 
       </div>
 
-<p>run_config(ConfigFile,NumList) -&gt; ok | {error,Reason}</p><p>Executes selected entries from the specified configuration file. <code class="inline">NumList</code> is a
+<p>Executes selected entries from the specified configuration file. <code class="inline">NumList</code> is a
 list of integers pointing out the entries to be executed.</p><p>To list the contents of a configuration file, use
 <a href="#list_config/1"><code class="inline">list_config/1</code></a>.</p><p>Notice that the history of the last trace is always available in file
 <code class="inline">ttb_last_config</code>.</p>
@@ -1819,15 +1775,13 @@ list of integers pointing out the entries to be executed.</p><p>To list the cont
 <section class="detail" id="run_history/1">
 
   <div class="detail-header">
-    <a href="#run_history/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#run_history/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">run_history(Entries)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L512" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L500" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1842,22 +1796,20 @@ list of integers pointing out the entries to be executed.</p><p>To list the cont
 
       </div>
 
-<p>run_history(N) -&gt; ok | {error, Reason}</p><p>Executes the specified entry or entries from the history list. To list history,
+<p>Executes the specified entry or entries from the history list. To list history,
 use <a href="#list_history/0"><code class="inline">list_history/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="seq_trigger_ms/0">
 
   <div class="detail-header">
-    <a href="#seq_trigger_ms/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#seq_trigger_ms/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">seq_trigger_ms()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1046" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1016" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1871,21 +1823,19 @@ use <a href="#list_history/0"><code class="inline">list_history/0</code></a>.</p
 
       </div>
 
-<p>seq_trigger_ms() -&gt; MatchSpec</p><p>Equivalent to <a href="#seq_trigger_ms/1"><code class="inline">seq_trigger_ms(all)</code></a>.</p>
+<p>Equivalent to <a href="#seq_trigger_ms/1"><code class="inline">seq_trigger_ms(all)</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="seq_trigger_ms/1">
 
   <div class="detail-header">
-    <a href="#seq_trigger_ms/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#seq_trigger_ms/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">seq_trigger_ms(Flags)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1090" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1058" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1900,36 +1850,34 @@ use <a href="#list_history/0"><code class="inline">list_history/0</code></a>.</p
 
       </div>
 
-<p>seq_trigger_ms(Flags) -&gt; MatchSpec</p><p>A match specification can turn on or off sequential tracing. This function
+<p>A match specification can turn on or off sequential tracing. This function
 returns a match specification, which turns on sequential tracing with the
 specified <code class="inline">Flags</code>.</p><p>This match specification can be specified as the last argument to <code class="inline">tp</code> or <code class="inline">tpl</code>.
 The activated <code class="inline">Item</code> then becomes a <em>trigger</em> for sequential tracing. This means
 that if the item is called on a process with trace flag <code class="inline">call</code> set, the process
 is &quot;contaminated&quot; with token <code class="inline">seq_trace</code>.</p><p>If <code class="inline">Flags = all</code>, all possible flags are set.</p><p>The possible values for <code class="inline">SeqTraceFlag</code> are available in <a href="../../../../lib/kernel-10.1.1/doc/html/seq_trace.html"><code class="inline">seq_trace</code></a>.</p><p>For a description of the <code class="inline">match_spec()</code> syntax, see section
 <a href="../../../../erts-15.1.2/doc/html/match_spec.html"><code class="inline">Match Specifications in Erlang</code></a> in ERTS, which
-explains the general match specification &quot;language&quot;.</p><blockquote><h4 class="info">Note</h4><p>The <em>system tracer</em> for sequential tracing is automatically initiated by <code class="inline">ttb</code>
-when a trace port is started with <code class="inline">ttb:tracer/0,1,2</code>.</p></blockquote><p>An example of how to use function <code class="inline">seq_trigger_ms/0,1</code> follows:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">(tiger@durin)5&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tracer</span><span class="p" data-group-id="6522069045-1">(</span><span class="p" data-group-id="6522069045-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="6522069045-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="6522069045-3">[</span><span class="ss">tiger@durin</span><span class="p" data-group-id="6522069045-3">]</span><span class="p" data-group-id="6522069045-2">}</span><span class="gp unselectable">
-(tiger@durin)6&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="6522069045-4">(</span><span class="ss">all</span><span class="p">,</span><span class="ss">call</span><span class="p" data-group-id="6522069045-4">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="6522069045-5">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="6522069045-6">{</span><span class="p" data-group-id="6522069045-7">[</span><span class="ss">all</span><span class="p" data-group-id="6522069045-7">]</span><span class="p">,</span><span class="p" data-group-id="6522069045-8">[</span><span class="ss">call</span><span class="p" data-group-id="6522069045-8">]</span><span class="p" data-group-id="6522069045-6">}</span><span class="p" data-group-id="6522069045-5">}</span><span class="gp unselectable">
-(tiger@durin)7&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tp</span><span class="p" data-group-id="6522069045-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="ss">func</span><span class="p">,</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">seq_trigger_ms</span><span class="p" data-group-id="6522069045-10">(</span><span class="p" data-group-id="6522069045-10">)</span><span class="p" data-group-id="6522069045-9">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="6522069045-11">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="6522069045-12">[</span><span class="p" data-group-id="6522069045-13">{</span><span class="ss">matched</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="6522069045-13">}</span><span class="p">,</span><span class="p" data-group-id="6522069045-14">{</span><span class="ss">saved</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="6522069045-14">}</span><span class="p" data-group-id="6522069045-12">]</span><span class="p" data-group-id="6522069045-11">}</span><span class="w">
-</span><span class="p" data-group-id="6522069045-15">(</span><span class="ss">tiger@durin</span><span class="p" data-group-id="6522069045-15">)</span><span class="mi">8</span><span class="o">&gt;</span></code></pre><p>Whenever <code class="inline">mod:func(...)</code> is called after this, token <code class="inline">seq_trace</code> is set on the
+explains the general match specification &quot;language&quot;.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>The <em>system tracer</em> for sequential tracing is automatically initiated by <code class="inline">ttb</code>
+when a trace port is started with <code class="inline">ttb:tracer/0,1,2</code>.</p></section><p>An example of how to use function <code class="inline">seq_trigger_ms/0,1</code> follows:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">(tiger@durin)5&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tracer</span><span class="p" data-group-id="9476092333-1">(</span><span class="p" data-group-id="9476092333-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9476092333-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="9476092333-3">[</span><span class="ss">tiger@durin</span><span class="p" data-group-id="9476092333-3">]</span><span class="p" data-group-id="9476092333-2">}</span><span class="gp unselectable">
+(tiger@durin)6&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="9476092333-4">(</span><span class="ss">all</span><span class="p">,</span><span class="ss">call</span><span class="p" data-group-id="9476092333-4">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9476092333-5">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="9476092333-6">{</span><span class="p" data-group-id="9476092333-7">[</span><span class="ss">all</span><span class="p" data-group-id="9476092333-7">]</span><span class="p">,</span><span class="p" data-group-id="9476092333-8">[</span><span class="ss">call</span><span class="p" data-group-id="9476092333-8">]</span><span class="p" data-group-id="9476092333-6">}</span><span class="p" data-group-id="9476092333-5">}</span><span class="gp unselectable">
+(tiger@durin)7&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tp</span><span class="p" data-group-id="9476092333-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="ss">func</span><span class="p">,</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">seq_trigger_ms</span><span class="p" data-group-id="9476092333-10">(</span><span class="p" data-group-id="9476092333-10">)</span><span class="p" data-group-id="9476092333-9">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="9476092333-11">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="9476092333-12">[</span><span class="p" data-group-id="9476092333-13">{</span><span class="ss">matched</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9476092333-13">}</span><span class="p">,</span><span class="p" data-group-id="9476092333-14">{</span><span class="ss">saved</span><span class="p">,</span><span class="mi">1</span><span class="p" data-group-id="9476092333-14">}</span><span class="p" data-group-id="9476092333-12">]</span><span class="p" data-group-id="9476092333-11">}</span><span class="w">
+</span><span class="p" data-group-id="9476092333-15">(</span><span class="ss">tiger@durin</span><span class="p" data-group-id="9476092333-15">)</span><span class="mi">8</span><span class="o">&gt;</span></code></pre><p>Whenever <code class="inline">mod:func(...)</code> is called after this, token <code class="inline">seq_trace</code> is set on the
 executing process.</p>
   </section>
 </section>
 <section class="detail" id="start_trace/4">
 
   <div class="detail-header">
-    <a href="#start_trace/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start_trace/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start_trace(Nodes, Patterns, FlagSpec, TracerOpts)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L139" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L137" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1951,30 +1899,28 @@ executing process.</p>
 
       </div>
 
-<p>start_trace(Nodes, Patterns, FlagSpec, Opts) -&gt; Result</p><p>This function is a shortcut allowing to start a trace with one command. Each
+<p>This function is a shortcut allowing to start a trace with one command. Each
 tuple in <code class="inline">Patterns</code> is converted to a list, which in turn is passed to
-<code class="inline">ttb:tpl/2,3,4</code>.</p><p>The call:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="7020598520-1">(</span><span class="p" data-group-id="7020598520-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="7020598520-2">]</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="7020598520-3">[</span><span class="p" data-group-id="7020598520-4">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7020598520-5">[</span><span class="p" data-group-id="7020598520-5">]</span><span class="p" data-group-id="7020598520-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7020598520-6">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7020598520-6">}</span><span class="p" data-group-id="7020598520-3">]</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="7020598520-7">{</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="7020598520-7">}</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="7020598520-8">[</span><span class="p" data-group-id="7020598520-9">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="7020598520-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7020598520-10">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="7020598520-11">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="7020598520-11">}</span><span class="p" data-group-id="7020598520-10">}</span><span class="p" data-group-id="7020598520-8">]</span><span class="p" data-group-id="7020598520-1">)</span><span class="p">.</span></code></pre><p>is equivalent to:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="9835223150-1">(</span><span class="p" data-group-id="9835223150-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="9835223150-2">]</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="9835223150-3">[</span><span class="p" data-group-id="9835223150-4">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="9835223150-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9835223150-5">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="9835223150-6">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="9835223150-6">}</span><span class="p" data-group-id="9835223150-5">}</span><span class="p" data-group-id="9835223150-3">]</span><span class="p" data-group-id="9835223150-1">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="9835223150-7">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9835223150-8">[</span><span class="p" data-group-id="9835223150-8">]</span><span class="p" data-group-id="9835223150-7">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="9835223150-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9835223150-10">[</span><span class="p" data-group-id="9835223150-10">]</span><span class="p" data-group-id="9835223150-9">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="9835223150-11">(</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="9835223150-11">)</span><span class="p">.</span></code></pre>
+<code class="inline">ttb:tpl/2,3,4</code>.</p><p>The call:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="8514751039-1">(</span><span class="p" data-group-id="8514751039-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="8514751039-2">]</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="8514751039-3">[</span><span class="p" data-group-id="8514751039-4">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8514751039-5">[</span><span class="p" data-group-id="8514751039-5">]</span><span class="p" data-group-id="8514751039-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8514751039-6">{</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8514751039-6">}</span><span class="p" data-group-id="8514751039-3">]</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="8514751039-7">{</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="8514751039-7">}</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="8514751039-8">[</span><span class="p" data-group-id="8514751039-9">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="8514751039-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8514751039-10">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="8514751039-11">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="8514751039-11">}</span><span class="p" data-group-id="8514751039-10">}</span><span class="p" data-group-id="8514751039-8">]</span><span class="p" data-group-id="8514751039-1">)</span><span class="p">.</span></code></pre><p>is equivalent to:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">ttb</span><span class="p">:</span><span class="nf">start_trace</span><span class="p" data-group-id="7402312816-1">(</span><span class="p" data-group-id="7402312816-2">[</span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">OtherNode</span><span class="p" data-group-id="7402312816-2">]</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="7402312816-3">[</span><span class="p" data-group-id="7402312816-4">{</span><span class="ss">file</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p" data-group-id="7402312816-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7402312816-5">{</span><span class="ss">handler</span><span class="p">,</span><span class="p" data-group-id="7402312816-6">{</span><span class="k">fun</span><span class="w"> </span><span class="ss">myhandler</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">S</span><span class="p" data-group-id="7402312816-6">}</span><span class="p" data-group-id="7402312816-5">}</span><span class="p" data-group-id="7402312816-3">]</span><span class="p" data-group-id="7402312816-1">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="7402312816-7">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7402312816-8">[</span><span class="p" data-group-id="7402312816-8">]</span><span class="p" data-group-id="7402312816-7">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">tpl</span><span class="p" data-group-id="7402312816-9">(</span><span class="ss">mod</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7402312816-10">[</span><span class="p" data-group-id="7402312816-10">]</span><span class="p" data-group-id="7402312816-9">)</span><span class="p">,</span><span class="w">
+</span><span class="nc">ttb</span><span class="p">:</span><span class="nf">p</span><span class="p" data-group-id="7402312816-11">(</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">call</span><span class="p" data-group-id="7402312816-11">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="stop/0">
 
   <div class="detail-header">
-    <a href="#stop/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#stop/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stop()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1134" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1100" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1994,15 +1940,13 @@ tuple in <code class="inline">Patterns</code> is converted to a list, which in t
 <section class="detail" id="stop/1">
 
   <div class="detail-header">
-    <a href="#stop/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#stop/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stop(Opts)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1163" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1127" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2016,7 +1960,7 @@ tuple in <code class="inline">Patterns</code> is converted to a list, which in t
 
       </div>
 
-<p>stop(Opts) -&gt; stopped | {stopped, Dir}</p><p>Stops tracing on all nodes. Logs and trace information files are sent to the
+<p>Stops tracing on all nodes. Logs and trace information files are sent to the
 trace control node and stored in a directory named
 <code class="inline">ttb_upload_FileName-Timestamp</code>, where <code class="inline">Filename</code> is the one provided with
 <code class="inline">{file, File}</code> during trace setup and <code class="inline">Timestamp</code> is of the form
@@ -2033,15 +1977,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tp/2">
 
   <div class="detail-header">
-    <a href="#tp/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tp/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tp(A, B)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L785" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L759" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2061,15 +2003,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tp/3">
 
   <div class="detail-header">
-    <a href="#tp/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tp/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tp(A, B, C)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L793" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L767" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2089,15 +2029,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tp/4">
 
   <div class="detail-header">
-    <a href="#tp/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tp/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tp(A, B, C, D)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L801" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L775" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2117,15 +2055,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tpe/2">
 
   <div class="detail-header">
-    <a href="#tpe/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tpe/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tpe(Event, MatchSpec)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L883" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L857" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2148,15 +2084,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tpl/2">
 
   <div class="detail-header">
-    <a href="#tpl/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tpl/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tpl(A, B)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L809" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L783" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2176,15 +2110,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tpl/3">
 
   <div class="detail-header">
-    <a href="#tpl/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tpl/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tpl(A, B, C)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L817" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L791" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2204,15 +2136,13 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 <section class="detail" id="tpl/4">
 
   <div class="detail-header">
-    <a href="#tpl/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tpl/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">tpl(A, B, C, D)</h1>
+    <h1 class="signature" translate="no">tpl(Module, Function, Arity, MatchSpec)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L873" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L847" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2226,7 +2156,7 @@ not just <code class="inline">stopped</code>. This implies <code class="inline">
 
       </div>
 
-<p>tpl(Module [, Function [, Arity]], MatchSpec)</p><p>These functions are to be used with trace flag <code class="inline">call</code>, <code class="inline">send</code>, and <code class="inline">'receive'</code>
+<p>These functions are to be used with trace flag <code class="inline">call</code>, <code class="inline">send</code>, and <code class="inline">'receive'</code>
 for setting and clearing trace patterns.</p><p>When trace flag <code class="inline">call</code> is set on a process, function calls are traced on that
 process if a trace pattern is set for the called function.</p><p>The <code class="inline">send</code> and <code class="inline">'receive'</code> flags enable tracing of all messages sent and
 received by the process/port. Trace patterns set with <code class="inline">tpe</code> may limit traced
@@ -2246,15 +2176,13 @@ function)</li><li><code class="inline">{codestr, Str}</code> - for <a href="../.
 <section class="detail" id="tracer/0">
 
   <div class="detail-header">
-    <a href="#tracer/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tracer/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tracer()</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L152" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L146" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2268,21 +2196,19 @@ function)</li><li><code class="inline">{codestr, Str}</code> - for <a href="../.
 
       </div>
 
-<p>tracer() -&gt; Result</p><p>Equivalent to <a href="#tracer/1"><code class="inline">tracer(node())</code></a>.</p>
+<p>Equivalent to <a href="#tracer/1"><code class="inline">tracer(node())</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="tracer/1">
 
   <div class="detail-header">
-    <a href="#tracer/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tracer/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">tracer/1</h1>
+    <h1 class="signature" translate="no">tracer(Nodes)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L166" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L160" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2296,22 +2222,20 @@ function)</li><li><code class="inline">{codestr, Str}</code> - for <a href="../.
 
       </div>
 
-<p>tracer(Nodes) -&gt; Result</p><p>Handy shortcuts for common tracing settings.</p><p><code class="inline">shell</code> is equivalent to
-<a href="#tracer/2"><code class="inline">tracer(node(),[{file, {local, &quot;ttb&quot;}}, shell])</code></a>.</p><p><code class="inline">dbg</code> is equivalent to <a href="#tracer/2"><code class="inline">tracer(node(),[{shell, only}])</code></a>.</p><p>Equivalent to <a href="#tracer/2"><code class="inline">tracer(Nodes,[])</code></a>.</p>
+<p>Handy shortcuts for common tracing settings.</p><p><code class="inline">shell</code> is equivalent to
+<a href="#tracer/2"><code class="inline">tracer(node(),[{file, {local, &quot;ttb&quot;}}, shell])</code></a>.</p><p><code class="inline">dbg</code> is equivalent to <a href="#tracer/2"><code class="inline">tracer(node(),[{shell, only}])</code></a>.</p><p><code class="inline">Nodes</code> is equivalent to <a href="#tracer/2"><code class="inline">tracer(Nodes,[])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="tracer/2">
 
   <div class="detail-header">
-    <a href="#tracer/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#tracer/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">tracer(Nodes, Opts)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L278" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L270" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2351,7 +2275,7 @@ function)</li><li><code class="inline">{codestr, Str}</code> - for <a href="../.
 
       </div>
 
-<p>tracer(Nodes,Opts) -&gt; Result</p><p>Starts a file trace port on all specified nodes and points the system tracer for
+<p>Starts a file trace port on all specified nodes and points the system tracer for
 sequential tracing to the same port.</p><p><em>Options:</em></p><ul><li><p><strong><code class="inline">Filename</code></strong> - The specified <code class="inline">Filename</code> is prefixed with the node name.
 Default <code class="inline">Filename</code> is <code class="inline">ttb</code>.</p></li><li><p><strong><code class="inline">File={wrap,Filename,Size,Count}</code></strong> - Can be used if the size of the trace
 logs must be limited. Default values are <code class="inline">Size=128*1024</code> and <code class="inline">Count=8</code>.</p></li><li><p><strong><code class="inline">Client</code></strong> - When tracing diskless nodes, <code class="inline">ttb</code> must be started from an
@@ -2405,15 +2329,13 @@ stored with <code class="inline">write_config(Data)</code>.</p></li><li><p><stro
 <section class="detail" id="write_config/2">
 
   <div class="detail-header">
-    <a href="#write_config/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#write_config/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">write_config(ConfigFile,Config)</h1>
+    <h1 class="signature" translate="no">write_config(ConfigFile, Config)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L550" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L534" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2431,21 +2353,19 @@ stored with <code class="inline">write_config(Data)</code>.</p></li><li><p><stro
 
       </div>
 
-<p>Equivalent to <a href="#write_config/3"><code class="inline">write_config(ConfigFile,Config,[])</code></a>.</p>
+<p>Equivalent to <a href="#write_config/3"><code class="inline">write_config(ConfigFile, Config, [])</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="write_config/3">
 
   <div class="detail-header">
-    <a href="#write_config/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#write_config/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">write_config(ConfigFile, Config, Opts)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L577" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L559" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2465,7 +2385,7 @@ stored with <code class="inline">write_config(Data)</code>.</p></li><li><p><stro
 
       </div>
 
-<p>write_config(ConfigFile,Config,Opts) -&gt; ok | {error,Reason}</p><p>Creates or extends a configuration file, which can be used for restoring a
+<p>Creates or extends a configuration file, which can be used for restoring a
 specific configuration later.</p><p>The contents of the configuration file can either be fetched from the history or
 specified directly as a list of <code class="inline">{Mod,Func,Args}</code>.</p><p>If the complete history is to be stored in the configuration file, <code class="inline">Config</code> must
 be <code class="inline">all</code>. If only a selected number of entries from the history are to be
@@ -2478,15 +2398,13 @@ information is appended at the end of the file.</p>
 <section class="detail" id="write_trace_info/2">
 
   <div class="detail-header">
-    <a href="#write_trace_info/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#write_trace_info/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">write_trace_info(Key, Info)</h1>
 
-      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1111" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/cocoa-xu/otp/blob/cx-windows-system-architecture/lib/observer/src/ttb.erl#L1079" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2527,7 +2445,7 @@ included in the call to the format handler.</p>
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
