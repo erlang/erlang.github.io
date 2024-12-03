@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.35.1">
     <meta name="project" content="stdlib v6.1.2">
 
 
     <title>array — stdlib v6.1.2</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
+    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
     <script src="dist/sidebar_items-3EFE45AC.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script async src="dist/html-PVRIOB7F.js"></script>
 <style type="text/css">
   .monospace-font > code {
     font-family: monospace;
@@ -142,14 +142,14 @@ that has been explicitly set to the same value as the default one (compare
 <a href="#reset/2"><code class="inline">reset/2</code></a>). If you need to differentiate between unset and set entries, ensure
 that the default value cannot be confused with the values of set entries.</p><p>The array never shrinks automatically. If an index <code class="inline">I</code> has been used to set an
 entry successfully, all indices in the range <code class="inline">[0,I]</code> stay accessible unless the
-array size is explicitly changed by calling <a href="#resize/2"><code class="inline">resize/2</code></a>.</p><p><em>Examples:</em></p><p>Create a fixed-size array with entries 0-9 set to <code class="inline">undefined</code>:</p><pre><code class="makeup erlang" translate="no"><span class="n">A0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="3359083836-1">(</span><span class="mi">10</span><span class="p" data-group-id="3359083836-1">)</span><span class="p">.</span><span class="w">
-</span><span class="mi">10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="3359083836-2">(</span><span class="n">A0</span><span class="p" data-group-id="3359083836-2">)</span><span class="p">.</span></code></pre><p>Create an extendible array and set entry 17 to <code class="inline">true</code>, causing the array to grow
-automatically:</p><pre><code class="makeup erlang" translate="no"><span class="n">A1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="4656960294-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="4656960294-2">(</span><span class="p" data-group-id="4656960294-2">)</span><span class="p" data-group-id="4656960294-1">)</span><span class="p">.</span><span class="w">
-</span><span class="mi">18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="4656960294-3">(</span><span class="n">A1</span><span class="p" data-group-id="4656960294-3">)</span><span class="p">.</span></code></pre><p>Read back a stored value:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="9094418699-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="9094418699-1">)</span><span class="p">.</span></code></pre><p>Accessing an unset entry returns default value:</p><pre><code class="makeup erlang" translate="no"><span class="ss">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="3639291791-1">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="3639291791-1">)</span></code></pre><p>Accessing an entry beyond the last set entry also returns the default value, if
-the array does not have fixed size:</p><pre><code class="makeup erlang" translate="no"><span class="ss">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="4701912837-1">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="4701912837-1">)</span><span class="p">.</span></code></pre><p>&quot;Sparse&quot; functions ignore default-valued entries:</p><pre><code class="makeup erlang" translate="no"><span class="n">A2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="2222805006-1">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="2222805006-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="2222805006-2">[</span><span class="p" data-group-id="2222805006-3">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="2222805006-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2222805006-4">{</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="2222805006-4">}</span><span class="p" data-group-id="2222805006-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">sparse_to_orddict</span><span class="p" data-group-id="2222805006-5">(</span><span class="n">A2</span><span class="p" data-group-id="2222805006-5">)</span><span class="p">.</span></code></pre><p>An extendible array can be made fixed-size later:</p><pre><code class="makeup erlang" translate="no"><span class="n">A3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">fix</span><span class="p" data-group-id="8349100695-1">(</span><span class="n">A2</span><span class="p" data-group-id="8349100695-1">)</span><span class="p">.</span></code></pre><p>A fixed-size array does not grow automatically and does not allow accesses
-beyond the last set entry:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="3917674499-1">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="3917674499-2">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="3917674499-2">}</span><span class="p" data-group-id="3917674499-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3917674499-3">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="3917674499-4">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="3917674499-4">)</span><span class="p" data-group-id="3917674499-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="3917674499-5">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="3917674499-6">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="3917674499-6">}</span><span class="p" data-group-id="3917674499-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3917674499-7">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="3917674499-8">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="3917674499-8">)</span><span class="p" data-group-id="3917674499-7">)</span><span class="p">.</span></code></pre>
+array size is explicitly changed by calling <a href="#resize/2"><code class="inline">resize/2</code></a>.</p><p><em>Examples:</em></p><p>Create a fixed-size array with entries 0-9 set to <code class="inline">undefined</code>:</p><pre><code class="makeup erlang" translate="no"><span class="n">A0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="8740656788-1">(</span><span class="mi">10</span><span class="p" data-group-id="8740656788-1">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="8740656788-2">(</span><span class="n">A0</span><span class="p" data-group-id="8740656788-2">)</span><span class="p">.</span></code></pre><p>Create an extendible array and set entry 17 to <code class="inline">true</code>, causing the array to grow
+automatically:</p><pre><code class="makeup erlang" translate="no"><span class="n">A1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="6150046687-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="6150046687-2">(</span><span class="p" data-group-id="6150046687-2">)</span><span class="p" data-group-id="6150046687-1">)</span><span class="p">.</span><span class="w">
+</span><span class="mi">18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">size</span><span class="p" data-group-id="6150046687-3">(</span><span class="n">A1</span><span class="p" data-group-id="6150046687-3">)</span><span class="p">.</span></code></pre><p>Read back a stored value:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="3929191008-1">(</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="3929191008-1">)</span><span class="p">.</span></code></pre><p>Accessing an unset entry returns default value:</p><pre><code class="makeup erlang" translate="no"><span class="ss">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="9181947947-1">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="9181947947-1">)</span></code></pre><p>Accessing an entry beyond the last set entry also returns the default value, if
+the array does not have fixed size:</p><pre><code class="makeup erlang" translate="no"><span class="ss">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="6257425557-1">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="6257425557-1">)</span><span class="p">.</span></code></pre><p>&quot;Sparse&quot; functions ignore default-valued entries:</p><pre><code class="makeup erlang" translate="no"><span class="n">A2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="0597218834-1">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p">,</span><span class="w"> </span><span class="n">A1</span><span class="p" data-group-id="0597218834-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="0597218834-2">[</span><span class="p" data-group-id="0597218834-3">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="0597218834-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0597218834-4">{</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p" data-group-id="0597218834-4">}</span><span class="p" data-group-id="0597218834-2">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">sparse_to_orddict</span><span class="p" data-group-id="0597218834-5">(</span><span class="n">A2</span><span class="p" data-group-id="0597218834-5">)</span><span class="p">.</span></code></pre><p>An extendible array can be made fixed-size later:</p><pre><code class="makeup erlang" translate="no"><span class="n">A3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">fix</span><span class="p" data-group-id="8754995536-1">(</span><span class="n">A2</span><span class="p" data-group-id="8754995536-1">)</span><span class="p">.</span></code></pre><p>A fixed-size array does not grow automatically and does not allow accesses
+beyond the last set entry:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="3722790637-1">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="3722790637-2">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="3722790637-2">}</span><span class="p" data-group-id="3722790637-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3722790637-3">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">set</span><span class="p" data-group-id="3722790637-4">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="3722790637-4">)</span><span class="p" data-group-id="3722790637-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="3722790637-5">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="p" data-group-id="3722790637-6">{</span><span class="ss">badarg</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="3722790637-6">}</span><span class="p" data-group-id="3722790637-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3722790637-7">(</span><span class="k">catch</span><span class="w"> </span><span class="nc">array</span><span class="p">:</span><span class="nf">get</span><span class="p" data-group-id="3722790637-8">(</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">A3</span><span class="p" data-group-id="3722790637-8">)</span><span class="p" data-group-id="3722790637-7">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -559,15 +559,13 @@ default-valued entries.</p></div>
 <section class="detail" id="t:array/0">
 
   <div class="detail-header">
-    <a href="#t:array/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:array/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">array()</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L181" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L181" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -587,15 +585,13 @@ default-valued entries.</p></div>
 <section class="detail" id="t:array/1">
 
   <div class="detail-header">
-    <a href="#t:array/1" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:array/1" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">array(Type)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L188" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L188" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -617,15 +613,13 @@ for equality.</p>
 <section class="detail" id="t:array_indx/0">
 
   <div class="detail-header">
-    <a href="#t:array_indx/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:array_indx/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">array_indx()</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L195" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L195" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -647,15 +641,13 @@ for equality.</p>
 <section class="detail" id="t:array_opt/0">
 
   <div class="detail-header">
-    <a href="#t:array_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:array_opt/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">array_opt()</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L197" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L197" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -682,15 +674,13 @@ for equality.</p>
 <section class="detail" id="t:array_opts/0">
 
   <div class="detail-header">
-    <a href="#t:array_opts/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:array_opts/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">array_opts()</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L201" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L201" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -712,15 +702,13 @@ for equality.</p>
 <section class="detail" id="t:indx_pair/1">
 
   <div class="detail-header">
-    <a href="#t:indx_pair/1" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:indx_pair/1" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">indx_pair(Type)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L203" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L203" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -742,15 +730,13 @@ for equality.</p>
 <section class="detail" id="t:indx_pairs/1">
 
   <div class="detail-header">
-    <a href="#t:indx_pairs/1" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:indx_pairs/1" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">indx_pairs(Type)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L204" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L204" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -784,15 +770,13 @@ for equality.</p>
 <section class="detail" id="default/1">
 
   <div class="detail-header">
-    <a href="#default/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#default/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">default(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L372" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L372" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -812,15 +796,13 @@ for equality.</p>
 <section class="detail" id="fix/1">
 
   <div class="detail-header">
-    <a href="#fix/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#fix/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">fix(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L457" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L457" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -841,15 +823,13 @@ insertion.</p><p>See also <a href="#set/3"><code class="inline">set/3</code></a>
 <section class="detail" id="foldl/3">
 
   <div class="detail-header">
-    <a href="#foldl/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#foldl/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">foldl(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1639" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1639" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -871,15 +851,13 @@ value. The elements are visited in order from the lowest index to the highest.</
 <section class="detail" id="foldr/3">
 
   <div class="detail-header">
-    <a href="#foldr/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#foldr/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">foldr(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1790" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1790" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -902,15 +880,13 @@ the lowest.</p><p>If <code class="inline">Function</code> is not a function, the
 <section class="detail" id="from_list/1">
 
   <div class="detail-header">
-    <a href="#from_list/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#from_list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">from_list(List)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L953" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L953" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -930,15 +906,13 @@ the lowest.</p><p>If <code class="inline">Function</code> is not a function, the
 <section class="detail" id="from_list/2">
 
   <div class="detail-header">
-    <a href="#from_list/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#from_list/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">from_list(List, Default)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L966" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L966" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -959,15 +933,13 @@ uninitialized entries of the array.</p><p>If <code class="inline">List</code> is
 <section class="detail" id="from_orddict/1">
 
   <div class="detail-header">
-    <a href="#from_orddict/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#from_orddict/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">from_orddict(Orddict)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1240" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1240" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -987,15 +959,13 @@ uninitialized entries of the array.</p><p>If <code class="inline">List</code> is
 <section class="detail" id="from_orddict/2">
 
   <div class="detail-header">
-    <a href="#from_orddict/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#from_orddict/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">from_orddict(Orddict, Default)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1255" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1255" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1017,15 +987,13 @@ non-negative integers, the call fails with reason <code class="inline">badarg</c
 <section class="detail" id="get/2">
 
   <div class="detail-header">
-    <a href="#get/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#get/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get(I, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L684" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L684" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1047,15 +1015,13 @@ greater than <code class="inline">size(Array)-1</code> is returned.</p><p>See al
 <section class="detail" id="is_array/1">
 
   <div class="detail-header">
-    <a href="#is_array/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#is_array/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">is_array(X)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L345" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L345" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1076,15 +1042,13 @@ well-formed array representation even if this function returns <code class="inli
 <section class="detail" id="is_fix/1">
 
   <div class="detail-header">
-    <a href="#is_fix/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#is_fix/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">is_fix(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L469" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L469" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1105,15 +1069,13 @@ otherwise <code class="inline">false</code>.</p><p>See also <a href="#fix/1"><co
 <section class="detail" id="map/2">
 
   <div class="detail-header">
-    <a href="#map/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#map/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">map(Function, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1452" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1452" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1135,15 +1097,13 @@ order from the lowest index to the highest.</p><p>If <code class="inline">Functi
 <section class="detail" id="new/0">
 
   <div class="detail-header">
-    <a href="#new/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#new/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">new()</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L215" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L215" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1163,15 +1123,13 @@ order from the lowest index to the highest.</p><p>If <code class="inline">Functi
 <section class="detail" id="new/1">
 
   <div class="detail-header">
-    <a href="#new/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#new/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">new(Options)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L264" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L264" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1190,21 +1148,19 @@ extendible and has initial size zero. Array indices start at <code class="inline
 array size; this also implies <code class="inline">{fixed, true}</code>. If <code class="inline">N</code> is not a non-negative
 integer, the call fails with reason <code class="inline">badarg</code>.</p></li><li><p><strong><code class="inline">fixed</code> or <code class="inline">{fixed, true}</code></strong> - Creates a fixed-size array. See also <a href="#fix/1"><code class="inline">fix/1</code></a>.</p></li><li><p><strong><code class="inline">{fixed, false}</code></strong> - Creates an extendible (non-fixed-size) array.</p></li><li><p><strong><code class="inline">{default, Value}</code></strong> - Sets the default value for the array to <code class="inline">Value</code>.</p></li></ul><p>Options are processed in the order they occur in the list, that is, later
 options have higher precedence.</p><p>The default value is used as the value of uninitialized entries, and cannot be
-changed once the array has been created.</p><p><em>Examples:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="8345748313-1">(</span><span class="mi">100</span><span class="p" data-group-id="8345748313-1">)</span></code></pre><p>creates a fixed-size array of size 100.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="7958475952-1">(</span><span class="p" data-group-id="7958475952-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="7958475952-2">}</span><span class="p" data-group-id="7958475952-1">)</span></code></pre><p>creates an empty, extendible array whose default value is <code class="inline">0</code>.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="9481947009-1">(</span><span class="p" data-group-id="9481947009-2">[</span><span class="p" data-group-id="9481947009-3">{</span><span class="nb">size</span><span class="p">,</span><span class="mi">10</span><span class="p" data-group-id="9481947009-3">}</span><span class="p">,</span><span class="p" data-group-id="9481947009-4">{</span><span class="ss">fixed</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="9481947009-4">}</span><span class="p">,</span><span class="p" data-group-id="9481947009-5">{</span><span class="ss">default</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="9481947009-5">}</span><span class="p" data-group-id="9481947009-2">]</span><span class="p" data-group-id="9481947009-1">)</span></code></pre><p>creates an extendible array with initial size 10 whose default value is <code class="inline">-1</code>.</p><p>See also <a href="#fix/1"><code class="inline">fix/1</code></a>, <a href="#from_list/2"><code class="inline">from_list/2</code></a>, <a href="#get/2"><code class="inline">get/2</code></a>, <a href="#new/0"><code class="inline">new/0</code></a>, <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#set/3"><code class="inline">set/3</code></a>.</p>
+changed once the array has been created.</p><p><em>Examples:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="8774769267-1">(</span><span class="mi">100</span><span class="p" data-group-id="8774769267-1">)</span></code></pre><p>creates a fixed-size array of size 100.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="6062336569-1">(</span><span class="p" data-group-id="6062336569-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="6062336569-2">}</span><span class="p" data-group-id="6062336569-1">)</span></code></pre><p>creates an empty, extendible array whose default value is <code class="inline">0</code>.</p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="1943867606-1">(</span><span class="p" data-group-id="1943867606-2">[</span><span class="p" data-group-id="1943867606-3">{</span><span class="nb">size</span><span class="p">,</span><span class="mi">10</span><span class="p" data-group-id="1943867606-3">}</span><span class="p">,</span><span class="p" data-group-id="1943867606-4">{</span><span class="ss">fixed</span><span class="p">,</span><span class="ss">false</span><span class="p" data-group-id="1943867606-4">}</span><span class="p">,</span><span class="p" data-group-id="1943867606-5">{</span><span class="ss">default</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="1943867606-5">}</span><span class="p" data-group-id="1943867606-2">]</span><span class="p" data-group-id="1943867606-1">)</span></code></pre><p>creates an extendible array with initial size 10 whose default value is <code class="inline">-1</code>.</p><p>See also <a href="#fix/1"><code class="inline">fix/1</code></a>, <a href="#from_list/2"><code class="inline">from_list/2</code></a>, <a href="#get/2"><code class="inline">get/2</code></a>, <a href="#new/0"><code class="inline">new/0</code></a>, <a href="#new/2"><code class="inline">new/2</code></a>, <a href="#set/3"><code class="inline">set/3</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="new/2">
 
   <div class="detail-header">
-    <a href="#new/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#new/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">new(Size, Options)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L291" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L291" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1223,21 +1179,19 @@ By default, the array has fixed size. Notice that any size specifications in
 <code class="inline">Options</code> override parameter <code class="inline">Size</code>.</p><p>If <code class="inline">Options</code> is a list, this is equivalent to
 <a href="#new/1"><code class="inline">new([{size, Size} | Options])</code></a>, otherwise it is equivalent to
 <a href="#new/1"><code class="inline">new([{size, Size} | [Options]])</code></a>. However, using this function
-directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="0170289401-1">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0170289401-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="0170289401-2">}</span><span class="p" data-group-id="0170289401-1">)</span></code></pre><p>creates a fixed-size array of size 100, whose default value is <code class="inline">0</code>.</p><p>See also <a href="#new/1"><code class="inline">new/1</code></a>.</p>
+directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup erlang" translate="no"><span class="nc">array</span><span class="p">:</span><span class="nf">new</span><span class="p" data-group-id="5441682849-1">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5441682849-2">{</span><span class="ss">default</span><span class="p">,</span><span class="mi">0</span><span class="p" data-group-id="5441682849-2">}</span><span class="p" data-group-id="5441682849-1">)</span></code></pre><p>creates a fixed-size array of size 100, whose default value is <code class="inline">0</code>.</p><p>See also <a href="#new/1"><code class="inline">new/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="relax/1">
 
   <div class="detail-header">
-    <a href="#relax/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#relax/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">relax(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L508" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L508" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1257,15 +1211,13 @@ directly is more efficient.</p><p><em>Example:</em></p><pre><code class="makeup 
 <section class="detail" id="reset/2">
 
   <div class="detail-header">
-    <a href="#reset/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reset/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reset(I, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L725" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L725" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1289,15 +1241,13 @@ larger than the maximum index, the call fails with reason <code class="inline">b
 <section class="detail" id="resize/1">
 
   <div class="detail-header">
-    <a href="#resize/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#resize/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">resize(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L568" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L568" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1318,15 +1268,13 @@ array has fixed size, also the resulting array has fixed size.</p><p>See also <a
 <section class="detail" id="resize/2">
 
   <div class="detail-header">
-    <a href="#resize/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#resize/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">resize(Size, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L536" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L536" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1347,15 +1295,13 @@ the specified array has fixed size, also the resulting array has fixed size.</p>
 <section class="detail" id="set/3">
 
   <div class="detail-header">
-    <a href="#set/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#set/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">set(I, Value, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L619" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L619" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1377,15 +1323,13 @@ the array grows to size <code class="inline">I+1</code>.</p><p>See also <a href=
 <section class="detail" id="size/1">
 
   <div class="detail-header">
-    <a href="#size/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#size/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">size(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L361" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L361" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1407,15 +1351,13 @@ guaranteed to not have been previously set.</p><p>See also <a href="#set/3"><cod
 <section class="detail" id="sparse_foldl/3">
 
   <div class="detail-header">
-    <a href="#sparse_foldl/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#sparse_foldl/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sparse_foldl(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1712" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1712" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1438,15 +1380,13 @@ the lowest index to the highest.</p><p>If <code class="inline">Function</code> i
 <section class="detail" id="sparse_foldr/3">
 
   <div class="detail-header">
-    <a href="#sparse_foldr/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#sparse_foldr/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sparse_foldr(Function, InitialAcc, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1868" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1868" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1469,15 +1409,13 @@ order from the highest index to the lowest.</p><p>If <code class="inline">Functi
 <section class="detail" id="sparse_map/2">
 
   <div class="detail-header">
-    <a href="#sparse_map/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#sparse_map/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sparse_map(Function, Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1544" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1544" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1499,15 +1437,13 @@ entries. The elements are visited in order from the lowest index to the highest.
 <section class="detail" id="sparse_size/1">
 
   <div class="detail-header">
-    <a href="#sparse_size/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#sparse_size/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sparse_size(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1918" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1918" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1529,15 +1465,13 @@ array, or zero if no such entry exists.</p><p>See also <a href="#resize/1"><code
 <section class="detail" id="sparse_to_list/1">
 
   <div class="detail-header">
-    <a href="#sparse_to_list/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#sparse_to_list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sparse_to_list(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L885" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L885" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1557,15 +1491,13 @@ array, or zero if no such entry exists.</p><p>See also <a href="#resize/1"><code
 <section class="detail" id="sparse_to_orddict/1">
 
   <div class="detail-header">
-    <a href="#sparse_to_orddict/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#sparse_to_orddict/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">sparse_to_orddict(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1158" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1158" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1586,15 +1518,13 @@ default-valued entries.</p><p>See also <a href="#to_orddict/1"><code class="inli
 <section class="detail" id="to_list/1">
 
   <div class="detail-header">
-    <a href="#to_list/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#to_list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_list(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L811" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L811" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1614,15 +1544,13 @@ default-valued entries.</p><p>See also <a href="#to_orddict/1"><code class="inli
 <section class="detail" id="to_orddict/1">
 
   <div class="detail-header">
-    <a href="#to_orddict/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#to_orddict/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">to_orddict(Array)</h1>
 
-      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1065" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/qzhuyan/otp/blob/fix/william/openssl-mac-refcnt/lib/stdlib/src/array.erl#L1065" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1660,7 +1588,7 @@ default-valued entries.</p><p>See also <a href="#to_orddict/1"><code class="inli
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
