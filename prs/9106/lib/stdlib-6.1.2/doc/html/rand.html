@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.35.1">
     <meta name="project" content="stdlib v6.1.2">
 
 
     <title>rand — stdlib v6.1.2</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
+    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
     <script src="dist/sidebar_items-3EFE45AC.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script async src="dist/html-PVRIOB7F.js"></script>
 <style type="text/css">
   .monospace-font > code {
     font-family: monospace;
@@ -186,7 +186,7 @@ See the <a href="http://xorshift.di.unimi.it">algorithms' homepage</a>.</p></li>
 required, ensure to always use <a href="#seed/1"><code class="inline">seed/1</code></a> to initialize the state.</p><p>Which algorithm that is the default may change between Erlang/OTP releases,
 and is selected to be one with high speed, small state and &quot;good enough&quot;
 statistical properties.</p><h4>Old Algorithms</h4><p>Undocumented (old) algorithms are deprecated but still implemented so old code
-relying on them will produce the same pseudo random sequences as before.</p><blockquote><h4 class="info">Note</h4><p>There were a number of problems in the implementation of
+relying on them will produce the same pseudo random sequences as before.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>There were a number of problems in the implementation of
 the now undocumented algorithms, which is why they are deprecated.
 The new algorithms are a bit slower but do not have these problems:</p><p>Uniform integer ranges had a skew in the probability distribution
 that was not noticable for small ranges but for large ranges
@@ -198,7 +198,7 @@ in the requested range weren't even possible to produce.</p><p>Uniform floats ha
 less than 0.5 had got smaller intervals decreasing as the generated value
 approached 0.0 although still uniformly distributed for sufficiently large
 subranges. The new algorithms produces uniformly distributed floats
-on the form <code class="inline">N * 2.0^(-53)</code> hence they are equally spaced.</p></blockquote><p><a href="" id="generator-state"></a></p><h4>Generator State</h4><p>Every time a random number is generated, a state is used to calculate it,
+on the form <code class="inline">N * 2.0^(-53)</code> hence they are equally spaced.</p></section><p><a href="" id="generator-state"></a></p><h4>Generator State</h4><p>Every time a random number is generated, a state is used to calculate it,
 producing a new state. The state can either be implicit
 or be an explicit argument and return value.</p><p>The functions with implicit state operates on a state stored
 in the process dictionary under the key <code class="inline">rand_seed</code>.  If that key
@@ -207,15 +207,15 @@ with the <a href="#default-algorithm"><em>default algorithm</em></a> and creates
 a reasonably unpredictable seed.</p><p>The functions with explicit state don't use the process dictionary.</p><h4><em>Examples</em></h4><p>Simple use; create and seed the
 <a href="#default-algorithm"><em>default algorithm</em></a> with a non-fixed seed,
 if not already done, and generate two uniformly distibuted
-floating point numbers.</p><pre><code class="makeup erlang" translate="no"><span class="n">R0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="7669677603-1">(</span><span class="p" data-group-id="7669677603-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">R1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="7669677603-2">(</span><span class="p" data-group-id="7669677603-2">)</span><span class="p">,</span></code></pre><p>Use a specified algorithm:</p><pre><code class="makeup erlang" translate="no"><span class="p">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">seed</span><span class="p" data-group-id="5753494609-1">(</span><span class="ss">exro928ss</span><span class="p" data-group-id="5753494609-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">R2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="5753494609-2">(</span><span class="p" data-group-id="5753494609-2">)</span><span class="p">,</span></code></pre><p>Use a specified algorithm with a fixed seed:</p><pre><code class="makeup erlang" translate="no"><span class="p">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">seed</span><span class="p" data-group-id="8620602339-1">(</span><span class="ss">exro928ss</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8620602339-2">{</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">123534</span><span class="p">,</span><span class="w"> </span><span class="mi">345345</span><span class="p" data-group-id="8620602339-2">}</span><span class="p" data-group-id="8620602339-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">R3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="8620602339-3">(</span><span class="p" data-group-id="8620602339-3">)</span><span class="p">,</span></code></pre><p>Use the functional API with a non-fixed seed:</p><pre><code class="makeup erlang" translate="no"><span class="n">S0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">seed_s</span><span class="p" data-group-id="3292599397-1">(</span><span class="ss">exsss</span><span class="p" data-group-id="3292599397-1">)</span><span class="p">,</span><span class="w">
-</span><span class="p" data-group-id="3292599397-2">{</span><span class="n">R4</span><span class="p">,</span><span class="w"> </span><span class="n">S1</span><span class="p" data-group-id="3292599397-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform_s</span><span class="p" data-group-id="3292599397-3">(</span><span class="n">S0</span><span class="p" data-group-id="3292599397-3">)</span><span class="p">,</span></code></pre><p>Generate a textbook basic form Box-Muller standard normal distribution number:</p><pre><code class="makeup erlang" translate="no"><span class="n">R5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform_real</span><span class="p" data-group-id="6313539392-1">(</span><span class="p" data-group-id="6313539392-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">R6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="6313539392-2">(</span><span class="p" data-group-id="6313539392-2">)</span><span class="p">,</span><span class="w">
-</span><span class="n">SND0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">math</span><span class="p">:</span><span class="nf">sqrt</span><span class="p" data-group-id="6313539392-3">(</span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">math</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="6313539392-4">(</span><span class="n">R5</span><span class="p" data-group-id="6313539392-4">)</span><span class="p" data-group-id="6313539392-3">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">math</span><span class="p">:</span><span class="nf">cos</span><span class="p" data-group-id="6313539392-5">(</span><span class="nc">math</span><span class="p">:</span><span class="nf">pi</span><span class="p" data-group-id="6313539392-6">(</span><span class="p" data-group-id="6313539392-6">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">R6</span><span class="p" data-group-id="6313539392-5">)</span></code></pre><p>Generate a standard normal distribution number:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="9516974578-1">{</span><span class="n">SND1</span><span class="p">,</span><span class="w"> </span><span class="n">S2</span><span class="p" data-group-id="9516974578-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">normal_s</span><span class="p" data-group-id="9516974578-2">(</span><span class="n">S1</span><span class="p" data-group-id="9516974578-2">)</span><span class="p">,</span></code></pre><p>Generate a normal distribution number with with mean -3 and variance 0.5:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="4725722692-1">{</span><span class="n">ND0</span><span class="p">,</span><span class="w"> </span><span class="n">S3</span><span class="p" data-group-id="4725722692-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">normal_s</span><span class="p" data-group-id="4725722692-2">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">S2</span><span class="p" data-group-id="4725722692-2">)</span><span class="p">,</span></code></pre><h4>Quality of the Generated Numbers</h4><blockquote><h4 class="info">Note</h4><p>The builtin random number generator algorithms are not cryptographically
+floating point numbers.</p><pre><code class="makeup erlang" translate="no"><span class="n">R0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="6279753050-1">(</span><span class="p" data-group-id="6279753050-1">)</span><span class="p">,</span><span class="w">
+</span><span class="n">R1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="6279753050-2">(</span><span class="p" data-group-id="6279753050-2">)</span><span class="p">,</span></code></pre><p>Use a specified algorithm:</p><pre><code class="makeup erlang" translate="no"><span class="p">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">seed</span><span class="p" data-group-id="1597812006-1">(</span><span class="ss">exro928ss</span><span class="p" data-group-id="1597812006-1">)</span><span class="p">,</span><span class="w">
+</span><span class="n">R2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="1597812006-2">(</span><span class="p" data-group-id="1597812006-2">)</span><span class="p">,</span></code></pre><p>Use a specified algorithm with a fixed seed:</p><pre><code class="makeup erlang" translate="no"><span class="p">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">seed</span><span class="p" data-group-id="3014960152-1">(</span><span class="ss">exro928ss</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3014960152-2">{</span><span class="mi">123</span><span class="p">,</span><span class="w"> </span><span class="mi">123534</span><span class="p">,</span><span class="w"> </span><span class="mi">345345</span><span class="p" data-group-id="3014960152-2">}</span><span class="p" data-group-id="3014960152-1">)</span><span class="p">,</span><span class="w">
+</span><span class="n">R3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="3014960152-3">(</span><span class="p" data-group-id="3014960152-3">)</span><span class="p">,</span></code></pre><p>Use the functional API with a non-fixed seed:</p><pre><code class="makeup erlang" translate="no"><span class="n">S0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">seed_s</span><span class="p" data-group-id="6355269817-1">(</span><span class="ss">exsss</span><span class="p" data-group-id="6355269817-1">)</span><span class="p">,</span><span class="w">
+</span><span class="p" data-group-id="6355269817-2">{</span><span class="n">R4</span><span class="p">,</span><span class="w"> </span><span class="n">S1</span><span class="p" data-group-id="6355269817-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform_s</span><span class="p" data-group-id="6355269817-3">(</span><span class="n">S0</span><span class="p" data-group-id="6355269817-3">)</span><span class="p">,</span></code></pre><p>Generate a textbook basic form Box-Muller standard normal distribution number:</p><pre><code class="makeup erlang" translate="no"><span class="n">R5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform_real</span><span class="p" data-group-id="2037242221-1">(</span><span class="p" data-group-id="2037242221-1">)</span><span class="p">,</span><span class="w">
+</span><span class="n">R6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="2037242221-2">(</span><span class="p" data-group-id="2037242221-2">)</span><span class="p">,</span><span class="w">
+</span><span class="n">SND0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">math</span><span class="p">:</span><span class="nf">sqrt</span><span class="p" data-group-id="2037242221-3">(</span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">math</span><span class="p">:</span><span class="nf">log</span><span class="p" data-group-id="2037242221-4">(</span><span class="n">R5</span><span class="p" data-group-id="2037242221-4">)</span><span class="p" data-group-id="2037242221-3">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">math</span><span class="p">:</span><span class="nf">cos</span><span class="p" data-group-id="2037242221-5">(</span><span class="nc">math</span><span class="p">:</span><span class="nf">pi</span><span class="p" data-group-id="2037242221-6">(</span><span class="p" data-group-id="2037242221-6">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">R6</span><span class="p" data-group-id="2037242221-5">)</span></code></pre><p>Generate a standard normal distribution number:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="8403918452-1">{</span><span class="n">SND1</span><span class="p">,</span><span class="w"> </span><span class="n">S2</span><span class="p" data-group-id="8403918452-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">normal_s</span><span class="p" data-group-id="8403918452-2">(</span><span class="n">S1</span><span class="p" data-group-id="8403918452-2">)</span><span class="p">,</span></code></pre><p>Generate a normal distribution number with with mean -3 and variance 0.5:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="5760591832-1">{</span><span class="n">ND0</span><span class="p">,</span><span class="w"> </span><span class="n">S3</span><span class="p" data-group-id="5760591832-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">normal_s</span><span class="p" data-group-id="5760591832-2">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">S2</span><span class="p" data-group-id="5760591832-2">)</span><span class="p">,</span></code></pre><h4>Quality of the Generated Numbers</h4><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>The builtin random number generator algorithms are not cryptographically
 strong. If a cryptographically strong random number generator is needed,
-use something like <a href="../../../../lib/crypto-5.5.1/doc/html/crypto.html#rand_seed/0"><code class="inline">crypto:rand_seed/0</code></a>.</p></blockquote><p>For all these generators except <code class="inline">exro928ss</code> and <code class="inline">exsss</code> the lowest bit(s)
+use something like <a href="../../../../lib/crypto-5.5.1/doc/html/crypto.html#rand_seed/0"><code class="inline">crypto:rand_seed/0</code></a>.</p></section><p>For all these generators except <code class="inline">exro928ss</code> and <code class="inline">exsss</code> the lowest bit(s)
 have got a slightly less random behaviour than all other bits.
 1 bit for <code class="inline">exrop</code> (and <code class="inline">exsp</code>), and 3 bits for <code class="inline">exs1024s</code>. See for example
 this explanation in the
@@ -224,7 +224,7 @@ generator source code:</p><blockquote><p>Beside passing BigCrush, this generator
 up to (and included) 16TB, with the exception of binary rank tests,
 which fail due to the lowest bit being an LFSR; all other bits pass all
 tests. We suggest to use a sign test to extract a random Boolean value.</p></blockquote><p>If this is a problem; to generate a boolean with these algorithms,
-use something like this:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="3143862297-1">(</span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="3143862297-2">(</span><span class="mi">256</span><span class="p" data-group-id="3143862297-2">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">128</span><span class="p" data-group-id="3143862297-1">)</span><span class="w"> </span><span class="c1">% -&gt; boolean()</span></code></pre><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="7906341847-1">(</span><span class="p" data-group-id="7906341847-2">(</span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="7906341847-3">(</span><span class="mi">256</span><span class="p" data-group-id="7906341847-3">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7906341847-2">)</span><span class="w"> </span><span class="ow">bsr</span><span class="w"> </span><span class="mi">7</span><span class="p" data-group-id="7906341847-1">)</span><span class="w"> </span><span class="c1">% -&gt; 0 | 1</span></code></pre><p>For a general range, with <code class="inline">N = 1</code> for <code class="inline">exrop</code>, and <code class="inline">N = 3</code> for <code class="inline">exs1024s</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="3757003902-1">(</span><span class="p" data-group-id="3757003902-2">(</span><span class="p" data-group-id="3757003902-3">(</span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="3757003902-4">(</span><span class="n">Range</span><span class="w"> </span><span class="ow">bsl</span><span class="w"> </span><span class="n">N</span><span class="p" data-group-id="3757003902-4">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3757003902-3">)</span><span class="w"> </span><span class="ow">bsr</span><span class="w"> </span><span class="n">N</span><span class="p" data-group-id="3757003902-2">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3757003902-1">)</span></code></pre><p>The floating point generating functions in this module waste the lowest bits
+use something like this:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="6400149848-1">(</span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="6400149848-2">(</span><span class="mi">256</span><span class="p" data-group-id="6400149848-2">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">128</span><span class="p" data-group-id="6400149848-1">)</span><span class="w"> </span><span class="c1">% -&gt; boolean()</span></code></pre><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="3057379822-1">(</span><span class="p" data-group-id="3057379822-2">(</span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="3057379822-3">(</span><span class="mi">256</span><span class="p" data-group-id="3057379822-3">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3057379822-2">)</span><span class="w"> </span><span class="ow">bsr</span><span class="w"> </span><span class="mi">7</span><span class="p" data-group-id="3057379822-1">)</span><span class="w"> </span><span class="c1">% -&gt; 0 | 1</span></code></pre><p>For a general range, with <code class="inline">N = 1</code> for <code class="inline">exrop</code>, and <code class="inline">N = 3</code> for <code class="inline">exs1024s</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="6236015013-1">(</span><span class="p" data-group-id="6236015013-2">(</span><span class="p" data-group-id="6236015013-3">(</span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="6236015013-4">(</span><span class="n">Range</span><span class="w"> </span><span class="ow">bsl</span><span class="w"> </span><span class="n">N</span><span class="p" data-group-id="6236015013-4">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6236015013-3">)</span><span class="w"> </span><span class="ow">bsr</span><span class="w"> </span><span class="n">N</span><span class="p" data-group-id="6236015013-2">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6236015013-1">)</span></code></pre><p>The floating point generating functions in this module waste the lowest bits
 when converting from an integer so they avoid this snag.</p><h2 id="module-niche-algorithms" class="section-heading">
   <a href="#module-niche-algorithms" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -782,15 +782,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:alg/0">
 
   <div class="detail-header">
-    <a href="#t:alg/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:alg/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">alg()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L518" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L518" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -812,15 +810,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:alg_handler/0">
 
   <div class="detail-header">
-    <a href="#t:alg_handler/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:alg_handler/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">alg_handler()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L498" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L498" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -850,15 +846,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:alg_state/0">
 
   <div class="detail-header">
-    <a href="#t:alg_state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:alg_state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">alg_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L469" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L469" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -887,15 +881,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:builtin_alg/0">
 
   <div class="detail-header">
-    <a href="#t:builtin_alg/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:builtin_alg/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">builtin_alg()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L515" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L515" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -917,15 +909,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:dummy_state/0">
 
   <div class="detail-header">
-    <a href="#t:dummy_state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:dummy_state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">dummy_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2108" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2108" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -947,15 +937,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:export_state/0">
 
   <div class="detail-header">
-    <a href="#t:export_state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:export_state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">export_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L520" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L520" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -977,15 +965,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:exro928_state/0">
 
   <div class="detail-header">
-    <a href="#t:exro928_state/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:exro928_state/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">exro928_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1853" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1853" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1007,15 +993,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:exrop_state/0">
 
   <div class="detail-header">
-    <a href="#t:exrop_state/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:exrop_state/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">exrop_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2025" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2025" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1037,15 +1021,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:exs64_state/0">
 
   <div class="detail-header">
-    <a href="#t:exs64_state/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:exs64_state/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">exs64_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1383" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1383" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1067,15 +1049,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:exs1024_state/0">
 
   <div class="detail-header">
-    <a href="#t:exs1024_state/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:exs1024_state/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">exs1024_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1667" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1667" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1097,15 +1077,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:exsplus_state/0">
 
   <div class="detail-header">
-    <a href="#t:exsplus_state/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:exsplus_state/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">exsplus_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1446" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1446" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1127,15 +1105,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:mwc59_state/0">
 
   <div class="detail-header">
-    <a href="#t:mwc59_state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:mwc59_state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">mwc59_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2193" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2193" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1157,15 +1133,13 @@ using the state in the process dictionary.</p></div>
 <section class="detail" id="t:seed/0">
 
   <div class="detail-header">
-    <a href="#t:seed/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:seed/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">seed()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L537" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L537" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1194,15 +1168,13 @@ hashing functions to create the generator's initial state.</p>
 <section class="detail" id="t:splitmix64_state/0">
 
   <div class="detail-header">
-    <a href="#t:splitmix64_state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:splitmix64_state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">splitmix64_state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2462" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2462" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1224,15 +1196,13 @@ hashing functions to create the generator's initial state.</p>
 <section class="detail" id="t:state/0">
 
   <div class="detail-header">
-    <a href="#t:state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L514" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L514" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1254,15 +1224,13 @@ hashing functions to create the generator's initial state.</p>
 <section class="detail" id="t:uint58/0">
 
   <div class="detail-header">
-    <a href="#t:uint58/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:uint58/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">uint58()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L466" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L466" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1284,15 +1252,13 @@ hashing functions to create the generator's initial state.</p>
 <section class="detail" id="t:uint64/0">
 
   <div class="detail-header">
-    <a href="#t:uint64/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:uint64/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">uint64()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L464" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L464" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1326,15 +1292,13 @@ hashing functions to create the generator's initial state.</p>
 <section class="detail" id="bytes/1">
 
   <div class="detail-header">
-    <a href="#bytes/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#bytes/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">bytes(N)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1115" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1115" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1358,15 +1322,13 @@ the process dictionary.  Returns the generated <a href="../../../../erts-15.1.2/
 <section class="detail" id="bytes_s/2">
 
   <div class="detail-header">
-    <a href="#bytes_s/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#bytes_s/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">bytes_s(N, State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1137" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1137" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1391,15 +1353,13 @@ as required to compose the <a href="../../../../erts-15.1.2/doc/html/erlang.html
 <section class="detail" id="export_seed/0">
 
   <div class="detail-header">
-    <a href="#export_seed/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#export_seed/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">export_seed()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L643" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L643" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1422,15 +1382,13 @@ To be used with <a href="#seed/1"><code class="inline">seed/1</code></a>.</p>
 <section class="detail" id="export_seed_s/1">
 
   <div class="detail-header">
-    <a href="#export_seed_s/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#export_seed_s/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">export_seed_s(State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L657" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L657" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1453,15 +1411,13 @@ To be used with <a href="#seed/1"><code class="inline">seed/1</code></a>.</p>
 <section class="detail" id="jump/0">
 
   <div class="detail-header">
-    <a href="#jump/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#jump/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">jump()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1234" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1234" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1484,15 +1440,13 @@ the process dictionary.  Returns the <a href="#t:state/0"><code class="inline">N
 <section class="detail" id="jump/1">
 
   <div class="detail-header">
-    <a href="#jump/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#jump/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">jump(State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1215" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1215" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1518,15 +1472,13 @@ no jump function implemented for the <a href="#t:state/0"><code class="inline">S
 <section class="detail" id="normal/0">
 
   <div class="detail-header">
-    <a href="#normal/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#normal/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">normal()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1248" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1248" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1549,15 +1501,13 @@ the process dictionary.  Returns the generated number <code class="inline">X</co
 <section class="detail" id="normal/2">
 
   <div class="detail-header">
-    <a href="#normal/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#normal/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">normal(Mean, Variance)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1264" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1264" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1580,15 +1530,13 @@ the process dictionary.  Returns the generated number <code class="inline">X</co
 <section class="detail" id="normal_s/1">
 
   <div class="detail-header">
-    <a href="#normal_s/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#normal_s/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">normal_s(State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1283" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1283" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1613,15 +1561,13 @@ and the <a href="#t:state/0"><code class="inline">NewState</code></a>.</p>
 <section class="detail" id="normal_s/3">
 
   <div class="detail-header">
-    <a href="#normal_s/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#normal_s/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">normal_s(Mean, Variance, State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1315" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1315" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1646,15 +1592,13 @@ where <code class="inline">Variance &gt;= 0.0</code>.</p><p>Returns <a href=".
 <section class="detail" id="seed/1">
 
   <div class="detail-header">
-    <a href="#seed/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#seed/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">seed(Alg_or_State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L678" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L678" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1679,15 +1623,13 @@ that has been implemented <em>(Since OTP 24.0)</em>.</p>
 <section class="detail" id="seed/2">
 
   <div class="detail-header">
-    <a href="#seed/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#seed/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">seed(Alg, Seed)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L726" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L726" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1712,15 +1654,13 @@ that has been implemented <em>(Since OTP 24.0)</em>.</p>
 <section class="detail" id="seed_s/1">
 
   <div class="detail-header">
-    <a href="#seed_s/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#seed_s/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">seed_s/1</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L698" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L698" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1747,15 +1687,13 @@ See also <a href="#export_seed/0"><code class="inline">export_seed/0</code></a>.
 <section class="detail" id="seed_s/2">
 
   <div class="detail-header">
-    <a href="#seed_s/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#seed_s/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">seed_s(Alg, Seed)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L742" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L742" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1779,15 +1717,13 @@ that has been implemented <em>since OTP 24.0</em>.</p>
 <section class="detail" id="uniform/0">
 
   <div class="detail-header">
-    <a href="#uniform/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#uniform/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">uniform()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L763" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L763" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1811,15 +1747,13 @@ the process dictionary.  Returns the generated number <code class="inline">X</co
 <section class="detail" id="uniform/1">
 
   <div class="detail-header">
-    <a href="#uniform/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#uniform/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">uniform(N)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L781" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L781" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1843,15 +1777,13 @@ the process dictionary.  Returns the generated number <code class="inline">X</co
 <section class="detail" id="uniform_real/0">
 
   <div class="detail-header">
-    <a href="#uniform_real/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#uniform_real/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">uniform_real()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L880" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L880" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1875,15 +1807,13 @@ the process dictionary.  Returns the generated number <code class="inline">X</co
 <section class="detail" id="uniform_real_s/1">
 
   <div class="detail-header">
-    <a href="#uniform_real_s/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#uniform_real_s/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">uniform_real_s(State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L958" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L958" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1902,11 +1832,11 @@ the process dictionary.  Returns the generated number <code class="inline">X</co
 <p>Generate a uniformly distributed random number <code class="inline">0.0 &lt; X &lt; 1.0</code>.</p><p>From the specified state, generates a random float, uniformly distributed
 in the value range <code class="inline">DBL_MIN =&lt; X &lt; 1.0</code>.</p><p>Conceptually, a random real number <code class="inline">R</code> is generated from the interval
 <code class="inline">0.0 =&lt; R &lt; 1.0</code> and then the closest rounded down nonzero
-normalized number in the IEEE 754 Double Precision Format is returned.</p><blockquote><h4 class="info">Note</h4><p>The generated numbers from this function has got better granularity
+normalized number in the IEEE 754 Double Precision Format is returned.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>The generated numbers from this function has got better granularity
 for small numbers than the regular <a href="#uniform_s/1"><code class="inline">uniform_s/1</code></a> because all bits
 in the mantissa are random. This property, in combination with the fact
 that exactly zero is never returned is useful for algorithms doing
-for example <code class="inline">1.0 / X</code> or <code class="inline">math:log(X)</code>.</p></blockquote><p>The concept implicates that the probability to get exactly zero is extremely
+for example <code class="inline">1.0 / X</code> or <code class="inline">math:log(X)</code>.</p></section><p>The concept implicates that the probability to get exactly zero is extremely
 low; so low that this function in fact never returns <code class="inline">0.0</code>.
 The smallest number that it might return is <code class="inline">DBL_MIN</code>,
 which is <code class="inline">2.0^(-1022)</code>.</p><p>The value range stated at the top of this function description is
@@ -1923,15 +1853,13 @@ than the regular <a href="#uniform_s/1"><code class="inline">uniform_s/1</code><
 <section class="detail" id="uniform_s/1">
 
   <div class="detail-header">
-    <a href="#uniform_s/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#uniform_s/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">uniform_s(State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L819" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L819" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1950,28 +1878,26 @@ than the regular <a href="#uniform_s/1"><code class="inline">uniform_s/1</code><
 <p>Generate a uniformly distributed random number <code class="inline">0.0 =&lt; X &lt; 1.0</code>.</p><p>From the specified <code class="inline">State</code>, generates a random number <code class="inline">X ::</code> <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:float/0"><code class="inline">float/0</code></a>,
 uniformly distributed in the value range <code class="inline">0.0 =&lt; X &lt; 1.0</code>.
 Returns the number <code class="inline">X</code> and the updated <code class="inline">NewState</code>.</p><p>The generated numbers are on the form <code class="inline">N * 2.0^(-53)</code>, that is;
-equally spaced in the interval.</p><blockquote><h4 class="warning">Warning</h4><p>This function may return exactly <code class="inline">0.0</code> which can be fatal for certain
+equally spaced in the interval.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>This function may return exactly <code class="inline">0.0</code> which can be fatal for certain
 applications. If that is undesired you can use <code class="inline">(1.0 - rand:uniform())</code>
 to get the interval <code class="inline">0.0 &lt; X =&lt; 1.0</code>, or instead use <a href="#uniform_real/0"><code class="inline">uniform_real/0</code></a>.</p><p>If neither endpoint is desired you can achieve the range
-<code class="inline">0.0 &lt; X &lt; 1.0</code> using test and re-try like this:</p><pre><code class="makeup erlang" translate="no"><span class="nf">my_uniform</span><span class="p" data-group-id="4081053177-1">(</span><span class="p" data-group-id="4081053177-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="4081053177-2">(</span><span class="p" data-group-id="4081053177-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+<code class="inline">0.0 &lt; X &lt; 1.0</code> using test and re-try like this:</p><pre><code class="makeup erlang" translate="no"><span class="nf">my_uniform</span><span class="p" data-group-id="2140356925-1">(</span><span class="p" data-group-id="2140356925-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">rand</span><span class="p">:</span><span class="nf">uniform</span><span class="p" data-group-id="2140356925-2">(</span><span class="p" data-group-id="2140356925-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
         </span><span class="n">X</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">X</span><span class="p">;</span><span class="w">
-        </span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">my_uniform</span><span class="p" data-group-id="4081053177-3">(</span><span class="p" data-group-id="4081053177-3">)</span><span class="w">
-    </span><span class="k">end</span><span class="p">.</span></code></pre></blockquote>
+        </span><span class="p">_</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">my_uniform</span><span class="p" data-group-id="2140356925-3">(</span><span class="p" data-group-id="2140356925-3">)</span><span class="w">
+    </span><span class="k">end</span><span class="p">.</span></code></pre></section>
   </section>
 </section>
 <section class="detail" id="uniform_s/2">
 
   <div class="detail-header">
-    <a href="#uniform_s/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#uniform_s/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">uniform_s(N, State)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L845" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L845" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2007,15 +1933,13 @@ Returns the number <code class="inline">X</code> and the updated <code class="in
 <section class="detail" id="exsp_jump/1">
 
   <div class="detail-header">
-    <a href="#exsp_jump/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#exsp_jump/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">exsp_jump(AlgState)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1642" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1642" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2040,15 +1964,13 @@ has been exposed.</p>
 <section class="detail" id="exsp_next/1">
 
   <div class="detail-header">
-    <a href="#exsp_next/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#exsp_next/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">exsp_next(AlgState)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1543" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L1543" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2074,26 +1996,24 @@ applications. On a typical 64 bit Erlang VM this approach executes
 in just above 30% (1/3) of the time for the default algorithm through
 this module's normal plug-in framework.</p><p>To seed this generator use <a href="#seed_s/1"><code class="inline">{_, AlgState} = rand:seed_s(exsp)</code></a>
 or <a href="#seed_s/1"><code class="inline">{_, AlgState} = rand:seed_s(exsp, Seed)</code></a>
-with a specific <a href="#t:seed/0"><code class="inline">Seed</code></a>.</p><blockquote><h4 class="info">Note</h4><p>This function offers no help in generating a number on a selected range,
+with a specific <a href="#t:seed/0"><code class="inline">Seed</code></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>This function offers no help in generating a number on a selected range,
 nor in generating floating point numbers.  It is easy to accidentally
 mess up the statistical properties of this generator or to loose
 the performance advantage when doing either.
 See the recepies at the start of this
-<a href="#niche-algorithms-api">Niche algorithms API</a> description.</p><p>Note also the caveat about weak low bits that this generator suffers from.</p><p>The generator is exported in this form primarily for performance reasons.</p></blockquote>
+<a href="#niche-algorithms-api">Niche algorithms API</a> description.</p><p>Note also the caveat about weak low bits that this generator suffers from.</p><p>The generator is exported in this form primarily for performance reasons.</p></section>
   </section>
 </section>
 <section class="detail" id="mwc59/1">
 
   <div class="detail-header">
-    <a href="#mwc59/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#mwc59/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mwc59(CX0)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2256" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2256" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2117,7 +2037,7 @@ and a prime modulus.</p><p>This generator uses the multiplier <code class="inlin
 <code class="inline">16#7fa6502 * 2^32 - 1</code>, which have been selected, in collaboration with
 Sebastiano Vigna, to avoid bignum operations and still get
 good statistical quality. It has been named &quot;MWC59&quot; and can be written as:</p><pre><code class="makeup erlang" translate="no"><span class="n">C</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">CX0</span><span class="err"> </span><span class="ow">bsr</span><span class="err"> </span><span class="mi">32</span><span class="w">
-</span><span class="n">X</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">CX0</span><span class="err"> </span><span class="ow">band</span><span class="err"> </span><span class="p" data-group-id="7656783190-1">(</span><span class="p" data-group-id="7656783190-2">(</span><span class="mi">1</span><span class="err"> </span><span class="ow">bsl</span><span class="err"> </span><span class="mi">32</span><span class="p" data-group-id="7656783190-2">)</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="7656783190-1">)</span><span class="p">)</span><span class="w">
+</span><span class="n">X</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="n">CX0</span><span class="err"> </span><span class="ow">band</span><span class="err"> </span><span class="p" data-group-id="1093164020-1">(</span><span class="p" data-group-id="1093164020-2">(</span><span class="mi">1</span><span class="err"> </span><span class="ow">bsl</span><span class="err"> </span><span class="mi">32</span><span class="p" data-group-id="1093164020-2">)</span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="1093164020-1">)</span><span class="p">)</span><span class="w">
 </span><span class="n">CX1</span><span class="err"> </span><span class="o">=</span><span class="err"> </span><span class="mi">16#7fa6502</span><span class="err"> </span><span class="o">*</span><span class="err"> </span><span class="n">X</span><span class="err"> </span><span class="o">+</span><span class="err"> </span><span class="n">C</span></code></pre><p>Because the generator uses a multiplier that is a power of 2 it gets
 statistical flaws for collision tests and birthday spacings tests
 in 2 and 3 dimensions, and these caveats apply even when looking
@@ -2141,25 +2061,23 @@ With the <a href="#mwc59_value32/1"><code class="inline">mwc59_value32</code></a
 becomes 16% (1/6), and with <a href="#mwc59_value/1"><code class="inline">mwc59_value</code></a>
 it becomes 20% (1/5) of the time for the default algorithm.
 With <a href="#mwc59_float/1"><code class="inline">mwc59_float</code></a> the total time
-is 60% of the time for the default algorithm generating a <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:float/0"><code class="inline">float/0</code></a>.</p><blockquote><h4 class="info">Note</h4><p>This generator is a niche generator for high speed applications.
+is 60% of the time for the default algorithm generating a <a href="../../../../erts-15.1.2/doc/html/erlang.html#t:float/0"><code class="inline">float/0</code></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>This generator is a niche generator for high speed applications.
 It has a much shorter period than the default generator, which in itself
 is a quality concern, although when used with the value scramblers
 it passes strict PRNG tests.  The generator is much faster than
-<a href="#exsp_next/1"><code class="inline">exsp_next/1</code></a> but with a bit lower quality and much shorter period.</p></blockquote>
+<a href="#exsp_next/1"><code class="inline">exsp_next/1</code></a> but with a bit lower quality and much shorter period.</p></section>
   </section>
 </section>
 <section class="detail" id="mwc59_float/1">
 
   <div class="detail-header">
-    <a href="#mwc59_float/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#mwc59_float/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mwc59_float(CX)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2341" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2341" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2183,15 +2101,13 @@ in the range <code class="inline">0.0 =&lt; V &lt; 1.0</code> like for examp
 <section class="detail" id="mwc59_seed/0">
 
   <div class="detail-header">
-    <a href="#mwc59_seed/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#mwc59_seed/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mwc59_seed()</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2355" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2355" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2214,15 +2130,13 @@ of <a href="#seed_s/1"><code class="inline">seed_s(atom())</code></a>.</p>
 <section class="detail" id="mwc59_seed/1">
 
   <div class="detail-header">
-    <a href="#mwc59_seed/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#mwc59_seed/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mwc59_seed(S)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2371" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2371" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2246,15 +2160,13 @@ to avoid that similar seeds create similar sequences.</p>
 <section class="detail" id="mwc59_value32/1">
 
   <div class="detail-header">
-    <a href="#mwc59_value32/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#mwc59_value32/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mwc59_value32(CX)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2299" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2299" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2289,15 +2201,13 @@ that is: <code class="inline">(Range*V) bsr 32</code>, which is much faster th
 <section class="detail" id="mwc59_value/1">
 
   <div class="detail-header">
-    <a href="#mwc59_value/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#mwc59_value/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">mwc59_value(CX)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2326" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2326" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2329,15 +2239,13 @@ adding up to 59 bits, which is not a bignum (on a 64-bit VM ):
 <section class="detail" id="splitmix64_next/1">
 
   <div class="detail-header">
-    <a href="#splitmix64_next/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#splitmix64_next/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">splitmix64_next(AlgState)</h1>
 
-      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2479" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/richcarl/otp/blob/hexbinfloat/lib/stdlib/src/rand.erl#L2479" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2382,7 +2290,7 @@ the probability for creating an accidentally bad seed.</p>
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
