@@ -4,19 +4,25 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.35.1">
     <meta name="project" content="kernel v10.1.2">
 
 
     <title>net_kernel — kernel v10.1.2</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
+    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-63C2B1B7.js"></script>
+    <script src="dist/sidebar_items-182FBEF2.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script async src="dist/html-PVRIOB7F.js"></script>
+<style type="text/css">
+  .monospace-font > code {
+    font-family: monospace;
+  }
+</style>
+
 
   </head>
   <body data-type="modules" class="page-module">
@@ -132,9 +138,9 @@ Pages
 operational for distributed Erlang to work. The purpose of this process is to
 implement parts of the BIFs <a href="../../../../erts-15.1.3/doc/html/erlang.html#spawn/4"><code class="inline">spawn/4</code></a> and
 <a href="../../../../erts-15.1.3/doc/html/erlang.html#spawn_link/4"><code class="inline">spawn_link/4</code></a>, and to provide monitoring of the network.</p><p>An Erlang node is started using command-line flag <code class="inline">-name</code> or <code class="inline">-sname</code>:</p><pre><code class="text">$ erl -sname foobar</code></pre><p>It is also possible to call <a href="#start/2"><code class="inline">net_kernel:start(foobar, #{})</code></a>
-directly from the normal Erlang shell prompt:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">net_kernel</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="3052089448-1">(</span><span class="ss">foobar</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3052089448-2">#{</span><span class="ss">name_domain</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">shortnames</span><span class="p" data-group-id="3052089448-2">}</span><span class="p" data-group-id="3052089448-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="3052089448-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.64</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="3052089448-3">}</span><span class="w">
-</span><span class="p" data-group-id="3052089448-4">(</span><span class="ss">foobar@gringotts</span><span class="p" data-group-id="3052089448-4">)</span><span class="mi">2</span><span class="o">&gt;</span></code></pre><p>If the node is started with command-line flag <code class="inline">-sname</code>, the node name is
+directly from the normal Erlang shell prompt:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">net_kernel</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="5859405821-1">(</span><span class="ss">foobar</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5859405821-2">#{</span><span class="ss">name_domain</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">shortnames</span><span class="p" data-group-id="5859405821-2">}</span><span class="p" data-group-id="5859405821-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5859405821-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.64</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="5859405821-3">}</span><span class="w">
+</span><span class="p" data-group-id="5859405821-4">(</span><span class="ss">foobar@gringotts</span><span class="p" data-group-id="5859405821-4">)</span><span class="mi">2</span><span class="o">&gt;</span></code></pre><p>If the node is started with command-line flag <code class="inline">-sname</code>, the node name is
 <code class="inline">foobar@Host</code>, where <code class="inline">Host</code> is the short name of the host (not the fully
 qualified domain name). If started with flag <code class="inline">-name</code>, the node name is
 <code class="inline">foobar@Host</code>, where <code class="inline">Host</code> is the fully qualified domain name. For more
@@ -144,13 +150,13 @@ parameter <code class="inline">dist_auto_connect</code> to <code class="inline">
 this case, connections must be established explicitly by calling
 <a href="#connect_node/1"><code class="inline">connect_node/1</code></a>.</p><p>Which nodes that are allowed to communicate with each other is handled by the
 magic cookie system, see section <a href="../../../../doc/system/distributed.html">Distributed Erlang</a>
-in the Erlang Reference Manual.</p><blockquote><h4 class="warning">Warning</h4><p>Starting a distributed node without also specifying
+in the Erlang Reference Manual.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>Starting a distributed node without also specifying
 <a href="../../../../erts-15.1.3/doc/html/erl_cmd.html#proto_dist"><code class="inline">-proto_dist inet_tls</code></a> will expose the node
 to attacks that may give the attacker complete access to the node and in
 extension the cluster. When using un-secure distributed nodes, make sure that
 the network is configured to keep potential attackers out. See the
 <a href="../../../../lib/ssl-11.2.5/doc/html/ssl_distribution.html">Using SSL for Erlang Distribution</a> User's Guide
-for details on how to setup a secure distributed node.</p></blockquote>
+for details on how to setup a secure distributed node.</p></section>
     </section>
 
 </div>
@@ -196,6 +202,18 @@ for details on how to setup a secure distributed node.</p></blockquote>
       </div>
 
         <div class="summary-synopsis"><p>Permits access to the specified set of nodes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#allowed/0" data-no-tooltip translate="no">allowed()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a list of nodes that are explicitly allowed to connect to the node by calling
+<a href="#allow/1"><code class="inline">allow/1</code></a>. If empty list is returned, it means that any node using the
+same cookie will be able to connect.</p></div>
 
     </div>
 
@@ -344,15 +362,13 @@ and other necessary processes.</p></div>
 <section class="detail" id="t:connection_state/0">
 
   <div class="detail-header">
-    <a href="#t:connection_state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:connection_state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">connection_state()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L179" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L179" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -374,15 +390,13 @@ and other necessary processes.</p></div>
 <section class="detail" id="t:connection_type/0">
 
   <div class="detail-header">
-    <a href="#t:connection_type/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:connection_type/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">connection_type()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L180" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L180" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -416,15 +430,13 @@ and other necessary processes.</p></div>
 <section class="detail" id="allow/1">
 
   <div class="detail-header">
-    <a href="#allow/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#allow/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">allow(Nodes)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L255" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L261" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -434,7 +446,7 @@ and other necessary processes.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> allow(Nodes) -> ok | error when Nodes :: [<a href="../../../../erts-15.1.3/doc/html/erlang.html#t:node/0">node</a>()].</pre>
+          <pre translate="no"><span class="attribute">-spec</span> allow(Nodes) -> ok | error | ignored when Nodes :: [<a href="../../../../erts-15.1.3/doc/html/erlang.html#t:node/0">node</a>()].</pre>
 
       </div>
 
@@ -442,21 +454,51 @@ and other necessary processes.</p></div>
 cookie can be connected. When <a href="#allow/1"><code class="inline">allow/1</code></a> is called, a list of
 allowed nodes is established. Any access attempts made from (or to) nodes not in
 that list will be rejected.</p><p>Subsequent calls to <a href="#allow/1"><code class="inline">allow/1</code></a> will add the specified nodes to the
-list of allowed nodes. It is not possible to remove nodes from the list.</p><p>Returns <code class="inline">error</code> if any element in <code class="inline">Nodes</code> is not an atom.</p>
+list of allowed nodes. It is not possible to remove nodes from the list.</p><p>Disallowing an already connected node will not cause it to be disconnected. It
+will, however, prevent any future reconnection attempts.</p><p>Passing <code class="inline">Nodes</code> as an empty list has never any affect at all.</p><p>Returns <code class="inline">error</code> if any element in <code class="inline">Nodes</code> is not an atom, and <code class="inline">ignored</code> if the
+local node is not alive.</p>
+  </section>
+</section>
+<section class="detail" id="allowed/0">
+
+  <div class="detail-header">
+    <a href="#allowed/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">allowed()</h1>
+
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L271" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+      <span class="note">(since OTP @OTP-19287@)</span>
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> allowed() -> {ok, Nodes} | ignored when Nodes :: [<a href="../../../../erts-15.1.3/doc/html/erlang.html#t:node/0">node</a>()].</pre>
+
+      </div>
+
+<p>Returns a list of nodes that are explicitly allowed to connect to the node by calling
+<a href="#allow/1"><code class="inline">allow/1</code></a>. If empty list is returned, it means that any node using the
+same cookie will be able to connect.</p>
   </section>
 </section>
 <section class="detail" id="connect_node/1">
 
   <div class="detail-header">
-    <a href="#connect_node/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#connect_node/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">connect_node(Node)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L701" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L714" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -478,15 +520,13 @@ and <code class="inline">ignored</code> if the local node is not alive.</p>
 <section class="detail" id="get_net_ticktime/0">
 
   <div class="detail-header">
-    <a href="#get_net_ticktime/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#get_net_ticktime/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_net_ticktime()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L447" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L460" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -511,15 +551,13 @@ and <code class="inline">ignored</code> if the local node is not alive.</p>
 <section class="detail" id="get_state/0">
 
   <div class="detail-header">
-    <a href="#get_state/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#get_state/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">get_state()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L310" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L323" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -557,15 +595,13 @@ fully qualified host portion.</p></li></ul></li></ul>
 <section class="detail" id="getopts/2">
 
   <div class="detail-header">
-    <a href="#getopts/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#getopts/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">getopts(Node, Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L3023" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L3036" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -595,15 +631,13 @@ distribution socket for <code class="inline">Node</code>.</p><p>Returns <code cl
 <section class="detail" id="monitor_nodes/1">
 
   <div class="detail-header">
-    <a href="#monitor_nodes/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#monitor_nodes/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">monitor_nodes(Flag)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L459" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L472" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -623,15 +657,13 @@ distribution socket for <code class="inline">Node</code>.</p><p>Returns <code cl
 <section class="detail" id="monitor_nodes/2">
 
   <div class="detail-header">
-    <a href="#monitor_nodes/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#monitor_nodes/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">monitor_nodes(Flag, Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L634" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L647" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -668,13 +700,13 @@ in results from <code class="inline">erlang:nodes()</code>.</li><li>As of OTP 23
 delivered before a <code class="inline">nodeup</code> message due to a new connection to the same node.
 Prior to OTP 23.0, this was not guaranteed to be the case.</li></ul><p>The format of the node status change messages depends on <code class="inline">Options</code>. If <code class="inline">Options</code>
 is the empty list or if <a href="#monitor_nodes/1"><code class="inline">net_kernel:monitor_nodes/1</code></a> is called, the format is as
-follows:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="7609194394-1">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p" data-group-id="7609194394-1">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="7609194394-2">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p" data-group-id="7609194394-2">}</span><span class="w">
-  </span><span class="n">Node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">node</span><span class="p" data-group-id="7609194394-3">(</span><span class="p" data-group-id="7609194394-3">)</span></code></pre><p>When <code class="inline">Options</code> is the empty map or empty list, the caller will only subscribe
+follows:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="1756591559-1">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p" data-group-id="1756591559-1">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="1756591559-2">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p" data-group-id="1756591559-2">}</span><span class="w">
+  </span><span class="n">Node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">node</span><span class="p" data-group-id="1756591559-3">(</span><span class="p" data-group-id="1756591559-3">)</span></code></pre><p>When <code class="inline">Options</code> is the empty map or empty list, the caller will only subscribe
 for status change messages for visible nodes. That is, only nodes that appear in
 the result of <a href="../../../../erts-15.1.3/doc/html/erlang.html#nodes/0"><code class="inline">erlang:nodes/0</code></a>.</p><p>If <code class="inline">Options</code> equals anything other than the empty list, the format of the status
-change messages is as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="2908100556-1">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="2908100556-1">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2908100556-2">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="2908100556-2">}</span><span class="w">
-  </span><span class="n">Node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">node</span><span class="p" data-group-id="2908100556-3">(</span><span class="p" data-group-id="2908100556-3">)</span><span class="w">
-  </span><span class="n">Info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2908100556-4">#{</span><span class="n">Tag</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Val</span><span class="p" data-group-id="2908100556-4">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="2908100556-5">[</span><span class="p" data-group-id="2908100556-6">{</span><span class="n">Tag</span><span class="p">,</span><span class="w"> </span><span class="n">Val</span><span class="p" data-group-id="2908100556-6">}</span><span class="p" data-group-id="2908100556-5">]</span></code></pre><p><code class="inline">Info</code> is either a map or a list of 2-tuples. Its content depends on <code class="inline">Options</code>.
+change messages is as follows:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="5399942141-1">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="5399942141-1">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5399942141-2">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="w"> </span><span class="n">Node</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="5399942141-2">}</span><span class="w">
+  </span><span class="n">Node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">node</span><span class="p" data-group-id="5399942141-3">(</span><span class="p" data-group-id="5399942141-3">)</span><span class="w">
+  </span><span class="n">Info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5399942141-4">#{</span><span class="n">Tag</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Val</span><span class="p" data-group-id="5399942141-4">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="p" data-group-id="5399942141-5">[</span><span class="p" data-group-id="5399942141-6">{</span><span class="n">Tag</span><span class="p">,</span><span class="w"> </span><span class="n">Val</span><span class="p" data-group-id="5399942141-6">}</span><span class="p" data-group-id="5399942141-5">]</span></code></pre><p><code class="inline">Info</code> is either a map or a list of 2-tuples. Its content depends on <code class="inline">Options</code>.
 If <code class="inline">Options</code> is a map, <code class="inline">Info</code> will also be a map. If <code class="inline">Options</code> is a list, <code class="inline">Info</code>
 will also be a list.</p><p>When <code class="inline">Options</code> is a map, currently the following associations are allowed:</p><ul><li><p><strong><code class="inline">connection_id =&gt; boolean()</code></strong> - If the value of the association equals
 <code class="inline">true</code>, a <code class="inline">connection_id =&gt; ConnectionId</code> association will be included in the
@@ -708,37 +740,35 @@ for status change messages for visible nodes only, but <em>no</em>
 <code class="inline">{node_type, visible}</code> tuple will be included in the <code class="inline">Info</code> list.</p></li><li><p><strong><code class="inline">nodedown_reason</code></strong> - The tuple <code class="inline">{nodedown_reason, Reason}</code> will be included
 in the <code class="inline">Info</code> list for <code class="inline">nodedown</code> messages.</p><p>See the documentation of the
 <a href="net_kernel.html#nodedown_reasons"><code class="inline">nodedown_reason =&gt; boolean()</code></a> association
-above for information about possible <code class="inline">Reason</code> values.</p></li></ul><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">(a@localhost)1&gt; </span><span class="nc">net_kernel</span><span class="p">:</span><span class="nf">monitor_nodes</span><span class="p" data-group-id="5888988859-1">(</span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5888988859-2">#{</span><span class="ss">connection_id</span><span class="p">=&gt;</span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="ss">node_type</span><span class="p">=&gt;</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">nodedown_reason</span><span class="p">=&gt;</span><span class="ss">true</span><span class="p" data-group-id="5888988859-2">}</span><span class="p" data-group-id="5888988859-1">)</span><span class="p">.</span><span class="w">
+above for information about possible <code class="inline">Reason</code> values.</p></li></ul><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">(a@localhost)1&gt; </span><span class="nc">net_kernel</span><span class="p">:</span><span class="nf">monitor_nodes</span><span class="p" data-group-id="9796361246-1">(</span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9796361246-2">#{</span><span class="ss">connection_id</span><span class="p">=&gt;</span><span class="ss">true</span><span class="p">,</span><span class="w"> </span><span class="ss">node_type</span><span class="p">=&gt;</span><span class="ss">all</span><span class="p">,</span><span class="w"> </span><span class="ss">nodedown_reason</span><span class="p">=&gt;</span><span class="ss">true</span><span class="p" data-group-id="9796361246-2">}</span><span class="p" data-group-id="9796361246-1">)</span><span class="p">.</span><span class="w">
 </span><span class="nf">ok</span><span class="w">
-</span><span class="p" data-group-id="5888988859-3">(</span><span class="ss">a@localhost</span><span class="p" data-group-id="5888988859-3">)</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">flush</span><span class="p" data-group-id="5888988859-4">(</span><span class="p" data-group-id="5888988859-4">)</span><span class="p">.</span><span class="w">
-</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="5888988859-5">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="ss">b@localhost</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="5888988859-6">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3067552</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">visible</span><span class="p" data-group-id="5888988859-6">}</span><span class="p" data-group-id="5888988859-5">}</span><span class="w">
-</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="5888988859-7">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="ss">c@localhost</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="5888988859-8">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">13892107</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">hidden</span><span class="p" data-group-id="5888988859-8">}</span><span class="p" data-group-id="5888988859-7">}</span><span class="w">
-</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="5888988859-9">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="ss">b@localhost</span><span class="p">,</span><span class="w">
-                    </span><span class="p" data-group-id="5888988859-10">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3067552</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">visible</span><span class="p">,</span><span class="w">
-                      </span><span class="ss">nodedown_reason</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">connection_closed</span><span class="p" data-group-id="5888988859-10">}</span><span class="p" data-group-id="5888988859-9">}</span><span class="w">
-</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="5888988859-11">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="ss">c@localhost</span><span class="p">,</span><span class="w">
-                    </span><span class="p" data-group-id="5888988859-12">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">13892107</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">hidden</span><span class="p">,</span><span class="w">
-                      </span><span class="ss">nodedown_reason</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">net_tick_timeout</span><span class="p" data-group-id="5888988859-12">}</span><span class="p" data-group-id="5888988859-11">}</span><span class="w">
-</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="5888988859-13">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="ss">b@localhost</span><span class="p">,</span><span class="w">
-                  </span><span class="p" data-group-id="5888988859-14">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3067553</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">visible</span><span class="p" data-group-id="5888988859-14">}</span><span class="p" data-group-id="5888988859-13">}</span><span class="w">
+</span><span class="p" data-group-id="9796361246-3">(</span><span class="ss">a@localhost</span><span class="p" data-group-id="9796361246-3">)</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">flush</span><span class="p" data-group-id="9796361246-4">(</span><span class="p" data-group-id="9796361246-4">)</span><span class="p">.</span><span class="w">
+</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="9796361246-5">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="ss">b@localhost</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="9796361246-6">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3067552</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">visible</span><span class="p" data-group-id="9796361246-6">}</span><span class="p" data-group-id="9796361246-5">}</span><span class="w">
+</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="9796361246-7">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="ss">c@localhost</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="9796361246-8">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">13892107</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">hidden</span><span class="p" data-group-id="9796361246-8">}</span><span class="p" data-group-id="9796361246-7">}</span><span class="w">
+</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="9796361246-9">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="ss">b@localhost</span><span class="p">,</span><span class="w">
+                    </span><span class="p" data-group-id="9796361246-10">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3067552</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">visible</span><span class="p">,</span><span class="w">
+                      </span><span class="ss">nodedown_reason</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">connection_closed</span><span class="p" data-group-id="9796361246-10">}</span><span class="p" data-group-id="9796361246-9">}</span><span class="w">
+</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="9796361246-11">{</span><span class="ss">nodedown</span><span class="p">,</span><span class="ss">c@localhost</span><span class="p">,</span><span class="w">
+                    </span><span class="p" data-group-id="9796361246-12">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">13892107</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">hidden</span><span class="p">,</span><span class="w">
+                      </span><span class="ss">nodedown_reason</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">net_tick_timeout</span><span class="p" data-group-id="9796361246-12">}</span><span class="p" data-group-id="9796361246-11">}</span><span class="w">
+</span><span class="n">Shell</span><span class="w"> </span><span class="ss">got</span><span class="w"> </span><span class="p" data-group-id="9796361246-13">{</span><span class="ss">nodeup</span><span class="p">,</span><span class="ss">b@localhost</span><span class="p">,</span><span class="w">
+                  </span><span class="p" data-group-id="9796361246-14">#{</span><span class="ss">connection_id</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">3067553</span><span class="p">,</span><span class="ss">node_type</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">visible</span><span class="p" data-group-id="9796361246-14">}</span><span class="p" data-group-id="9796361246-13">}</span><span class="w">
 </span><span class="nf">ok</span><span class="w">
-</span><span class="p" data-group-id="5888988859-15">(</span><span class="ss">a@localhost</span><span class="p" data-group-id="5888988859-15">)</span><span class="mi">3</span><span class="o">&gt;</span></code></pre>
+</span><span class="p" data-group-id="9796361246-15">(</span><span class="ss">a@localhost</span><span class="p" data-group-id="9796361246-15">)</span><span class="mi">3</span><span class="o">&gt;</span></code></pre>
   </section>
 </section>
 <section class="detail" id="set_net_ticktime/1">
 
   <div class="detail-header">
-    <a href="#set_net_ticktime/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#set_net_ticktime/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">set_net_ticktime(NetTicktime)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L426" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L439" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -762,15 +792,13 @@ above for information about possible <code class="inline">Reason</code> values.<
 <section class="detail" id="set_net_ticktime/2">
 
   <div class="detail-header">
-    <a href="#set_net_ticktime/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#set_net_ticktime/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">set_net_ticktime(NetTicktime, TransitionPeriod)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L416" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L429" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -797,9 +825,9 @@ cover <code class="inline">TransitionPeriod</code> seconds following the call to
 ((<code class="inline">TransitionPeriod*1000 - 1) div MTTI + 1)*MTTI</code> milliseconds).</p></li></ul><p>If <code class="inline">NetTicktime &lt; PreviousNetTicktime</code>, the <code class="inline">net_ticktime</code> change is done at the
 end of the transition period; otherwise at the beginning. During the transition
 period, <code class="inline">net_kernel</code> ensures that there is outgoing traffic on all connections
-at least every <code class="inline">MTTI</code> millisecond.</p><blockquote><h4 class="info">Note</h4><p>The <code class="inline">net_ticktime</code> changes must be initiated on all nodes in the network (with
+at least every <code class="inline">MTTI</code> millisecond.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>The <code class="inline">net_ticktime</code> changes must be initiated on all nodes in the network (with
 the same <code class="inline">NetTicktime</code>) before the end of any transition period on any node;
-otherwise connections can erroneously be disconnected.</p></blockquote><p>Returns one of the following:</p><ul><li><p><strong><code class="inline">unchanged</code></strong> - <code class="inline">net_ticktime</code> already has the value of <code class="inline">NetTicktime</code> and is
+otherwise connections can erroneously be disconnected.</p></section><p>Returns one of the following:</p><ul><li><p><strong><code class="inline">unchanged</code></strong> - <code class="inline">net_ticktime</code> already has the value of <code class="inline">NetTicktime</code> and is
 left unchanged.</p></li><li><p><strong><code class="inline">change_initiated</code></strong> - <code class="inline">net_kernel</code> initiated the change of <code class="inline">net_ticktime</code>
 to <code class="inline">NetTicktime</code> seconds.</p></li><li><p><strong><code class="inline">{ongoing_change_to, NewNetTicktime}</code></strong> - The request is <em>ignored</em> because
 <code class="inline">net_kernel</code> is busy changing <code class="inline">net_ticktime</code> to <code class="inline">NewNetTicktime</code> seconds.</p></li></ul>
@@ -808,15 +836,13 @@ to <code class="inline">NetTicktime</code> seconds.</p></li><li><p><strong><code
 <section class="detail" id="setopts/2">
 
   <div class="detail-header">
-    <a href="#setopts/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#setopts/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">setopts(Node, Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L2919" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L2932" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -847,15 +873,13 @@ and <a href="kernel_app.html#inet_dist_connect_options">inet_dist_connect_option
 <section class="detail" id="start/1">
 
   <div class="detail-header">
-    <a href="#start/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start(Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L873" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L886" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -892,15 +916,13 @@ equals <code class="inline">4</code>.</p></li></ul>
 <section class="detail" id="start/2">
 
   <div class="detail-header">
-    <a href="#start/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start(Name, Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L819" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L832" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -960,15 +982,13 @@ been passed; otherwise <code class="inline">false</code>.</p><p>If <code class="
 <section class="detail" id="stop/0">
 
   <div class="detail-header">
-    <a href="#stop/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#stop/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stop()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L333" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/kernel/src/net_kernel.erl#L346" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1009,7 +1029,7 @@ node is not alive.</p>
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 

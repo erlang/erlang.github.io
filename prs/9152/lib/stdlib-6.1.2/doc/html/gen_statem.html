@@ -4,19 +4,25 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.35.1">
     <meta name="project" content="stdlib v6.1.2">
 
 
     <title>gen_statem — stdlib v6.1.2</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
+    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-AC7C37ED.js"></script>
+    <script src="dist/sidebar_items-C0A99A19.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script async src="dist/html-PVRIOB7F.js"></script>
+<style type="text/css">
+  .monospace-font > code {
+    font-family: monospace;
+  }
+</style>
+
 
   </head>
   <body data-type="modules" class="page-behaviour">
@@ -135,13 +141,13 @@ remains in OTP &quot;as is&quot; to not break old code using it.</p><p>A generic
 using this module has a standard set of interface functions
 and includes functionality for tracing and error reporting.
 It also fits into an OTP supervision tree.  For more information,
-see <a href="../../../../doc/system/statem.html">OTP Design Principles</a>.</p><blockquote><h4 class="info">Note</h4><p>If you are new to <code class="inline">gen_statem</code> and want an overview
+see <a href="../../../../doc/system/statem.html">OTP Design Principles</a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>If you are new to <code class="inline">gen_statem</code> and want an overview
 of concepts and operation the section
 <a href="../../../../doc/system/statem.html"><code class="inline">gen_statem</code> Behaviour</a> located in
 the User's Guide <a href="../../../../doc/system/index.html">OTP Design Principles</a>
 is recommended to read.  This reference manual focuses on
 being correct and complete, which might make it hard to see
-the forest for all the trees.</p></blockquote><h4>Features</h4><p><code class="inline">gen_statem</code> has got the same features that <a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> had
+the forest for all the trees.</p></section><h4>Features</h4><p><code class="inline">gen_statem</code> has got the same features that <a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> had
 and adds some really useful:</p><ul><li><a href="#state_functions">Co-located state code</a></li><li><a href="#handle_event_function">Arbitrary term state</a></li><li><a href="#event-postponing">Event postponing</a></li><li><a href="#event-insertion">Self-generated events</a></li><li><a href="#t:state_timeout/0">State time-out</a></li><li><a href="#t:generic_timeout/0">Multiple generic named time-outs</a></li><li><a href="#t:timeout_option/0">Absolute time-out time</a></li><li><a href="#state-enter-calls">Automatic state enter calls</a></li><li><a href="#reply-to-a-call">Reply from other state than the request</a>,
 traceable with <a href="sys.html"><code class="inline">sys</code></a></li><li><a href="#reply-to-a-call">Multiple replies</a>, traceable with <a href="sys.html"><code class="inline">sys</code></a></li><li><a href="#change_callback_module">Changing the callback module</a></li></ul><p>Two <a href="#t:callback_mode/0"><em>callback modes</em></a> are supported:</p><ul><li><code class="inline">state_functions</code> - for finite-state machines (<a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> like),
 which requires the state to be an atom and uses that state
@@ -176,7 +182,7 @@ and the callback functions is as follows:</p><pre><code class="makeup erlang" tr
                    </span><span class="ss">depending</span><span class="w"> </span><span class="ss">on</span><span class="w"> </span><span class="ss">callback</span><span class="w"> </span><span class="ss">mode</span><span class="w">
 
 </span><span class="n">Release</span><span class="w"> </span><span class="ss">upgrade</span><span class="o">/</span><span class="nf">downgrade</span><span class="w">
-</span><span class="p" data-group-id="7754867724-1">(</span><span class="ss">code</span><span class="w"> </span><span class="ss">change</span><span class="p" data-group-id="7754867724-1">)</span><span class="w">
+</span><span class="p" data-group-id="0554482365-1">(</span><span class="ss">code</span><span class="w"> </span><span class="ss">change</span><span class="p" data-group-id="0554482365-1">)</span><span class="w">
                       </span><span class="o">--</span><span class="o">--</span><span class="p">-&gt;</span><span class="w"> </span><span class="n">Module</span><span class="p">:</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span></code></pre><h4 id="state-callback">State callback</h4><p>The <em>state callback</em> for a specific <a href="#t:state/0">state</a> in a <code class="inline">gen_statem</code>
 is the callback function that is called for all events in this state.
 It is selected depending on which <a href="#t:callback_mode/0"><em>callback mode</em></a>
@@ -225,12 +231,12 @@ as if it is the oldest incoming event. A dedicated <a href="#t:event_type/0"><co
 <code class="inline">internal</code> can be used for such events making it possible to
 safely distinguish them from external events.</p><p>Inserting an event replaces the trick of calling your own state handling
 functions that you often would have to resort to in, for example,
-<a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> to force processing an inserted event before others.</p><blockquote><h4 class="info">Note</h4><p>If you postpone an event and (against good practice) directly call
+<a href="gen_fsm.html"><code class="inline">gen_fsm</code></a> to force processing an inserted event before others.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>If you postpone an event and (against good practice) directly call
 a different <em>state callback</em>, the postponed event is not retried,
 since there was no <em>state change</em>.</p><p>Instead of directly calling a <em>state callback</em>, do a <em>state change</em>.
 This makes the <code class="inline">gen_statem</code> engine retry postponed events.</p><p>Inserting an event in a <em>state change</em> also triggers
 the new  <em>state callback</em> to be called with that event
-before receiving any external events.</p></blockquote><h4 id="state-enter-calls">State enter calls</h4><p>The <code class="inline">gen_statem</code> engine can automatically make a special call to the
+before receiving any external events.</p></section><h4 id="state-enter-calls">State enter calls</h4><p>The <code class="inline">gen_statem</code> engine can automatically make a special call to the
 <a href="#state-callback"><em>state callback</em></a> whenever a new state is
 entered; see <a href="#t:state_enter/0"><code class="inline">state_enter/0</code></a>. This is for writing code common
 to all state entries.  Another way to do it is to explicitly insert
@@ -264,12 +270,12 @@ of a callback function returning <code class="inline">{stop, Reason}</code>, an
 with this <code class="inline">Reason</code> is sent to linked processes and ports.
 See <a href="../../../../doc/system/ref_man_processes.html#errors">Processes</a>
 in the Reference Manual for details regarding error handling
-using exit signals.</p><blockquote><h4 class="info">Note</h4><p>For some important information about distributed signals, see the
+using exit signals.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>For some important information about distributed signals, see the
 <a href="../../../../doc/system/ref_man_processes.html#blocking-signaling-over-distribution"><em>Blocking Signaling Over Distribution</em>
 </a>
 section in the <em>Processes</em> chapter of the <em>Erlang Reference Manual</em>.
 Blocking signaling can, for example, cause call time-outs in <code class="inline">gen_statem</code>
-to be significantly delayed.</p></blockquote><h4>Bad argument</h4><p>Unless otherwise stated, all functions in this module fail if the specified
+to be significantly delayed.</p></section><h4>Bad argument</h4><p>Unless otherwise stated, all functions in this module fail if the specified
 <code class="inline">gen_statem</code> does not exist or if bad arguments are specified.</p><h2 id="module-example" class="section-heading">
   <a href="#module-example" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -302,97 +308,97 @@ init, to set the callback mode to <code class="inline">state_functions</code>, e
   </a>
   <span class="text">Pushbutton Code</span>
 </h3>
-<p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="6089261943-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="6089261943-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="6089261943-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="6089261943-2">)</span><span class="p">.</span><span class="w">
+<p>The following is the complete callback module file <code class="inline">pushbutton.erl</code>:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="1342652037-1">(</span><span class="ss">pushbutton</span><span class="p" data-group-id="1342652037-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="1342652037-2">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="1342652037-2">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="6089261943-3">(</span><span class="p" data-group-id="6089261943-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="6089261943-4">]</span><span class="p" data-group-id="6089261943-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="6089261943-5">(</span><span class="p" data-group-id="6089261943-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="6089261943-6">]</span><span class="p" data-group-id="6089261943-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="6089261943-7">(</span><span class="p" data-group-id="6089261943-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="6089261943-8">]</span><span class="p" data-group-id="6089261943-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="1342652037-3">(</span><span class="p" data-group-id="1342652037-4">[</span><span class="ss">start</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">push</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">get_count</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="1342652037-4">]</span><span class="p" data-group-id="1342652037-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="1342652037-5">(</span><span class="p" data-group-id="1342652037-6">[</span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="1342652037-6">]</span><span class="p" data-group-id="1342652037-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="1342652037-7">(</span><span class="p" data-group-id="1342652037-8">[</span><span class="ss">on</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="ss">off</span><span class="p">/</span><span class="mi">3</span><span class="p" data-group-id="1342652037-8">]</span><span class="p" data-group-id="1342652037-7">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">name</span><span class="p" data-group-id="6089261943-9">(</span><span class="p" data-group-id="6089261943-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
+</span><span class="nf">name</span><span class="p" data-group-id="1342652037-9">(</span><span class="p" data-group-id="1342652037-9">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">pushbutton_statem</span><span class="p">.</span><span class="w"> </span><span class="c1">% The registered server name</span><span class="w">
 
 </span><span class="c1">%% API.  This example uses a registered name name()</span><span class="w">
 </span><span class="c1">%% and does not link to the caller.</span><span class="w">
-</span><span class="nf">start</span><span class="p" data-group-id="6089261943-10">(</span><span class="p" data-group-id="6089261943-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="6089261943-11">(</span><span class="p" data-group-id="6089261943-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="6089261943-13">(</span><span class="p" data-group-id="6089261943-13">)</span><span class="p" data-group-id="6089261943-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6089261943-14">[</span><span class="p" data-group-id="6089261943-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6089261943-15">[</span><span class="p" data-group-id="6089261943-15">]</span><span class="p" data-group-id="6089261943-11">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">push</span><span class="p" data-group-id="6089261943-16">(</span><span class="p" data-group-id="6089261943-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="6089261943-17">(</span><span class="nf">name</span><span class="p" data-group-id="6089261943-18">(</span><span class="p" data-group-id="6089261943-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="6089261943-17">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">get_count</span><span class="p" data-group-id="6089261943-19">(</span><span class="p" data-group-id="6089261943-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="6089261943-20">(</span><span class="nf">name</span><span class="p" data-group-id="6089261943-21">(</span><span class="p" data-group-id="6089261943-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="6089261943-20">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="6089261943-22">(</span><span class="p" data-group-id="6089261943-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="6089261943-23">(</span><span class="nf">name</span><span class="p" data-group-id="6089261943-24">(</span><span class="p" data-group-id="6089261943-24">)</span><span class="p" data-group-id="6089261943-23">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start</span><span class="p" data-group-id="1342652037-10">(</span><span class="p" data-group-id="1342652037-10">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="1342652037-11">(</span><span class="p" data-group-id="1342652037-12">{</span><span class="ss">local</span><span class="p">,</span><span class="nf">name</span><span class="p" data-group-id="1342652037-13">(</span><span class="p" data-group-id="1342652037-13">)</span><span class="p" data-group-id="1342652037-12">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1342652037-14">[</span><span class="p" data-group-id="1342652037-14">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1342652037-15">[</span><span class="p" data-group-id="1342652037-15">]</span><span class="p" data-group-id="1342652037-11">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">push</span><span class="p" data-group-id="1342652037-16">(</span><span class="p" data-group-id="1342652037-16">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="1342652037-17">(</span><span class="nf">name</span><span class="p" data-group-id="1342652037-18">(</span><span class="p" data-group-id="1342652037-18">)</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p" data-group-id="1342652037-17">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">get_count</span><span class="p" data-group-id="1342652037-19">(</span><span class="p" data-group-id="1342652037-19">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="1342652037-20">(</span><span class="nf">name</span><span class="p" data-group-id="1342652037-21">(</span><span class="p" data-group-id="1342652037-21">)</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p" data-group-id="1342652037-20">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="1342652037-22">(</span><span class="p" data-group-id="1342652037-22">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="1342652037-23">(</span><span class="nf">name</span><span class="p" data-group-id="1342652037-24">(</span><span class="p" data-group-id="1342652037-24">)</span><span class="p" data-group-id="1342652037-23">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Mandatory callback functions</span><span class="w">
-</span><span class="nf">terminate</span><span class="p" data-group-id="6089261943-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="6089261943-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="1342652037-25">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="1342652037-25">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">void</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="6089261943-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="6089261943-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="6089261943-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="6089261943-27">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="6089261943-28">(</span><span class="p" data-group-id="6089261943-29">[</span><span class="p" data-group-id="6089261943-29">]</span><span class="p" data-group-id="6089261943-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="1342652037-26">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="1342652037-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1342652037-27">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1342652037-27">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="1342652037-28">(</span><span class="p" data-group-id="1342652037-29">[</span><span class="p" data-group-id="1342652037-29">]</span><span class="p" data-group-id="1342652037-28">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Set the initial state + data.  Data is used only as a counter.</span><span class="w">
     </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="6089261943-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="6089261943-30">}</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="6089261943-31">(</span><span class="p" data-group-id="6089261943-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="1342652037-30">{</span><span class="ss">ok</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1342652037-30">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="1342652037-31">(</span><span class="p" data-group-id="1342652037-31">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">off</span><span class="p" data-group-id="6089261943-32">(</span><span class="p" data-group-id="6089261943-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="6089261943-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="1342652037-32">(</span><span class="p" data-group-id="1342652037-33">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1342652037-33">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="6089261943-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="6089261943-35">[</span><span class="p" data-group-id="6089261943-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="6089261943-36">}</span><span class="p" data-group-id="6089261943-35">]</span><span class="p" data-group-id="6089261943-34">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">off</span><span class="p" data-group-id="6089261943-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="6089261943-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-38">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="1342652037-34">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="1342652037-35">[</span><span class="p" data-group-id="1342652037-36">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="1342652037-36">}</span><span class="p" data-group-id="1342652037-35">]</span><span class="p" data-group-id="1342652037-34">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">off</span><span class="p" data-group-id="1342652037-37">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-37">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="1342652037-38">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-38">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">on</span><span class="p" data-group-id="6089261943-39">(</span><span class="p" data-group-id="6089261943-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="6089261943-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="1342652037-39">(</span><span class="p" data-group-id="1342652037-40">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1342652037-40">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="6089261943-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="6089261943-42">[</span><span class="p" data-group-id="6089261943-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="6089261943-43">}</span><span class="p" data-group-id="6089261943-42">]</span><span class="p" data-group-id="6089261943-41">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">on</span><span class="p" data-group-id="6089261943-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_event</span><span class="p" data-group-id="6089261943-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-45">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="1342652037-41">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="1342652037-42">[</span><span class="p" data-group-id="1342652037-43">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="1342652037-43">}</span><span class="p" data-group-id="1342652037-42">]</span><span class="p" data-group-id="1342652037-41">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">on</span><span class="p" data-group-id="1342652037-44">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-44">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_event</span><span class="p" data-group-id="1342652037-45">(</span><span class="n">EventType</span><span class="p">,</span><span class="w"> </span><span class="n">EventContent</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-45">)</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Handle events common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="6089261943-46">(</span><span class="p" data-group-id="6089261943-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="6089261943-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="1342652037-46">(</span><span class="p" data-group-id="1342652037-47">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="1342652037-47">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-46">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="6089261943-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="6089261943-49">[</span><span class="p" data-group-id="6089261943-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="6089261943-50">}</span><span class="p" data-group-id="6089261943-49">]</span><span class="p" data-group-id="6089261943-48">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="6089261943-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="6089261943-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="1342652037-48">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="1342652037-49">[</span><span class="p" data-group-id="1342652037-50">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1342652037-50">}</span><span class="p" data-group-id="1342652037-49">]</span><span class="p" data-group-id="1342652037-48">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="1342652037-51">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="1342652037-51">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="6089261943-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="6089261943-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="9792167056-1">(</span><span class="p" data-group-id="9792167056-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="9792167056-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="9792167056-2">}</span><span class="gp unselectable">
-2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="9792167056-3">(</span><span class="p" data-group-id="9792167056-3">)</span><span class="p">.</span><span class="w">
+    </span><span class="p" data-group-id="1342652037-52">{</span><span class="ss">keep_state</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="1342652037-52">}</span><span class="p">.</span></code></pre><p>The following is a shell session when running it:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">start</span><span class="p" data-group-id="6273524721-1">(</span><span class="p" data-group-id="6273524721-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6273524721-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">0.36</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p" data-group-id="6273524721-2">}</span><span class="gp unselectable">
+2&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="6273524721-3">(</span><span class="p" data-group-id="6273524721-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">0</span><span class="gp unselectable">
-3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="9792167056-4">(</span><span class="p" data-group-id="9792167056-4">)</span><span class="p">.</span><span class="w">
+3&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="6273524721-4">(</span><span class="p" data-group-id="6273524721-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">on</span><span class="gp unselectable">
-4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="9792167056-5">(</span><span class="p" data-group-id="9792167056-5">)</span><span class="p">.</span><span class="w">
+4&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="6273524721-5">(</span><span class="p" data-group-id="6273524721-5">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="9792167056-6">(</span><span class="p" data-group-id="9792167056-6">)</span><span class="p">.</span><span class="w">
+5&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="6273524721-6">(</span><span class="p" data-group-id="6273524721-6">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">off</span><span class="gp unselectable">
-6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="9792167056-7">(</span><span class="p" data-group-id="9792167056-7">)</span><span class="p">.</span><span class="w">
+6&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">get_count</span><span class="p" data-group-id="6273524721-7">(</span><span class="p" data-group-id="6273524721-7">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1</span><span class="gp unselectable">
-7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="9792167056-8">(</span><span class="p" data-group-id="9792167056-8">)</span><span class="p">.</span><span class="w">
+7&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">stop</span><span class="p" data-group-id="6273524721-8">(</span><span class="p" data-group-id="6273524721-8">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="9792167056-9">(</span><span class="p" data-group-id="9792167056-9">)</span><span class="p">.</span><span class="w">
+8&gt; </span><span class="nc">pushbutton</span><span class="p">:</span><span class="nf">push</span><span class="p" data-group-id="6273524721-9">(</span><span class="p" data-group-id="6273524721-9">)</span><span class="p">.</span><span class="w">
 </span><span class="gt">** exception exit: {noproc,{gen_statem,call,[pushbutton_statem,push,infinity]}}
      in function  gen:do_for_proc/2 (gen.erl, line 261)
      in call from gen_statem:call/3 (gen_statem.erl, line 386)</span></code></pre><p>To compare styles, here follows the same example using
 <a href="#t:callback_mode/0"><em>callback mode</em></a> <code class="inline">handle_event_function</code>,
 or rather, the code to replace after function <a href="#c:init/1"><code class="inline">init/1</code></a>
-of the <code class="inline">pushbutton.erl</code> example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="3865824606-1">(</span><span class="p" data-group-id="3865824606-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
+of the <code class="inline">pushbutton.erl</code> example file above:</p><pre><code class="makeup erlang" translate="no"><span class="nf">callback_mode</span><span class="p" data-group-id="2707211008-1">(</span><span class="p" data-group-id="2707211008-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="ss">handle_event_function</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%%% state callback(s)</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="3865824606-2">(</span><span class="p" data-group-id="3865824606-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="3865824606-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3865824606-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2707211008-2">(</span><span class="p" data-group-id="2707211008-3">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2707211008-3">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">off</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2707211008-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;on&#39;, increment count and reply</span><span class="w">
     </span><span class="c1">%% that the resulting status is &#39;on&#39;</span><span class="w">
-    </span><span class="p" data-group-id="3865824606-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="3865824606-5">[</span><span class="p" data-group-id="3865824606-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="3865824606-6">}</span><span class="p" data-group-id="3865824606-5">]</span><span class="p" data-group-id="3865824606-4">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="3865824606-7">(</span><span class="p" data-group-id="3865824606-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="3865824606-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3865824606-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2707211008-4">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">on</span><span class="p">,</span><span class="n">Data</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="p" data-group-id="2707211008-5">[</span><span class="p" data-group-id="2707211008-6">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">on</span><span class="p" data-group-id="2707211008-6">}</span><span class="p" data-group-id="2707211008-5">]</span><span class="p" data-group-id="2707211008-4">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2707211008-7">(</span><span class="p" data-group-id="2707211008-8">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2707211008-8">}</span><span class="p">,</span><span class="w"> </span><span class="ss">push</span><span class="p">,</span><span class="w"> </span><span class="ss">on</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2707211008-7">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Go to &#39;off&#39; and reply that the resulting status is &#39;off&#39;</span><span class="w">
-    </span><span class="p" data-group-id="3865824606-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="3865824606-10">[</span><span class="p" data-group-id="3865824606-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="3865824606-11">}</span><span class="p" data-group-id="3865824606-10">]</span><span class="p" data-group-id="3865824606-9">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="2707211008-9">{</span><span class="ss">next_state</span><span class="p">,</span><span class="ss">off</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2707211008-10">[</span><span class="p" data-group-id="2707211008-11">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="ss">off</span><span class="p" data-group-id="2707211008-11">}</span><span class="p" data-group-id="2707211008-10">]</span><span class="p" data-group-id="2707211008-9">}</span><span class="p">;</span><span class="w">
 </span><span class="c1">%%</span><span class="w">
 </span><span class="c1">%% Event handling common to all states</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="3865824606-12">(</span><span class="p" data-group-id="3865824606-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="3865824606-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3865824606-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2707211008-12">(</span><span class="p" data-group-id="2707211008-13">{</span><span class="ss">call</span><span class="p">,</span><span class="n">From</span><span class="p" data-group-id="2707211008-13">}</span><span class="p">,</span><span class="w"> </span><span class="ss">get_count</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2707211008-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Reply with the current count</span><span class="w">
-    </span><span class="p" data-group-id="3865824606-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="3865824606-15">[</span><span class="p" data-group-id="3865824606-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="3865824606-16">}</span><span class="p" data-group-id="3865824606-15">]</span><span class="p" data-group-id="3865824606-14">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">handle_event</span><span class="p" data-group-id="3865824606-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="3865824606-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="2707211008-14">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p">,</span><span class="p" data-group-id="2707211008-15">[</span><span class="p" data-group-id="2707211008-16">{</span><span class="ss">reply</span><span class="p">,</span><span class="n">From</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2707211008-16">}</span><span class="p" data-group-id="2707211008-15">]</span><span class="p" data-group-id="2707211008-14">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="2707211008-17">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="2707211008-17">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="c1">%% Ignore all other events</span><span class="w">
-    </span><span class="p" data-group-id="3865824606-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="3865824606-18">}</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><h2 id="module-api-changes" class="section-heading">
+    </span><span class="p" data-group-id="2707211008-18">{</span><span class="ss">next_state</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">Data</span><span class="p" data-group-id="2707211008-18">}</span><span class="p">.</span></code></pre><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><h2 id="module-api-changes" class="section-heading">
   <a href="#module-api-changes" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -412,13 +418,13 @@ were added.</li><li>In OTP 22.3 the possibility to change the callback module wi
 <a href="#pop_callback_module"><code class="inline">pop_callback_module</code></a>, was added.</li><li>In OTP 23.0 <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a> were added,
 as well as functions for asynchronous calls: <a href="#send_request/2"><code class="inline">send_request/2</code></a>,
 <a href="#wait_response/2"><code class="inline">wait_response/1,2</code></a>, and <a href="#check_response/2"><code class="inline">check_response/2</code></a>.</li><li>In OTP 24.0 <a href="#receive_response/2"><code class="inline">receive_response/1,2</code></a> were added.</li><li>In OTP 25.0 <a href="#c:format_status/1"><code class="inline">Module:format_status/1</code></a>
-was added to replace <a href="#c:format_status/1"><code class="inline">Module:format_status/1</code></a>,
+was added to replace <a href="#c:format_status/2"><code class="inline">Module:format_status/2</code></a>,
 as well as functions for collections of asynchronous calls:
 <a href="#send_request/4"><code class="inline">send_request/4</code></a>, <a href="#wait_response/3"><code class="inline">wait_response/3</code></a>, <a href="#receive_response/3"><code class="inline">receive_response/3</code></a>,
 <a href="#check_response/3"><code class="inline">check_response/3</code></a>, <a href="#reqids_new/0"><code class="inline">reqids_new/0</code></a>, <a href="#reqids_size/1"><code class="inline">reqids_size/1</code></a>,
 <a href="#reqids_add/3"><code class="inline">reqids_add/3</code></a>, <a href="#reqids_to_list/1"><code class="inline">reqids_to_list/1</code></a>.</li><li>In OTP 26.0 the possibility to return <code class="inline">{error, Reason}</code> from
-<a href="#c:init/1"><code class="inline">Module:init/1</code></a> was added.</li><li>In OTP 27.0 <a href="#c:format_status/1"><code class="inline">Module:format_status/1</code></a>
-was deprecated.</li></ul></blockquote><h2 id="module-see-also" class="section-heading">
+<a href="#c:init/1"><code class="inline">Module:init/1</code></a> was added.</li><li>In OTP 27.0 <a href="#c:format_status/2"><code class="inline">Module:format_status/2</code></a>
+was deprecated.</li></ul></section><h2 id="module-see-also" class="section-heading">
   <a href="#module-see-also" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -1286,15 +1292,13 @@ to a request identifier collection.</p></div>
 <section class="detail" id="t:action/0">
 
   <div class="detail-header">
-    <a href="#t:action/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:action/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">action()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1096" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1096" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1362,15 +1366,13 @@ Otherwise like <code class="inline">{change_callback_module, NewModule}</code> 
 <section class="detail" id="t:callback_mode/0">
 
   <div class="detail-header">
-    <a href="#t:callback_mode/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:callback_mode/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L725" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L725" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1406,15 +1408,13 @@ The result is cached for subsequent calls to
 <section class="detail" id="t:callback_mode_result/0">
 
   <div class="detail-header">
-    <a href="#t:callback_mode_result/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:callback_mode_result/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">callback_mode_result()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L697" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L697" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1440,15 +1440,13 @@ or not.</p>
 <section class="detail" id="t:data/0">
 
   <div class="detail-header">
-    <a href="#t:data/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:data/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">data()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L623" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L623" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1477,15 +1475,13 @@ should be part of the <a href="#t:state/0"><code class="inline">state/0</code></
 <section class="detail" id="t:enter_action/0">
 
   <div class="detail-header">
-    <a href="#t:enter_action/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:enter_action/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">enter_action()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1148" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1148" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1517,15 +1513,13 @@ the last <a href="#t:event_timeout/0"><code class="inline">event_timeout/0</code
 <section class="detail" id="t:enter_loop_opt/0">
 
   <div class="detail-header">
-    <a href="#t:enter_loop_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:enter_loop_opt/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">enter_loop_opt()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2182" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2182" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1551,15 +1545,13 @@ and <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>
 <section class="detail" id="t:event_content/0">
 
   <div class="detail-header">
-    <a href="#t:event_content/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:event_content/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">event_content()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L684" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L684" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1586,15 +1578,13 @@ comes from.</p>
 <section class="detail" id="t:event_handler_result/1">
 
   <div class="detail-header">
-    <a href="#t:event_handler_result/1" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:event_handler_result/1" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1337" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1337" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1616,15 +1606,13 @@ comes from.</p>
 <section class="detail" id="t:event_handler_result/2">
 
   <div class="detail-header">
-    <a href="#t:event_handler_result/2" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:event_handler_result/2" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">event_handler_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1357" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1357" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1658,15 +1646,13 @@ is a <em>state change</em>.</li></ul>
 <section class="detail" id="t:event_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:event_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:event_timeout/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">event_timeout()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L924" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L924" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1705,15 +1691,13 @@ action without affecting the time of expiry.</p>
 <section class="detail" id="t:event_type/0">
 
   <div class="detail-header">
-    <a href="#t:event_type/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:event_type/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">event_type()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L633" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L633" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1737,15 +1721,13 @@ through the <em>transition action</em> <a href="#t:action/0"><code class="inline
 <section class="detail" id="t:external_event_type/0">
 
   <div class="detail-header">
-    <a href="#t:external_event_type/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:external_event_type/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">external_event_type()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L651" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L651" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1774,15 +1756,13 @@ sent to the <code class="inline">gen_statem</code> process.</p>
 <section class="detail" id="t:format_status/0">
 
   <div class="detail-header">
-    <a href="#t:format_status/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:format_status/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">format_status()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1904" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1904" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1811,15 +1791,13 @@ sent to the <code class="inline">gen_statem</code> process.</p>
 <section class="detail" id="t:from/0">
 
   <div class="detail-header">
-    <a href="#t:from/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:from/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">from()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L560" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L560" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1844,15 +1822,13 @@ using <a href="#call/3"><code class="inline">call/2,3</code></a>.</p>
 <section class="detail" id="t:generic_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:generic_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:generic_timeout/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">generic_timeout()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L959" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L959" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1889,15 +1865,13 @@ action without affecting the time of expiry.</p>
 <section class="detail" id="t:hibernate/0">
 
   <div class="detail-header">
-    <a href="#t:hibernate/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:hibernate/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">hibernate()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L887" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L887" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1918,25 +1892,23 @@ action without affecting the time of expiry.</p>
 <p>Hibernate the server process.</p><p>If <code class="inline">true</code>, hibernates the <code class="inline">gen_statem</code> by calling <a href="proc_lib.html#hibernate/3"><code class="inline">proc_lib:hibernate/3</code></a>
 before going into <code class="inline">receive</code> to wait for a new external event.</p><p>There is also a server start option
 <a href="#t:enter_loop_opt/0"><code class="inline">{hibernate_after, Timeout}</code></a>
-for automatic hibernation.</p><blockquote><h4 class="info">Note</h4><p>If there are enqueued events to process when hibernation is requested,
+for automatic hibernation.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>If there are enqueued events to process when hibernation is requested,
 this is optimized by not hibernating but instead calling
 <a href="../../../../erts-15.1.3/doc/html/erlang.html#garbage_collect/0"><code class="inline">erlang:garbage_collect/0</code></a> to simulate,
 in a more effective way, that the <code class="inline">gen_statem</code> entered hibernation
-and immediately got awakened by an enqueued event.</p></blockquote>
+and immediately got awakened by an enqueued event.</p></section>
   </section>
 </section>
 <section class="detail" id="t:init_result/1">
 
   <div class="detail-header">
-    <a href="#t:init_result/1" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:init_result/1" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">init_result(StateType)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1273" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1273" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -1958,15 +1930,13 @@ and immediately got awakened by an enqueued event.</p></blockquote>
 <section class="detail" id="t:init_result/2">
 
   <div class="detail-header">
-    <a href="#t:init_result/2" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:init_result/2" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">init_result(StateType, DataType)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1296" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1296" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2000,15 +1970,13 @@ before that they were not <code class="inline">ok</code> tagged.  This was befor
 <section class="detail" id="t:postpone/0">
 
   <div class="detail-header">
-    <a href="#t:postpone/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:postpone/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">postpone()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L863" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L863" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2033,15 +2001,13 @@ After a <em>state change</em> (<code class="inline">NextState =/= State</code>
 <section class="detail" id="t:reply_action/0">
 
   <div class="detail-header">
-    <a href="#t:reply_action/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:reply_action/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">reply_action()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1269" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1269" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2072,15 +2038,13 @@ on the border of witchcraft since there has been no earlier call to a
 <section class="detail" id="t:reply_tag/0">
 
   <div class="detail-header">
-    <a href="#t:reply_tag/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:reply_tag/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">reply_tag()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L565" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L565" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2102,15 +2066,13 @@ on the border of witchcraft since there has been no earlier call to a
 <section class="detail" id="t:request_id/0">
 
   <div class="detail-header">
-    <a href="#t:request_id/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:request_id/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">request_id()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1441" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1441" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2132,15 +2094,13 @@ on the border of witchcraft since there has been no earlier call to a
 <section class="detail" id="t:request_id_collection/0">
 
   <div class="detail-header">
-    <a href="#t:request_id_collection/0" class="detail-link" data-no-tooltip title="Link to this opaque">
+    <a href="#t:request_id_collection/0" class="detail-link" data-no-tooltip aria-label="Link to this opaque">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this opaque</span>
     </a>
     <h1 class="signature" translate="no">request_id_collection()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1450" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1450" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2163,15 +2123,13 @@ a label chosen by the user.  For more information see <a href="#reqids_new/0"><c
 <section class="detail" id="t:response_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:response_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:response_timeout/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">response_timeout()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1479" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1479" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2208,15 +2166,13 @@ recalculate the relative time until the deadline over and over again.</p></li></
 <section class="detail" id="t:server_name/0">
 
   <div class="detail-header">
-    <a href="#t:server_name/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:server_name/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">server_name()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2125" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2240,15 +2196,13 @@ See <a href="#start_link/3"><code class="inline">start_link/3</code></a> and <a 
 <section class="detail" id="t:server_ref/0">
 
   <div class="detail-header">
-    <a href="#t:server_ref/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:server_ref/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">server_ref()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2153" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2153" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2282,15 +2236,13 @@ Thus, <code class="inline">{via, global, GlobalName}</code> is the same as <co
 <section class="detail" id="t:start_mon_ret/0">
 
   <div class="detail-header">
-    <a href="#t:start_mon_ret/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:start_mon_ret/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">start_mon_ret()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2207" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2207" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2315,15 +2267,13 @@ tuple.</p>
 <section class="detail" id="t:start_opt/0">
 
   <div class="detail-header">
-    <a href="#t:start_opt/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:start_opt/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">start_opt()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2168" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2168" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2348,15 +2298,13 @@ and <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>
 <section class="detail" id="t:start_ret/0">
 
   <div class="detail-header">
-    <a href="#t:start_ret/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:start_ret/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">start_ret()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2193" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2193" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2379,15 +2327,13 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
 <section class="detail" id="t:state/0">
 
   <div class="detail-header">
-    <a href="#t:state/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L596" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L596" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2409,7 +2355,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
 the state can be any term. After a <em>state change</em> (<code class="inline">NextState =/= State</code>),
 all postponed events are retried.</p><p>Comparing two states for strict equality is assumed to be a fast operation,
 since for every <em>state transition</em> the <code class="inline">gen_statem</code> engine has to deduce
-if it is a  <em>state change</em>.</p><blockquote><h4 class="info">Note</h4><p>The smaller the state term, in general, the faster the comparison.</p><p>Note that if the &quot;same&quot; state term is returned for a state transition
+if it is a  <em>state change</em>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>The smaller the state term, in general, the faster the comparison.</p><p>Note that if the &quot;same&quot; state term is returned for a state transition
 (or a return action without a <code class="inline">NextState</code> field is used),
 the comparison for equality is always fast because that can be seen
 from the term handle.</p><p>But if a newly constructed state term is returned,
@@ -2417,21 +2363,19 @@ both the old and the new state terms will have to be traversed
 until an inequality is found, or until both terms
 have been fully traversed.</p><p>So it is possible to use large state terms that are fast to compare,
 but very easy to accidentally mess up.  Using small state terms is
-the safe choice.</p></blockquote>
+the safe choice.</p></section>
   </section>
 </section>
 <section class="detail" id="t:state_callback_result/2">
 
   <div class="detail-header">
-    <a href="#t:state_callback_result/2" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state_callback_result/2" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state_callback_result(ActionType, DataType)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1405" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1405" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2486,15 +2430,13 @@ in all future versions of <code class="inline">gen_statem</code>.</p>
 <section class="detail" id="t:state_enter/0">
 
   <div class="detail-header">
-    <a href="#t:state_enter/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state_enter/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state_enter()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L769" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L769" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2543,15 +2485,13 @@ but will happen when repeating the <em>state enter call</em>.</p>
 <section class="detail" id="t:state_enter_result/1">
 
   <div class="detail-header">
-    <a href="#t:state_enter_result/1" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state_enter_result/1" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1312" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1312" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2573,15 +2513,13 @@ but will happen when repeating the <em>state enter call</em>.</p>
 <section class="detail" id="t:state_enter_result/2">
 
   <div class="detail-header">
-    <a href="#t:state_enter_result/2" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state_enter_result/2" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state_enter_result(State, DataType)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1327" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1327" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2611,15 +2549,13 @@ equal to the current state, sets <code class="inline">NewData</code>, and execut
 <section class="detail" id="t:state_name/0">
 
   <div class="detail-header">
-    <a href="#t:state_name/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state_name/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state_name()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L610" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L610" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2647,15 +2583,13 @@ callback function <a href="#c:terminate/3"><code class="inline">Module:terminate
 <section class="detail" id="t:state_timeout/0">
 
   <div class="detail-header">
-    <a href="#t:state_timeout/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:state_timeout/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">state_timeout()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1009" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1009" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2702,15 +2636,13 @@ action without affecting the time of expiry.</p>
 <section class="detail" id="t:timeout_action/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_action/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:timeout_action/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">timeout_action()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1188" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1188" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2768,15 +2700,13 @@ with <code class="inline">EventContent</code>, and time-out options
 <section class="detail" id="t:timeout_cancel_action/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_cancel_action/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:timeout_cancel_action/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">timeout_cancel_action()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1225" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1225" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2806,15 +2736,13 @@ will expire).  Using this action shows the intention more clearly.</p>
 <section class="detail" id="t:timeout_event_type/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_event_type/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:timeout_event_type/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">timeout_event_type()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L672" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L672" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2842,15 +2770,13 @@ for itself with the corresponding <a href="#t:timeout_action/0"><code class="inl
 <section class="detail" id="t:timeout_option/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_option/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:timeout_option/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">timeout_option()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1022" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1022" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2876,15 +2802,13 @@ See <a href="../../../../erts-15.1.3/doc/html/erlang.html#start_timer/4"><code c
 <section class="detail" id="t:timeout_update_action/0">
 
   <div class="detail-header">
-    <a href="#t:timeout_update_action/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:timeout_update_action/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">timeout_update_action()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1244" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1244" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2916,15 +2840,13 @@ if a generic time-out name was misspelled.</p>
 <section class="detail" id="t:transition_option/0">
 
   <div class="detail-header">
-    <a href="#t:transition_option/0" class="detail-link" data-no-tooltip title="Link to this type">
+    <a href="#t:transition_option/0" class="detail-link" data-no-tooltip aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature" translate="no">transition_option()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L852" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L852" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -2983,11 +2905,11 @@ but if it is a system event it goes right back into hibernation.
 When a new message arrives the
 <a href="#state-callback"><em>state callback</em></a> is called with
 the corresponding event, and we start again
-from the top of this sequence.</p></li></ol><blockquote><h4 class="info">Note</h4><p>The behaviour of a zero time-out (a time-out with time <code class="inline">0</code>)
+from the top of this sequence.</p></li></ol><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>The behaviour of a zero time-out (a time-out with time <code class="inline">0</code>)
 differs subtly from Erlang's <code class="inline">receive ... after 0 ... end</code>.</p><p>The latter receives one message if there is one,
 while using the <a href="#t:timeout_action/0"><code class="inline">timeout_action/0</code></a> <code class="inline">{timeout, 0}</code> does not
 receive any external event.</p><p><a href="gen_server.html"><code class="inline">gen_server</code></a>'s time-out works like Erlang's
-<code class="inline">receive ... after 0 ... end</code>, in contrast to <code class="inline">gen_statem</code>.</p></blockquote>
+<code class="inline">receive ... after 0 ... end</code>, in contrast to <code class="inline">gen_statem</code>.</p></section>
   </section>
 </section>
 
@@ -3005,15 +2927,13 @@ receive any external event.</p><p><a href="gen_server.html"><code class="inline"
 <section class="detail" id="c:callback_mode/0">
 
   <div class="detail-header">
-    <a href="#c:callback_mode/0" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:callback_mode/0" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">callback_mode()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1551" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1551" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3045,22 +2965,20 @@ any of the actions <a href="#push_callback_module"><code class="inline">change_c
 <a href="#push_callback_module"><code class="inline">push_callback_module</code></a> or
 <a href="#pop_callback_module"><code class="inline">pop_callback_module</code></a>.</p><p>The <code class="inline">CallbackMode</code> is either just <a href="#t:callback_mode/0"><code class="inline">callback_mode/0</code></a>
 or a list containing <a href="#t:callback_mode/0"><code class="inline">callback_mode/0</code></a> and possibly
-the atom <a href="#t:state_enter/0"><code class="inline">state_enter</code></a>.</p><blockquote><h4 class="info">Note</h4><p>If this function's body does not return an inline constant value
-the callback module is doing something strange.</p></blockquote>
+the atom <a href="#t:state_enter/0"><code class="inline">state_enter</code></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>If this function's body does not return an inline constant value
+the callback module is doing something strange.</p></section>
   </section>
 </section>
 <section class="detail" id="c:code_change/4">
 
   <div class="detail-header">
-    <a href="#c:code_change/4" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:code_change/4" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">code_change(OldVsn, OldState, OldData, Extra)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1809" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1809" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3129,24 +3047,22 @@ an upgrade that upgrades <em>that</em> module needs to suspend,
 code change, and resume any server whose child specification declares
 that it is using <em>that</em> module.
 And again; the <em>current</em> callback module will get the
-<a href="#c:code_change/4"><code class="inline">Module:code_change/4</code></a> call.</p><blockquote><h4 class="info">Note</h4><p>If a release upgrade/downgrade with <code class="inline">Change = {advanced, Extra}</code>
+<a href="#c:code_change/4"><code class="inline">Module:code_change/4</code></a> call.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>If a release upgrade/downgrade with <code class="inline">Change = {advanced, Extra}</code>
 specified in the <code class="inline">.appup</code> file is made
 when <a href="#c:code_change/4"><code class="inline">Module:code_change/4</code></a> is not implemented
-the process will crash with exit reason <code class="inline">undef</code>.</p></blockquote>
+the process will crash with exit reason <code class="inline">undef</code>.</p></section>
   </section>
 </section>
 <section class="detail" id="c:format_status/1">
 
   <div class="detail-header">
-    <a href="#c:format_status/1" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:format_status/1" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">format_status(Status)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1969" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1969" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3177,34 +3093,32 @@ of the <code class="inline">gen_statem</code>, and shall return a map <code clas
 containing the same keys as the input map,
 but it may transform some values.</p><p>One use case for this function is to return compact alternative state
 representations to avoid having large state terms printed in log files.
-Another is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="1557629802-1">(</span><span class="n">Status</span><span class="p" data-group-id="1557629802-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="1557629802-2">(</span><span class="w">
-    </span><span class="nf">fun</span><span class="p" data-group-id="1557629802-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="1557629802-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="1557629802-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="1557629802-4">)</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="1557629802-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="1557629802-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="1557629802-6">}</span><span class="p" data-group-id="1557629802-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-            </span><span class="p" data-group-id="1557629802-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="1557629802-7">}</span><span class="p">;</span><span class="w">
-       </span><span class="p" data-group-id="1557629802-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="1557629802-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+Another is to hide sensitive data from being written to the error log.</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">format_status</span><span class="p" data-group-id="8963915965-1">(</span><span class="n">Status</span><span class="p" data-group-id="8963915965-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="nc">maps</span><span class="p">:</span><span class="nf">map</span><span class="p" data-group-id="8963915965-2">(</span><span class="w">
+    </span><span class="nf">fun</span><span class="p" data-group-id="8963915965-3">(</span><span class="ss">state</span><span class="p">,</span><span class="n">State</span><span class="p" data-group-id="8963915965-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="nc">maps</span><span class="p">:</span><span class="nf">remove</span><span class="p" data-group-id="8963915965-4">(</span><span class="ss">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="8963915965-4">)</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="8963915965-5">(</span><span class="ss">message</span><span class="p">,</span><span class="p" data-group-id="8963915965-6">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Pass</span><span class="p" data-group-id="8963915965-6">}</span><span class="p" data-group-id="8963915965-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+            </span><span class="p" data-group-id="8963915965-7">{</span><span class="ss">password</span><span class="p">,</span><span class="w"> </span><span class="ss">removed</span><span class="p" data-group-id="8963915965-7">}</span><span class="p">;</span><span class="w">
+       </span><span class="p" data-group-id="8963915965-8">(</span><span class="p">_</span><span class="p">,</span><span class="n">Value</span><span class="p" data-group-id="8963915965-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
             </span><span class="n">Value</span><span class="w">
-    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="1557629802-2">)</span><span class="p">.</span></code></pre><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need
+    </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p" data-group-id="8963915965-2">)</span><span class="p">.</span></code></pre><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>This callback is optional, so a callback module does not need
 to export it.  The <code class="inline">gen_statem</code> module provides
 a default implementation of this function that returns <code class="inline">{State, Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data,
 the default function will instead return <code class="inline">{State, Info}</code>,
 where <code class="inline">Info</code> says nothing but the fact that
-<a href="#c:format_status/2"><code class="inline">Module:format_status/2</code></a> has crashed.</p></blockquote>
+<a href="#c:format_status/2"><code class="inline">Module:format_status/2</code></a> has crashed.</p></section>
   </section>
 </section>
 <section class="detail" id="c:format_status/2">
 
   <div class="detail-header">
-    <a href="#c:format_status/2" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:format_status/2" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">format_status/2</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1881" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1881" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3249,26 +3163,24 @@ with the rest of the <a href="sys.html#get_status/1"><code class="inline">sys:ge
 return value.</p><p>One use for this function is to return compact alternative
 state representations to avoid having large state terms printed
 in log files. Another use is to hide sensitive data
-from being written to the error log.</p><blockquote><h4 class="info">Note</h4><p>This callback is optional, so a callback module does not need
+from being written to the error log.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>This callback is optional, so a callback module does not need
 to export it.  The <code class="inline">gen_statem</code> module provides a default
 implementation of this function that returns <code class="inline">{State, Data}</code>.</p><p>If this callback is exported but fails, to hide possibly sensitive data,
 the default function will instead return <code class="inline">{State, Info}</code>,
 where <code class="inline">Info</code> says nothing but the fact that
-<a href="#c:format_status/2"><code class="inline">Module:format_status/2</code></a> has crashed.</p></blockquote>
+<a href="#c:format_status/2"><code class="inline">Module:format_status/2</code></a> has crashed.</p></section>
   </section>
 </section>
 <section class="detail" id="c:handle_event/4">
 
   <div class="detail-header">
-    <a href="#c:handle_event/4" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:handle_event/4" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">handle_event/4</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1650" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1650" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3328,15 +3240,13 @@ is no longer in scope.</p>
 <section class="detail" id="c:init/1">
 
   <div class="detail-header">
-    <a href="#c:init/1" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:init/1" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">init(Args)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1511" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1511" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3356,25 +3266,23 @@ is no longer in scope.</p>
 <a href="#start_link/3"><code class="inline">start_link/3,4</code></a>,
 <a href="#start_monitor/3"><code class="inline">start_monitor/3,4</code></a>, or
 <a href="#start/3"><code class="inline">start/3,4</code></a>, this function is called by the new process
-to initialize the implementation state and server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><blockquote><h4 class="info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a>
+to initialize the implementation state and server data.</p><p><code class="inline">Args</code> is the <code class="inline">Args</code> argument provided to that start function.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Note that if the <code class="inline">gen_statem</code> is started through <a href="proc_lib.html"><code class="inline">proc_lib</code></a>
 and <a href="#enter_loop/6"><code class="inline">enter_loop/4,5,6</code></a>, this callback
 will never be called.  Since this callback is not optional
-it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="1293706882-1">(</span><span class="p">_</span><span class="p" data-group-id="1293706882-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="1293706882-2">(</span><span class="p" data-group-id="1293706882-2">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">init</span><span class="p" data-group-id="1293706882-3">(</span><span class="n">Args</span><span class="p" data-group-id="1293706882-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="1293706882-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1293706882-5">[</span><span class="n">Args</span><span class="p" data-group-id="1293706882-5">]</span><span class="p" data-group-id="1293706882-4">)</span><span class="p">.</span></code></pre></blockquote>
+it can in that case be implemented as:</p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">spec</span><span class="w"> </span><span class="nf">init</span><span class="p" data-group-id="7792457879-1">(</span><span class="p">_</span><span class="p" data-group-id="7792457879-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nf">no_return</span><span class="p" data-group-id="7792457879-2">(</span><span class="p" data-group-id="7792457879-2">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="7792457879-3">(</span><span class="n">Args</span><span class="p" data-group-id="7792457879-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">error</span><span class="p" data-group-id="7792457879-4">(</span><span class="ss">not_implemented</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7792457879-5">[</span><span class="n">Args</span><span class="p" data-group-id="7792457879-5">]</span><span class="p" data-group-id="7792457879-4">)</span><span class="p">.</span></code></pre></section>
   </section>
 </section>
 <section class="detail" id="c:StateName/3">
 
   <div class="detail-header">
-    <a href="#c:StateName/3" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:StateName/3" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">'StateName'/3</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1582" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1582" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3409,15 +3317,13 @@ which is the <a href="#state-callback"><em>state callback</em></a> in
 <section class="detail" id="c:terminate/3">
 
   <div class="detail-header">
-    <a href="#c:terminate/3" class="detail-link" data-no-tooltip title="Link to this callback">
+    <a href="#c:terminate/3" class="detail-link" data-no-tooltip aria-label="Link to this callback">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
     </a>
     <h1 class="signature" translate="no">terminate/3</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1722" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L1722" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3474,15 +3380,13 @@ just as for any process.</p>
 <section class="detail" id="call/2">
 
   <div class="detail-header">
-    <a href="#call/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#call/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2526" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2526" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3504,15 +3408,13 @@ just as for any process.</p>
 <section class="detail" id="call/3">
 
   <div class="detail-header">
-    <a href="#call/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#call/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">call(ServerRef, Request, Timeout)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2578" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2578" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3559,15 +3461,13 @@ of relevant values for the <code class="inline">Reason</code> in the exit term.<
 <section class="detail" id="cast/2">
 
   <div class="detail-header">
-    <a href="#cast/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#cast/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">cast(ServerRef, Msg)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2501" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2501" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3593,15 +3493,13 @@ with <a href="#t:event_type/0"><code class="inline">event_type/0</code></a> <cod
 <section class="detail" id="check_response/2">
 
   <div class="detail-header">
-    <a href="#check_response/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#check_response/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqId)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2958" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2958" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3637,15 +3535,13 @@ this function returns an <code class="inline">error</code> return with the exit 
 <section class="detail" id="check_response/3">
 
   <div class="detail-header">
-    <a href="#check_response/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#check_response/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">check_response(Msg, ReqIdCollection, Delete)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3024" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3024" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3705,15 +3601,13 @@ this function, it will always return <code class="inline">no_reply</code>.</p>
 <section class="detail" id="enter_loop/4">
 
   <div class="detail-header">
-    <a href="#enter_loop/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#enter_loop/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3159" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3159" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3735,15 +3629,13 @@ this function, it will always return <code class="inline">no_reply</code>.</p>
 <section class="detail" id="enter_loop/5">
 
   <div class="detail-header">
-    <a href="#enter_loop/5" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#enter_loop/5" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server_or_Actions)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3183" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3183" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3772,15 +3664,13 @@ this function, it will always return <code class="inline">no_reply</code>.</p>
 <section class="detail" id="enter_loop/6">
 
   <div class="detail-header">
-    <a href="#enter_loop/6" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#enter_loop/6" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Opts, State, Data, Server, Actions)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3231" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3231" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3825,15 +3715,13 @@ according to <a href="#t:server_name/0"><code class="inline">server_name/0</code
 <section class="detail" id="receive_response/1">
 
   <div class="detail-header">
-    <a href="#receive_response/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#receive_response/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2805" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2805" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3860,15 +3748,13 @@ according to <a href="#t:server_name/0"><code class="inline">server_name/0</code
 <section class="detail" id="receive_response/2">
 
   <div class="detail-header">
-    <a href="#receive_response/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#receive_response/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">receive_response(ReqId, Timeout)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2845" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2845" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3911,15 +3797,13 @@ while <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>
 <section class="detail" id="receive_response/3">
 
   <div class="detail-header">
-    <a href="#receive_response/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#receive_response/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">receive_response(ReqIdCollection, Timeout, Delete)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2922" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2922" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -3988,15 +3872,13 @@ and then return <code class="inline">timeout</code>.</p>
 <section class="detail" id="reply/1">
 
   <div class="detail-header">
-    <a href="#reply/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reply/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reply(Replies)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3125" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3125" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4015,21 +3897,19 @@ and then return <code class="inline">timeout</code>.</p>
 <p>Send one or multiple <code class="inline">call</code> replies.</p><p>This funcion can be used by a <code class="inline">gen_statem</code> callback to explicitly send
 one or multiple replies to processes waiting for <code class="inline">call</code> requests' replies,
 when it is impractical or impossible to return <a href="#t:reply_action/0"><code class="inline">reply_action/0</code></a>s
-from a <a href="#state-callback"><em>state callback</em></a>.</p><blockquote><h4 class="info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></blockquote>
+from a <a href="#state-callback"><em>state callback</em></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></section>
   </section>
 </section>
 <section class="detail" id="reply/2">
 
   <div class="detail-header">
-    <a href="#reply/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reply/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reply(From, Reply)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3146" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3146" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4048,21 +3928,19 @@ from a <a href="#state-callback"><em>state callback</em></a>.</p><blockquote><h4
 <p>Send a <code class="inline">call</code> <code class="inline">Reply</code> to <code class="inline">From</code>.</p><p>This funcion can be used by a <code class="inline">gen_statem</code> callback to explicitly send
 a reply to a process waiting for a <code class="inline">call</code> requests' reply,
 when it is impractical or impossible to return a <a href="#t:reply_action/0"><code class="inline">reply_action/0</code></a>
-from a <a href="#state-callback"><em>state callback</em></a>.</p><blockquote><h4 class="info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></blockquote>
+from a <a href="#state-callback"><em>state callback</em></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>A reply sent with this function is not visible in <a href="sys.html"><code class="inline">sys</code></a> debug output.</p></section>
   </section>
 </section>
 <section class="detail" id="reqids_add/3">
 
   <div class="detail-header">
-    <a href="#reqids_add/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reqids_add/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reqids_add(ReqId, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3083" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3083" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4087,15 +3965,13 @@ the resulting request identifier collection.</p>
 <section class="detail" id="reqids_new/0">
 
   <div class="detail-header">
-    <a href="#reqids_new/0" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reqids_new/0" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reqids_new()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3054" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3054" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4125,15 +4001,13 @@ request identifiers in a collection.</p>
 <section class="detail" id="reqids_size/1">
 
   <div class="detail-header">
-    <a href="#reqids_size/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reqids_size/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reqids_size(ReqIdCollection)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3063" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3063" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4155,15 +4029,13 @@ request identifiers in a collection.</p>
 <section class="detail" id="reqids_to_list/1">
 
   <div class="detail-header">
-    <a href="#reqids_to_list/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#reqids_to_list/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">reqids_to_list(ReqIdCollection)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3102" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L3102" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4188,15 +4060,13 @@ in <a href="#t:request_id_collection/0"><code class="inline">ReqIdCollection</co
 <section class="detail" id="send_request/2">
 
   <div class="detail-header">
-    <a href="#send_request/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#send_request/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2625" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2625" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4236,15 +4106,13 @@ or <a href="#check_response/2"><code class="inline">check_response/2</code></a> 
 <section class="detail" id="send_request/4">
 
   <div class="detail-header">
-    <a href="#send_request/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#send_request/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">send_request(ServerRef, Request, Label, ReqIdCollection)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2658" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2658" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4279,15 +4147,13 @@ but slightly more efficient.</p>
 <section class="detail" id="start/3">
 
   <div class="detail-header">
-    <a href="#start/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2227" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2227" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4310,15 +4176,13 @@ is not registered with any <a href="#t:server_name/0">name service</a>.</p>
 <section class="detail" id="start/4">
 
   <div class="detail-header">
-    <a href="#start/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2250" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2250" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4345,15 +4209,13 @@ see <a href="#start_link/4"><code class="inline">start_link/4</code></a>.</p>
 <section class="detail" id="start_link/3">
 
   <div class="detail-header">
-    <a href="#start_link/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start_link/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2268" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2268" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4376,15 +4238,13 @@ is not registered with any <a href="#t:server_name/0">name service</a>.</p>
 <section class="detail" id="start_link/4">
 
   <div class="detail-header">
-    <a href="#start_link/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start_link/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start_link(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2391" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2391" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4417,8 +4277,8 @@ from <a href="#c:init/1"><code class="inline">Module:init/1</code></a>, or it is
 and this start function returns <a href="#t:start_ret/0"><code class="inline">{error, timeout}</code></a>.</p></li><li><p><strong><a href="#t:start_opt/0"><code class="inline">{spawn_opt, SpawnOpts}</code></a></strong> -
 <code class="inline">SpawnOpts</code> is passed as option list to <a href="../../../../erts-15.1.3/doc/html/erlang.html#spawn_opt/2"><code class="inline">erlang:spawn_opt/2</code></a>,
 which is used to spawn the <code class="inline">gen_statem</code> process.
-See <a href="proc_lib.html#t:start_spawn_option/0"><code class="inline">proc_lib:start_spawn_option/0</code></a>.</p><blockquote><h4 class="info">Note</h4><p>Using spawn option <code class="inline">monitor</code> is not allowed,
-it causes a <code class="inline">badarg</code> failure.</p></blockquote></li><li><p><strong><a href="#t:enter_loop_opt/0"><code class="inline">{hibernate_after, HibernateAfterTimeout}</code></a></strong> -
+See <a href="proc_lib.html#t:start_spawn_option/0"><code class="inline">proc_lib:start_spawn_option/0</code></a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Using spawn option <code class="inline">monitor</code> is not allowed,
+it causes a <code class="inline">badarg</code> failure.</p></section></li><li><p><strong><a href="#t:enter_loop_opt/0"><code class="inline">{hibernate_after, HibernateAfterTimeout}</code></a></strong> -
 When the <code class="inline">gen_statem</code> process waits for a message, if no message
 is received within <code class="inline">HibernateAfterTimeout</code> milliseconds,
 the process goes into hibernation automatically
@@ -4446,7 +4306,7 @@ The <code class="inline">gen_statem</code> process exited with reason <code clas
 The <code class="inline">gen_statem</code> process did a graceful exit with reason <code class="inline">normal</code>.</li></ul></li></ul><p>If the return value is <code class="inline">ignore</code> or <code class="inline">{error, _}</code>, the started
 <code class="inline">gen_statem</code> process has terminated.  If an <code class="inline">'EXIT'</code> message
 was delivered to the calling process (due to the process link),
-that message has been consumed.</p><blockquote><h4 class="warning">Warning</h4><p>Before OTP 26.0, if the started <code class="inline">gen_statem</code> process returned e.g.
+that message has been consumed.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>Before OTP 26.0, if the started <code class="inline">gen_statem</code> process returned e.g.
 <code class="inline">{stop, Reason}</code> from <a href="#c:init/1"><code class="inline">Module:init/1</code></a>,
 this function could return <code class="inline">{error, Reason}</code>
 <em>before</em> the started <code class="inline">gen_statem</code> process had terminated,
@@ -4459,21 +4319,19 @@ message caused this function to return <code class="inline">{error, Reason}</co
 so the <code class="inline">'EXIT'</code> message had been consumed and
 the started <code class="inline">gen_statem</code> process had terminated.</p><p>Since it was impossible to tell the difference between these two cases
 from <code class="inline">start_link/3,4</code>'s return value, this inconsistency
-was cleaned up in OTP 26.0.</p></blockquote>
+was cleaned up in OTP 26.0.</p></section>
   </section>
 </section>
 <section class="detail" id="start_monitor/3">
 
   <div class="detail-header">
-    <a href="#start_monitor/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start_monitor/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start_monitor(Module, Args, Opts)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2409" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2409" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4496,15 +4354,13 @@ process is not registered with any <a href="#t:server_name/0">name service</a>.<
 <section class="detail" id="start_monitor/4">
 
   <div class="detail-header">
-    <a href="#start_monitor/4" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#start_monitor/4" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">start_monitor(ServerName, Module, Args, Opts)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2440" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2440" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4540,15 +4396,13 @@ and removed from the caller's message queue.</p>
 <section class="detail" id="stop/1">
 
   <div class="detail-header">
-    <a href="#stop/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#stop/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2451" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2451" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4570,15 +4424,13 @@ and removed from the caller's message queue.</p>
 <section class="detail" id="stop/3">
 
   <div class="detail-header">
-    <a href="#stop/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#stop/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">stop(ServerRef, Reason, Timeout)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2483" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2483" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4612,15 +4464,13 @@ if the connection fails to the remote <code class="inline">Node</code> where the
 <section class="detail" id="wait_response/1">
 
   <div class="detail-header">
-    <a href="#wait_response/1" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#wait_response/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2676" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2676" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4647,15 +4497,13 @@ if the connection fails to the remote <code class="inline">Node</code> where the
 <section class="detail" id="wait_response/2">
 
   <div class="detail-header">
-    <a href="#wait_response/2" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#wait_response/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqId, WaitTime)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2713" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2713" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4695,15 +4543,13 @@ while <a href="#wait_response/2"><code class="inline">wait_response/2</code></a>
 <section class="detail" id="wait_response/3">
 
   <div class="detail-header">
-    <a href="#wait_response/3" class="detail-link" data-no-tooltip title="Link to this function">
+    <a href="#wait_response/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature" translate="no">wait_response(ReqIdCollection, WaitTime, Delete)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2788" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/mnesia/backup_and_fallback_on_ext_backend/OTP-19383/lib/stdlib/src/gen_statem.erl#L2788" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-       <span class="sr-only">View Source</span>
      </a>
 
 
@@ -4788,7 +4634,7 @@ and then return <code class="inline">timeout</code>.</p>
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
