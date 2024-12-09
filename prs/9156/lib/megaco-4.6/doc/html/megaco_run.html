@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-0A1C3251.js"></script>
+    <script src="dist/sidebar_items-50746EC9.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -210,9 +210,9 @@ flow will look like this:</p><p><img src="assets/MG-startup_flow_noMID.gif" alt=
   <span class="text">Configuring the Megaco stack</span>
 </h2>
 <p>There are three kinds of configuration:</p><ul><li><p>User info - Information related to megaco users. Read/Write.</p><p>A User is an entity identified by a MID, e.g. a MGC or a MG.</p><p>This information can be retrieved using
-<a href="megaco.html#user_info/2">megaco:user_info</a>.</p></li><li><p>Connection info - Information regarding connections. Read/Write.</p><p>This information can be retrieved using
-<a href="megaco.html#conn_info/2">megaco:conn_info</a>.</p></li><li><p>System info - System wide information. Read only.</p><p>This information can be retrieved using
-<a href="megaco.html#system_info/1">megaco:system_info</a>.</p></li></ul><p><a href="" id="initial_config"></a></p><h2 id="initial-configuration" class="section-heading">
+<a href="megaco.html#user_info">megaco:user_info</a>.</p></li><li><p>Connection info - Information regarding connections. Read/Write.</p><p>This information can be retrieved using
+<a href="megaco.html#conn_info">megaco:conn_info</a>.</p></li><li><p>System info - System wide information. Read only.</p><p>This information can be retrieved using
+<a href="megaco.html#system_info">megaco:system_info</a>.</p></li></ul><p><a href="" id="initial_config"></a></p><h2 id="initial-configuration" class="section-heading">
   <a href="#initial-configuration" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -232,8 +232,8 @@ more info.</p><p><a href="" id="changing_config"></a></p><h2 id="changing-the-co
   <span class="text">Changing the configuration</span>
 </h2>
 <p>The configuration can be changed during runtime. This is done with the functions
-<a href="megaco.html#update_user_info/3">megaco:update_user_info</a> and
-<a href="megaco.html#update_conn_info/3">megaco:update_conn_info</a></p><p><a href="" id="transaction_sender"></a></p><h2 id="the-transaction-sender" class="section-heading">
+<a href="megaco.html#update_user_info">megaco:update_user_info</a> and
+<a href="megaco.html#update_conn_info">megaco:update_conn_info</a></p><p><a href="" id="transaction_sender"></a></p><h2 id="the-transaction-sender" class="section-heading">
   <a href="#the-transaction-sender" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -241,8 +241,8 @@ more info.</p><p><a href="" id="changing_config"></a></p><h2 id="changing-the-co
 </h2>
 <p>The transaction sender is a process (one per connection), which handle all
 transaction sending, if so configured (see
-<a href="megaco.html#user_info/2">megaco:user_info</a> and
-<a href="megaco.html#conn_info/2">megaco:conn_info</a>).</p><p>The purpose of the transaction sender is to accumulate transactions for a more
+<a href="megaco.html#user_info">megaco:user_info</a> and
+<a href="megaco.html#conn_info">megaco:conn_info</a>).</p><p>The purpose of the transaction sender is to accumulate transactions for a more
 efficient message sending. The transactions that are accumulated are transaction
 request and transaction ack. For transaction ack's the benefit is quite large,
 since the transactions are small and it is possible to have ranges (which means
@@ -269,20 +269,20 @@ introduced. Simply, this package defines a procedure to segment megaco messages
 a transport that already does this (e.g. TCP), the megaco application does not
 check this. Instead, it is up to the user to configure this properly.</p><ul><li><p>Receiving segmented messages:</p><p>This is handled automatically by the megaco application. There is however one
 thing that need to be configured by the user, the
-<a href="megaco.html#user_info/2">segment_recv_timer</a> option.</p><p>Note that the segments are delivered to the user differently depending on
+<a href="megaco.html#user_info">segment_recv_timer</a> option.</p><p>Note that the segments are delivered to the user differently depending on
 which function is used to issue the original request. When issuing the request
-using the <a href="megaco.html#cast/3">megaco:cast</a> function, the segments are delivered
-to the user via the <a href="megaco_user.html#c:handle_trans_reply/5">handle_trans_reply</a> callback
+using the <a href="megaco.html#cast">megaco:cast</a> function, the segments are delivered
+to the user via the <a href="megaco_user.html#trans_reply">handle_trans_reply</a> callback
 function one at a time, as they arrive. But this obviously doe not work for
-the <a href="megaco.html#call/3">megaco:call</a> function. In this case, the segments are
+the <a href="megaco.html#call">megaco:call</a> function. In this case, the segments are
 accumulated and then delivered all at once as the function returns.</p></li><li><p>Sending segmented messages:</p><p>This is also handled automatically by the megaco application. First of all,
 segmentation is only attempted if so configured, see the
-<a href="megaco.html#user_info/2">segment_send</a> option. Secondly, megaco relies on the
+<a href="megaco.html#user_info">segment_send</a> option. Secondly, megaco relies on the
 ability of the used codec to encode action replies, which is the smallest
 component the megaco application handles when segmenting. Thirdly, the reply
 will be segmented only if the sum of the size of the action replies (plus an
 arbitrary message header size) are greater then the specified max message size
-(see the <a href="megaco.html#user_info/2">max_pdu_size</a> option). Finally, if
+(see the <a href="megaco.html#user_info">max_pdu_size</a> option). Finally, if
 segmentation is decided, then each action reply will make up its own (segment)
 message.</p></li></ul>
 </div>

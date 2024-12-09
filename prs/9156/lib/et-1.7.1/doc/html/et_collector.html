@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-639C3385.js"></script>
+    <script src="dist/sidebar_items-207E2C66.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -269,7 +269,7 @@ Pages
 
       </div>
 
-        <div class="summary-synopsis"><p>Change active trace pattern globally on all trace nodes.</p></div>
+        <div class="summary-synopsis"><p>change_pattern(CollectorPid, RawPattern) -&gt; {old_pattern, TracePattern}</p></div>
 
     </div>
 
@@ -279,7 +279,7 @@ Pages
 
       </div>
 
-        <div class="summary-synopsis"><p>Clear the event table.</p></div>
+        <div class="summary-synopsis"><p>clear_table(Handle) -&gt; ok</p></div>
 
     </div>
 
@@ -289,8 +289,7 @@ Pages
 
       </div>
 
-        <div class="summary-synopsis"><p>Delete a dictionary entry and send a {et, {dict_delete, Key}} tuple to all
-registered subscribers.</p></div>
+        <div class="summary-synopsis"><p>dict_delete(CollectorPid, Key) -&gt; ok</p></div>
 
     </div>
 
@@ -300,8 +299,9 @@ registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Insert a dictionary entry and send a <code class="inline">{et, {dict_insert, Key, Val}}</code> tuple to
-all registered subscribers.</p></div>
+        <div class="summary-synopsis"><p>dict_insert(CollectorPid, Key, Val) -&gt; okdict_insert(CollectorPid, {subscriber,
+SubscriberPid}, Void) -&gt; okdict_insert(CollectorPid, {filter, collector},
+FilterFun) -&gt; ok</p></div>
 
     </div>
 
@@ -311,7 +311,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Lookup a dictionary entry and return zero or one value.</p></div>
+        <div class="summary-synopsis"><p>dict_lookup(CollectorPid, Key) -&gt; [Val]</p></div>
 
     </div>
 
@@ -321,7 +321,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Match some dictionary entries</p></div>
+        <div class="summary-synopsis"><p>dict_match(CollectorPid, Pattern) -&gt; [Match]</p></div>
 
     </div>
 
@@ -331,7 +331,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Return a the identity of the globally registered collector if there is any.</p></div>
+        <div class="summary-synopsis"><p>get_global_pid() -&gt; CollectorPid | exit(Reason)</p></div>
 
     </div>
 
@@ -341,7 +341,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Equivalent to <a href="#iterate/5"><code class="inline">iterate(Handle, Prev, Limit, undefined, Prev)</code></a>.</p></div>
+        <div class="summary-synopsis"><p>iterate(Handle, Prev, Limit) -&gt; NewAcc</p></div>
 
     </div>
 
@@ -351,7 +351,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Iterate over the currently stored events.</p></div>
+        <div class="summary-synopsis"><p>iterate(Handle, Prev, Limit, Fun, Acc) -&gt; NewAcc</p></div>
 
     </div>
 
@@ -361,7 +361,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Make a key out of an event record or an old key.</p></div>
+        <div class="summary-synopsis"><p>make_key(Type, Stuff) -&gt; Key</p></div>
 
     </div>
 
@@ -371,7 +371,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Sends a message to all registered subscribers.</p></div>
+        <div class="summary-synopsis"><p>multicast(_CollectorPid, Msg) -&gt; ok</p></div>
 
     </div>
 
@@ -387,7 +387,7 @@ all registered subscribers.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#report_event/5" data-no-tooltip translate="no">report_event(Handle, DetailLevel, FromTo, Label, Contents)</a>
+        <a href="#report_event/5" data-no-tooltip translate="no">report_event(CollectorPid, DetailLevel, FromTo, Label, Contents)</a>
 
       </div>
 
@@ -397,11 +397,12 @@ all registered subscribers.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#report_event/6" data-no-tooltip translate="no">report_event(Handle, DetailLevel, From, To, Label, Contents)</a>
+        <a href="#report_event/6" data-no-tooltip translate="no">report_event(CollectorPid, DetailLevel, From, To, Label, Contents)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Report an event to the collector.</p></div>
+        <div class="summary-synopsis"><p>report_event(Handle, DetailLevel, From, To, Label, Contents) -&gt; {ok,
+Continuation} | exit(Reason)</p></div>
 
     </div>
 
@@ -411,7 +412,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Save the events to a file.</p></div>
+        <div class="summary-synopsis"><p>save_event_file(CollectorPid, FileName, Options) -&gt; ok | {error, Reason}</p></div>
 
     </div>
 
@@ -421,7 +422,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Start a collector process.</p></div>
+        <div class="summary-synopsis"><p>start_link(Options) -&gt; {ok, CollectorPid} | {error, Reason}</p></div>
 
     </div>
 
@@ -431,7 +432,8 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Load raw Erlang trace from a file, port or process.</p></div>
+        <div class="summary-synopsis"><p>start_trace_client(CollectorPid, Type, Parameters) -&gt; file_loaded |
+{trace_client_pid, pid()} | exit(Reason)</p></div>
 
     </div>
 
@@ -441,7 +443,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Stop a collector process.</p></div>
+        <div class="summary-synopsis"><p>stop(CollectorPid) -&gt; ok</p></div>
 
     </div>
 
@@ -920,7 +922,7 @@ all registered subscribers.</p></div>
     </a>
     <h1 class="signature" translate="no">change_pattern(CollectorPid, RawPattern)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L667" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L682" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -940,7 +942,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-<p>Change active trace pattern globally on all trace nodes.</p>
+<p>change_pattern(CollectorPid, RawPattern) -&gt; {old_pattern, TracePattern}</p><p>Change active trace pattern globally on all trace nodes.</p>
   </section>
 </section>
 <section class="detail" id="clear_table/1">
@@ -952,7 +954,7 @@ all registered subscribers.</p></div>
     </a>
     <h1 class="signature" translate="no">clear_table(Handle)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L1087" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L1125" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -968,7 +970,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-<p>Clear the event table.</p>
+<p>clear_table(Handle) -&gt; ok</p><p>Clear the event table.</p>
   </section>
 </section>
 <section class="detail" id="dict_delete/2">
@@ -980,7 +982,7 @@ all registered subscribers.</p></div>
     </a>
     <h1 class="signature" translate="no">dict_delete(CollectorPid, Key)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L771" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L794" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -996,7 +998,7 @@ all registered subscribers.</p></div>
 
       </div>
 
-<p>Delete a dictionary entry and send a {et, {dict_delete, Key}} tuple to all
+<p>dict_delete(CollectorPid, Key) -&gt; ok</p><p>Delete a dictionary entry and send a {et, {dict_delete, Key}} tuple to all
 registered subscribers.</p><p>If the deleted entry is a registered subscriber, it will imply that the
 subscriber process gets is unregistered as subscriber as well as it gets it
 final message.</p>
@@ -1011,7 +1013,7 @@ final message.</p>
     </a>
     <h1 class="signature" translate="no">dict_insert(CollectorPid, What, Value)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L711" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L730" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1032,7 +1034,9 @@ final message.</p>
 
       </div>
 
-<p>Insert a dictionary entry and send a <code class="inline">{et, {dict_insert, Key, Val}}</code> tuple to
+<p>dict_insert(CollectorPid, Key, Val) -&gt; okdict_insert(CollectorPid, {subscriber,
+SubscriberPid}, Void) -&gt; okdict_insert(CollectorPid, {filter, collector},
+FilterFun) -&gt; ok</p><p>Insert a dictionary entry and send a {et, {dict_insert, Key, Val}} tuple to
 all registered subscribers.</p><p>If the entry is a new subscriber, it will imply that the new subscriber process
 first will get one message for each already stored dictionary entry, before it
 and all old subscribers will get this particular entry. The collector process
@@ -1049,7 +1053,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
     </a>
     <h1 class="signature" translate="no">dict_lookup(CollectorPid, Key)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L741" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L762" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1065,7 +1069,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
 
       </div>
 
-<p>Lookup a dictionary entry and return zero or one value.</p>
+<p>dict_lookup(CollectorPid, Key) -&gt; [Val]</p><p>Lookup a dictionary entry and return zero or one value.</p>
   </section>
 </section>
 <section class="detail" id="dict_match/2">
@@ -1077,7 +1081,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
     </a>
     <h1 class="signature" translate="no">dict_match(CollectorPid, Pattern)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L794" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L819" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1097,7 +1101,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
 
       </div>
 
-<p>Match some dictionary entries</p>
+<p>dict_match(CollectorPid, Pattern) -&gt; [Match]</p><p>Match some dictionary entries</p>
   </section>
 </section>
 <section class="detail" id="get_global_pid/0">
@@ -1109,7 +1113,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
     </a>
     <h1 class="signature" translate="no">get_global_pid()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L639" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L652" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1125,7 +1129,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
 
       </div>
 
-<p>Return a the identity of the globally registered collector if there is any.</p>
+<p>get_global_pid() -&gt; CollectorPid | exit(Reason)</p><p>Return a the identity of the globally registered collector if there is any.</p>
   </section>
 </section>
 <section class="detail" id="iterate/3">
@@ -1137,7 +1141,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
     </a>
     <h1 class="signature" translate="no">iterate(Handle, Prev, Limit)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L903" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L937" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1162,7 +1166,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
 
       </div>
 
-<p>Equivalent to <a href="#iterate/5"><code class="inline">iterate(Handle, Prev, Limit, undefined, Prev)</code></a>.</p>
+<p>iterate(Handle, Prev, Limit) -&gt; NewAcc</p><p>Short for iterate(Handle, Prev, Limit, undefined, Prev) -&gt; NewAcc</p>
   </section>
 </section>
 <section class="detail" id="iterate/5">
@@ -1174,7 +1178,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
     </a>
     <h1 class="signature" translate="no">iterate(Handle, Prev, Limit, Fun, Acc)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L943" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L979" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1201,7 +1205,7 @@ dies it will imply that it gets unregistered as with a normal dict_delete/2.</p>
 
       </div>
 
-<p>Iterate over the currently stored events.</p><p>Iterates over the currently stored events and applies a function for each event.
+<p>iterate(Handle, Prev, Limit, Fun, Acc) -&gt; NewAcc</p><p>Iterate over the currently stored events.</p><p>Iterates over the currently stored events and applies a function for each event.
 The iteration may be performed forwards or backwards and may be limited to a
 maximum number of events (abs(Limit)).</p>
   </section>
@@ -1215,7 +1219,7 @@ maximum number of events (abs(Limit)).</p>
     </a>
     <h1 class="signature" translate="no">make_key(Handle, Stuff)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L582" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L593" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1235,7 +1239,7 @@ maximum number of events (abs(Limit)).</p>
 
       </div>
 
-<p>Make a key out of an event record or an old key.</p>
+<p>make_key(Type, Stuff) -&gt; Key</p><p>Make a key out of an event record or an old key.</p>
   </section>
 </section>
 <section class="detail" id="multicast/2">
@@ -1247,7 +1251,7 @@ maximum number of events (abs(Limit)).</p>
     </a>
     <h1 class="signature" translate="no">multicast(CollectorPid, Msg)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L809" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L836" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1263,7 +1267,7 @@ maximum number of events (abs(Limit)).</p>
 
       </div>
 
-<p>Sends a message to all registered subscribers.</p>
+<p>multicast(_CollectorPid, Msg) -&gt; ok</p><p>Sends a message to all registered subscribers.</p>
   </section>
 </section>
 <section class="detail" id="report/2">
@@ -1275,7 +1279,7 @@ maximum number of events (abs(Limit)).</p>
     </a>
     <h1 class="signature" translate="no">report(Handle, TraceOrEvent)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L472" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L478" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1306,9 +1310,9 @@ maximum number of events (abs(Limit)).</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">report_event(Handle, DetailLevel, FromTo, Label, Contents)</h1>
+    <h1 class="signature" translate="no">report_event(CollectorPid, DetailLevel, FromTo, Label, Contents)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L532" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L538" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1320,9 +1324,9 @@ maximum number of events (abs(Limit)).</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> report_event(Handle, DetailLevel, FromTo, Label, Contents) -> {ok, Continuation}
+          <pre translate="no"><span class="attribute">-spec</span> report_event(CollectorPid, DetailLevel, FromTo, Label, Contents) -> {ok, Continuation}
                       when
-                          Handle :: CollectorPid :: <a href="../../../../erts-15.1.3/doc/html/erlang.html#t:pid/0">pid</a>() | <a href="#t:table_handle/0">table_handle</a>(),
+                          CollectorPid :: <a href="../../../../erts-15.1.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                           DetailLevel :: <a href="#t:level/0">level</a>(),
                           FromTo :: <a href="#t:actor/0">actor</a>(),
                           Label :: <a href="../../../../erts-15.1.3/doc/html/erlang.html#t:term/0">term</a>(),
@@ -1341,9 +1345,9 @@ maximum number of events (abs(Limit)).</p>
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">report_event(Handle, DetailLevel, From, To, Label, Contents)</h1>
+    <h1 class="signature" translate="no">report_event(CollectorPid, DetailLevel, From, To, Label, Contents)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L551" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L560" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1355,9 +1359,9 @@ maximum number of events (abs(Limit)).</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> report_event(Handle, DetailLevel, From, To, Label, Contents) -> {ok, Continuation}
+          <pre translate="no"><span class="attribute">-spec</span> report_event(CollectorPid, DetailLevel, From, To, Label, Contents) -> {ok, Continuation}
                       when
-                          Handle :: CollectorPid :: <a href="../../../../erts-15.1.3/doc/html/erlang.html#t:pid/0">pid</a>() | <a href="#t:table_handle/0">table_handle</a>(),
+                          CollectorPid :: <a href="../../../../erts-15.1.3/doc/html/erlang.html#t:pid/0">pid</a>(),
                           DetailLevel :: <a href="#t:level/0">level</a>(),
                           From :: <a href="#t:actor/0">actor</a>(),
                           To :: <a href="#t:actor/0">actor</a>(),
@@ -1367,7 +1371,8 @@ maximum number of events (abs(Limit)).</p>
 
       </div>
 
-<p>Report an event to the collector.</p><p>All events are filtered thru the collector filter, which optionally may
+<p>report_event(Handle, DetailLevel, From, To, Label, Contents) -&gt; {ok,
+Continuation} | exit(Reason)</p><p>Report an event to the collector.</p><p>All events are filtered thru the collector filter, which optionally may
 transform or discard the event. The first call should use the pid of the
 collector process as report handle, while subsequent calls should use the table
 handle.</p>
@@ -1382,7 +1387,7 @@ handle.</p>
     </a>
     <h1 class="signature" translate="no">save_event_file(CollectorPid, FileName, Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L400" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L406" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1402,7 +1407,7 @@ handle.</p>
 
       </div>
 
-<p>Save the events to a file.</p><p>By default the currently stored events (existing) are written to a brand new
+<p>save_event_file(CollectorPid, FileName, Options) -&gt; ok | {error, Reason}</p><p>Save the events to a file.</p><p>By default the currently stored events (existing) are written to a brand new
 file (write) and the events are kept (keep) after they have been written to the
 file.</p><p>Instead of keeping the events after writing them to file, it is possible to
 remove all stored events after they have successfully written to file (clear).</p><p>The options defaults to existing, write and keep.</p>
@@ -1417,7 +1422,7 @@ remove all stored events after they have successfully written to file (clear).</
     </a>
     <h1 class="signature" translate="no">start_link(Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L250" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L252" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1433,7 +1438,7 @@ remove all stored events after they have successfully written to file (clear).</
 
       </div>
 
-<p>Start a collector process.</p><p>The collector collects trace events and keeps them ordered by their timestamp.
+<p>start_link(Options) -&gt; {ok, CollectorPid} | {error, Reason}</p><p>Start a collector process.</p><p>The collector collects trace events and keeps them ordered by their timestamp.
 The timestamp may either reflect the time when the actual trace data was
 generated (trace_ts) or when the trace data was transformed into an event record
 (event_ts). If the time stamp is missing in the trace data (missing timestamp
@@ -1464,7 +1469,7 @@ that node and a corresponding trace client on the collector node.</p><p>Default 
     </a>
     <h1 class="signature" translate="no">start_trace_client(CollectorPid, Type, Parameter)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L833" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L863" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1484,7 +1489,8 @@ that node and a corresponding trace client on the collector node.</p><p>Default 
 
       </div>
 
-<p>Load raw Erlang trace from a file, port or process.</p>
+<p>start_trace_client(CollectorPid, Type, Parameters) -&gt; file_loaded |
+{trace_client_pid, pid()} | exit(Reason)</p><p>Load raw Erlang trace from a file, port or process.</p>
   </section>
 </section>
 <section class="detail" id="stop/1">
@@ -1496,7 +1502,7 @@ that node and a corresponding trace client on the collector node.</p><p>Default 
     </a>
     <h1 class="signature" translate="no">stop(CollectorPid)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L356" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/et/src/et_collector.erl#L360" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -1508,11 +1514,11 @@ that node and a corresponding trace client on the collector node.</p><p>Default 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> stop(<a href="../../../../erts-15.1.3/doc/html/erlang.html#t:pid/0">pid</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> stop(CollectorPid :: <a href="../../../../erts-15.1.3/doc/html/erlang.html#t:pid/0">pid</a>()) -> ok.</pre>
 
       </div>
 
-<p>Stop a collector process.</p>
+<p>stop(CollectorPid) -&gt; ok</p><p>Stop a collector process.</p>
   </section>
 </section>
 

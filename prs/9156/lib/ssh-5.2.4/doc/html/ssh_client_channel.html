@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-FDA0FDB6.js"></script>
+    <script src="dist/sidebar_items-27119887.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-7XSQ4GTY.js"></script>
 
@@ -128,7 +128,9 @@ Pages
 
 
     <section id="moduledoc">
-<p>SSH services (clients and servers) are implemented as channels that are
+<p>-behaviour(ssh_client_channel). (Replaces ssh_channel)</p><blockquote><h4 class="info">Note</h4><p>This module replaces ssh_channel.</p><p>The old module is still available for compatibility, but should not be used
+for new programs. The old module will not be maintained except for some error
+corrections</p></blockquote><p>SSH services (clients and servers) are implemented as channels that are
 multiplexed over an SSH connection and communicates over the
 <a href="http://www.ietf.org/rfc/rfc4254.txt">SSH Connection Protocol</a>. This module
 provides a callback API that takes care of generic channel aspects for clients,
@@ -137,9 +139,7 @@ care of the service (application) specific parts. This behavior also ensures
 that the channel process honors the principal of an OTP-process so that it can
 be part of a supervisor tree. This is a requirement of channel processes
 implementing a subsystem that will be added to the <code class="inline">ssh</code> applications supervisor
-tree.</p><blockquote><h4 class="info">Note</h4><p>This module replaces ssh_channel.</p><p>The old module is still available for compatibility, but should not be used
-for new programs. The old module will not be maintained except for some error
-corrections</p></blockquote><blockquote><h4 class="info">Note</h4><p>When implementing a <code class="inline">ssh</code> subsystem for daemons, use
+tree.</p><blockquote><h4 class="info">Note</h4><p>When implementing a <code class="inline">ssh</code> subsystem for daemons, use
 <a href="ssh_server_channel.html">-behaviour(ssh_server_channel)</a> (Replaces
 ssh_daemon_channel) instead.</p></blockquote><blockquote><h4 class="error">Dont</h4><p>Functions in this module are not supposed to be called outside a module
 implementing this behaviour!</p></blockquote><h2 id="module-callback-timeouts" class="section-heading">
@@ -176,9 +176,9 @@ handle_msg(timeout, State).</p>
     </div>
 
 </div>
-<div class="summary-callbacks summary">
+<div class="summary-callbacks-callback-functions summary">
   <h2>
-    <a href="#callbacks">Callbacks</a>
+    <a href="#callbacks-callback-functions">Callbacks: Callback Functions</a>
   </h2>
 
     <div class="summary-row">
@@ -281,10 +281,7 @@ ignored.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Makes a synchronous call to the channel process by sending a message and waiting
-until a reply arrives, or a time-out occurs. The channel calls
-<a href="#c:handle_call/3">Module:handle_call/3</a> to handle the message. If the channel
-process does not exist, <code class="inline">{error, closed}</code> is returned.</p></div>
+        <div class="summary-synopsis"><p>call(ChannelRef, Msg, Timeout) -&gt; Reply | {error, Reason}</p></div>
 
     </div>
 
@@ -294,9 +291,7 @@ process does not exist, <code class="inline">{error, closed}</code> is returned.
 
       </div>
 
-        <div class="summary-synopsis"><p>Sends an asynchronous message to the channel process and returns ok immediately,
-ignoring if the destination node or channel process does not exist. The channel
-calls <a href="#c:handle_cast/2">Module:handle_cast/2</a> to handle the message.</p></div>
+        <div class="summary-synopsis"><p>cast(ChannelRef, Msg) -&gt; ok</p></div>
 
     </div>
 
@@ -306,8 +301,7 @@ calls <a href="#c:handle_cast/2">Module:handle_cast/2</a> to handle the message.
 
       </div>
 
-        <div class="summary-synopsis"><p>Makes an existing process an <code class="inline">ssh_client_channel</code> (replaces ssh_channel)
-process.</p></div>
+        <div class="summary-synopsis"><p>enter<em>loop(State) -&gt; </em></p></div>
 
     </div>
 
@@ -317,7 +311,7 @@ process.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Initiates a client channel.</p></div>
+        <div class="summary-synopsis"><p>init(Options) -&gt; {ok, State} | {ok, State, Timeout} | {stop, Reason}</p></div>
 
     </div>
 
@@ -327,9 +321,7 @@ process.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>This function can be used by a channel to send a reply to a client that called
-<code class="inline">call/[2,3]</code> when the reply cannot be defined in the return value of
-<a href="#c:handle_call/3">Module:handle_call/3</a>.</p></div>
+        <div class="summary-synopsis"><p>reply(Client, Reply) -&gt; _</p></div>
 
     </div>
 
@@ -349,9 +341,8 @@ process.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Starts a process that handles an SSH channel. It is called internally, by the
-<code class="inline">ssh</code> daemon, or explicitly by the <code class="inline">ssh</code> client implementations. The behavior
-sets the <code class="inline">trap_exit</code> flag to <code class="inline">true</code>.</p></div>
+        <div class="summary-synopsis"><p>start_link(SshConnection, ChannelId, ChannelCb, CbInitArgs) -&gt; {ok, ChannelRef}
+| {error, Reason}</p></div>
 
     </div>
 
@@ -377,7 +368,7 @@ sets the <code class="inline">trap_exit</code> flag to <code class="inline">true
     </a>
     <h1 class="signature" translate="no">client()</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L257" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L264" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -402,14 +393,14 @@ sets the <code class="inline">trap_exit</code> flag to <code class="inline">true
     </div>
   </section>
 
-  <section id="callbacks" class="details-list">
+  <section id="callbacks-callback-functions" class="details-list">
     <h1 class="section-heading">
-      <a class="hover-link" href="#callbacks">
+      <a class="hover-link" href="#callbacks-callback-functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
-      <span class="text">Callbacks</span>
+      <span class="text">Callbacks: Callback Functions</span>
     </h1>
-    <div class="callbacks-list">
+    <div class="callbacks-callback-functions-list">
 <section class="detail" id="c:code_change/3">
 
   <div class="detail-header">
@@ -419,7 +410,7 @@ sets the <code class="inline">trap_exit</code> flag to <code class="inline">true
     </a>
     <h1 class="signature" translate="no">code_change(OldVsn, State, Extra)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L137" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L140" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -460,7 +451,7 @@ normal way.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">handle_call(Request, From, State)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L84" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L87" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -497,7 +488,7 @@ normal way.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">handle_cast(Request, State)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L99" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L102" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -531,7 +522,7 @@ normal way.</p></blockquote>
     </a>
     <h1 class="signature" translate="no">handle_msg(Msg, State)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L156" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L159" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -552,7 +543,7 @@ normal way.</p></blockquote>
 
 <p>Handles other messages than SSH Connection Protocol, call, or cast messages sent
 to the channel.</p><p>Possible Erlang 'EXIT' messages is to be handled by this function and all
-channels are to handle the following message.</p><ul><li><strong><code class="inline">{ssh_channel_up,</code> <a href="ssh.html#t:channel_id/0"><code class="inline">ssh:channel_id/0</code></a> <code class="inline">,</code> <a href="ssh.html#t:connection_ref/0"><code class="inline">ssh:connection_ref/0</code></a> <code class="inline">}</code></strong> -
+channels are to handle the following message.</p><ul><li><strong><code class="inline">{ssh_channel_up, ``t:ssh:channel_id/0``, ``t:ssh:connection_ref/0``}</code></strong> -
 This is the first message that the channel receives. It is sent just before
 the <a href="#init/1"><code class="inline">init/1</code></a> function returns successfully. This is especially useful if the
 server wants to send a message to the client without first receiving a message
@@ -569,7 +560,7 @@ by immediately returning <code class="inline">{ok, State}</code>.</li></ul>
     </a>
     <h1 class="signature" translate="no">handle_ssh_msg/2</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L170" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L173" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -589,7 +580,7 @@ by immediately returning <code class="inline">{ok, State}</code>.</li></ul>
       </div>
 
 <p>Handles SSH Connection Protocol messages that may need service-specific
-attention. For details, see <a href="ssh_connection.html#t:event/0"><code class="inline">ssh_connection:event/0</code></a>.</p><p>The following message is taken care of by the <code class="inline">ssh_client_channel</code> behavior.</p><ul><li><strong><code class="inline">{closed,</code> <a href="ssh.html#t:channel_id/0"><code class="inline">ssh:channel_id/0</code></a> <code class="inline">}</code></strong> - The channel behavior sends a close
+attention. For details, see <a href="ssh_connection.html#t:event/0"><code class="inline">ssh_connection:event/0</code></a>.</p><p>The following message is taken care of by the <code class="inline">ssh_client_channel</code> behavior.</p><ul><li><strong><code class="inline">{closed, ``t:ssh:channel_id/0``}</code></strong> - The channel behavior sends a close
 message to the other side, if such a message has not already been sent. Then
 it terminates the channel with reason <code class="inline">normal</code>.</li></ul>
   </section>
@@ -603,7 +594,7 @@ it terminates the channel with reason <code class="inline">normal</code>.</li></
     </a>
     <h1 class="signature" translate="no">init(Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L74" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L77" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -639,7 +630,7 @@ initializations succeed.</p><p>For more detailed information on time-outs, see S
     </a>
     <h1 class="signature" translate="no">terminate(Reason, State)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L113" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L116" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -686,7 +677,7 @@ ignored.</p>
     </a>
     <h1 class="signature" translate="no">call(ChannelRef, Msg)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L212" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L215" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -717,7 +708,7 @@ ignored.</p>
     </a>
     <h1 class="signature" translate="no">call(ChannelRef, Msg, Timeout)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L228" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L233" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -741,7 +732,7 @@ ignored.</p>
 
       </div>
 
-<p>Makes a synchronous call to the channel process by sending a message and waiting
+<p>call(ChannelRef, Msg, Timeout) -&gt; Reply | {error, Reason}</p><p>Makes a synchronous call to the channel process by sending a message and waiting
 until a reply arrives, or a time-out occurs. The channel calls
 <a href="#c:handle_call/3">Module:handle_call/3</a> to handle the message. If the channel
 process does not exist, <code class="inline">{error, closed}</code> is returned.</p>
@@ -756,7 +747,7 @@ process does not exist, <code class="inline">{error, closed}</code> is returned.
     </a>
     <h1 class="signature" translate="no">cast(ChannelRef, Msg)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L254" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L261" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -774,7 +765,7 @@ process does not exist, <code class="inline">{error, closed}</code> is returned.
 
       </div>
 
-<p>Sends an asynchronous message to the channel process and returns ok immediately,
+<p>cast(ChannelRef, Msg) -&gt; ok</p><p>Sends an asynchronous message to the channel process and returns ok immediately,
 ignoring if the destination node or channel process does not exist. The channel
 calls <a href="#c:handle_cast/2">Module:handle_cast/2</a> to handle the message.</p>
   </section>
@@ -788,7 +779,7 @@ calls <a href="#c:handle_cast/2">Module:handle_cast/2</a> to handle the message.
     </a>
     <h1 class="signature" translate="no">enter_loop(State)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L339" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L351" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -806,8 +797,8 @@ calls <a href="#c:handle_cast/2">Module:handle_cast/2</a> to handle the message.
 
       </div>
 
-<p>Makes an existing process an <code class="inline">ssh_client_channel</code> (replaces ssh_channel)
-process.</p><p>Does not return, instead the calling process enters the
+<p>enter<em>loop(State) -&gt; </em></p><p>Makes an existing process an <code class="inline">ssh_client_channel</code> (replaces ssh_channel)
+process. Does not return, instead the calling process enters the
 <code class="inline">ssh_client_channel</code> (replaces ssh_channel) process receive loop and become an
 <code class="inline">ssh_client_channel</code> process. The process must have been started using one of
 the start functions in <code class="inline">proc_lib</code>, see the <a href="../../../../lib/stdlib-6.1.2/doc/html/proc_lib.html"><code class="inline">proc_lib</code></a> manual page in STDLIB.
@@ -824,7 +815,7 @@ The user is responsible for any initialization of the process and must call
     </a>
     <h1 class="signature" translate="no">init(Options)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L384" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L396" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -847,9 +838,9 @@ The user is responsible for any initialization of the process and must call
 
       </div>
 
-<p>Initiates a client channel.</p><p>The following options must be present:</p><ul><li><p><strong><code class="inline">{channel_cb, atom()}</code></strong> - The module that implements the channel behaviour.</p></li><li><p><strong><code class="inline">{init_args(), list()}</code></strong> - The list of arguments to the <code class="inline">init</code> function of
-the callback module.</p></li><li><p><strong><code class="inline">{cm,</code> <a href="ssh.html#t:connection_ref/0"><code class="inline">ssh:connection_ref/0</code></a> <code class="inline">}</code></strong> - Reference to the <code class="inline">ssh</code> connection as
-returned by <a href="ssh.html#connect/3"><code class="inline">ssh:connect/3</code></a>.</p></li><li><p><strong><code class="inline">{channel_id,</code> <a href="ssh.html#t:channel_id/0"><code class="inline">ssh:channel_id/0</code></a> <code class="inline">}</code></strong> - Id of the <code class="inline">ssh</code> channel as
+<p>init(Options) -&gt; {ok, State} | {ok, State, Timeout} | {stop, Reason}</p><p>The following options must be present:</p><ul><li><p><strong><code class="inline">{channel_cb, atom()}</code></strong> - The module that implements the channel behaviour.</p></li><li><p><strong><code class="inline">{init_args(), list()}</code></strong> - The list of arguments to the <code class="inline">init</code> function of
+the callback module.</p></li><li><p><strong><code class="inline">{cm, ``t:ssh:connection_ref/0``}</code></strong> - Reference to the <code class="inline">ssh</code> connection as
+returned by <a href="ssh.html#connect/3"><code class="inline">ssh:connect/3</code></a>.</p></li><li><p><strong><code class="inline">{channel_id, ``t:ssh:channel_id/0``}</code></strong> - Id of the <code class="inline">ssh</code> channel as
 returned by
 <a href="ssh_connection.html#session_channel/2">ssh_connection:session_channel/2,4</a>.</p></li></ul><blockquote><h4 class="info">Note</h4><p>This function is normally not called by the user. The user only needs to call
 if the channel process needs to be started with help of <code class="inline">proc_lib</code> instead of
@@ -865,7 +856,7 @@ calling <a href="#start/4"><code class="inline">start/4</code></a> or <a href="#
     </a>
     <h1 class="signature" translate="no">reply(Client, Reply)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L271" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L280" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -883,7 +874,7 @@ calling <a href="#start/4"><code class="inline">start/4</code></a> or <a href="#
 
       </div>
 
-<p>This function can be used by a channel to send a reply to a client that called
+<p>reply(Client, Reply) -&gt; _</p><p>This function can be used by a channel to send a reply to a client that called
 <code class="inline">call/[2,3]</code> when the reply cannot be defined in the return value of
 <a href="#c:handle_call/3">Module:handle_call/3</a>.</p><p><code class="inline">Client</code> must be the <code class="inline">From</code> argument provided to the callback function
 <a href="#c:handle_call/3"><code class="inline">handle_call/3</code></a>. <code class="inline">Reply</code> is an arbitrary term, which is
@@ -899,7 +890,7 @@ given back to the client as the return value of [call/[2,3].](<a href="#call/2">
     </a>
     <h1 class="signature" translate="no">start(SshConnection, ChannelId, ChannelCb, CbInitArgs)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L288" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L297" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -936,7 +927,7 @@ given back to the client as the return value of [call/[2,3].](<a href="#call/2">
     </a>
     <h1 class="signature" translate="no">start_link(SshConnection, ChannelId, ChannelCb, CbInitArgs)</h1>
 
-      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L314" class="icon-action" rel="help" title="View Source">
+      <a href="https://github.com/Mikaka27/otp/blob/michal/common_test/fix_compatiblity_between_otp27_and_earlier/ERIERL-1166/OTP-19385/lib/ssh/src/ssh_client_channel.erl#L326" class="icon-action" rel="help" title="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
        <span class="sr-only">View Source</span>
      </a>
@@ -961,7 +952,8 @@ given back to the client as the return value of [call/[2,3].](<a href="#call/2">
 
       </div>
 
-<p>Starts a process that handles an SSH channel. It is called internally, by the
+<p>start_link(SshConnection, ChannelId, ChannelCb, CbInitArgs) -&gt; {ok, ChannelRef}
+| {error, Reason}</p><p>Starts a process that handles an SSH channel. It is called internally, by the
 <code class="inline">ssh</code> daemon, or explicitly by the <code class="inline">ssh</code> client implementations. The behavior
 sets the <code class="inline">trap_exit</code> flag to <code class="inline">true</code>.</p>
   </section>
