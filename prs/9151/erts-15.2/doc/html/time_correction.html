@@ -4,25 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.35.1">
+    <meta name="generator" content="ExDoc v0.34.1">
     <meta name="project" content="erts v15.2">
 
 
     <title>Time and Time Correction in Erlang — erts v15.2</title>
-    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
+    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-D494D198.js"></script>
+    <script src="dist/sidebar_items-6AD4BAC9.js"></script>
     <script src="docs_config.js"></script>
-    <script async src="dist/html-PVRIOB7F.js"></script>
-<style type="text/css">
-  .monospace-font > code {
-    font-family: monospace;
-  }
-</style>
-
+    <script async src="dist/html-7XSQ4GTY.js"></script>
 
   </head>
   <body data-type="extras" class="page-extra">
@@ -140,7 +134,7 @@ Pages
 <p>As of Erlang/OTP 18 (ERTS 7.0) the time functionality was extended. This
 includes a <a href="time_correction.html#new-time-api">new API</a> for time and
 <a href="time_correction.html#time-warp-modes">time warp modes</a> that change the system
-behavior when system time changes.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>As of Erlang/OTP 26 (ERTS 14.0) the
+behavior when system time changes.</p><blockquote><h4 class="info">Note</h4><p>As of Erlang/OTP 26 (ERTS 14.0) the
 <a href="time_correction.html#multi-time-warp-mode">multi time warp mode</a> is enabled by
 default. This assumes that all code executing on the system is
 <a href="time_correction.html#time-warp-safe-code">time warp safe</a>.</p><p>If you have old code in the system that is not time warp safe, you now
@@ -152,7 +146,7 @@ in no time warp mode, the system behaves as it did prior to the introduction
 of the extended time functionality introduced in OTP 18.</p><p>If you have code that is not time warp safe, you are strongly encouraged to
 change this so that you can use multi time warp mode. Compared to no time warp
 mode, multi time warp mode improves scalability and performance as well as
-accuracy and precision of time measurements.</p></section><h2 id="terminology" class="section-heading">
+accuracy and precision of time measurements.</p></blockquote><h2 id="terminology" class="section-heading">
   <a href="#terminology" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -432,10 +426,10 @@ Erlang runtime system is started before OS system time has been corrected,
 Erlang system time can be wrong for a long time, centuries or even longer.</p><p>If you need to use Erlang code that is not
 <a href="time_correction.html#time-warp-safe-code">time warp safe</a>, and you need to start
 the Erlang runtime system before OS system time has been corrected, you may want
-to use the single time warp mode.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>There are limitations to when you can execute time warp unsafe code using this
+to use the single time warp mode.</p><blockquote><h4 class="info">Note</h4><p>There are limitations to when you can execute time warp unsafe code using this
 mode. If it is possible to use time warp safe code only, it is <em>much</em> better
 to use the <a href="time_correction.html#multi-time-warp-mode">multi-time warp mode</a>
-instead.</p></section><p>Using the single time warp mode, the time offset is handled in two phases:</p><ul><li><p><strong>Preliminary Phase</strong> - This phase starts when the runtime system starts. A
+instead.</p></blockquote><p>Using the single time warp mode, the time offset is handled in two phases:</p><ul><li><p><strong>Preliminary Phase</strong> - This phase starts when the runtime system starts. A
 preliminary time offset based on current OS system time is determined. This
 offset is from now on to be fixed during the whole preliminary phase.</p><p>If time correction is enabled, adjustments to the Erlang monotonic clock are
 made to keep its frequency as correct as possible. However, <em>no</em> adjustments
@@ -464,9 +458,9 @@ user finalizes the time offset.</p></li></ul><p>If these requirements are not fu
 OS system time is adjusted using a time adjustment protocol such as NTP, only
 small adjustments of Erlang monotonic time are needed to keep system times
 aligned after finalization. As long as the system is not suspended, the largest
-adjustments needed are for inserted (or deleted) leap seconds.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>To use this mode, ensure that all Erlang code that will execute in both phases
+adjustments needed are for inserted (or deleted) leap seconds.</p><blockquote><h4 class="warning">Warning</h4><p>To use this mode, ensure that all Erlang code that will execute in both phases
 is <a href="time_correction.html#time-warp-safe-code">time warp safe</a>.</p><p>Code executing only in the final phase does not have to be able to cope with
-the time warp.</p></section><h3 id="multi-time-warp-mode" class="section-heading">
+the time warp.</p></blockquote><h3 id="multi-time-warp-mode" class="section-heading">
   <a href="#multi-time-warp-mode" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -485,8 +479,8 @@ monotonic clock to be as correct as possible. This makes time measurements using
 Erlang monotonic time more accurate and precise.</p><p>If time correction is disabled, Erlang monotonic time leaps forward if OS system
 time leaps forward. If OS system time leaps backwards, Erlang monotonic time
 stops briefly, but it does not freeze for extended periods of time. This as the
-time offset is changed to align Erlang system time with OS system time.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>To use this mode, ensure that all Erlang code that will execute on the runtime
-system is <a href="time_correction.html#time-warp-safe-code">time warp safe</a>.</p></section><h2 id="new-time-api" class="section-heading">
+time offset is changed to align Erlang system time with OS system time.</p><blockquote><h4 class="warning">Warning</h4><p>To use this mode, ensure that all Erlang code that will execute on the runtime
+system is <a href="time_correction.html#time-warp-safe-code">time warp safe</a>.</p></blockquote><h2 id="new-time-api" class="section-heading">
   <a href="#new-time-api" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -555,24 +549,24 @@ measurements, we have introduced
 </h3>
 <p>Previously <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> was the only option for doing many things. This
 section deals with some things that <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> can be used for, and how you
-use the new API.</p><h4>Retrieve Erlang System Time</h4><section role="note" class="admonition error"><h4 class="admonition-title error">Dont</h4><p>Use <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> to retrieve the current Erlang system time.</p></section><section role="note" class="admonition tip"><h4 class="admonition-title tip">Do</h4><p>Use <a href="erlang.html#system_time/1"><code class="inline">erlang:system_time/1</code></a> to retrieve the current Erlang system time on the
+use the new API.</p><h4>Retrieve Erlang System Time</h4><blockquote><h4 class="error">Dont</h4><p>Use <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> to retrieve the current Erlang system time.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Use <a href="erlang.html#system_time/1"><code class="inline">erlang:system_time/1</code></a> to retrieve the current Erlang system time on the
 <a href="erlang.html#t:time_unit/0">time unit</a> of your choice.</p><p>If you want the same format as returned by <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a>, use
-<a href="erlang.html#timestamp/0"><code class="inline">erlang:timestamp/0</code></a>.</p></section><h4>Measure Elapsed Time</h4><section role="note" class="admonition error"><h4 class="admonition-title error">Dont</h4><p>Take time stamps with <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> and calculate the difference in time with
-<a href="../../../lib/stdlib-6.2/doc/html/timer.html#now_diff/2"><code class="inline">timer:now_diff/2</code></a>.</p></section><section role="note" class="admonition tip"><h4 class="admonition-title tip">Do</h4><p>Take time stamps with <a href="erlang.html#monotonic_time/0"><code class="inline">erlang:monotonic_time/0</code></a> and calculate the time
+<a href="erlang.html#timestamp/0"><code class="inline">erlang:timestamp/0</code></a>.</p></blockquote><h4>Measure Elapsed Time</h4><blockquote><h4 class="error">Dont</h4><p>Take time stamps with <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> and calculate the difference in time with
+<a href="../../../lib/stdlib-6.2/doc/html/timer.html#now_diff/2"><code class="inline">timer:now_diff/2</code></a>.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Take time stamps with <a href="erlang.html#monotonic_time/0"><code class="inline">erlang:monotonic_time/0</code></a> and calculate the time
 difference using ordinary subtraction. The result is in <code class="inline">native</code>
 <a href="erlang.html#t:time_unit/0">time unit</a>. If you want to convert the result to
 another time unit, you can use <a href="erlang.html#convert_time_unit/3"><code class="inline">erlang:convert_time_unit/3</code></a>.</p><p>An easier way to do this is to use <a href="erlang.html#monotonic_time/1"><code class="inline">erlang:monotonic_time/1</code></a> with the desired
-time unit. However, you can then lose accuracy and precision.</p></section><h4>Determine Order of Events</h4><section role="note" class="admonition error"><h4 class="admonition-title error">Dont</h4><p>Determine the order of events by saving a time stamp with <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> when
-the event occurs.</p></section><section role="note" class="admonition tip"><h4 class="admonition-title tip">Do</h4><p>Determine the order of events by saving the integer returned by
+time unit. However, you can then lose accuracy and precision.</p></blockquote><h4>Determine Order of Events</h4><blockquote><h4 class="error">Dont</h4><p>Determine the order of events by saving a time stamp with <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> when
+the event occurs.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Determine the order of events by saving the integer returned by
 <a href="erlang.html#unique_integer/1"><code class="inline">erlang:unique_integer([monotonic])</code></a> when the
 event occurs. These integers are strictly monotonically ordered on current
-runtime system instance corresponding to creation time.</p></section><h4>Determine Order of Events with Time of the Event</h4><section role="note" class="admonition error"><h4 class="admonition-title error">Dont</h4><p>Determine the order of events by saving a time stamp with <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> when
-the event occurs.</p></section><section role="note" class="admonition tip"><h4 class="admonition-title tip">Do</h4><p>Determine the order of events by saving a tuple containing
+runtime system instance corresponding to creation time.</p></blockquote><h4>Determine Order of Events with Time of the Event</h4><blockquote><h4 class="error">Dont</h4><p>Determine the order of events by saving a time stamp with <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> when
+the event occurs.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Determine the order of events by saving a tuple containing
 <a href="erlang.html#monotonic_time/0">monotonic time</a> and a
 <a href="erlang.html#unique_integer/1">strictly monotonically increasing integer</a> as
-follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">monotonic_time</span><span class="p" data-group-id="0224067848-1">(</span><span class="p" data-group-id="0224067848-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">UMI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">unique_integer</span><span class="p" data-group-id="0224067848-2">(</span><span class="p" data-group-id="0224067848-3">[</span><span class="ss">monotonic</span><span class="p" data-group-id="0224067848-3">]</span><span class="p" data-group-id="0224067848-2">)</span><span class="p">,</span><span class="w">
-</span><span class="n">EventTag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="0224067848-4">{</span><span class="n">Time</span><span class="p">,</span><span class="w"> </span><span class="n">UMI</span><span class="p" data-group-id="0224067848-4">}</span></code></pre><p>These tuples are strictly monotonically ordered on the current runtime system
+follows:</p><pre><code class="makeup erlang" translate="no"><span class="n">Time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">monotonic_time</span><span class="p" data-group-id="9114748344-1">(</span><span class="p" data-group-id="9114748344-1">)</span><span class="p">,</span><span class="w">
+</span><span class="n">UMI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">erlang</span><span class="p">:</span><span class="nf">unique_integer</span><span class="p" data-group-id="9114748344-2">(</span><span class="p" data-group-id="9114748344-3">[</span><span class="ss">monotonic</span><span class="p" data-group-id="9114748344-3">]</span><span class="p" data-group-id="9114748344-2">)</span><span class="p">,</span><span class="w">
+</span><span class="n">EventTag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="9114748344-4">{</span><span class="n">Time</span><span class="p">,</span><span class="w"> </span><span class="n">UMI</span><span class="p" data-group-id="9114748344-4">}</span></code></pre><p>These tuples are strictly monotonically ordered on the current runtime system
 instance according to creation time. It is important that the monotonic time
 is in the first element (the most significant element when comparing
 two-tuples). Using the monotonic time in the tuples, you can calculate time
@@ -582,14 +576,14 @@ using <a href="erlang.html#time_offset/0"><code class="inline">erlang:time_offse
 corresponds to Erlang system time.</p><p>If you are executing in a mode where time offset can change, and you want to
 get the actual Erlang system time when the event occurred, you can save the
 time offset as a third element in the tuple (the least significant element
-when comparing three-tuples).</p></section><h4>Create a Unique Name</h4><section role="note" class="admonition error"><h4 class="admonition-title error">Dont</h4><p>Use the values returned from <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> to create a name unique on the
-current runtime system instance.</p></section><section role="note" class="admonition tip"><h4 class="admonition-title tip">Do</h4><p>Use the value returned from <a href="erlang.html#unique_integer/0"><code class="inline">erlang:unique_integer/0</code></a> to create a name unique
+when comparing three-tuples).</p></blockquote><h4>Create a Unique Name</h4><blockquote><h4 class="error">Dont</h4><p>Use the values returned from <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a> to create a name unique on the
+current runtime system instance.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Use the value returned from <a href="erlang.html#unique_integer/0"><code class="inline">erlang:unique_integer/0</code></a> to create a name unique
 on the current runtime system instance. If you only want positive integers,
-you can use <a href="erlang.html#unique_integer/1"><code class="inline">erlang:unique_integer([positive])</code></a>.</p></section><h4>Seed Random Number Generation with a Unique Value</h4><section role="note" class="admonition error"><h4 class="admonition-title error">Dont</h4><p>Seed random number generation using <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a>.</p></section><section role="note" class="admonition tip"><h4 class="admonition-title tip">Do</h4><p>Seed random number generation using a combination of
+you can use <a href="erlang.html#unique_integer/1"><code class="inline">erlang:unique_integer([positive])</code></a>.</p></blockquote><h4>Seed Random Number Generation with a Unique Value</h4><blockquote><h4 class="error">Dont</h4><p>Seed random number generation using <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a>.</p></blockquote><blockquote><h4 class="tip">Do</h4><p>Seed random number generation using a combination of
 <a href="erlang.html#monotonic_time/0"><code class="inline">erlang:monotonic_time/0</code></a>,
 <a href="erlang.html#time_offset/0"><code class="inline">erlang:time_offset/0</code></a>,
 <a href="erlang.html#unique_integer/0"><code class="inline">erlang:unique_integer/0</code></a>, and other
-functionality.</p></section><p>To sum up this section: <em>Do not use <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a>.</em></p><h2 id="support-of-both-new-and-old-otp-releases" class="section-heading">
+functionality.</p></blockquote><p>To sum up this section: <em>Do not use <a href="erlang.html#now/0"><code class="inline">erlang:now/0</code></a>.</em></p><h2 id="support-of-both-new-and-old-otp-releases" class="section-heading">
   <a href="#support-of-both-new-and-old-otp-releases" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -646,7 +640,7 @@ Match Specifications in Erlang
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
