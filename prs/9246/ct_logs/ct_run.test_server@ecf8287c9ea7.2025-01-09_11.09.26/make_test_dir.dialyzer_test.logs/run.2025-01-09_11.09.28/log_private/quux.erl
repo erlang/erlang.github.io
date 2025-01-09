@@ -1,5 +1,0 @@
-
-      -module(quux).
-
-      g() -> undefined.
-      
