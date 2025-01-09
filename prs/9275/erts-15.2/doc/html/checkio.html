@@ -125,26 +125,34 @@ Pages
     <span>Checking for I/O events</span>
   </h1>
 
-<p>An I/O event in ERTS is any event triggered by a <a href="https://en.wikipedia.org/wiki/File_descriptor">file descriptor</a>
-on Unix or any OBJECT HANDLE that can be passed to <a href="https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitformultipleobjects" title="">WaitForMultipleObjects</a> on Windows. The check I/O infrastructure
-is used by linked-in drivers through <a href="erl_driver.html#driver_select">driver_select</a>
-and by NIFs through <a href="erl_nif.html#enif_select">enif_select</a>.</p><p>The main user of the check I/O subsystem is network communication through m:gen_tcp, m:gen_udp, m:gen_sctp and m:socket on Unix (on Windows m:socket used its own internal check I/O implementation based on completion ports).
-It is also used by various other parts, such as when doing os:cmd/1 or reading from the terminal.</p><p>This document gives an overview of how the check I/O subsystem works.</p><p>The check I/O subsystem consists of a platform specific (<a href="#polling">erl_poll</a>) and agnostic part (<a href="#check-i-o">check_io</a>).</p><p><a href="#polling" title="">erl_poll</a> is the basic mechanisms for checking if any events have been signaled and allows
-waiting for a timeout if needed. The implementation of polling is very platform specific and
-lives in <a href="https://github.com/erlang/otp/blob/master/erts/emulator/sys/common/erl_poll.c" title="">erts/emulator/sys/common/erl_poll.c</a> for Unix and <a href="https://github.com/erlang/otp/blob/master/erts/emulator/sys/win32/erl_poll.c" title="">erts/emulator/sys/win32/erl_poll.c</a> for Windows.</p><p><a href="#check-i-o">Check I/O</a> is the cross-platform part of the check I/O subsystem that makes sure that <a href="#polling" title="">erl_poll</a> has the correct state and dispatches events to the correct entity. The implementation
-can be found in <a href="https://github.com/erlang/otp/blob/master/erts/emulator/sys/common/erl_check_io.c" title="">erts/emulator/sys/common/erl_check_io.c</a>.</p><p>check_io is then used by ports and NIFs to listen to events. Ports are communicated to through
-<a href="portsignals.html">port signals</a> and are delivered through the <a href="driver_entry.html#ready_input">ready_input</a> and <a href="driver_entry.html#ready_output">ready_output</a> callbacks.
+<p>An I/O event in ERTS is any event triggered by a <a href="https://en.wikipedia.org/wiki/File_descriptor" title="">file descriptor</a>
+on Unix or any OBJECT HANDLE that can be passed to <a href="https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitformultipleobjects" title="">WaitForMultipleObjects</a> on Windows.
+The check I/O infrastructure is used by linked-in drivers through <a href="erl_driver.html#driver_select">driver_select</a>
+and by NIFs through <a href="erl_nif.html#enif_select">enif_select</a>.</p><p>The main user of the check I/O subsystem is network communication through
+<a href="../../../lib/kernel-10.2/doc/html/gen_tcp.html"><code class="inline">gen_tcp</code></a>, <a href="../../../lib/kernel-10.2/doc/html/gen_udp.html"><code class="inline">gen_udp</code></a>, <a href="../../../lib/kernel-10.2/doc/html/gen_sctp.html"><code class="inline">gen_sctp</code></a> and <a href="../../../lib/kernel-10.2/doc/html/socket.html"><code class="inline">socket</code></a> on Unix (on Windows
+<a href="../../../lib/kernel-10.2/doc/html/socket.html"><code class="inline">socket</code></a> used its own internal check I/O implementation based on completion ports).
+It is also used by various other parts, such as when doing os:cmd/1 or
+reading from the terminal.</p><p>This document gives an overview of how the check I/O subsystem works.</p><p>The check I/O subsystem consists of a platform specific (<a href="#polling">erl_poll</a>)
+and platform agnostic part (<a href="#check-i-o">check_io</a>).</p><p><a href="#polling" title="">erl_poll</a> is the basic mechanisms for checking if any events have been signalled
+and allows waiting for a timeout if needed. The implementation of polling is very
+platform specific and lives in <a href="https://github.com/erlang/otp/blob/master/erts/emulator/sys/common/erl_poll.c" title="">erts/emulator/sys/common/erl_poll.c</a> for Unix and
+<a href="https://github.com/erlang/otp/blob/master/erts/emulator/sys/win32/erl_poll.c" title="">erts/emulator/sys/win32/erl_poll.c</a> for Windows.</p><p><a href="#check-i-o">check_io</a> is the cross-platform part of the check I/O subsystem
+that makes sure that <a href="#polling" title="">erl_poll</a> has the correct state and dispatches events to
+the correct entity. The implementation can be found in <a href="https://github.com/erlang/otp/blob/master/erts/emulator/sys/common/erl_check_io.c" title="">erts/emulator/sys/common/erl_check_io.c</a>.</p><p>check_io is then used by ports and NIFs to listen to events. Ports are
+communicated to through <a href="portsignals.html">port signals</a> and are delivered through
+the <a href="driver_entry.html#ready_input">ready_input</a> and <a href="driver_entry.html#ready_output">ready_output</a> callbacks.
 <a href="erl_nif.html">NIFs</a> get an Erlang message whenever an event is triggered.</p><h2 id="polling" class="section-heading">
   <a href="#polling" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">Polling</span>
 </h2>
-<p>The polling subsystem basically has two API functions; erts_poll_control and erts_poll_wait. erts_poll_control is used to update a ErtsPollSet and
-erts_poll_wait is used to wait for an event in the pollset to be triggered
-or a timeout to happen (the timeout can be 0 if just checking). Only a single
-thread usually calls erts_poll_wait at the same time, but multiple threads
-calls erts_poll_control at any time.</p><p>The implementation of Unix and Windows are completely different as Windows does
+<p>The polling subsystem basically has two API functions; erts_poll_control and
+erts_poll_wait. erts_poll_control is used to update a ErtsPollSet and
+erts_poll_wait is used to wait for an event in the pollset to be triggered or a
+timeout to happen (the timeout can be 0 if just checking). Only a single thread
+usually calls erts_poll_wait at the same time, but multiple threads calls
+erts_poll_control at any time.</p><p>The implementation of Unix and Windows are completely different as Windows does
 not really have a concept of &quot;polling&quot; for an event.</p><h3 id="polling-on-unix" class="section-heading">
   <a href="#polling-on-unix" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
@@ -152,8 +160,9 @@ not really have a concept of &quot;polling&quot; for an event.</p><h3 id="pollin
   <span class="text">Polling on Unix</span>
 </h3>
 <p>The poll implemention on Unix support a variety of different polling mechanisms.
-At the writing of this document they are: <a href="https://man7.org/linux/man-pages/man7/epoll.7.html" title="">epoll</a> (Linux), <a href="https://man.freebsd.org/cgi/man.cgi?kqueue" title="">kqueue</a> (MacOS + *Bsd), <a href="https://docs.oracle.com/cd/E88353_01/html/E37851/poll-4d.html" title="">/dev/poll</a> (Solaris), <a href="https://man7.org/linux/man-pages/man2/poll.2.html" title="">poll</a> and <a href="https://man7.org/linux/man-pages/man2/select.2.html" title="">select</a>. <a href="https://man7.org/linux/man-pages/man7/epoll.7.html" title="">epoll</a>+<a href="https://man.freebsd.org/cgi/man.cgi?kqueue" title="">kqueue</a>+<a href="https://docs.oracle.com/cd/E88353_01/html/E37851/poll-4d.html" title="">/dev/poll</a> are referred to as
-&quot;kernel polling&quot; methods, as the information about which FDs are currently monitored
+At the writing of this document they are: <a href="https://man7.org/linux/man-pages/man7/epoll.7.html" title="">epoll</a> (Linux), <a href="https://man.freebsd.org/cgi/man.cgi?kqueue" title="">kqueue</a> (MacOS + *Bsd),
+<a href="https://docs.oracle.com/cd/E88353_01/html/E37851/poll-4d.html" title="">/dev/poll</a> (Solaris), <a href="https://man7.org/linux/man-pages/man2/poll.2.html" title="">poll</a> and <a href="https://man7.org/linux/man-pages/man2/select.2.html" title="">select</a>. <a href="https://man7.org/linux/man-pages/man7/epoll.7.html" title="">epoll</a>+<a href="https://man.freebsd.org/cgi/man.cgi?kqueue" title="">kqueue</a>+<a href="https://docs.oracle.com/cd/E88353_01/html/E37851/poll-4d.html" title="">/dev/poll</a> are
+referred to as &quot;kernel polling&quot; methods, as the information about which FDs are currently monitored
 lives in the OS kernel, while <a href="https://man7.org/linux/man-pages/man2/poll.2.html" title="">poll</a>+<a href="https://man7.org/linux/man-pages/man2/select.2.html" title="">select</a> are &quot;user polling&quot; methods as the
 caller needs to supply all FDs of interest to the kernel everything erts_poll_wait
 is called.</p><p>By default all Unix'es use a &quot;kernel polling&quot; method, but has a fallback pollset that
@@ -163,9 +172,16 @@ it is possible to update these in parallel and without waking the thread that
 is currently waiting for events. For user polling a queue of needed updates
 is managed by each pollset and whenever an update is done to that queue the
 thread waiting on events is woken up to update the set of file descriptors it
-is waiting on.</p><p>When an event is triggered it is removed from the pollset and needs to be
+is waiting on.</p><p>When using kernel polling it is possible to have multiple poll threads
+(using the <a href="erl_cmd.html#+IOt">+IOt</a> flag) that read events from the same pollset.
+This can be useful for very busy systems with many many FDs that become active alot.
+If the kernel you are using is not very good at allowing multiple threads to
+check in the same pollset (this primarily applied to old versions of Linux),
+then it is also possible to configure erts to use separate
+pollsets for each pollthread ((using the <a href="erl_cmd.html#+IOp">+IOp</a> flag)).</p><p>When an event is triggered it is removed from the pollset and needs to be
 re-enabled before any new events are triggered. If <a href="https://man7.org/linux/man-pages/man2/epoll_ctl.2.html#:~:text=EPOLLONESHOT" title="">ONESHOT</a> or equivalent is
-available then kernel polling uses that flag.</p><h3 id="polling-on-windows" class="section-heading">
+available then kernel polling uses that flag, otherwise erl_poll will update
+the pollset as the event is triggered.</p><h3 id="polling-on-windows" class="section-heading">
   <a href="#polling-on-windows" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -194,7 +210,13 @@ FD back into the pollset when a driver_select event has been handled.
 This is done by the port re-inserting the FD in the pollset after
 a ready_input/ready_output event is called. For NIFs you need to call
 enif_select for each event that you want, so no such mechanism needs
-to exist for NIFs.</p><p>For very active FDs the fact that we need to re-insert events each time
+to exist for NIFs.</p><h3 id="scheduler-pollset" class="section-heading">
+  <a href="#scheduler-pollset" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Scheduler pollset</span>
+</h3>
+<p>For very active FDs the fact that we need to re-insert events each time
 they trigger can lead to quite a lot of overhead. Because of this there
 is an optimization that places FDs that are never deselected into a
 special pollset managed that is not checked by the poll threads, but
