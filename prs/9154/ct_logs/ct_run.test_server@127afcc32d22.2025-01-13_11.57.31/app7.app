@@ -1,7 +1,0 @@
-{application,app7,
-             [{description,"ERTS  CXC 138 10"},
-              {vsn,"2.0"},
-              {modules,[]},
-              {registered,[]},
-              {applications,[kernel]},
-              {mod,{ch_sup,{app7,13,15}}}]}.
