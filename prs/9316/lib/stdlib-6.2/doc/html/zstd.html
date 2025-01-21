@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-EF7921CE.js"></script>
+    <script src="dist/sidebar_items-B0F03806.js"></script>
     <script src="docs_config.js"></script>
     <script async src="dist/html-PVRIOB7F.js"></script>
 <style type="text/css">
@@ -137,18 +137,25 @@ Pages
 <p>Zstandard compression interface.</p><p>This module provides an API for the Zstandard library
 (<a href="http://www.zstd.net">www.zstd.net</a>). It is used to compress and decompress data
 and offers the same compression ratio as <a href="../../../../erts-15.2/doc/html/zlib.html"><code class="inline">zlib</code></a> but at a lower CPU cost.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">~&quot;my data to be compressed&quot;</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="8214910639-1">(</span><span class="n">Data</span><span class="p" data-group-id="8214910639-1">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="8214910639-2">(</span><span class="n">Compressed</span><span class="p" data-group-id="8214910639-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8214910639-3">[</span><span class="s">~&quot;my data to be compressed&quot;</span><span class="p" data-group-id="8214910639-3">]</span></code></pre><p>If you are compressing or decompressing possibly large amounts of data,
-it is also possible to do streamed compression/decompression.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="n">Ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="9580856857-1">(</span><span class="ss">compress</span><span class="p" data-group-id="9580856857-1">)</span><span class="p">,</span><span class="w">
-</span><span class="n">Compress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="n">F</span><span class="p" data-group-id="9580856857-2">(</span><span class="ss">end_of_data</span><span class="p" data-group-id="9580856857-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                   </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="9580856857-3">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9580856857-4">[</span><span class="p" data-group-id="9580856857-4">]</span><span class="p" data-group-id="9580856857-3">)</span><span class="p">;</span><span class="w">
-               </span><span class="n">F</span><span class="p" data-group-id="9580856857-5">(</span><span class="n">Data</span><span class="p" data-group-id="9580856857-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                   </span><span class="p" data-group-id="9580856857-6">[</span><span class="nc">zstd</span><span class="p">:</span><span class="nf">chunk</span><span class="p" data-group-id="9580856857-7">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="9580856857-7">)</span><span class="p">|</span><span class="n">F</span><span class="p" data-group-id="9580856857-8">(</span><span class="n">Read</span><span class="p" data-group-id="9580856857-9">(</span><span class="p" data-group-id="9580856857-9">)</span><span class="p" data-group-id="9580856857-8">)</span><span class="p" data-group-id="9580856857-6">]</span><span class="w">
-           </span><span class="k">end</span><span class="p">,</span><span class="w">
-</span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Compress</span><span class="p" data-group-id="9580856857-10">(</span><span class="n">Read</span><span class="p" data-group-id="9580856857-11">(</span><span class="p" data-group-id="9580856857-11">)</span><span class="p" data-group-id="9580856857-10">)</span><span class="p">,</span><span class="w">
-</span><span class="nc">zstd</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9580856857-12">(</span><span class="n">Ctx</span><span class="p" data-group-id="9580856857-12">)</span><span class="p">,</span><span class="w">
-</span><span class="n">Compressed</span><span class="p">.</span></code></pre><p>In all functions errors can be thrown, where <code class="inline">Reason</code> describes the error.</p><p>Typical <code class="inline">Reason</code>s:</p><ul><li><strong><code class="inline">badarg</code></strong> - Bad argument.</li><li><strong><code class="inline">zstd_error</code></strong> - An error generated by the Zstandard library.</li><li><strong><code class="inline">not_on_controlling_process</code></strong> - The context was used by a process that
+&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="6819118027-1">(</span><span class="n">Data</span><span class="p" data-group-id="6819118027-1">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="6819118027-2">(</span><span class="n">Compressed</span><span class="p" data-group-id="6819118027-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="6819118027-3">[</span><span class="s">~&quot;my data to be compressed&quot;</span><span class="p" data-group-id="6819118027-3">]</span></code></pre><p>If you are compressing or decompressing possibly large amounts of data,
+it is also possible to do streamed compression/decompression.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Compress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="n">F</span><span class="p" data-group-id="0363667939-1">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p" data-group-id="0363667939-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                     </span><span class="k">case</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">read</span><span class="p" data-group-id="0363667939-2">(</span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="0363667939-2">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+                         </span><span class="p" data-group-id="0363667939-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0363667939-3">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                             </span><span class="p" data-group-id="0363667939-4">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p" data-group-id="0363667939-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">stream</span><span class="p" data-group-id="0363667939-5">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="0363667939-5">)</span><span class="p">,</span><span class="w">
+                             </span><span class="p" data-group-id="0363667939-6">[</span><span class="n">C</span><span class="p">|</span><span class="n">F</span><span class="p" data-group-id="0363667939-7">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p" data-group-id="0363667939-7">)</span><span class="p" data-group-id="0363667939-6">]</span><span class="p">;</span><span class="w">
+                         </span><span class="ss">eof</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                             </span><span class="p" data-group-id="0363667939-8">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="p" data-group-id="0363667939-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="0363667939-9">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p" data-group-id="0363667939-9">)</span><span class="p">,</span><span class="w">
+                             </span><span class="n">C</span><span class="w">
+                     </span><span class="k">end</span><span class="w">
+             </span><span class="k">end</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="p" data-group-id="0363667939-10">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Ctx</span><span class="p" data-group-id="0363667939-10">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="0363667939-11">(</span><span class="ss">compress</span><span class="p" data-group-id="0363667939-11">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="p" data-group-id="0363667939-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p" data-group-id="0363667939-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">file</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="0363667939-13">(</span><span class="n">File</span><span class="p">,</span><span class="p" data-group-id="0363667939-14">[</span><span class="ss">read</span><span class="p">,</span><span class="ss">binary</span><span class="p" data-group-id="0363667939-14">]</span><span class="p" data-group-id="0363667939-13">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="0363667939-15">(</span><span class="n">Compress</span><span class="p" data-group-id="0363667939-16">(</span><span class="n">Ctx</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p" data-group-id="0363667939-16">)</span><span class="p" data-group-id="0363667939-15">)</span><span class="p">.</span><span class="w">
+</span><span class="p">&lt;&lt;</span><span class="mi">40</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">253</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">88</span><span class="p">,</span><span class="mi">89</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">108</span><span class="p">,</span><span class="mi">111</span><span class="p">,</span><span class="mi">114</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">109</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">105</span><span class="p">,</span><span class="mi">112</span><span class="p">,</span><span class="mi">115</span><span class="p">,</span><span class="mi">117</span><span class="p">,</span><span class="mi">109</span><span class="p">&gt;&gt;</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="0363667939-17">(</span><span class="n">Compressed</span><span class="p" data-group-id="0363667939-17">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="0363667939-18">[</span><span class="s">~&quot;lorem ipsum&quot;</span><span class="p" data-group-id="0363667939-18">]</span></code></pre><p>In all functions errors can be thrown, where <code class="inline">Reason</code> describes the error.</p><p>Typical <code class="inline">Reason</code>s:</p><ul><li><strong><code class="inline">badarg</code></strong> - Bad argument.</li><li><strong><code class="inline">zstd_error</code></strong> - An error generated by the Zstandard library.</li><li><strong><code class="inline">not_on_controlling_process</code></strong> - The context was used by a process that
 did not create it.</li></ul>
     </section>
 
@@ -245,18 +252,7 @@ for streaming compression or decompression.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#chunk/2" data-no-tooltip translate="no">chunk/2</a>
-
-      </div>
-
-        <div class="summary-synopsis"><p>Compress or decompress a chunk of data. The last chunk of data should be called
-with <a href="#finish/2"><code class="inline">finish/2</code></a> to complete the compression/decompression.</p></div>
-
-    </div>
-
-    <div class="summary-row">
-      <div class="summary-signature">
-        <a href="#close/1" data-no-tooltip translate="no">close/1</a>
+        <a href="#close/1" data-no-tooltip translate="no">close(Ctx)</a>
 
       </div>
 
@@ -277,11 +273,11 @@ is closed it is no longer possible to use it.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#compress/2" data-no-tooltip translate="no">compress/2</a>
+        <a href="#compress/2" data-no-tooltip translate="no">compress(Data, CtxOrOptions)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Compress Data using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Compress <code class="inline">Data</code> using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p></div>
 
     </div>
 
@@ -291,15 +287,17 @@ is closed it is no longer possible to use it.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Create a compression or decompression context.</p></div>
+        <div class="summary-synopsis"><p>Equivalent to <a href="#context/2"><code class="inline">context(Mode, #{})</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#context/2" data-no-tooltip translate="no">context/2</a>
+        <a href="#context/2" data-no-tooltip translate="no">context(Mode, Options)</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>Create a compression or decompression context.</p></div>
 
     </div>
 
@@ -345,17 +343,17 @@ is closed it is no longer possible to use it.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#decompress/2" data-no-tooltip translate="no">decompress/2</a>
+        <a href="#decompress/2" data-no-tooltip translate="no">decompress(Data, CtxOrOptions)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Decompress Data using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Decompress <code class="inline">Data</code> using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#finish/2" data-no-tooltip translate="no">finish/2</a>
+        <a href="#finish/2" data-no-tooltip translate="no">finish(Ctx, Data)</a>
 
       </div>
 
@@ -365,7 +363,7 @@ is closed it is no longer possible to use it.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_dict_id/1" data-no-tooltip translate="no">get_dict_id/1</a>
+        <a href="#get_dict_id/1" data-no-tooltip translate="no">get_dict_id(DictOrFrame)</a>
 
       </div>
 
@@ -379,11 +377,13 @@ is closed it is no longer possible to use it.</p></div>
 
       </div>
 
+        <div class="summary-synopsis"><p>Get header of a Zstandard compressed frame.</p></div>
+
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#get_parameter/2" data-no-tooltip translate="no">get_parameter/2</a>
+        <a href="#get_parameter/2" data-no-tooltip translate="no">get_parameter(Ctx, Key)</a>
 
       </div>
 
@@ -393,7 +393,7 @@ is closed it is no longer possible to use it.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#reset/1" data-no-tooltip translate="no">reset/1</a>
+        <a href="#reset/1" data-no-tooltip translate="no">reset(Ctx)</a>
 
       </div>
 
@@ -404,11 +404,22 @@ but keeping all parameters set.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#set_parameter/3" data-no-tooltip translate="no">set_parameter/3</a>
+        <a href="#set_parameter/3" data-no-tooltip translate="no">set_parameter(Ctx, Key, Value)</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Set a parameter on a <code class="inline">context/0</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stream/2" data-no-tooltip translate="no">stream(Ctx, Data)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Compress or decompress a stream of data. The last stream of data should be called
+with <a href="#finish/2"><code class="inline">finish/2</code></a> to complete the compression/decompression.</p></div>
 
     </div>
 
@@ -433,7 +444,7 @@ but keeping all parameters set.</p></div>
     </a>
     <h1 class="signature" translate="no">compress_dict()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L76" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L83" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -459,7 +470,7 @@ but keeping all parameters set.</p></div>
     </a>
     <h1 class="signature" translate="no">compress_parameters()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L140" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L147" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -496,18 +507,21 @@ but keeping all parameters set.</p></div>
       </div>
 
 <p>Compression parameters.</p><p>Zstandard has many parameters that can be tuned. Setting some parameters will
-fail when set to an incorrect value, while others will be silently adjusted to</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="ss">the</span><span class="w"> </span><span class="ss">closest</span><span class="w"> </span><span class="ss">valid</span><span class="w"> </span><span class="ss">value</span><span class="p">.</span></code></pre><ul><li><code class="inline">dictionary</code> - Sets the compression dictionary for the context. The dictionary
+fail when set to an incorrect value, while others will be silently adjusted to
+the closest valid value.</p><ul><li><p><code class="inline">dictionary</code> - Sets the compression dictionary for the context. The dictionary
 can be either a <code class="inline">t:binary()</code> representing the dictionary or a <a href="#t:compress_dict/0"><code class="inline">compress_dict/0</code></a>.
 When a <a href="#t:compress_dict/0"><code class="inline">compress_dict/0</code></a> is attached to a context it will be kept alive until
-either the context is closed or it is replaced by another dictionary.</li></ul><p>To reset the context to not use any dictionary use the empty dictionary, that is <code class="inline">&lt;&lt;&gt;&gt;</code>.</p><ul><li><code class="inline">pedgedSrcSize</code> - When using <a href="#chunk/2"><code class="inline">chunk/2</code></a> to do streaming compression, the decompressed
+either the context is closed or it is replaced by another dictionary.</p><p>To reset the context to not use any dictionary use the empty dictionary, that is <code class="inline">&lt;&lt;&gt;&gt;</code>.</p></li><li><p><code class="inline">pedgedSrcSize</code> - When using <a href="#stream/2"><code class="inline">stream/2</code></a> to do streaming compression, the decompressed
 size is not known when the header of the Zstandard frame is emitted. Setting this
 parameter on the context lets the compressor know the expected size of the data to
-compress. If the size is not correct when <a href="#finish/2"><code class="inline">finish/2</code></a> is called an exception will be<pre><code class="makeup erlang" translate="no"><span class="w">                                    </span><span class="ss">generated</span><span class="p">.</span><span class="w"> </span><span class="n">Using</span><span class="w"> </span><span class="p" data-group-id="1140680230-1">[</span><span class="err">`</span><span class="ss">compress</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="err">`</span><span class="p" data-group-id="1140680230-1">]</span><span class="p" data-group-id="1140680230-2">(</span><span class="err">`</span><span class="ss">compress</span><span class="p">/</span><span class="mi">2</span><span class="err">`</span><span class="p" data-group-id="1140680230-2">)</span><span class="w"> </span><span class="ss">will</span><span class="w"> </span><span class="ss">automatically</span><span class="w"> </span><span class="ss">set</span><span class="w"> </span><span class="ss">this</span><span class="w"> </span><span class="ss">value</span><span class="p">.</span></code></pre></li><li><code class="inline">compressionLevel</code> - Sets the <a href="#t:compressionLevel/0"><code class="inline">compressionLevel/0</code></a>.</li><li><p><code class="inline">windowLog</code> | <code class="inline">hashLog</code> | <code class="inline">chainLog</code> | <code class="inline">searchLog</code> | <code class="inline">minMatch</code> |
+compress. If the size is not correct when <a href="#finish/2"><code class="inline">finish/2</code></a> is called an exception will be
+generated. Using <a href="#compress/2"><code class="inline">compress/1,2</code></a> will automatically set this value.</p></li><li><p><code class="inline">compressionLevel</code> - Sets the <a href="#t:compressionLevel/0"><code class="inline">compressionLevel/0</code></a>.</p></li><li><p><code class="inline">windowLog</code> | <code class="inline">hashLog</code> | <code class="inline">chainLog</code> | <code class="inline">searchLog</code> | <code class="inline">minMatch</code> |
 <code class="inline">targetLength</code> | <code class="inline">targetCBlockSize</code> - Set the corresponding parameter.
-See the Zstandard documentation for more details.</p></li><li><code class="inline">strategy</code> - Sets the compression <a href="#t:strategy/0"><code class="inline">strategy/0</code></a>.</li><li><code class="inline">enableLongDistanceMatching</code> - Whether to enable Long Distance Matching or not.
-LDM is useful when compressing large datasets and is enabled by using a high<pre><code class="makeup erlang" translate="no"><span class="w">             </span><span class="err">`</span><span class="ss">compressionLevel</span><span class="err">`</span><span class="p">.</span><span class="w">
-             </span><span class="o">*</span><span class="w"> </span><span class="err">`</span><span class="ss">ldmHashLog</span><span class="err">`</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="err">`</span><span class="ss">ldmMinMatch</span><span class="err">`</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="err">`</span><span class="ss">ldmBucketSizeLog</span><span class="err">`</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="err">`</span><span class="ss">ldmHashRateLog</span><span class="err">`</span><span class="w"> </span><span class="o">-</span><span class="w">
-             </span><span class="n">Set</span><span class="w"> </span><span class="ss">the</span><span class="w"> </span><span class="ss">corresponding</span><span class="w"> </span><span class="n">LDM</span><span class="w"> </span><span class="ss">parameter</span><span class="p">.</span></code></pre>See the Zstandard documentation for more details.</li><li><code class="inline">contentSizeFlag</code> - Whether to include the contentSize or not.</li><li><code class="inline">checksumFlag</code> - Whether to include the checksum or not.</li><li><code class="inline">dictIDFlag</code> - Whether to include the dictionary ID or not.</li></ul><p>The Zstandard documentation contains more details about each parameter.</p>
+See the Zstandard documentation for more details.</p></li><li><p><code class="inline">strategy</code> - Sets the compression <a href="#t:strategy/0"><code class="inline">strategy/0</code></a>.</p></li><li><p><code class="inline">enableLongDistanceMatching</code> - Whether to enable Long Distance Matching or not.
+LDM is useful when compressing large datasets and is enabled by using a high
+<code class="inline">compressionLevel</code>.</p></li><li><p><code class="inline">ldmHashLog</code> | <code class="inline">ldmMinMatch</code> | <code class="inline">ldmBucketSizeLog</code> | <code class="inline">ldmHashRateLog</code> -
+Set the corresponding LDM parameter.
+See the Zstandard documentation for more details.</p></li><li><p><code class="inline">contentSizeFlag</code> - Whether to include the contentSize or not.</p></li><li><p><code class="inline">checksumFlag</code> - Whether to include the checksum or not.</p></li><li><p><code class="inline">dictIDFlag</code> - Whether to include the dictionary ID or not.</p></li></ul><p>The Zstandard documentation contains more details about each parameter.</p>
   </section>
 </section>
 <section class="detail" id="t:compressionLevel/0">
@@ -518,7 +532,7 @@ LDM is useful when compressing large datasets and is enabled by using a high<pre
     </a>
     <h1 class="signature" translate="no">compressionLevel()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L90" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L97" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -548,7 +562,7 @@ favor of performance.</p><p>0 is a special value which represents the default co
     </a>
     <h1 class="signature" translate="no">context()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L72" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L79" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -575,7 +589,7 @@ for streaming compression or decompression.</p><p>Only the process that created 
     </a>
     <h1 class="signature" translate="no">decompress_dict()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L80" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L87" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -601,7 +615,7 @@ for streaming compression or decompression.</p><p>Only the process that created 
     </a>
     <h1 class="signature" translate="no">decompress_parameters()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L186" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L193" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -620,7 +634,8 @@ for streaming compression or decompression.</p><p>Only the process that created 
       </div>
 
 <p>Decompression parameters.</p><p>Zstandard has many parameters that can be tuned. Setting some parameters will
-fail when set to an incorrect value, while others will be silently adjusted to</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="ss">the</span><span class="w"> </span><span class="ss">closest</span><span class="w"> </span><span class="ss">valid</span><span class="w"> </span><span class="ss">value</span><span class="p">.</span></code></pre><ul><li><code class="inline">dictionary</code> - Sets the decompression dictionary for the context. The dictionary
+fail when set to an incorrect value, while others will be silently adjusted to
+the closest valid value.</p><ul><li><code class="inline">dictionary</code> - Sets the decompression dictionary for the context. The dictionary
 can be either a <code class="inline">t:binary()</code> representing the dictionary or a <a href="#t:decompress_dict/0"><code class="inline">decompress_dict/0</code></a>.
 When a <a href="#t:decompress_dict/0"><code class="inline">decompress_dict/0</code></a> is attached to a context it will be kept alive until
 either the context is closed or it is replaced by another dictionary.</li></ul><p>To reset the context to not use any dictionary use the empty dictionary, that is <code class="inline">&lt;&lt;&gt;&gt;</code>.</p><ul><li><code class="inline">windowLogMax</code> - Set the corresponding parameter. See the Zstandard documentation for more details.</li></ul>
@@ -634,7 +649,7 @@ either the context is closed or it is replaced by another dictionary.</li></ul><
     </a>
     <h1 class="signature" translate="no">strategy()</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L103" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L110" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -670,52 +685,15 @@ the best compression ratio.</p><p><code class="inline">default</code> is a speci
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
-<section class="detail" id="chunk/2">
-
-  <div class="detail-header">
-    <a href="#chunk/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <h1 class="signature" translate="no">chunk/2</h1>
-
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L422" class="icon-action" rel="help" aria-label="View Source">
-       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-     </a>
-
-
-  </div>
-
-  <section class="docstring">
-
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">-spec</span> chunk(<a href="#t:context/0">context</a>(), <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> Result
-               when
-                   Result ::
-                       {continue, Remainder :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>(), Output :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()} |
-                       {continue, Output :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()}.</pre>
-
-      </div>
-
-<p>Compress or decompress a chunk of data. The last chunk of data should be called
-with <a href="#finish/2"><code class="inline">finish/2</code></a> to complete the compression/decompression.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="0477449570-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="0477449570-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="0477449570-2">(</span><span class="ss">compress</span><span class="p" data-group-id="0477449570-2">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="p" data-group-id="0477449570-3">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="n">C1</span><span class="p" data-group-id="0477449570-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">chunk</span><span class="p" data-group-id="0477449570-4">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">~&quot;a&quot;</span><span class="p" data-group-id="0477449570-4">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="p" data-group-id="0477449570-5">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">C2</span><span class="p" data-group-id="0477449570-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="0477449570-6">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">~&quot;b&quot;</span><span class="p" data-group-id="0477449570-6">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="0477449570-7">(</span><span class="p" data-group-id="0477449570-8">[</span><span class="n">C1</span><span class="p">,</span><span class="w"> </span><span class="n">C2</span><span class="p" data-group-id="0477449570-8">]</span><span class="p" data-group-id="0477449570-7">)</span><span class="p">.</span><span class="w">
-</span><span class="p">&lt;&lt;</span><span class="mi">40</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">253</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">88</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">98</span><span class="p">&gt;&gt;</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="0477449570-9">(</span><span class="n">Compressed</span><span class="p" data-group-id="0477449570-9">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="0477449570-10">[</span><span class="p">&lt;&lt;</span><span class="s">&quot;ab&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="0477449570-10">]</span></code></pre>
-  </section>
-</section>
 <section class="detail" id="close/1">
 
   <div class="detail-header">
     <a href="#close/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">close/1</h1>
+    <h1 class="signature" translate="no">close(Ctx)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L540" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L572" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -726,13 +704,14 @@ with <a href="#finish/2"><code class="inline">finish/2</code></a> to complete th
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> close(<a href="#t:context/0">context</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> close(Ctx :: <a href="#t:context/0">context</a>()) -> ok.</pre>
 
       </div>
 
 <p>Close a <a href="#t:context/0"><code class="inline">context/0</code></a>, releasing all referenced resources. After a <a href="#t:context/0"><code class="inline">context/0</code></a>
-is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><code class="inline">context/0</code></a> is automatically closed when GC:ed, so the only reason to call</p><pre><code class="makeup erlang" translate="no"><span class="w">                                         </span><span class="ss">this</span><span class="w"> </span><span class="ss">function</span><span class="w"> </span><span class="ss">is</span><span class="w"> </span><span class="ss">to</span><span class="w"> </span><span class="ss">make</span><span class="w"> </span><span class="ss">the</span><span class="w"> </span><span class="ss">resources</span><span class="w"> </span><span class="ss">attached</span><span class="w"> </span><span class="ss">to</span><span class="w"> </span><span class="ss">the</span><span class="w"> </span><span class="ss">context</span><span class="w"> </span><span class="ss">be</span><span class="w"> </span><span class="ss">released</span><span class="w">
-                                         </span><span class="ss">before</span><span class="w"> </span><span class="ss">the</span><span class="w"> </span><span class="ss">next</span><span class="w"> </span><span class="n">GC</span><span class="p">.</span></code></pre>
+is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><code class="inline">context/0</code></a> is automatically closed when GC:ed, so the only reason to call
+this function is to make the resources attached to the context be released
+before the next GC.</p>
   </section>
 </section>
 <section class="detail" id="compress/1">
@@ -743,7 +722,7 @@ is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><co
     </a>
     <h1 class="signature" translate="no">compress(Data)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L547" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L579" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -754,7 +733,7 @@ is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><co
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> compress(Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> compress(<a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
 
       </div>
 
@@ -767,9 +746,9 @@ is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><co
     <a href="#compress/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">compress/2</h1>
+    <h1 class="signature" translate="no">compress(Data, CtxOrOptions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L562" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L596" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -781,12 +760,12 @@ is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><co
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> compress(Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Options :: <a href="#t:compress_parameters/0">compress_parameters</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>();
-              (Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), CCtx :: <a href="#t:context/0">context</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
+              (Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Ctx :: <a href="#t:context/0">context</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
 
       </div>
 
-<p>Compress Data using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="7323588043-1">(</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="7323588043-1">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="7323588043-2">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7323588043-3">#{</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p" data-group-id="7323588043-3">}</span><span class="p" data-group-id="7323588043-2">)</span><span class="p">.</span></code></pre>
+<p>Compress <code class="inline">Data</code> using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="1677319215-1">(</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="1677319215-1">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="1677319215-2">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1677319215-3">#{</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p" data-group-id="1677319215-3">}</span><span class="p" data-group-id="1677319215-2">)</span><span class="p">.</span></code></pre>
   </section>
 </section>
 <section class="detail" id="context/1">
@@ -797,7 +776,7 @@ is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><co
     </a>
     <h1 class="signature" translate="no">context(Mode)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L389" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L413" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -808,13 +787,11 @@ is closed it is no longer possible to use it.</p><p>A <a href="#t:context/0"><co
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> context(compress) -> {ok, <a href="#t:context/0">context</a>()};
-             (decompress) -> {ok, <a href="#t:context/0">context</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> context(compress | decompress) -> {ok, <a href="#t:context/0">context</a>()}.</pre>
 
       </div>
 
-<p>Create a compression or decompression context.</p><p>A context can be used to do streaming compression/decompression and allows
-re-using parameters for multiple compressions/decompressions.</p>
+<p>Equivalent to <a href="#context/2"><code class="inline">context(Mode, #{})</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="context/2">
@@ -823,9 +800,9 @@ re-using parameters for multiple compressions/decompressions.</p>
     <a href="#context/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">context/2</h1>
+    <h1 class="signature" translate="no">context(Mode, Options)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L394" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L426" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -841,7 +818,8 @@ re-using parameters for multiple compressions/decompressions.</p>
 
       </div>
 
-
+<p>Create a compression or decompression context.</p><p>A context can be used to do streaming compression/decompression and allows
+re-using parameters for multiple compressions/decompressions.</p>
   </section>
 </section>
 <section class="detail" id="create_compress_dict/1">
@@ -852,7 +830,7 @@ re-using parameters for multiple compressions/decompressions.</p>
     </a>
     <h1 class="signature" translate="no">create_compress_dict(Dict)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L309" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L316" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -878,7 +856,7 @@ re-using parameters for multiple compressions/decompressions.</p>
     </a>
     <h1 class="signature" translate="no">create_compress_dict(Dict, Level)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L326" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L333" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -908,7 +886,7 @@ only a single <a href="#t:compress_dict/0"><code class="inline">compress_dict/0<
     </a>
     <h1 class="signature" translate="no">create_decompress_dict(Dict)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L342" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L349" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -927,7 +905,8 @@ only a single <a href="#t:compress_dict/0"><code class="inline">compress_dict/0<
 a dictionary for decompression. The same dictionary has to be used for
 compression as decompression. To verify that the same dictionary is used
 you can use <a href="#get_dict_id/1"><code class="inline">get_dict_id/1</code></a> on the dictionary and compressed data, or just
-try to decompress as decompression will raise and exception if an incorrect</p><pre><code class="makeup erlang" translate="no"><span class="w">                                                           </span><span class="ss">dictionary</span><span class="w"> </span><span class="ss">is</span><span class="w"> </span><span class="ss">given</span><span class="p">.</span></code></pre><p>As loading a dictionary can be a heavy operations, it is possible to create
+try to decompress as decompression will raise and exception if an incorrect
+dictionary is given.</p><p>As loading a dictionary can be a heavy operations, it is possible to create
 only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dict/0</code></a> and provide it to multiple <a href="#t:context/0"><code class="inline">context/0</code></a>.</p>
   </section>
 </section>
@@ -939,7 +918,7 @@ only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dic
     </a>
     <h1 class="signature" translate="no">decompress(Data)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L578" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L612" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -950,7 +929,7 @@ only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dic
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> decompress(Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> decompress(<a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
 
       </div>
 
@@ -963,9 +942,9 @@ only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dic
     <a href="#decompress/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">decompress/2</h1>
+    <h1 class="signature" translate="no">decompress(Data, CtxOrOptions)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L594" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L630" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -977,13 +956,13 @@ only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dic
       <div class="specs">
 
           <pre translate="no"><span class="attribute">-spec</span> decompress(Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Options :: <a href="#t:decompress_parameters/0">decompress_parameters</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>();
-                (Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), DCtx :: <a href="#t:context/0">context</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
+                (Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Ctx :: <a href="#t:context/0">context</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>().</pre>
 
       </div>
 
-<p>Decompress Data using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="8771424349-1">(</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8771424349-1">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="8771424349-2">(</span><span class="n">Compressed</span><span class="p" data-group-id="8771424349-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8771424349-3">[</span><span class="s">~&quot;abc&quot;</span><span class="p" data-group-id="8771424349-3">]</span></code></pre>
+<p>Decompress <code class="inline">Data</code> using the given <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> or the <a href="#t:context/0"><code class="inline">context/0</code></a>.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="2242846293-1">(</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="2242846293-1">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="2242846293-2">(</span><span class="n">Compressed</span><span class="p" data-group-id="2242846293-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="2242846293-3">[</span><span class="s">~&quot;abc&quot;</span><span class="p" data-group-id="2242846293-3">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="finish/2">
@@ -992,9 +971,9 @@ only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dic
     <a href="#finish/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">finish/2</h1>
+    <h1 class="signature" translate="no">finish(Ctx, Data)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L463" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L495" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1005,15 +984,15 @@ only a single <a href="#t:decompress_dict/0"><code class="inline">decompress_dic
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> finish(<a href="#t:context/0">context</a>(), <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> Result when Result :: {done, <a href="../../../../erts-15.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> finish(Ctx :: <a href="#t:context/0">context</a>(), Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> Result when Result :: {done, <a href="../../../../erts-15.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>()}.</pre>
 
       </div>
 
 <p>Finish compressing/decompressing data.</p><p>This flushes all output buffers and resets the <a href="#t:context/0"><code class="inline">context/0</code></a> so
-that it can be used for compressing/decompressing again.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="0761070715-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">DCtx</span><span class="p" data-group-id="0761070715-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="0761070715-2">(</span><span class="ss">decompress</span><span class="p" data-group-id="0761070715-2">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="p" data-group-id="0761070715-3">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="n">D1</span><span class="p" data-group-id="0761070715-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">chunk</span><span class="p" data-group-id="0761070715-4">(</span><span class="n">DCtx</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">40</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">253</span><span class="p">,</span><span class="mi">32</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="0761070715-4">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="p" data-group-id="0761070715-5">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">D2</span><span class="p" data-group-id="0761070715-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="0761070715-6">(</span><span class="n">DCtx</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">98</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="0761070715-6">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="0761070715-7">(</span><span class="p" data-group-id="0761070715-8">[</span><span class="n">D1</span><span class="p">,</span><span class="n">D2</span><span class="p" data-group-id="0761070715-8">]</span><span class="p" data-group-id="0761070715-7">)</span><span class="p">.</span><span class="w">
+that it can be used for compressing/decompressing again.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="5518329499-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">DCtx</span><span class="p" data-group-id="5518329499-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="5518329499-2">(</span><span class="ss">decompress</span><span class="p" data-group-id="5518329499-2">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="p" data-group-id="5518329499-3">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="n">D1</span><span class="p" data-group-id="5518329499-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">stream</span><span class="p" data-group-id="5518329499-4">(</span><span class="n">DCtx</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">40</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">253</span><span class="p">,</span><span class="mi">32</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="5518329499-4">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="p" data-group-id="5518329499-5">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">D2</span><span class="p" data-group-id="5518329499-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="5518329499-6">(</span><span class="n">DCtx</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="mi">2</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">98</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="5518329499-6">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="5518329499-7">(</span><span class="p" data-group-id="5518329499-8">[</span><span class="n">D1</span><span class="p">,</span><span class="n">D2</span><span class="p" data-group-id="5518329499-8">]</span><span class="p" data-group-id="5518329499-7">)</span><span class="p">.</span><span class="w">
 </span><span class="p">&lt;&lt;</span><span class="s">&quot;ab&quot;</span><span class="p">&gt;&gt;</span></code></pre>
   </section>
 </section>
@@ -1023,9 +1002,9 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
     <a href="#get_dict_id/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">get_dict_id/1</h1>
+    <h1 class="signature" translate="no">get_dict_id(DictOrFrame)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L360" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L367" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1036,14 +1015,14 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_dict_id(<a href="#t:compress_dict/0">compress_dict</a>() | <a href="#t:decompress_dict/0">decompress_dict</a>() | <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_dict_id(DictOrFrame :: <a href="#t:compress_dict/0">compress_dict</a>() | <a href="#t:decompress_dict/0">decompress_dict</a>() | <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()) -> <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>().</pre>
 
       </div>
 
-<p>Get the dictionary ID of a dictionary or a frame.</p><p>The dictionary ID 0 represents no dictionary.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">CDict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">create_compress_dict</span><span class="p" data-group-id="4280867513-1">(</span><span class="n">Dict</span><span class="p" data-group-id="4280867513-1">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_dict_id</span><span class="p" data-group-id="4280867513-2">(</span><span class="n">CDict</span><span class="p" data-group-id="4280867513-2">)</span><span class="p">.</span><span class="w">
+<p>Get the dictionary ID of a dictionary or a frame.</p><p>The dictionary ID 0 represents no dictionary.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">CDict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">create_compress_dict</span><span class="p" data-group-id="7726990156-1">(</span><span class="n">Dict</span><span class="p" data-group-id="7726990156-1">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_dict_id</span><span class="p" data-group-id="7726990156-2">(</span><span class="n">CDict</span><span class="p" data-group-id="7726990156-2">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">1850243626</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_dict_id</span><span class="p" data-group-id="4280867513-3">(</span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="4280867513-4">(</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="4280867513-4">)</span><span class="p" data-group-id="4280867513-3">)</span><span class="p">.</span><span class="w">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_dict_id</span><span class="p" data-group-id="7726990156-3">(</span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="7726990156-4">(</span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="7726990156-4">)</span><span class="p" data-group-id="7726990156-3">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">0</span></code></pre>
   </section>
 </section>
@@ -1055,7 +1034,7 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
     </a>
     <h1 class="signature" translate="no">get_frame_header(Frame)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L374" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L405" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1066,11 +1045,26 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_frame_header(Frame :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()) -> {ok, <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>()} | {error, <a href="unicode.html#t:chardata/0">unicode:chardata</a>()}.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_frame_header(Frame :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) ->
+                          {ok,
+                           #{frameContentSize => <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                             windowSize => <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                             blockSizeMax => <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                             frameType => 'ZSTD_frame' | 'ZSTD_skippableFrame',
+                             headerSize => <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                             dictID => <a href="../../../../erts-15.2/doc/html/erlang.html#t:non_neg_integer/0">non_neg_integer</a>(),
+                             checksumFlag => <a href="../../../../erts-15.2/doc/html/erlang.html#t:boolean/0">boolean</a>()}} |
+                          {error, <a href="unicode.html#t:chardata/0">unicode:chardata</a>()}.</pre>
 
       </div>
 
-
+<p>Get header of a Zstandard compressed frame.</p><p>A compressed Zstandard stream can consist of multiple frames. This
+function will read metadata from the first frame. This information
+can be useful when debugging corrupted Zstandard streams.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">compress</span><span class="p" data-group-id="3645465998-1">(</span><span class="s">~&quot;abc&quot;</span><span class="p" data-group-id="3645465998-1">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_frame_header</span><span class="p" data-group-id="3645465998-2">(</span><span class="n">Compressed</span><span class="p" data-group-id="3645465998-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="3645465998-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="p" data-group-id="3645465998-4">#{</span><span class="ss">frameContentSize</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="ss">windowSize</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="ss">blockSizeMax</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="ss">frameType</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="ss">&#39;ZSTD_frame&#39;</span><span class="p">,</span><span class="ss">headerSize</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+      </span><span class="ss">dictID</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">checksumFlag</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="ss">false</span><span class="p" data-group-id="3645465998-4">}</span><span class="p" data-group-id="3645465998-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_parameter/2">
@@ -1079,9 +1073,9 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
     <a href="#get_parameter/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">get_parameter/2</h1>
+    <h1 class="signature" translate="no">get_parameter(Ctx, Key)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L300" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L307" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1092,7 +1086,7 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> get_parameter(<a href="#t:context/0">context</a>(), Key :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>()) -> Value :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
+          <pre translate="no"><span class="attribute">-spec</span> get_parameter(Ctx :: <a href="#t:context/0">context</a>(), Key :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>()) -> Value :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>().</pre>
 
       </div>
 
@@ -1100,13 +1094,13 @@ that it can be used for compressing/decompressing again.</p><p>For example:</p><
 which parameters are available and what each parameter does.</p><p>Note that it is not possible to get the <code class="inline">dictionary</code> and <code class="inline">pledgedSrcSize</code>
 parameters using this API. Instead you can use <a href="#get_dict_id/1"><code class="inline">get_dict_id/1</code></a> on the
 <a href="#t:context/0"><code class="inline">context/0</code></a> to get the id of the dictionary used. There is no way to
-get the <code class="inline">pledgedSrcSize</code>.</p><p>Returns <code class="inline">ok</code> on success, raises an error on failure.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="9504316783-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="9504316783-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="9504316783-2">(</span><span class="ss">compress</span><span class="p" data-group-id="9504316783-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="9504316783-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="9504316783-3">}</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_parameter</span><span class="p" data-group-id="9504316783-4">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p" data-group-id="9504316783-4">)</span><span class="p">.</span><span class="w">
+get the <code class="inline">pledgedSrcSize</code>.</p><p>Returns <code class="inline">ok</code> on success, raises an error on failure.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="0615861899-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="0615861899-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="0615861899-2">(</span><span class="ss">compress</span><span class="p" data-group-id="0615861899-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="0615861899-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="0615861899-3">}</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_parameter</span><span class="p" data-group-id="0615861899-4">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p" data-group-id="0615861899-4">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">3</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">set_parameter</span><span class="p" data-group-id="9504316783-5">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="9504316783-5">)</span><span class="p">.</span><span class="w">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">set_parameter</span><span class="p" data-group-id="0615861899-5">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="0615861899-5">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_parameter</span><span class="p" data-group-id="9504316783-6">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p" data-group-id="9504316783-6">)</span><span class="p">.</span><span class="w">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">get_parameter</span><span class="p" data-group-id="0615861899-6">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p" data-group-id="0615861899-6">)</span><span class="p">.</span><span class="w">
 </span><span class="mi">15</span></code></pre>
   </section>
 </section>
@@ -1116,9 +1110,9 @@ get the <code class="inline">pledgedSrcSize</code>.</p><p>Returns <code class="i
     <a href="#reset/1" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">reset/1</h1>
+    <h1 class="signature" translate="no">reset(Ctx)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L526" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L558" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1129,20 +1123,20 @@ get the <code class="inline">pledgedSrcSize</code>.</p><p>Returns <code class="i
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> reset(<a href="#t:context/0">context</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> reset(Ctx :: <a href="#t:context/0">context</a>()) -> ok.</pre>
 
       </div>
 
 <p>Reset a context while streaming data, returning it to its original state
 but keeping all parameters set.</p><p>By resetting the state, the context can be re-used for other operations even
-if it is in the middle of a (de)compression stream.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="4935037130-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="4935037130-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="4935037130-2">(</span><span class="ss">compress</span><span class="p" data-group-id="4935037130-2">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">chunk</span><span class="p" data-group-id="4935037130-3">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="p" data-group-id="4935037130-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="4935037130-4">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="4935037130-4">}</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">reset</span><span class="p" data-group-id="4935037130-5">(</span><span class="n">CCtx</span><span class="p" data-group-id="4935037130-5">)</span><span class="p">.</span><span class="w">
+if it is in the middle of a (de)compression stream.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="5182049590-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="5182049590-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="5182049590-2">(</span><span class="ss">compress</span><span class="p" data-group-id="5182049590-2">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">stream</span><span class="p" data-group-id="5182049590-3">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="p" data-group-id="5182049590-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5182049590-4">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="5182049590-4">}</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">reset</span><span class="p" data-group-id="5182049590-5">(</span><span class="n">CCtx</span><span class="p" data-group-id="5182049590-5">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-&gt; </span><span class="p" data-group-id="4935037130-6">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">Compressed</span><span class="p" data-group-id="4935037130-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="4935037130-7">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p" data-group-id="4935037130-7">)</span><span class="p">.</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="4935037130-8">(</span><span class="n">Compressed</span><span class="p" data-group-id="4935037130-8">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="4935037130-9">[</span><span class="s">~&quot;b&quot;</span><span class="p" data-group-id="4935037130-9">]</span></code></pre>
+&gt; </span><span class="p" data-group-id="5182049590-6">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">Compressed</span><span class="p" data-group-id="5182049590-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="5182049590-7">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p" data-group-id="5182049590-7">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="5182049590-8">(</span><span class="n">Compressed</span><span class="p" data-group-id="5182049590-8">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="5182049590-9">[</span><span class="s">~&quot;b&quot;</span><span class="p" data-group-id="5182049590-9">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="set_parameter/3">
@@ -1151,9 +1145,9 @@ if it is in the middle of a (de)compression stream.</p><p>For example:</p><pre><
     <a href="#set_parameter/3" class="detail-link" data-no-tooltip aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
-    <h1 class="signature" translate="no">set_parameter/3</h1>
+    <h1 class="signature" translate="no">set_parameter(Ctx, Key, Value)</h1>
 
-      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L256" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L263" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1164,19 +1158,56 @@ if it is in the middle of a (de)compression stream.</p><p>For example:</p><pre><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> set_parameter(<a href="#t:context/0">context</a>(), Key :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>(), Value :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>()) -> ok.</pre>
+          <pre translate="no"><span class="attribute">-spec</span> set_parameter(Ctx :: <a href="#t:context/0">context</a>(), Key :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>(), Value :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:term/0">term</a>()) -> ok.</pre>
 
       </div>
 
 <p>Set a parameter on a <code class="inline">context/0</code>.</p><p>See <a href="#t:compress_parameters/0"><code class="inline">compress_parameters/0</code></a> and <a href="#t:decompress_parameters/0"><code class="inline">decompress_parameters/0</code></a> for details on
-which parameters are available and what each parameter does.</p><p>Returns <code class="inline">ok</code> on success, raises an error on failure.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="8304250934-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="8304250934-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="8304250934-2">(</span><span class="ss">compress</span><span class="p" data-group-id="8304250934-2">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8304250934-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="8304250934-3">}</span><span class="gp unselectable">
-&gt; </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">set_parameter</span><span class="p" data-group-id="8304250934-4">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="8304250934-4">)</span><span class="p">.</span><span class="w">
+which parameters are available and what each parameter does.</p><p>Returns <code class="inline">ok</code> on success, raises an error on failure.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="1420859645-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="1420859645-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="1420859645-2">(</span><span class="ss">compress</span><span class="p" data-group-id="1420859645-2">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1420859645-3">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="1420859645-3">}</span><span class="gp unselectable">
+&gt; </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">set_parameter</span><span class="p" data-group-id="1420859645-4">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">compressionLevel</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="1420859645-4">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">ok</span><span class="gp unselectable">
-&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">chunk</span><span class="p" data-group-id="8304250934-5">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8304250934-5">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8304250934-6">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="8304250934-6">}</span><span class="gp unselectable">
-&gt; </span><span class="k">catch</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">set_parameter</span><span class="p" data-group-id="8304250934-7">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">dictionary</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="8304250934-7">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="8304250934-8">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8304250934-9">{</span><span class="p" data-group-id="8304250934-10">{</span><span class="ss">zstd_error</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;Operation not authorized at current processing stage&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="8304250934-10">}</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="8304250934-9">}</span><span class="p" data-group-id="8304250934-8">}</span></code></pre>
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">stream</span><span class="p" data-group-id="1420859645-5">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="1420859645-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1420859645-6">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="1420859645-6">}</span><span class="gp unselectable">
+&gt; </span><span class="k">catch</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">set_parameter</span><span class="p" data-group-id="1420859645-7">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="ss">dictionary</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc&quot;</span><span class="p" data-group-id="1420859645-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="1420859645-8">{</span><span class="ss">&#39;EXIT&#39;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1420859645-9">{</span><span class="p" data-group-id="1420859645-10">{</span><span class="ss">zstd_error</span><span class="p">,</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;Operation not authorized at current processing stage&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="1420859645-10">}</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p" data-group-id="1420859645-9">}</span><span class="p" data-group-id="1420859645-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="stream/2">
+
+  <div class="detail-header">
+    <a href="#stream/2" class="detail-link" data-no-tooltip aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <h1 class="signature" translate="no">stream(Ctx, Data)</h1>
+
+      <a href="https://github.com/garazdawi/otp/blob/lukas/stdlib/zstd/lib/stdlib/src/zstd.erl#L454" class="icon-action" rel="help" aria-label="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">-spec</span> stream(Ctx :: <a href="#t:context/0">context</a>(), Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>()) -> Result
+                when
+                    Result ::
+                        {continue, Remainder :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iovec/0">erlang:iovec</a>(), Output :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()} |
+                        {continue, Output :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()}.</pre>
+
+      </div>
+
+<p>Compress or decompress a stream of data. The last stream of data should be called
+with <a href="#finish/2"><code class="inline">finish/2</code></a> to complete the compression/decompression.</p><p>For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">&gt; </span><span class="p" data-group-id="7436640728-1">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">CCtx</span><span class="p" data-group-id="7436640728-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">context</span><span class="p" data-group-id="7436640728-2">(</span><span class="ss">compress</span><span class="p" data-group-id="7436640728-2">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="p" data-group-id="7436640728-3">{</span><span class="ss">continue</span><span class="p">,</span><span class="w"> </span><span class="n">C1</span><span class="p" data-group-id="7436640728-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">stream</span><span class="p" data-group-id="7436640728-4">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">~&quot;a&quot;</span><span class="p" data-group-id="7436640728-4">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="p" data-group-id="7436640728-5">{</span><span class="ss">done</span><span class="p">,</span><span class="w"> </span><span class="n">C2</span><span class="p" data-group-id="7436640728-5">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">finish</span><span class="p" data-group-id="7436640728-6">(</span><span class="n">CCtx</span><span class="p">,</span><span class="w"> </span><span class="s">~&quot;b&quot;</span><span class="p" data-group-id="7436640728-6">)</span><span class="p">.</span><span class="gp unselectable">
+&gt; </span><span class="n">Compressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">iolist_to_binary</span><span class="p" data-group-id="7436640728-7">(</span><span class="p" data-group-id="7436640728-8">[</span><span class="n">C1</span><span class="p">,</span><span class="w"> </span><span class="n">C2</span><span class="p" data-group-id="7436640728-8">]</span><span class="p" data-group-id="7436640728-7">)</span><span class="p">.</span><span class="w">
+</span><span class="p">&lt;&lt;</span><span class="mi">40</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">47</span><span class="p">,</span><span class="mi">253</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">88</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">98</span><span class="p">&gt;&gt;</span><span class="gp unselectable">
+&gt; </span><span class="nc">zstd</span><span class="p">:</span><span class="nf">decompress</span><span class="p" data-group-id="7436640728-9">(</span><span class="n">Compressed</span><span class="p" data-group-id="7436640728-9">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="7436640728-10">[</span><span class="p">&lt;&lt;</span><span class="s">&quot;ab&quot;</span><span class="p">&gt;&gt;</span><span class="p" data-group-id="7436640728-10">]</span></code></pre>
   </section>
 </section>
 
