@@ -178,8 +178,8 @@ the <a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code
 <a href="#t:completion_info/0"><code class="inline">completion_info/0</code></a> and the received <code class="inline">completion</code> message.</p><p>The compiler may then optimize a following <code class="inline">receive</code> statement
 to only scan the messages that arrive after the <a href="../../../../erts-15.2/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a>
 is created.  If the message queue is large this is a big optimization.</p><p>The <a href="../../../../erts-15.2/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> has to be unique for the call.</p><h4>Repeating an Operation on a <code class="inline">select</code> Systems</h4><p>On<code class="inline">select</code> systems, if a call would be repeated <em>before</em> the <code class="inline">select</code>
-message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="7198043690-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7198043690-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="7198043690-2">}</span><span class="p" data-group-id="7198043690-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="7198043690-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="7198043690-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="7198043690-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="7198043690-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="7198043690-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="7198043690-5">)</span><span class="p">,</span><span class="w">
+message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="5030839010-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5030839010-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="5030839010-2">}</span><span class="p" data-group-id="5030839010-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="5030839010-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="5030839010-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="5030839010-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="5030839010-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="5030839010-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="5030839010-5">)</span><span class="p">,</span><span class="w">
     </span><span class="p">:</span></code></pre><p>Above, <code class="inline">Handle</code> is <em>no longer</em> valid once the second <a href="#accept/2"><code class="inline">accept/2</code></a>, call
 has been made (the first call is automatically canceled).
 After the second <a href="#accept/2"><code class="inline">accept/2</code></a> call returns <code class="inline">{error, timeout}</code>,
@@ -212,28 +212,28 @@ API features could be considered no longer experimental.</li></ul><h2 id="module
   </a>
   <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="4704727362-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="4704727362-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="4704727362-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="4704727362-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="4704727362-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="4704727362-3">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="4704727362-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4704727362-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="4338554093-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="4338554093-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="4338554093-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="4338554093-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="4338554093-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="4338554093-3">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="4338554093-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4338554093-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                                </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SAddr</span><span class="p">,</span><span class="w">
-                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="4704727362-5">}</span><span class="p" data-group-id="4704727362-4">)</span><span class="p">,</span><span class="w">
+                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="4338554093-5">}</span><span class="p" data-group-id="4338554093-4">)</span><span class="p">,</span><span class="w">
    </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="4704727362-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4704727362-6">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="4704727362-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="4704727362-7">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="4704727362-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4704727362-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="4704727362-9">(</span><span class="n">Sock</span><span class="p" data-group-id="4704727362-9">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4704727362-10">(</span><span class="n">Sock</span><span class="p" data-group-id="4704727362-10">)</span><span class="p">.</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="4338554093-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4338554093-6">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="4338554093-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="4338554093-7">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4338554093-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4338554093-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="4338554093-9">(</span><span class="n">Sock</span><span class="p" data-group-id="4338554093-9">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4338554093-10">(</span><span class="n">Sock</span><span class="p" data-group-id="4338554093-10">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="4704727362-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="4704727362-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="4704727362-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="4704727362-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="4704727362-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="4704727362-13">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="4704727362-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4704727362-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="4338554093-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="4338554093-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="4338554093-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="4338554093-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="4338554093-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="4338554093-13">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="4338554093-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4338554093-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                              </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="4704727362-15">}</span><span class="p" data-group-id="4704727362-14">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="4704727362-16">(</span><span class="n">LSock</span><span class="p" data-group-id="4704727362-16">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="4704727362-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="4704727362-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4704727362-18">(</span><span class="n">LSock</span><span class="p" data-group-id="4704727362-18">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="4704727362-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4704727362-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="4704727362-20">(</span><span class="n">Sock</span><span class="p" data-group-id="4704727362-20">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="4704727362-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4704727362-21">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4704727362-22">(</span><span class="n">Sock</span><span class="p" data-group-id="4704727362-22">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4704727362-23">(</span><span class="n">LSock</span><span class="p" data-group-id="4704727362-23">)</span><span class="p">.</span></code></pre>
+                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="4338554093-15">}</span><span class="p" data-group-id="4338554093-14">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="4338554093-16">(</span><span class="n">LSock</span><span class="p" data-group-id="4338554093-16">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4338554093-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="4338554093-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4338554093-18">(</span><span class="n">LSock</span><span class="p" data-group-id="4338554093-18">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="4338554093-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4338554093-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="4338554093-20">(</span><span class="n">Sock</span><span class="p" data-group-id="4338554093-20">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="4338554093-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="4338554093-21">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4338554093-22">(</span><span class="n">Sock</span><span class="p" data-group-id="4338554093-22">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="4338554093-23">(</span><span class="n">LSock</span><span class="p" data-group-id="4338554093-23">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -4083,7 +4083,7 @@ which port that was chosen, you can find out using something like:
     </a>
     <h1 class="signature" translate="no">cancel/2</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6658" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6660" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4162,7 +4162,7 @@ a <code class="inline">'DOWN'</code> message from this monitor in the caller mes
     </a>
     <h1 class="signature" translate="no">close(Socket)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5817" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5819" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4352,7 +4352,7 @@ about <a href="#connect-timeout">connection time-out</a>.</p>
     </a>
     <h1 class="signature" translate="no">getopt/2</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6038" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6040" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4394,7 +4394,7 @@ that the underlying OS does.</p></section>
     </a>
     <h1 class="signature" translate="no">getopt(Socket, Level, Opt)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6058" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6060" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4428,7 +4428,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">getopt_native/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6127" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6129" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4650,7 +4650,7 @@ So, don't call this function often.</p></section>
     </a>
     <h1 class="signature" translate="no">ioctl/2</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6261" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6263" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4685,7 +4685,7 @@ with its name and address.</p></li><li><p><strong><code class="inline">nread</co
 <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.2/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a>.</p></li><li><p><strong><code class="inline">tcp_info</code></strong> - Get miscellaneous TCP related information for a
 <em>connected</em> socket <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.2/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a> with information items as key-value pairs.</p></li></ul><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Not all requests are supported by all platforms.
 To see if a ioctl request is supported on the current platform:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="n">Request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">nread</span><span class="p">,</span><span class="w">
-      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3062306381-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="3062306381-1">)</span><span class="p">,</span><span class="w">
+      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="9010888075-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="9010888075-1">)</span><span class="p">,</span><span class="w">
       </span><span class="p">:</span></code></pre></section>
   </section>
 </section>
@@ -4697,7 +4697,7 @@ To see if a ioctl request is supported on the current platform:</p><pre><code cl
     </a>
     <h1 class="signature" translate="no">ioctl/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6485" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6487" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4776,7 +4776,7 @@ and <a href="#t:protocol/0">protocol <code class="inline">udp</code></a>.</p><p>
     </a>
     <h1 class="signature" translate="no">ioctl(Socket, SetRequest, Name, Value)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6590" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6592" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -4843,7 +4843,7 @@ of the interface with the specified name.</p></li></ul>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/0"><code class="inline">supports/0</code></a> has a <code class="inline">{Key1, true}</code> tuple
 or a <code class="inline">{Key1, list()}</code> tuple in its returned list,
-otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3812260412-1">(</span><span class="ss">local</span><span class="p" data-group-id="3812260412-1">)</span><span class="p">,</span></code></pre>
+otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="6378204452-1">(</span><span class="ss">local</span><span class="p" data-group-id="6378204452-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="is_supported/2">
@@ -4872,7 +4872,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
       </div>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/1"><code class="inline">supports(Key1)</code></a> has a <code class="inline">{Key2, true}</code> tuple
-in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="4403010137-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="4403010137-1">)</span><span class="p">,</span></code></pre>
+in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3702333352-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="3702333352-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="listen/1">
@@ -4963,7 +4963,7 @@ will most probably be perceived as at least that long.</p><section role="note" c
 
 <p>Start a socket monitor.</p><p>If the <code class="inline">Socket</code> doesn't exist or when later the monitor is triggered,
 a <code class="inline">'DOWN'</code> message is sent to the process that called <a href="#monitor/1"><code class="inline">monitor/1</code></a>
-with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="w">	    </span><span class="p" data-group-id="6534032713-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="6534032713-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
+with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="w">	    </span><span class="p" data-group-id="0353985095-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="0353985095-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
 <code class="inline">Socket</code> did not exist when the monitor was started.</p><p>Making several calls to <a href="#monitor/1"><code class="inline">socket:monitor/1</code></a> for the same <code class="inline">Socket</code> is not an
 error; each call creates an independent monitor instance.</p>
   </section>
@@ -5172,7 +5172,7 @@ for this socket. This overrides the global value.</p><p>Defaults to the global v
     </a>
     <h1 class="signature" translate="no">peername(Socket)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6176" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6178" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5202,7 +5202,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv(Socket)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4868" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4870" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5230,7 +5230,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/2</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4884" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4886" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5261,7 +5261,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4917" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4919" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5304,7 +5304,7 @@ the remote end of the socket.</p>
     </a>
     <h1 class="signature" translate="no">recv/4</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5021" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5023" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5390,7 +5390,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom(Socket)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5299" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5301" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5418,7 +5418,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/2</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5316" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5318" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5449,7 +5449,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5351" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5353" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5487,7 +5487,7 @@ will probably need an updated <code class="inline">Length</code> argument.</p>
     </a>
     <h1 class="signature" translate="no">recvfrom/4</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5446" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5448" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5567,7 +5567,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5534" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5536" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5595,7 +5595,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/2</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5556" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5558" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5628,7 +5628,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5581" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5583" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5659,7 +5659,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg(Socket, BufSz, CtrlSz, TimeoutOrHandle)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5599" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5601" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5692,7 +5692,7 @@ at the start of this module reference manual page.</p>
     </a>
     <h1 class="signature" translate="no">recvmsg/5</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5693" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5695" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5939,7 +5939,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4537" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4539" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -5969,7 +5969,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont, Timeout_Handle)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4555" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4557" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6004,7 +6004,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile(Socket, FileHandle_Cont, Offset, Count)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4574" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4576" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6039,7 +6039,7 @@ and encode message flags in every call but the first.</p>
     </a>
     <h1 class="signature" translate="no">sendfile/5</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4694" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4696" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6130,7 +6130,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg(Socket, Msg)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L3987" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L3989" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6159,7 +6159,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4012" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4014" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6193,7 +6193,7 @@ need to be updated between continuation calls.</p>
     </a>
     <h1 class="signature" translate="no">sendmsg/4</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4176" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4178" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6354,7 +6354,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
     </a>
     <h1 class="signature" translate="no">sendto/4</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L3780" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L3782" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6367,8 +6367,11 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Dest :: <a href="#t:sockaddr/0">sockaddr</a>(), Flags :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:list/0">list</a>()) -> Result
+          <pre translate="no"><span class="attribute">-spec</span> sendto(Socket :: <a href="#t:socket/0">socket</a>(), Data :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:iodata/0">iodata</a>(), Dest :: <a href="#t:sockaddr/0">sockaddr</a>(), Flags | TimeoutOrHandle) ->
+                Result
                 when
+                    TimeoutOrHandle :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:dynamic/0">dynamic</a>(),
+                    Flags :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:list/0">list</a>(),
                     Result ::
                         ok |
                         {ok, RestData :: <a href="../../../../erts-15.2/doc/html/erlang.html#t:binary/0">binary</a>()} |
@@ -6407,7 +6410,7 @@ an explanation of <code class="inline">TimeoutOrHandle</code>.</p>
     </a>
     <h1 class="signature" translate="no">sendto/5</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L3900" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L3902" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6486,7 +6489,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv(Socket, IOV)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4269" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4271" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6519,7 +6522,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
     </a>
     <h1 class="signature" translate="no">sendv/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4383" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4385" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6606,7 +6609,7 @@ at the start of this module reference manual page.</p><p><a href="" id="sendv-co
     </a>
     <h1 class="signature" translate="no">sendv/4</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4464" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L4466" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6668,7 +6671,7 @@ unfinished calls.</p><p>See <a href="#sendv/3"><code class="inline">sendv/3</cod
     </a>
     <h1 class="signature" translate="no">setopt/3</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5913" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5915" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6713,7 +6716,7 @@ that the underlying OS does.</p></section>
     </a>
     <h1 class="signature" translate="no">setopt/4</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5936" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5938" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6746,7 +6749,7 @@ difference between known options and native options clear.</p>
     </a>
     <h1 class="signature" translate="no">setopt_native(Socket, Option, Value)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5979" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5981" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6792,7 +6795,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">shutdown(Socket, How)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5849" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L5851" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -6821,7 +6824,7 @@ encoding has to be deduced from the header files for the running system.</p>
     </a>
     <h1 class="signature" translate="no">sockname(Socket)</h1>
 
-      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6151" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/ariel-anieli/otp/blob/random-deprecated/lib/kernel/src/socket.erl#L6153" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -7077,7 +7080,7 @@ indicating if the socket should be returned or not.</p></li></ul>
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
       </p>
-<p>Copyright © 1996-2024 <a href="https://www.ericsson.com">Ericsson AB</a></p>
+<p>Copyright © 1996-2025 <a href="https://www.ericsson.com">Ericsson AB</a></p>
     </footer>
   </div>
 </main>
