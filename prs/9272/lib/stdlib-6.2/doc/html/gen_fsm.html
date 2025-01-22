@@ -141,163 +141,163 @@ Pages
   <span class="text">Migration to gen_statem</span>
 </h2>
 <p>Here follows a simple example of turning a gen_fsm into a <a href="gen_statem.html"><code class="inline">gen_statem</code></a>.
-The example comes from the previous User's Guide for <code class="inline">gen_fsm</code></p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="5682159740-1">(</span><span class="ss">code_lock</span><span class="p" data-group-id="5682159740-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">define</span><span class="p" data-group-id="5682159740-2">(</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="ss">code_lock</span><span class="p" data-group-id="5682159740-2">)</span><span class="p">.</span><span class="w">
+The example comes from the previous User's Guide for <code class="inline">gen_fsm</code></p><pre><code class="makeup erlang" translate="no"><span class="p">-</span><span class="na">module</span><span class="p" data-group-id="5990450747-1">(</span><span class="ss">code_lock</span><span class="p" data-group-id="5990450747-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">define</span><span class="p" data-group-id="5990450747-2">(</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="ss">code_lock</span><span class="p" data-group-id="5990450747-2">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%-define(BEFORE_REWRITE, true).</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-3">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-3">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="5682159740-4">(</span><span class="ss">gen_fsm</span><span class="p" data-group-id="5682159740-4">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-3">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-3">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="5990450747-4">(</span><span class="ss">gen_fsm</span><span class="p" data-group-id="5990450747-4">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="5682159740-5">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="5682159740-5">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">behaviour</span><span class="p" data-group-id="5990450747-5">(</span><span class="ss">gen_statem</span><span class="p" data-group-id="5990450747-5">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5682159740-6">(</span><span class="p" data-group-id="5682159740-7">[</span><span class="ss">start_link</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">button</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="5682159740-7">]</span><span class="p" data-group-id="5682159740-6">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5990450747-6">(</span><span class="p" data-group-id="5990450747-7">[</span><span class="ss">start_link</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">button</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p">/</span><span class="mi">0</span><span class="p" data-group-id="5990450747-7">]</span><span class="p" data-group-id="5990450747-6">)</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-8">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-8">)</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5682159740-9">(</span><span class="p" data-group-id="5682159740-10">[</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">open</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">handle_sync_event</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">handle_event</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w">
-     </span><span class="ss">handle_info</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p" data-group-id="5682159740-10">]</span><span class="p" data-group-id="5682159740-9">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-8">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-8">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5990450747-9">(</span><span class="p" data-group-id="5990450747-10">[</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">open</span><span class="p">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="ss">handle_sync_event</span><span class="p">/</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="ss">handle_event</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w">
+     </span><span class="ss">handle_info</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p" data-group-id="5990450747-10">]</span><span class="p" data-group-id="5990450747-9">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5682159740-11">(</span><span class="p" data-group-id="5682159740-12">[</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">open</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w">
-     </span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p" data-group-id="5682159740-12">]</span><span class="p" data-group-id="5682159740-11">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">export</span><span class="p" data-group-id="5990450747-11">(</span><span class="p" data-group-id="5990450747-12">[</span><span class="ss">init</span><span class="p">/</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">callback_mode</span><span class="p">/</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">open</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w">
+     </span><span class="ss">terminate</span><span class="p">/</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="ss">code_change</span><span class="p">/</span><span class="mi">4</span><span class="p" data-group-id="5990450747-12">]</span><span class="p" data-group-id="5990450747-11">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% Add callback__mode/0</span><span class="w">
 </span><span class="c1">%% Change arity of the state functions</span><span class="w">
 </span><span class="c1">%% Remove handle_info/3</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-13">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-13">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">start_link</span><span class="p" data-group-id="5682159740-14">(</span><span class="n">Code</span><span class="p" data-group-id="5682159740-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_fsm</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="5682159740-15">(</span><span class="p" data-group-id="5682159740-16">{</span><span class="ss">local</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">NAME</span><span class="p" data-group-id="5682159740-16">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-17">[</span><span class="p" data-group-id="5682159740-17">]</span><span class="p" data-group-id="5682159740-15">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-13">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-13">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start_link</span><span class="p" data-group-id="5990450747-14">(</span><span class="n">Code</span><span class="p" data-group-id="5990450747-14">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_fsm</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="5990450747-15">(</span><span class="p" data-group-id="5990450747-16">{</span><span class="ss">local</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">NAME</span><span class="p" data-group-id="5990450747-16">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-17">[</span><span class="p" data-group-id="5990450747-17">]</span><span class="p" data-group-id="5990450747-15">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">start_link</span><span class="p" data-group-id="5682159740-18">(</span><span class="n">Code</span><span class="p" data-group-id="5682159740-18">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="5682159740-19">(</span><span class="p" data-group-id="5682159740-20">{</span><span class="ss">local</span><span class="p">,</span><span class="o">?</span><span class="n">NAME</span><span class="p" data-group-id="5682159740-20">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-21">[</span><span class="p" data-group-id="5682159740-21">]</span><span class="p" data-group-id="5682159740-19">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">start_link</span><span class="p" data-group-id="5990450747-18">(</span><span class="n">Code</span><span class="p" data-group-id="5990450747-18">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">start_link</span><span class="p" data-group-id="5990450747-19">(</span><span class="p" data-group-id="5990450747-20">{</span><span class="ss">local</span><span class="p">,</span><span class="o">?</span><span class="n">NAME</span><span class="p" data-group-id="5990450747-20">}</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="n">MODULE</span><span class="p">,</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-21">[</span><span class="p" data-group-id="5990450747-21">]</span><span class="p" data-group-id="5990450747-19">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-22">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-22">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">button</span><span class="p" data-group-id="5682159740-23">(</span><span class="n">Digit</span><span class="p" data-group-id="5682159740-23">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_fsm</span><span class="p">:</span><span class="nf">send_event</span><span class="p" data-group-id="5682159740-24">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-25">{</span><span class="ss">button</span><span class="p">,</span><span class="w"> </span><span class="n">Digit</span><span class="p" data-group-id="5682159740-25">}</span><span class="p" data-group-id="5682159740-24">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-22">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-22">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">button</span><span class="p" data-group-id="5990450747-23">(</span><span class="n">Digit</span><span class="p" data-group-id="5990450747-23">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_fsm</span><span class="p">:</span><span class="nf">send_event</span><span class="p" data-group-id="5990450747-24">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-25">{</span><span class="ss">button</span><span class="p">,</span><span class="w"> </span><span class="n">Digit</span><span class="p" data-group-id="5990450747-25">}</span><span class="p" data-group-id="5990450747-24">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">button</span><span class="p" data-group-id="5682159740-26">(</span><span class="n">Digit</span><span class="p" data-group-id="5682159740-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">cast</span><span class="p" data-group-id="5682159740-27">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-28">{</span><span class="ss">button</span><span class="p">,</span><span class="n">Digit</span><span class="p" data-group-id="5682159740-28">}</span><span class="p" data-group-id="5682159740-27">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">button</span><span class="p" data-group-id="5990450747-26">(</span><span class="n">Digit</span><span class="p" data-group-id="5990450747-26">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">cast</span><span class="p" data-group-id="5990450747-27">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-28">{</span><span class="ss">button</span><span class="p">,</span><span class="n">Digit</span><span class="p" data-group-id="5990450747-28">}</span><span class="p" data-group-id="5990450747-27">)</span><span class="p">.</span><span class="w">
     </span><span class="c1">%% send_event is asynchronous and becomes a cast</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-29">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-29">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="5682159740-30">(</span><span class="p" data-group-id="5682159740-30">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_fsm</span><span class="p">:</span><span class="nf">sync_send_all_state_event</span><span class="p" data-group-id="5682159740-31">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="5682159740-31">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-29">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-29">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="5990450747-30">(</span><span class="p" data-group-id="5990450747-30">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_fsm</span><span class="p">:</span><span class="nf">sync_send_all_state_event</span><span class="p" data-group-id="5990450747-31">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="5990450747-31">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">stop</span><span class="p" data-group-id="5682159740-32">(</span><span class="p" data-group-id="5682159740-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="5682159740-33">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="5682159740-33">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">stop</span><span class="p" data-group-id="5990450747-32">(</span><span class="p" data-group-id="5990450747-32">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">gen_statem</span><span class="p">:</span><span class="nf">call</span><span class="p" data-group-id="5990450747-33">(</span><span class="o">?</span><span class="n">NAME</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p" data-group-id="5990450747-33">)</span><span class="p">.</span><span class="w">
     </span><span class="c1">%% sync_send is synchronous and becomes call</span><span class="w">
     </span><span class="c1">%% all_state is handled by callback code in gen_statem</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">init</span><span class="p" data-group-id="5682159740-34">(</span><span class="n">Code</span><span class="p" data-group-id="5682159740-34">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">do_lock</span><span class="p" data-group-id="5682159740-35">(</span><span class="p" data-group-id="5682159740-35">)</span><span class="p">,</span><span class="w">
-    </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5682159740-36">#{</span><span class="ss">code</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="ss">remaining</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5682159740-36">}</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-37">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-37">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">init</span><span class="p" data-group-id="5990450747-34">(</span><span class="n">Code</span><span class="p" data-group-id="5990450747-34">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">do_lock</span><span class="p" data-group-id="5990450747-35">(</span><span class="p" data-group-id="5990450747-35">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5990450747-36">#{</span><span class="ss">code</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="ss">remaining</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5990450747-36">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-37">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-37">}</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-38">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-38">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-38">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-38">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">callback_mode</span><span class="p" data-group-id="5682159740-39">(</span><span class="p" data-group-id="5682159740-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">callback_mode</span><span class="p" data-group-id="5990450747-39">(</span><span class="p" data-group-id="5990450747-39">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="ss">state_functions</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% state_functions mode is the mode most similar to</span><span class="w">
 </span><span class="c1">%% gen_fsm. There is also handle_event mode which is</span><span class="w">
 </span><span class="c1">%% a fairly different concept.</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-40">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-40">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">locked</span><span class="p" data-group-id="5682159740-41">(</span><span class="p" data-group-id="5682159740-42">{</span><span class="ss">button</span><span class="p">,</span><span class="w"> </span><span class="n">Digit</span><span class="p" data-group-id="5682159740-42">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5682159740-41">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nf">analyze_lock</span><span class="p" data-group-id="5682159740-43">(</span><span class="n">Digit</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5682159740-43">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-44">{</span><span class="ss">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-44">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5682159740-45">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p" data-group-id="5682159740-45">}</span><span class="p">;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-46">{</span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-46">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5682159740-47">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-47">}</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-40">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-40">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">locked</span><span class="p" data-group-id="5990450747-41">(</span><span class="p" data-group-id="5990450747-42">{</span><span class="ss">button</span><span class="p">,</span><span class="w"> </span><span class="n">Digit</span><span class="p" data-group-id="5990450747-42">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5990450747-41">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nf">analyze_lock</span><span class="p" data-group-id="5990450747-43">(</span><span class="n">Digit</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5990450747-43">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-44">{</span><span class="ss">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-44">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="5990450747-45">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p" data-group-id="5990450747-45">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-46">{</span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-46">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="5990450747-47">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-47">}</span><span class="w">
     </span><span class="k">end</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">locked</span><span class="p" data-group-id="5682159740-48">(</span><span class="ss">cast</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-49">{</span><span class="ss">button</span><span class="p">,</span><span class="n">Digit</span><span class="p" data-group-id="5682159740-49">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5682159740-48">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nf">analyze_lock</span><span class="p" data-group-id="5682159740-50">(</span><span class="n">Digit</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5682159740-50">)</span><span class="w"> </span><span class="k">of</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-51">{</span><span class="ss">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-51">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5682159740-52">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p" data-group-id="5682159740-52">}</span><span class="p">;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-53">{</span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-53">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-        </span><span class="p" data-group-id="5682159740-54">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-54">}</span><span class="w">
+</span><span class="nf">locked</span><span class="p" data-group-id="5990450747-48">(</span><span class="ss">cast</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-49">{</span><span class="ss">button</span><span class="p">,</span><span class="n">Digit</span><span class="p" data-group-id="5990450747-49">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5990450747-48">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nf">analyze_lock</span><span class="p" data-group-id="5990450747-50">(</span><span class="n">Digit</span><span class="p">,</span><span class="w"> </span><span class="n">Data0</span><span class="p" data-group-id="5990450747-50">)</span><span class="w"> </span><span class="k">of</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-51">{</span><span class="ss">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-51">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="5990450747-52">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p" data-group-id="5990450747-52">}</span><span class="p">;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-53">{</span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-53">}</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+        </span><span class="p" data-group-id="5990450747-54">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-54">}</span><span class="w">
     </span><span class="k">end</span><span class="p">;</span><span class="w">
-</span><span class="nf">locked</span><span class="p" data-group-id="5682159740-55">(</span><span class="p" data-group-id="5682159740-56">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">From</span><span class="p" data-group-id="5682159740-56">}</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-55">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_call</span><span class="p" data-group-id="5682159740-57">(</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-57">)</span><span class="p">;</span><span class="w">
-</span><span class="nf">locked</span><span class="p" data-group-id="5682159740-58">(</span><span class="p" data-group-id="5682159740-59">{</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5682159740-59">}</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-58">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_info</span><span class="p" data-group-id="5682159740-60">(</span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-60">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">locked</span><span class="p" data-group-id="5990450747-55">(</span><span class="p" data-group-id="5990450747-56">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">From</span><span class="p" data-group-id="5990450747-56">}</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-55">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_call</span><span class="p" data-group-id="5990450747-57">(</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-57">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">locked</span><span class="p" data-group-id="5990450747-58">(</span><span class="p" data-group-id="5990450747-59">{</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="5990450747-59">}</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-58">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_info</span><span class="p" data-group-id="5990450747-60">(</span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-60">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% Arity differs</span><span class="w">
 </span><span class="c1">%% All state events are dispatched to handle_call and handle_info help</span><span class="w">
 </span><span class="c1">%% functions. If you want to handle a call or cast event specifically</span><span class="w">
 </span><span class="c1">%% for this state you would add a special clause for it above.</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-61">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-61">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">open</span><span class="p" data-group-id="5682159740-62">(</span><span class="ss">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5682159740-62">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-     </span><span class="nf">do_lock</span><span class="p" data-group-id="5682159740-63">(</span><span class="p" data-group-id="5682159740-63">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-64">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5682159740-64">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">open</span><span class="p" data-group-id="5682159740-65">(</span><span class="p" data-group-id="5682159740-66">{</span><span class="ss">button</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="5682159740-66">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-65">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-67">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-67">}</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-61">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-61">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">open</span><span class="p" data-group-id="5990450747-62">(</span><span class="ss">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5990450747-62">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="nf">do_lock</span><span class="p" data-group-id="5990450747-63">(</span><span class="p" data-group-id="5990450747-63">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-64">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5990450747-64">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">open</span><span class="p" data-group-id="5990450747-65">(</span><span class="p" data-group-id="5990450747-66">{</span><span class="ss">button</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="5990450747-66">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-65">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-67">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-67">}</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">open</span><span class="p" data-group-id="5682159740-68">(</span><span class="ss">timeout</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-68">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">do_lock</span><span class="p" data-group-id="5682159740-69">(</span><span class="p" data-group-id="5682159740-69">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-70">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-70">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">open</span><span class="p" data-group-id="5682159740-71">(</span><span class="ss">cast</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-72">{</span><span class="ss">button</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="5682159740-72">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-71">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-73">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-73">}</span><span class="p">;</span><span class="w">
-</span><span class="nf">open</span><span class="p" data-group-id="5682159740-74">(</span><span class="p" data-group-id="5682159740-75">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">From</span><span class="p" data-group-id="5682159740-75">}</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-74">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_call</span><span class="p" data-group-id="5682159740-76">(</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-76">)</span><span class="p">;</span><span class="w">
-</span><span class="nf">open</span><span class="p" data-group-id="5682159740-77">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-77">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">handle_info</span><span class="p" data-group-id="5682159740-78">(</span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="ss">open</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-78">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">open</span><span class="p" data-group-id="5990450747-68">(</span><span class="ss">timeout</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-68">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">do_lock</span><span class="p" data-group-id="5990450747-69">(</span><span class="p" data-group-id="5990450747-69">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-70">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-70">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">open</span><span class="p" data-group-id="5990450747-71">(</span><span class="ss">cast</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-72">{</span><span class="ss">button</span><span class="p">,</span><span class="p">_</span><span class="p" data-group-id="5990450747-72">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-71">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-73">{</span><span class="ss">next_state</span><span class="p">,</span><span class="w"> </span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-73">}</span><span class="p">;</span><span class="w">
+</span><span class="nf">open</span><span class="p" data-group-id="5990450747-74">(</span><span class="p" data-group-id="5990450747-75">{</span><span class="ss">call</span><span class="p">,</span><span class="w"> </span><span class="n">From</span><span class="p" data-group-id="5990450747-75">}</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-74">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_call</span><span class="p" data-group-id="5990450747-76">(</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-76">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">open</span><span class="p" data-group-id="5990450747-77">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-77">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">handle_info</span><span class="p" data-group-id="5990450747-78">(</span><span class="n">Msg</span><span class="p">,</span><span class="w"> </span><span class="ss">open</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-78">)</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% Arity differs</span><span class="w">
 </span><span class="c1">%% All state events are dispatched to handle_call and handle_info help</span><span class="w">
 </span><span class="c1">%% functions. If you want to handle a call or cast event specifically</span><span class="w">
 </span><span class="c1">%% for this state you would add a special clause for it above.</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 </span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-79">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-79">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">handle_sync_event</span><span class="p" data-group-id="5682159740-80">(</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-80">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-81">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="ss">normal</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-81">}</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-79">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-79">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">handle_sync_event</span><span class="p" data-group-id="5990450747-80">(</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-80">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-81">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="ss">normal</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-81">}</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">handle_event</span><span class="p" data-group-id="5682159740-82">(</span><span class="n">Event</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-82">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-83">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-84">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-85">{</span><span class="ss">unexpected</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p" data-group-id="5682159740-85">}</span><span class="p" data-group-id="5682159740-84">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-83">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">handle_event</span><span class="p" data-group-id="5990450747-82">(</span><span class="n">Event</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-82">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-83">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-84">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-85">{</span><span class="ss">unexpected</span><span class="p">,</span><span class="w"> </span><span class="n">Event</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p" data-group-id="5990450747-85">}</span><span class="p" data-group-id="5990450747-84">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-83">}</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">handle_info</span><span class="p" data-group-id="5682159740-86">(</span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-86">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-87">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-88">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-89">{</span><span class="ss">unexpected</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p" data-group-id="5682159740-89">}</span><span class="p" data-group-id="5682159740-88">}</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-87">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">handle_info</span><span class="p" data-group-id="5990450747-86">(</span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-86">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-87">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-88">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-89">{</span><span class="ss">unexpected</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p" data-group-id="5990450747-89">}</span><span class="p" data-group-id="5990450747-88">}</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-87">}</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">terminate</span><span class="p" data-group-id="5682159740-90">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="5682159740-90">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="n">State</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="ss">locked</span><span class="w"> </span><span class="ow">andalso</span><span class="w"> </span><span class="nf">do_lock</span><span class="p" data-group-id="5682159740-91">(</span><span class="p" data-group-id="5682159740-91">)</span><span class="p">,</span><span class="w">
+</span><span class="nf">terminate</span><span class="p" data-group-id="5990450747-90">(</span><span class="p">_</span><span class="n">Reason</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Data</span><span class="p" data-group-id="5990450747-90">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">State</span><span class="w"> </span><span class="o">=/=</span><span class="w"> </span><span class="ss">locked</span><span class="w"> </span><span class="ow">andalso</span><span class="w"> </span><span class="nf">do_lock</span><span class="p" data-group-id="5990450747-91">(</span><span class="p" data-group-id="5990450747-91">)</span><span class="p">,</span><span class="w">
     </span><span class="ss">ok</span><span class="p">.</span><span class="w">
-</span><span class="nf">code_change</span><span class="p" data-group-id="5682159740-92">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="5682159740-92">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-93">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-93">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">code_change</span><span class="p" data-group-id="5990450747-92">(</span><span class="p">_</span><span class="n">Vsn</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">Extra</span><span class="p" data-group-id="5990450747-92">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-93">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-93">}</span><span class="p">.</span><span class="w">
 
 </span><span class="c1">%% Internal functions</span><span class="w">
-</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5682159740-94">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5682159740-94">)</span><span class="p">.</span><span class="w">
+</span><span class="p">-</span><span class="na">ifdef</span><span class="p" data-group-id="5990450747-94">(</span><span class="n">BEFORE_REWRITE</span><span class="p" data-group-id="5990450747-94">)</span><span class="p">.</span><span class="w">
 </span><span class="p">-</span><span class="na">else</span><span class="p">.</span><span class="w">
-</span><span class="nf">handle_call</span><span class="p" data-group-id="5682159740-95">(</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-95">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-     </span><span class="p" data-group-id="5682159740-96">{</span><span class="ss">stop_and_reply</span><span class="p">,</span><span class="w"> </span><span class="ss">normal</span><span class="p">,</span><span class="w">  </span><span class="p" data-group-id="5682159740-97">{</span><span class="ss">reply</span><span class="p">,</span><span class="w"> </span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p" data-group-id="5682159740-97">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-96">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">handle_call</span><span class="p" data-group-id="5990450747-95">(</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-95">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+     </span><span class="p" data-group-id="5990450747-96">{</span><span class="ss">stop_and_reply</span><span class="p">,</span><span class="w"> </span><span class="ss">normal</span><span class="p">,</span><span class="w">  </span><span class="p" data-group-id="5990450747-97">{</span><span class="ss">reply</span><span class="p">,</span><span class="w"> </span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="ss">ok</span><span class="p" data-group-id="5990450747-97">}</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-96">}</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">handle_info</span><span class="p" data-group-id="5682159740-98">(</span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-98">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="5682159740-99">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-100">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-101">{</span><span class="ss">unexpected</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p" data-group-id="5682159740-101">}</span><span class="p" data-group-id="5682159740-100">}</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-99">}</span><span class="p">.</span><span class="w">
+</span><span class="nf">handle_info</span><span class="p" data-group-id="5990450747-98">(</span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-98">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="5990450747-99">{</span><span class="ss">stop</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-100">{</span><span class="ss">shutdown</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-101">{</span><span class="ss">unexpected</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p" data-group-id="5990450747-101">}</span><span class="p" data-group-id="5990450747-100">}</span><span class="p">,</span><span class="w"> </span><span class="n">StateName</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-99">}</span><span class="p">.</span><span class="w">
 </span><span class="c1">%% These are internal functions for handling all state events</span><span class="w">
 </span><span class="c1">%% and not behaviour callbacks as in gen_fsm</span><span class="w">
 </span><span class="p">-</span><span class="na">endif</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">analyze_lock</span><span class="p" data-group-id="5682159740-102">(</span><span class="n">Digit</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-103">#{</span><span class="ss">code</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Remaining</span><span class="p" data-group-id="5682159740-103">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-102">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">analyze_lock</span><span class="p" data-group-id="5990450747-102">(</span><span class="n">Digit</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-103">#{</span><span class="ss">code</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Code</span><span class="p">,</span><span class="w"> </span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Remaining</span><span class="p" data-group-id="5990450747-103">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-102">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
      </span><span class="k">case</span><span class="w"> </span><span class="n">Remaining</span><span class="w"> </span><span class="k">of</span><span class="w">
-         </span><span class="p" data-group-id="5682159740-104">[</span><span class="n">Digit</span><span class="p" data-group-id="5682159740-104">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-         </span><span class="nf">do_unlock</span><span class="p" data-group-id="5682159740-105">(</span><span class="p" data-group-id="5682159740-105">)</span><span class="p">,</span><span class="w">
-         </span><span class="p" data-group-id="5682159740-106">{</span><span class="ss">open</span><span class="p">,</span><span class="w">  </span><span class="n">Data</span><span class="p" data-group-id="5682159740-107">#{</span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5682159740-107">}</span><span class="p" data-group-id="5682159740-106">}</span><span class="p">;</span><span class="w">
-         </span><span class="p" data-group-id="5682159740-108">[</span><span class="n">Digit</span><span class="p">|</span><span class="n">Rest</span><span class="p" data-group-id="5682159740-108">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="c1">% Incomplete</span><span class="w">
-             </span><span class="p" data-group-id="5682159740-109">{</span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-110">#{</span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Rest</span><span class="p" data-group-id="5682159740-110">}</span><span class="p" data-group-id="5682159740-109">}</span><span class="p">;</span><span class="w">
+         </span><span class="p" data-group-id="5990450747-104">[</span><span class="n">Digit</span><span class="p" data-group-id="5990450747-104">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+         </span><span class="nf">do_unlock</span><span class="p" data-group-id="5990450747-105">(</span><span class="p" data-group-id="5990450747-105">)</span><span class="p">,</span><span class="w">
+         </span><span class="p" data-group-id="5990450747-106">{</span><span class="ss">open</span><span class="p">,</span><span class="w">  </span><span class="n">Data</span><span class="p" data-group-id="5990450747-107">#{</span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5990450747-107">}</span><span class="p" data-group-id="5990450747-106">}</span><span class="p">;</span><span class="w">
+         </span><span class="p" data-group-id="5990450747-108">[</span><span class="n">Digit</span><span class="p">|</span><span class="n">Rest</span><span class="p" data-group-id="5990450747-108">]</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="c1">% Incomplete</span><span class="w">
+             </span><span class="p" data-group-id="5990450747-109">{</span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-110">#{</span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Rest</span><span class="p" data-group-id="5990450747-110">}</span><span class="p" data-group-id="5990450747-109">}</span><span class="p">;</span><span class="w">
          </span><span class="p">_</span><span class="n">Wrong</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-             </span><span class="p" data-group-id="5682159740-111">{</span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5682159740-112">#{</span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5682159740-112">}</span><span class="p" data-group-id="5682159740-111">}</span><span class="w">
+             </span><span class="p" data-group-id="5990450747-111">{</span><span class="ss">locked</span><span class="p">,</span><span class="w"> </span><span class="n">Data</span><span class="p" data-group-id="5990450747-112">#{</span><span class="ss">remaining</span><span class="w"> </span><span class="p">:=</span><span class="w"> </span><span class="n">Code</span><span class="p" data-group-id="5990450747-112">}</span><span class="p" data-group-id="5990450747-111">}</span><span class="w">
      </span><span class="k">end</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">do_lock</span><span class="p" data-group-id="5682159740-113">(</span><span class="p" data-group-id="5682159740-113">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5682159740-114">(</span><span class="s">&quot;Lock</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-115">[</span><span class="p" data-group-id="5682159740-115">]</span><span class="p" data-group-id="5682159740-114">)</span><span class="p">.</span><span class="w">
-</span><span class="nf">do_unlock</span><span class="p" data-group-id="5682159740-116">(</span><span class="p" data-group-id="5682159740-116">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5682159740-117">(</span><span class="s">&quot;Unlock</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5682159740-118">[</span><span class="p" data-group-id="5682159740-118">]</span><span class="p" data-group-id="5682159740-117">)</span><span class="p">.</span></code></pre><h2 id="module-otp-19-documentation" class="section-heading">
+</span><span class="nf">do_lock</span><span class="p" data-group-id="5990450747-113">(</span><span class="p" data-group-id="5990450747-113">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5990450747-114">(</span><span class="s">&quot;Lock</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-115">[</span><span class="p" data-group-id="5990450747-115">]</span><span class="p" data-group-id="5990450747-114">)</span><span class="p">.</span><span class="w">
+</span><span class="nf">do_unlock</span><span class="p" data-group-id="5990450747-116">(</span><span class="p" data-group-id="5990450747-116">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5990450747-117">(</span><span class="s">&quot;Unlock</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5990450747-118">[</span><span class="p" data-group-id="5990450747-118">]</span><span class="p" data-group-id="5990450747-117">)</span><span class="p">.</span></code></pre><h2 id="module-otp-19-documentation" class="section-heading">
   <a href="#module-otp-19-documentation" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -812,7 +812,7 @@ and <a href="#state-data"><em>state data</em></a>.</p></div>
     </a>
     <h1 class="signature" translate="no">enter_loop_opt()</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L816" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L818" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -842,7 +842,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
     </a>
     <h1 class="signature" translate="no">from()</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L394" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L396" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -870,7 +870,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
     </a>
     <h1 class="signature" translate="no">fsm_name()</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L779" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L781" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -902,7 +902,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
     </a>
     <h1 class="signature" translate="no">fsm_ref()</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L789" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L791" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -935,7 +935,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
     </a>
     <h1 class="signature" translate="no">start_opt()</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L803" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L805" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -977,7 +977,7 @@ and <a href="#start_link/3"><code class="inline">start_link/3,4</code></a> funct
     </a>
     <h1 class="signature" translate="no">code_change(OldVsn, StateName, StateData, Extra)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L699" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L701" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1029,7 +1029,7 @@ and updated internal data.</p>
     </a>
     <h1 class="signature" translate="no">format_status/2</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L760" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L762" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1092,7 +1092,7 @@ that large state terms are printed in log files.</p>
     </a>
     <h1 class="signature" translate="no">handle_event(Event, StateName, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L558" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L560" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1138,7 +1138,7 @@ see <a href="#c:StateName/2"><code class="inline">Module:StateName/2</code></a>.
     </a>
     <h1 class="signature" translate="no">handle_info(Info, StateName, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L616" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L618" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1186,7 +1186,7 @@ see <a href="#c:StateName/2"><code class="inline">Module:StateName/2</code></a>.
     </a>
     <h1 class="signature" translate="no">handle_sync_event(Event, From, StateName, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L585" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L587" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1239,7 +1239,7 @@ see <a href="#c:StateName/3"><code class="inline">Module:StateName/3</code></a>.
     </a>
     <h1 class="signature" translate="no">init(Args)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L427" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L429" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1296,7 +1296,7 @@ where <code class="inline">Reason</code> is any term, or <code class="inline">ig
     </a>
     <h1 class="signature" translate="no">'StateName'(Event, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L469" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L471" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1356,7 +1356,7 @@ and terminates.</p>
     </a>
     <h1 class="signature" translate="no">'StateName'(Event, From, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L527" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L529" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1434,7 +1434,7 @@ and terminates.</p></li></ul>
     </a>
     <h1 class="signature" translate="no">terminate(Reason, StateName, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L668" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L670" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1500,7 +1500,7 @@ using <a href="../../../../lib/kernel-10.2/doc/html/error_logger.html#format/2">
     </a>
     <h1 class="signature" translate="no">cancel_timer(Ref)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1231" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1233" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1537,7 +1537,7 @@ otherwise <code class="inline">false</code>.</p>
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Options, StateName, StateData)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1261" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1263" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1573,7 +1573,7 @@ but the started server is not registered as for <a href="#start_link/3"><code cl
     </a>
     <h1 class="signature" translate="no">enter_loop/5</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1287" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1289" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1618,7 +1618,7 @@ but the started server is not registered as for <a href="#start_link/3"><code cl
     </a>
     <h1 class="signature" translate="no">enter_loop(Module, Options, StateName, StateData, FsmName, Timeout)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1329" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1331" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1668,7 +1668,7 @@ according to <code class="inline">FsmName</code>.</p>
     </a>
     <h1 class="signature" translate="no">reply(Caller, Reply)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1608" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1610" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1707,7 +1707,7 @@ when the reply cannot be defined in the return value of
     </a>
     <h1 class="signature" translate="no">send_all_state_event(FsmRef, Event)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1102" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1104" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1744,7 +1744,7 @@ in each state name function.</p>
     </a>
     <h1 class="signature" translate="no">send_event(FsmRef, Event)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1023" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1025" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1782,7 +1782,7 @@ to <code class="inline">Module:StateName/2</code>.</p>
     </a>
     <h1 class="signature" translate="no">send_event_after(Time, Event)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1206" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1208" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1820,7 +1820,7 @@ to <a href="#c:StateName/2"><code class="inline">Module:StateName/2</code></a>.<
     </a>
     <h1 class="signature" translate="no">start(Module, Args, Options)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L853" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L855" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1859,7 +1859,7 @@ see <a href="#start_link/3"><code class="inline">start_link/3,4</code></a>.</p>
     </a>
     <h1 class="signature" translate="no">start(FsmName, Module, Args, Options)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L873" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L875" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1899,7 +1899,7 @@ see <a href="#start_link/4"><code class="inline">start_link/3,4</code></a>.</p>
     </a>
     <h1 class="signature" translate="no">start_link(Module, Args, Options)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L889" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L891" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -1937,7 +1937,7 @@ without registering a <code class="inline">Name</code>.</p>
     </a>
     <h1 class="signature" translate="no">start_link(FsmName, Module, Args, Options)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L961" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L963" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2002,7 +2002,7 @@ or <code class="inline">ignore</code>, the process is terminated and the functio
     </a>
     <h1 class="signature" translate="no">start_timer(Time, Msg)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1182" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1184" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2040,7 +2040,7 @@ to <a href="#c:StateName/2"><code class="inline">Module:StateName/2</code></a>.<
     </a>
     <h1 class="signature" translate="no">stop(FsmRef)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L967" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L969" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2070,7 +2070,7 @@ to <a href="#c:StateName/2"><code class="inline">Module:StateName/2</code></a>.<
     </a>
     <h1 class="signature" translate="no">stop(FsmRef, Reason, Timeout)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L994" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L996" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2110,7 +2110,7 @@ within the specified time, a <code class="inline">timeout</code> exception is ra
     </a>
     <h1 class="signature" translate="no">sync_send_all_state_event(FsmRef, Event)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1117" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1119" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2141,7 +2141,7 @@ within the specified time, a <code class="inline">timeout</code> exception is ra
     </a>
     <h1 class="signature" translate="no">sync_send_all_state_event(FsmRef, Event, Timeout)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1144" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1146" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2181,7 +2181,7 @@ and <code class="inline">sync_send_all_state_event</code>, see <a href="#send_al
     </a>
     <h1 class="signature" translate="no">sync_send_event(FsmRef, Event)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1038" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1040" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
@@ -2211,7 +2211,7 @@ and <code class="inline">sync_send_all_state_event</code>, see <a href="#send_al
     </a>
     <h1 class="signature" translate="no">sync_send_event(FsmRef, Event, Timeout)</h1>
 
-      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1075" class="icon-action" rel="help" aria-label="View Source">
+      <a href="https://github.com/frazze-jobb/otp/blob/frazze/kernel/prim_tty_unicode_char_not_part_of_escape_sequence/OTP-19414/lib/stdlib/src/gen_fsm.erl#L1077" class="icon-action" rel="help" aria-label="View Source">
        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
      </a>
 
