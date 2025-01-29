@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.37.0-rc.0">
+    <meta name="generator" content="ExDoc v0.37.0-rc.2">
     <meta name="project" content="kernel v10.2.1">
 
 
     <title>socket — kernel v10.2.1</title>
 
-    <link rel="stylesheet" href="dist/html-erlang-K3USIQEG.css" />
+    <link rel="stylesheet" href="dist/html-erlang-FDBURIED.css" />
 
     <script defer src="dist/sidebar_items-872F0F84.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-GPAM72RX.js"></script>
+    <script defer src="dist/html-NL4GMUWY.js"></script>
 
   </head>
   <body>
@@ -119,20 +119,20 @@ the <code class="inline">CompletionHandle</code> or a <code class="inline">selec
 the <code class="inline">SelectHandle</code> is sent to the calling process.</p><p>On <code class="inline">select</code> systems, <a href="#recv/2"><code class="inline">recv/2,3,4</code></a> may also return:</p><ul><li><code class="inline">{select, {</code><a href="#t:select_info/0"><code class="inline">SelectInfo</code></a><code class="inline">, Data}</code></li></ul><p>This may happen for sockets of type <a href="#t:type/0"><code class="inline">stream</code></a>
 when <code class="inline">Length &gt; 1</code> since the OS may split a data stream at any point
 and deliver just the first part of the requested data.
-For the next recv call; the <code class="inline">Length</code> to receive will probably
-have to be adjusted due to the already delivered data
-in this return value.</p><p>See <a href="#recv/2"><code class="inline">recv/2,3,4</code></a>.</p><p>On <code class="inline">select</code> systems, when the <code class="inline">{otp, select_read}</code> option is <code class="inline">true</code>,
+For the next <a href="#recv/2"><code class="inline">recv/2,3,4</code></a> call; the <code class="inline">Length</code> to receive
+will probably have to be adjusted due to the already delivered data
+in this return value.</p><p>On <code class="inline">select</code> systems, when the <code class="inline">{otp, select_read}</code> option is <code class="inline">true</code>,
 the asynchronous <a href="#recv-nowait"><code class="inline">recv/3,4</code></a>,
 <a href="#recvfrom-nowait"><code class="inline">recvfrom/3,4</code></a>, and
 <a href="#recvmsg-nowait"><code class="inline">recvmsg/3,4,5</code></a> functions may also return:</p><ul><li><code class="inline">{select_read, {</code><a href="#t:select_info/0"><code class="inline">SelectInfo</code></a><code class="inline">, Data}</code></li></ul><p>This indicates that the receive operation was completed;
 all requested data has been delivered,  and that the calling process
 will get a <code class="inline">select</code> message when there is data available
-for the next receive operation.</p><h4>The <code class="inline">completion</code> and <code class="inline">select</code> Messages</h4><p>The <code class="inline">completion</code> message has the format:</p><ul><li><code class="inline">{'$socket',</code><a href="#t:socket/0"><code class="inline">Socket</code></a><code class="inline">, completion, {</code><a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code></a><code class="inline">, CompletionStatus}}</code></li></ul><p>The <code class="inline">select</code> message has the format:</p><ul><li><code class="inline">{'$socket',</code><a href="#t:socket/0"><code class="inline">Socket</code></a><code class="inline">, select,</code><a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a><code class="inline">}</code></li></ul><p>When a <code class="inline">completion</code> message is received (which contains the <em>result</em>
-of the operation), it means that the operation has been <em>completed</em> with
-<code class="inline">CompletionStatus :: ok | {error, Reason}</code>.
-See the respective function's documentation for possible values
-of <code class="inline">Reason</code>, which are the same <code class="inline">{error, Reason}</code> values
-that can be returned by the function itself.</p><p>When a <code class="inline">select</code> message is received, it only means that the operation
+for the next receive operation.</p><h4 id="async-messages">The <code class="inline">completion</code> and <code class="inline">select</code> Messages <a href=""></a></h4><p>The <code class="inline">completion</code> message has the format:</p><ul><li><code class="inline">{'$socket',</code><a href="#t:socket/0"><code class="inline">Socket</code></a><code class="inline">, completion, {</code><a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code></a><code class="inline">, CompletionStatus}}</code></li></ul><p>The <code class="inline">select</code> message has the format:</p><ul><li><code class="inline">{'$socket',</code><a href="#t:socket/0"><code class="inline">Socket</code></a><code class="inline">, select,</code><a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a><code class="inline">}</code></li></ul><p>When a <code class="inline">completion</code> message is received (which contains the <em>result</em>
+of the operation), it means that the operation has been <em>completed</em> and
+<code class="inline">CompletionStatus</code> is the return value for the operation,
+which is what the function that initiated the operation
+could have returned, with the <code class="inline">nowait</code> argument,
+except for the <code class="inline">completion</code> and <code class="inline">select</code> return values.</p><p>When a <code class="inline">select</code> message is received, it only means that the operation
 <em>may now continue</em>, by retrying the operation (which may return
 a new <code class="inline">{select, _}</code> value).  Some operations are retried by repeating
 the same function call, and some have a dedicated function variant
@@ -151,13 +151,14 @@ will then be the <a href="#t:select_handle/0"><code class="inline">SelectHandle<
 the <a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code></a> in the returned
 <a href="#t:completion_info/0"><code class="inline">completion_info/0</code></a> and the received <code class="inline">completion</code> message.</p><p>The compiler may then optimize a following <code class="inline">receive</code> statement
 to only scan the messages that arrive after the <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a>
-is created.  If the message queue is large this is a big optimization.</p><p>The <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a> has to be unique for the call.</p><h4>Repeating an Operation on a <code class="inline">select</code> Systems</h4><p>On<code class="inline">select</code> systems, if a call would be repeated <em>before</em> the <code class="inline">select</code>
-message has been received it replaces the call in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="4477810079-1">{</span><span class="ss">select</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4477810079-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="w"> </span><span class="n">Handle</span><span class="p" data-group-id="4477810079-2">}</span><span class="p" data-group-id="4477810079-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4477810079-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="ss">nowait</span><span class="p" data-group-id="4477810079-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="4477810079-4">{</span><span class="ss">error</span><span class="p">,</span><span class="w"> </span><span class="ss">timeout</span><span class="p" data-group-id="4477810079-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="4477810079-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="4477810079-5">)</span><span class="p">,</span><span class="w">
+is created.  If the message queue is large this is a big optimization.</p><p>It is not possible to have more than one operation in progress
+with the same <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:reference/0"><code class="inline">reference/0</code></a>.</p><h4>Repeating an Operation on a <code class="inline">select</code> Systems</h4><p>On<code class="inline">select</code> systems, if a call would be repeated <em>before</em> the <code class="inline">select</code>
+message has been received it replaces the operation in progress:</p><pre><code class="makeup erlang" translate="no"><span class="w">    </span><span class="p" data-group-id="1188917628-1">{</span><span class="ss">select</span><span class="p">,</span><span class="err"> </span><span class="p" data-group-id="1188917628-2">{</span><span class="ss">select_info</span><span class="p">,</span><span class="err"> </span><span class="n">Handle</span><span class="p" data-group-id="1188917628-2">}</span><span class="p" data-group-id="1188917628-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="1188917628-3">(</span><span class="n">LSock</span><span class="p">,</span><span class="err"> </span><span class="ss">nowait</span><span class="p" data-group-id="1188917628-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="1188917628-4">{</span><span class="ss">ok</span><span class="p">,</span><span class="err"> </span><span class="n">Socket</span><span class="p" data-group-id="1188917628-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="1188917628-5">(</span><span class="n">LSock</span><span class="p">,</span><span class="err"> </span><span class="mi">1000</span><span class="p" data-group-id="1188917628-5">)</span><span class="p">,</span><span class="w">
     </span><span class="p">:</span></code></pre><p>Above, <code class="inline">Handle</code> is <em>no longer</em> valid once the second <a href="#accept/2"><code class="inline">accept/2</code></a>, call
 has been made (the first call is automatically canceled).
-After the second <a href="#accept/2"><code class="inline">accept/2</code></a> call returns <code class="inline">{error, timeout}</code>,
-the accept operation has completed.</p><p>Note that there is a race here; there is no way to know if the call
+After the second <a href="#accept/2"><code class="inline">accept/2</code></a> call returns, the accept operation
+has completed.</p><p>Note that there is a race here; there is no way to know if the call
 is repeated <em>before</em> the <code class="inline">select</code> message is sent since it <em>may</em>
 have been sent just before the repeated call.  So now there
 might be a <code class="inline">select</code> message containing <code class="inline">Handle</code> in the inbox.</p><h4>The <code class="inline">abort</code> Message</h4><p>Another message the user must be prepared for
@@ -186,28 +187,28 @@ API features could be considered no longer experimental.</li></ul><h2 id="module
   </a>
   <span class="text">Examples</span>
 </h2>
-<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="9674548956-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="9674548956-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="9674548956-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="9674548956-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="9674548956-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="9674548956-3">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="9674548956-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9674548956-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="nf">client</span><span class="p" data-group-id="3910018272-1">(</span><span class="n">SAddr</span><span class="p">,</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="3910018272-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="3910018272-2">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="3910018272-2">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="3910018272-3">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="3910018272-3">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">connect</span><span class="p" data-group-id="3910018272-4">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3910018272-5">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                                </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SAddr</span><span class="p">,</span><span class="w">
-                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="9674548956-5">}</span><span class="p" data-group-id="9674548956-4">)</span><span class="p">,</span><span class="w">
-   </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p">&gt;&gt;</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="9674548956-6">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9674548956-6">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="9674548956-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="9674548956-7">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="9674548956-8">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9674548956-8">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="9674548956-9">(</span><span class="n">Sock</span><span class="p" data-group-id="9674548956-9">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9674548956-10">(</span><span class="n">Sock</span><span class="p" data-group-id="9674548956-10">)</span><span class="p">.</span><span class="w">
+                               </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">SPort</span><span class="p" data-group-id="3910018272-5">}</span><span class="p" data-group-id="3910018272-4">)</span><span class="p">,</span><span class="w">
+   </span><span class="n">Msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3910018272-6">&lt;&lt;</span><span class="s">&quot;hello&quot;</span><span class="p" data-group-id="3910018272-6">&gt;&gt;</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="3910018272-7">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="3910018272-7">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">shutdown</span><span class="p" data-group-id="3910018272-8">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="ss">write</span><span class="p" data-group-id="3910018272-8">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="3910018272-9">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="3910018272-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="3910018272-10">(</span><span class="n">Sock</span><span class="p" data-group-id="3910018272-10">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3910018272-11">(</span><span class="n">Sock</span><span class="p" data-group-id="3910018272-11">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">server</span><span class="p" data-group-id="9674548956-11">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="9674548956-11">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-   </span><span class="p" data-group-id="9674548956-12">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="9674548956-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="9674548956-13">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="9674548956-13">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="9674548956-14">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9674548956-15">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
+</span><span class="nf">server</span><span class="p" data-group-id="3910018272-12">(</span><span class="n">Addr</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="3910018272-12">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+   </span><span class="p" data-group-id="3910018272-13">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">LSock</span><span class="p" data-group-id="3910018272-13">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">open</span><span class="p" data-group-id="3910018272-14">(</span><span class="ss">inet</span><span class="p">,</span><span class="w"> </span><span class="ss">stream</span><span class="p">,</span><span class="w"> </span><span class="ss">tcp</span><span class="p" data-group-id="3910018272-14">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">bind</span><span class="p" data-group-id="3910018272-15">(</span><span class="n">LSock</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3910018272-16">#{</span><span class="ss">family</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">inet</span><span class="p">,</span><span class="w">
                              </span><span class="ss">port</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w">
-                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="9674548956-15">}</span><span class="p" data-group-id="9674548956-14">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="9674548956-16">(</span><span class="n">LSock</span><span class="p" data-group-id="9674548956-16">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="9674548956-17">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="9674548956-17">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="9674548956-18">(</span><span class="n">LSock</span><span class="p" data-group-id="9674548956-18">)</span><span class="p">,</span><span class="w">
-   </span><span class="p" data-group-id="9674548956-19">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9674548956-19">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="9674548956-20">(</span><span class="n">Sock</span><span class="p" data-group-id="9674548956-20">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="9674548956-21">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="9674548956-21">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9674548956-22">(</span><span class="n">Sock</span><span class="p" data-group-id="9674548956-22">)</span><span class="p">,</span><span class="w">
-   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="9674548956-23">(</span><span class="n">LSock</span><span class="p" data-group-id="9674548956-23">)</span><span class="p">.</span></code></pre>
+                             </span><span class="ss">addr</span><span class="w">   </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">Addr</span><span class="p" data-group-id="3910018272-16">}</span><span class="p" data-group-id="3910018272-15">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">listen</span><span class="p" data-group-id="3910018272-17">(</span><span class="n">LSock</span><span class="p" data-group-id="3910018272-17">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="3910018272-18">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Sock</span><span class="p" data-group-id="3910018272-18">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">accept</span><span class="p" data-group-id="3910018272-19">(</span><span class="n">LSock</span><span class="p" data-group-id="3910018272-19">)</span><span class="p">,</span><span class="w">
+   </span><span class="p" data-group-id="3910018272-20">{</span><span class="ss">ok</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="3910018272-20">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">recv</span><span class="p" data-group-id="3910018272-21">(</span><span class="n">Sock</span><span class="p" data-group-id="3910018272-21">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">send</span><span class="p" data-group-id="3910018272-22">(</span><span class="n">Sock</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="p" data-group-id="3910018272-22">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3910018272-23">(</span><span class="n">Sock</span><span class="p" data-group-id="3910018272-23">)</span><span class="p">,</span><span class="w">
+   </span><span class="ss">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">close</span><span class="p" data-group-id="3910018272-24">(</span><span class="n">LSock</span><span class="p" data-group-id="3910018272-24">)</span><span class="p">.</span></code></pre>
     </section>
 
 </div>
@@ -1621,7 +1622,7 @@ option default value.</p></div>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1573" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1572" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1651,7 +1652,7 @@ option default value.</p></div>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1583" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1582" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1698,7 +1699,7 @@ successfully decoded the data.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1622" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1621" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1738,7 +1739,7 @@ compatible what is defined in the platform's header files.</p>
         <span class="note">(since OTP 26.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1775" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1774" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1769,7 +1770,7 @@ contained in the returned <a href="#t:completion_info/0"><code class="inline">co
         <span class="note">(since OTP 26.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1807" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1806" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1786,7 +1787,7 @@ contained in the returned <a href="#t:completion_info/0"><code class="inline">co
       </div>
 
 <p><a href="#asynchronous-calls">Completion operation</a> info.</p><p>Returned by an operation that requires the caller to wait for a
-<a href="#asynchronous-calls">completion message</a> containing the
+<a href="#async-messages"><code class="inline">completion</code> message</a> containing the
 <a href="#t:completion_handle/0"><code class="inline">CompletionHandle</code></a> <em>and</em> the result of the operation;
 the <code class="inline">CompletionStatus</code>.</p>
   </section>
@@ -1803,7 +1804,7 @@ the <code class="inline">CompletionStatus</code>.</p>
         <span class="note">(since OTP 26.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1758" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1757" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1835,7 +1836,7 @@ contained in the returned <a href="#t:completion_info/0"><code class="inline">co
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L487" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L486" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1869,7 +1870,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1636" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1635" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1899,7 +1900,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L408" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L407" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1932,7 +1933,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1643" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1642" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1999,7 +2000,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L719" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L718" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2033,7 +2034,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1637" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1636" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2064,7 +2065,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1640" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1639" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2096,7 +2097,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L550" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L549" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2128,7 +2129,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L547" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L546" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2160,7 +2161,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L548" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L547" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2190,7 +2191,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L545" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L544" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2222,7 +2223,7 @@ protocol domain <code class="inline">local</code> is supported.</p><p><a href="#
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L424" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L423" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2261,7 +2262,7 @@ and the <a href="#t:otp_socket_option/0"><code class="inline">otp_socket_option/
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1690" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1689" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2292,7 +2293,7 @@ and the <a href="#t:otp_socket_option/0"><code class="inline">otp_socket_option/
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L789" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L788" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2326,7 +2327,7 @@ the rest are left as (unsigned) integer values.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L399" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L398" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2356,7 +2357,7 @@ the rest are left as (unsigned) integer values.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1700" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1699" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2390,7 +2391,7 @@ the rest are left as (unsigned) integer values.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1716" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1715" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2426,7 +2427,7 @@ the rest are left as (unsigned) integer values.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L585" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L584" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2456,7 +2457,7 @@ the rest are left as (unsigned) integer values.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L594" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L593" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2486,7 +2487,7 @@ the rest are left as (unsigned) integer values.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L605" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L604" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2521,7 +2522,7 @@ multicast source filtering (RFC 3376).</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L633" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L632" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2551,7 +2552,7 @@ multicast source filtering (RFC 3376).</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L617" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L616" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2582,7 +2583,7 @@ multicast source filtering (RFC 3376).</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L627" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L626" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2613,7 +2614,7 @@ Some constant(s) may be unsupported by the platform.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L665" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L664" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2644,7 +2645,7 @@ Some constant(s) may be unsupported by the platform.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L646" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L645" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2675,7 +2676,7 @@ RFC 2553.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L669" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L668" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2705,7 +2706,7 @@ RFC 2553.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L656" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L655" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2736,7 +2737,7 @@ RFC 2553.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L852" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L851" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2768,7 +2769,7 @@ with options named <code class="inline">SO_</code>* .</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L566" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L565" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2799,7 +2800,7 @@ with options named <code class="inline">SO_</code>* .</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1479" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1478" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2829,7 +2830,7 @@ with options named <code class="inline">SO_</code>* .</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1466" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1465" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2866,7 +2867,7 @@ all platforms. See the platform's documentation,
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1541" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1540" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2907,7 +2908,7 @@ last in the containing list.</p></li></ul>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1500" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1499" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2948,7 +2949,7 @@ they are set to <code class="inline">NULL</code>, <code class="inline">0</code>.
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1611" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1610" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2978,7 +2979,7 @@ they are set to <code class="inline">NULL</code>, <code class="inline">0</code>.
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L940" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L939" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3016,7 +3017,7 @@ type.</p></li><li><p><strong><code class="inline">select_read</code></strong> - 
 On <code class="inline">select</code> implementations, see <a href="#asynchronous-calls">Asynchronous Calls</a>,
 automatically activate select after a completed read.</p><p>Instead of <code class="inline">{ok, Data}</code> the receive operation returns
 <a href="#t:select_info/0"><code class="inline">{select_read, {SelectInfo, Data}}</code></a>,
-and the calling process can wait for a <code class="inline">select</code> message
+and the calling process can wait for a <a href="#async-messages"><code class="inline">select</code> message</a>
 containing <code class="inline">SelectInfo</code> when there is data available again.</p><p>Setting this option locks out other processes from receiving any data
 since the current process continues its operation, so it effectively
 disables receive operation queuing.</p></li><li><p><strong><code class="inline">fd</code></strong> - <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:integer/0"><code class="inline">integer/0</code></a> - Only valid to <em>get</em>. The OS protocol levels'
@@ -3040,7 +3041,7 @@ internal use only.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L715" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L714" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3072,7 +3073,7 @@ internal use only.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L543" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L542" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3104,7 +3105,7 @@ internal use only.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1685" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1684" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3134,7 +3135,7 @@ internal use only.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L541" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L540" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3175,7 +3176,7 @@ for a named <code class="inline">Protocol</code>.</p><p>See <a href="#open/3"><c
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L675" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L674" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3211,7 +3212,7 @@ for a named <code class="inline">Protocol</code>.</p><p>See <a href="#open/3"><c
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L690" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L689" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3252,7 +3253,7 @@ have been stripped from the C struct field names, for convenience.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L702" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L701" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3286,7 +3287,7 @@ have been stripped from the C struct field names, for convenience.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L709" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L708" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3317,7 +3318,7 @@ have been stripped from the C struct field names, for convenience.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1766" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1765" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3348,7 +3349,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1793" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1792" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3364,14 +3365,14 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
       </div>
 
 <p><a href="#asynchronous-calls">Select operation</a> info.</p><p>Returned by an operation that requires the caller to wait for a
-<a href="#asynchronous-calls">select message</a> containing the
+<a href="#async-messages"><code class="inline">select</code> message</a> containing the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a>.</p><p>On <code class="inline">select</code> systems, if the option
 <a href="#t:otp_socket_option/0"><code class="inline">{otp, select_read}</code></a> is set,
 <a href="#t:select_info/0"><code class="inline">{select_read, {select_info(), _}}</code></a>
 is returned instead of <code class="inline">{ok, _}</code> to indicate that a new
 asynchronous receive operation has been initiated
 and the caller should wait for a
-<a href="#asynchronous-calls">select message</a> containing the
+<a href="#async-messages"><code class="inline">select</code> message</a> containing the
 <a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a>.</p>
   </section>
 </section>
@@ -3387,7 +3388,7 @@ and the caller should wait for a
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1747" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1746" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3420,7 +3421,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L827" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L826" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3457,7 +3458,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L799" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L798" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3494,7 +3495,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L764" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L763" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3529,7 +3530,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L753" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L752" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3560,7 +3561,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L777" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L776" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3597,7 +3598,7 @@ contained in the returned <a href="#t:select_info/0"><code class="inline">select
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L824" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L823" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3629,7 +3630,7 @@ and the content of <code class="inline">sa_data</code> in the <a href="../../../
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L836" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L835" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3659,7 +3660,7 @@ and the content of <code class="inline">sa_data</code> in the <a href="../../../
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L744" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L743" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3696,7 +3697,7 @@ address is zero.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L814" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L813" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3727,7 +3728,7 @@ and the content of <code class="inline">sa_data</code> in the <a href="../../../
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1445" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1444" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3758,7 +3759,7 @@ and <a href="#accept/1"><code class="inline">accept/1,2</code></a>.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L431" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L430" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3812,7 +3813,7 @@ and <a href="#accept/1"><code class="inline">accept/1,2</code></a>.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1448" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1447" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3842,7 +3843,7 @@ and <a href="#accept/1"><code class="inline">accept/1,2</code></a>.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L456" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L455" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3885,7 +3886,7 @@ and <a href="#accept/1"><code class="inline">accept/1,2</code></a>.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1268" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1267" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3985,7 +3986,7 @@ queue. The same warning applies for this option.</p></li><li><p><strong><code cl
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L576" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L575" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4016,7 +4017,7 @@ microseconds.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L498" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L497" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4060,7 +4061,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3253" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3252" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4101,7 +4102,7 @@ on the platform named <code class="inline">SOCK_*</code>.  For example
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3325" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3324" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4179,7 +4180,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2931" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2930" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4217,7 +4218,7 @@ which port that was chosen, you can find out using something like:
         <span class="note">(since OTP 22.1)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6710" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6713" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4242,10 +4243,10 @@ in progress, that is; it returned a value containing
 a <a href="#t:completion_info/0"><code class="inline">completion_info/0</code></a> or <a href="#t:select_info/0"><code class="inline">select_info/0</code></a>.</p><p>See the note <a href="#asynchronous-calls">Asynchronous Calls</a>
 at the start of this module reference manual page.</p><p>If another process tries an operation of the same basic type
 (<a href="#accept/1"><code class="inline">accept/1</code></a> | <a href="#send/2"><code class="inline">send/2</code></a> | <a href="#recv/2"><code class="inline">recv/2</code></a>) it will be enqueued and notified
-through a <code class="inline">select</code> or <code class="inline">completion</code> message when the current operation
-and all enqueued before it has been completed. If the current operation
-is canceled by this function it is treated as a completed operation;
-the process first in queue is notified.</p><p>If <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a> <code class="inline">|</code>
+through a <a href="#async-messages"><code class="inline">select</code> or <code class="inline">completion</code> message</a>
+when the current operation and all enqueued before it has been completed.
+If the current operation is canceled by this function it is treated
+as a completed operation; the process first in queue is notified.</p><p>If <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a> <code class="inline">|</code>
 <a href="#t:completion_info/0"><code class="inline">CompletionInfo</code></a> does not match
 an operation in progress for the calling process, this function returns
 <code class="inline">{error, {invalid, SelectInfo | CompletionInfo}}</code>.</p>
@@ -4263,7 +4264,7 @@ an operation in progress for the calling process, this function returns
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2496" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2495" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4300,7 +4301,7 @@ a <code class="inline">'DOWN'</code> message from this monitor in the caller mes
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5869" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5872" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4343,7 +4344,7 @@ scenario that is often not relevant.</p></section>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3017" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3016" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4360,7 +4361,7 @@ scenario that is often not relevant.</p></section>
 
 <p>Finalize a <a href="#connect-nowait"><code class="inline">connect/3</code></a> operation.</p><p>See the note <a href="#asynchronous-calls">Asynchronous Calls</a>
 at the start of this module reference manual page.</p><p>On <code class="inline">select</code> systems this function finalizes a connection setup
-on a socket, after receiving a <code class="inline">select</code> message
+on a socket, after receiving a <a href="#async-messages"><code class="inline">select</code> message</a>
 <code class="inline">{'$socket',</code> <a href="#t:socket/0"><code class="inline">Socket</code></a><code class="inline">, select,</code><a href="#t:select_handle/0"><code class="inline">SelectHandle</code></a><code class="inline">}</code>,
 and returns whether the connection setup was successful or not.</p><p>Instead of calling this function, for backwards compatibility,
 it is allowed to call <a href="#connect/2"><code class="inline">connect/2,3</code></a> again,
@@ -4381,7 +4382,7 @@ cannot return a <code class="inline">select</code> return value.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3031" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3030" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4412,7 +4413,7 @@ cannot return a <code class="inline">select</code> return value.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3135" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3134" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4481,7 +4482,7 @@ couldn't be completed immediately.</p><p>If the time-out argument (argument 2) i
 <em>(since OTP 24.0)</em>, or on <em>Windows</em>, the equivalent
 <code class="inline">Handle ::</code> <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> <em>(since OTP 26.0)</em>,
 start an <a href="#asynchronous-calls">asynchronous call</a> like for <code class="inline">nowait</code>.</p><p>See the note <a href="#asynchronous-calls">Asynchronous Calls</a>
-at the start of this module reference manual page.</p><p>After receiving a <code class="inline">select</code> message call <a href="#connect/1"><code class="inline">connect/1</code></a>
+at the start of this module reference manual page.</p><p>After receiving a <a href="#async-messages"><code class="inline">select</code> message</a>; call <a href="#connect/1"><code class="inline">connect/1</code></a>
 to complete the operation.</p><p>If cancelling the operation with <a href="#cancel/2"><code class="inline">cancel/2</code></a> see the note above
 about <a href="#connect-timeout">connection time-out</a>.</p>
   </section>
@@ -4498,7 +4499,7 @@ about <a href="#connect-timeout">connection time-out</a>.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6090" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6093" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4542,7 +4543,7 @@ that the underlying OS does.</p></section>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6110" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6113" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4578,7 +4579,7 @@ difference between known options and native options clear.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6179" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6182" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4643,7 +4644,7 @@ encoding has to be deduced from the header files for the running system.</p>
         <span class="note">(since OTP 24.1)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2121" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2120" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4676,7 +4677,7 @@ of <a href="#t:info_keys/0"><code class="inline">info_keys/0</code></a> (all key
         <span class="note">(since OTP 24.1)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2140" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2139" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4712,7 +4713,7 @@ and the default information (see <a href="#i/0"><code class="inline">i/0</code><
         <span class="note">(since OTP 24.1)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2179" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2178" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4749,7 +4750,7 @@ all sockets of that specific <a href="#t:type/0"><code class="inline">type/0</co
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2387" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2386" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4780,7 +4781,7 @@ So, don't call this function often.</p></section>
         <span class="note">(since OTP 22.1)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2416" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2415" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4812,7 +4813,7 @@ So, don't call this function often.</p></section>
         <span class="note">(since OTP 24.2)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6313" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6316" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4845,7 +4846,7 @@ with its name and address.</p></li><li><p><strong><code class="inline">nread</co
 <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:boolean/0"><code class="inline">boolean/0</code></a>.</p></li><li><p><strong><code class="inline">tcp_info</code></strong> - Get miscellaneous TCP related information for a
 <em>connected</em> socket <em>(since OTP 26.1)</em>.</p><p>Result; a <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a> with information items as key-value pairs.</p></li></ul><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Not all requests are supported by all platforms.
 To see if a ioctl request is supported on the current platform:</p><pre><code class="makeup erlang" translate="no"><span class="w">      </span><span class="n">Request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">nread</span><span class="p">,</span><span class="w">
-      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="8148199302-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="8148199302-1">)</span><span class="p">,</span><span class="w">
+      </span><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="7136148062-1">(</span><span class="ss">ioctl_requests</span><span class="p">,</span><span class="w"> </span><span class="n">Request</span><span class="p" data-group-id="7136148062-1">)</span><span class="p">,</span><span class="w">
       </span><span class="p">:</span></code></pre></section>
   </section>
 </section>
@@ -4861,7 +4862,7 @@ To see if a ioctl request is supported on the current platform:</p><pre><code cl
         <span class="note">(since OTP 24.2)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6537" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6540" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4942,7 +4943,7 @@ and <a href="#t:protocol/0">protocol <code class="inline">udp</code></a>.</p><p>
         <span class="note">(since OTP 24.2)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6642" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6645" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -4992,7 +4993,7 @@ of the interface with the specified name.</p></li></ul>
         <span class="note">(since OTP 23.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2624" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2623" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5009,7 +5010,7 @@ of the interface with the specified name.</p></li></ul>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/0"><code class="inline">supports/0</code></a> has a <code class="inline">{Key1, true}</code> tuple
 or a <code class="inline">{Key1, list()}</code> tuple in its returned list,
-otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="1077055104-1">(</span><span class="ss">local</span><span class="p" data-group-id="1077055104-1">)</span><span class="p">,</span></code></pre>
+otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="3846506110-1">(</span><span class="ss">local</span><span class="p" data-group-id="3846506110-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="is_supported/2">
@@ -5024,7 +5025,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
         <span class="note">(since OTP 23.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2641" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2640" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5040,7 +5041,7 @@ otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Examp
       </div>
 
 <p>Check if a socket feature is supported.</p><p>Returns <code class="inline">true</code> if <a href="#supports/1"><code class="inline">supports(Key1)</code></a> has a <code class="inline">{Key2, true}</code> tuple
-in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="8034702781-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="8034702781-1">)</span><span class="p">,</span></code></pre>
+in its returned list, otherwise <code class="inline">false</code> (also for unknown keys).</p><p>Example:</p><pre><code class="makeup erlang" translate="no"><span class="ss">true</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">socket</span><span class="p">:</span><span class="nf">is_supported</span><span class="p" data-group-id="9838871535-1">(</span><span class="ss">msg_flags</span><span class="p">,</span><span class="w"> </span><span class="ss">errqueue</span><span class="p" data-group-id="9838871535-1">)</span><span class="p">,</span></code></pre>
   </section>
 </section>
 <section class="detail" id="listen/1">
@@ -5055,7 +5056,7 @@ in its returned list, otherwise <code class="inline">false</code> (also for unkn
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3208" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3207" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5086,7 +5087,7 @@ value for <code class="inline">Backlog</code> (currently <code class="inline">5<
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3227" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3226" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5120,7 +5121,7 @@ will most probably be perceived as at least that long.</p><section role="note" c
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2452" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2451" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5137,7 +5138,7 @@ will most probably be perceived as at least that long.</p><section role="note" c
 
 <p>Start a socket monitor.</p><p>If the <code class="inline">Socket</code> doesn't exist or when later the monitor is triggered,
 a <code class="inline">'DOWN'</code> message is sent to the process that called <a href="#monitor/1"><code class="inline">monitor/1</code></a>
-with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="w">	    </span><span class="p" data-group-id="9608770484-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="9608770484-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
+with the following pattern:</p><pre><code class="makeup erlang" translate="no"><span class="w">	    </span><span class="p" data-group-id="1607049610-1">{</span><span class="ss">&#39;DOWN&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MonitorRef</span><span class="p">,</span><span class="w"> </span><span class="ss">socket</span><span class="p">,</span><span class="w"> </span><span class="n">Socket</span><span class="p">,</span><span class="w"> </span><span class="n">Info</span><span class="p" data-group-id="1607049610-1">}</span></code></pre><p><code class="inline">Info</code> is the termination reason of the socket or <code class="inline">nosock</code> if
 <code class="inline">Socket</code> did not exist when the monitor was started.</p><p>Making several calls to <a href="#monitor/1"><code class="inline">socket:monitor/1</code></a> for the same <code class="inline">Socket</code> is not an
 error; each call creates an independent monitor instance.</p>
   </section>
@@ -5154,7 +5155,7 @@ error; each call creates an independent monitor instance.</p>
         <span class="note">(since OTP 22.3)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1855" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1854" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5184,7 +5185,7 @@ error; each call creates an independent monitor instance.</p>
         <span class="note">(since OTP 23.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2714" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2713" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5214,7 +5215,7 @@ error; each call creates an independent monitor instance.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2798" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2797" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5273,7 +5274,7 @@ to use in this function.</p></section>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2833" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2832" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5310,7 +5311,7 @@ to use in this function.</p></section>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2892" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2891" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5360,7 +5361,7 @@ for this socket. This overrides the global value.</p><p>Defaults to the global v
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6228" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6231" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5392,7 +5393,7 @@ the remote end of the socket.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4920" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4923" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5422,7 +5423,7 @@ the remote end of the socket.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4936" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4939" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5455,7 +5456,7 @@ the remote end of the socket.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4969" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4972" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5500,7 +5501,7 @@ the remote end of the socket.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5092" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5095" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5601,7 +5602,7 @@ a receive operation is completed.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5336" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5339" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5631,7 +5632,7 @@ a receive operation is completed.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5353" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5356" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5664,7 +5665,7 @@ a receive operation is completed.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5388" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5391" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5704,7 +5705,7 @@ a receive operation is completed.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5484" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5487" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5787,7 +5788,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5578" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5581" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5817,7 +5818,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5600" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5603" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5852,7 +5853,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5625" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5628" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5885,7 +5886,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5643" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5646" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -5920,7 +5921,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5739" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5742" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6004,7 +6005,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3418" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3417" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6043,7 +6044,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3439" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3438" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6078,7 +6079,7 @@ at the start of this module reference manual page.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3578" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3577" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6180,7 +6181,7 @@ and encode message flags in every call but the first.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4589" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4590" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6212,7 +6213,7 @@ and encode message flags in every call but the first.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4607" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4608" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6249,7 +6250,7 @@ and encode message flags in every call but the first.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4626" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4627" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6286,7 +6287,7 @@ and encode message flags in every call but the first.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4746" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4749" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6359,8 +6360,10 @@ or <code class="inline">{error, {timeout, BytesSent}}</code> if some but not a
 starts an <a href="#asynchronous-calls">asynchronous call</a> if the operation
 couldn't be completed immediately.</p><p>If the <code class="inline">Handle</code> argument is a <a href="#t:select_handle/0"><code class="inline">select_handle/0</code></a>, starts
 an <a href="#asynchronous-calls">asynchronous call</a> like for <code class="inline">nowait</code>.</p><p>See the note <a href="#asynchronous-calls">Asynchronous Calls</a>
-at the start of this module reference manual page.</p><p>After receiving a <code class="inline">select</code> message call <a href="#sendfile/2"><code class="inline">sendfile/2,3,4,5</code></a>
-with <code class="inline">SelectInfo</code> as the <code class="inline">Continuation</code> argument, to complete the operation.</p><p><a href="" id="sendfile-cont"></a></p><p>If the function is called with a <code class="inline">Continuation</code> argument, that is;
+at the start of this module reference manual page.</p><p>After receiving a <a href="#async-messages"><code class="inline">select</code> message</a>;
+call <a href="#sendfile/2"><code class="inline">sendfile/2,3,4,5</code></a>
+with <code class="inline">SelectInfo</code> as the <code class="inline">Continuation</code> argument,
+to complete the operation.</p><p><a href="" id="sendfile-cont"></a></p><p>If the function is called with a <code class="inline">Continuation</code> argument, that is;
 the <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a> from the previous
 <a href="#sendfile/5"><code class="inline">sendfile/5</code></a> call; the transfer is continued with
 preprocessed parameters in the <code class="inline">SelectInfo</code>.</p><p>The <code class="inline">Offset</code> and maybe <code class="inline">Count</code> arguments will probably
@@ -6446,7 +6449,7 @@ need to be updated between continuation calls.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4228" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4229" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6553,8 +6556,9 @@ couldn't be completed immediately.</p><p>If the <code class="inline">Handle</cod
 <em>(since OTP 24.0)</em>, or on <em>Windows</em>, the equivalent
 <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> <em>(since OTP 26.0)</em>, starts
 an <a href="#asynchronous-calls">asynchronous call</a> like for <code class="inline">nowait</code>.</p><p>See the note <a href="#asynchronous-calls">Asynchronous Calls</a>
-at the start of this module reference manual page.</p><p>After receiving a <code class="inline">select</code> message call <a href="#sendmsg/3"><code class="inline">sendmsg/3,4</code></a>
-with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</code> argument, to complete the operation.</p><p><a href="" id="sendmsg-cont"></a></p><p>With the arguments <code class="inline">Data</code> and <a href="#t:select_info/0"><code class="inline">Cont</code></a>,
+at the start of this module reference manual page.</p><p>After receiving a <a href="#async-messages"><code class="inline">select</code> message</a>;
+call <a href="#sendmsg/3"><code class="inline">sendmsg/3,4</code></a> with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</code> argument,
+to complete the operation.</p><p><a href="" id="sendmsg-cont"></a></p><p>With the arguments <code class="inline">Data</code> and <a href="#t:select_info/0"><code class="inline">Cont</code></a>,
 continues the send operation.  <code class="inline">Cont</code> should be
 the <a href="#t:select_info/0"><code class="inline">SelectInfo</code></a> returned from the previous
 <a href="#sendmsg/2"><code class="inline">sendmsg/2,3,4</code></a> call.</p><p><code class="inline">Data</code> can be a <a href="#t:msg_send/0"><code class="inline">Msg</code></a> <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:map/0"><code class="inline">map/0</code></a>
@@ -6573,7 +6577,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3785" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3784" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6611,7 +6615,7 @@ where only the key <code class="inline">iov</code> is used, or an <a href="../..
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3832" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L3831" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6734,8 +6738,9 @@ couldn't be completed immediately.</p><p>If the <code class="inline">Handle</cod
 <em>(since OTP 24.0)</em>, or on <em>Windows</em>, the equivalent
 <a href="#t:completion_handle/0"><code class="inline">completion_handle/0</code></a> <em>(since OTP 26.0)</em>, starts
 an <a href="#asynchronous-calls">asynchronous call</a> like for <code class="inline">nowait</code>.</p><p>See the note <a href="#asynchronous-calls">Asynchronous Calls</a>
-at the start of this module reference manual page.</p><p>After receiving a <code class="inline">select</code> message call <a href="#sendto/3"><code class="inline">sendto/3,4</code></a>
-with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</code> argument, to complete the operation.</p>
+at the start of this module reference manual page.</p><p>After receiving a <a href="#async-messages"><code class="inline">select</code> message</a>;
+call <a href="#sendto/3"><code class="inline">sendto/3,4</code></a> with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</code> argument,
+to complete the operation.</p>
   </section>
 </section>
 <section class="detail" id="sendv/2">
@@ -6750,7 +6755,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
         <span class="note">(since OTP 27.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4321" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4322" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6785,7 +6790,7 @@ with <code class="inline">SelectInfo</code> as the <code class="inline">Cont</co
         <span class="note">(since OTP 27.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4435" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4436" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6874,7 +6879,7 @@ at the start of this module reference manual page.</p><p><a href="" id="sendv-co
         <span class="note">(since OTP 27.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4516" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L4517" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6938,7 +6943,7 @@ unfinished calls.</p><p>See <a href="#sendv/3"><code class="inline">sendv/3</cod
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5965" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5968" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -6985,7 +6990,7 @@ that the underlying OS does.</p></section>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5988" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5991" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7020,7 +7025,7 @@ difference between known options and native options clear.</p>
         <span class="note">(since OTP 24.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6031" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6034" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7068,7 +7073,7 @@ encoding has to be deduced from the header files for the running system.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5901" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L5904" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7099,7 +7104,7 @@ encoding has to be deduced from the header files for the running system.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6203" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L6206" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7133,7 +7138,7 @@ selected by the OS.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2547" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2546" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7169,7 +7174,7 @@ and <code class="inline">{Key, boolean()}</code> tuples for each of the followin
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2581" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2580" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7208,7 +7213,7 @@ there might be more supported keys.</p>
         <span class="note">(since OTP 22.0)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2605" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2604" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7245,7 +7250,7 @@ there might be more supported keys.</p>
         <span class="note">(since OTP 23.1)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2070" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L2069" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7279,7 +7284,7 @@ for more info (the <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:map/0
         <span class="note">(since OTP 22.3)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1873" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1872" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7309,7 +7314,7 @@ for more info (the <a href="../../../../erts-15.2.1/doc/html/erlang.html#t:map/0
         <span class="note">(since OTP 22.3)</span>
 
 
-        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1907" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/RaimoNiskanen/otp/blob/raimo/socket/select_read/OTP-19451/lib/kernel/src/socket.erl#L1906" class="icon-action" rel="help" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -7360,7 +7365,7 @@ indicating if the socket should be returned or not.</p></li></ul>
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.0-rc.0) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.0-rc.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
