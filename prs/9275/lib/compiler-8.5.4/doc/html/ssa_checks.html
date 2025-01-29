@@ -4,35 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.37.0-rc.2">
     <meta name="project" content="compiler v8.5.4">
 
 
     <title>BEAM SSA Checks — compiler v8.5.4</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
 
+    <link rel="stylesheet" href="dist/html-erlang-FDBURIED.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-BA050160.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script defer src="dist/sidebar_items-BA050160.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-NL4GMUWY.js"></script>
 
   </head>
-  <body data-type="extras" class="page-extra">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -58,37 +45,13 @@ compiler
         </div>
       </div>
     </div>
-    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
 </nav>
 
-<main class="content">
-  <output role="status" id="toast"></output>
+<output role="status" id="toast"></output>
 
+<main class="content page-extra" id="main" data-type="extras">
   <div id="content" class="content-inner">
     <div class="top-search">
       <div class="search-settings">
@@ -97,8 +60,8 @@ Pages
             <span class="sr-only">Search documentation of compiler</span>
             <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
           </button>
           <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
             <i class="ri-close-line ri-lg" title="Cancel search"></i>
@@ -114,16 +77,16 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>BEAM SSA Checks</h1>
+
 
       <a href="https://github.com/garazdawi/otp/blob/lukas/erts/enif_scheduler_pollset/lib/compiler/internal_doc/ssa_checks.md#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-
-    <span>BEAM SSA Checks</span>
-  </h1>
+  </div>
 
 <p>While developing optimizations operating on the BEAM SSA it is often
 hard to check that various transforms have the intended effect. For
@@ -142,32 +105,32 @@ functionality.</p><h2 id="syntax" class="section-heading">
 <p>SSA checks are embedded in the source code as comments starting with
 with one of <code class="inline">%ssa%</code>, <code class="inline">%%ssa%</code> or <code class="inline">%%%ssa%</code>. This is a short
 introduction the syntax, for the full syntax please refer to the
-<code class="inline">ssa_check_when_clause</code> production in <code class="inline">erl_parse.yrl</code>.</p><p>SSA checks can be placed inside any Erlang function, for example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">t0</span><span class="p" data-group-id="3578849057-1">(</span><span class="p" data-group-id="3578849057-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+<code class="inline">ssa_check_when_clause</code> production in <code class="inline">erl_parse.yrl</code>.</p><p>SSA checks can be placed inside any Erlang function, for example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">t0</span><span class="p" data-group-id="2564383435-1">(</span><span class="p" data-group-id="2564383435-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
 </span><span class="c1">%ssa% () when post_ssa_opt -&gt;</span><span class="w">
 </span><span class="c1">%ssa%   ret(#{}).</span><span class="w">
-  </span><span class="p" data-group-id="3578849057-2">#{</span><span class="p" data-group-id="3578849057-2">}</span><span class="p">.</span></code></pre><p>will check that <code class="inline">t0/0</code> returns the literal <code class="inline">#{}</code>. If we want to check
-that a function returns its first formal parameter, we can write:</p><pre><code class="makeup erlang" translate="no"><span class="nf">t1</span><span class="p" data-group-id="3464249191-1">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">B</span><span class="p" data-group-id="3464249191-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+  </span><span class="p" data-group-id="2564383435-2">#{</span><span class="p" data-group-id="2564383435-2">}</span><span class="p">.</span></code></pre><p>will check that <code class="inline">t0/0</code> returns the literal <code class="inline">#{}</code>. If we want to check
+that a function returns its first formal parameter, we can write:</p><pre><code class="makeup erlang" translate="no"><span class="nf">t1</span><span class="p" data-group-id="2050636390-1">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">B</span><span class="p" data-group-id="2050636390-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
 </span><span class="c1">%ssa% (X, _) when post_ssa_opt -&gt;</span><span class="w">
 </span><span class="c1">%ssa%   ret(X).</span><span class="w">
   </span><span class="n">A</span><span class="p">.</span></code></pre><p>Note how we match the first formal parameter using <code class="inline">X</code>. The reason for
 having our own formal parameters for the SSA check, is that we don't
 want to introduce new identifiers at the Erlang level to support
 SSA-level checks. Consider if <code class="inline">t1/2</code> had been defined as <code class="inline">t1([A|As], B)</code> we would have had to introduce a new identifier for the aggregate
-value <code class="inline">[A|As]</code>.</p><p>The full syntax for a SSA check clause is:</p><pre><code class="makeup erlang" translate="no"><span class="o">&lt;</span><span class="ss">expected</span><span class="o">-</span><span class="ss">result</span><span class="o">&gt;</span><span class="o">?</span><span class="w"> </span><span class="p" data-group-id="7832428526-1">(</span><span class="o">&lt;</span><span class="ss">formals</span><span class="o">&gt;</span><span class="p" data-group-id="7832428526-1">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">pipeline</span><span class="o">-</span><span class="ss">location</span><span class="o">&gt;</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">checks</span><span class="o">&gt;</span><span class="w"> </span><span class="ss">&#39;.&#39;</span></code></pre><p>where <code class="inline">&lt;expected-result&gt;</code> can be one of <code class="inline">pass</code> (the check must
+value <code class="inline">[A|As]</code>.</p><p>The full syntax for a SSA check clause is:</p><pre><code class="makeup erlang" translate="no"><span class="o">&lt;</span><span class="ss">expected</span><span class="o">-</span><span class="ss">result</span><span class="o">&gt;</span><span class="o">?</span><span class="w"> </span><span class="p" data-group-id="0680942851-1">(</span><span class="o">&lt;</span><span class="ss">formals</span><span class="o">&gt;</span><span class="p" data-group-id="0680942851-1">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">pipeline</span><span class="o">-</span><span class="ss">location</span><span class="o">&gt;</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">checks</span><span class="o">&gt;</span><span class="w"> </span><span class="ss">&#39;.&#39;</span></code></pre><p>where <code class="inline">&lt;expected-result&gt;</code> can be one of <code class="inline">pass</code> (the check must
 succeed), <code class="inline">fail</code> and <code class="inline">xfail</code> (the check must fail). Omitting
 <code class="inline">&lt;expected-result&gt;</code> is parsed as an implicit <code class="inline">pass</code>.</p><p><code class="inline">&lt;formals&gt;</code> is a comma-separated list of variables.</p><p><code class="inline">&lt;pipeline-location&gt;</code> specifies when in the compiler pipeline to run
 the checks. For now the only supported value for <code class="inline">&lt;pipeline-location&gt;</code>
 is <code class="inline">post_ssa_opt</code> which runs the checks after the <code class="inline">ssa_opt</code> pass.</p><p><code class="inline">&lt;checks&gt;</code> is a comma-separated list of matches against the BEAM SSA
-code. For non-flow-control operations the syntax is:</p><pre><code class="makeup erlang" translate="no"><span class="o">&lt;</span><span class="ss">variable</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">operation</span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="9903369172-1">(</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">arguments</span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="9903369172-1">)</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">annotation</span><span class="o">&gt;</span><span class="o">?</span></code></pre><p>where <code class="inline">&lt;operation&gt;</code> is the <code class="inline">#b_set.op</code> field from the internal SSA
-representation. BIFs are written as <code class="inline">bif:&lt;atom&gt;</code>.</p><p><code class="inline">&lt;arguments&gt;</code> is a comma-separated list of variables or literals.</p><p>For flow control operations and labels, the syntax is as follows:</p><pre><code class="makeup erlang" translate="no"><span class="nf">br</span><span class="p" data-group-id="9602175165-1">(</span><span class="o">&lt;</span><span class="ss">bool</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">true</span><span class="o">-</span><span class="ss">label</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">false</span><span class="o">-</span><span class="ss">label</span><span class="o">&gt;</span><span class="p" data-group-id="9602175165-1">)</span><span class="w">
+code. For non-flow-control operations the syntax is:</p><pre><code class="makeup erlang" translate="no"><span class="o">&lt;</span><span class="ss">variable</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">operation</span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="6269042715-1">(</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">arguments</span><span class="o">&gt;</span><span class="w"> </span><span class="p" data-group-id="6269042715-1">)</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">annotation</span><span class="o">&gt;</span><span class="o">?</span></code></pre><p>where <code class="inline">&lt;operation&gt;</code> is the <code class="inline">#b_set.op</code> field from the internal SSA
+representation. BIFs are written as <code class="inline">bif:&lt;atom&gt;</code>.</p><p><code class="inline">&lt;arguments&gt;</code> is a comma-separated list of variables or literals.</p><p>For flow control operations and labels, the syntax is as follows:</p><pre><code class="makeup erlang" translate="no"><span class="nf">br</span><span class="p" data-group-id="1451925027-1">(</span><span class="o">&lt;</span><span class="ss">bool</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">true</span><span class="o">-</span><span class="ss">label</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">false</span><span class="o">-</span><span class="ss">label</span><span class="o">&gt;</span><span class="p" data-group-id="1451925027-1">)</span><span class="w">
 
-</span><span class="nf">switch</span><span class="p" data-group-id="9602175165-2">(</span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">fail</span><span class="o">-</span><span class="ss">label</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9602175165-3">[</span><span class="p" data-group-id="9602175165-4">{</span><span class="o">&lt;</span><span class="ss">label</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span><span class="p" data-group-id="9602175165-4">}</span><span class="p">,</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="9602175165-3">]</span><span class="p" data-group-id="9602175165-2">)</span><span class="w">
+</span><span class="nf">switch</span><span class="p" data-group-id="1451925027-2">(</span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">fail</span><span class="o">-</span><span class="ss">label</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1451925027-3">[</span><span class="p" data-group-id="1451925027-4">{</span><span class="o">&lt;</span><span class="ss">label</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span><span class="p" data-group-id="1451925027-4">}</span><span class="p">,</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p" data-group-id="1451925027-3">]</span><span class="p" data-group-id="1451925027-2">)</span><span class="w">
 
-</span><span class="nf">ret</span><span class="p" data-group-id="9602175165-5">(</span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span><span class="p" data-group-id="9602175165-5">)</span><span class="w">
+</span><span class="nf">ret</span><span class="p" data-group-id="1451925027-5">(</span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span><span class="p" data-group-id="1451925027-5">)</span><span class="w">
 
 </span><span class="ss">label</span><span class="w"> </span><span class="o">&lt;</span><span class="ss">value</span><span class="o">&gt;</span></code></pre><p>where <code class="inline">&lt;value&gt;</code> is a literal or a variable.</p><p>A check can also include an assertion on operation annotations. The
 assertion is written as a map-like pattern following the argument
-list, for example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">t0</span><span class="p" data-group-id="4741067270-1">(</span><span class="p" data-group-id="4741067270-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+list, for example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">t0</span><span class="p" data-group-id="5471991140-1">(</span><span class="p" data-group-id="5471991140-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
 </span><span class="c1">%ssa% () when post_ssa_opt -&gt;</span><span class="w">
 </span><span class="c1">%ssa% _ = call(fun return_int/0) { result_type =&gt; {t_integer,{17,17}},</span><span class="w">
 </span><span class="c1">%ssa%                              location =&gt; {_,32} },</span><span class="w">
@@ -175,9 +138,9 @@ list, for example:</p><pre><code class="makeup erlang" translate="no"><span clas
 </span><span class="c1">%ssa%    result_type =&gt; {t_tuple,2,true,#{1 =&gt; {t_integer,{1,1}},</span><span class="w">
 </span><span class="c1">%ssa%                                     2 =&gt; {t_integer,{2,2}}}}</span><span class="w">
 </span><span class="c1">%ssa% }.</span><span class="w">
-    </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">return_int</span><span class="p" data-group-id="4741067270-2">(</span><span class="p" data-group-id="4741067270-2">)</span><span class="p">,</span><span class="w">
-    </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">return_tuple</span><span class="p" data-group-id="4741067270-3">(</span><span class="p" data-group-id="4741067270-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="4741067270-4">{</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="4741067270-4">}</span><span class="p">.</span></code></pre><h2 id="semantics" class="section-heading">
+    </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">return_int</span><span class="p" data-group-id="5471991140-2">(</span><span class="p" data-group-id="5471991140-2">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">return_tuple</span><span class="p" data-group-id="5471991140-3">(</span><span class="p" data-group-id="5471991140-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="5471991140-4">{</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p" data-group-id="5471991140-4">}</span><span class="p">.</span></code></pre><h2 id="semantics" class="section-heading">
   <a href="#semantics" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -245,7 +208,7 @@ Invariants on the Structure and Format of BEAM SSA
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.0-rc.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 

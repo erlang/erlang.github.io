@@ -4,35 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.34.1">
+    <meta name="generator" content="ExDoc v0.37.0-rc.2">
     <meta name="project" content="erts v15.2.1">
 
 
     <title>Distribution Protocol — erts v15.2.1</title>
-    <link rel="stylesheet" href="dist/html-erlang-APNLKZCW.css" />
 
+    <link rel="stylesheet" href="dist/html-erlang-FDBURIED.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-E7FF6F4D.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-7XSQ4GTY.js"></script>
+    <script defer src="dist/sidebar_items-4B465461.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-NL4GMUWY.js"></script>
 
   </head>
-  <body data-type="extras" class="page-extra">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -58,37 +45,13 @@ erts
         </div>
       </div>
     </div>
-    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-        <li>
-          <button id="modules-list-tab-button" role="tab" data-type="modules" aria-controls="modules-tab-panel" aria-selected="false" tabindex="-1">
-            Modules
-          </button>
-        </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-    <div id="modules-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="modules-list-tab-button" hidden>
-      <ul id="modules-full-list" class="full-list"></ul>
-    </div>
-
-
 </nav>
 
-<main class="content">
-  <output role="status" id="toast"></output>
+<output role="status" id="toast"></output>
 
+<main class="content page-extra" id="main" data-type="extras">
   <div id="content" class="content-inner">
     <div class="top-search">
       <div class="search-settings">
@@ -97,8 +60,8 @@ Pages
             <span class="sr-only">Search documentation of erts</span>
             <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
           </button>
           <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
             <i class="ri-close-line ri-lg" title="Cancel search"></i>
@@ -114,16 +77,16 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>Distribution Protocol</h1>
+
 
       <a href="https://github.com/garazdawi/otp/blob/lukas/erts/enif_scheduler_pollset/erts/doc/guides/erl_dist_protocol.md#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-
-    <span>Distribution Protocol</span>
-  </h1>
+  </div>
 
 <p>This description is far from complete. It will be updated if the protocol is
 updated. However, the protocols, both from Erlang nodes to the Erlang Port
@@ -132,11 +95,11 @@ host) to initiate a connection request.</p><p>For each host, where a distributed
 running. The EPMD can be started explicitly or automatically as a result of the
 Erlang node startup.</p><p>By default the EPMD listens on port 4369.</p><p>(3) and (4) above are performed at the same level but the <code class="inline">net_kernel</code>
 disconnects the other node if it communicates using an invalid cookie (after 1
-second).</p><p>The integers in all multibyte fields are in big-endian order.</p><blockquote><h4 class="warning">Warning</h4><p>The Erlang Distribution protocol is not by itself secure and does not aim to
+second).</p><p>The integers in all multibyte fields are in big-endian order.</p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>The Erlang Distribution protocol is not by itself secure and does not aim to
 be so. In order to get secure distribution the distributed nodes should be
 configured to use distribution over tls. See the
 <a href="../../../lib/ssl-11.2.6/doc/html/ssl_distribution.html">Using SSL for Erlang Distribution</a> User's Guide
-for details on how to setup a secure distributed node.</p></blockquote><h2 id="epmd-protocol" class="section-heading">
+for details on how to setup a secure distributed node.</p></section><h2 id="epmd-protocol" class="section-heading">
   <a href="#epmd-protocol" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -256,7 +219,7 @@ sequenceDiagram
     
     client -&gt;&gt; EPMD: NAMES_REQ
     EPMD --&gt;&gt; client: NAMES_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">110</code></td></tr></tbody></table><p><em>Table: NAMES_REQ (110)</em></p><p>The response for a <code class="inline">NAMES_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">4</th><th style="text-align: left;"></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">EPMDPortNo</code></td><td style="text-align: left;"><code class="inline">NodeInfo*</code></td></tr></tbody></table><p><em>Table: NAMES_RESP</em></p><p><code class="inline">NodeInfo</code> is a string written for each active node. When all <code class="inline">NodeInfo</code> has
-been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7971188354-1">(</span><span class="s">&quot;name ~ts at port </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7971188354-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="7971188354-2">]</span><span class="p" data-group-id="7971188354-1">)</span><span class="p">.</span></code></pre><h3 id="dump-all-data-from-epmd" class="section-heading">
+been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="4357434357-1">(</span><span class="s">&quot;name ~ts at port </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4357434357-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p" data-group-id="4357434357-2">]</span><span class="p" data-group-id="4357434357-1">)</span><span class="p">.</span></code></pre><h3 id="dump-all-data-from-epmd" class="section-heading">
   <a href="#dump-all-data-from-epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -271,9 +234,9 @@ sequenceDiagram
     
     client -&gt;&gt; EPMD: DUMP_REQ
     EPMD --&gt;&gt; client: DUMP_RESP</code></pre><table><thead><tr><th style="text-align: left;">1</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">100</code></td></tr></tbody></table><p><em>Table: DUMP_REQ</em></p><p>The response for a <code class="inline">DUMP_REQ</code> is as follows:</p><table><thead><tr><th style="text-align: left;">4</th><th style="text-align: left;"></th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">EPMDPortNo</code></td><td style="text-align: left;"><code class="inline">NodeInfo*</code></td></tr></tbody></table><p><em>Table: DUMP_RESP</em></p><p><code class="inline">NodeInfo</code> is a string written for each node kept in the EPMD. When all
-<code class="inline">NodeInfo</code> has been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0005475574-1">(</span><span class="s">&quot;active name     ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
-          </span><span class="p" data-group-id="0005475574-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="0005475574-2">]</span><span class="p" data-group-id="0005475574-1">)</span><span class="p">.</span></code></pre><p>or</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="6329249678-1">(</span><span class="s">&quot;old/unused name ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="s"> </span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
-          </span><span class="p" data-group-id="6329249678-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="6329249678-2">]</span><span class="p" data-group-id="6329249678-1">)</span><span class="p">.</span></code></pre><h3 id="kill-epmd" class="section-heading">
+<code class="inline">NodeInfo</code> has been written the connection is closed by the EPMD.</p><p><code class="inline">NodeInfo</code> is, as expressed in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="6424327708-1">(</span><span class="s">&quot;active name     ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
+          </span><span class="p" data-group-id="6424327708-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="6424327708-2">]</span><span class="p" data-group-id="6424327708-1">)</span><span class="p">.</span></code></pre><p>or</p><pre><code class="makeup erlang" translate="no"><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7667106744-1">(</span><span class="s">&quot;old/unused name ~ts at port </span><span class="si">~p</span><span class="s">, fd = </span><span class="si">~p</span><span class="s"> </span><span class="si">~n</span><span class="s">&quot;</span><span class="p">,</span><span class="w">
+          </span><span class="p" data-group-id="7667106744-2">[</span><span class="n">NodeName</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="p">,</span><span class="w"> </span><span class="n">Fd</span><span class="p" data-group-id="7667106744-2">]</span><span class="p" data-group-id="7667106744-1">)</span><span class="p">.</span></code></pre><h3 id="kill-epmd" class="section-heading">
   <a href="#kill-epmd" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -312,9 +275,9 @@ sequenceDiagram
 establishing a connection. The protocol was introduced in Erlang/OTP R6 and
 amended in OTP 23. From OTP 25 support for the older protocol was dropped.
 Therefore an OTP 25 node can not connect to nodes older than OTP 23. This
-documentation only decribes the part of the protocol used by OTP 25.</p><blockquote><h4 class="info">Note</h4><p>A bug introduced in OTP 25.0 may cause OTP 25 nodes to reject connection
+documentation only decribes the part of the protocol used by OTP 25.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>A bug introduced in OTP 25.0 may cause OTP 25 nodes to reject connection
 attempts from OTP 23 and 24 nodes that are not using <code class="inline">epmd</code> to gain version
-information about the remote node. This is fixed in OTP 25.3.</p></blockquote><h3 id="general" class="section-heading">
+information about the remote node. This is fixed in OTP 25.3.</p></section><h3 id="general" class="section-heading">
   <a href="#general" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -411,7 +374,7 @@ received from <code class="inline">A</code>. The digest is then sent to <code cl
   </a>
   <span class="text">Semigraphic View</span>
 </h3>
-<pre><code class="makeup erlang" translate="no"><span class="n">A</span><span class="w"> </span><span class="p" data-group-id="4414580736-1">(</span><span class="ss">initiator</span><span class="p" data-group-id="4414580736-1">)</span><span class="w">                                      </span><span class="n">B</span><span class="w"> </span><span class="p" data-group-id="4414580736-2">(</span><span class="ss">acceptor</span><span class="p" data-group-id="4414580736-2">)</span><span class="w">
+<pre><code class="makeup erlang" translate="no"><span class="n">A</span><span class="w"> </span><span class="p" data-group-id="9913302666-1">(</span><span class="ss">initiator</span><span class="p" data-group-id="9913302666-1">)</span><span class="w">                                      </span><span class="n">B</span><span class="w"> </span><span class="p" data-group-id="9913302666-2">(</span><span class="ss">acceptor</span><span class="p" data-group-id="9913302666-2">)</span><span class="w">
 
 </span><span class="n">TCP</span><span class="w"> </span><span class="ss">connect</span><span class="w"> </span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">&gt;</span><span class="w">
                                                    </span><span class="n">TCP</span><span class="w"> </span><span class="ss">accept</span><span class="w">
@@ -421,36 +384,36 @@ received from <code class="inline">A</code>. The digest is then sent to <code cl
 
   </span><span class="o">&lt;-</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="w"> </span><span class="ss">send_status</span><span class="w">
 </span><span class="nf">recv_status</span><span class="w">
-</span><span class="p" data-group-id="4414580736-3">(</span><span class="k">if</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="ss">was</span><span class="w"> </span><span class="ss">&#39;alive&#39;</span><span class="w">
+</span><span class="p" data-group-id="9913302666-3">(</span><span class="k">if</span><span class="w"> </span><span class="ss">status</span><span class="w"> </span><span class="ss">was</span><span class="w"> </span><span class="ss">&#39;alive&#39;</span><span class="w">
  </span><span class="ss">send_status</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                                                   </span><span class="ss">recv_status</span><span class="p" data-group-id="4414580736-3">)</span><span class="w">
+                                                   </span><span class="ss">recv_status</span><span class="p" data-group-id="9913302666-3">)</span><span class="w">
 
-                          </span><span class="p" data-group-id="4414580736-4">(</span><span class="n">ChB</span><span class="p" data-group-id="4414580736-4">)</span><span class="w">                      </span><span class="n">ChB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="4414580736-5">(</span><span class="p" data-group-id="4414580736-5">)</span><span class="w">
+                          </span><span class="p" data-group-id="9913302666-4">(</span><span class="n">ChB</span><span class="p" data-group-id="9913302666-4">)</span><span class="w">                      </span><span class="n">ChB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="9913302666-5">(</span><span class="p" data-group-id="9913302666-5">)</span><span class="w">
   </span><span class="o">&lt;-</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">-</span><span class="w"> </span><span class="ss">send_challenge</span><span class="w">
 </span><span class="nf">recv_challenge</span><span class="w">
 
-</span><span class="p" data-group-id="4414580736-6">(</span><span class="k">if</span><span class="w"> </span><span class="ss">old</span><span class="w"> </span><span class="ss">send_name</span><span class="w">
+</span><span class="p" data-group-id="9913302666-6">(</span><span class="k">if</span><span class="w"> </span><span class="ss">old</span><span class="w"> </span><span class="ss">send_name</span><span class="w">
  </span><span class="ss">send_complement</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                                                   </span><span class="ss">recv_complement</span><span class="p" data-group-id="4414580736-6">)</span><span class="w">
+                                                   </span><span class="ss">recv_complement</span><span class="p" data-group-id="9913302666-6">)</span><span class="w">
 
-</span><span class="n">ChA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="4414580736-7">(</span><span class="p" data-group-id="4414580736-7">)</span><span class="p">,</span><span class="w">
-</span><span class="n">OCA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="4414580736-8">(</span><span class="n">B</span><span class="p" data-group-id="4414580736-8">)</span><span class="p">,</span><span class="w">
-</span><span class="n">DiA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="4414580736-9">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">OCA</span><span class="p" data-group-id="4414580736-9">)</span><span class="w">
-                          </span><span class="p" data-group-id="4414580736-10">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">DiA</span><span class="p" data-group-id="4414580736-10">)</span><span class="w">
+</span><span class="n">ChA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_challenge</span><span class="p" data-group-id="9913302666-7">(</span><span class="p" data-group-id="9913302666-7">)</span><span class="p">,</span><span class="w">
+</span><span class="n">OCA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="9913302666-8">(</span><span class="n">B</span><span class="p" data-group-id="9913302666-8">)</span><span class="p">,</span><span class="w">
+</span><span class="n">DiA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="9913302666-9">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">OCA</span><span class="p" data-group-id="9913302666-9">)</span><span class="w">
+                          </span><span class="p" data-group-id="9913302666-10">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">DiA</span><span class="p" data-group-id="9913302666-10">)</span><span class="w">
 </span><span class="ss">send_challenge_reply</span><span class="w"> </span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="p">-&gt;</span><span class="w">
                                                    </span><span class="ss">recv_challenge_reply</span><span class="w">
-                                                   </span><span class="n">ICB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="4414580736-11">(</span><span class="n">A</span><span class="p" data-group-id="4414580736-11">)</span><span class="p">,</span><span class="w">
+                                                   </span><span class="n">ICB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="9913302666-11">(</span><span class="n">A</span><span class="p" data-group-id="9913302666-11">)</span><span class="p">,</span><span class="w">
                                                    </span><span class="nc">check</span><span class="p">:</span><span class="w">
-                                                   </span><span class="n">DiA</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="4414580736-12">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">ICB</span><span class="p" data-group-id="4414580736-12">)</span><span class="o">?</span><span class="w">
+                                                   </span><span class="n">DiA</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="9913302666-12">(</span><span class="n">ChB</span><span class="p">,</span><span class="w"> </span><span class="n">ICB</span><span class="p" data-group-id="9913302666-12">)</span><span class="o">?</span><span class="w">
 </span><span class="w">                                                   </span><span class="p">-</span><span class="w"> </span><span class="na">if</span><span class="w"> </span><span class="n">OK</span><span class="p">:</span><span class="w">
-                                                    </span><span class="n">OCB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="4414580736-13">(</span><span class="n">A</span><span class="p" data-group-id="4414580736-13">)</span><span class="p">,</span><span class="w">
-                                                    </span><span class="n">DiB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="4414580736-14">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">OCB</span><span class="p" data-group-id="4414580736-14">)</span><span class="w">
-                          </span><span class="p" data-group-id="4414580736-15">(</span><span class="n">DiB</span><span class="p" data-group-id="4414580736-15">)</span><span class="w">
+                                                    </span><span class="n">OCB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">out_cookie</span><span class="p" data-group-id="9913302666-13">(</span><span class="n">A</span><span class="p" data-group-id="9913302666-13">)</span><span class="p">,</span><span class="w">
+                                                    </span><span class="n">DiB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">gen_digest</span><span class="w"> </span><span class="p" data-group-id="9913302666-14">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">OCB</span><span class="p" data-group-id="9913302666-14">)</span><span class="w">
+                          </span><span class="p" data-group-id="9913302666-15">(</span><span class="n">DiB</span><span class="p" data-group-id="9913302666-15">)</span><span class="w">
   </span><span class="o">&lt;-</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="o">--</span><span class="w"> </span><span class="ss">send_challenge_ack</span><span class="w">
 </span><span class="ss">recv_challenge_ack</span><span class="w">                                  </span><span class="n">DONE</span><span class="w">
-</span><span class="n">ICA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="4414580736-16">(</span><span class="n">B</span><span class="p" data-group-id="4414580736-16">)</span><span class="p">,</span><span class="w">                                </span><span class="o">-</span><span class="w"> </span><span class="nc">else</span><span class="p">:</span><span class="w">
+</span><span class="n">ICA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">in_cookie</span><span class="p" data-group-id="9913302666-16">(</span><span class="n">B</span><span class="p" data-group-id="9913302666-16">)</span><span class="p">,</span><span class="w">                                </span><span class="o">-</span><span class="w"> </span><span class="nc">else</span><span class="p">:</span><span class="w">
 </span><span class="nc">check</span><span class="p">:</span><span class="w">                                              </span><span class="n">CLOSE</span><span class="w">
-</span><span class="n">DiB</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="4414580736-17">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">ICA</span><span class="p" data-group-id="4414580736-17">)</span><span class="o">?</span><span class="w">
+</span><span class="n">DiB</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">gen_digest</span><span class="p" data-group-id="9913302666-17">(</span><span class="n">ChA</span><span class="p">,</span><span class="w"> </span><span class="n">ICA</span><span class="p" data-group-id="9913302666-17">)</span><span class="o">?</span><span class="w">
 </span><span class="p">-</span><span class="w"> </span><span class="na">if</span><span class="w"> </span><span class="n">OK</span><span class="p">:</span><span class="w">
  </span><span class="n">DONE</span><span class="w">
 </span><span class="p">-</span><span class="w"> </span><span class="na">else</span><span class="p">:</span><span class="w">
@@ -511,8 +474,8 @@ messages.</p></li><li><p><strong><code class="inline" id="DFLAG_HANDSHAKE_23">-d
 node supports the new connection setup handshake (version 6) introduced in
 OTP 23. This flag is mandatory (from OTP 25). If not present, the connection
 is refused.</p></li><li><p><strong><code class="inline" id="DFLAG_UNLINK_ID">-define(DFLAG_UNLINK_ID, 16#2000000).</code></strong> - Use the
-<a href="erl_dist_protocol.html#link_protocol">new link protocol</a>.</p><blockquote><h4 class="info">Note</h4><p>This flag is mandatory as of OTP 26.</p></blockquote></li><li><p><strong><code class="inline">-define(DFLAG_MANDATORY_25_DIGEST, (1 bsl 36)).</code></strong> - The node supports all
-capabilities that are mandatory in OTP 25. Introduced in OTP 25.</p><blockquote><h4 class="info">Note</h4><p>This flag will become mandatory in OTP 27.</p></blockquote></li><li><p><strong><code class="inline" id="DFLAG_SPAWN">-define(DFLAG_SPAWN, (1 bsl 32)).</code></strong> - Set if the
+<a href="erl_dist_protocol.html#link_protocol">new link protocol</a>.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>This flag is mandatory as of OTP 26.</p></section></li><li><p><strong><code class="inline">-define(DFLAG_MANDATORY_25_DIGEST, (1 bsl 36)).</code></strong> - The node supports all
+capabilities that are mandatory in OTP 25. Introduced in OTP 25.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>This flag will become mandatory in OTP 27.</p></section></li><li><p><strong><code class="inline" id="DFLAG_SPAWN">-define(DFLAG_SPAWN, (1 bsl 32)).</code></strong> - Set if the
 <a href="erl_dist_protocol.html#SPAWN_REQUEST"><code class="inline">SPAWN_REQUEST</code></a>,
 <a href="erl_dist_protocol.html#SPAWN_REQUEST_TT"><code class="inline">SPAWN_REQUEST_TT</code></a>,
 <a href="erl_dist_protocol.html#SPAWN_REPLY"><code class="inline">SPAWN_REPLY</code></a>,
@@ -551,9 +514,9 @@ nodes have in this case the following format:</p><table><thead><tr><th style="te
 format). Notice that <code class="inline">Message</code> is only passed in combination with a
 <code class="inline">ControlMessage</code> encoding a send ('!').</p></li></ul><p><a href="" id="control_message"></a></p><p>The <code class="inline">ControlMessage</code> is a tuple, where the first element indicates which
 distributed operation it encodes:</p><ul><li><p><strong><code class="inline" id="LINK">LINK</code></strong> - <code class="inline">{1, FromPid, ToPid}</code></p><p>This signal is sent by <code class="inline">FromPid</code> in order to create a link between <code class="inline">FromPid</code>
-and <code class="inline">ToPid</code>.</p></li><li><p><strong><code class="inline">SEND</code></strong> - <code class="inline">{2, Unused, ToPid}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">EXIT</code></strong> - <code class="inline">{3, FromPid, ToPid, Reason}</code></p><p>This signal is sent when a link has been broken</p></li><li><p><strong><code class="inline" id="UNLINK">UNLINK</code> (obsolete)</strong> - <code class="inline">{4, FromPid, ToPid}</code></p><blockquote><h4 class="warning">Warning</h4><p>This signal is obsolete and not supported as of OTP 26. For more information
+and <code class="inline">ToPid</code>.</p></li><li><p><strong><code class="inline">SEND</code></strong> - <code class="inline">{2, Unused, ToPid}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">EXIT</code></strong> - <code class="inline">{3, FromPid, ToPid, Reason}</code></p><p>This signal is sent when a link has been broken</p></li><li><p><strong><code class="inline" id="UNLINK">UNLINK</code> (obsolete)</strong> - <code class="inline">{4, FromPid, ToPid}</code></p><section role="note" class="admonition warning"><h4 class="admonition-title warning">Warning</h4><p>This signal is obsolete and not supported as of OTP 26. For more information
 see the documentation of the
-<a href="erl_dist_protocol.html#link_protocol">link protocol</a>.</p></blockquote></li><li><p><strong><code class="inline">NODE_LINK</code></strong> - <code class="inline">{5}</code></p></li><li><p><strong><code class="inline">REG_SEND</code></strong> - <code class="inline">{6, FromPid, Unused, ToName}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">GROUP_LEADER</code></strong> - <code class="inline">{7, FromPid, ToPid}</code></p></li><li><p><strong><code class="inline">EXIT2</code></strong> - <code class="inline">{8, FromPid, ToPid, Reason}</code></p><p>This signal is sent by a call to the erlang:exit/2 bif</p></li><li><p><strong><code class="inline">SEND_TT</code></strong> - <code class="inline">{12, Unused, ToPid, TraceToken}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">EXIT_TT</code></strong> - <code class="inline">{13, FromPid, ToPid, TraceToken, Reason}</code></p></li><li><p><strong><code class="inline">REG_SEND_TT</code></strong> - <code class="inline">{16, FromPid, Unused, ToName, TraceToken}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">EXIT2_TT</code></strong> - <code class="inline">{18, FromPid, ToPid, TraceToken, Reason}</code></p></li><li><p><strong><code class="inline">MONITOR_P</code></strong> - <code class="inline">{19, FromPid, ToProc, Ref}</code>, where <code class="inline">FromPid</code> = monitoring
+<a href="erl_dist_protocol.html#link_protocol">link protocol</a>.</p></section></li><li><p><strong><code class="inline">NODE_LINK</code></strong> - <code class="inline">{5}</code></p></li><li><p><strong><code class="inline">REG_SEND</code></strong> - <code class="inline">{6, FromPid, Unused, ToName}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">GROUP_LEADER</code></strong> - <code class="inline">{7, FromPid, ToPid}</code></p></li><li><p><strong><code class="inline">EXIT2</code></strong> - <code class="inline">{8, FromPid, ToPid, Reason}</code></p><p>This signal is sent by a call to the erlang:exit/2 bif</p></li><li><p><strong><code class="inline">SEND_TT</code></strong> - <code class="inline">{12, Unused, ToPid, TraceToken}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">EXIT_TT</code></strong> - <code class="inline">{13, FromPid, ToPid, TraceToken, Reason}</code></p></li><li><p><strong><code class="inline">REG_SEND_TT</code></strong> - <code class="inline">{16, FromPid, Unused, ToName, TraceToken}</code></p><p>Followed by <code class="inline">Message</code>.</p><p><code class="inline">Unused</code> is kept for backward compatibility.</p></li><li><p><strong><code class="inline">EXIT2_TT</code></strong> - <code class="inline">{18, FromPid, ToPid, TraceToken, Reason}</code></p></li><li><p><strong><code class="inline">MONITOR_P</code></strong> - <code class="inline">{19, FromPid, ToProc, Ref}</code>, where <code class="inline">FromPid</code> = monitoring
 process and <code class="inline">ToProc</code> = monitored process pid or name (atom)</p></li><li><p><strong><code class="inline">DEMONITOR_P</code></strong> - <code class="inline">{20, FromPid, ToProc, Ref}</code>, where <code class="inline">FromPid</code> = monitoring
 process and <code class="inline">ToProc</code> = monitored process pid or name (atom)</p><p>We include <code class="inline">FromPid</code> just in case we want to trace this.</p></li><li><p><strong><code class="inline">MONITOR_P_EXIT</code></strong> - <code class="inline">{21, FromProc, ToPid, Ref, Reason}</code>, where <code class="inline">FromProc</code>
 = monitored process pid or name (atom), <code class="inline">ToPid</code> = monitoring process, and
@@ -565,24 +528,24 @@ process and <code class="inline">ToProc</code> = monitored process pid or name (
 </h3>
 <ul><li><p><strong><code class="inline">SEND_SENDER</code></strong> - <code class="inline">{22, FromPid, ToPid}</code></p><p>Followed by <code class="inline">Message</code>.</p><p>This control message replaces the <code class="inline">SEND</code> control message and will be sent when
 the distribution flag <a href="erl_dist_protocol.html#dflags"><code class="inline">DFLAG_SEND_SENDER</code></a> has
-been negotiated in the connection setup handshake.</p><blockquote><h4 class="info">Note</h4><p>Messages encoded before the connection has been set up may still use the
+been negotiated in the connection setup handshake.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Messages encoded before the connection has been set up may still use the
 <code class="inline">SEND</code> control message. However, once a <code class="inline">SEND_SENDER</code> or <code class="inline">SEND_SENDER_TT</code>
 control message has been sent, no more <code class="inline">SEND</code> control messages will be sent
-in the same direction on the connection.</p></blockquote></li><li><p><strong><code class="inline">SEND_SENDER_TT</code></strong> - <code class="inline">{23, FromPid, ToPid, TraceToken}</code></p><p>Followed by <code class="inline">Message</code>.</p><p>This control message replaces the <code class="inline">SEND_TT</code> control message and will be sent
+in the same direction on the connection.</p></section></li><li><p><strong><code class="inline">SEND_SENDER_TT</code></strong> - <code class="inline">{23, FromPid, ToPid, TraceToken}</code></p><p>Followed by <code class="inline">Message</code>.</p><p>This control message replaces the <code class="inline">SEND_TT</code> control message and will be sent
 when the distribution flag <a href="erl_dist_protocol.html#dflags"><code class="inline">DFLAG_SEND_SENDER</code></a>
-has been negotiated in the connection setup handshake.</p><blockquote><h4 class="info">Note</h4><p>Messages encoded before the connection has been set up may still use the
+has been negotiated in the connection setup handshake.</p><section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Messages encoded before the connection has been set up may still use the
 <code class="inline">SEND_TT</code> control message. However, once a <code class="inline">SEND_SENDER</code> or <code class="inline">SEND_SENDER_TT</code>
 control message has been sent, no more <code class="inline">SEND_TT</code> control messages will be
-sent in the same direction on the connection.</p></blockquote></li></ul><h3 id="new-ctrlmessages-for-erlang-otp-22" class="section-heading">
+sent in the same direction on the connection.</p></section></li></ul><h3 id="new-ctrlmessages-for-erlang-otp-22" class="section-heading">
   <a href="#new-ctrlmessages-for-erlang-otp-22" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
   <span class="text">New Ctrlmessages for Erlang/OTP 22</span>
 </h3>
-<blockquote><h4 class="info">Note</h4><p>Messages encoded before the connection has been set up may still use the
+<section role="note" class="admonition info"><h4 class="admonition-title info">Note</h4><p>Messages encoded before the connection has been set up may still use the
 non-PAYLOAD variant. However, once a PAYLOAD control message has been sent, no
 more non-PAYLOAD control messages will be sent in the same direction on the
-connection.</p></blockquote><ul><li><p><strong><code class="inline">PAYLOAD_EXIT</code></strong> - <code class="inline">{24, FromPid, ToPid}</code></p><p>Followed by <code class="inline">Reason</code>.</p><p>This control message replaces the <code class="inline">EXIT</code> control message and will be sent when
+connection.</p></section><ul><li><p><strong><code class="inline">PAYLOAD_EXIT</code></strong> - <code class="inline">{24, FromPid, ToPid}</code></p><p>Followed by <code class="inline">Reason</code>.</p><p>This control message replaces the <code class="inline">EXIT</code> control message and will be sent when
 the distribution flag <a href="erl_dist_protocol.html#dflags"><code class="inline">DFLAG_EXIT_PAYLOAD</code></a> has
 been negotiated in the connection setup handshake.</p></li><li><p><strong><code class="inline">PAYLOAD_EXIT_TT</code></strong> - <code class="inline">{25, FromPid, ToPid, TraceToken}</code></p><p>Followed by <code class="inline">Reason</code>.</p><p>This control message replaces the <code class="inline">EXIT_TT</code> control message and will be sent
 when the distribution flag <a href="erl_dist_protocol.html#dflags"><code class="inline">DFLAG_EXIT_PAYLOAD</code></a>
@@ -761,7 +724,7 @@ epmd
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.34.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.0-rc.2) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
