@@ -4,41 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.35.1">
+    <meta name="generator" content="ExDoc v0.37.0-rc.0">
     <meta name="project" content="Erlang System Documentation v28.0-rc0">
 
 
     <title>Common Caveats — Erlang System Documentation v28.0-rc0</title>
-    <link rel="stylesheet" href="dist/html-erlang-4IXSOGMD.css" />
 
+    <link rel="stylesheet" href="dist/html-erlang-K3USIQEG.css" />
 
-    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
-    <script src="dist/handlebars.templates-K7URE6B4.js"></script>
-    <script src="dist/sidebar_items-4A143270.js"></script>
-    <script src="docs_config.js"></script>
-    <script async src="dist/html-PVRIOB7F.js"></script>
-<style type="text/css">
-  .monospace-font > code {
-    font-family: monospace;
-  }
-</style>
-
+    <script defer src="dist/sidebar_items-4A143270.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-GPAM72RX.js"></script>
 
   </head>
-  <body data-type="extras" class="page-extra">
-    <script>
-
-      try {
-        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
-
-        if (settings.theme === 'dark' ||
-           ((settings.theme === 'system' || settings.theme == null) &&
-             window.matchMedia('(prefers-color-scheme: dark)').matches)
-           ) {
-          document.body.classList.add('dark')
-        }
-      } catch (error) { }
-    </script>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
 
 <div class="body-wrapper">
 
@@ -64,27 +45,13 @@ Erlang System Documentation
         </div>
       </div>
     </div>
-    <ul id="sidebar-listNav" class="sidebar-listNav" role="tablist">
-      <li>
-        <button id="extras-list-tab-button" role="tab" data-type="extras" aria-controls="extras-tab-panel" aria-selected="true" tabindex="0">
-Pages
-        </button>
-      </li>
-
-
-    </ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
   </div>
-
-  <div id="extras-tab-panel" class="sidebar-tabpanel" role="tabpanel" aria-labelledby="extras-list-tab-button">
-    <ul id="extras-full-list" class="full-list"></ul>
-  </div>
-
-
 </nav>
 
-<main class="content">
-  <output role="status" id="toast"></output>
+<output role="status" id="toast"></output>
 
+<main class="content page-extra" id="main" data-type="extras">
   <div id="content" class="content-inner">
     <div class="top-search">
       <div class="search-settings">
@@ -93,8 +60,8 @@ Pages
             <span class="sr-only">Search documentation of Erlang System Documentation</span>
             <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true" title="Submit search"></i>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
           </button>
           <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
             <i class="ri-close-line ri-lg" title="Cancel search"></i>
@@ -110,16 +77,16 @@ Pages
     </div>
 
 <div id="top-content">
-  <h1>
+  <div class="heading-with-actions top-heading">
+    <h1>Common Caveats</h1>
+
 
       <a href="https://github.com/lucioleKi/otp/blob/isabell/erts/processes_iterator/system/doc/efficiency_guide/commoncaveats.md#L1" title="View Source" class="icon-action" rel="help">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
 
-
-    <span>Common Caveats</span>
-  </h1>
+  </div>
 
 <p>This section lists a few constructs to watch out for.</p><h2 id="operator" class="section-heading">
   <a href="#operator" class="hover-link">
@@ -128,23 +95,23 @@ Pages
   <span class="text">Operator <code class="inline">++</code></span>
 </h2>
 <p>The <code class="inline">++</code> operator copies its left-hand side operand. That is clearly
-seen if we do our own implementation in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nf">my_plus_plus</span><span class="p" data-group-id="2525009547-1">(</span><span class="p" data-group-id="2525009547-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="2525009547-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="2525009547-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="2525009547-3">[</span><span class="n">H</span><span class="p">|</span><span class="nf">my_plus_plus</span><span class="p" data-group-id="2525009547-4">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="2525009547-4">)</span><span class="p" data-group-id="2525009547-3">]</span><span class="p">;</span><span class="w">
-</span><span class="nf">my_plus_plus</span><span class="p" data-group-id="2525009547-5">(</span><span class="p" data-group-id="2525009547-6">[</span><span class="p" data-group-id="2525009547-6">]</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="2525009547-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="n">Tail</span><span class="p">.</span></code></pre><p>We must be careful how we use <code class="inline">++</code> in a loop. First is how not to use it:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">naive_reverse</span><span class="p" data-group-id="9570040332-1">(</span><span class="p" data-group-id="9570040332-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="9570040332-2">]</span><span class="p" data-group-id="9570040332-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">naive_reverse</span><span class="p" data-group-id="9570040332-3">(</span><span class="n">T</span><span class="p" data-group-id="9570040332-3">)</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="p" data-group-id="9570040332-4">[</span><span class="n">H</span><span class="p" data-group-id="9570040332-4">]</span><span class="p">;</span><span class="w">
-</span><span class="nf">naive_reverse</span><span class="p" data-group-id="9570040332-5">(</span><span class="p" data-group-id="9570040332-6">[</span><span class="p" data-group-id="9570040332-6">]</span><span class="p" data-group-id="9570040332-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p" data-group-id="9570040332-7">[</span><span class="p" data-group-id="9570040332-7">]</span><span class="p">.</span></code></pre><p>As the <code class="inline">++</code> operator copies its left-hand side operand, the growing
-result is copied repeatedly, leading to quadratic complexity.</p><p>On the other hand, using <code class="inline">++</code> in loop like this is perfectly fine:</p><p><strong>OK</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="0276967018-1">(</span><span class="n">List</span><span class="p" data-group-id="0276967018-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="0276967018-2">(</span><span class="n">List</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0276967018-3">[</span><span class="p" data-group-id="0276967018-3">]</span><span class="p" data-group-id="0276967018-2">)</span><span class="p">.</span><span class="w">
+seen if we do our own implementation in Erlang:</p><pre><code class="makeup erlang" translate="no"><span class="nf">my_plus_plus</span><span class="p" data-group-id="4460091615-1">(</span><span class="p" data-group-id="4460091615-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="4460091615-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="4460091615-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="4460091615-3">[</span><span class="n">H</span><span class="p">|</span><span class="nf">my_plus_plus</span><span class="p" data-group-id="4460091615-4">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="4460091615-4">)</span><span class="p" data-group-id="4460091615-3">]</span><span class="p">;</span><span class="w">
+</span><span class="nf">my_plus_plus</span><span class="p" data-group-id="4460091615-5">(</span><span class="p" data-group-id="4460091615-6">[</span><span class="p" data-group-id="4460091615-6">]</span><span class="p">,</span><span class="w"> </span><span class="n">Tail</span><span class="p" data-group-id="4460091615-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Tail</span><span class="p">.</span></code></pre><p>We must be careful how we use <code class="inline">++</code> in a loop. First is how not to use it:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">naive_reverse</span><span class="p" data-group-id="8468693582-1">(</span><span class="p" data-group-id="8468693582-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="8468693582-2">]</span><span class="p" data-group-id="8468693582-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">naive_reverse</span><span class="p" data-group-id="8468693582-3">(</span><span class="n">T</span><span class="p" data-group-id="8468693582-3">)</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="p" data-group-id="8468693582-4">[</span><span class="n">H</span><span class="p" data-group-id="8468693582-4">]</span><span class="p">;</span><span class="w">
+</span><span class="nf">naive_reverse</span><span class="p" data-group-id="8468693582-5">(</span><span class="p" data-group-id="8468693582-6">[</span><span class="p" data-group-id="8468693582-6">]</span><span class="p" data-group-id="8468693582-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p" data-group-id="8468693582-7">[</span><span class="p" data-group-id="8468693582-7">]</span><span class="p">.</span></code></pre><p>As the <code class="inline">++</code> operator copies its left-hand side operand, the growing
+result is copied repeatedly, leading to quadratic complexity.</p><p>On the other hand, using <code class="inline">++</code> in loop like this is perfectly fine:</p><p><strong>OK</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="3602428325-1">(</span><span class="n">List</span><span class="p" data-group-id="3602428325-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="3602428325-2">(</span><span class="n">List</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3602428325-3">[</span><span class="p" data-group-id="3602428325-3">]</span><span class="p" data-group-id="3602428325-2">)</span><span class="p">.</span><span class="w">
 
-</span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="0276967018-4">(</span><span class="p" data-group-id="0276967018-5">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="0276967018-5">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="0276967018-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="0276967018-6">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0276967018-7">[</span><span class="n">H</span><span class="p" data-group-id="0276967018-7">]</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="0276967018-6">)</span><span class="p">;</span><span class="w">
-</span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="0276967018-8">(</span><span class="p" data-group-id="0276967018-9">[</span><span class="p" data-group-id="0276967018-9">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="0276967018-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+</span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="3602428325-4">(</span><span class="p" data-group-id="3602428325-5">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="3602428325-5">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="3602428325-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="3602428325-6">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3602428325-7">[</span><span class="n">H</span><span class="p" data-group-id="3602428325-7">]</span><span class="w"> </span><span class="o">++</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="3602428325-6">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">naive_but_ok_reverse</span><span class="p" data-group-id="3602428325-8">(</span><span class="p" data-group-id="3602428325-9">[</span><span class="p" data-group-id="3602428325-9">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="3602428325-8">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="n">Acc</span><span class="p">.</span></code></pre><p>Each list element is copied only once. The growing result <code class="inline">Acc</code> is the right-hand
-side operand, which it is <em>not</em> copied.</p><p>Experienced Erlang programmers would probably write as follows:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">vanilla_reverse</span><span class="p" data-group-id="8782912146-1">(</span><span class="p" data-group-id="8782912146-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="8782912146-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="8782912146-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">vanilla_reverse</span><span class="p" data-group-id="8782912146-3">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8782912146-4">[</span><span class="n">H</span><span class="p">|</span><span class="n">Acc</span><span class="p" data-group-id="8782912146-4">]</span><span class="p" data-group-id="8782912146-3">)</span><span class="p">;</span><span class="w">
-</span><span class="nf">vanilla_reverse</span><span class="p" data-group-id="8782912146-5">(</span><span class="p" data-group-id="8782912146-6">[</span><span class="p" data-group-id="8782912146-6">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="8782912146-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+side operand, which it is <em>not</em> copied.</p><p>Experienced Erlang programmers would probably write as follows:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">vanilla_reverse</span><span class="p" data-group-id="8002563523-1">(</span><span class="p" data-group-id="8002563523-2">[</span><span class="n">H</span><span class="p">|</span><span class="n">T</span><span class="p" data-group-id="8002563523-2">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="8002563523-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">vanilla_reverse</span><span class="p" data-group-id="8002563523-3">(</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8002563523-4">[</span><span class="n">H</span><span class="p">|</span><span class="n">Acc</span><span class="p" data-group-id="8002563523-4">]</span><span class="p" data-group-id="8002563523-3">)</span><span class="p">;</span><span class="w">
+</span><span class="nf">vanilla_reverse</span><span class="p" data-group-id="8002563523-5">(</span><span class="p" data-group-id="8002563523-6">[</span><span class="p" data-group-id="8002563523-6">]</span><span class="p">,</span><span class="w"> </span><span class="n">Acc</span><span class="p" data-group-id="8002563523-5">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="n">Acc</span><span class="p">.</span></code></pre><p>In principle, this is slightly more efficient because the list element <code class="inline">[H]</code>
 is not built before being copied and discarded. In practice, the compiler
 rewrites <code class="inline">[H] ++ Acc</code> to <code class="inline">[H|Acc]</code>.</p><h2 id="timer-module" class="section-heading">
@@ -170,41 +137,41 @@ therefore harmless.</p><h2 id="accidental-copying-and-loss-of-sharing" class="se
   <span class="text">Accidental Copying and Loss of Sharing</span>
 </h2>
 <p>When spawning a new process using a fun, one can accidentally copy more data to
-the process than intended. For example:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">accidental1</span><span class="p" data-group-id="0684319258-1">(</span><span class="n">State</span><span class="p" data-group-id="0684319258-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="0684319258-2">(</span><span class="nf">fun</span><span class="p" data-group-id="0684319258-3">(</span><span class="p" data-group-id="0684319258-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0684319258-4">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0684319258-5">[</span><span class="n">State</span><span class="o">#</span><span class="ss">state</span><span class="p">.</span><span class="ss">info</span><span class="p" data-group-id="0684319258-5">]</span><span class="p" data-group-id="0684319258-4">)</span><span class="w">
-          </span><span class="k">end</span><span class="p" data-group-id="0684319258-2">)</span><span class="p">.</span></code></pre><p>The code in the fun will extract one element from the record and print it. The
+the process than intended. For example:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">accidental1</span><span class="p" data-group-id="6684533802-1">(</span><span class="n">State</span><span class="p" data-group-id="6684533802-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="6684533802-2">(</span><span class="nf">fun</span><span class="p" data-group-id="6684533802-3">(</span><span class="p" data-group-id="6684533802-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="6684533802-4">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6684533802-5">[</span><span class="n">State</span><span class="o">#</span><span class="ss">state</span><span class="p">.</span><span class="ss">info</span><span class="p" data-group-id="6684533802-5">]</span><span class="p" data-group-id="6684533802-4">)</span><span class="w">
+          </span><span class="k">end</span><span class="p" data-group-id="6684533802-2">)</span><span class="p">.</span></code></pre><p>The code in the fun will extract one element from the record and print it. The
 rest of the <code class="inline">state</code> record is not used. However, when the <a href="../../erts-15.2.1/doc/html/erlang.html#spawn/1"><code class="inline">spawn/1</code></a>
-function is executed, the entire record is copied to the newly created process.</p><p>The same kind of problem can happen with a map:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">accidental2</span><span class="p" data-group-id="7612060714-1">(</span><span class="n">State</span><span class="p" data-group-id="7612060714-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="7612060714-2">(</span><span class="nf">fun</span><span class="p" data-group-id="7612060714-3">(</span><span class="p" data-group-id="7612060714-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="7612060714-4">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7612060714-5">[</span><span class="nf">map_get</span><span class="p" data-group-id="7612060714-6">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="7612060714-6">)</span><span class="p" data-group-id="7612060714-5">]</span><span class="p" data-group-id="7612060714-4">)</span><span class="w">
-          </span><span class="k">end</span><span class="p" data-group-id="7612060714-2">)</span><span class="p">.</span></code></pre><p>In the following example (part of a module implementing the <a href="../../lib/stdlib-6.2/doc/html/gen_server.html"><code class="inline">gen_server</code></a>
-behavior) the created fun is sent to another process:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">handle_call</span><span class="p" data-group-id="1793358690-1">(</span><span class="ss">give_me_a_fun</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="1793358690-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="n">Fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="1793358690-2">(</span><span class="p" data-group-id="1793358690-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">State</span><span class="o">#</span><span class="ss">state</span><span class="p">.</span><span class="nb">size</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="1793358690-3">{</span><span class="ss">reply</span><span class="p">,</span><span class="w"> </span><span class="n">Fun</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="1793358690-3">}</span><span class="p">.</span></code></pre><p>How bad that unnecessary copy is depends on the contents of the record or the
-map.</p><p>For example, if the <code class="inline">state</code> record is initialized like this:</p><pre><code class="makeup erlang" translate="no"><span class="nf">init1</span><span class="p" data-group-id="3683111488-1">(</span><span class="p" data-group-id="3683111488-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="o">#</span><span class="ss">state</span><span class="p" data-group-id="3683111488-2">{</span><span class="ss">data</span><span class="o">=</span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="3683111488-3">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p" data-group-id="3683111488-3">)</span><span class="p" data-group-id="3683111488-2">}</span><span class="p">.</span></code></pre><p>a list with 10000 elements (or about 20000 heap words) will be copied to the
+function is executed, the entire record is copied to the newly created process.</p><p>The same kind of problem can happen with a map:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">accidental2</span><span class="p" data-group-id="8663062102-1">(</span><span class="n">State</span><span class="p" data-group-id="8663062102-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="8663062102-2">(</span><span class="nf">fun</span><span class="p" data-group-id="8663062102-3">(</span><span class="p" data-group-id="8663062102-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="8663062102-4">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8663062102-5">[</span><span class="nf">map_get</span><span class="p" data-group-id="8663062102-6">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="8663062102-6">)</span><span class="p" data-group-id="8663062102-5">]</span><span class="p" data-group-id="8663062102-4">)</span><span class="w">
+          </span><span class="k">end</span><span class="p" data-group-id="8663062102-2">)</span><span class="p">.</span></code></pre><p>In the following example (part of a module implementing the <a href="../../lib/stdlib-6.2/doc/html/gen_server.html"><code class="inline">gen_server</code></a>
+behavior) the created fun is sent to another process:</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">handle_call</span><span class="p" data-group-id="6338021355-1">(</span><span class="ss">give_me_a_fun</span><span class="p">,</span><span class="w"> </span><span class="p">_</span><span class="n">From</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="6338021355-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p" data-group-id="6338021355-2">(</span><span class="p" data-group-id="6338021355-2">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="n">State</span><span class="o">#</span><span class="ss">state</span><span class="p">.</span><span class="nb">size</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="6338021355-3">{</span><span class="ss">reply</span><span class="p">,</span><span class="w"> </span><span class="n">Fun</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="6338021355-3">}</span><span class="p">.</span></code></pre><p>How bad that unnecessary copy is depends on the contents of the record or the
+map.</p><p>For example, if the <code class="inline">state</code> record is initialized like this:</p><pre><code class="makeup erlang" translate="no"><span class="nf">init1</span><span class="p" data-group-id="8683326883-1">(</span><span class="p" data-group-id="8683326883-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="o">#</span><span class="ss">state</span><span class="p" data-group-id="8683326883-2">{</span><span class="ss">data</span><span class="o">=</span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="8683326883-3">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p" data-group-id="8683326883-3">)</span><span class="p" data-group-id="8683326883-2">}</span><span class="p">.</span></code></pre><p>a list with 10000 elements (or about 20000 heap words) will be copied to the
 newly created process.</p><p>An unnecessary copy of 10000 element list can be bad enough, but it can get even
 worse if the <code class="inline">state</code> record contains <em>shared subterms</em>. Here is a simple example
-of a term with a shared subterm:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="1031180965-1">{</span><span class="n">SubTerm</span><span class="p">,</span><span class="w"> </span><span class="n">SubTerm</span><span class="p" data-group-id="1031180965-1">}</span></code></pre><p>When a term is copied to another process, sharing of subterms will be lost and
-the copied term can be many times larger than the original term. For example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">init2</span><span class="p" data-group-id="4793140097-1">(</span><span class="p" data-group-id="4793140097-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="n">SharedSubTerms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">foldl</span><span class="p" data-group-id="4793140097-2">(</span><span class="nf">fun</span><span class="p" data-group-id="4793140097-3">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p" data-group-id="4793140097-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="4793140097-4">[</span><span class="n">A</span><span class="p">|</span><span class="n">A</span><span class="p" data-group-id="4793140097-4">]</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4793140097-5">[</span><span class="mi">0</span><span class="p" data-group-id="4793140097-5">]</span><span class="p">,</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="4793140097-6">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="4793140097-6">)</span><span class="p" data-group-id="4793140097-2">)</span><span class="p">,</span><span class="w">
-    </span><span class="o">#</span><span class="ss">state</span><span class="p" data-group-id="4793140097-7">{</span><span class="ss">data</span><span class="o">=</span><span class="n">Shared</span><span class="p" data-group-id="4793140097-7">}</span><span class="p">.</span></code></pre><p>In the process that calls <code class="inline">init2/0</code>, the size of the <code class="inline">data</code> field in the <code class="inline">state</code>
+of a term with a shared subterm:</p><pre><code class="makeup erlang" translate="no"><span class="p" data-group-id="7755396383-1">{</span><span class="n">SubTerm</span><span class="p">,</span><span class="w"> </span><span class="n">SubTerm</span><span class="p" data-group-id="7755396383-1">}</span></code></pre><p>When a term is copied to another process, sharing of subterms will be lost and
+the copied term can be many times larger than the original term. For example:</p><pre><code class="makeup erlang" translate="no"><span class="nf">init2</span><span class="p" data-group-id="3907193142-1">(</span><span class="p" data-group-id="3907193142-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">SharedSubTerms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">foldl</span><span class="p" data-group-id="3907193142-2">(</span><span class="nf">fun</span><span class="p" data-group-id="3907193142-3">(</span><span class="p">_</span><span class="p">,</span><span class="w"> </span><span class="n">A</span><span class="p" data-group-id="3907193142-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="p" data-group-id="3907193142-4">[</span><span class="n">A</span><span class="p">|</span><span class="n">A</span><span class="p" data-group-id="3907193142-4">]</span><span class="w"> </span><span class="k">end</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3907193142-5">[</span><span class="mi">0</span><span class="p" data-group-id="3907193142-5">]</span><span class="p">,</span><span class="w"> </span><span class="nc">lists</span><span class="p">:</span><span class="nf">seq</span><span class="p" data-group-id="3907193142-6">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p" data-group-id="3907193142-6">)</span><span class="p" data-group-id="3907193142-2">)</span><span class="p">,</span><span class="w">
+    </span><span class="o">#</span><span class="ss">state</span><span class="p" data-group-id="3907193142-7">{</span><span class="ss">data</span><span class="o">=</span><span class="n">Shared</span><span class="p" data-group-id="3907193142-7">}</span><span class="p">.</span></code></pre><p>In the process that calls <code class="inline">init2/0</code>, the size of the <code class="inline">data</code> field in the <code class="inline">state</code>
 record will be 32 heap words. When the record is copied to the newly created
 process, sharing will be lost and the size of the copied <code class="inline">data</code> field will be
 131070 heap words. More details about
 <a href="eff_guide_processes.html#loss-of-sharing">loss off sharing</a> are found in a later
 section.</p><p>To avoid the problem, outside of the fun extract only the fields of the record
-that are actually used:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">fixed_accidental1</span><span class="p" data-group-id="5691445530-1">(</span><span class="n">State</span><span class="p" data-group-id="5691445530-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+that are actually used:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">fixed_accidental1</span><span class="p" data-group-id="0244866666-1">(</span><span class="n">State</span><span class="p" data-group-id="0244866666-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
     </span><span class="n">Info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">State</span><span class="o">#</span><span class="ss">state</span><span class="p">.</span><span class="ss">info</span><span class="p">,</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="5691445530-2">(</span><span class="nf">fun</span><span class="p" data-group-id="5691445530-3">(</span><span class="p" data-group-id="5691445530-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5691445530-4">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5691445530-5">[</span><span class="n">Info</span><span class="p" data-group-id="5691445530-5">]</span><span class="p" data-group-id="5691445530-4">)</span><span class="w">
-          </span><span class="k">end</span><span class="p" data-group-id="5691445530-2">)</span><span class="p">.</span></code></pre><p>Similarly, outside of the fun extract only the map elements that are actually
-used:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">fixed_accidental2</span><span class="p" data-group-id="5383542178-1">(</span><span class="n">State</span><span class="p" data-group-id="5383542178-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="n">Info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">map_get</span><span class="p" data-group-id="5383542178-2">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="5383542178-2">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">spawn</span><span class="p" data-group-id="5383542178-3">(</span><span class="nf">fun</span><span class="p" data-group-id="5383542178-4">(</span><span class="p" data-group-id="5383542178-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="5383542178-5">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5383542178-6">[</span><span class="n">Info</span><span class="p" data-group-id="5383542178-6">]</span><span class="p" data-group-id="5383542178-5">)</span><span class="w">
-          </span><span class="k">end</span><span class="p" data-group-id="5383542178-3">)</span><span class="p">.</span></code></pre><h2 id="list_to_atom-1" class="section-heading">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="0244866666-2">(</span><span class="nf">fun</span><span class="p" data-group-id="0244866666-3">(</span><span class="p" data-group-id="0244866666-3">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="0244866666-4">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0244866666-5">[</span><span class="n">Info</span><span class="p" data-group-id="0244866666-5">]</span><span class="p" data-group-id="0244866666-4">)</span><span class="w">
+          </span><span class="k">end</span><span class="p" data-group-id="0244866666-2">)</span><span class="p">.</span></code></pre><p>Similarly, outside of the fun extract only the map elements that are actually
+used:</p><p><strong>DO</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">fixed_accidental2</span><span class="p" data-group-id="9230824227-1">(</span><span class="n">State</span><span class="p" data-group-id="9230824227-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">Info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">map_get</span><span class="p" data-group-id="9230824227-2">(</span><span class="ss">info</span><span class="p">,</span><span class="w"> </span><span class="n">State</span><span class="p" data-group-id="9230824227-2">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">spawn</span><span class="p" data-group-id="9230824227-3">(</span><span class="nf">fun</span><span class="p" data-group-id="9230824227-4">(</span><span class="p" data-group-id="9230824227-4">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+                  </span><span class="nc">io</span><span class="p">:</span><span class="nf">format</span><span class="p" data-group-id="9230824227-5">(</span><span class="s">&quot;</span><span class="si">~p</span><span class="s">\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9230824227-6">[</span><span class="n">Info</span><span class="p" data-group-id="9230824227-6">]</span><span class="p" data-group-id="9230824227-5">)</span><span class="w">
+          </span><span class="k">end</span><span class="p" data-group-id="9230824227-3">)</span><span class="p">.</span></code></pre><h2 id="list_to_atom-1" class="section-heading">
   <a href="#list_to_atom-1" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -219,7 +186,7 @@ input, <a href="../../erts-15.2.1/doc/html/erlang.html#list_to_existing_atom/1">
 to guard against a denial-of-service attack. (All atoms that are allowed must
 have been created earlier, for example, by using all of them in a module
 and loading that module.)</p><p>Using <a href="../../erts-15.2.1/doc/html/erlang.html#list_to_atom/1"><code class="inline">list_to_atom/1</code></a> to construct an atom that
-is passed to <a href="../../erts-15.2.1/doc/html/erlang.html#apply/3"><code class="inline">apply/3</code></a> is quite expensive.</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">apply</span><span class="p" data-group-id="1796118267-1">(</span><span class="nf">list_to_atom</span><span class="p" data-group-id="1796118267-2">(</span><span class="s">&quot;some_prefix&quot;</span><span class="o">++</span><span class="n">Var</span><span class="p" data-group-id="1796118267-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="p" data-group-id="1796118267-1">)</span></code></pre><h2 id="length-1" class="section-heading">
+is passed to <a href="../../erts-15.2.1/doc/html/erlang.html#apply/3"><code class="inline">apply/3</code></a> is quite expensive.</p><p><strong>DO NOT</strong></p><pre><code class="makeup erlang" translate="no"><span class="nf">apply</span><span class="p" data-group-id="2293783771-1">(</span><span class="nf">list_to_atom</span><span class="p" data-group-id="2293783771-2">(</span><span class="s">&quot;some_prefix&quot;</span><span class="o">++</span><span class="n">Var</span><span class="p" data-group-id="2293783771-2">)</span><span class="p">,</span><span class="w"> </span><span class="ss">foo</span><span class="p">,</span><span class="w"> </span><span class="n">Args</span><span class="p" data-group-id="2293783771-1">)</span></code></pre><h2 id="length-1" class="section-heading">
   <a href="#length-1" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -231,8 +198,8 @@ the list, as opposed to <a href="../../erts-15.2.1/doc/html/erlang.html#tuple_si
 execute in constant time.</p><p>Normally, there is no need to worry about the speed of <a href="../../erts-15.2.1/doc/html/erlang.html#length/1"><code class="inline">length/1</code></a>,
 because it is efficiently implemented in C. In time-critical code, you might
 want to avoid it if the input list could potentially be very long.</p><p>Some uses of <a href="../../erts-15.2.1/doc/html/erlang.html#length/1"><code class="inline">length/1</code></a> can be replaced by matching. For example,
-the following code:</p><pre><code class="makeup erlang" translate="no"><span class="nf">foo</span><span class="p" data-group-id="2001985848-1">(</span><span class="n">L</span><span class="p" data-group-id="2001985848-1">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="nf">length</span><span class="p" data-group-id="2001985848-2">(</span><span class="n">L</span><span class="p" data-group-id="2001985848-2">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>can be rewritten to:</p><pre><code class="makeup erlang" translate="no"><span class="nf">foo</span><span class="p" data-group-id="3817375916-1">(</span><span class="p" data-group-id="3817375916-2">[</span><span class="p">_</span><span class="p">,</span><span class="p">_</span><span class="p">,</span><span class="p">_</span><span class="p">|</span><span class="p">_</span><span class="p" data-group-id="3817375916-2">]</span><span class="o">=</span><span class="n">L</span><span class="p" data-group-id="3817375916-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+the following code:</p><pre><code class="makeup erlang" translate="no"><span class="nf">foo</span><span class="p" data-group-id="9674234991-1">(</span><span class="n">L</span><span class="p" data-group-id="9674234991-1">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="nf">length</span><span class="p" data-group-id="9674234991-2">(</span><span class="n">L</span><span class="p" data-group-id="9674234991-2">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>can be rewritten to:</p><pre><code class="makeup erlang" translate="no"><span class="nf">foo</span><span class="p" data-group-id="1938804607-1">(</span><span class="p" data-group-id="1938804607-2">[</span><span class="p">_</span><span class="p">,</span><span class="p">_</span><span class="p">,</span><span class="p">_</span><span class="p">|</span><span class="p">_</span><span class="p" data-group-id="1938804607-2">]</span><span class="o">=</span><span class="n">L</span><span class="p" data-group-id="1938804607-1">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
    </span><span class="p">.</span><span class="p">.</span><span class="p">.</span></code></pre><p>One slight difference is that <a href="../../erts-15.2.1/doc/html/erlang.html#length/1"><code class="inline">length(L)</code></a> fails if <code class="inline">L</code> is an
 improper list, while the pattern in the second code fragment accepts an improper
 list.</p><h2 id="setelement-3" class="section-heading">
@@ -248,10 +215,10 @@ clearly can see that destructively updating the tuple would give the same result
 as if the tuple was copied, the call to <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a> is
 replaced with a special destructive <code class="inline">setelement</code> instruction. In the following
 code sequence, the first <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a> call copies the tuple
-and modifies the ninth element:</p><pre><code class="makeup erlang" translate="no"><span class="nf">multiple_setelement</span><span class="p" data-group-id="8342912417-1">(</span><span class="n">T0</span><span class="p" data-group-id="8342912417-1">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="nf">tuple_size</span><span class="p" data-group-id="8342912417-2">(</span><span class="n">T0</span><span class="p" data-group-id="8342912417-2">)</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
-    </span><span class="n">T1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">setelement</span><span class="p" data-group-id="8342912417-3">(</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="n">T0</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p" data-group-id="8342912417-3">)</span><span class="p">,</span><span class="w">
-    </span><span class="n">T2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">setelement</span><span class="p" data-group-id="8342912417-4">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="n">T1</span><span class="p">,</span><span class="w"> </span><span class="ss">foobar</span><span class="p" data-group-id="8342912417-4">)</span><span class="p">,</span><span class="w">
-    </span><span class="nf">setelement</span><span class="p" data-group-id="8342912417-5">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="p">,</span><span class="w"> </span><span class="ss">new_value</span><span class="p" data-group-id="8342912417-5">)</span><span class="p">.</span></code></pre><p>The two following <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a> calls modify the tuple in
+and modifies the ninth element:</p><pre><code class="makeup erlang" translate="no"><span class="nf">multiple_setelement</span><span class="p" data-group-id="8290274106-1">(</span><span class="n">T0</span><span class="p" data-group-id="8290274106-1">)</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="nf">tuple_size</span><span class="p" data-group-id="8290274106-2">(</span><span class="n">T0</span><span class="p" data-group-id="8290274106-2">)</span><span class="w"> </span><span class="o">=:=</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="p">-&gt;</span><span class="w">
+    </span><span class="n">T1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">setelement</span><span class="p" data-group-id="8290274106-3">(</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="n">T0</span><span class="p">,</span><span class="w"> </span><span class="ss">bar</span><span class="p" data-group-id="8290274106-3">)</span><span class="p">,</span><span class="w">
+    </span><span class="n">T2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">setelement</span><span class="p" data-group-id="8290274106-4">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="n">T1</span><span class="p">,</span><span class="w"> </span><span class="ss">foobar</span><span class="p" data-group-id="8290274106-4">)</span><span class="p">,</span><span class="w">
+    </span><span class="nf">setelement</span><span class="p" data-group-id="8290274106-5">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">T2</span><span class="p">,</span><span class="w"> </span><span class="ss">new_value</span><span class="p" data-group-id="8290274106-5">)</span><span class="p">.</span></code></pre><p>The two following <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a> calls modify the tuple in
 place.</p><p>For the optimization to be applied, <em>all</em> the following conditions must be true:</p><ul><li>The tuple argument must be known to be a tuple of a known size.</li><li>The indices must be integer literals, not variables or expressions.</li><li>The indices must be given in descending order.</li><li>There must be no calls to another function in between the calls to
 <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a>.</li><li>The tuple returned from one <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a> call must only be
 used in the subsequent call to <a href="../../erts-15.2.1/doc/html/erlang.html#setelement/3"><code class="inline">setelement/3</code></a>.</li></ul><p>If the code cannot be structured as in the <code class="inline">multiple_setelement/1</code> example, the
@@ -322,7 +289,7 @@ Constructing and Matching Binaries
 
       <p class="built-using">
         Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.35.1) for the
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.37.0-rc.0) for the
 
           <a href="https://erlang.org" title="Erlang" target="_blank" translate="no">Erlang programming language</a>
 
@@ -332,28 +299,34 @@ Constructing and Matching Binaries
   </div>
 </main>
 </div>
-<script>
-  function mermaidLoaded() {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: document.body.className.includes("dark") ? "dark" : "default"
-    });
-    let id = 0;
-    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  <script>
+  let initialized = false;
+
+  window.addEventListener("exdoc:loaded", () => {
+      if (!initialized) {
+      mermaid.initialize({
+          startOnLoad: false,
+          theme: document.body.className.includes("dark") ? "dark" : "default"
+      });
+      initialized = true;
+      }
+
+      let id = 0;
+      for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
       const preEl = codeEl.parentElement;
       const graphDefinition = codeEl.textContent;
       const graphEl = document.createElement("div");
       const graphId = "mermaid-graph-" + id++;
       mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
-        graphEl.innerHTML = svg;
-        bindFunctions?.(graphEl);
-        preEl.insertAdjacentElement("afterend", graphEl);
-        preEl.remove();
+          graphEl.innerHTML = svg;
+          bindFunctions?.(graphEl);
+          preEl.insertAdjacentElement("afterend", graphEl);
+          preEl.remove();
       });
-    }
-  }
-</script>
-<script async src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js" onload="mermaidLoaded();"></script>
+      }
+  });
+  </script>
 
   </body>
 </html>
