@@ -1,0 +1,1414 @@
+-file("/buildroot/otp/Erlang ∅⊤℞/lib/stdlib-6.2/src/erl_expand_records."
+      "erl",
+      1).
+
+-module(erl_expand_records).
+
+-export([module/2]).
+
+-import(lists, [map/2,foldl/3,foldr/3,sort/1,reverse/1,duplicate/2]).
+
+-record(exprec,{vcount = 0,
+                calltype = #{},
+                records = #{},
+                raw_records = [],
+                strict_ra = [],
+                checked_ra = [],
+                dialyzer = false,
+                rec_init_count = 0,
+                new_forms = #{},
+                strict_rec_tests = true :: boolean()}).
+
+-spec module(AbsForms, CompileOptions) -> AbsForms2
+                when
+                    AbsForms :: [erl_parse:abstract_form()],
+                    AbsForms2 :: [erl_parse:abstract_form()],
+                    CompileOptions :: [compile:option()].
+
+module(Fs0, Opts0) ->
+    put(erl_expand_records_in_guard, false),
+    Opts = Opts0 ++ compiler_options(Fs0),
+    St0 =
+        {exprec, 0,
+         init_calltype(Fs0),
+         #{},
+         [], [], [],
+         lists:member(dialyzer, Opts),
+         0,
+         #{},
+         strict_record_tests(Opts)},
+    {Fs, _St} = forms(Fs0, St0),
+    erase(erl_expand_records_in_guard),
+    Fs.
+
+compiler_options(Forms) ->
+    lists:flatten([ 
+                   C ||
+                       {attribute, _, compile, C} <- Forms
+                  ]).
+
+init_calltype(Forms) ->
+    Ctype =
+        #{ 
+          {Name, Arity} => local ||
+              {function, _, Name, Arity, _} <- Forms
+        },
+    init_calltype_imports(Forms, Ctype).
+
+init_calltype_imports([{attribute, _, import, {Mod, Fs}} | T], Ctype0) ->
+    true = is_atom(Mod),
+    Ctype =
+        lists:foldl(fun(FA, Acc) ->
+                           Acc#{FA => {imported, Mod}}
+                    end,
+                    Ctype0, Fs),
+    init_calltype_imports(T, Ctype);
+init_calltype_imports([_ | T], Ctype) ->
+    init_calltype_imports(T, Ctype);
+init_calltype_imports([], Ctype) ->
+    Ctype.
+
+forms([{attribute, _, record, {Name, Defs}} = Attr | Fs], St0) ->
+    NDefs = normalise_fields(Defs),
+    St =
+        begin
+            REC0 =
+                maps:put(Name, NDefs,
+                         case St0 of
+                             {exprec, _, _, REC3, _, _, _, _, _, _, _} ->
+                                 REC3;
+                             REC3 ->
+                                 error({badrecord, REC3})
+                         end),
+            REC1 =
+                [Attr |
+                 case St0 of
+                     {exprec, _, _, _, REC4, _, _, _, _, _, _} ->
+                         REC4;
+                     REC4 ->
+                         error({badrecord, REC4})
+                 end],
+            REC2 = St0,
+            case REC2 of
+                {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                    setelement(4, setelement(5, REC2, REC1), REC0);
+                _ ->
+                    error({badrecord, REC2})
+            end
+        end,
+    {Fs1, St1} = forms(Fs, St),
+    {[Attr | Fs1], St1};
+forms([{function, Anno, N, A, Cs0} | Fs0], St0) ->
+    {Cs, St1} = clauses(Cs0, St0),
+    {Fs, St2} = forms(Fs0, St1),
+    {[{function, Anno, N, A, Cs} | Fs], St2};
+forms([F | Fs0], St0) ->
+    {Fs, St} = forms(Fs0, St0),
+    {[F | Fs], St};
+forms([], {exprec, _, _, _, _, _, _, _, _, FsN, _} = St) ->
+    {[ 
+      {function, Anno,
+       maps:get(Def, FsN),
+       0,
+       [{clause, Anno, [], [], [Def]}]} ||
+          {_, Anno, _} = Def <- maps:keys(FsN)
+     ],
+     St};
+forms([], St) ->
+    {[], St}.
+
+clauses([{clause, Anno, H0, G0, B0} | Cs0], St0) ->
+    {H1, St1} = head(H0, St0),
+    {G1, St2} = guard(G0, St1),
+    {H, G} = optimize_is_record(H1, G1, St2),
+    {B, St3} = exprs(B0, St2),
+    {Cs, St4} = clauses(Cs0, St3),
+    {[{clause, Anno, H, G, B} | Cs], St4};
+clauses([], St) ->
+    {[], St}.
+
+head(As, St) ->
+    pattern_list(As, St).
+
+pattern({var, _, '_'} = Var, St) ->
+    {Var, St};
+pattern({var, _, _} = Var, St) ->
+    {Var, St};
+pattern({char, _, _} = Char, St) ->
+    {Char, St};
+pattern({integer, _, _} = Int, St) ->
+    {Int, St};
+pattern({float, _, _} = Float, St) ->
+    {Float, St};
+pattern({atom, _, _} = Atom, St) ->
+    {Atom, St};
+pattern({string, _, _} = String, St) ->
+    {String, St};
+pattern({nil, _} = Nil, St) ->
+    {Nil, St};
+pattern({cons, Anno, H, T}, St0) ->
+    {TH, St1} = pattern(H, St0),
+    {TT, St2} = pattern(T, St1),
+    {{cons, Anno, TH, TT}, St2};
+pattern({tuple, Anno, Ps}, St0) ->
+    {TPs, St1} = pattern_list(Ps, St0),
+    {{tuple, Anno, TPs}, St1};
+pattern({map, Anno, Ps}, St0) ->
+    {TPs, St1} = pattern_list(Ps, St0),
+    {{map, Anno, TPs}, St1};
+pattern({map_field_exact, Anno, K0, V0}, St0) ->
+    {K, St1} = expr(K0, St0),
+    {V, St2} = pattern(V0, St1),
+    {{map_field_exact, Anno, K, V}, St2};
+pattern({record_index, Anno, Name, Field}, St) ->
+    {index_expr(Anno, Field, Name, record_fields(Name, Anno, St)), St};
+pattern({record, Anno0, Name, Pfs}, St0) ->
+    Fs = record_fields(Name, Anno0, St0),
+    {TMs, St1} = pattern_list(pattern_fields(Fs, Pfs), St0),
+    Anno = mark_record(Anno0, St1),
+    {{tuple, Anno, [{atom, Anno0, Name} | TMs]}, St1};
+pattern({bin, Anno, Es0}, St0) ->
+    {Es1, St1} = pattern_bin(Es0, St0),
+    {{bin, Anno, Es1}, St1};
+pattern({match, Anno, Pat1, Pat2}, St0) ->
+    {TH, St1} = pattern(Pat2, St0),
+    {TT, St2} = pattern(Pat1, St1),
+    {{match, Anno, TT, TH}, St2};
+pattern({op, Anno, Op, A0}, St0) ->
+    {A, St1} = pattern(A0, St0),
+    {{op, Anno, Op, A}, St1};
+pattern({op, Anno, Op, L0, R0}, St0) ->
+    {L, St1} = pattern(L0, St0),
+    {R, St2} = pattern(R0, St1),
+    {{op, Anno, Op, L, R}, St2}.
+
+pattern_list([P0 | Ps0], St0) ->
+    {P, St1} = pattern(P0, St0),
+    {Ps, St2} = pattern_list(Ps0, St1),
+    {[P | Ps], St2};
+pattern_list([], St) ->
+    {[], St}.
+
+guard([G0 | Gs0], St0) ->
+    {G, St1} = guard_tests(G0, St0),
+    {Gs, St2} = guard(Gs0, St1),
+    {[G | Gs], St2};
+guard([], St) ->
+    {[], St}.
+
+guard_tests(Gts0, St0) ->
+    {Gts1, St1} = guard_tests1(Gts0, St0),
+    {Gts1,
+     begin
+         REC5 = St1,
+         case REC5 of
+             {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                 setelement(7, REC5, []);
+             _ ->
+                 error({badrecord, REC5})
+         end
+     end}.
+
+guard_tests1([Gt0 | Gts0], St0) ->
+    {Gt1, St1} = guard_test(Gt0, St0),
+    {Gts1, St2} = guard_tests1(Gts0, St1),
+    {[Gt1 | Gts1], St2};
+guard_tests1([], St) ->
+    {[], St}.
+
+guard_test(G0, St0) ->
+    in_guard(fun() ->
+                    {G1, St1} = guard_test1(G0, St0),
+                    strict_record_access(G1, St1)
+             end).
+
+guard_test1({call, Anno, {atom, Tanno, Tname}, As}, St) ->
+    Test = {atom, Tanno, normalise_test(Tname, length(As))},
+    expr({call, Anno, Test, As}, St);
+guard_test1(Test, St) ->
+    expr(Test, St).
+
+normalise_test(atom, 1) ->
+    is_atom;
+normalise_test(binary, 1) ->
+    is_binary;
+normalise_test(float, 1) ->
+    is_float;
+normalise_test(function, 1) ->
+    is_function;
+normalise_test(integer, 1) ->
+    is_integer;
+normalise_test(list, 1) ->
+    is_list;
+normalise_test(number, 1) ->
+    is_number;
+normalise_test(pid, 1) ->
+    is_pid;
+normalise_test(port, 1) ->
+    is_port;
+normalise_test(record, 2) ->
+    is_record;
+normalise_test(reference, 1) ->
+    is_reference;
+normalise_test(tuple, 1) ->
+    is_tuple;
+normalise_test(Name, _) ->
+    Name.
+
+is_in_guard() ->
+    get(erl_expand_records_in_guard).
+
+in_guard(F) ->
+    InGuard = put(erl_expand_records_in_guard, true),
+    Res = F(),
+    true = put(erl_expand_records_in_guard, InGuard),
+    Res.
+
+not_in_guard(F) ->
+    InGuard = put(erl_expand_records_in_guard, false),
+    Res = F(),
+    false = put(erl_expand_records_in_guard, InGuard),
+    Res.
+
+record_test(Anno, Term, Name, St) ->
+    case is_in_guard() of
+        false ->
+            record_test_in_body(Anno, Term, Name, St);
+        true ->
+            record_test_in_guard(Anno, Term, Name, St)
+    end.
+
+record_test_in_guard(Anno, Term, Name, St) ->
+    case not_a_tuple(Term) of
+        true ->
+            expr({atom, Anno, false}, St);
+        false ->
+            Fs = record_fields(Name, Anno, St),
+            NAnno = no_compiler_warning(Anno),
+            expr({call, NAnno,
+                  {remote, NAnno,
+                   {atom, NAnno, erlang},
+                   {atom, NAnno, is_record}},
+                  [Term,
+                   {atom, Anno, Name},
+                   {integer, Anno, length(Fs) + 1}]},
+                 St)
+    end.
+
+not_a_tuple({atom, _, _}) ->
+    true;
+not_a_tuple({integer, _, _}) ->
+    true;
+not_a_tuple({float, _, _}) ->
+    true;
+not_a_tuple({nil, _}) ->
+    true;
+not_a_tuple({cons, _, _, _}) ->
+    true;
+not_a_tuple({char, _, _}) ->
+    true;
+not_a_tuple({string, _, _}) ->
+    true;
+not_a_tuple({record_index, _, _, _}) ->
+    true;
+not_a_tuple({bin, _, _}) ->
+    true;
+not_a_tuple({op, _, _, _}) ->
+    true;
+not_a_tuple({op, _, _, _, _}) ->
+    true;
+not_a_tuple(_) ->
+    false.
+
+traverse_af(AF, Fun) ->
+    traverse_af(AF, Fun, []).
+
+traverse_af(AF, Fun, Acc) when is_list(AF) ->
+    [ 
+     traverse_af(Ast, Fun, Fun(Ast, Acc)) ||
+         Ast <- AF
+    ];
+traverse_af(AF, Fun, Acc) when is_tuple(AF) ->
+    [[ 
+      fun(List) when is_list(List) ->
+             traverse_af(List, Fun, Acc);
+         (Tuple) when is_tuple(Tuple) ->
+             case erl_anno:is_anno(Tuple) of
+                 true ->
+                     [];
+                 false ->
+                     traverse_af(Tuple, Fun, Fun(Tuple, Acc))
+             end;
+         (_) ->
+             []
+      end(Term) ||
+          Term <- tuple_to_list(AF)
+     ],
+     Acc];
+traverse_af(_, _, Acc) ->
+    Acc.
+
+save_vars({var, _, Var}, _) ->
+    Var;
+save_vars(_, Acc) ->
+    Acc.
+
+free_variables(AF, Acc) ->
+    try
+        _ = traverse_af(AF, fun free_variables1/2, Acc),
+        false
+    catch
+        throw:{error, unsafe_variable} ->
+            true
+    end.
+
+free_variables1({'fun', _anno, _}, Acc) ->
+    {function, Acc};
+free_variables1({clause, _anno, Pattern, _guards, _body},
+                {function, Acc}) ->
+    lists:flatten(traverse_af(Pattern, fun save_vars/2, []) ++ Acc);
+free_variables1({var, _, Var}, Acc) ->
+    case lists:member(Var, Acc) of
+        true ->
+            Acc;
+        false ->
+            throw({error, unsafe_variable})
+    end;
+free_variables1(_, Acc) ->
+    Acc.
+
+record_test_in_body(Anno, Expr, Name, St0) ->
+    Fs = record_fields(Name, Anno, St0),
+    {Var, St} = new_var(Anno, St0),
+    NAnno = no_compiler_warning(Anno),
+    expr({block, Anno,
+          [{match, Anno, Var, Expr},
+           {call, NAnno,
+            {remote, NAnno,
+             {atom, NAnno, erlang},
+             {atom, NAnno, is_record}},
+            [Var, {atom, Anno, Name}, {integer, Anno, length(Fs) + 1}]}]},
+         St).
+
+exprs([E0 | Es0], St0) ->
+    {E, St1} = expr(E0, St0),
+    {Es, St2} = exprs(Es0, St1),
+    {[E | Es], St2};
+exprs([], St) ->
+    {[], St}.
+
+expr({var, _, _} = Var, St) ->
+    {Var, St};
+expr({char, _, _} = Char, St) ->
+    {Char, St};
+expr({integer, _, _} = Int, St) ->
+    {Int, St};
+expr({float, _, _} = Float, St) ->
+    {Float, St};
+expr({atom, _, _} = Atom, St) ->
+    {Atom, St};
+expr({string, _, _} = String, St) ->
+    {String, St};
+expr({nil, _} = Nil, St) ->
+    {Nil, St};
+expr({cons, Anno, H0, T0}, St0) ->
+    {H, St1} = expr(H0, St0),
+    {T, St2} = expr(T0, St1),
+    {{cons, Anno, H, T}, St2};
+expr({lc, Anno, E0, Qs0}, St0) ->
+    {Qs1, St1} = lc_tq(Anno, Qs0, St0),
+    {E1, St2} = expr(E0, St1),
+    {{lc, Anno, E1, Qs1}, St2};
+expr({bc, Anno, E0, Qs0}, St0) ->
+    {Qs1, St1} = lc_tq(Anno, Qs0, St0),
+    {E1, St2} = expr(E0, St1),
+    {{bc, Anno, E1, Qs1}, St2};
+expr({mc, Anno, E0, Qs0}, St0) ->
+    {Qs1, St1} = lc_tq(Anno, Qs0, St0),
+    {E1, St2} = expr(E0, St1),
+    {{mc, Anno, E1, Qs1}, St2};
+expr({tuple, Anno, Es0}, St0) ->
+    {Es1, St1} = expr_list(Es0, St0),
+    {{tuple, Anno, Es1}, St1};
+expr({map, Anno, Es0}, St0) ->
+    {Es1, St1} = expr_list(Es0, St0),
+    {{map, Anno, Es1}, St1};
+expr({map, Anno, Arg0, Es0}, St0) ->
+    {Arg1, St1} = expr(Arg0, St0),
+    {Es1, St2} = expr_list(Es0, St1),
+    {{map, Anno, Arg1, Es1}, St2};
+expr({map_field_assoc, Anno, K0, V0}, St0) ->
+    {K, St1} = expr(K0, St0),
+    {V, St2} = expr(V0, St1),
+    {{map_field_assoc, Anno, K, V}, St2};
+expr({map_field_exact, Anno, K0, V0}, St0) ->
+    {K, St1} = expr(K0, St0),
+    {V, St2} = expr(V0, St1),
+    {{map_field_exact, Anno, K, V}, St2};
+expr({record_index, Anno, Name, F}, St) ->
+    I = index_expr(Anno, F, Name, record_fields(Name, Anno, St)),
+    expr(I, St);
+expr({record, Anno0, Name, Is}, St) ->
+    Anno = mark_record(Anno0, St),
+    R_init =
+        [{atom, Anno, Name} |
+         record_inits(record_fields(Name, Anno0, St), Is)],
+    Vars = lists:flatten(traverse_af(Is, fun save_vars/2)),
+    case free_variables(R_init, Vars) of
+        true ->
+            IsUndefined =
+                [ 
+                 {RF, AnnoRF, Field, {atom, AnnoRF, undefined}} ||
+                     {record_field = RF, AnnoRF, Field, _} <- Is
+                ],
+            R_default_init =
+                [{atom, Anno, Name} |
+                 record_inits(record_fields(Name, Anno0, St),
+                              IsUndefined)],
+            {Def, St1} = expr({tuple, Anno, R_default_init}, St),
+            Map =
+                case St1 of
+                    {exprec, _, _, _, _, _, _, _, _, REC6, _} ->
+                        REC6;
+                    REC6 ->
+                        error({badrecord, REC6})
+                end,
+            {FName, St2} =
+                case maps:get(Def, Map, undefined) of
+                    undefined ->
+                        C = case St1 of
+                                {exprec, _, _, _, _, _, _, _, REC7, _,
+                                 _} ->
+                                    REC7;
+                                REC7 ->
+                                    error({badrecord, REC7})
+                            end,
+                        NewName =
+                            list_to_atom("rec_init$^"
+                                         ++
+                                         integer_to_list(C)),
+                        {NewName,
+                         begin
+                             REC8 = C + 1,
+                             REC9 = Map#{Def => NewName},
+                             REC10 = St1,
+                             case REC10 of
+                                 {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                                     setelement(9,
+                                                setelement(10, REC10,
+                                                           REC9),
+                                                REC8);
+                                 _ ->
+                                     error({badrecord, REC10})
+                             end
+                         end};
+                    OldName ->
+                        {OldName, St1}
+                end,
+            expr({record, Anno0,
+                  {call, Anno, {atom, Anno, FName}, []},
+                  Name, Is},
+                 St2);
+        false ->
+            expr({tuple, Anno, R_init}, St)
+    end;
+expr({record_field, _A, R, Name, F}, St) ->
+    Anno = erl_parse:first_anno(R),
+    get_record_field(Anno, R, F, Name, St);
+expr({record, Anno, R, Name, Us}, St0) ->
+    {Ue, St1} =
+        record_update(R, Name, record_fields(Name, Anno, St0), Us, St0),
+    expr(Ue, St1);
+expr({bin, Anno, Es0}, St0) ->
+    {Es1, St1} = expr_bin(Es0, St0),
+    {{bin, Anno, Es1}, St1};
+expr({block, Anno, Es0}, St0) ->
+    {Es, St1} = exprs(Es0, St0),
+    {{block, Anno, Es}, St1};
+expr({'if', Anno, Cs0}, St0) ->
+    {Cs, St1} = clauses(Cs0, St0),
+    {{'if', Anno, Cs}, St1};
+expr({'case', Anno, E0, Cs0}, St0) ->
+    {E, St1} = expr(E0, St0),
+    {Cs, St2} = clauses(Cs0, St1),
+    {{'case', Anno, E, Cs}, St2};
+expr({'receive', Anno, Cs0}, St0) ->
+    {Cs, St1} = clauses(Cs0, St0),
+    {{'receive', Anno, Cs}, St1};
+expr({'receive', Anno, Cs0, To0, ToEs0}, St0) ->
+    {To, St1} = expr(To0, St0),
+    {ToEs, St2} = exprs(ToEs0, St1),
+    {Cs, St3} = clauses(Cs0, St2),
+    {{'receive', Anno, Cs, To, ToEs}, St3};
+expr({'fun', Anno, {function, F, A}} = Fun0, St0) ->
+    FA = {F, A},
+    case
+        case St0 of
+            {exprec, _, REC11, _, _, _, _, _, _, _, _} ->
+                REC11;
+            REC11 ->
+                error({badrecord, REC11})
+        end
+    of
+        #{FA := local} ->
+            {Fun0, St0};
+        #{FA := {imported, M}} ->
+            MAtom = {atom, Anno, M},
+            FAtom = {atom, Anno, F},
+            AInt = {integer, Anno, A},
+            {{'fun', Anno, {function, MAtom, FAtom, AInt}}, St0};
+        _ ->
+            case erl_internal:bif(F, A) of
+                true ->
+                    MAtom = {atom, Anno, erlang},
+                    FAtom = {atom, Anno, F},
+                    AInt = {integer, Anno, A},
+                    {{'fun', Anno, {function, MAtom, FAtom, AInt}}, St0};
+                false ->
+                    {As, St1} = new_vars(A, Anno, St0),
+                    Cs =
+                        [{clause, Anno, As, [],
+                          [{call, Anno, {atom, Anno, F}, As}]}],
+                    Fun = {'fun', Anno, {clauses, Cs}},
+                    expr(Fun, St1)
+            end
+    end;
+expr({'fun', _, {function, _M, _F, _A}} = Fun, St) ->
+    {Fun, St};
+expr({'fun', Anno, {clauses, Cs0}}, St0) ->
+    not_in_guard(fun() ->
+                        {Cs, St1} = clauses(Cs0, St0),
+                        {{'fun', Anno, {clauses, Cs}}, St1}
+                 end);
+expr({named_fun, Anno, Name, Cs0}, St0) ->
+    not_in_guard(fun() ->
+                        {Cs, St1} = clauses(Cs0, St0),
+                        {{named_fun, Anno, Name, Cs}, St1}
+                 end);
+expr({call, Anno, {atom, _, is_record}, [A, {atom, _, Name}]}, St) ->
+    record_test(Anno, A, Name, St);
+expr({call, Anno,
+      {remote, _, {atom, _, erlang}, {atom, _, is_record}},
+      [A, {atom, _, Name}]},
+     St) ->
+    record_test(Anno, A, Name, St);
+expr({call, Anno,
+      {tuple, _, [{atom, _, erlang}, {atom, _, is_record}]},
+      [A, {atom, _, Name}]},
+     St) ->
+    record_test(Anno, A, Name, St);
+expr({call, Anno, {atom, _, is_record}, [_, _, {integer, _, Sz}]}, St)
+    when is_integer(Sz), Sz =< 0 ->
+    {{atom, Anno, false}, St};
+expr({call, Anno,
+      {remote, _, {atom, _, erlang}, {atom, _, is_record}},
+      [_, _, {integer, _, Sz}]},
+     St)
+    when is_integer(Sz), Sz =< 0 ->
+    {{atom, Anno, false}, St};
+expr({call, Anno, {atom, _AnnoA, record_info}, [_, _] = As0}, St0) ->
+    {As, St1} = expr_list(As0, St0),
+    record_info_call(Anno, As, St1);
+expr({call, Anno, {atom, _AnnoA, N} = Atom, As0}, St0) ->
+    {As, St1} = expr_list(As0, St0),
+    Ar = length(As),
+    NA = {N, Ar},
+    case
+        case St0 of
+            {exprec, _, REC12, _, _, _, _, _, _, _, _} ->
+                REC12;
+            REC12 ->
+                error({badrecord, REC12})
+        end
+    of
+        #{NA := local} ->
+            {{call, Anno, Atom, As}, St1};
+        #{NA := {imported, Module}} ->
+            ModAtom = {atom, Anno, Module},
+            {{call, Anno, {remote, Anno, ModAtom, Atom}, As}, St1};
+        _ ->
+            case erl_internal:bif(N, Ar) of
+                true ->
+                    ModAtom = {atom, Anno, erlang},
+                    {{call, Anno, {remote, Anno, ModAtom, Atom}, As},
+                     St1};
+                false ->
+                    {{call, Anno, Atom, As}, St1}
+            end
+    end;
+expr({call, Anno, {remote, AnnoR, M, F}, As0}, St0) ->
+    {[M1, F1 | As1], St1} = expr_list([M, F | As0], St0),
+    {{call, Anno, {remote, AnnoR, M1, F1}, As1}, St1};
+expr({call, Anno, F, As0}, St0) ->
+    {[Fun1 | As1], St1} = expr_list([F | As0], St0),
+    {{call, Anno, Fun1, As1}, St1};
+expr({'try', Anno, Es0, Scs0, Ccs0, As0}, St0) ->
+    {Es1, St1} = exprs(Es0, St0),
+    {Scs1, St2} = clauses(Scs0, St1),
+    {Ccs1, St3} = clauses(Ccs0, St2),
+    {As1, St4} = exprs(As0, St3),
+    {{'try', Anno, Es1, Scs1, Ccs1, As1}, St4};
+expr({'catch', Anno, E0}, St0) ->
+    {E, St1} = expr(E0, St0),
+    {{'catch', Anno, E}, St1};
+expr({'maybe', MaybeAnno, Es0}, St0) ->
+    {Es, St1} = exprs(Es0, St0),
+    {{'maybe', MaybeAnno, Es}, St1};
+expr({'maybe', MaybeAnno, Es0, {'else', ElseAnno, Cs0}}, St0) ->
+    {Es, St1} = exprs(Es0, St0),
+    {Cs, St2} = clauses(Cs0, St1),
+    {{'maybe', MaybeAnno, Es, {'else', ElseAnno, Cs}}, St2};
+expr({maybe_match, Anno, P0, E0}, St0) ->
+    {E, St1} = expr(E0, St0),
+    {P, St2} = pattern(P0, St1),
+    {{maybe_match, Anno, P, E}, St2};
+expr({match, Anno, P0, E0}, St0) ->
+    {E, St1} = expr(E0, St0),
+    {P, St2} = pattern(P0, St1),
+    {{match, Anno, P, E}, St2};
+expr({op, Anno, 'not', A0}, St0) ->
+    {A, St1} = bool_operand(A0, St0),
+    {{op, Anno, 'not', A}, St1};
+expr({op, Anno, Op, A0}, St0) ->
+    {A, St1} = expr(A0, St0),
+    {{op, Anno, Op, A}, St1};
+expr({op, Anno, Op, L0, R0}, St0) when Op =:= 'and'; Op =:= 'or' ->
+    {L, St1} = bool_operand(L0, St0),
+    {R, St2} = bool_operand(R0, St1),
+    {{op, Anno, Op, L, R}, St2};
+expr({op, Anno, Op, L0, R0}, St0) when Op =:= 'andalso'; Op =:= 'orelse' ->
+    {L, St1} = bool_operand(L0, St0),
+    {R, St2} = bool_operand(R0, St1),
+    {{op, Anno, Op, L, R},
+     begin
+         REC13 =
+             case St1 of
+                 {exprec, _, _, _, _, _, REC15, _, _, _, _} ->
+                     REC15;
+                 REC15 ->
+                     error({badrecord, REC15})
+             end,
+         REC14 = St2,
+         case REC14 of
+             {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                 setelement(7, REC14, REC13);
+             _ ->
+                 error({badrecord, REC14})
+         end
+     end};
+expr({op, Anno, Op, L0, R0}, St0) ->
+    {L, St1} = expr(L0, St0),
+    {R, St2} = expr(R0, St1),
+    {{op, Anno, Op, L, R}, St2};
+expr({executable_line, _, _} = E, St) ->
+    {E, St};
+expr({debug_line, _, _} = E, St) ->
+    {E, St};
+expr({ssa_check_when, _, _, _, _, _} = E, St) ->
+    {E, St}.
+
+expr_list([E0 | Es0], St0) ->
+    {E, St1} = expr(E0, St0),
+    {Es, St2} = expr_list(Es0, St1),
+    {[E | Es], St2};
+expr_list([], St) ->
+    {[], St}.
+
+bool_operand(E0, St0) ->
+    {E1, St1} = expr(E0, St0),
+    strict_record_access(E1, St1).
+
+strict_record_access(E, {exprec, _, _, _, _, [], _, _, _, _, _} = St) ->
+    {E, St};
+strict_record_access(E0, St0) ->
+    {exprec, _, _, _, _, StrictRA, CheckedRA, _, _, _, _} = St0,
+    {New, NC} =
+        lists:foldl(fun({Key, _Anno, _R, _Sz} = A, {L, C}) ->
+                           case lists:keymember(Key, 1, C) of
+                               true ->
+                                   {L, C};
+                               false ->
+                                   {[A | L], [A | C]}
+                           end
+                    end,
+                    {[], CheckedRA},
+                    StrictRA),
+    E1 =
+        if
+            New =:= [] ->
+                E0;
+            true ->
+                conj(New, E0)
+        end,
+    St1 =
+        begin
+            REC16 = St0,
+            case REC16 of
+                {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                    setelement(6, setelement(7, REC16, NC), []);
+                _ ->
+                    error({badrecord, REC16})
+            end
+        end,
+    expr(E1, St1).
+
+conj([], _E) ->
+    empty;
+conj([{{Name, _Rp}, Anno, R, Sz} | AL], E) ->
+    NAnno = no_compiler_warning(Anno),
+    T1 =
+        {op, NAnno, 'orelse',
+         {call, NAnno,
+          {remote, NAnno,
+           {atom, NAnno, erlang},
+           {atom, NAnno, is_record}},
+          [R, {atom, NAnno, Name}, {integer, NAnno, Sz}]},
+         {atom, NAnno, fail}},
+    T2 =
+        case conj(AL, none) of
+            empty ->
+                T1;
+            C ->
+                {op, NAnno, 'and', C, T1}
+        end,
+    case E of
+        none ->
+            case T2 of
+                {op, _, 'and', _, _} ->
+                    T2;
+                _ ->
+                    {op, NAnno, 'and', T2, {atom, NAnno, true}}
+            end;
+        _ ->
+            {op, NAnno, 'and', T2, E}
+    end.
+
+lc_tq(Anno, [{generate, AnnoG, P0, G0} | Qs0], St0) ->
+    {G1, St1} = expr(G0, St0),
+    {P1, St2} = pattern(P0, St1),
+    {Qs1, St3} = lc_tq(Anno, Qs0, St2),
+    {[{generate, AnnoG, P1, G1} | Qs1], St3};
+lc_tq(Anno, [{generate_strict, AnnoG, P0, G0} | Qs0], St0) ->
+    {G1, St1} = expr(G0, St0),
+    {P1, St2} = pattern(P0, St1),
+    {Qs1, St3} = lc_tq(Anno, Qs0, St2),
+    {[{generate_strict, AnnoG, P1, G1} | Qs1], St3};
+lc_tq(Anno, [{b_generate, AnnoG, P0, G0} | Qs0], St0) ->
+    {G1, St1} = expr(G0, St0),
+    {P1, St2} = pattern(P0, St1),
+    {Qs1, St3} = lc_tq(Anno, Qs0, St2),
+    {[{b_generate, AnnoG, P1, G1} | Qs1], St3};
+lc_tq(Anno, [{b_generate_strict, AnnoG, P0, G0} | Qs0], St0) ->
+    {G1, St1} = expr(G0, St0),
+    {P1, St2} = pattern(P0, St1),
+    {Qs1, St3} = lc_tq(Anno, Qs0, St2),
+    {[{b_generate_strict, AnnoG, P1, G1} | Qs1], St3};
+lc_tq(Anno, [{m_generate, AnnoG, P0, G0} | Qs0], St0) ->
+    {G1, St1} = expr(G0, St0),
+    {map_field_exact, AnnoMFE, KeyP0, ValP0} = P0,
+    {KeyP1, St2} = pattern(KeyP0, St1),
+    {ValP1, St3} = pattern(ValP0, St2),
+    {Qs1, St4} = lc_tq(Anno, Qs0, St3),
+    P1 = {map_field_exact, AnnoMFE, KeyP1, ValP1},
+    {[{m_generate, AnnoG, P1, G1} | Qs1], St4};
+lc_tq(Anno, [{m_generate_strict, AnnoG, P0, G0} | Qs0], St0) ->
+    {G1, St1} = expr(G0, St0),
+    {map_field_exact, AnnoMFE, KeyP0, ValP0} = P0,
+    {KeyP1, St2} = pattern(KeyP0, St1),
+    {ValP1, St3} = pattern(ValP0, St2),
+    {Qs1, St4} = lc_tq(Anno, Qs0, St3),
+    P1 = {map_field_exact, AnnoMFE, KeyP1, ValP1},
+    {[{m_generate_strict, AnnoG, P1, G1} | Qs1], St4};
+lc_tq(Anno, [{zip, AnnoG, G0} | Qs0], St0) ->
+    {G1, St1} = lc_tq(Anno, G0, St0),
+    {Qs1, St2} = lc_tq(Anno, Qs0, St1),
+    {[{zip, AnnoG, G1} | Qs1], St2};
+lc_tq(Anno,
+      [F0 | Qs0],
+      {exprec, _, Calltype, _, Records, _, _, _, _, _, _} = St0) ->
+    IsOverriden =
+        fun(FA) ->
+               case Calltype of
+                   #{FA := local} ->
+                       true;
+                   #{FA := {imported, _}} ->
+                       true;
+                   _ ->
+                       false
+               end
+        end,
+    case erl_lint:is_guard_test(F0, Records, IsOverriden) of
+        true ->
+            {F1, St1} = guard_test(F0, St0),
+            {Qs1, St2} = lc_tq(Anno, Qs0, St1),
+            {[F1 | Qs1], St2};
+        false ->
+            {F1, St1} = expr(F0, St0),
+            {Qs1, St2} = lc_tq(Anno, Qs0, St1),
+            {[F1 | Qs1], St2}
+    end;
+lc_tq(_Anno, [], St0) ->
+    {[],
+     begin
+         REC17 = St0,
+         case REC17 of
+             {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                 setelement(7, REC17, []);
+             _ ->
+                 error({badrecord, REC17})
+         end
+     end}.
+
+normalise_fields(Fs) ->
+    lists:map(fun({record_field, Anno, Field}) ->
+                     {record_field, Anno, Field,
+                      {atom, Anno, undefined}};
+                 ({typed_record_field,
+                   {record_field, Anno, Field},
+                   _Type}) ->
+                     {record_field, Anno, Field,
+                      {atom, Anno, undefined}};
+                 ({typed_record_field, Field, _Type}) ->
+                     Field;
+                 (F) ->
+                     F
+              end,
+              Fs).
+
+record_fields(R, Anno, St) ->
+    Fields =
+        maps:get(R,
+                 case St of
+                     {exprec, _, _, REC18, _, _, _, _, _, _, _} ->
+                         REC18;
+                     REC18 ->
+                         error({badrecord, REC18})
+                 end),
+    [ 
+     {record_field, Anno, {atom, Anno, F}, copy_expr(Di, Anno)} ||
+         {record_field, _Anno, {atom, _AnnoA, F}, Di} <- Fields
+    ].
+
+find_field(F, [{record_field, _, {atom, _, F}, Val} | _]) ->
+    {ok, Val};
+find_field(F, [_ | Fs]) ->
+    find_field(F, Fs);
+find_field(_, []) ->
+    error.
+
+copy_expr(Expr, Anno) ->
+    erl_parse:map_anno(fun(_A) ->
+                              Anno
+                       end,
+                       Expr).
+
+field_names(Fs) ->
+    lists:map(fun({record_field, _, Field, _Val}) ->
+                     Field
+              end,
+              Fs).
+
+index_expr(Anno, {atom, _, F}, _Name, Fs) ->
+    {integer, Anno, index_expr(F, Fs, 2)}.
+
+index_expr(F, [{record_field, _, {atom, _, F}, _} | _], I) ->
+    I;
+index_expr(F, [_ | Fs], I) ->
+    index_expr(F, Fs, I + 1).
+
+get_record_field(Anno, R, Index, Name, St) ->
+    case
+        case St of
+            {exprec, _, _, _, _, _, _, _, _, _, REC19} ->
+                REC19;
+            REC19 ->
+                error({badrecord, REC19})
+        end
+    of
+        false ->
+            sloppy_get_record_field(Anno, R, Index, Name, St);
+        true ->
+            strict_get_record_field(Anno, R, Index, Name, St)
+    end.
+
+strict_get_record_field(Anno, R, {atom, _, F} = Index, Name, St0) ->
+    case is_in_guard() of
+        false ->
+            {Var, St} = new_var(Anno, St0),
+            Fs = record_fields(Name, Anno, St),
+            I = index_expr(F, Fs, 2),
+            P = record_pattern(2, I, Var,
+                               length(Fs) + 1,
+                               Anno,
+                               [{atom, Anno, Name}]),
+            NAnno = no_compiler_warning(Anno),
+            RAnno = mark_record(NAnno, St),
+            E = {'case', Anno, R,
+                 [{clause, NAnno, [{tuple, RAnno, P}], [], [Var]},
+                  {clause, NAnno,
+                   [Var],
+                   [],
+                   [{call, NAnno,
+                     {remote, NAnno,
+                      {atom, NAnno, erlang},
+                      {atom, NAnno, error}},
+                     [{tuple, NAnno, [{atom, NAnno, badrecord}, Var]}]}]}]},
+            expr(E, St);
+        true ->
+            Fs = record_fields(Name, Anno, St0),
+            I = index_expr(Anno, Index, Name, Fs),
+            {ExpR, St1} = expr(R, St0),
+            A0 = erl_anno:new(0),
+            ExpRp =
+                erl_parse:map_anno(fun(_A) ->
+                                          A0
+                                   end,
+                                   ExpR),
+            RA = {{Name, ExpRp}, Anno, ExpR, length(Fs) + 1},
+            St2 =
+                begin
+                    REC20 =
+                        [RA |
+                         case St1 of
+                             {exprec, _, _, _, _, REC22, _, _, _, _, _} ->
+                                 REC22;
+                             REC22 ->
+                                 error({badrecord, REC22})
+                         end],
+                    REC21 = St1,
+                    case REC21 of
+                        {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                            setelement(6, REC21, REC20);
+                        _ ->
+                            error({badrecord, REC21})
+                    end
+                end,
+            {{call, Anno,
+              {remote, Anno,
+               {atom, Anno, erlang},
+               {atom, Anno, element}},
+              [I, ExpR]},
+             St2}
+    end.
+
+record_pattern(I, I, Var, Sz, Anno, Acc) ->
+    record_pattern(I + 1, I, Var, Sz, Anno, [Var | Acc]);
+record_pattern(Cur, I, Var, Sz, Anno, Acc) when Cur =< Sz ->
+    record_pattern(Cur + 1, I, Var, Sz, Anno, [{var, Anno, '_'} | Acc]);
+record_pattern(_, _, _, _, _, Acc) ->
+    lists:reverse(Acc).
+
+sloppy_get_record_field(Anno, R, Index, Name, St) ->
+    Fs = record_fields(Name, Anno, St),
+    I = index_expr(Anno, Index, Name, Fs),
+    expr({call, Anno,
+          {remote, Anno, {atom, Anno, erlang}, {atom, Anno, element}},
+          [I, R]},
+         St).
+
+strict_record_tests(Opts) ->
+    strict_record_tests(Opts, true).
+
+strict_record_tests([strict_record_tests | Os], _) ->
+    strict_record_tests(Os, true);
+strict_record_tests([no_strict_record_tests | Os], _) ->
+    strict_record_tests(Os, false);
+strict_record_tests([_ | Os], Bool) ->
+    strict_record_tests(Os, Bool);
+strict_record_tests([], Bool) ->
+    Bool.
+
+pattern_fields(Fs, Ms) ->
+    Wildcard = record_wildcard_init(Ms),
+    lists:map(fun({record_field, Anno, {atom, _, F}, _}) ->
+                     case find_field(F, Ms) of
+                         {ok, Match} ->
+                             Match;
+                         error when Wildcard =:= none ->
+                             {var, Anno, '_'};
+                         error ->
+                             Wildcard
+                     end
+              end,
+              Fs).
+
+record_inits(Fs, Is) ->
+    WildcardInit = record_wildcard_init(Is),
+    lists:map(fun({record_field, _, {atom, _, F}, D}) ->
+                     case find_field(F, Is) of
+                         {ok, Init} ->
+                             Init;
+                         error when WildcardInit =:= none ->
+                             D;
+                         error ->
+                             WildcardInit
+                     end
+              end,
+              Fs).
+
+record_wildcard_init([{record_field, _, {var, _, '_'}, D} | _]) ->
+    D;
+record_wildcard_init([_ | Is]) ->
+    record_wildcard_init(Is);
+record_wildcard_init([]) ->
+    none.
+
+record_update(R, Name, Fs, Us0, St0) ->
+    Anno = element(2, R),
+    {Pre, Us, St1} = record_exprs(Us0, St0),
+    {Var, St2} = new_var(Anno, St1),
+    Dialyzer =
+        case St2 of
+            {exprec, _, _, _, _, _, _, REC23, _, _, _} ->
+                REC23;
+            REC23 ->
+                error({badrecord, REC23})
+        end,
+    {Update, St} =
+        if
+            not Dialyzer, Us =/= [] ->
+                {record_setel(Var, Name, Fs, Us), St2};
+            true ->
+                record_match(Var, Name, Anno, Fs, Us, St2)
+        end,
+    {{block, Anno, Pre ++ [{match, Anno, Var, R}, Update]}, St}.
+
+record_match(R, Name, AnnoR, Fs, Us, St0) ->
+    {Ps, News, St1} = record_upd_fs(Fs, Us, St0),
+    NAnnoR = no_compiler_warning(AnnoR),
+    RAnno = mark_record(AnnoR, St1),
+    {{'case', AnnoR, R,
+      [{clause, AnnoR,
+        [{tuple, RAnno, [{atom, AnnoR, Name} | Ps]}],
+        [],
+        [{tuple, RAnno, [{atom, AnnoR, Name} | News]}]},
+       {clause, NAnnoR,
+        [{var, NAnnoR, '_'}],
+        [],
+        [call_error(NAnnoR,
+                    {tuple, NAnnoR, [{atom, NAnnoR, badrecord}, R]})]}]},
+     St1}.
+
+record_upd_fs([{record_field, Anno, {atom, _AnnoA, F}, _Val} | Fs],
+              Us, St0) ->
+    {P, St1} = new_var(Anno, St0),
+    {Ps, News, St2} = record_upd_fs(Fs, Us, St1),
+    case find_field(F, Us) of
+        {ok, New} ->
+            {[P | Ps], [New | News], St2};
+        error ->
+            {[P | Ps], [P | News], St2}
+    end;
+record_upd_fs([], _, St) ->
+    {[], [], St}.
+
+record_setel(R, Name, Fs, Us0) ->
+    Us1 =
+        lists:foldl(fun({record_field, Anno, Field, Val}, Acc) ->
+                           {integer, _, FieldIndex} =
+                               I = index_expr(Anno, Field, Name, Fs),
+                           [{FieldIndex, {I, Anno, Val}} | Acc]
+                    end,
+                    [], Us0),
+    Us2 = lists:sort(Us1),
+    Us =
+        [ 
+         T ||
+             {_, T} <- Us2
+        ],
+    AnnoR = element(2, hd(Us)),
+    Wildcards = lists:duplicate(length(Fs), {var, AnnoR, '_'}),
+    NAnnoR = no_compiler_warning(AnnoR),
+    {'case', AnnoR, R,
+     [{clause, AnnoR,
+       [{tuple, AnnoR, [{atom, AnnoR, Name} | Wildcards]}],
+       [],
+       [lists:foldr(fun({I, Anno, Val}, Acc) ->
+                           {call, Anno,
+                            {remote, Anno,
+                             {atom, Anno, erlang},
+                             {atom, Anno, setelement}},
+                            [I, Acc, Val]}
+                    end,
+                    R, Us)]},
+      {clause, NAnnoR,
+       [{var, NAnnoR, '_'}],
+       [],
+       [call_error(NAnnoR,
+                   {tuple, NAnnoR, [{atom, NAnnoR, badrecord}, R]})]}]}.
+
+record_info_call(Anno, [{atom, _AnnoI, Info}, {atom, _AnnoN, Name}], St) ->
+    case Info of
+        size ->
+            {{integer, Anno, 1 + length(record_fields(Name, Anno, St))},
+             St};
+        fields ->
+            {make_list(field_names(record_fields(Name, Anno, St)), Anno),
+             St}
+    end.
+
+record_exprs(Us, St) ->
+    record_exprs(Us, St, [], []).
+
+record_exprs([{record_field, Anno, {atom, _AnnoA, _F} = Name, Val} =
+                  Field0 |
+              Us],
+             St0, Pre, Fs) ->
+    case is_simple_val(Val) of
+        true ->
+            record_exprs(Us, St0, Pre, [Field0 | Fs]);
+        false ->
+            {Var, St} = new_var(Anno, St0),
+            Bind = {match, Anno, Var, Val},
+            Field = {record_field, Anno, Name, Var},
+            record_exprs(Us, St, [Bind | Pre], [Field | Fs])
+    end;
+record_exprs([], St, Pre, Fs) ->
+    {lists:reverse(Pre), Fs, St}.
+
+is_simple_val({var, _, _}) ->
+    true;
+is_simple_val(Val) ->
+    try
+        erl_parse:normalise(Val),
+        true
+    catch
+        error:_ ->
+            false
+    end.
+
+pattern_bin(Es0, St) ->
+    lists:foldr(fun(E, Acc) ->
+                       pattern_element(E, Acc)
+                end,
+                {[], St},
+                Es0).
+
+pattern_element({bin_element, Anno, Expr0, Size0, Type}, {Es, St0}) ->
+    {Expr, St1} = pattern(Expr0, St0),
+    {Size, St2} =
+        case Size0 of
+            default ->
+                {Size0, St1};
+            _ ->
+                expr(Size0, St1)
+        end,
+    {[{bin_element, Anno, Expr, Size, Type} | Es], St2}.
+
+expr_bin(Es0, St) ->
+    lists:foldr(fun(E, Acc) ->
+                       bin_element(E, Acc)
+                end,
+                {[], St},
+                Es0).
+
+bin_element({bin_element, Anno, Expr, Size, Type}, {Es, St0}) ->
+    {Expr1, St1} = expr(Expr, St0),
+    {Size1, St2} =
+        if
+            Size =:= default ->
+                {default, St1};
+            true ->
+                expr(Size, St1)
+        end,
+    {[{bin_element, Anno, Expr1, Size1, Type} | Es], St2}.
+
+new_vars(N, Anno, St) ->
+    new_vars(N, Anno, St, []).
+
+new_vars(N, Anno, St0, Vs) when N > 0 ->
+    {V, St1} = new_var(Anno, St0),
+    new_vars(N - 1, Anno, St1, [V | Vs]);
+new_vars(0, _Anno, St, Vs) ->
+    {Vs, St}.
+
+new_var(Anno, St0) ->
+    {New, St1} = new_var_name(St0),
+    {{var, Anno, New}, St1}.
+
+new_var_name(St) ->
+    C = case St of
+            {exprec, REC24, _, _, _, _, _, _, _, _, _} ->
+                REC24;
+            REC24 ->
+                error({badrecord, REC24})
+        end,
+    {list_to_atom("rec" ++ integer_to_list(C)),
+     begin
+         REC25 = C + 1,
+         REC26 = St,
+         case REC26 of
+             {exprec, _, _, _, _, _, _, _, _, _, _} ->
+                 setelement(2, REC26, REC25);
+             _ ->
+                 error({badrecord, REC26})
+         end
+     end}.
+
+make_list(Ts, Anno) ->
+    lists:foldr(fun(H, T) ->
+                       {cons, Anno, H, T}
+                end,
+                {nil, Anno},
+                Ts).
+
+call_error(Anno, R) ->
+    {call, Anno,
+     {remote, Anno, {atom, Anno, erlang}, {atom, Anno, error}},
+     [R]}.
+
+optimize_is_record(H0, G0,
+                   {exprec, _, _, _, _, _, _, Dialyzer, _, _, _}) ->
+    case opt_rec_vars(G0) of
+        [] ->
+            {H0, G0};
+        Rs0 ->
+            case Dialyzer of
+                true ->
+                    {H0, G0};
+                false ->
+                    {H, Rs} = opt_pattern_list(H0, Rs0),
+                    G = opt_remove(G0, Rs),
+                    {H, G}
+            end
+    end.
+
+opt_rec_vars([G | Gs]) ->
+    Rs = opt_rec_vars_1(G, orddict:new()),
+    opt_rec_vars(Gs, Rs);
+opt_rec_vars([]) ->
+    orddict:new().
+
+opt_rec_vars([G | Gs], Rs0) ->
+    Rs1 = opt_rec_vars_1(G, orddict:new()),
+    Rs = ordsets:intersection(Rs0, Rs1),
+    opt_rec_vars(Gs, Rs);
+opt_rec_vars([], Rs) ->
+    Rs.
+
+opt_rec_vars_1([T | Ts], Rs0) ->
+    Rs = opt_rec_vars_2(T, Rs0),
+    opt_rec_vars_1(Ts, Rs);
+opt_rec_vars_1([], Rs) ->
+    Rs.
+
+opt_rec_vars_2({op, _, 'and', A1, A2}, Rs) ->
+    opt_rec_vars_1([A1, A2], Rs);
+opt_rec_vars_2({op, _, 'andalso', A1, A2}, Rs) ->
+    opt_rec_vars_1([A1, A2], Rs);
+opt_rec_vars_2({op, _, 'orelse', Arg, {atom, _, fail}}, Rs) ->
+    opt_rec_vars_2(Arg, Rs);
+opt_rec_vars_2({call, Anno,
+                {remote, _,
+                 {atom, _, erlang},
+                 {atom, _, is_record} = IsRecord},
+                Args},
+               Rs) ->
+    opt_rec_vars_2({call, Anno, IsRecord, Args}, Rs);
+opt_rec_vars_2({call, _,
+                {atom, _, is_record},
+                [{var, _, V}, {atom, _, Tag}, {integer, _, Sz}]},
+               Rs)
+    when is_integer(Sz), 0 < Sz, Sz < 100 ->
+    orddict:store(V, {Tag, Sz}, Rs);
+opt_rec_vars_2(_, Rs) ->
+    Rs.
+
+opt_pattern_list(Ps, Rs) ->
+    opt_pattern_list(Ps, Rs, []).
+
+opt_pattern_list([P0 | Ps], Rs0, Acc) ->
+    {P, Rs} = opt_pattern(P0, Rs0),
+    opt_pattern_list(Ps, Rs, [P | Acc]);
+opt_pattern_list([], Rs, Acc) ->
+    {lists:reverse(Acc), Rs}.
+
+opt_pattern({var, _, V} = Var, Rs0) ->
+    case orddict:find(V, Rs0) of
+        {ok, {Tag, Sz}} ->
+            Rs = orddict:store(V, {remove, Tag, Sz}, Rs0),
+            {opt_var(Var, Tag, Sz), Rs};
+        _ ->
+            {Var, Rs0}
+    end;
+opt_pattern({cons, Anno, H0, T0}, Rs0) ->
+    {H, Rs1} = opt_pattern(H0, Rs0),
+    {T, Rs} = opt_pattern(T0, Rs1),
+    {{cons, Anno, H, T}, Rs};
+opt_pattern({tuple, Anno, Es0}, Rs0) ->
+    {Es, Rs} = opt_pattern_list(Es0, Rs0),
+    {{tuple, Anno, Es}, Rs};
+opt_pattern({match, Anno, Pa0, Pb0}, Rs0) ->
+    {Pa, Rs1} = opt_pattern(Pa0, Rs0),
+    {Pb, Rs} = opt_pattern(Pb0, Rs1),
+    {{match, Anno, Pa, Pb}, Rs};
+opt_pattern(P, Rs) ->
+    {P, Rs}.
+
+opt_var({var, Anno, _} = Var, Tag, Sz) ->
+    Rp = record_pattern(2, -1, ignore, Sz, Anno, [{atom, Anno, Tag}]),
+    {match, Anno, {tuple, Anno, Rp}, Var}.
+
+opt_remove(Gs, Rs) ->
+    [ 
+     opt_remove_1(G, Rs) ||
+         G <- Gs
+    ].
+
+opt_remove_1(Ts, Rs) ->
+    [ 
+     opt_remove_2(T, Rs) ||
+         T <- Ts
+    ].
+
+opt_remove_2({op, Anno, 'and' = Op, A1, A2}, Rs) ->
+    {op, Anno, Op, opt_remove_2(A1, Rs), opt_remove_2(A2, Rs)};
+opt_remove_2({op, Anno, 'andalso' = Op, A1, A2}, Rs) ->
+    {op, Anno, Op, opt_remove_2(A1, Rs), opt_remove_2(A2, Rs)};
+opt_remove_2({op, Anno, 'orelse', A1, A2}, Rs) ->
+    {op, Anno, 'orelse', opt_remove_2(A1, Rs), A2};
+opt_remove_2({call, Anno,
+              {remote, _, {atom, _, erlang}, {atom, _, is_record}},
+              [{var, _, V}, {atom, _, Tag}, {integer, _, Sz}]} =
+                 A,
+             Rs) ->
+    case orddict:find(V, Rs) of
+        {ok, {remove, Tag, Sz}} ->
+            {atom, Anno, true};
+        _ ->
+            A
+    end;
+opt_remove_2({call, Anno,
+              {atom, _, is_record},
+              [{var, _, V}, {atom, _, Tag}, {integer, _, Sz}]} =
+                 A,
+             Rs) ->
+    case orddict:find(V, Rs) of
+        {ok, {remove, Tag, Sz}} ->
+            {atom, Anno, true};
+        _ ->
+            A
+    end;
+opt_remove_2(A, _) ->
+    A.
+
+no_compiler_warning(Anno) ->
+    erl_anno:set_generated(true, Anno).
+
+mark_record(Anno, St) ->
+    case
+        case St of
+            {exprec, _, _, _, _, _, _, REC27, _, _, _} ->
+                REC27;
+            REC27 ->
+                error({badrecord, REC27})
+        end
+    of
+        true ->
+            erl_anno:set_record(true, Anno);
+        false ->
+            Anno
+    end.
+
+
+
