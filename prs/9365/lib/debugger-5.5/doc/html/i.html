@@ -99,9 +99,9 @@ interpreter.</p><p>This module also provides facilities for displaying status in
 interpreted processes and break points.</p><p>It is possible to attach to interpreted processes by only giving the corresponding
 process identity. By default, an attachment window is displayed. Processes
 at other Erlang nodes can be attached manually or automatically.</p><p>The functions in this module are defined in the Erlang shell. That is,
-they can be called without the <code class="inline">i:</code> prefix. For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nf">ii</span><span class="p" data-group-id="4723984313-1">(</span><span class="ss">t</span><span class="p" data-group-id="4723984313-1">)</span><span class="p">.</span><span class="w">
-</span><span class="p" data-group-id="4723984313-2">{</span><span class="ss">module</span><span class="p">,</span><span class="ss">t</span><span class="p" data-group-id="4723984313-2">}</span><span class="gp unselectable">
-2&gt; </span><span class="nf">iaa</span><span class="p" data-group-id="4723984313-3">(</span><span class="p" data-group-id="4723984313-4">[</span><span class="ss">init</span><span class="p" data-group-id="4723984313-4">]</span><span class="p" data-group-id="4723984313-3">)</span><span class="p">.</span><span class="w">
+they can be called without the <code class="inline">i:</code> prefix. For example:</p><pre><code class="makeup erlang" translate="no"><span class="gp unselectable">1&gt; </span><span class="nf">ii</span><span class="p" data-group-id="8072732207-1">(</span><span class="ss">t</span><span class="p" data-group-id="8072732207-1">)</span><span class="p">.</span><span class="w">
+</span><span class="p" data-group-id="8072732207-2">{</span><span class="ss">module</span><span class="p">,</span><span class="ss">t</span><span class="p" data-group-id="8072732207-2">}</span><span class="gp unselectable">
+2&gt; </span><span class="nf">iaa</span><span class="p" data-group-id="8072732207-3">(</span><span class="p" data-group-id="8072732207-4">[</span><span class="ss">init</span><span class="p" data-group-id="8072732207-4">]</span><span class="p" data-group-id="8072732207-3">)</span><span class="p">.</span><span class="w">
 </span><span class="ss">true</span></code></pre>
     </section>
 
@@ -1320,34 +1320,28 @@ been or are executing interpreted modules.</p>
   </div>
 </main>
 </div>
-  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-  <script>
-  let initialized = false;
-
-  window.addEventListener("exdoc:loaded", () => {
-      if (!initialized) {
-      mermaid.initialize({
-          startOnLoad: false,
-          theme: document.body.className.includes("dark") ? "dark" : "default"
-      });
-      initialized = true;
-      }
-
-      let id = 0;
-      for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+<script>
+  function mermaidLoaded() {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
       const preEl = codeEl.parentElement;
       const graphDefinition = codeEl.textContent;
       const graphEl = document.createElement("div");
       const graphId = "mermaid-graph-" + id++;
       mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
-          graphEl.innerHTML = svg;
-          bindFunctions?.(graphEl);
-          preEl.insertAdjacentElement("afterend", graphEl);
-          preEl.remove();
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
       });
-      }
-  });
-  </script>
+    }
+  }
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js" onload="mermaidLoaded();"></script>
 
   </body>
 </html>

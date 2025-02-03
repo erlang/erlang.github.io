@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.37.0-rc.2">
-    <meta name="project" content="Erlang System Documentation v28.0-rc0">
+    <meta name="project" content="Erlang System Documentation v27.2.1">
 
 
-    <title>System Limits — Erlang System Documentation v28.0-rc0</title>
+    <title>System Limits — Erlang System Documentation v27.2.1</title>
 
     <link rel="stylesheet" href="dist/html-erlang-FDBURIED.css" />
 
@@ -41,7 +41,7 @@
 Erlang System Documentation
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v28.0-rc0
+          v27.2.1
         </div>
       </div>
     </div>
@@ -123,8 +123,7 @@ flag in the <a href="../../erts-15.2.1/doc/html/erl_cmd.html"><code class="inlin
 On a 64 bit system at most <code class="inline">2⁶⁰ - 1</code> unique port identifiers can be created and
 on a 32 bit system at most <code class="inline">2²⁸ - 1</code>.</p></li><li><p><a href="" id="files_sockets"></a> <strong>Open files and sockets</strong> - The maximum number of simultaneously
 open files and sockets depends on <a href="#ports">the maximum number of Erlang ports</a>
-available, as well as on operating system-specific settings and limits.</p></li><li><p><strong>Number of arguments to a function</strong> - 255.</p></li><li><p><strong>Number of arguments to a fun</strong> - 255, minus one for each environment
-variable.</p></li><li><p><a href="" id="unique_references"></a> <strong>Unique References on a Runtime System Instance</strong> -
+available, as well as on operating system-specific settings and limits.</p></li><li><p><strong>Number of arguments to a function or fun</strong> - 255.</p></li><li><p><a href="" id="unique_references"></a> <strong>Unique References on a Runtime System Instance</strong> -
 Each scheduler thread has its own set of references, and all other threads have
 a shared set of references. Each set of references consist of <code class="inline">2⁶⁴ - 1</code>unique
 references. That is, the total amount of unique references that can be produced
@@ -199,34 +198,28 @@ Profiling
   </div>
 </main>
 </div>
-  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-  <script>
-  let initialized = false;
-
-  window.addEventListener("exdoc:loaded", () => {
-      if (!initialized) {
-      mermaid.initialize({
-          startOnLoad: false,
-          theme: document.body.className.includes("dark") ? "dark" : "default"
-      });
-      initialized = true;
-      }
-
-      let id = 0;
-      for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+<script>
+  function mermaidLoaded() {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
       const preEl = codeEl.parentElement;
       const graphDefinition = codeEl.textContent;
       const graphEl = document.createElement("div");
       const graphId = "mermaid-graph-" + id++;
       mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
-          graphEl.innerHTML = svg;
-          bindFunctions?.(graphEl);
-          preEl.insertAdjacentElement("afterend", graphEl);
-          preEl.remove();
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
       });
-      }
-  });
-  </script>
+    }
+  }
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js" onload="mermaidLoaded();"></script>
 
   </body>
 </html>

@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-erlang-FDBURIED.css" />
 
-    <script defer src="dist/sidebar_items-EA4797C0.js"></script>
+    <script defer src="dist/sidebar_items-B137F3D8.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-NL4GMUWY.js"></script>
 
@@ -265,17 +265,11 @@ with a printname consisting of the same characters as <code class="inline">V</co
   </a>
   <span class="text">Qualifiers</span>
 </h3>
-<p>A qualifier Q is one of the following:</p><ul><li>If Q is a filter <code class="inline">E</code>, where <code class="inline">E</code> is an expression, then Rep(Q) = <code class="inline">Rep(E)</code>.</li><li>If Q is a zip generator <code class="inline">Q_1 &amp;&amp; ...&amp;&amp; Q_k]</code>, where each <code class="inline">Q_i</code> is
-a non-zip generator, then Rep(E) = <code class="inline">{zip,ANNO,[Rep(Q_1), ..., Rep(Q_k)]}</code>.
-For Rep(Q), see below.</li><li>If Q is a list generator <code class="inline">P &lt;- E</code>, where <code class="inline">P</code> is a pattern and <code class="inline">E</code> is an
-expression, then Rep(Q) = <code class="inline">{generate,ANNO,Rep(P),Rep(E)}</code>.</li><li>If Q is a list generator <code class="inline">P &lt;:- E</code>, where <code class="inline">P</code> is a pattern and <code class="inline">E</code> is an
-expression, then Rep(Q) = <code class="inline">{generate_strict,ANNO,Rep(P),Rep(E)}</code>.</li><li>If Q is a bitstring generator <code class="inline">P &lt;= E</code>, where <code class="inline">P</code> is a pattern and <code class="inline">E</code> is an
-expression, then Rep(Q) = <code class="inline">{b_generate,ANNO,Rep(P),Rep(E)}</code>.</li><li>If Q is a bitstring generator <code class="inline">P &lt;:= E</code>, where <code class="inline">P</code> is a pattern and <code class="inline">E</code> is an
-expression, then Rep(Q) = <code class="inline">{b_generate_strict,ANNO,Rep(P),Rep(E)}</code>.</li><li>If Q is a map generator <code class="inline">P &lt;- E</code>, where <code class="inline">P</code> is an association pattern
+<p>A qualifier Q is one of the following:</p><ul><li>If Q is a filter <code class="inline">E</code>, where <code class="inline">E</code> is an expression, then Rep(Q) = <code class="inline">Rep(E)</code>.</li><li>If Q is a list generator <code class="inline">P &lt;- E</code>, where <code class="inline">P</code> is a pattern and <code class="inline">E</code> is an
+expression, then Rep(Q) = <code class="inline">{generate,ANNO,Rep(P),Rep(E)}</code>.</li><li>If Q is a bitstring generator <code class="inline">P &lt;= E</code>, where <code class="inline">P</code> is a pattern and <code class="inline">E</code> is an
+expression, then Rep(Q) = <code class="inline">{b_generate,ANNO,Rep(P),Rep(E)}</code>.</li><li>If Q is a map generator <code class="inline">P &lt;- E</code>, where <code class="inline">P</code> is an association pattern
 <code class="inline">P_1 := P_2</code> and <code class="inline">E</code> is an expression, then Rep(Q) =
-<code class="inline">{m_generate,ANNO,Rep(P),Rep(E)}</code>. For Rep(P), see below.</li><li>If Q is a map generator <code class="inline">P &lt;:- E</code>, where <code class="inline">P</code> is an association pattern
-<code class="inline">P_1 := P_2</code> and <code class="inline">E</code> is an expression, then Rep(Q) =
-<code class="inline">{m_generate_strict,ANNO,Rep(P),Rep(E)}</code>.</li></ul><h3 id="bitstring-element-type-specifiers" class="section-heading">
+<code class="inline">{m_generate,ANNO,Rep(P),Rep(E)}</code>. For Rep(P), see below.</li></ul><h3 id="bitstring-element-type-specifiers" class="section-heading">
   <a href="#bitstring-element-type-specifiers" class="hover-link">
     <i class="ri-link-m" aria-hidden="true"></i>
   </a>
@@ -490,34 +484,28 @@ tty - A Command-Line Interface
   </div>
 </main>
 </div>
-  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-  <script>
-  let initialized = false;
-
-  window.addEventListener("exdoc:loaded", () => {
-      if (!initialized) {
-      mermaid.initialize({
-          startOnLoad: false,
-          theme: document.body.className.includes("dark") ? "dark" : "default"
-      });
-      initialized = true;
-      }
-
-      let id = 0;
-      for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
+<script>
+  function mermaidLoaded() {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: document.body.className.includes("dark") ? "dark" : "default"
+    });
+    let id = 0;
+    for (const codeEl of document.querySelectorAll("pre code.mermaid")) {
       const preEl = codeEl.parentElement;
       const graphDefinition = codeEl.textContent;
       const graphEl = document.createElement("div");
       const graphId = "mermaid-graph-" + id++;
       mermaid.render(graphId, graphDefinition).then(({svg, bindFunctions}) => {
-          graphEl.innerHTML = svg;
-          bindFunctions?.(graphEl);
-          preEl.insertAdjacentElement("afterend", graphEl);
-          preEl.remove();
+        graphEl.innerHTML = svg;
+        bindFunctions?.(graphEl);
+        preEl.insertAdjacentElement("afterend", graphEl);
+        preEl.remove();
       });
-      }
-  });
-  </script>
+    }
+  }
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid@10.2.3/dist/mermaid.min.js" onload="mermaidLoaded();"></script>
 
   </body>
 </html>
